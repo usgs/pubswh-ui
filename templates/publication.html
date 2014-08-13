@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Pubs!</title>
+</head>
+<body>
+{% if indexID %}
+  <h1>Hello, this is the pages for publication with the indexID of {{ indexID }}!</h1>
+{% else %}
+  <h1>you need to add a publication id to the URL!</h1>
+{% endif %}
+</body>
+</html>
+
