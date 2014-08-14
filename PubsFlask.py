@@ -1,4 +1,6 @@
-from flask import Flask, url_for, render_template, jsonify, abort
+from flask import Flask, render_template, jsonify, abort, url_for, request
+from webargs import Arg
+from webargs.flaskparser import use_args, FlaskParser
 
 app = Flask(__name__)
 
@@ -42,6 +44,13 @@ pubs = [
     }
     ]
 
+search_args = {
+    'title':Arg(str, multiple=True),
+    'author':Arg(str, multiple=True),
+    'year':Arg(str, multiple=True),
+    'abstract':Arg(str, multiple=True)
+}
+
 #url_for('static', filename='style.css')
 
 @app.route('/')
@@ -63,6 +72,27 @@ def get_pub(indexId):
 @app.route('/publication/<indexID>')
 def publication(indexID):
     return render_template('publication.html',indexID=indexID)
+
+@app.route('/search',methods=['GET'])
+def api_hello():
+    params = request.args.items()
+    print params
+    if 'indexID' in request.args:
+        indexId= request.args['indexId']
+        pub = filter(lambda t:t['indexId'] == indexId, pubs)
+        if len(pub) == 0:
+                abort(404)
+        return jsonify( { 'pub': pub[0] } )
+    else:
+        return jsonify( { 'pubs': pubs } )
+
+#this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
+@app.route('/searchwebargs',methods=['GET'])
+def api_webargs():
+    parser = FlaskParser()
+    args = parser.parse(search_args, request)
+    print 'webarg param: ',args
+    #TODO: map the webargs to the Pubs Warehouse Java API, generate output
 
 if __name__ == '__main__':
     app.debug = True
