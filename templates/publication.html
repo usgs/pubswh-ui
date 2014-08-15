@@ -2,14 +2,155 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Pubs!</title>
+    <title>{{ pubdata['title'] }}</title>
 </head>
 <body>
-{% if indexID %}
-  <h1>Hello, this is the pages for publication with the indexID of {{ indexID }}!</h1>
-{% else %}
-  <h1>you need to add a publication id to the URL!</h1>
-{% endif %}
+   <div class="main-container">
+            <div class="main wrapper clearfix">
+
+                <article>
+                    <img id="thumbnail" src="{{ url_for('static', filename = '_thumb_15050.png') }}" alt="thumbnail"/>
+
+                    <hgroup>
+                        <h3 property="dc:title" datatype="" rel="dc:type" href="http://purl.org/dc/dcmitype/Text">{{ pubdata['title']|safe }}</h3>
+                        <h4>{{ pubdata['seriesTitle']['text'] }} {{ pubdata['seriesNumber'] }}</h4>
+                        <h5>{{ pubdata['subSeriesTitle'] }}</h5>
+                        <h6>{{ pubdata['collaboration'] }}</h6>
+                    </hgroup>
+
+                    <section>
+                        <dl id="contributors">
+                          <dt>Authors:</dt>
+                          {% for author in pubdata['authors']|sort(attribute='rank')  %}
+                          <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ author['organization'] }}{{ author['given'] }}
+                              {{ author['family'] }} {{ author['suffix'] }}</dd>
+                          {%  endfor %}
+                          <dt class="clear">Editor:</dt>
+                          {% for editor in pubdata['editors']|sort(attribute='rank')  %}
+                          <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ editor['organization'] }}{{ editor['given'] }}
+                              {{ editor['family'] }} {{ editor['suffix'] }}</dd>
+                          {%  endfor %}
+                        </dl>
+                    </section>
+
+                    <section id="abstract">
+                        <h2 id="abstract_head">Abstract</h2>
+                        {{ pubdata['abstract']|safe }}
+
+                    </section>
+
+                    <section id="suggested">
+
+                        <ul class="fileslist">
+                                <li> <a href="pdf/sir2014-5141.pdf" target="_blank" title="SIR 2014-5141 Report"><strong>Report</strong> PDF (7.67 MB)</a> </li>
+                        </ul>
+
+                    <address>
+                        <p><strong>For additional information, contact:</strong><br />
+                        <!-- ** [ Insert Colophon information if available. If not, use SC Director ] ** -->
+                        <a href="mailto:dc_ga@usgs.gov">Director</a>, Georgia Water Science Center<br />
+                          U.S. Geological Survey<br />
+                          1770 Corporate Drive, Suite 500<br />
+                          Norcross, GA 30093<br />
+                        <a href="http://ga.water.usgs.gov/">http://ga.water.usgs.gov/ </a> </p>
+                    </address>
+
+                    <aside>
+                        <p class="adobeReader">Part or all of this report is presented in Portable Document Format (PDF). For best results viewing and printing PDF documents, it is recommended that you download the documents to your computer and open them with Adobe Reader. PDF documents opened from your browser may not display or print as intended. Download the latest version of <a href="http://get.adobe.com/reader/">Adobe Reader</a>, free of charge. More information about viewing, downloading, and printing report files can be found <a href="http://pubs.usgs.gov/potential_problems.html">here</a>.</p>
+                    </aside>
+
+                        <h4>Suggested Citation</h4>
+                        <p class="reference"> Joiner, J.K., Aulenbach, B.T., and Landers, M.N., 2014, Watershed characteristics and water-quality trends and loads in 12 watersheds in Gwinnett County, Georgia: U.S. Geological Survey Scientific Investigations Report 2014–5141, 79 p., http://dx.doi.org/10.3133/sir20145141.<p>
+                        <p class="issn">ISSN 2328–031X (print)</p>
+                        <p class="issn">ISSN 2328–0328 (online)</p>
+                        <p class="issn">ISBN 978–1–4113–3815–9</p>
+
+                        <h4>Table of Contents</h4>
+
+                        <ul id="table_contents">
+
+                            <li><a href="">Abstract</a></li>
+                            <li><a href="">Introduction</a></li>
+                            <li><a href="">Methods</a></li>
+                            <li><a href="">Watershed Characteristics</a> </li>
+                            <li><a href="">Hydrologic Inputs and Outputs</a> </li>
+                            <li><a href="">Surface-Water Quality</a></li>
+                            <li><a href="">Water-Quality Seasonality and Long-Term Trends</a></li>
+                            <li><a href="">Stream Water Loads and Yields</a> </li>
+                            <li><a href="">Interpreting Aggregate Effects on Water Quality</a></li>
+                            <li><a href="">Summary</a></li>
+                            <li><a href="">Acknowledgments</a></li>
+                            <li><a href="">References Cited</a></li>
+                            <li><a href="">Appendix</a></li>
+
+                        </ul>
+                    </section>
+
+
+                    <section id="details">
+                        <h4 id="" class="dark">Additonal Publication Details</h4>
+
+                        <table id="publication_details">
+
+                            <tr>
+                                <td class="left">Publication Type</td>
+                                <td class="right">Report</td>
+                            </tr>
+
+                            <tr class="dark">
+                                <td class="left">Publication Subtype</td>
+                                <td class="right">USGS Numbered Series</td>
+                            </tr>
+
+                            <tr>
+                                <td class="left">Series Name</td>
+                                <td class="right">Scientific Investigations Report</td>
+                            </tr>
+
+                            <tr class="dark">
+                                <td class="left">Series Number</td>
+                                <td class="right">2014-5141</td>
+                            </tr>
+
+                            <tr>
+                                <td class="left">Language</td>
+                                <td class="right">English</td>
+                            </tr>
+
+                            <tr class="dark">
+                                <td class="left">Publisher</td>
+                                <td class="right" itemscope itemtype="http://schema.org/Organization">U.S. Geological Survey</td>
+                            </tr>
+
+                            <tr>
+                                <td class="left">Publisher Location</td>
+                                <td class="right">Reston, VA</td>
+                            </tr>
+
+                            <tr class="dark">
+                                <td class="left">Contributing Office</td>
+                                <td class="right">Georgia Water Science Center,
+                                Alabama Water Science Center</td>
+                            </tr>
+
+                            <tr>
+                                <td class="left">Description</td>
+                                <td class="right">vii, 79 p.</td>
+                            </tr>
+
+                            <tr class="dark">
+                                <td class="left">Number of pages</td>
+                                <td class="right">92</td>
+                            </tr>
+
+                        </table>
+
+                    </section>
+
+                </article>
+
+            </div> <!-- #main -->
+        </div> <!-- #main-container -->
 </body>
 </html>
 
