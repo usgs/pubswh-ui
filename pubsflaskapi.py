@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return "Hey look, it's the backend app!"
 
 search_args = {
     'title': Arg(str, multiple=True),
@@ -18,12 +18,12 @@ search_args = {
 }
 
 #making a tiny API for the app to call
-@app.route('/api/v1/pubs', methods=['GET'])
+@app.route('/publication', methods=['GET'])
 def get_pubs():
     return jsonify({'pubs': pubs})
 
 
-@app.route('/api/v1/pubs/<indexId>', methods=['GET'])
+@app.route('/publication/<indexId>', methods=['GET'])
 def get_pub(indexId):
     pub = filter(lambda t: t['indexId'] == indexId, pubs)
     if len(pub) == 0:
@@ -57,4 +57,4 @@ def api_webargs():
 
 if __name__ == '__main__':
     app.debug = True
-    app.run()
+    app.run(port=5001)

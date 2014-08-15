@@ -1,12 +1,12 @@
-from flask import Flask, render_template, jsonify, abort, url_for, request
-from Stubdata import pubs, pubSubtypes, costCenters
+from flask import Flask, render_template, abort
+from jinja2 import TemplateNotFound
+from requests import get
 
 app = Flask(__name__)
 
 
 
-#url_for('static', filename='_thumb_15050.png')
-
+baseApiUrl = "http://localhost:5001"
 
 
 @app.route('/')
@@ -17,16 +17,15 @@ def index():
 #will lead to the rendered HTML for the object
 @app.route('/publication/<indexId>')
 def publication(indexId):
-    pub = filter(lambda t: t['indexId'] == indexId, pubs)
-    if len(pub) == 0:
-        abort(404)
-    pubdata= pub[0]
-    print pubdata['title']
-    return render_template('publication.html', indexID=indexId, pubdata=pub[0])
+    r = get(baseApiUrl+'/publication/'+indexId)
+    pubreturn = r.json()
+    pubdata= pubreturn['pub']
+    return render_template('publication.html', indexID=indexId, pubdata=pubdata)
 
 
 
 if __name__ == '__main__':
     app.debug = True
-    app.run()
+    #app.run()
+    app.run(port=5000)
 
