@@ -20,15 +20,23 @@
 
                     <section>
                         <dl id="contributors">
-                          <dt>Authors:</dt>
-                          {% for author in pubdata['authors']|sort(attribute='rank')  %}
-                          <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ author['organization'] }}{{ author['given'] }}
-                              {{ author['family'] }} {{ author['suffix'] }}</dd>
+                          <dt>Authored by:</dt>
+                          {% for contributor in pubdata['authors']|sort(attribute='rank')  %}
+                              {% if contributor['corporation'] == False  %}
+                            <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ contributor['given'] }}
+                              {{ contributor['family'] }} {{ contributor['suffix'] }}</dd>
+                              {% else %}
+                             <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Organization" itemtype="http://schema.org/Organization">{{ contributor['organization'] }}</dd>
+                              {% endif %}
                           {%  endfor %}
-                          <dt class="clear">Editor:</dt>
-                          {% for editor in pubdata['editors']|sort(attribute='rank')  %}
-                          <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ editor['organization'] }}{{ editor['given'] }}
-                              {{ editor['family'] }} {{ editor['suffix'] }}</dd>
+                          <dt class="clear">Edited by:</dt>
+                          {% for contributor in pubdata['editors']|sort(attribute='rank')  %}
+                              {% if contributor['corporation'] == False  %}
+                            <dd rel="dc:creator" class="editor" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ contributor['organization'] }}{{ contributor['given'] }}
+                              {{ contributor['family'] }} {{ contributor['suffix'] }}</dd>
+                              {% else %}
+                             <dd rel="dc:creator" class="editor" property="foaf:name" typeof="foaf:Organization" itemtype="http://schema.org/Organization">{{ contributor['organization'] }}</dd>
+                              {% endif %}
                           {%  endfor %}
                         </dl>
                     </section>

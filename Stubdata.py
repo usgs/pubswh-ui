@@ -107,6 +107,8 @@ pubs = [
     "authors": [
         {
             "contributorId": 13213,
+            "corporation": False,
+            "usgs": True,
             "family": "Joiner",
             "given": "John K.",
             "suffix": "",
@@ -120,6 +122,8 @@ pubs = [
         },
         {
             "contributorId": 321323,
+            "corporation": False,
+            "usgs": True,
             "family": "Aulenbach",
             "given": "Brent T.",
             "suffix": "",
@@ -133,6 +137,8 @@ pubs = [
         },
         {
             "contributorId": 55132513,
+            "corporation": False,
+            "usgs": True,
             "family": "Landers",
             "given": "Mark N.",
             "suffix": "",
@@ -147,6 +153,8 @@ pubs = [
 
         {
             "contributorId": 2,
+            "corporation": True,
+            "usgs": True,
             "organization": "US Geological Survey Ice Survey Team",
             "id": 5,
             "rank": 5
@@ -155,6 +163,8 @@ pubs = [
     "editors": [
         {
             "contributorId": 1,
+            "corporation": False,
+            "usgs": True,
             "family": "Tor",
             "given": "Ed I.",
             "suffix": "Jr.",
