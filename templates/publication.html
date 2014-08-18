@@ -50,7 +50,9 @@
                     <section id="suggested">
 
                         <ul class="fileslist">
-                                <li> <a href="pdf/sir2014-5141.pdf" target="_blank" title="SIR 2014-5141 Report"><strong>Report</strong> PDF (7.67 MB)</a> </li>
+                            {% for link in pubdata['links']|sort(attribute='rank') %}
+                                <li> <a href="{{ link["url"] }}" target="_blank" title="{{ link["description"] }}"><strong>{{ link["type"]["text"] }}</strong> {{ link["linkFileType"]["text"] }} ({{ link["size"] }})</a> </li>
+                            {% endfor %}
                         </ul>
 
                     <address>

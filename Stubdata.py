@@ -60,29 +60,17 @@ pubs = [
             "id": 1,
             "rank": 1,
             "type": {
+                "text":"Report",
                 "id": 1
             },
-            "url": "www.wow.org",
-            "text": "amazing link",
-            "size": "12 GB",
+            "url": "http://pubs.usgs.gov/sir/2014/5141/pdf/sir2014-5141.pdf",
+            "text": "Report",
+            "size": "4.6 MB",
             "linkFileType": {
+                "text":"PDF",
                 "id": 2
             },
-            "description": "This description is wow!"
-        },
-        {
-            "id": 2,
-            "rank": 2,
-            "type": {
-                "id": 3
-            },
-            "url": "www.xyz.org",
-            "text": "end of the line",
-            "size": "1 TB",
-            "linkFileType": {
-                "id": 3
-            },
-            "description": "I'm at the end"
+            "description": "SIR 2014-5141 Report"
         }
     ],
     "indexId": "sir20145141",
