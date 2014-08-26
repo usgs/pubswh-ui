@@ -174,7 +174,23 @@ pubs = [
             "id": 114,
             "text": "Eastern Geographic Science Center"
         }
-    ]
+    ],
+        "chapter": "chapter",
+        "subchapterNumber": "subchapter title",
+        "doi": "10.3133/sir20145141",
+        "issn": {"online":"2328-0328",
+        "print":"2328-0328"},
+        "isbn": "978-01-4113-3815-9",
+        "usgsCitation": "Joiner, J.K., Aulenbach, B.T., and Landers, M.N., 2014, Watershed characteristics and water-quality trends and loads in 12 watersheds in Gwinnett County, Georgia: U.S. Geological Survey Scientific Investigations Report 20140-5141, 79 p.",
+        "productDescription": "vii, 79 p.",
+        "startPage": "",
+        "endPage": "",
+        "numberOfPages": "92",
+        "onlineOnly": "N",
+        "additionalOnlineFiles": "Y",
+        "temporalStart": "2014-07-14T12:00:00",
+        "temporalEnd": "2014-07-20T12:00:00",
+        "ipdsId": "ipdsid",
     }
 ]
 

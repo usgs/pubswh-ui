@@ -14,8 +14,12 @@
                     <hgroup>
                         <h3 property="dc:title" datatype="" rel="dc:type" href="http://purl.org/dc/dcmitype/Text">{{ pubdata['title']|safe }}</h3>
                         <h4>{{ pubdata['seriesTitle']['text'] }} {{ pubdata['seriesNumber'] }}</h4>
+                        {% if pubdata['subSeriesTitle'] %}
                         <h5>{{ pubdata['subSeriesTitle'] }}</h5>
+                        {% endif %}
+                        {% if pubdata['collaboration'] %}
                         <h6>{{ pubdata['collaboration'] }}</h6>
+                        {% endif %}
                     </hgroup>
 
                     <section>
@@ -29,6 +33,7 @@
                              <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Organization" itemtype="http://schema.org/Organization">{{ contributor['organization'] }}</dd>
                               {% endif %}
                           {%  endfor %}
+                          {% if pubdata['editors'] %}
                           <dt class="clear">Edited by:</dt>
                           {% for contributor in pubdata['editors']|sort(attribute='rank')  %}
                               {% if contributor['corporation'] == False  %}
@@ -38,6 +43,7 @@
                              <dd rel="dc:creator" class="editor" property="foaf:name" typeof="foaf:Organization" itemtype="http://schema.org/Organization">{{ contributor['organization'] }}</dd>
                               {% endif %}
                           {%  endfor %}
+                          {% endif %}
                         </dl>
                     </section>
 
@@ -70,90 +76,97 @@
                     </aside>
 
                         <h4>Suggested Citation</h4>
-                        <p class="reference"> Joiner, J.K., Aulenbach, B.T., and Landers, M.N., 2014, Watershed characteristics and water-quality trends and loads in 12 watersheds in Gwinnett County, Georgia: U.S. Geological Survey Scientific Investigations Report 2014–5141, 79 p., http://dx.doi.org/10.3133/sir20145141.<p>
-                        <p class="issn">ISSN 2328–031X (print)</p>
-                        <p class="issn">ISSN 2328–0328 (online)</p>
-                        <p class="issn">ISBN 978–1–4113–3815–9</p>
+                        <p class="reference">{{ pubdata['usgsCitation'] }}, <a href="http://dx.doi.org/{{ pubdata["doi"] }}">http://dx.doi.org/{{ pubdata["doi"] }}</a><p>
+                    <!--Table of Contents Goes here eventually-->
 
-                        <h4>Table of Contents</h4>
 
-                        <ul id="table_contents">
-
-                            <li><a href="">Abstract</a></li>
-                            <li><a href="">Introduction</a></li>
-                            <li><a href="">Methods</a></li>
-                            <li><a href="">Watershed Characteristics</a> </li>
-                            <li><a href="">Hydrologic Inputs and Outputs</a> </li>
-                            <li><a href="">Surface-Water Quality</a></li>
-                            <li><a href="">Water-Quality Seasonality and Long-Term Trends</a></li>
-                            <li><a href="">Stream Water Loads and Yields</a> </li>
-                            <li><a href="">Interpreting Aggregate Effects on Water Quality</a></li>
-                            <li><a href="">Summary</a></li>
-                            <li><a href="">Acknowledgments</a></li>
-                            <li><a href="">References Cited</a></li>
-                            <li><a href="">Appendix</a></li>
-
-                        </ul>
                     </section>
 
 
                     <section id="details">
                         <h4 id="" class="dark">Additonal Publication Details</h4>
+                        <dl id="publication_details">
+                            <dt>Publication Type</dt>
+                            <dd>{{ pubdata['publicationType']['text'] }}</dd>
+                            {% if pubdata['publicationSubtype']  %}
+                            <dt>Publication Subtype</dt>
+                            <dd>{{ pubdata['publicationSubtype']['text'] }}</dd>
+                            {% endif %}
+                            {% if pubdata['seriesTitle']  %}
+                            <dt>Series Name</dt>
+                            <dd>{{ pubdata['seriesTitle']['text'] }}</dd>
+                            {% endif %}
+                            {% if pubdata['seriesNumber']  %}
+                            <dt>Series Number</dt>
+                            <dd>{{ pubdata['seriesNumber'] }}</dd>
 
-                        <table id="publication_details">
+                            {% endif %}
+                            {% if pubdata['issn']['print']  %}
+                            <dt>ISSN (print)</dt>
+                                <dd>{{ pubdata['issn']['print'] }}</dd>{% endif %}
+                        {% if pubdata['issn']['online'] %}<dt>ISSN (online)</dt>
+                                <dd>{{ pubdata['issn']['online'] }}</dd>{% endif %}
+                        {% if pubdata['isbn'] %}<dt>ISBN</dt>
+                                <dd>{{ pubdata['isbn'] }}</dd>{% endif %}
+                        {% if pubdata['doi'] %}<dt>DOI</dt>
+                                <dd>{{ pubdata['doi'] }}</dd>{% endif %}
 
-                            <tr>
-                                <td class="left">Publication Type</td>
-                                <td class="right">Report</td>
-                            </tr>
+                            {% if pubdata['language']  %}
+                            <dt>Language</dt>
+                            <dd>{{ pubdata['language'] }}</dd>
+                            {% endif %}
+                            {% if pubdata['publisher']  %}
+                            <dt>Publisher</dt>
+                            <dd>{{ pubdata['publisher'] }}</dd>
+                            {% endif %}
+                            {% if pubdata['publisherLocation']  %}
+                            <dt>Publisher Location</dt>
+                            <dd>{{ pubdata['publisherLocation'] }}</dd>
+                            {% endif %}
+                            {% if pubdata['costCenters']  %}
+                            <dt>Contributing Office</dt>
+                                {% for costCenter in pubdata['costCenters'] %}
+                                <dd>{{ costCenter['text'] }}</dd>
+                                {% endfor %}
+                            {% endif %}
+                            {% if pubdata['productDescription']  %}
+                            <dt>Description</dt>
+                            <dd>{{ pubdata['productDescription'] }}</dd>
+                            {% endif %}
+                            {% if pubdata['numberOfPages']  %}
+                            <dt>Number of Pages</dt>
+                            <dd>{{ pubdata['numberOfPages'] }}</dd>
+                            {% endif %}
+                            {% if pubdata['startPage']  %}
+                            <dt>Start Page</dt>
+                            <dd>{{ pubdata['startPage'] }}</dd>
+                            {% endif %}
+                            {% if pubdata['endPage']  %}
+                            <dt>End Page</dt>
+                            <dd>{{ pubdata['endPage'] }}</dd>
+                            {% endif %}
+                            {% if pubdata['temporalStart']  %}
+                            <dt>Time Range Start</dt>
+                            <dd>{{ pubdata['temporalStart'] }}</dd>
+                            {% endif %}
+                            {% if pubdata['temporalEnd']  %}
+                            <dt>Time Range End</dt>
+                            <dd>{{ pubdata['temporalEnd'] }}</dd>
+                            {% endif %}
 
-                            <tr class="dark">
-                                <td class="left">Publication Subtype</td>
-                                <td class="right">USGS Numbered Series</td>
-                            </tr>
 
-                            <tr>
-                                <td class="left">Series Name</td>
-                                <td class="right">Scientific Investigations Report</td>
-                            </tr>
 
-                            <tr class="dark">
-                                <td class="left">Series Number</td>
-                                <td class="right">2014-5141</td>
-                            </tr>
 
-                            <tr>
-                                <td class="left">Language</td>
-                                <td class="right">English</td>
-                            </tr>
 
-                            <tr class="dark">
-                                <td class="left">Publisher</td>
-                                <td class="right" itemscope itemtype="http://schema.org/Organization">U.S. Geological Survey</td>
-                            </tr>
 
-                            <tr>
-                                <td class="left">Publisher Location</td>
-                                <td class="right">Reston, VA</td>
-                            </tr>
 
-                            <tr class="dark">
-                                <td class="left">Contributing Office</td>
-                                <td class="right">Georgia Water Science Center,
-                                Alabama Water Science Center</td>
-                            </tr>
 
-                            <tr>
-                                <td class="left">Description</td>
-                                <td class="right">vii, 79 p.</td>
-                            </tr>
 
-                            <tr class="dark">
-                                <td class="left">Number of pages</td>
-                                <td class="right">92</td>
-                            </tr>
 
-                        </table>
+
+                        </dl>
+
+
 
                     </section>
 
