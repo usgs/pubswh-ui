@@ -1,5 +1,6 @@
-from flask import Flask, render_template, abort
-from jinja2 import TemplateNotFound
+
+
+from flask import Flask, render_template
 from requests import get
 
 app = Flask(__name__)
