@@ -1,179 +1,93 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
+{% extends 'base.html' %}
+{% block head %}
     <title>{{ pubdata['title'] }}</title>
-</head>
-<body>
-   <div class="main-container">
-            <div class="main wrapper clearfix">
+    <meta name="description" content="{{ pubdata['abstract'] }}">
+{% endblock %}
 
-                <article>
-                    <img id="thumbnail" src="{{ url_for('static', filename = '_thumb_15050.png') }}" alt="thumbnail"/>
 
-                    <hgroup>
-                        <h3 property="dc:title" datatype="" rel="dc:type" href="http://purl.org/dc/dcmitype/Text">{{ pubdata['title']|safe }}</h3>
-                        <h4>{{ pubdata['seriesTitle']['text'] }} {{ pubdata['seriesNumber'] }}</h4>
-                        {% if pubdata['subSeriesTitle'] %}
-                        <h5>{{ pubdata['subSeriesTitle'] }}</h5>
-                        {% endif %}
-                        {% if pubdata['collaboration'] %}
-                        <h6>{{ pubdata['collaboration'] }}</h6>
-                        {% endif %}
-                    </hgroup>
 
-                    <section>
-                        <dl id="contributors">
-                          <dt>Authored by:</dt>
-                          {% for contributor in pubdata['authors']|sort(attribute='rank')  %}
-                              {% if contributor['corporation'] == False  %}
-                            <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ contributor['given'] }}
-                              {{ contributor['family'] }} {{ contributor['suffix'] }}</dd>
-                              {% else %}
-                             <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Organization" itemtype="http://schema.org/Organization">{{ contributor['organization'] }}</dd>
-                              {% endif %}
-                          {%  endfor %}
-                          {% if pubdata['editors'] %}
-                          <dt class="clear">Edited by:</dt>
-                          {% for contributor in pubdata['editors']|sort(attribute='rank')  %}
-                              {% if contributor['corporation'] == False  %}
-                            <dd rel="dc:creator" class="editor" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ contributor['organization'] }}{{ contributor['given'] }}
-                              {{ contributor['family'] }} {{ contributor['suffix'] }}</dd>
-                              {% else %}
-                             <dd rel="dc:creator" class="editor" property="foaf:name" typeof="foaf:Organization" itemtype="http://schema.org/Organization">{{ contributor['organization'] }}</dd>
-                              {% endif %}
-                          {%  endfor %}
+        {% block main %}
+        <main role ="main">
+            <article>
+                <img id="thumbnail" src="{{ url_for('static', filename = 'img/_thumb_15050.png') }}" alt="thumbnail"/>
+
+                <hgroup>
+                    <h3 property="dc:title" datatype="" rel="dc:type" href="http://purl.org/dc/dcmitype/Text">{{ pubdata['title']|safe }}</h3>
+                    <h4>{{ pubdata['seriesTitle']['text'] }} {{ pubdata['seriesNumber'] }}</h4>
+                    {% if pubdata['subSeriesTitle'] %}
+                    <h5>{{ pubdata['subSeriesTitle'] }}</h5>
+                    {% endif %}
+                    {% if pubdata['collaboration'] %}
+                    <h6>{{ pubdata['collaboration'] }}</h6>
+                    {% endif %}
+                </hgroup>
+
+                <section>
+                    <dl id="contributors">
+                      <dt>Authored by:</dt>
+                      {% for contributor in pubdata['authors']|sort(attribute='rank')  %}
+                          {% if contributor['corporation'] == False  %}
+                        <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ contributor['given'] }}
+                          {{ contributor['family'] }} {{ contributor['suffix'] }}</dd>
+                          {% else %}
+                         <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Organization" itemtype="http://schema.org/Organization">{{ contributor['organization'] }}</dd>
                           {% endif %}
-                        </dl>
-                    </section>
+                      {%  endfor %}
+                      {% if pubdata['editors'] %}
+                      <dt class="clear">Edited by:</dt>
+                      {% for contributor in pubdata['editors']|sort(attribute='rank')  %}
+                          {% if contributor['corporation'] == False  %}
+                        <dd rel="dc:creator" class="editor" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ contributor['organization'] }}{{ contributor['given'] }}
+                          {{ contributor['family'] }} {{ contributor['suffix'] }}</dd>
+                          {% else %}
+                         <dd rel="dc:creator" class="editor" property="foaf:name" typeof="foaf:Organization" itemtype="http://schema.org/Organization">{{ contributor['organization'] }}</dd>
+                          {% endif %}
+                      {%  endfor %}
+                      {% endif %}
+                    </dl>
+                </section>
 
-                    <section id="abstract">
-                        <h2 id="abstract_head">Abstract</h2>
-                        {{ pubdata['abstract']|safe }}
+                <section id="abstract">
+                    <h2 id="abstract_head">Abstract</h2>
+                    {{ pubdata['abstract']|safe }}
 
-                    </section>
+                </section>
 
-                    <section id="suggested">
+                <section id="suggested">
 
-                        <ul class="fileslist">
-                            {% for link in pubdata['links']|sort(attribute='rank') %}
-                                <li> <a href="{{ link["url"] }}" target="_blank" title="{{ link["description"] }}"><strong>{{ link["type"]["text"] }}</strong> {{ link["linkFileType"]["text"] }} ({{ link["size"] }})</a> </li>
-                            {% endfor %}
-                        </ul>
+                    <ul class="fileslist">
+                        {% for link in pubdata['links']|sort(attribute='rank') %}
+                            <li> <a href="{{ link["url"] }}" target="_blank" title="{{ link["description"] }}"><strong>{{ link["type"]["text"] }}</strong> {{ link["linkFileType"]["text"] }} ({{ link["size"] }})</a> </li>
+                        {% endfor %}
+                    </ul>
 
-                    <address>
-                        <p><strong>For additional information, contact:</strong><br />
-                        <!-- ** [ Insert Colophon information if available. If not, use SC Director ] ** -->
-                        <a href="mailto:dc_ga@usgs.gov">Director</a>, Georgia Water Science Center<br />
-                          U.S. Geological Survey<br />
-                          1770 Corporate Drive, Suite 500<br />
-                          Norcross, GA 30093<br />
-                        <a href="http://ga.water.usgs.gov/">http://ga.water.usgs.gov/ </a> </p>
-                    </address>
+                <aside>
+                    <p class="adobeReader">Part or all of this report is presented in Portable Document Format (PDF). For best results viewing and printing PDF documents, it is recommended that you download the documents to your computer and open them with Adobe Reader. PDF documents opened from your browser may not display or print as intended. Download the latest version of <a href="http://get.adobe.com/reader/">Adobe Reader</a>, free of charge. More information about viewing, downloading, and printing report files can be found <a href="http://pubs.usgs.gov/potential_problems.html">here</a>.</p>
+                </aside>
 
-                    <aside>
-                        <p class="adobeReader">Part or all of this report is presented in Portable Document Format (PDF). For best results viewing and printing PDF documents, it is recommended that you download the documents to your computer and open them with Adobe Reader. PDF documents opened from your browser may not display or print as intended. Download the latest version of <a href="http://get.adobe.com/reader/">Adobe Reader</a>, free of charge. More information about viewing, downloading, and printing report files can be found <a href="http://pubs.usgs.gov/potential_problems.html">here</a>.</p>
-                    </aside>
-
-                        <h4>Suggested Citation</h4>
-                        <p class="reference">{{ pubdata['usgsCitation'] }}, <a href="http://dx.doi.org/{{ pubdata["doi"] }}">http://dx.doi.org/{{ pubdata["doi"] }}</a><p>
-                    <!--Table of Contents Goes here eventually-->
+                    <h4>Suggested Citation</h4>
+                    <p class="reference">{{ pubdata['usgsCitation'] }}, <a href="http://dx.doi.org/{{ pubdata["doi"] }}">http://dx.doi.org/{{ pubdata["doi"] }}</a><p>
+                <!--Table of Contents Goes here eventually-->
 
 
-                    </section>
+                </section>
 
 
-                    <section id="details">
-                        <h4 id="" class="dark">Additonal Publication Details</h4>
-                        <dl id="publication_details">
-                            <dt>Publication Type</dt>
-                            <dd>{{ pubdata['publicationType']['text'] }}</dd>
-                            {% if pubdata['publicationSubtype']  %}
-                            <dt>Publication Subtype</dt>
-                            <dd>{{ pubdata['publicationSubtype']['text'] }}</dd>
-                            {% endif %}
-                            {% if pubdata['seriesTitle']  %}
-                            <dt>Series Name</dt>
-                            <dd>{{ pubdata['seriesTitle']['text'] }}</dd>
-                            {% endif %}
-                            {% if pubdata['seriesNumber']  %}
-                            <dt>Series Number</dt>
-                            <dd>{{ pubdata['seriesNumber'] }}</dd>
-
-                            {% endif %}
-                            {% if pubdata['issn']['print']  %}
-                            <dt>ISSN (print)</dt>
-                                <dd>{{ pubdata['issn']['print'] }}</dd>{% endif %}
-                        {% if pubdata['issn']['online'] %}<dt>ISSN (online)</dt>
-                                <dd>{{ pubdata['issn']['online'] }}</dd>{% endif %}
-                        {% if pubdata['isbn'] %}<dt>ISBN</dt>
-                                <dd>{{ pubdata['isbn'] }}</dd>{% endif %}
-                        {% if pubdata['doi'] %}<dt>DOI</dt>
-                                <dd>{{ pubdata['doi'] }}</dd>{% endif %}
-
-                            {% if pubdata['language']  %}
-                            <dt>Language</dt>
-                            <dd>{{ pubdata['language'] }}</dd>
-                            {% endif %}
-                            {% if pubdata['publisher']  %}
-                            <dt>Publisher</dt>
-                            <dd>{{ pubdata['publisher'] }}</dd>
-                            {% endif %}
-                            {% if pubdata['publisherLocation']  %}
-                            <dt>Publisher Location</dt>
-                            <dd>{{ pubdata['publisherLocation'] }}</dd>
-                            {% endif %}
-                            {% if pubdata['costCenters']  %}
-                            <dt>Contributing Office</dt>
-                                {% for costCenter in pubdata['costCenters'] %}
-                                <dd>{{ costCenter['text'] }}</dd>
-                                {% endfor %}
-                            {% endif %}
-                            {% if pubdata['productDescription']  %}
-                            <dt>Description</dt>
-                            <dd>{{ pubdata['productDescription'] }}</dd>
-                            {% endif %}
-                            {% if pubdata['numberOfPages']  %}
-                            <dt>Number of Pages</dt>
-                            <dd>{{ pubdata['numberOfPages'] }}</dd>
-                            {% endif %}
-                            {% if pubdata['startPage']  %}
-                            <dt>Start Page</dt>
-                            <dd>{{ pubdata['startPage'] }}</dd>
-                            {% endif %}
-                            {% if pubdata['endPage']  %}
-                            <dt>End Page</dt>
-                            <dd>{{ pubdata['endPage'] }}</dd>
-                            {% endif %}
-                            {% if pubdata['temporalStart']  %}
-                            <dt>Time Range Start</dt>
-                            <dd>{{ pubdata['temporalStart'] }}</dd>
-                            {% endif %}
-                            {% if pubdata['temporalEnd']  %}
-                            <dt>Time Range End</dt>
-                            <dd>{{ pubdata['temporalEnd'] }}</dd>
-                            {% endif %}
+                <section id="details">
+                    <h4 id="" class="dark">Additional Publication Details</h4>
+                    <dl id="publication_details">
+                      {% for detail in pubdata['details'] %}
+                          <dt class="{{ loop.cycle('', 'dark') }}">{{ detail.keys()[0] }}</dt>
+                          <dd class="{{ loop.cycle('', 'dark') }}">{{ detail.values()[0] }}</dd>
+                      {% endfor %}
+                    </dl>
 
 
 
+                </section>
 
+            </article>
+        </main>
+        {% endblock %}
 
-
-
-
-
-
-
-                        </dl>
-
-
-
-                    </section>
-
-                </article>
-
-            </div> <!-- #main -->
-        </div> <!-- #main-container -->
-</body>
-</html>
 
