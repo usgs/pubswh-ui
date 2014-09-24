@@ -11,6 +11,7 @@ app = Flask(__name__)
 
 pub_url = "http://127.0.0.1:5001/api/"
 lookup_url = "https://pubs-test.er.usgs.gov/pubs-services/lookup/"
+supersedes_url = 'http://pubs.er.usgs.gov/service/citation/json/extras?'
 
 
 

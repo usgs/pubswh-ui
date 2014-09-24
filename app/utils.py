@@ -78,3 +78,6 @@ def pull_feed (feed_url):
 
     return {'post' : post}
 
+def supersedes(supersedes_url, pubdata):
+    indexId = pubdata.get('indexId')
+    supersedes = get(supersedes_url, params={'prod_id':indexId})
