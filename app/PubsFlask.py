@@ -49,7 +49,6 @@ def lookup(endpoint):
 def faq():
     feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=myUSGS+4.0+RSS+Feed&labelString=pw_faq&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=600&showContent=true&confirm=Create+RSS+Feed'
     faq_content = pull_feed(feed_url)
-    print(faq_content)
     return render_template('faq.html', faq_content=faq_content)
 
 

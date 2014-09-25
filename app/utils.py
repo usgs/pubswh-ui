@@ -3,8 +3,8 @@ __author__ = 'jameskreft'
 from requests import get
 import pprint
 import feedparser
-
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
+import json
 
 def call_api(baseapiurl, index_id):
     r = get(baseapiurl+'/publication/'+index_id)
@@ -63,6 +63,7 @@ def pull_feed (feed_url):
         # Remove edited by paragraph
         soup.p.extract()
 
+
         # Remove final div in the feed
         feedDiv = soup.find('div', class_='feed')
         childrenDivs = feedDiv.findAll('div')
@@ -73,11 +74,21 @@ def pull_feed (feed_url):
         links = feedDiv.select('a[href^="' + base + '"]')
         for link in links:
             link['href'] = link['href'].replace(base, '')
-
         post = unicode(soup)
 
-    return {'post' : post}
+    return post
 
-def supersedes(supersedes_url, pubdata):
-    indexId = pubdata.get('indexId')
-    supersedes = get(supersedes_url, params={'prod_id':indexId})
+def supersedes(supersedes_url, indexId):
+    supersede_array = get(supersedes_url, params={'prod_id':indexId}).json()['modsCollection']['mods'][0]['relatedItem'][0]
+    supersede_info = {}
+    supersede_info['type']=supersede_array['@type']
+    supersede_info['indexId']=supersede_array['identifier']['#text']
+    supersede_info['title']=supersede_array['titleInfo']['title']
+    return supersede_info
+
+
+supersedes('http://pubs.er.usgs.gov/service/citation/json/extras','fs15199')
+
+
+
+

@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% block head %}
-    <title>FAQ- USGS Publications Warehouse</title>
+    <title>Frequently Asked Questions- USGS Publications Warehouse</title>
     <meta name="description" content="FAQs about the Publications Warehouse">
 {% endblock %}
 
 {% block main %}
-{{ faq_content[0]|safe }}
+    <h1>Frequently Asked Questions</h1>
+{{ faq_content|safe }}
 {% endblock %}
