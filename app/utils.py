@@ -87,8 +87,5 @@ def supersedes(supersedes_url, indexId):
     return supersede_info
 
 
-supersedes('http://pubs.er.usgs.gov/service/citation/json/extras','fs15199')
-
-
 
 
