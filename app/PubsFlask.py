@@ -5,6 +5,7 @@ from webargs import Arg
 from webargs.flaskparser import FlaskParser
 import json
 from utils import pubdetails, pull_feed
+from forms import ContactForm
 
 
 app = Flask(__name__)
@@ -15,16 +16,18 @@ supersedes_url = 'http://pubs.er.usgs.gov/service/citation/json/extras?'
 
 
 
-
-
 @app.route('/')
 def index():
     return render_template('home.html')
 
 #contact form
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
-    return 'Contact form will live here'
+    form = ContactForm()
+    if request.method == 'POST':
+        return 'Form posted.'
+    elif request.method == 'GET':
+        return render_template('contact.html', form=form)
 
 #leads to rendered html for publication page
 @app.route('/publication/<indexId>')
@@ -45,14 +48,34 @@ def lookup(endpoint):
     else:
         abort(404)
 
-@app.route('/faq')
+
+
+@app.route('/documentation/faq')
 def faq():
     feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=myUSGS+4.0+RSS+Feed&labelString=pw_faq&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=600&showContent=true&confirm=Create+RSS+Feed'
     faq_content = pull_feed(feed_url)
     return render_template('faq.html', faq_content=faq_content)
 
+@app.route('/documentation/usgs_series')
+def usgs_series():
+    feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=myUSGS+4.0+RSS+Feed&labelString=usgs_series&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
+    usgs_series_content = pull_feed(feed_url)
+    return render_template('usgs_series.html', usgs_series_content=usgs_series_content)
 
-#search args, will be used for the search params and generating the opensearch.xml documen
+@app.route('/documentation/web_service_documentation')
+def web_service_docs():
+    feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=myUSGS+4.0+RSS+Feed&labelString=pubs_webservice_docs&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3650&showContent=true&confirm=Create+RSS+Feed'
+    web_service_docs = pull_feed(feed_url)
+    return render_template('webservice_docs.html', web_service_docs=web_service_docs)
+
+@app.route('/documentation/other_resources')
+def other_resources():
+    feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=myUSGS+4.0+RSS+Feed&labelString=other_resources&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3650&showContent=true&confirm=Create+RSS+Feed'
+    other_resources = pull_feed(feed_url)
+    return render_template('other_resources.html', other_resources=other_resources)
+
+
+#search args, will be used for the search params and generating the opensearch.xml documentation
 search_args = {
     'title': Arg(str, multiple=True),
     'author': Arg(str, multiple=True),
@@ -71,7 +94,7 @@ def api_webargs():
     #TODO: map the webargs to the Pubs Warehouse Java API, generate output
 
 
-
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 if __name__ == '__main__':
     app.debug = True

@@ -117,11 +117,13 @@ $(document).ready(function(){
 
                 	<h3>More links</h3>
 
-                    	<h4><a href="#">FAQS</a></h4>
+                    	<h4><a href="{{ url_for('faq') }}">FAQS</a></h4>
 
-                    	<h4><a href="#">Contents</a></h4>
+                        <h4><a href="{{ url_for('web_service_docs') }}">Web Service Documentation</a></h4>
 
-                    	<h4><a href="#">Other Resources</a></h4>
+                    	<h4><a href="{{ url_for('other_resources') }}">Other Resources</a></h4>
+
+                        <h4><a href="{{ url_for('usgs_series') }}">Descriptions of US Geological Survey Report Series</a></h4>
 
                 </section>
 
@@ -139,3 +141,4 @@ $(document).ready(function(){
 
             </article>
 {% endblock %}
+{% block url %}<a href="{{ url_for('index') }}">http://pubs.er.usgs.gov{{ url_for('index') }}</a>{% endblock %}

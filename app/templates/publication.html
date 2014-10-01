@@ -90,4 +90,6 @@
         </main>
         {% endblock %}
 
+        {% block url %}<a href="{{ url_for('publication', indexId = pubdata['indexId']) }}">http://pubs.er.usgs.gov{{ url_for('publication', indexId = pubdata['indexId']) }}</a>{% endblock %}
+
 
