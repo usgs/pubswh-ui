@@ -10,7 +10,7 @@ from forms import ContactForm
 
 app = Flask(__name__)
 
-pub_url = "http://127.0.0.1:5001/api/"
+pub_url = "https://cida-eros-pubsdev.er.usgs.gov:8443/pubs-services/"
 lookup_url = "https://pubs-test.er.usgs.gov/pubs-services/lookup/"
 supersedes_url = 'http://pubs.er.usgs.gov/service/citation/json/extras?'
 
@@ -32,7 +32,7 @@ def contact():
 #leads to rendered html for publication page
 @app.route('/publication/<indexId>')
 def publication(indexId):
-    r = get(pub_url+'publication/'+indexId)
+    r = get(pub_url+'publication/'+indexId, {'mimetype': 'json'})
     pubreturn = r.json()
     pubdata= pubdetails(pubreturn['pub'])
     return render_template('publication.html', indexID=indexId, pubdata=pubdata)

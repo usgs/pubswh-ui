@@ -13,6 +13,12 @@ def call_api(baseapiurl, index_id):
 
 
 def pubdetails(pubdata):
+    """build the ordered list to make the 'Publications details' box
+
+    :param pubdata: the data pulled from the pubs warehouse web service
+    :return: pubdata with an additional "details" element
+    """
+
     pubdata['details'] = []
     detailslist = [
         ['publicationType', 'text', 'Publication type:'],
@@ -50,6 +56,11 @@ def pubdetails(pubdata):
 
 
 def pull_feed(feed_url):
+    """
+    pull page data from a my.usgs.gov confluence wiki feed
+    :param feed_url: the url of the feed, created in confluence feed builder
+    :return: the html of the page itself, stripped of header and footer
+    """
     feed = feedparser.parse(feed_url)
 
     # Process html to remove unwanted mark-up and fix links
@@ -76,9 +87,29 @@ def pull_feed(feed_url):
 
 
 def supersedes(supersedes_url, index_id):
+    """
+    pull supersede info for a pub from legacy "extras" endpoint
+    :param supersedes_url:url for extras endpoint
+    :param index_id: index_id of pub
+    :return: dict of relevant supersede info
+    """
+
     supersede_array = get(supersedes_url,
                           params={'prod_id': index_id}).json()['modsCollection']['mods'][0]['relatedItem'][0]
-    supersede_info = {'type': supersede_array['@type']}
-    supersede_info['index_id'] = supersede_array['identifier']['#text']
-    supersede_info['title'] = supersede_array['titleInfo']['title']
-    return supersede_info
+    #TODO: deal with pubs with more than one relationship
+    return {'type': supersede_array['@type'], 'index_id': supersede_array['identifier']['#text'],
+            'title': supersede_array['titleInfo']['title']}
+
+def getbrowsecontent(browseurl):
+    """
+    Gets
+    :param browseurl: url of legacy browse interface
+    :return: html content of links
+    """
+    content = get(browseurl).text
+    print content
+    soup = BeautifulSoup(content)
+    links_div = soup.find('div', {id: "pubs-browse-links"})
+    print links_div
+
+getbrowsecontent('http://pubs.er.usgs.gov/browse')
