@@ -32,10 +32,10 @@ def contact():
 #leads to rendered html for publication page
 @app.route('/publication/<indexId>')
 def publication(indexId):
-    r = get(pub_url+'publication/'+indexId, {'mimetype': 'json'})
+    r = get(pub_url+'publication/'+indexId, params={'mimetype': 'json'}, verify=False)
     pubreturn = r.json()
-    pubdata= pubdetails(pubreturn['pub'])
-    return render_template('publication.html', indexID=indexId, pubdata=pubdata)
+    #pubdata= pubdetails(pubreturn['pub'])
+    return render_template('publication.html', indexID=indexId, pubdata=pubreturn)
 
 #leads to json for selected endpoints
 @app.route('/lookup/<endpoint>')

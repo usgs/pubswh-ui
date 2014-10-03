@@ -112,4 +112,3 @@ def getbrowsecontent(browseurl):
     links_div = soup.find('div', {id: "pubs-browse-links"})
     print links_div
 
-getbrowsecontent('http://pubs.er.usgs.gov/browse')

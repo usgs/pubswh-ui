@@ -57,7 +57,7 @@
 
                     <ul class="fileslist">
                         {% for link in pubdata['links']|sort(attribute='rank') %}
-                            <li> <a href="{{ link["url"] }}" target="_blank" title="{{ link["description"] }}"><strong>{{ link["type"]["text"] }}</strong> {{ link["linkFileType"]["text"] }} ({{ link["size"] }})</a> </li>
+                            <li> <a href="{{ link["url"] }}" target="_blank" title="{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}"><strong>{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}</strong> {% if link["linkFileType"]["text"]  %}{{ link["linkFileType"]["text"] }}{% endif %} {% if link["size"]  %}({{ link["size"] }}){% endif %}</a> </li>
                         {% endfor %}
                     </ul>
 
