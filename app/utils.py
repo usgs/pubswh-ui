@@ -54,6 +54,34 @@ def pubdetails(pubdata):
             pubdata['details'].append({detail[1]: pubdata.get(detail[0])})
     return pubdata
 
+def display_links(pubdata):
+    """
+    restructures links from the API so that they are easy to display in a jinja template
+    :param pubdata:
+    :return: pubdata with new displayLinks array
+    """
+    links = pubdata.get("links")
+    displaylinks = []
+    if links is not None:
+        rankcounter = 0
+        for link in links:
+            if link.get('rank') is None:
+                link['rank'] = rankcounter
+                rankcounter = rankcounter+1
+            displaylinks.append(link)
+
+    pubdata["displayLinks"] = displaylinks
+    return pubdata
+
+
+
+
+
+
+
+
+
+
 
 def pull_feed(feed_url):
     """

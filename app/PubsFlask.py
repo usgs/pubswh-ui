@@ -4,13 +4,13 @@ from requests import get
 from webargs import Arg
 from webargs.flaskparser import FlaskParser
 import json
-from utils import pubdetails, pull_feed
+from utils import pubdetails, pull_feed, display_links
 from forms import ContactForm
-
+import pprint
 
 app = Flask(__name__)
 
-pub_url = "https://cida-eros-pubsdev.er.usgs.gov:8443/pubs-services/"
+pub_url = "https://pubs-test.er.usgs.gov/pubs-services/"
 lookup_url = "https://pubs-test.er.usgs.gov/pubs-services/lookup/"
 supersedes_url = 'http://pubs.er.usgs.gov/service/citation/json/extras?'
 
@@ -34,8 +34,9 @@ def contact():
 def publication(indexId):
     r = get(pub_url+'publication/'+indexId, params={'mimetype': 'json'}, verify=False)
     pubreturn = r.json()
-    #pubdata= pubdetails(pubreturn['pub'])
-    return render_template('publication.html', indexID=indexId, pubdata=pubreturn)
+    pubdata= pubdetails(pubreturn)
+    pubdata = display_links(pubdata)
+    return render_template('publication.html', indexID=indexId, pubdata=pubdata)
 
 #leads to json for selected endpoints
 @app.route('/lookup/<endpoint>')
@@ -94,7 +95,9 @@ def api_webargs():
     #TODO: map the webargs to the Pubs Warehouse Java API, generate output
 
 
+#this is the not at all secret "secret key" given as an example in the flask documentation
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+#TODO build a settings.py, since clearly a default secret key and an app.debug statement isn't production ready.
 
 if __name__ == '__main__':
     app.debug = True
