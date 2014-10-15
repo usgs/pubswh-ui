@@ -13,7 +13,9 @@
 
                 <hgroup>
                     <h3 property="dc:title" datatype="" rel="dc:type" href="http://purl.org/dc/dcmitype/Text">{{ pubdata['title']|safe }}</h3>
+                    {% if pubdata['seriesTitle'] %}
                     <h4>{{ pubdata['seriesTitle']['text'] }} {{ pubdata['seriesNumber'] }}</h4>
+                    {% endif %}
                     {% if pubdata['subSeriesTitle'] %}
                     <h5>{{ pubdata['subSeriesTitle'] }}</h5>
                     {% endif %}
@@ -49,17 +51,19 @@
 
                 <section id="abstract">
                     <h2 id="abstract_head">Abstract</h2>
-                    {{ pubdata['abstract']|safe }}
+                    {{ pubdata['docAbstract']|safe }}
 
                 </section>
 
                 <section id="suggested">
 
+
                     <ul class="fileslist">
-                        {% for link in pubdata['links']|sort(attribute='rank') %}
-                            <li> <a href="{{ link["url"] }}" target="_blank" title="{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}"><strong>{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}</strong> {% if link["linkFileType"]["text"]  %}{{ link["linkFileType"]["text"] }}{% endif %} {% if link["size"]  %}({{ link["size"] }}){% endif %}</a> </li>
+                        {% for link in pubdata['displayLinks']|sort(attribute='rank') %}
+                            <li> <a href="{{ link["url"] }}" target="_blank" title="{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %} {% if link["size"]  %}({{ link["size"] }}){% endif %}</a> </li>
                         {% endfor %}
                     </ul>
+
 
                 <aside>
                     <p class="adobeReader">Part or all of this report is presented in Portable Document Format (PDF). For best results viewing and printing PDF documents, it is recommended that you download the documents to your computer and open them with Adobe Reader. PDF documents opened from your browser may not display or print as intended. Download the latest version of <a href="http://get.adobe.com/reader/">Adobe Reader</a>, free of charge. More information about viewing, downloading, and printing report files can be found <a href="http://pubs.usgs.gov/potential_problems.html">here</a>.</p>
@@ -71,6 +75,7 @@
 
 
                 </section>
+
 
 
                 <section id="details">
