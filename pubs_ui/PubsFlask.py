@@ -1,13 +1,13 @@
 
-from flask import Flask, render_template, abort, request, Response
+from flask import render_template, abort, request, Response
 from requests import get
 from webargs import Arg
 from webargs.flaskparser import FlaskParser
 import json
 from utils import pubdetails, pull_feed, display_links
 from forms import ContactForm
+from pubs_ui import app
 
-app = Flask(__name__)
 
 pub_url = "https://pubs-test.er.usgs.gov/pubs-services/"
 lookup_url = "https://pubs-test.er.usgs.gov/pubs-services/lookup/"
@@ -95,10 +95,12 @@ def api_webargs():
 
 
 #this is the not at all secret "secret key" given as an example in the flask documentation
-app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-#TODO build a settings.py, since clearly a default secret key and an app.debug statement isn't production ready.
+#pubs_ui.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+#TODO build a settings.py, since clearly a default secret key and an pubs_ui.debug statement isn't production ready.
 
+"""
 if __name__ == '__main__':
-    app.debug = True
-    #app.run()
-    app.run(port=5000)
+    #pubs_ui.debug = True
+    #runserver()
+    pubs_ui.runserver(port=5000)
+"""
