@@ -26,9 +26,10 @@ To get this application running using the flask local dev server, there are thre
  * Running on http://127.0.0.1:5050/
  * Restarting with reloader
  ```
+
 ---
 
-If you want to generate a real secret key, you can do so trivially from the Python console by using `os.random()` like so:
+If you want to generate a real secret key, you can do so trivially from the Python console by using `os.urandom()` like so:
 
 ```python
 >>> import os
