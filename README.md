@@ -18,11 +18,11 @@ To get this application running using the flask local dev server, there are thre
  #URL for endpoint to get supersede info
  SUPERSEDES_URL = "[server of choice]/service/citation/json/extras?"
 
-```
+ ```
 
 3. After you have created your `local_settings.py`, you can start the app by running `runserver.py`, which will give you an output like so:
 
- ```
+ ```python
  * Running on http://127.0.0.1:5050/
  * Restarting with reloader
  ```
@@ -30,7 +30,7 @@ To get this application running using the flask local dev server, there are thre
 
 If you want to generate a real secret key, you can do so trivially from the Python console by using `os.random()` like so:
 
-```
+```python
 >>> import os
 >>> os.urandom(24)
 '\xa1\x89D\x9e+\xb4Pl\xbfr\xa5\xc3\xc1\x05\x9c\x90\x91\x10\xa8\xfa\x10\xe7r\x9e'
