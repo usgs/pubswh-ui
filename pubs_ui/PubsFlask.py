@@ -1,5 +1,5 @@
 
-from flask import render_template, abort, request, Response
+from flask import render_template, abort, request, Response, jsonify
 from requests import get
 from webargs import Arg
 from webargs.flaskparser import FlaskParser
@@ -12,6 +12,9 @@ from pubs_ui import app
 pub_url = app.config['PUB_URL']
 lookup_url = app.config['LOOKUP_URL']
 supersedes_url = app.config['SUPERSEDES_URL']
+
+#should requests verify the certificates for ssl connections
+verify_cert = app.config['VERIFY_CERT']
 
 
 @app.route('/')
@@ -32,11 +35,14 @@ def contact():
 #leads to rendered html for publication page
 @app.route('/publication/<indexId>')
 def publication(indexId):
-    r = get(pub_url+'publication/'+indexId, params={'mimetype': 'json'}, verify=False)
+    r = get(pub_url+'publication/'+indexId, params={'mimetype': 'json'}, verify=verify_cert)
     pubreturn = r.json()
     pubdata = pubdetails(pubreturn)
     pubdata = display_links(pubdata)
-    return render_template('publication.html', indexID=indexId, pubdata=pubdata)
+    if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
+        return jsonify(pubdata)
+    else:
+        return render_template('publication.html', indexID=indexId, pubdata=pubdata)
 
 
 #leads to json for selected endpoints
@@ -45,7 +51,7 @@ def lookup(endpoint):
     endpoint_list = ['costcenters', 'publicationtypes', 'publicationsubtypes', 'publicationseries']
     endpoint = endpoint.lower()
     if endpoint in endpoint_list:
-        r = get(lookup_url+endpoint+'?mimetype=json').json()
+        r = get(lookup_url+endpoint, params={'mimetype': 'json'},  verify=verify_cert).json()
         return Response(json.dumps(r),  mimetype='application/json')
     else:
         abort(404)
