@@ -9,9 +9,9 @@ from forms import ContactForm
 from pubs_ui import app
 
 
-pub_url = "https://pubs-test.er.usgs.gov/pubs-services/"
-lookup_url = "https://pubs-test.er.usgs.gov/pubs-services/lookup/"
-supersedes_url = 'http://pubs.er.usgs.gov/service/citation/json/extras?'
+pub_url = app.config['PUB_URL']
+lookup_url = app.config['LOOKUP_URL']
+supersedes_url = app.config['SUPERCEDES_URL']
 
 
 @app.route('/')
