@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>gov.usgs.cida.PubsWarehouse_UI</groupId>
+    <artifactId>publications_wh_ui</artifactId>
+    <packaging>pom</packaging>
+    <version>0.1-SNAPSHOT</version>
+    <name>Pubications Warehouse UI</name>
+  
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    
+    <url>https://github.com/USGS-CIDA/PubsWarehouse_UI</url>
+    <inceptionYear>2014</inceptionYear>
+    <organization>
+        <name>Center for Integrated Data Analytics</name>
+        <url>http://cida.usgs.gov</url>
+    </organization>    
+	
+    <developers>
+    	<developer>
+    		<name>Jim Kreft</name>
+    		<email>jkreft@usgs.gov</email>
+    		<id>jkreft</id>
+            <organization>Center for Integrated Data Analytics</organization>
+            <organizationUrl>http://cida.usgs.gov</organizationUrl>
+            <timezone>-6</timezone>
+    	</developer>
+        <developer>
+            <name>Andrew Yan</name>
+            <email>ayan@usgs.gov</email>
+            <id>ayan</id>
+            <organization>Center for Integrated Data Analytics</organization>
+            <organizationUrl>http://cida.usgs.gov</organizationUrl>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <name>Stephan Kochaver</name>
+            <email>skochaver@usgs.gov </email>
+            <id>skochaver</id>
+            <organization>Center for Integrated Data Analytics</organization>
+            <organizationUrl>http://cida.usgs.gov</organizationUrl>
+            <timezone>-6</timezone>
+        </developer>        
+    </developers>
+	
+    <licenses>
+        <license>
+            <name>Public Domain</name>
+            <url>http://water.usgs.gov/software/help/notice/</url>
+            <comments>
+                See the url or the 'LICENSE' file for details
+            </comments>
+        </license>
+    </licenses>
+	
+    <repositories>
+        <repository>
+            <id>public-releases</id>
+            <url>http://internal.cida.usgs.gov/maven/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>cida-public-releases</id>
+            <url>http://internal.cida.usgs.gov/maven/content/groups/cida-public/</url>
+        </repository>
+        <repository>
+            <id>cida-python-releases</id>
+            <url>http://internal.cida.usgs.gov/maven/content/repositories/cida-python-releases/</url>
+        </repository>
+        <repository>
+            <id>cida-python-snapshots</id>
+            <url>http://internal.cida.usgs.gov/maven/content/groups/public-snapshots/</url>
+        </repository>
+        <repository>
+            <id>cida-thirdparty</id>
+            <url>http://internal.cida.usgs.gov/maven/content/repositories/cida-thirdparty/</url>
+        </repository>
+    </repositories>
+
+    <scm>
+        <connection>scm:git:https://github.com/USGS-CIDA/PubsWarehouse_UI</connection>
+        <developerConnection>scm:git:git@github.com:USGS-CIDA/PubsWarehouse_UI.git</developerConnection>
+        <url>https://github.com/USGS-CIDA/PubsWarehouse_UI</url>
+  </scm>
+	
+    <distributionManagement>
+        <repository>
+            <id>cida-python-releases</id>
+            <name>CIDA Python Releases</name>
+            <url>http://internal.cida.usgs.gov/maven/content/repositories/cida-python-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>cida-python-snapshots</id>
+            <name>CIDA Python Snapshots</name>
+            <url>http://internal.cida.usgs.gov/maven/content/repositories/cida-python-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+	<version>2.4</version>
+        <executions>
+          <execution>
+            <id>create-distribution</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>assembly/zip.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

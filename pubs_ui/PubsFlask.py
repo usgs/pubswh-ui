@@ -9,9 +9,9 @@ from forms import ContactForm
 from pubs_ui import app
 
 
-pub_url = "https://pubs-test.er.usgs.gov/pubs-services/"
-lookup_url = "https://pubs-test.er.usgs.gov/pubs-services/lookup/"
-supersedes_url = 'http://pubs.er.usgs.gov/service/citation/json/extras?'
+pub_url = app.config['PUB_URL']
+lookup_url = app.config['LOOKUP_URL']
+supersedes_url = app.config['SUPERCEDES_URL']
 
 
 @app.route('/')
@@ -92,15 +92,3 @@ def api_webargs():
 
     print 'webarg param: ', args
     #TODO: map the webargs to the Pubs Warehouse Java API, generate output
-
-
-#this is the not at all secret "secret key" given as an example in the flask documentation
-#pubs_ui.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-#TODO build a settings.py, since clearly a default secret key and an pubs_ui.debug statement isn't production ready.
-
-"""
-if __name__ == '__main__':
-    #pubs_ui.debug = True
-    #runserver()
-    pubs_ui.runserver(port=5000)
-"""
