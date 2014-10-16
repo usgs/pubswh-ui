@@ -11,7 +11,7 @@ from pubs_ui import app
 
 pub_url = app.config['PUB_URL']
 lookup_url = app.config['LOOKUP_URL']
-supersedes_url = app.config['SUPERCEDES_URL']
+supersedes_url = app.config['SUPERSEDES_URL']
 
 
 @app.route('/')
