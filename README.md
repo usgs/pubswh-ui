@@ -1,27 +1,31 @@
 PubsWarehouse_UI
 ================
 
-to get this application running using the flask dev server, you need to create a  `local_settings.py` file under PubsWarehouse_UI folder, and add this file to .gitignore
-There is more to do to hook this to Jenkins.
+To get this application running using the flask local dev server, there are three steps:
 
-```python
-SECRET_KEY = 'the_secret_key'
-DEBUG = True #you want debug to be true for development, but not production
+1. Create a virtualenv using python 2.7.5 and add everything in the `requirements.txt` file
+ 
+2. Create a  `local_settings.py` file under PubsWarehouse_UI folder, and add this file to .gitignore.  The contents of the files should looks like so:
 
-#these are the URLS to use to point to the backing services
+ ```python
+ SECRET_KEY = 'the_secret_key'
+ DEBUG = True #you want debug to be true for development, but not production
 
-#URL for getting publication information
-PUB_URL = "[server of choice]/pubs-services/"
-#URL for getting lookup information- authors, contributing offices, etc
-LOOKUP_URL = "[server of choice]/pubs-services/lookup/"
-#URL for endpoint to get supersede info
-SUPERSEDES_URL = "[server of choice]/service/citation/json/extras?"
+ #URL for getting publication information
+ PUB_URL = "[server of choice]/pubs-services/"
+ #URL for getting lookup information- authors, contributing offices, etc
+ LOOKUP_URL = "[server of choice]/pubs-services/lookup/"
+ #URL for endpoint to get supersede info
+ SUPERSEDES_URL = "[server of choice]/service/citation/json/extras?"
 
 ```
----
 
-After you have created your `local_settings.py` to actually get the app up and running, you need to run `runserver.py`
+3. After you have created your `local_settings.py`, you can start the app by running `runserver.py`, which will give you an output like so:
 
+ ```
+ * Running on http://127.0.0.1:5050/
+ * Restarting with reloader
+ ```
 ---
 
 If you want to generate a real secret key, you can do so trivially from the Python console by using `os.random()` like so:
