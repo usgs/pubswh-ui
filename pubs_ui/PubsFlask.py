@@ -92,15 +92,3 @@ def api_webargs():
 
     print 'webarg param: ', args
     #TODO: map the webargs to the Pubs Warehouse Java API, generate output
-
-
-#this is the not at all secret "secret key" given as an example in the flask documentation
-#pubs_ui.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-#TODO build a settings.py, since clearly a default secret key and an pubs_ui.debug statement isn't production ready.
-
-"""
-if __name__ == '__main__':
-    #pubs_ui.debug = True
-    #runserver()
-    pubs_ui.runserver(port=5000)
-"""
