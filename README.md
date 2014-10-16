@@ -11,15 +11,18 @@ DEBUG = True #you want debug to be true for development, but not production
 #these are the URLS to use to point to the backing services
 
 #URL for getting publication information
-PUB_URL = ""
+PUB_URL = "[server of choice]/pubs-services/"
 #URL for getting lookup information- authors, contributing offices, etc
-LOOKUP_URL = "https://pubs-test.er.usgs.gov/pubs-services/lookup/"
+LOOKUP_URL = "[server of choice]/pubs-services/lookup/"
 #URL for endpoint to get supersede info
-SUPERSEDES_URL = "http://pubs.er.usgs.gov/service/citation/json/extras?#
+SUPERSEDES_URL = "[server of choice]/service/citation/json/extras?"
 
 ```
+---
 
-to actually get the app up and running, you need to run `runserver.py`
+After you have created your `local_settings.py` to actually get the app up and running, you need to run `runserver.py`
+
+---
 
 If you want to generate a real secret key, you can do so trivially from the Python console by using `os.random()` like so:
 
