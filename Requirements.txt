@@ -1,4 +1,6 @@
 Flask==0.10.1
+Flask-Collect==1.1.2
+Flask-Script==2.0.5
 Flask-WTF==0.10.2
 Jinja2==2.7.3
 MarkupSafe==0.23
