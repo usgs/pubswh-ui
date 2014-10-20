@@ -17,6 +17,9 @@ To get this application running using the flask local dev server, there are thre
  LOOKUP_URL = "[server of choice]/pubs-services/lookup/"
  #URL for endpoint to get supersede info
  SUPERSEDES_URL = "[server of choice]/service/citation/json/extras?"
+ 
+ #verify ssl certificate for outside service calls
+ VERIFY_CERT = True or False
 
  ```
 
