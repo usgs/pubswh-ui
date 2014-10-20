@@ -8,7 +8,6 @@ from flask.ext.collect import Collect
 from pubs_ui import app 
 
 manager = Manager()
-collect = Collect()
+collect = Collect(app)
 collect.collect(verbose=True)
-collect.init_app(app)
 collect.init_script(manager)
