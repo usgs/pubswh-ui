@@ -4,14 +4,20 @@ from requests import get
 from webargs import Arg
 from webargs.flaskparser import FlaskParser
 import json
-from utils import pubdetails, pull_feed, display_links
+from utils import pubdetails, pull_feed, display_links,getbrowsecontent
 from forms import ContactForm
 from pubs_ui import app
+import sys
+
+#set UTF-8 to be default throughout app
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 
 pub_url = app.config['PUB_URL']
 lookup_url = app.config['LOOKUP_URL']
 supersedes_url = app.config['SUPERSEDES_URL']
+browse_url = app.config['BROWSE_URL']
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
@@ -79,6 +85,13 @@ def web_service_docs():
 def other_resources():
     feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=myUSGS+4.0+RSS+Feed&labelString=other_resources&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3650&showContent=true&confirm=Create+RSS+Feed'
     return render_template('other_resources.html', other_resources=pull_feed(feed_url))
+
+
+@app.route('/browse/', defaults={'path': ''})
+@app.route('/browse/<path:path>')
+def browse(path):
+    browsecontent = getbrowsecontent(browse_url+path)
+    return render_template('browse.html', browsecontent=browsecontent)
 
 
 #search args, will be used for the search params and generating the opensearch.xml documentation

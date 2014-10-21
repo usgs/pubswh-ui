@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block head %}
+    <title>Browse the USGS Publications Warehouse</title>
+    <meta name="description" content="Browse all of the USGS publications warehouse by following a link tree">
+{% endblock %}
+
+{% block main %}
+    <h1>Browse the USGS Publication Warehouse</h1>
+{{ browsecontent|safe }}
+{% endblock %}
