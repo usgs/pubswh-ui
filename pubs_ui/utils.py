@@ -54,6 +54,7 @@ def pubdetails(pubdata):
             pubdata['details'].append({detail[1]: pubdata.get(detail[0])})
     return pubdata
 
+
 def display_links(pubdata):
     """
     restructures links from the API so that they are easy to display in a jinja template
@@ -72,15 +73,6 @@ def display_links(pubdata):
 
     pubdata["displayLinks"] = displaylinks
     return pubdata
-
-
-
-
-
-
-
-
-
 
 
 def pull_feed(feed_url):
@@ -127,6 +119,7 @@ def supersedes(supersedes_url, index_id):
     #TODO: deal with pubs with more than one relationship
     return {'type': supersede_array['@type'], 'index_id': supersede_array['identifier']['#text'],
             'title': supersede_array['titleInfo']['title']}
+
 
 def getbrowsecontent(browseurl):
     """
