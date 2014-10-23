@@ -91,6 +91,8 @@ def other_resources():
 @app.route('/browse/<path:path>')
 def browse(path):
     browsecontent = getbrowsecontent(browse_url+path)
+    #print browsecontent
+    print browsecontent['breadcrumbs']
     return render_template('browse.html', browsecontent=browsecontent)
 
 
