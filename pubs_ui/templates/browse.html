@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block main %}
+<<<<<<< HEAD
     <p class="breadcrumb">
         {% for crumb in browsecontent['breadcrumbs']  %}{{ crumb|safe }}{% endfor %}</p>
     <h1>Browse the USGS Publication Warehouse</h1>
@@ -12,4 +13,8 @@
     {% for link in browsecontent['links']  %}
     {{ link|safe }}
     {% endfor %}
+=======
+    <h1 class="otherPages">Browse the USGS Publication Warehouse</h1>
+{{ browsecontent|safe }}
+>>>>>>> upstream/master
 {% endblock %}
