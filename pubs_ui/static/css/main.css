@@ -468,6 +468,10 @@ h1.otherPages{
 	margin-left:10px;
 }
 
+.feed{
+	min-height:100%;
+	margin-bottom:-98px;
+}
 
 .feed hr{
 	border:none;
@@ -501,11 +505,18 @@ li.p1{
 }
 
 /* ==========================================================================
+   browse styles
+   ========================================================================== */
+
+
+
+/* ==========================================================================
    footer styles
    ========================================================================== */
 footer {
   clear: both;
   position: relative;
+  height:98px;
 }
 
 footer p{margin:0;}
@@ -582,6 +593,10 @@ footer p{margin:0;}
     list-style: none;
 	margin:0;
   }
+  
+  #header_nav ul li{
+  margin-bottom:2px;}
+  
   #header_nav ul li a {
     color: #fff;
     text-decoration: none;
