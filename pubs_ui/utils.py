@@ -128,8 +128,8 @@ def getbrowsecontent(browseurl):
     :return: html content of links
     """
     content = get(browseurl).text
-    print content
     soup = BeautifulSoup(content)
-    links_div = soup.find('div', {id: "pubs-browse-links"})
-    print links_div
+    links_div = soup.find('div', {"id": "pubs-browse-links"}).contents
+    return(unicode(links_div))
+
 
