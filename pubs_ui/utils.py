@@ -133,3 +133,10 @@ def getbrowsecontent(browseurl):
     return(unicode(links_div))
 
 
+def summation(a, b):
+    """
+    Silly little function to explore Pythons unit-test
+    library versus flask-testing
+    """
+    sum_value = a + b
+    return sum_value
