@@ -11,6 +11,7 @@ COLLECT_STORAGE = 'flask.ext.collect.storage.file'
 PUB_URL = ''
 LOOKUP_URL = ''
 SUPERSEDES_URL = ''
+BROWSE_URL = ''
 
 try:
     from local_settings import *
