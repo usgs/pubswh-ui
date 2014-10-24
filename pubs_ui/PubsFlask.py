@@ -108,6 +108,7 @@ search_args = {
 def api_webargs():
     parser = FlaskParser()
     args = parser.parse(search_args, request)
+    return render_template('search_results.html')
 
     print 'webarg param: ', args
     #TODO: map the webargs to the Pubs Warehouse Java API, generate output
