@@ -12,8 +12,7 @@ PUB_URL = ''
 LOOKUP_URL = ''
 SUPERSEDES_URL = ''
 BROWSE_URL = ''
-
-BASE_SEARCH_URL = 'https://pubs-test.er.usgs.gov/pubs-services/publication/?mimetype=json'
+BASE_SEARCH_URL = ''
 
 try:
     from local_settings import *

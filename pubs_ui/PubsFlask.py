@@ -1,10 +1,11 @@
 
 from flask import render_template, abort, request, Response, jsonify
 from requests import get
-from webargs import Arg
 from webargs.flaskparser import FlaskParser
 import json
-from utils import pubdetails, pull_feed, display_links,getbrowsecontent
+from arguments import search_args
+from utils import (pubdetails, pull_feed, display_links, getbrowsecontent, 
+                   get_pubs_search_results)
 from forms import ContactForm
 from pubs_ui import app
 import sys
@@ -18,6 +19,7 @@ pub_url = app.config['PUB_URL']
 lookup_url = app.config['LOOKUP_URL']
 supersedes_url = app.config['SUPERSEDES_URL']
 browse_url = app.config['BROWSE_URL']
+search_url = app.config['BASE_SEARCH_URL']
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
@@ -94,21 +96,13 @@ def browse(path):
     return render_template('browse.html', browsecontent=browsecontent)
 
 
-#search args, will be used for the search params and generating the opensearch.xml documentation
-search_args = {
-    'title': Arg(str, multiple=True),
-    'author': Arg(str, multiple=True),
-    'year': Arg(str, multiple=True),
-    'abstract': Arg(str, multiple=True)
-}
-
-
 #this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
 @app.route('/search/searchwebargs', methods=['GET'])
 def api_webargs():
     parser = FlaskParser()
-    args = parser.parse(search_args, request)
-    return render_template('search_results.html')
+    search_kwargs = parser.parse(search_args, request)
+    search_results = get_pubs_search_results(search_url, params=search_kwargs)
+    return render_template('search_results.html', results=search_results['records'])
 
-    print 'webarg param: ', args
+    # print 'webarg param: ', search_kwargs
     #TODO: map the webargs to the Pubs Warehouse Java API, generate output
