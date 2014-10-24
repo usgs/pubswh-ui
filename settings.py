@@ -4,7 +4,6 @@ Created on Oct 15, 2014
 @author: ayan
 '''
 DEBUG = True
-SERVER_NAME = '127.0.0.1:5050'
 SECRET_KEY = ''
 VERIFY_CERT = True
 COLLECT_STATIC_ROOT = 'static/'
@@ -12,6 +11,7 @@ COLLECT_STORAGE = 'flask.ext.collect.storage.file'
 PUB_URL = ''
 LOOKUP_URL = ''
 SUPERSEDES_URL = ''
+BROWSE_URL = ''
 
 try:
     from local_settings import *

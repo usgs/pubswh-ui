@@ -45,9 +45,6 @@ def pubdetails(pubdata):
         ['conferenceTitle', 'Conference Title:'],
         ['conferenceLocation', 'Conference Location'],
         ['conferenceDate', 'Conference Date:']
-
-
-
     ]
     for detail in detailslist:
 
@@ -147,3 +144,12 @@ def getbrowsecontent(browseurl):
     browse_content['header'] = soup.find('div', {"id": "pubs-browse-header"}).contents
 
     return browse_content
+
+
+def summation(a, b):
+    """
+    Silly little function to exam test running with
+    the nose library.
+    """
+    sum_value = a + b
+    return sum_value
