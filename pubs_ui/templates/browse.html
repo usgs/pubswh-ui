@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 {% block head %}
     <title>Browse the USGS Publications Warehouse</title>
@@ -5,11 +6,16 @@
 {% endblock %}
 
 {% block main %}
-    <p class="breadcrumb">
-        {% for crumb in browsecontent['breadcrumbs']  %}{{ crumb|safe }}{% endfor %}</p>
-    <h1>Browse the USGS Publication Warehouse</h1>
-    <h2>{{ browsecontent['header'][0]|safe }}</h2>
-    {% for link in browsecontent['links']  %}
-    {{ link|safe }}
-    {% endfor %}
+	<div class="space">
+	    <p class="breadcrumb">
+	        {% for crumb in browsecontent['breadcrumbs']  %}{{ crumb|safe }}{% endfor %}</p>
+	    <h1>Browse the USGS Publication Warehouse</h1>
+	    <h2>{{ browsecontent['header'][0]|safe }}</h2>
+	    <div class="fix">
+		    {% for link in browsecontent['links']  %}
+		    {{ link|safe }}
+		    {% endfor %}
+	    </div>
+    </div>
 {% endblock %}
+
