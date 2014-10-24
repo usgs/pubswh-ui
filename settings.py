@@ -12,6 +12,7 @@ PUB_URL = ''
 LOOKUP_URL = ''
 SUPERSEDES_URL = ''
 BROWSE_URL = ''
+BASE_SEARCH_URL = ''
 
 try:
     from local_settings import *
