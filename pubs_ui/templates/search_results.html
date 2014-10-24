@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block head %}
+	<title>Search Results - USGS Publications Warehouse</title>
+	<meta name="description" content="Search results for USGS Publications Warehouse">
+{% endblock head %}
+
+{% block main %}
+	{% for result in results %}
+		<ul>{{ result.title }}</ul>
+	{% endfor %}
+{% endblock main %}
