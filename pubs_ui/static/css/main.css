@@ -18,8 +18,10 @@ textarea {
     color: #222;
 }
 
-html {
+html,
+body {
     font-size: 1em;
+    height:100%;
 }
 
 /*
@@ -219,7 +221,9 @@ article{padding:0 10px;}
 			text-decoration:none;}
 			
 #options a:hover,
-#links a:hover{text-decoration:underline;}
+#links a:hover{
+	text-decoration:underline;
+	color:#000;}
 			
 #options h3,
 #links h3{font-weight:normal;}
@@ -470,7 +474,6 @@ h1.otherPages{
 
 .feed{
 	min-height:100%;
-	margin-bottom:-98px;
 }
 
 .feed hr{
@@ -497,7 +500,9 @@ h1.otherPages{
 	font-weight:bold;
 }
 
-.feed a:hover{text-decoration:underline;}
+.feed a:hover{
+	text-decoration:underline;
+	color:#000;}
 
 li.p1{
 	margin-bottom:10px;
@@ -508,6 +513,58 @@ li.p1{
    browse styles
    ========================================================================== */
 
+.breadcrumb a{
+	text-decoration:none;
+	color:rgb(0,51,102);
+	font-weight:bold;
+}
+
+.breadcrumb a:hover{
+	text-decoration:underline;
+}
+
+h2.otherPages{
+	margin:-5px 0 0 17px;}
+	
+
+.fix ul{
+	list-style-type:none;
+	
+}
+
+.fix ul li{
+	margin-bottom:15px;
+}
+
+.fix ul li a{
+	color:rgb(100,100,100);
+	font-weight:bold;
+	text-decoration:none;
+}
+
+.fix ul li a:hover{
+	text-decoration:underline;
+	color:#000;
+}
+
+.fix li.pubs-browse-list-theme{
+	margin-bottom:15px;
+}
+
+.fix li.pubs-browse-list-theme a{
+	color:rgb(100,100,100);
+	text-decoration:none;
+}
+
+.fix li.pubs-browse-list-theme a:hover{
+	text-decoration:underline;
+	color:#000;
+}
+
+.space{
+	margin-top:-15px;
+	padding:15px;
+}
 
 
 /* ==========================================================================
@@ -516,7 +573,6 @@ li.p1{
 footer {
   clear: both;
   position: relative;
-  height:98px;
 }
 
 footer p{margin:0;}
@@ -790,7 +846,7 @@ h1.otherPages{
 	font-size:2em;
 	margin-left:15px;}
 
-
+ul#pubs-browse-ul{width:70%;}
 
 }/*media query*/
 
