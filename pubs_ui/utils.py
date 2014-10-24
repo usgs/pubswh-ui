@@ -148,8 +148,8 @@ def getbrowsecontent(browseurl):
 
 def summation(a, b):
     """
-    Silly little function to explore Pythons unit-test
-    library versus flask-testing
+    Silly little function to exam test running with
+    the nose library.
     """
     sum_value = a + b
     return sum_value
