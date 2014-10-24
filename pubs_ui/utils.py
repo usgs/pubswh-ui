@@ -20,6 +20,9 @@ def pubdetails(pubdata):
     """
 
     pubdata['details'] = []
+    #details list element has len of 2 or 3.  If 2, the item is coming back as a simple Key:value object, but if three
+    # there are either lists or dicts. the first item in the list is the param in pubdata, the 2nd or 3rd is the display
+    # descriptor and the second if it exists is the secondary key needed to get the text.
     detailslist = [
         ['publicationType', 'text', 'Publication type:'],
         ['publicationSubtype', 'text', 'Publication Subtype:'],
@@ -37,20 +40,27 @@ def pubdetails(pubdata):
         ['numberofPages', 'Number of pages:'],
         ['startPage', 'Start page:'],
         ['endPage', 'End page:'],
-        ['temporalStart', 'Time Range Start'],
-        ['temporalEnd', 'Time Range End']
+        ['temporalStart', 'Time Range Start:'],
+        ['temporalEnd', 'Time Range End:'],
+        ['conferenceTitle', 'Conference Title:'],
+        ['conferenceLocation', 'Conference Location'],
+        ['conferenceDate', 'Conference Date:']
     ]
     for detail in detailslist:
+
         if len(detail) == 3:
+            #if the detail exists and is a dict with a couple key:value pairs, get the right value
             if pubdata.get(detail[0]) is not None and isinstance(pubdata.get(detail[0]), dict):
                 pubdata['details'].append({detail[2]: pubdata[detail[0]].get(detail[1])})
-            elif pubdata.get(detail[0]) is not None and isinstance(pubdata.get(detail[0]), list):
-                dd = ''
+            #if the thing is a list of dicts and if there is something in the list, concatenate the values into a string
+            elif pubdata.get(detail[0]) is not None and isinstance(pubdata.get(detail[0]), list) \
+                    and len(pubdata.get(detail[0])) > 0:
+                dd = []
                 for det in pubdata.get(detail[0]):
-                    dd = dd+det.get(detail[1])+', '
-                dd = dd[:-2]
+                    dd.append(det.get(detail[1]))
+                dd = ', '.join(dd)
                 pubdata['details'].append({detail[2]: dd})
-        elif pubdata.get(detail[0]) is not None and len(pubdata.get(detail[0])) > 0:
+        elif len(detail) == 2 and pubdata.get(detail[0]) is not None and len(pubdata.get(detail[0])) > 0:
             pubdata['details'].append({detail[1]: pubdata.get(detail[0])})
     return pubdata
 
@@ -125,12 +135,15 @@ def getbrowsecontent(browseurl):
     """
     Gets
     :param browseurl: url of legacy browse interface
-    :return: html content of links
+    :return: html content of links, breadcrumb, and title
     """
     content = get(browseurl).text
     soup = BeautifulSoup(content)
-    links_div = soup.find('div', {"id": "pubs-browse-links"}).contents
-    return(unicode(links_div))
+    browse_content = {'links':soup.find('div', {"id": "pubs-browse-links"}).contents}
+    browse_content['breadcrumbs'] = soup.find('div', {"id": "pubs-browse-breadcrumbs"}).contents
+    browse_content['header'] = soup.find('div', {"id": "pubs-browse-header"}).contents
+
+    return browse_content
 
 
 def summation(a, b):

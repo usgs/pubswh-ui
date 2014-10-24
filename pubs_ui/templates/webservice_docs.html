@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-    <h1>Web Service Help</h1>
+    <h1 class="otherPages">Web Service Help</h1>
 {{ web_service_docs|safe }}
 {% endblock %}
 {% block url %}<a href="{{ url_for('web_service_docs') }}">http://pubs.er.usgs.gov{{ url_for('web_service_docs') }}</a>{% endblock %}
