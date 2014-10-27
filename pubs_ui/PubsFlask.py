@@ -3,8 +3,9 @@ import json
 from flask import render_template, abort, request, Response, jsonify
 from requests import get
 from webargs.flaskparser import FlaskParser
+from flask.ext.paginate import Pagination
+from flask_utils.flask_pagination import manual_paginate_json_response
 from arguments import search_args
-from flask_utils.flask_pagination import Pagination
 from utils import (pubdetails, pull_feed, display_links, getbrowsecontent, 
                    get_pubs_search_results)
 from forms import ContactForm
@@ -98,15 +99,26 @@ def browse(path):
 
 
 #this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
-@app.route('/search/', methods=['GET'], defaults={'page': 1})
-@app.route('/search/<int:page>')
-def api_webargs(page):
+@app.route('/search', methods=['GET'])
+def api_webargs():
     parser = FlaskParser()
     search_kwargs = parser.parse(search_args, request)
+    per_page = 10
+    try:
+        page = int(request.args.get('page', 1))
+    except ValueError:
+        page = 1
+    search_kwargs['page_size'] = per_page
+    search_kwargs['page'] = page
     search_results = get_pubs_search_results(search_url, params=search_kwargs)
-    search_result_count = len(search_results)
-    pagination = Pagination(page, PER_PAGE, search_result_count)
-    return render_template('search_results.html', results=search_results['records'])
+    search_result_records = search_results['records']
+    record_count = search_results['recordCount']
+    #paginated_search_results = manual_paginate_json_response(search_result_records, page, record_count, per_page=per_page)
+    pagination = Pagination(page=page, total=record_count, per_page=per_page, record_name='Search Results')
+    return render_template('search_results.html', 
+                           search_result_records=search_result_records,
+                           pagination=pagination
+                           )
 
     # print 'webarg param: ', search_kwargs
     #TODO: map the webargs to the Pubs Warehouse Java API, generate output
