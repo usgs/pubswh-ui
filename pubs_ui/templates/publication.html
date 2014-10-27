@@ -9,7 +9,7 @@
         {% block main %}
         <main role ="main">
             <article>
-                <img id="thumbnail" src="{{ url_for('static', filename = 'img/_thumb_15050.png') }}" alt="thumbnail"/>
+                <img id="thumbnail" src="{{ pubdata['displayLinks']['Thumbnail'][0]['url'] }}" alt="thumbnail"/>
 
                 <hgroup>
                     <h3 property="dc:title" datatype="" rel="dc:type" href="http://purl.org/dc/dcmitype/Text">{{ pubdata['title']|safe }}</h3>
@@ -20,7 +20,7 @@
                     <h5>{{ pubdata['subSeriesTitle'] }}</h5>
                     {% endif %}
                     {% if pubdata['collaboration'] %}
-                    <h6>{{ pubdata['collaboration'] }}</h6>
+                    <h6>{{ pubdata['collaboration']|safe }}</h6>
                     {% endif %}
                 </hgroup>
 
@@ -59,7 +59,10 @@
 
 
                     <ul class="fileslist">
-                        {% for link in pubdata['displayLinks']|sort(attribute='rank') %}
+                        {% for link in pubdata['displayLinks']['Document']|sort(attribute='rank') %}
+                            <li> <a href="{{ link["url"] }}" target="_blank" title="{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %} {% if link["size"]  %}({{ link["size"] }}){% endif %}</a> </li>
+                        {% endfor %}
+                        {% for link in pubdata['displayLinks']['Index Page']|sort(attribute='rank') %}
                             <li> <a href="{{ link["url"] }}" target="_blank" title="{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %} {% if link["size"]  %}({{ link["size"] }}){% endif %}</a> </li>
                         {% endfor %}
                     </ul>
