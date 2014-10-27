@@ -3,25 +3,9 @@ Created on Oct 17, 2014
 
 @author: ayan
 '''
-from flask.ext.script import Manager, Command, Option
+from flask.ext.script import Manager, Command
 from flask.ext.collect import Collect
 from pubs_ui import app as application
-
-
-class RunServer(Command):
-    """
-    Run flask development server
-    """
-    
-    option_list = (
-                   Option('--port', '-p', dest='port'),
-                   )
-    
-    def run(self, port):
-        if port:
-            application.run(port=int(port))
-        else:
-            application.run()
 
 
 class CollectStaticFiles(Command):

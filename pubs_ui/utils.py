@@ -153,6 +153,21 @@ def getbrowsecontent(browseurl):
     return browse_content
 
 
+def get_pubs_search_results(search_url, params):
+    """
+    Searches Pubs API for a specified query parameter
+    
+    :param str search_url: URL without any search parameters appended
+    :param dict params: dictionary of form {'key1': 'value1', 'key2': 'value2}
+    :return: query results
+    :rtype: json object
+    """
+    search_result_obj = get(url=search_url, params=params)
+    search_result_json = search_result_obj.json()
+    
+    return search_result_json
+
+
 def summation(a, b):
     """
     Silly little function to exam test running with
