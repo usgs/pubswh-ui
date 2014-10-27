@@ -1,9 +1,10 @@
 
+import json
 from flask import render_template, abort, request, Response, jsonify
 from requests import get
 from webargs.flaskparser import FlaskParser
-import json
 from arguments import search_args
+from flask_utils.flask_pagination import Pagination
 from utils import (pubdetails, pull_feed, display_links, getbrowsecontent, 
                    get_pubs_search_results)
 from forms import ContactForm
@@ -23,7 +24,7 @@ search_url = app.config['BASE_SEARCH_URL']
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
-
+PER_PAGE = 5
 
 @app.route('/')
 def index():
@@ -97,11 +98,14 @@ def browse(path):
 
 
 #this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
-@app.route('/search', methods=['GET'])
-def api_webargs():
+@app.route('/search/', methods=['GET'], defaults={'page': 1})
+@app.route('/search/<int:page>')
+def api_webargs(page):
     parser = FlaskParser()
     search_kwargs = parser.parse(search_args, request)
     search_results = get_pubs_search_results(search_url, params=search_kwargs)
+    search_result_count = len(search_results)
+    pagination = Pagination(page, PER_PAGE, search_result_count)
     return render_template('search_results.html', results=search_results['records'])
 
     # print 'webarg param: ', search_kwargs
