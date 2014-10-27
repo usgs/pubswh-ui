@@ -97,7 +97,7 @@ def browse(path):
 
 
 #this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
-@app.route('/search/searchwebargs', methods=['GET'])
+@app.route('/search', methods=['GET'])
 def api_webargs():
     parser = FlaskParser()
     search_kwargs = parser.parse(search_args, request)

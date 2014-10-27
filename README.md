@@ -19,6 +19,8 @@ To get this application running using the flask local dev server, there are thre
  SUPERSEDES_URL = "[server of choice]/service/citation/json/extras?"
  #URL for Browse
  BROWSE_URL = "[server of choice]browse/"
+ #URL for Search
+ BASE_SEARCH_URL = "[server of choice]/pubs-services/publication"
  
  #verify ssl certificate for outside service calls
  VERIFY_CERT = True or False

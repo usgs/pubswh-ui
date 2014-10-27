@@ -64,6 +64,7 @@ def pubdetails(pubdata):
             pubdata['details'].append({detail[1]: pubdata.get(detail[0])})
     return pubdata
 
+
 def display_links(pubdata):
     """
     restructures links from the API so that they are easy to display in a jinja template
@@ -175,4 +176,3 @@ def summation(a, b):
     """
     sum_value = a + b
     return sum_value
-
