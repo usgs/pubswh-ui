@@ -71,17 +71,25 @@ def display_links(pubdata):
     :param pubdata:
     :return: pubdata with new displayLinks array
     """
+    display_link_list = [
+        'Thumbnail',
+        'Index Page',
+        'Document',
+        'Plate'
+    ]
     links = pubdata.get("links")
-    displaylinks = []
-    if links is not None:
+    display_links = {}
+    for linktype in display_link_list:
         rankcounter = 0
         for link in links:
-            if link.get('rank') is None:
-                link['rank'] = rankcounter
-                rankcounter = rankcounter+1
-            displaylinks.append(link)
-
-    pubdata["displayLinks"] = displaylinks
+            if link['type']['text'] == linktype:
+                linklist = []
+                if link.get('rank') is None:
+                    link['rank'] = rankcounter
+                    rankcounter += 1
+                linklist.append(link)
+                display_links[linktype] = linklist
+    pubdata["displayLinks"] = display_links
     return pubdata
 
 
