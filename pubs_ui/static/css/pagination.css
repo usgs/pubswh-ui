@@ -14,8 +14,9 @@
     font-size: 150%;
 }
 
-.pagination {
-    margin: 10px 0;
-    margin-top: 0;
-    margin-bottom: 0;
+div.pagination li {
+	display: inline;
+	padding-left: 2px;
+	padding-right: 2px;
+	
 }
