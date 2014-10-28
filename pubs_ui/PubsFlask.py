@@ -4,7 +4,6 @@ from flask import render_template, abort, request, Response, jsonify
 from requests import get
 from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
-from flask_utils.flask_pagination import manual_paginate_json_response
 from arguments import search_args
 from utils import (pubdetails, pull_feed, display_links, getbrowsecontent, 
                    get_pubs_search_results)
