@@ -102,21 +102,27 @@ def browse(path):
 def api_webargs():
     parser = FlaskParser()
     search_kwargs = parser.parse(search_args, request)
-    per_page = 10
+    per_page = 15
     try:
         page = int(request.args.get('page', 1))
     except ValueError:
         page = 1
     search_kwargs['page_size'] = per_page
-    search_kwargs['page'] = page
-    search_results = get_pubs_search_results(search_url, params=search_kwargs)
-    search_result_records = search_results['records']
-    record_count = search_results['recordCount']
-    #paginated_search_results = manual_paginate_json_response(search_result_records, page, record_count, per_page=per_page)
-    pagination = Pagination(page=page, total=record_count, per_page=per_page, record_name='Search Results')
+    search_kwargs['page_number'] = page
+    search_results, resp_status_code = get_pubs_search_results(search_url, params=search_kwargs)
+    try:
+        search_result_records = search_results['records']
+        record_count = search_results['recordCount']
+        pagination = Pagination(page=page, total=record_count, per_page=per_page, record_name='Search Results')
+        search_service_down = None
+    except TypeError:
+        search_result_records = None
+        pagination = None
+        search_service_down = 'The backend services appear to be down with a {0} status.'.format(resp_status_code)
     return render_template('search_results.html', 
                            search_result_records=search_result_records,
-                           pagination=pagination
+                           pagination=pagination,
+                           search_service_down=search_service_down
                            )
 
     # print 'webarg param: ', search_kwargs
