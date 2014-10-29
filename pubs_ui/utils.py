@@ -1,13 +1,13 @@
 __author__ = 'jameskreft'
 
-from requests import get
+import requests
 import feedparser
 from bs4 import BeautifulSoup
 import re
 from operator import itemgetter
 
 def call_api(baseapiurl, index_id):
-    r = get(baseapiurl+'/publication/'+index_id)
+    r = requests.get(baseapiurl+'/publication/'+index_id)
     pubreturn = r.json()
     pubdata = pubreturn['pub']
     return pubdata
@@ -170,8 +170,8 @@ def supersedes(supersedes_url, index_id):
     :return: dict of relevant supersede info
     """
 
-    supersede_array = get(supersedes_url,
-                          params={'prod_id': index_id}).json()['modsCollection']['mods'][0]['relatedItem'][0]
+    supersede_array = requests.get(supersedes_url,
+                                   params={'prod_id': index_id}).json()['modsCollection']['mods'][0]['relatedItem'][0]
     #TODO: deal with pubs with more than one relationship
     return {'type': supersede_array['@type'], 'index_id': supersede_array['identifier']['#text'],
             'title': supersede_array['titleInfo']['title']}
@@ -183,7 +183,7 @@ def getbrowsecontent(browseurl):
     :param browseurl: url of legacy browse interface
     :return: html content of links, breadcrumb, and title
     """
-    content = get(browseurl).text
+    content = requests.get(browseurl).text
     soup = BeautifulSoup(content)
     browse_content = {'links':soup.find('div', {"id": "pubs-browse-links"}).contents}
     browse_content['breadcrumbs'] = soup.find('div', {"id": "pubs-browse-breadcrumbs"}).contents
@@ -198,13 +198,17 @@ def get_pubs_search_results(search_url, params):
     
     :param str search_url: URL without any search parameters appended
     :param dict params: dictionary of form {'key1': 'value1', 'key2': 'value2}
-    :return: query results
-    :rtype: json object
+    :return: query results (or None) and response status code.
+    :rtype: tuple
     """
-    search_result_obj = get(url=search_url, params=params)
-    search_result_json = search_result_obj.json()
+    search_result_obj = requests.get(url=search_url, params=params)
+    try:
+        search_result_json = search_result_obj.json()
+    except ValueError:
+        search_result_json = None
+    resp_status_code = search_result_obj.status_code
     
-    return search_result_json
+    return search_result_json, resp_status_code
 
 
 def summation(a, b):
