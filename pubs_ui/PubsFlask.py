@@ -1,8 +1,9 @@
 
+import json
 from flask import render_template, abort, request, Response, jsonify
 from requests import get
 from webargs.flaskparser import FlaskParser
-import json
+from flask.ext.paginate import Pagination
 from arguments import search_args
 from utils import (pubdetails, pull_feed, display_links, getbrowsecontent, 
                    get_pubs_search_results)
@@ -23,7 +24,7 @@ search_url = app.config['BASE_SEARCH_URL']
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
-
+PER_PAGE = 5
 
 @app.route('/')
 def index():
@@ -101,8 +102,28 @@ def browse(path):
 def api_webargs():
     parser = FlaskParser()
     search_kwargs = parser.parse(search_args, request)
-    search_results = get_pubs_search_results(search_url, params=search_kwargs)
-    return render_template('search_results.html', results=search_results['records'])
+    per_page = 15
+    try:
+        page = int(request.args.get('page', 1))
+    except ValueError:
+        page = 1
+    search_kwargs['page_size'] = per_page
+    search_kwargs['page_number'] = page
+    search_results, resp_status_code = get_pubs_search_results(search_url, params=search_kwargs)
+    try:
+        search_result_records = search_results['records']
+        record_count = search_results['recordCount']
+        pagination = Pagination(page=page, total=record_count, per_page=per_page, record_name='Search Results')
+        search_service_down = None
+    except TypeError:
+        search_result_records = None
+        pagination = None
+        search_service_down = 'The backend services appear to be down with a {0} status.'.format(resp_status_code)
+    return render_template('search_results.html', 
+                           search_result_records=search_result_records,
+                           pagination=pagination,
+                           search_service_down=search_service_down
+                           )
 
     # print 'webarg param: ', search_kwargs
     #TODO: map the webargs to the Pubs Warehouse Java API, generate output
