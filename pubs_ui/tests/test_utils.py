@@ -48,7 +48,8 @@ class TestGetPubsSearchResults(TestCase):
         httpretty.register_uri(httpretty.GET,
                                self.search_url,
                                content_type='application/json',
-                               status=503)
+                               status=503
+                               )
         result = get_pubs_search_results(self.search_url, self.test_params)
         response_content, status_code = result
         self.assertEquals(status_code, 503)
