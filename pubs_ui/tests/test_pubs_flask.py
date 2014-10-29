@@ -5,6 +5,8 @@ Created on Oct 28, 2014
 '''
 from unittest import TestCase
 import flask
+import httpretty
+from settings import BASE_SEARCH_URL
 from pubs_ui import app
 
 
@@ -27,15 +29,25 @@ class TestApiWebArgsSearch(TestCase):
     def setUp(self):
         
         self.search_url = '/search?q=state_name'
+        self.api_search = BASE_SEARCH_URL
     
     def test_api_webargs_url(self):
         
         with app.test_request_context(self.search_url):
             query_param = flask.request.args['q']
         self.assertEqual(query_param, 'state_name')
-        
+    
+    @httpretty.activate 
     def test_api_webargs_page_responds(self):
-        
+        """
+        Create a mock backend service and then
+        execute the test.
+        """
+        httpretty.register_uri(httpretty.GET,
+                       self.api_search,
+                       content_type='application/json',
+                       status=503
+                       )
         with app.test_client() as c:
             response = c.get(self.search_url)
         status_code = response.status_code
