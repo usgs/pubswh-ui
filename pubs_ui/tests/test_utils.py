@@ -8,6 +8,7 @@ These tests should be run through the test runner via "nosetests".
 import json
 import httpretty
 from unittest import TestCase
+from settings import BASE_SEARCH_URL
 from ..utils import get_pubs_search_results
 
 
@@ -20,7 +21,7 @@ class TestGetPubsSearchResults(TestCase):
     
     def setUp(self):
         
-        self.search_url = 'https://pubs-fake.er.usgs.gov/pubs-services/publication/'
+        self.search_url = BASE_SEARCH_URL
         self.test_params = {'q': 'some_state'}
         self.resp_data = [{u'a': 1, u'b': 2, u'c': 3}]
  
