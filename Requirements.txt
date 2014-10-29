@@ -13,7 +13,7 @@ flask-paginate==0.2.7
 httpretty==0.8.3
 itsdangerous==0.24
 nose==1.3.4
-requests==2.3.0
+requests==2.4.3
 urllib3==1.7.1
 webargs==0.7.0
 wsgiref==0.1.2
