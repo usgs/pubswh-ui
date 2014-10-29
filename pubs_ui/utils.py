@@ -3,7 +3,8 @@ __author__ = 'jameskreft'
 import requests
 import feedparser
 from bs4 import BeautifulSoup
-
+import re
+from operator import itemgetter
 
 def call_api(baseapiurl, index_id):
     r = requests.get(baseapiurl+'/publication/'+index_id)
@@ -65,32 +66,69 @@ def pubdetails(pubdata):
     return pubdata
 
 
-def display_links(pubdata):
+def create_display_links(pubdata):
     """
     restructures links from the API so that they are easy to display in a jinja template
     :param pubdata:
     :return: pubdata with new displayLinks array
     """
-    display_link_list = [
-        'Thumbnail',
-        'Index Page',
-        'Document',
-        'Plate'
-    ]
+    display_links = {
+        'Thumbnail': [],
+        'Index Page': [],
+        'Document': [],
+        'Plate': []
+    }
     links = pubdata.get("links")
-    display_links = {}
-    for linktype in display_link_list:
-        rankcounter = 0
+    for linktype in display_links:
+        rankcounter = 1
         for link in links:
             if link['type']['text'] == linktype:
-                linklist = []
                 if link.get('rank') is None:
                     link['rank'] = rankcounter
                     rankcounter += 1
-                linklist.append(link)
-                display_links[linktype] = linklist
+                display_links[linktype].append(link)
+    display_links = manipulate_plate_links(display_links)
     pubdata["displayLinks"] = display_links
     return pubdata
+
+
+def manipulate_plate_links(display_links):
+    if len(display_links.get("Plate")) > 0:
+        for link in display_links["Plate"]:
+            url = link["url"]
+            file_name = url.split("/")[-1].split(".")
+            text = file_name[0]
+            if link.get("text") is None:
+                if len(file_name[0].title().split('-')) > 1:
+                    try:
+                        text = file_name[0].title().split('-')
+                        text[1] = int(text[1])
+                    except (ValueError, IndexError):
+                        text = file_name[0].title().split('-')
+                if len(file_name[0].split("_")) > 1:
+                    try:
+                        text = file_name[0].split("_")[-1]
+                        text = re.split('(\d+)', text)[0:2]
+                        text[1] = int(text[1])
+                    except (ValueError, IndexError):
+                        try:
+                            text = file_name[0].split("_")[0]
+                            text = re.split('(\d+)', text)[0:2]
+                            text[1] = int(text[1])
+                        except (ValueError, IndexError):
+                            text = file_name[0].split("_")
+
+                link["text"] = text
+            if link.get('linkFileType') is None:
+                link['linkFileType'] = {'text': file_name[1]}
+        display_links["Plate"] = sorted(display_links["Plate"], key=itemgetter('text'))
+        rankcounter = 1
+        for link in display_links["Plate"]:
+            link['rank'] = rankcounter
+            rankcounter += 1
+            link['text'][1] = str(link['text'][1])
+            link['text'] = " ".join(link['text']).title()
+    return display_links
 
 
 def pull_feed(feed_url):
