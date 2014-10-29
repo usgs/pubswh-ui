@@ -2,6 +2,7 @@
 import json
 from flask import render_template, abort, request, Response, jsonify
 from requests import get
+from requests.exceptions import ConnectionError
 from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
 from arguments import search_args
