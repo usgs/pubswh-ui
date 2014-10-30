@@ -10,23 +10,23 @@
 
 {% block main %}
 	{% if pagination %}
-		{{ pagination.info|safe }}
-		{{ pagination.links|safe }}
-		<table>
-			<thead>
-				<tr>
-					<th>Title</th>
-				</tr>
-			</thead>
-			<tbody>
+		<header>
+            {{ pagination.info|safe }}
+            {{ pagination.links|safe }}
+		</header>
+        <section id="search-results">
 				{% for result in search_result_records %}
-					<tr>
-						<td>{{ result.title }}</td>
-					</tr>
-				{% endfor %}				
-			</tbody>	
-		</table>
-		{{ pagination.links|safe }}
+					<article>
+                        <h4><a href="{{ url_for('publication', indexId = result['indexId']) }}">{{ result['title']|safe }}</a></h4>
+                        <p>{{ result['authorList']|join(', ') }}</p>
+					</article>
+				{% endfor %}
+        </section>
+		<div>
+            <nav>
+                {{ pagination.links|safe }}
+            </nav>
+		</div>
 	{% else %}
 		{{ search_service_down }}
 	{% endif %}
