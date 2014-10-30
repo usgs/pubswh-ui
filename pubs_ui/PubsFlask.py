@@ -26,8 +26,8 @@ verify_cert = app.config['VERIFY_CERT']
 
 @app.route('/')
 def index():
-    sp = SearchPublications()
-    recent_publications = sp.get_recent_publications(params={'pub_x_days': 5}) 
+    sp = SearchPublications(search_url)
+    recent_publications = sp.get_recent_publications(params={'pub_x_days': 5}) # bring back recent publications
     return render_template('home.html',
                            recent_publications=recent_publications
                            )
@@ -112,8 +112,7 @@ def api_webargs():
     search_kwargs['page_size'] = per_page
     search_kwargs['page_number'] = page
     sp = SearchPublications(search_url)
-    search_results, resp_status_code = sp.get_pubs_search_results(params=search_kwargs)
-    # search_results, resp_status_code = get_pubs_search_results(search_url, params=search_kwargs)
+    search_results, resp_status_code = sp.get_pubs_search_results(params=search_kwargs) # go out to the pubs API and get the search results
     try:
         search_result_records = search_results['records']
         record_count = search_results['recordCount']

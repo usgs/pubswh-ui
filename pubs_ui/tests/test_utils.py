@@ -9,7 +9,35 @@ import json
 import httpretty
 from unittest import TestCase
 from settings import BASE_SEARCH_URL
-from ..utils import SearchPublications
+from ..utils import SearchPublications, make_contributor_list
+
+
+class TestMakeContributorList(TestCase):
+    
+    def setUp(self):
+        
+        self.authors = {'authors': [
+                                    {'given': 'apple', 'family': 'orange', 'rank': 1, 'corporation': False},
+                                    {'given': 'mango', 'family': 'grape', 'rank': 2, 'corporation': False}
+                                    ]
+                        }
+        self.organization = {'authors': [
+                                         {'corporation': True, 'organization': 'A Local Government Agency', 'rank': 1},
+                                         {'corporation': True, 'organization': 'Another Local Agency', 'rank': 2}
+                                         ]
+                             }
+        
+    def test_make_contributors_list_no_corporation(self):
+        
+        result = make_contributor_list(self.authors['authors'])
+        expected = ['apple orange', 'mango grape']
+        self.assertEquals(result, expected)
+        
+    def test_make_contributions_list_corporation(self):
+        
+        result = make_contributor_list(self.organization['authors'])
+        expected = ['A Local Government Agency', 'Another Local Agency']
+        self.assertEquals(result, expected)
 
 
 class TestSearchPublications(TestCase):

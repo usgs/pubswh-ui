@@ -231,24 +231,6 @@ class SearchPublications(object):
             search_result_json = None
         resp_status_code = search_result_obj.status_code
         return search_result_json, resp_status_code
-    
-    def get_recent_publications(self, params={'pub_x_days': 5}):
-        """
-        Method to get publications published in the past 5 days.
-        This function may be refactored into get_pubs_search_results
-        if sufficient commonalities exists.
-      
-        :param dict params: dictionary of form {'key1': 'value1', 'key2': 'value2}
-        :return: query results (or None) and response status code.
-        :rtype: tuple
-        """
-        search_result_obj = requests.get(url=self.search_url, params=params)
-        try:
-            search_result_json = search_result_obj.json()
-        except ValueError:
-            search_result_json = None
-        resp_status_code = search_result_obj.status_code
-        return search_result_json, resp_status_code
 
 
 def make_contributor_list(contributors):
