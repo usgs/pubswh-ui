@@ -93,6 +93,12 @@ def create_display_links(pubdata):
 
 
 def manipulate_plate_links(display_links):
+    """
+    This function rejiggers plate link displays for plate links that are named regularly but do not have display text or
+    a proper order
+    :param display_links:
+    :return: display links with rejiggered plate link order
+    """
     if len(display_links.get("Plate")) > 0:
         for link in display_links["Plate"]:
             url = link["url"]
@@ -204,11 +210,40 @@ def get_pubs_search_results(search_url, params):
     search_result_obj = requests.get(url=search_url, params=params)
     try:
         search_result_json = search_result_obj.json()
+        for record in search_result_json['records']:
+            if record.get("authors") is not None:
+                record["authorList"] = make_contributor_list(record["authors"])
     except ValueError:
         search_result_json = None
     resp_status_code = search_result_obj.status_code
-    
     return search_result_json, resp_status_code
+
+
+def make_contributor_list(contributors):
+    """
+    Makes a list of names for contributors
+
+    :param list contributors: a list of dicts of a contributor type (authors, editors, etc)
+    :return list of concatenated author names
+    :rtype: list
+    """
+    sorted_contributors = sorted(contributors, key=itemgetter('rank'))
+    contributor_list = []
+    for contributor in sorted_contributors:
+        if contributor['corporation'] == False:
+            contributor_name_list = []
+            if contributor.get("given") is not None:
+                contributor_name_list.append(contributor['given'])
+            if contributor.get("family") is not None:
+                contributor_name_list.append(contributor['family'])
+            if contributor.get("suffix") is not None:
+                contributor_name_list.append(contributor['suffix'])
+            contributor_text = " ".join(contributor_name_list)
+        else:
+            contributor_text = contributor['organization']
+        contributor_list.append(contributor_text)
+    return contributor_list
+
 
 
 def summation(a, b):
