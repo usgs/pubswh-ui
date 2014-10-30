@@ -3,7 +3,8 @@ __author__ = 'jameskreft'
 import requests
 import feedparser
 from bs4 import BeautifulSoup
-
+import re
+from operator import itemgetter
 
 def call_api(baseapiurl, index_id):
     r = requests.get(baseapiurl+'/publication/'+index_id)
@@ -65,32 +66,75 @@ def pubdetails(pubdata):
     return pubdata
 
 
-def display_links(pubdata):
+def create_display_links(pubdata):
     """
     restructures links from the API so that they are easy to display in a jinja template
     :param pubdata:
     :return: pubdata with new displayLinks array
     """
-    display_link_list = [
-        'Thumbnail',
-        'Index Page',
-        'Document',
-        'Plate'
-    ]
+    display_links = {
+        'Thumbnail': [],
+        'Index Page': [],
+        'Document': [],
+        'Plate': []
+    }
     links = pubdata.get("links")
-    display_links = {}
-    for linktype in display_link_list:
-        rankcounter = 0
+    for linktype in display_links:
+        rankcounter = 1
         for link in links:
             if link['type']['text'] == linktype:
-                linklist = []
                 if link.get('rank') is None:
                     link['rank'] = rankcounter
                     rankcounter += 1
-                linklist.append(link)
-                display_links[linktype] = linklist
+                display_links[linktype].append(link)
+    display_links = manipulate_plate_links(display_links)
     pubdata["displayLinks"] = display_links
     return pubdata
+
+
+def manipulate_plate_links(display_links):
+    """
+    This function rejiggers plate link displays for plate links that are named regularly but do not have display text or
+    a proper order
+    :param display_links:
+    :return: display links with rejiggered plate link order
+    """
+    if len(display_links.get("Plate")) > 0:
+        for link in display_links["Plate"]:
+            url = link["url"]
+            file_name = url.split("/")[-1].split(".")
+            text = file_name[0]
+            if link.get("text") is None:
+                if len(file_name[0].title().split('-')) > 1:
+                    try:
+                        text = file_name[0].title().split('-')
+                        text[1] = int(text[1])
+                    except (ValueError, IndexError):
+                        text = file_name[0].title().split('-')
+                if len(file_name[0].split("_")) > 1:
+                    try:
+                        text = file_name[0].split("_")[-1]
+                        text = re.split('(\d+)', text)[0:2]
+                        text[1] = int(text[1])
+                    except (ValueError, IndexError):
+                        try:
+                            text = file_name[0].split("_")[0]
+                            text = re.split('(\d+)', text)[0:2]
+                            text[1] = int(text[1])
+                        except (ValueError, IndexError):
+                            text = file_name[0].split("_")
+
+                link["text"] = text
+            if link.get('linkFileType') is None:
+                link['linkFileType'] = {'text': file_name[1]}
+        display_links["Plate"] = sorted(display_links["Plate"], key=itemgetter('text'))
+        rankcounter = 1
+        for link in display_links["Plate"]:
+            link['rank'] = rankcounter
+            rankcounter += 1
+            link['text'][1] = str(link['text'][1])
+            link['text'] = " ".join(link['text']).title()
+    return display_links
 
 
 def pull_feed(feed_url):
@@ -166,11 +210,40 @@ def get_pubs_search_results(search_url, params):
     search_result_obj = requests.get(url=search_url, params=params)
     try:
         search_result_json = search_result_obj.json()
+        for record in search_result_json['records']:
+            if record.get("authors") is not None:
+                record["authorList"] = make_contributor_list(record["authors"])
     except ValueError:
         search_result_json = None
     resp_status_code = search_result_obj.status_code
-    
     return search_result_json, resp_status_code
+
+
+def make_contributor_list(contributors):
+    """
+    Makes a list of names for contributors
+
+    :param list contributors: a list of dicts of a contributor type (authors, editors, etc)
+    :return list of concatenated author names
+    :rtype: list
+    """
+    sorted_contributors = sorted(contributors, key=itemgetter('rank'))
+    contributor_list = []
+    for contributor in sorted_contributors:
+        if contributor['corporation'] == False:
+            contributor_name_list = []
+            if contributor.get("given") is not None:
+                contributor_name_list.append(contributor['given'])
+            if contributor.get("family") is not None:
+                contributor_name_list.append(contributor['family'])
+            if contributor.get("suffix") is not None:
+                contributor_name_list.append(contributor['suffix'])
+            contributor_text = " ".join(contributor_name_list)
+        else:
+            contributor_text = contributor['organization']
+        contributor_list.append(contributor_text)
+    return contributor_list
+
 
 
 def summation(a, b):
