@@ -13,6 +13,9 @@ from ..utils import SearchPublications, make_contributor_list
 
 
 class TestMakeContributorList(TestCase):
+    """
+    Test the make_contributor_list function
+    """
     
     def setUp(self):
         
@@ -26,18 +29,30 @@ class TestMakeContributorList(TestCase):
                                          {'corporation': True, 'organization': 'Another Local Agency', 'rank': 2}
                                          ]
                              }
+        self.mixed = {'authors': [
+                                  {'given': 'apple', 'family': 'orange', 'rank': 1, 'corporation': False},
+                                  {'corporation': True, 'organization': 'A Local Government Agency', 'rank': 2},
+                                  {'given': 'mango', 'family': 'grape', 'rank': 2, 'corporation': False}
+                                  ]
+                      }
         
     def test_make_contributors_list_no_corporation(self):
         
         result = make_contributor_list(self.authors['authors'])
         expected = ['apple orange', 'mango grape']
-        self.assertEquals(result, expected)
+        self.assertEqual(result, expected)
         
     def test_make_contributions_list_corporation(self):
         
         result = make_contributor_list(self.organization['authors'])
         expected = ['A Local Government Agency', 'Another Local Agency']
-        self.assertEquals(result, expected)
+        self.assertEqual(result, expected)
+        
+    def test_make_contributions_mixed(self):
+        
+        result = make_contributor_list(self.mixed['authors'])
+        expected = ['apple orange', 'A Local Government Agency', 'mango grape']
+        self.assertEqual(result, expected)
 
 
 class TestSearchPublications(TestCase):
@@ -63,8 +78,8 @@ class TestSearchPublications(TestCase):
         result = self.sp.get_pubs_search_results(self.test_params)
         response_content, status_code = result
         expected_return_content = self.resp_data = {'records': [{'authorList': ['apple orange'], 'authors': [{'given': 'apple', 'family': 'orange', 'rank': 1, 'corporation': False},], 'series_number': '18301'}]}
-        self.assertEquals(status_code, 200)
-        self.assertEquals(response_content, expected_return_content)
+        self.assertEqual(status_code, 200)
+        self.assertEqual(response_content, expected_return_content)
 
     @httpretty.activate
     def test_response_behavior_with_down_service(self):
@@ -78,5 +93,5 @@ class TestSearchPublications(TestCase):
                                )
         result = self.sp.get_pubs_search_results(self.test_params)
         response_content, status_code = result
-        self.assertEquals(status_code, 503)
+        self.assertEqual(status_code, 503)
         self.assertIsNone(response_content)
