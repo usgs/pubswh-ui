@@ -257,12 +257,3 @@ def make_contributor_list(contributors):
             contributor_text = contributor['organization']
         contributor_list.append(contributor_text)
     return contributor_list
-
-
-def summation(a, b):
-    """
-    Silly little function to exam test running with
-    the nose library.
-    """
-    sum_value = a + b
-    return sum_value
