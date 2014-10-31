@@ -77,7 +77,7 @@ class TestSearchPublications(TestCase):
                                )
         result = self.sp.get_pubs_search_results(self.test_params)
         response_content, status_code = result
-        expected_return_content = self.resp_data = {'records': [{'authorList': ['apple orange'], 'authors': [{'given': 'apple', 'family': 'orange', 'rank': 1, 'corporation': False},], 'series_number': '18301'}]}
+        expected_return_content = {'records': [{'authorList': ['apple orange'], 'authors': [{'given': 'apple', 'family': 'orange', 'rank': 1, 'corporation': False},], 'series_number': '18301'}]}
         self.assertEqual(status_code, 200)
         self.assertEqual(response_content, expected_return_content)
 
