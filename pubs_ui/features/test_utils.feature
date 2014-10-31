@@ -16,8 +16,14 @@ Feature: Test all pub_ui utilities
 		Then I see that pull_feed gave the expected output
 
 	Scenario: pubdetails functions correctly
+		Given I have some fake json pubs metadata
+		When I find fake details with pubdetails
+		I am returned an expected result
 		
 	Scenario: pubdetails behaves correctly
+		Given I point to a real pubs url
+		When I find real details with pubdetails
+		I am returned an expected result
 
 	Scenario: display_links functions correctly
 

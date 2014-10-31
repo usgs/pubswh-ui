@@ -2,6 +2,8 @@ import unittest
 import httpretty
 from nose.tools import assert_equal
 from lettuce import *
+import json
+from requests import get
 #from pubs_ui import utils
 import utils
 
@@ -39,10 +41,30 @@ def test_pull_feed(step):
     assert_equal(world.expected_output, world.output)
     httpretty.disable()
     httpretty.reset()
-
     
+###pubdetails scenarios###
+@step(r'I have some fake json pubs metadata')
+def set_mock_pubs(step):
+    test_url = "http://test_url/test/publication/a1"
+    world.body = json.loads('{"publicationYear":"1880","publicationType":{"id":18,"text":"Report"}}')
 
+@step(r'I find fake details with pubdetails')   
+def get_pubdetails(step):
+    world.output = utils.pubdetails(world.body)
+    world.expected_output = {u'publicationType': {u'text': u'Report', u'id': 18}, u'publicationYear': u'1880', 'details': [{'Publication type:': u'Report'}]}
 
-                           
-    
+@step(r'I am returned an expected result')
+def test_pubdetails(step):
+    assert_equal(world.output, world.expected_output)
+
+@step(r'I point to a real pubs url')
+def first_annual_report(step):
+    world.live_url = 'https://pubs.er.usgs.gov/pubs-services/publication/ar1'
+
+@step(r'When I find real details with pubdetails')
+def get_first_details(step):
+    r = get(world.live_url)
+    json = r.json()
+    world.output = len(str(utils.pubdetails(json))) #Measure json lengths (as strings) since there is a lot of data
+    world.expected_output = 1680
     
