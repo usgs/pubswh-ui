@@ -1,3 +1,4 @@
+
 /*! HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
 
 /*
@@ -18,8 +19,10 @@ textarea {
     color: #222;
 }
 
-html {
+html,
+body {
     font-size: 1em;
+    height:100%;
 }
 
 /*
@@ -99,7 +102,7 @@ textarea {
 /* ==========================================================================
    Index styles
    ========================================================================== */
-   
+ 
 
 #new_pubs{display:none;}
 
@@ -219,7 +222,9 @@ article{padding:0 10px;}
 			text-decoration:none;}
 			
 #options a:hover,
-#links a:hover{text-decoration:underline;}
+#links a:hover{
+	text-decoration:underline;
+	color:#000;}
 			
 #options h3,
 #links h3{font-weight:normal;}
@@ -233,7 +238,9 @@ article{padding:0 10px;}
 #links h4{margin:5px 0 0 0;
 			clear:both;}
 			
-#links{margin:0 0 15px 0;}	
+#links{margin:0 0 15px 0;}
+
+#twitter{margin:0 0 10px 10px;}	
    
 /* ==========================================================================
    Publication.html styles
@@ -443,6 +450,164 @@ address p {
 .dark{background:#eee;}
 
 /* ==========================================================================
+   contact styles
+   ========================================================================== */
+   
+form#contactForm{
+}
+
+form#contactForm input,
+form#contactForm textarea{
+	display:block;
+	margin-bottom:15px;
+	width:99.5%;
+	height:25px;
+	outline:none;
+	padding-left:.5%;
+	border-radius:3px;
+	border:1px solid rgb(200,200,200);
+	
+}
+
+form#contactForm textarea{
+	min-height:60px;
+	padding-top:.5%;
+	
+}
+
+form#contactForm input#submit{
+	background:rgb(0,51,102);
+	color:#fff;
+	height:37px;
+	padding-top:3px;
+}
+
+form#contactForm input#submit:hover{
+	background:#fff;
+	border:1px solid rgb(200,200,200);
+	color:rgb(0,51,102);
+}
+
+/* ==========================================================================
+   other styles
+   ========================================================================== */
+   
+
+ul.toc-indentation li{
+	margin-bottom:10px;}
+
+ul.toc-indentation a{
+	color:rgb(100,100,100);
+	text-decoration:none;
+	font-family:Verdana;
+	font-weight:normal;
+}
+
+ul.toc-indentation a:hover{
+	text-decoration:underline;
+}
+
+h1.otherPages{
+	font-size:1.5em;
+	margin-left:10px;
+}
+
+.feed{
+	min-height:100%;
+}
+
+.feed hr{
+	border:none;
+}
+
+.feed h5,
+.feed h4{
+	font-size:1.3em;
+	margin-bottom:5px;
+}
+
+.feed > :first-child{
+	padding:5px 20px 5px 20px !important;
+}
+
+.feed p{
+	line-height:1.5em;
+}
+
+.feed a{
+	color:rgb(0, 97, 163);
+	text-decoration:none;
+	font-weight:bold;
+}
+
+.feed a:hover{
+	text-decoration:underline;
+	color:#000;}
+
+li.p1{
+	margin-bottom:10px;
+	line-height:1.5em;
+}
+
+/* ==========================================================================
+   browse styles
+   ========================================================================== */
+
+.breadcrumb a{
+	text-decoration:none;
+	color:rgb(0,51,102);
+	font-weight:bold;
+}
+
+.breadcrumb a:hover{
+	text-decoration:underline;
+}
+
+h2.otherPages{
+	margin:-5px 0 0 17px;}
+	
+
+.fix ul{
+	list-style-type:none;
+	
+}
+
+.fix ul li{
+	margin-bottom:15px;
+}
+
+.fix ul li a{
+	color:rgb(100,100,100);
+	font-weight:bold;
+	text-decoration:none;
+}
+
+.fix ul li a:hover{
+	text-decoration:underline;
+	color:#000;
+}
+
+.fix li.pubs-browse-list-theme{
+	margin-bottom:15px;
+}
+
+.fix li.pubs-browse-list-theme a{
+	color:rgb(100,100,100);
+	text-decoration:none;
+}
+
+.fix li.pubs-browse-list-theme a:hover{
+	text-decoration:underline;
+	color:#000;
+}
+
+.space{
+	margin-top:-15px;
+	padding:15px;
+}
+
+
+/* ==========================================================================
    footer styles
    ========================================================================== */
 footer {
@@ -524,6 +689,10 @@ footer p{margin:0;}
     list-style: none;
 	margin:0;
   }
+  
+  #header_nav ul li{
+  margin-bottom:2px;}
+  
   #header_nav ul li a {
     color: #fff;
     text-decoration: none;
@@ -619,6 +788,22 @@ footer p{margin:0;}
     right: 65px;
     top: 25px;
   }
+  
+/* ==========================================================================
+   Contact styles
+   ========================================================================== */  
+   
+form#contactForm input,
+form#contactForm textarea{
+	width:45%;
+	
+}
+
+form#contactForm input#submit{
+	width:200px;
+}
+
+  
 }
 /*media query*/
 @media screen and (min-width: 1025px) {
@@ -689,22 +874,41 @@ footer p{margin:0;}
     margin-top: 20px;
   }
   
+
+
+
+/* ==========================================================================
+   other styles
+   ========================================================================== */
+   
+ul.toc-indentation{	
+	width:70%;
 }
-/*media query*/
 
 
+.feed h5{
+	width:70%;
+}
 
+.feed p{
+	width:70%;
+}
 
+li.p1{
+	width:70%;
+}
 
+h1.otherPages{
+	font-size:2em;
+	margin-left:15px;}
+	
+/* ==========================================================================
+   browse styles
+   ========================================================================== */
 
+ul#pubs-browse-ul{width:70%;}
 
-
-
-
-
-
-
-
+}/*media query*/
 
 
 /* ==========================================================================

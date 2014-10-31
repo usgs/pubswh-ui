@@ -1,25 +1,30 @@
 __author__ = 'jameskreft'
 
-from requests import get
+import requests
 import feedparser
 from bs4 import BeautifulSoup
-
+import re
+from operator import itemgetter
 
 def call_api(baseapiurl, index_id):
-    r = get(baseapiurl+'/publication/'+index_id)
+    r = requests.get(baseapiurl+'/publication/'+index_id)
     pubreturn = r.json()
     pubdata = pubreturn['pub']
     return pubdata
 
 
 def pubdetails(pubdata):
-    """build the ordered list to make the 'Publications details' box
+    """
+    build the ordered list to make the 'Publications details' box
 
     :param pubdata: the data pulled from the pubs warehouse web service
     :return: pubdata with an additional "details" element
     """
 
     pubdata['details'] = []
+    #details list element has len of 2 or 3.  If 2, the item is coming back as a simple Key:value object, but if three
+    # there are either lists or dicts. the first item in the list is the param in pubdata, the 2nd or 3rd is the display
+    # descriptor and the second if it exists is the secondary key needed to get the text.
     detailslist = [
         ['publicationType', 'text', 'Publication type:'],
         ['publicationSubtype', 'text', 'Publication Subtype:'],
@@ -37,50 +42,100 @@ def pubdetails(pubdata):
         ['numberofPages', 'Number of pages:'],
         ['startPage', 'Start page:'],
         ['endPage', 'End page:'],
-        ['temporalStart', 'Time Range Start'],
-        ['temporalEnd', 'Time Range End']
+        ['temporalStart', 'Time Range Start:'],
+        ['temporalEnd', 'Time Range End:'],
+        ['conferenceTitle', 'Conference Title:'],
+        ['conferenceLocation', 'Conference Location'],
+        ['conferenceDate', 'Conference Date:']
     ]
     for detail in detailslist:
+
         if len(detail) == 3:
+            #if the detail exists and is a dict with a couple key:value pairs, get the right value
             if pubdata.get(detail[0]) is not None and isinstance(pubdata.get(detail[0]), dict):
                 pubdata['details'].append({detail[2]: pubdata[detail[0]].get(detail[1])})
-            elif pubdata.get(detail[0]) is not None and isinstance(pubdata.get(detail[0]), list):
-                dd = ''
+            #if the thing is a list of dicts and if there is something in the list, concatenate the values into a string
+            elif pubdata.get(detail[0]) is not None and isinstance(pubdata.get(detail[0]), list) \
+                    and len(pubdata.get(detail[0])) > 0:
+                dd = []
                 for det in pubdata.get(detail[0]):
-                    dd = dd+det.get(detail[1])+', '
-                dd = dd[:-2]
+                    dd.append(det.get(detail[1]))
+                dd = ', '.join(dd)
                 pubdata['details'].append({detail[2]: dd})
-        elif pubdata.get(detail[0]) is not None and len(pubdata.get(detail[0])) > 0:
+        elif len(detail) == 2 and pubdata.get(detail[0]) is not None and len(pubdata.get(detail[0])) > 0:
             pubdata['details'].append({detail[1]: pubdata.get(detail[0])})
     return pubdata
 
-def display_links(pubdata):
+
+def create_display_links(pubdata):
     """
     restructures links from the API so that they are easy to display in a jinja template
     :param pubdata:
     :return: pubdata with new displayLinks array
     """
+    display_links = {
+        'Thumbnail': [],
+        'Index Page': [],
+        'Document': [],
+        'Plate': []
+    }
     links = pubdata.get("links")
-    displaylinks = []
-    if links is not None:
-        rankcounter = 0
+    for linktype in display_links:
+        rankcounter = 1
         for link in links:
-            if link.get('rank') is None:
-                link['rank'] = rankcounter
-                rankcounter = rankcounter+1
-            displaylinks.append(link)
-
-    pubdata["displayLinks"] = displaylinks
+            if link['type']['text'] == linktype:
+                if link.get('rank') is None:
+                    link['rank'] = rankcounter
+                    rankcounter += 1
+                display_links[linktype].append(link)
+    display_links = manipulate_plate_links(display_links)
+    pubdata["displayLinks"] = display_links
     return pubdata
 
 
+def manipulate_plate_links(display_links):
+    """
+    This function rejiggers plate link displays for plate links that are named regularly but do not have display text or
+    a proper order
+    :param display_links:
+    :return: display links with rejiggered plate link order
+    """
+    if len(display_links.get("Plate")) > 0:
+        for link in display_links["Plate"]:
+            url = link["url"]
+            file_name = url.split("/")[-1].split(".")
+            text = file_name[0]
+            if link.get("text") is None:
+                if len(file_name[0].title().split('-')) > 1:
+                    try:
+                        text = file_name[0].title().split('-')
+                        text[1] = int(text[1])
+                    except (ValueError, IndexError):
+                        text = file_name[0].title().split('-')
+                if len(file_name[0].split("_")) > 1:
+                    try:
+                        text = file_name[0].split("_")[-1]
+                        text = re.split('(\d+)', text)[0:2]
+                        text[1] = int(text[1])
+                    except (ValueError, IndexError):
+                        try:
+                            text = file_name[0].split("_")[0]
+                            text = re.split('(\d+)', text)[0:2]
+                            text[1] = int(text[1])
+                        except (ValueError, IndexError):
+                            text = file_name[0].split("_")
 
-
-
-
-
-
-
+                link["text"] = text
+            if link.get('linkFileType') is None:
+                link['linkFileType'] = {'text': file_name[1]}
+        display_links["Plate"] = sorted(display_links["Plate"], key=itemgetter('text'))
+        rankcounter = 1
+        for link in display_links["Plate"]:
+            link['rank'] = rankcounter
+            rankcounter += 1
+            link['text'][1] = str(link['text'][1])
+            link['text'] = " ".join(link['text']).title()
+    return display_links
 
 
 def pull_feed(feed_url):
@@ -122,21 +177,83 @@ def supersedes(supersedes_url, index_id):
     :return: dict of relevant supersede info
     """
 
-    supersede_array = get(supersedes_url,
-                          params={'prod_id': index_id}).json()['modsCollection']['mods'][0]['relatedItem'][0]
+    supersede_array = requests.get(supersedes_url,
+                                   params={'prod_id': index_id}).json()['modsCollection']['mods'][0]['relatedItem'][0]
     #TODO: deal with pubs with more than one relationship
     return {'type': supersede_array['@type'], 'index_id': supersede_array['identifier']['#text'],
             'title': supersede_array['titleInfo']['title']}
+
 
 def getbrowsecontent(browseurl):
     """
     Gets
     :param browseurl: url of legacy browse interface
-    :return: html content of links
+    :return: html content of links, breadcrumb, and title
     """
-    content = get(browseurl).text
-    print content
+    content = requests.get(browseurl).text
     soup = BeautifulSoup(content)
-    links_div = soup.find('div', {id: "pubs-browse-links"})
-    print links_div
+    browse_content = {'links':soup.find('div', {"id": "pubs-browse-links"}).contents}
+    browse_content['breadcrumbs'] = soup.find('div', {"id": "pubs-browse-breadcrumbs"}).contents
+    browse_content['header'] = soup.find('div', {"id": "pubs-browse-header"}).contents
 
+    return browse_content
+
+
+class SearchPublications(object):
+    
+    """
+    Methods for executing various types
+    of searches against the backend
+    Pubs API.
+    
+    :param str search_url: URL without any search parameters appended
+    """
+    
+    def __init__(self, search_url):
+        self.search_url = search_url
+        
+    def get_pubs_search_results(self, params):
+        """
+        Searches Pubs API for a specified query parameter
+        
+        :param str search_url: URL without any search parameters appended
+        :param dict params: dictionary of form {'key1': 'value1', 'key2': 'value2}
+        :return: query results (or None) and response status code.
+        :rtype: tuple
+        """
+        search_result_obj = requests.get(url=self.search_url, params=params)
+        try:
+            search_result_json = search_result_obj.json()
+            for record in search_result_json['records']:
+                if record.get("authors") is not None:
+                    record["authorList"] = make_contributor_list(record["authors"])
+        except ValueError:
+            search_result_json = None
+        resp_status_code = search_result_obj.status_code
+        return search_result_json, resp_status_code
+
+
+def make_contributor_list(contributors):
+    """
+    Makes a list of names for contributors
+
+    :param list contributors: a list of dicts of a contributor type (authors, editors, etc)
+    :return list of concatenated author names
+    :rtype: list
+    """
+    sorted_contributors = sorted(contributors, key=itemgetter('rank'))
+    contributor_list = []
+    for contributor in sorted_contributors:
+        if contributor['corporation'] == False:
+            contributor_name_list = []
+            if contributor.get("given") is not None:
+                contributor_name_list.append(contributor['given'])
+            if contributor.get("family") is not None:
+                contributor_name_list.append(contributor['family'])
+            if contributor.get("suffix") is not None:
+                contributor_name_list.append(contributor['suffix'])
+            contributor_text = " ".join(contributor_name_list)
+        else:
+            contributor_text = contributor['organization']
+        contributor_list.append(contributor_text)
+    return contributor_list

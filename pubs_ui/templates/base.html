@@ -8,9 +8,16 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {% block head %} {% endblock %}
+        {% block page_style %}{% endblock page_style %}
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/normalize.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/main.css') }}">
         <script src="{{ url_for('static', filename = 'js/vendor/modernizr-2.6.2.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename = 'js/vendor/jquery-1.11.1.min.js') }}"></script>
+        <script>
+        	BASE_SEARCH_PAGE_URL = "{{ url_for('api_webargs')}}"
+        </script>
+        {% block page_script %}{% endblock page_script %}
+        
     </head>
     <body>
            <!--[if lt IE 7]>
@@ -72,16 +79,16 @@
 
 
                 URL: {% block url %}{% endblock %}<br />
-                Page Contact Information: <a href="http://answers.usgs.gov/cgi-bin/gsanswers?pemail=GS_Pubs_Web_Contact&subject=pubs.usgs.gov+inquiry">GS Pubs Web Contact</a><br />
+                Page Contact Information: <a href="{{ url_for('contact') }}">Pubs Warehouse Contact Page</a><br />
 
                 Page Last Modified: Monday, August 04, 2014, 11:39:38 AM
          </p>
 	     </footer>
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='js/vendor/jquery-1.10.2.min.js') }}"><\/script>')</script>
+        <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='js/vendor/jquery-1.11.1.min.js') }}"><\/script>')</script>
         <script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
         <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename = 'js/NavSearch.js') }}"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

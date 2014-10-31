@@ -1,25 +1,36 @@
-
+import sys
+import json
 from flask import render_template, abort, request, Response, jsonify
 from requests import get
-from webargs import Arg
 from webargs.flaskparser import FlaskParser
-import json
-from utils import pubdetails, pull_feed, display_links
+from flask.ext.paginate import Pagination
+from arguments import search_args
+from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
+                   SearchPublications)
 from forms import ContactForm
 from pubs_ui import app
+
+#set UTF-8 to be default throughout app
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 
 pub_url = app.config['PUB_URL']
 lookup_url = app.config['LOOKUP_URL']
 supersedes_url = app.config['SUPERSEDES_URL']
+browse_url = app.config['BROWSE_URL']
+search_url = app.config['BASE_SEARCH_URL']
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
 
-
 @app.route('/')
 def index():
-    return render_template('home.html')
+    sp = SearchPublications(search_url)
+    recent_publications = sp.get_pubs_search_results(params=None) # bring back recent publications
+    return render_template('home.html',
+                           recent_publications=recent_publications
+                           )
 
 
 #contact form
@@ -38,7 +49,7 @@ def publication(indexId):
     r = get(pub_url+'publication/'+indexId, params={'mimetype': 'json'}, verify=verify_cert)
     pubreturn = r.json()
     pubdata = pubdetails(pubreturn)
-    pubdata = display_links(pubdata)
+    pubdata = create_display_links(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:
@@ -81,20 +92,41 @@ def other_resources():
     return render_template('other_resources.html', other_resources=pull_feed(feed_url))
 
 
-#search args, will be used for the search params and generating the opensearch.xml documentation
-search_args = {
-    'title': Arg(str, multiple=True),
-    'author': Arg(str, multiple=True),
-    'year': Arg(str, multiple=True),
-    'abstract': Arg(str, multiple=True)
-}
+@app.route('/browse/', defaults={'path': ''})
+@app.route('/browse/<path:path>')
+def browse(path):
+    browsecontent = getbrowsecontent(browse_url+path)
+    return render_template('browse.html', browsecontent=browsecontent)
 
 
 #this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
-@app.route('/search/searchwebargs', methods=['GET'])
+@app.route('/search', methods=['GET'])
 def api_webargs():
     parser = FlaskParser()
-    args = parser.parse(search_args, request)
+    search_kwargs = parser.parse(search_args, request)
+    per_page = 15
+    try:
+        page = int(request.args.get('page', 1))
+    except ValueError:
+        page = 1
+    search_kwargs['page_size'] = per_page
+    search_kwargs['page_number'] = page
+    sp = SearchPublications(search_url)
+    search_results, resp_status_code = sp.get_pubs_search_results(params=search_kwargs) # go out to the pubs API and get the search results
+    try:
+        search_result_records = search_results['records']
+        record_count = search_results['recordCount']
+        pagination = Pagination(page=page, total=record_count, per_page=per_page, record_name='Search Results')
+        search_service_down = None
+    except TypeError:
+        search_result_records = None
+        pagination = None
+        search_service_down = 'The backend services appear to be down with a {0} status.'.format(resp_status_code)
+    return render_template('search_results.html', 
+                           search_result_records=search_result_records,
+                           pagination=pagination,
+                           search_service_down=search_service_down
+                           )
 
-    print 'webarg param: ', args
+    # print 'webarg param: ', search_kwargs
     #TODO: map the webargs to the Pubs Warehouse Java API, generate output

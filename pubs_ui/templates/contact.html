@@ -5,25 +5,23 @@
 {% endblock %}
 
 {% block main %}
-    <h1>Contact us!</h1>
-      <h2>Contact</h2>
-  <form action="{{ url_for('contact') }}" method=post>
-    {{ form.hidden_tag() }}
-
-    {{ form.name.label }}
-    {{ form.name }}
-
-    {{ form.email.label }}
-    {{ form.email }}
-
-    {{ form.subject.label }}
-    {{ form.subject }}
-
-    {{ form.message.label }}
-    {{ form.message }}
-
-    {{ form.submit }}
-  </form>
+	<div class="space">
+	    <h1>Contact us!</h1>
+	      <h2>Contact</h2>
+	  <form id="contactForm" action="{{ url_for('contact') }}" method=post>
+	    {{ form.hidden_tag() }}
+	
+	    {{ form.name(placeholder="Name") }}
+	
+	    {{ form.email(placeholder="Email") }}
+	
+	    {{ form.subject(placeholder="Subject") }}
+	
+	    {{ form.message(placeholder="Write a Message") }}
+	
+	    {{ form.submit }}
+	  </form>
+  </div>
 
 {% endblock %}
-{% block url %}<a href="{{ url_for('web_service_docs') }}">http://pubs.er.usgs.gov{{ url_for('web_service_docs') }}</a>{% endblock %}
+{% block url %}<a href="{{ url_for('contact') }}">http://pubs.er.usgs.gov{{ url_for('contact') }}</a>{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block head %}
+	<title>Search Results - USGS Publications Warehouse</title>
+	<meta name="description" content="Search results for USGS Publications Warehouse">
+{% endblock head %}
+
+{% block page_style %}
+	<link rel="stylesheet" href="{{ url_for('static', filename = 'css/pagination.css') }}">
+{% endblock page_style %}
+
+{% block main %}
+	{% if pagination %}
+		<header>
+            {{ pagination.info|safe }}
+            {{ pagination.links|safe }}
+		</header>
+        <section id="search-results">
+				{% for result in search_result_records %}
+					<article>
+                        <h4><a href="{{ url_for('publication', indexId = result['indexId']) }}">{{ result['title']|safe }}</a></h4>
+                        <p>{{ result['authorList']|join(', ') }}</p>
+					</article>
+				{% endfor %}
+        </section>
+		<div>
+            <nav>
+                {{ pagination.links|safe }}
+            </nav>
+		</div>
+	{% else %}
+		{{ search_service_down }}
+	{% endif %}
+{% endblock main %}
