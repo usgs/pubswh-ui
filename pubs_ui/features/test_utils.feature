@@ -4,11 +4,18 @@ Feature: Test all pub_ui utilities
 	We will test the functionality and behavior of all our utility functions
 	
 	Scenario: pull_feed functions correctly
-		Given that I have created a mock url
-		When I parse the response
-		Then I see a nice unicode response
+		Given I have created a mock url
+		And I defined the output we would expect for the mock from pull_feed
+		When I register the mock xml and feed it to pull_feed
+		Then I see that pull_feed gave the expected output
 		
 	Scenario: pull_feed behaves correctly
+		Given I point to a live feed url on the wiki
+		And I define what ouput we would normally expect from this page
+		When I run pull_feed under normal circumstances
+		Then I see that pull_feed gave the expected output
+		
+		
 		
 
 	Scenario: call_api functions correctly
