@@ -14,7 +14,8 @@ def call_api(baseapiurl, index_id):
 
 
 def pubdetails(pubdata):
-    """build the ordered list to make the 'Publications details' box
+    """
+    build the ordered list to make the 'Publications details' box
 
     :param pubdata: the data pulled from the pubs warehouse web service
     :return: pubdata with an additional "details" element
@@ -198,25 +199,38 @@ def getbrowsecontent(browseurl):
     return browse_content
 
 
-def get_pubs_search_results(search_url, params):
+class SearchPublications(object):
+    
     """
-    Searches Pubs API for a specified query parameter
+    Methods for executing various types
+    of searches against the backend
+    Pubs API.
     
     :param str search_url: URL without any search parameters appended
-    :param dict params: dictionary of form {'key1': 'value1', 'key2': 'value2}
-    :return: query results (or None) and response status code.
-    :rtype: tuple
     """
-    search_result_obj = requests.get(url=search_url, params=params)
-    try:
-        search_result_json = search_result_obj.json()
-        for record in search_result_json['records']:
-            if record.get("authors") is not None:
-                record["authorList"] = make_contributor_list(record["authors"])
-    except ValueError:
-        search_result_json = None
-    resp_status_code = search_result_obj.status_code
-    return search_result_json, resp_status_code
+    
+    def __init__(self, search_url):
+        self.search_url = search_url
+        
+    def get_pubs_search_results(self, params):
+        """
+        Searches Pubs API for a specified query parameter
+        
+        :param str search_url: URL without any search parameters appended
+        :param dict params: dictionary of form {'key1': 'value1', 'key2': 'value2}
+        :return: query results (or None) and response status code.
+        :rtype: tuple
+        """
+        search_result_obj = requests.get(url=self.search_url, params=params)
+        try:
+            search_result_json = search_result_obj.json()
+            for record in search_result_json['records']:
+                if record.get("authors") is not None:
+                    record["authorList"] = make_contributor_list(record["authors"])
+        except ValueError:
+            search_result_json = None
+        resp_status_code = search_result_obj.status_code
+        return search_result_json, resp_status_code
 
 
 def make_contributor_list(contributors):
@@ -243,13 +257,3 @@ def make_contributor_list(contributors):
             contributor_text = contributor['organization']
         contributor_list.append(contributor_text)
     return contributor_list
-
-
-
-def summation(a, b):
-    """
-    Silly little function to exam test running with
-    the nose library.
-    """
-    sum_value = a + b
-    return sum_value
