@@ -25,9 +25,15 @@ Feature: Test all pub_ui utilities
 		When I find real details with pubdetails
 		I am returned an expected result
 
-	Scenario: display_links functions correctly
+	Scenario: create_display_links functions correctly
+		Given I have a fake json full of pubs-related links
+		When I create_display_links using the dummy list
+		I am given a list of links for use in the jinja template
 
-	Scenario: display_links behaves correctly
+	Scenario: create_display_links behaves correctly
+		Given I point to a real pubs url
+		When I create_display_links from the pub's response
+		I am given a list of links for use in the jinja template
 
 	Scenario: getbrowsercontent functions correctly
 

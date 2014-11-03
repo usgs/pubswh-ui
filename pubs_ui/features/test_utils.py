@@ -67,4 +67,23 @@ def get_first_details(step):
     json = r.json()
     world.output = len(str(utils.pubdetails(json))) #Measure json lengths (as strings) since there is a lot of data
     world.expected_output = 1680
+
+###display-link scenarios###
+@step(r'I have a fake json full of pubs-related links')
+def mock_pubs_links(step):
+    world.body = json.loads('{"links":[{"id":5277443,"rank":0,"type":{"id":24,"text":"Thumbnail"},"url":"http://pubs.usgs.gov/ar/01/report-thumb.jpg"},{"id":5166317,"rank":300,"type":{"id":11,"text":"Document"},"url":"http://pubs.usgs.gov/ar/01/report.pdf","linkFileType":{"id":1,"text":"pdf"}},{"id":5344307,"rank":400,"type":{"id":17,"text":"Plate"},"url":"http://pubs.usgs.gov/ar/01/plate-1.pdf","size":"9056","linkFileType":{"id":1,"text":"pdf"}}]}')
+    
+@step(r'I create_display_links using the dummy list')
+def display_links(step):
+    world.output = utils.create_display_links(world.body)
+    world.expected_output = {'displayLinks': {'Plate': [{u'url': u'http://pubs.usgs.gov/ar/01/plate-1.pdf', 'text': u'Plate 1', u'rank': 1, u'type': {u'text': u'Plate', u'id': 17}, u'id': 5344307, u'linkFileType': {u'text': u'pdf', u'id': 1}, u'size': u'9056'}], 'Document': [{u'url': u'http://pubs.usgs.gov/ar/01/report.pdf', u'linkFileType': {u'text': u'pdf', u'id': 1}, u'type': {u'text': u'Document', u'id': 11}, u'id': 5166317, u'rank': 300}], 'Thumbnail': [{u'url': u'http://pubs.usgs.gov/ar/01/report-thumb.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5277443, u'rank': 0}], 'Index Page': []}, u'links': [{u'url': u'http://pubs.usgs.gov/ar/01/report-thumb.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5277443, u'rank': 0}, {u'url': u'http://pubs.usgs.gov/ar/01/report.pdf', u'linkFileType': {u'text': u'pdf', u'id': 1}, u'type': {u'text': u'Document', u'id': 11}, u'id': 5166317, u'rank': 300}, {u'url': u'http://pubs.usgs.gov/ar/01/plate-1.pdf', 'text': u'Plate 1', u'rank': 1, u'type': {u'text': u'Plate', u'id': 17}, u'id': 5344307, u'linkFileType': {u'text': u'pdf', u'id': 1}, u'size': u'9056'}]}
+
+@step(r'I am given a list of links for use in the jinja template')
+def test_links_ouput(step):
+    assert_equal(world.output, world.expected_output)
+
+@step(r"I create_display_links from the pub's response")
+def live_display_links(step):
+    world.output = len(utils.create_display_links(get(world.live_url).json()))
+    world.expected_output = 20 #check all necessary components are there.
     
