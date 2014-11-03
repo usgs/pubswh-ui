@@ -86,4 +86,20 @@ def test_links_ouput(step):
 def live_display_links(step):
     world.output = len(utils.create_display_links(get(world.live_url).json()))
     world.expected_output = 20 #check all necessary components are there.
-    
+
+###getbrowsecontent scenarios###
+@step(r"I have a mockup url and body of pubs browse links")
+def mockup_browse(step):
+    body = r'<div id="pubs-browse-links"><ul><li><a href="browse/usgs-publications" alt="Official USGS Publications">Official USGS Publications</a></li><li><a href="browse/journals/all/" alt="Scientific Journal Articles by USGS Authors">ScientificJournal Articles by USGS Authors</a></li><li><a href="browse/other-pubs/all/" alt="Other US Government Publications">Other US Government Publications</a></li><li><a href="browse/state-local/all/" alt="State, Local, and other government publications">State, Local, and other government publications</a></li><li><a href="browse/books-reports-conference/all/" alt="Books, Reports, Conference Proceedings and other publications">Books, Reports, Conference Proceedings and other publications</a></li></ul></div><div id="pubs-browse-breadcrumbs"><a href="browse">Browse USGS Pubs Warehouse</a></div><div id="pubs-browse-header">Please select a category of interest</div>'
+    world.url = "http://test_url/test/browse"
+    httpretty.enable()
+    httpretty.register_uri(httpretty.GET, world.url, body = body)
+
+@step(r"I get the links, breadcrumbs, and titles from the url")
+def browse_content(step):
+    world.output = len(utils.getbrowsecontent(world.url))
+    world.expected_output = 3
+
+@step(r"I am returned a location for the links, breadcrumbs, and titles")
+def test_content(step):
+    assert_equal(world.output, world.expected_output)

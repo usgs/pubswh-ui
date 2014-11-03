@@ -18,23 +18,26 @@ Feature: Test all pub_ui utilities
 	Scenario: pubdetails functions correctly
 		Given I have some fake json pubs metadata
 		When I find fake details with pubdetails
-		I am returned an expected result
+		Then I am returned an expected result
 		
 	Scenario: pubdetails behaves correctly
 		Given I point to a real pubs url
 		When I find real details with pubdetails
-		I am returned an expected result
+		Then I am returned an expected result
 
 	Scenario: create_display_links functions correctly
 		Given I have a fake json full of pubs-related links
 		When I create_display_links using the dummy list
-		I am given a list of links for use in the jinja template
+		Then I am given a list of links for use in the jinja template
 
 	Scenario: create_display_links behaves correctly
 		Given I point to a real pubs url
 		When I create_display_links from the pub's response
-		I am given a list of links for use in the jinja template
+		Then I am given a list of links for use in the jinja template
 
 	Scenario: getbrowsercontent functions correctly
-
+		Given I have a mockup url and body of pubs browse links
+		When I get the links, breadcrumbs, and titles from the url
+		Then I am returned a location for the links, breadcrumbs, and titles
+		
 	Scenario: getbrowsercontent behaves correctly
