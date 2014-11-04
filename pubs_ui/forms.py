@@ -14,4 +14,4 @@ class ContactForm(Form):
 
 
 class Search(Form):
-    search = SearchField("Search Terms")
+    search = StringField("Search Terms")

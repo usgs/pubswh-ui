@@ -6,7 +6,7 @@ from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
 from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
-                   get_pubs_search_results)
+                   get_pubs_search_results, contributor_lists)
 from forms import ContactForm
 from pubs_ui import app
 import sys
@@ -48,6 +48,7 @@ def publication(indexId):
     pubreturn = r.json()
     pubdata = pubdetails(pubreturn)
     pubdata = create_display_links(pubdata)
+    pubdata = contributor_lists(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:
