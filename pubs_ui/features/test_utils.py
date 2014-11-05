@@ -94,12 +94,20 @@ def mockup_browse(step):
     world.url = "http://test_url/test/browse"
     httpretty.enable()
     httpretty.register_uri(httpretty.GET, world.url, body = body)
-
+    world.expected_output = '{\'breadcrumbs\': [<a href="browse">Browse USGS Pubs Warehouse</a>], \'links\': [<ul><li><a alt="Official USGS Publications" href="browse/usgs-publications">Official USGS Publications</a></li><li><a alt="Scientific Journal Articles by USGS Authors" href="browse/journals/all/">ScientificJournal Articles by USGS Authors</a></li><li><a alt="Other US Government Publications" href="browse/other-pubs/all/">Other US Government Publications</a></li><li><a alt="State, Local, and other government publications" href="browse/state-local/all/">State, Local, and other government publications</a></li><li><a alt="Books, Reports, Conference Proceedings and other publications" href="browse/books-reports-conference/all/">Books, Reports, Conference Proceedings and other publications</a></li></ul>], \'header\': [u\'Please select a category of interest\']}'
 @step(r"I get the links, breadcrumbs, and titles from the url")
 def browse_content(step):
-    world.output = len(utils.getbrowsecontent(world.url))
-    world.expected_output = 3
+    world.output = str(utils.getbrowsecontent(world.url))
+    httpretty.disable()
+    httpretty.reset()
 
-@step(r"I am returned a location for the links, breadcrumbs, and titles")
+@step(r"I am returned a list for the links, breadcrumbs, and titles")
 def test_content(step):
     assert_equal(world.output, world.expected_output)
+
+@step(r"I point to a real pubs browse url")
+def make_url(step):
+    world.url = "http://pubs.er.usgs.gov/browse"
+    world.expected_output = '{\'breadcrumbs\': [u\'\\n\', <a href="browse">Browse USGS Pubs Warehouse</a>, u\'\\n\'], \'links\': [u\'\\n\', <ul>\n<li><a alt="Official USGS Publications" href="browse/usgs-publications">Official USGS Publications</a></li>\n<li><a alt="Scientific Journal Articles by USGS Authors" href="browse/journals/all/">Scientific Journal Articles by USGS Authors</a></li>\n<li><a alt="Other US Government Publications" href="browse/other-pubs/all/">Other US Government Publications</a></li>\n<li><a alt="State, Local, and other government publications" href="browse/state-local/all/">State, Local, and other government publications</a></li>\n<li><a alt="Books, Reports, Conference Proceedings and other publications" href="browse/books-reports-conference/all/">Books, Reports, Conference Proceedings and other publications</a></li>\n</ul>, u\'\\n\'], \'header\': [u\'Please select a category of interest\']}'
+
+    

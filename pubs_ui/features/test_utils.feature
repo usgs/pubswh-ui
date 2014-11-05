@@ -38,6 +38,11 @@ Feature: Test all pub_ui utilities
 	Scenario: getbrowsercontent functions correctly
 		Given I have a mockup url and body of pubs browse links
 		When I get the links, breadcrumbs, and titles from the url
-		Then I am returned a location for the links, breadcrumbs, and titles
+		Then I am returned a list for the links, breadcrumbs, and titles
 		
 	Scenario: getbrowsercontent behaves correctly
+		Given I point to a real pubs browse url
+		When I get the links, breadcrumbs, and titles from the url
+		Then I am returned a list for the links, breadcrumbs, and titles
+
+	
