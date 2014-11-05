@@ -6,13 +6,6 @@ from bs4 import BeautifulSoup
 import re
 from operator import itemgetter
 
-def call_api(baseapiurl, index_id):
-    r = requests.get(baseapiurl+'/publication/'+index_id)
-    pubreturn = r.json()
-    pubdata = pubreturn['pub']
-    return pubdata
-
-
 def pubdetails(pubdata):
     """
     build the ordered list to make the 'Publications details' box
