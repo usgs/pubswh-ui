@@ -15,9 +15,15 @@ class TestIndex(TestCase):
     def setUp(self):
         
         self.index_url = '/'
-        
+        self.api_search = BASE_SEARCH_URL
+    
+    @httpretty.activate    
     def test_index_page_resp(self):
-        
+        httpretty.register_uri(httpretty.GET,
+                       self.api_search,
+                       content_type='application/json',
+                       status=503
+                       )        
         with app.test_client() as c:
             response = c.get(self.index_url)
         status_code = response.status_code

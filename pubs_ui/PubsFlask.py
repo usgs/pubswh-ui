@@ -1,4 +1,4 @@
-
+import sys
 import json
 from flask import render_template, abort, request, Response, jsonify
 from requests import get
@@ -6,10 +6,9 @@ from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
 from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
-                   get_pubs_search_results, contributor_lists)
+                   SearchPublications, contributor_lists)
 from forms import ContactForm, SearchForm
 from pubs_ui import app
-import sys
 
 #set UTF-8 to be default throughout app
 reload(sys)
@@ -28,8 +27,12 @@ PER_PAGE = 5
 
 @app.route('/')
 def index():
+    sp = SearchPublications(search_url)
+    recent_publications = sp.get_pubs_search_results(params=None) # bring back recent publications
     form = SearchForm(None, obj=request.args)
-    return render_template('home.html', form=form)
+    return render_template('home.html',
+                           recent_publications=recent_publications, form=form
+                           )
 
 
 #contact form
@@ -112,7 +115,8 @@ def api_webargs():
         page = 1
     search_kwargs['page_size'] = per_page
     search_kwargs['page_number'] = page
-    search_results, resp_status_code = get_pubs_search_results(search_url, params=search_kwargs)
+    sp = SearchPublications(search_url)
+    search_results, resp_status_code = sp.get_pubs_search_results(params=search_kwargs) # go out to the pubs API and get the search results
     try:
         search_result_records = search_results['records']
         record_count = search_results['recordCount']

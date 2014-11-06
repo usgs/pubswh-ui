@@ -46,8 +46,6 @@ $(document).ready(function(){
                     <h3>Pubs Warehouse provides access to over 100,000 publications written by USGS scientists over the century-plus history of the bureau</h3>
                 </section>
 
-
-
                 <section id="search">
                 	<label for="mysearch2">Search for publications </label>
                 	<form style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q"> {{ form.q(placeholder="search terms") }}</form>
