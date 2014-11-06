@@ -98,7 +98,11 @@ def other_resources():
 @app.route('/browse/', defaults={'path': ''})
 @app.route('/browse/<path:path>')
 def browse(path):
-    browsecontent = getbrowsecontent(browse_url+path)
+    #hack to troubleshoot mod_wsgi problem
+    if path[0:7] == 'browse/' and path == 'browse/':
+        browsecontent = getbrowsecontent(browse_url+path[7:])
+    else:
+        browsecontent = getbrowsecontent(browse_url+path)
     return render_template('browse.html', browsecontent=browsecontent)
 
 
