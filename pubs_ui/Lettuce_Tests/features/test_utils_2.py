@@ -2,7 +2,7 @@ import json
 import httpretty
 from lettuce import *
 from nose.tools import assert_equal
-from utils import SearchPublications, make_contributor_list
+from pubs_ui.utils import SearchPublications, make_contributor_list
 
 @step(r'we have imitated the authors data we would see from pubs')
 def make_lists(step):

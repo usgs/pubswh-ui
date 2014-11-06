@@ -5,7 +5,7 @@ from lettuce import *
 import json
 from requests import get
 from bs4 import BeautifulSoup
-import utils
+import pubs_ui.utils
 
 ###pull_feed scenarios###
 @step(r'I have created a mock xml at a mock url')
