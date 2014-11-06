@@ -6,8 +6,8 @@ from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
 from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
-                   SearchPublications)
-from forms import ContactForm
+                   SearchPublications, contributor_lists)
+from forms import ContactForm, SearchForm
 from pubs_ui import app
 
 #set UTF-8 to be default throughout app
@@ -23,13 +23,15 @@ search_url = app.config['BASE_SEARCH_URL']
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
+PER_PAGE = 5
 
 @app.route('/')
 def index():
     sp = SearchPublications(search_url)
     recent_publications = sp.get_pubs_search_results(params=None) # bring back recent publications
+    form = SearchForm(None, obj=request.args)
     return render_template('home.html',
-                           recent_publications=recent_publications
+                           recent_publications=recent_publications, form=form
                            )
 
 
@@ -50,6 +52,7 @@ def publication(indexId):
     pubreturn = r.json()
     pubdata = pubdetails(pubreturn)
     pubdata = create_display_links(pubdata)
+    pubdata = contributor_lists(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:
@@ -104,6 +107,7 @@ def browse(path):
 def api_webargs():
     parser = FlaskParser()
     search_kwargs = parser.parse(search_args, request)
+    form = SearchForm(None, obj=request.args)
     per_page = 15
     try:
         page = int(request.args.get('page', 1))
@@ -125,7 +129,8 @@ def api_webargs():
     return render_template('search_results.html', 
                            search_result_records=search_result_records,
                            pagination=pagination,
-                           search_service_down=search_service_down
+                           search_service_down=search_service_down,
+                           form=form
                            )
 
     # print 'webarg param: ', search_kwargs

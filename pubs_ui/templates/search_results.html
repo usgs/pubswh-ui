@@ -9,16 +9,25 @@
 {% endblock page_style %}
 
 {% block main %}
-	{% if pagination %}
+
+    {% if pagination %}
 		<header>
-            {{ pagination.info|safe }}
-            {{ pagination.links|safe }}
+                {{ pagination.info|safe }}
 		</header>
+        <h1>Search Results</h1>
+        <form style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q">
+            {{ form.q(placeholder="search terms") }}
+        </form>
         <section id="search-results">
 				{% for result in search_result_records %}
 					<article>
                         <h4><a href="{{ url_for('publication', indexId = result['indexId']) }}">{{ result['title']|safe }}</a></h4>
-                        <p>{{ result['authorList']|join(', ') }}</p>
+                        {% if result['seriesTitle'] and result['seriesNumber'] %}<p class="pubinfo">{{ result['publicationYear'] }}, {{ result['seriesTitle']['text'] }} {{ result['seriesNumber'] }} {{ result['chapter'] }} {{ result['subChapter'] }}</p>
+                        {% elif result['seriesTitle'] and result['publicationType']['text']== 'Article' %}<p class="pubinfo">{{ result['publicationYear'] }}, {{ result['seriesTitle']['text'] }} {% if result['volume'] %}({{ result['volume'] }}){% endif %} {{ result['startPage'] }}{% if result['endPage'] %}-{{ result['endPage'] }}{% endif %}</p>
+                        {% else %}<p class="pubinfo">{{ result['publicationYear'] }}{%  if result['publicationType'] %}, {{ result['publicationType']['text'] }}{% endif %}{% if result['largerWorkTitle'] %}, {{ result['largerWorkTitle'] }}</p>{% endif %}{% endif %}
+                        {% if result['authorsList']|length > 0 %}<p class="searchContributors">{{ result['authorsList']|join(', ') }}</p>{% endif %}
+                        {% if result['editorsList']|length > 0 %}<p class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</p>{% endif %}
+                        {% if result['docAbstract']  %}<p>{{ result['docAbstract'].split(' ')[0:50]|join(' ')|striptags }}...</p>{% endif %}
 					</article>
 				{% endfor %}
         </section>

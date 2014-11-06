@@ -13,5 +13,5 @@ class ContactForm(Form):
     submit = SubmitField("Send")
 
 
-class Search(Form):
-    search = SearchField("Search Terms")
+class SearchForm(Form):
+    q = SearchField("Search Terms")
