@@ -1,11 +1,9 @@
-import unittest
 import httpretty
 from nose.tools import assert_equal
 from lettuce import *
 import json
 from requests import get
-from bs4 import BeautifulSoup
-import pubs_ui.utils
+from pubs_ui.utils import pull_feed, pubdetails, getbrowsecontent, create_display_links
 
 ###pull_feed scenarios###
 @step(r'I have created a mock xml at a mock url')
@@ -19,7 +17,7 @@ def create_mock(step):
     
 @step(r'I pull_feed the fake url')
 def enable_mock(step):
-    world.output = utils.pull_feed("http://test_url/test")
+    world.output = pull_feed("http://test_url/test")
 
 @step(r'I defined the output we would expect for the mock from pull_feed')
 def mock_output(step):
@@ -35,7 +33,7 @@ def live_output(step):
     
 @step(r'I run pull_feed under normal circumstances')
 def run_pull_feed(step):
-    world.output = utils.pull_feed(world.feed_url)
+    world.output = pull_feed(world.feed_url)
 
 @step(r'I see that pull_feed gave the expected output')
 def test_pull_feed(step):
@@ -51,7 +49,7 @@ def set_mock_pubs(step):
 
 @step(r'I find fake details with pubdetails')   
 def get_pubdetails(step):
-    world.output = utils.pubdetails(world.body)
+    world.output = pubdetails(world.body)
     world.expected_output = {u'publicationType': {u'text': u'Report', u'id': 18}, u'publicationYear': u'1880', 'details': [{'Publication type:': u'Report'}]}
 
 @step(r'I am returned an expected result')
@@ -66,7 +64,7 @@ def first_annual_report(step):
 def get_first_details(step):
     r = get(world.live_url)
     json = r.json()
-    world.output = len(str(utils.pubdetails(json))) #Measure json lengths (as strings) since there is a lot of data
+    world.output = len(str(pubdetails(json))) #Measure json lengths (as strings) since there is a lot of data
     world.expected_output = 1680
 
 ###display-link scenarios###
@@ -76,7 +74,7 @@ def mock_pubs_links(step):
     
 @step(r'I create_display_links using the dummy list')
 def display_links(step):
-    world.output = utils.create_display_links(world.body)
+    world.output = create_display_links(world.body)
     world.expected_output = {'displayLinks': {'Plate': [{u'url': u'http://pubs.usgs.gov/ar/01/plate-1.pdf', 'text': u'Plate 1', u'rank': 1, u'type': {u'text': u'Plate', u'id': 17}, u'id': 5344307, u'linkFileType': {u'text': u'pdf', u'id': 1}, u'size': u'9056'}], 'Document': [{u'url': u'http://pubs.usgs.gov/ar/01/report.pdf', u'linkFileType': {u'text': u'pdf', u'id': 1}, u'type': {u'text': u'Document', u'id': 11}, u'id': 5166317, u'rank': 300}], 'Thumbnail': [{u'url': u'http://pubs.usgs.gov/ar/01/report-thumb.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5277443, u'rank': 0}], 'Index Page': []}, u'links': [{u'url': u'http://pubs.usgs.gov/ar/01/report-thumb.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5277443, u'rank': 0}, {u'url': u'http://pubs.usgs.gov/ar/01/report.pdf', u'linkFileType': {u'text': u'pdf', u'id': 1}, u'type': {u'text': u'Document', u'id': 11}, u'id': 5166317, u'rank': 300}, {u'url': u'http://pubs.usgs.gov/ar/01/plate-1.pdf', 'text': u'Plate 1', u'rank': 1, u'type': {u'text': u'Plate', u'id': 17}, u'id': 5344307, u'linkFileType': {u'text': u'pdf', u'id': 1}, u'size': u'9056'}]}
 
 @step(r'I am given a list of links for use in the jinja template')
@@ -85,7 +83,7 @@ def test_links_ouput(step):
 
 @step(r"I create_display_links from the pub's response")
 def live_display_links(step):
-    world.output = len(utils.create_display_links(get(world.live_url).json()))
+    world.output = len(create_display_links(get(world.live_url).json()))
     world.expected_output = 20 #check all necessary components are there.
 
 ###getbrowsecontent scenarios###
@@ -98,7 +96,7 @@ def mockup_browse(step):
     world.expected_output = '{\'breadcrumbs\': [<a href="browse">Browse USGS Pubs Warehouse</a>], \'links\': [<ul><li><a alt="Official USGS Publications" href="browse/usgs-publications">Official USGS Publications</a></li><li><a alt="Scientific Journal Articles by USGS Authors" href="browse/journals/all/">ScientificJournal Articles by USGS Authors</a></li><li><a alt="Other US Government Publications" href="browse/other-pubs/all/">Other US Government Publications</a></li><li><a alt="State, Local, and other government publications" href="browse/state-local/all/">State, Local, and other government publications</a></li><li><a alt="Books, Reports, Conference Proceedings and other publications" href="browse/books-reports-conference/all/">Books, Reports, Conference Proceedings and other publications</a></li></ul>], \'header\': [u\'Please select a category of interest\']}'
 @step(r"I get the links, breadcrumbs, and titles from the url")
 def browse_content(step):
-    world.output = str(utils.getbrowsecontent(world.url))
+    world.output = str(getbrowsecontent(world.url))
     httpretty.disable()
     httpretty.reset()
 
