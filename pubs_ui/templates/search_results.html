@@ -9,14 +9,15 @@
 {% endblock page_style %}
 
 {% block main %}
-	{% if pagination %}
+
+    {% if pagination %}
 		<header>
-            <nav>
                 {{ pagination.info|safe }}
-                {{ pagination.links|safe }}
-            </nav>
 		</header>
         <h1>Search Results</h1>
+        <form style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q">
+            {{ form.q(placeholder="search terms") }}
+        </form>
         <section id="search-results">
 				{% for result in search_result_records %}
 					<article>

@@ -4,7 +4,7 @@
     <title>U.S. Geological Survey Publications Warehouse</title>
     <meta name="description" content="The Publications warehouse contains over 130,000 publications that cover the 150 year history of the USGS">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    
+ {# Commenting advanced search script out for now, it may come back
     <script>
 
 //advanced search show/hide toggle
@@ -36,7 +36,7 @@ $(document).ready(function(){
 });
 
         </script>
-        
+#}
 {% endblock %}
 {% block main %}
             <article id="index_article">
@@ -46,11 +46,13 @@ $(document).ready(function(){
                     <h3>Pubs Warehouse provides access to over 100,000 publications written by USGS scientists over the century-plus history of the bureau</h3>
                 </section>
 
+
+
                 <section id="search">
                 	<label for="mysearch2">Search for publications </label>
-                	<input id="mysearch2" type="search" placeholder="search publications">
+                	<form style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q"> {{ form.q(placeholder="search terms") }}</form>
                 </section>
-
+{# Commenting advanced search content out now, it may come back
                 <section id="advanced" style="display:none">
 
                 	<label for="advancedSearch">Limit by... </label>
@@ -99,7 +101,7 @@ $(document).ready(function(){
                     <button>Search</button> <p id="bar">|</p> <p class="toggle">Advanced Search</p>
 
                 </section>
-
+#}
                 <section id="options">
 
                 	<h3>Don't want to search?</h3>

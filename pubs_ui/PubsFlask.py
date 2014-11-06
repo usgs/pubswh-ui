@@ -7,7 +7,7 @@ from flask.ext.paginate import Pagination
 from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
                    get_pubs_search_results, contributor_lists)
-from forms import ContactForm
+from forms import ContactForm, SearchForm
 from pubs_ui import app
 import sys
 
@@ -28,7 +28,8 @@ PER_PAGE = 5
 
 @app.route('/')
 def index():
-    return render_template('home.html')
+    form = SearchForm(None, obj=request.args)
+    return render_template('home.html', form=form)
 
 
 #contact form
@@ -103,6 +104,7 @@ def browse(path):
 def api_webargs():
     parser = FlaskParser()
     search_kwargs = parser.parse(search_args, request)
+    form = SearchForm(None, obj=request.args)
     per_page = 15
     try:
         page = int(request.args.get('page', 1))
@@ -123,7 +125,8 @@ def api_webargs():
     return render_template('search_results.html', 
                            search_result_records=search_result_records,
                            pagination=pagination,
-                           search_service_down=search_service_down
+                           search_service_down=search_service_down,
+                           form=form
                            )
 
     # print 'webarg param: ', search_kwargs
