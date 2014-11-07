@@ -14,7 +14,7 @@
                 <hgroup>
                     <h3 property="dc:title" datatype="" rel="dc:type" href="http://purl.org/dc/dcmitype/Text">{{ pubdata['title']|safe }}</h3>
                     {% if pubdata['seriesTitle'] %}
-                    <h4>{{ pubdata['seriesTitle']['text'] }} {{ pubdata['seriesNumber'] }}</h4>
+                    <h4>{{ pubdata['seriesTitle']['text'] }} {{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %}</h4>
                     {% endif %}
                     {% if pubdata['subSeriesTitle'] %}
                     <h5>{{ pubdata['subSeriesTitle'] }}</h5>
@@ -27,22 +27,20 @@
                 <section>
                     <dl id="contributors">
                       <dt>Authored by:</dt>
-                      {% for contributor in pubdata['authors']|sort(attribute='rank')  %}
-                          {% if contributor['corporation'] == False  %}
-                        <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ contributor['given'] }}
-                          {{ contributor['family'] }} {{ contributor['suffix'] }}</dd>
+                      {% for contributor in pubdata['authorsListTyped']  %}
+                          {% if contributor['type'] == "person"  %}
+                        <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ contributor['text'] }}</dd>
                           {% else %}
-                         <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Organization" itemtype="http://schema.org/Organization">{{ contributor['organization'] }}</dd>
+                         <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Organization" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</dd>
                           {% endif %}
                       {%  endfor %}
-                      {% if pubdata['editors'] %}
+                      {% if pubdata['editorsList'] %}
                       <dt class="clear">Edited by:</dt>
-                      {% for contributor in pubdata['editors']|sort(attribute='rank')  %}
-                          {% if contributor['corporation'] == False  %}
-                        <dd rel="dc:creator" class="editor" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ contributor['organization'] }}{{ contributor['given'] }}
-                          {{ contributor['family'] }} {{ contributor['suffix'] }}</dd>
+                      {% for contributor in pubdata['editorsListTyped']  %}
+                          {% if contributor['type'] == "person"  %}
+                        <dd rel="dc:creator" class="editor" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ contributor['text'] }}</dd>
                           {% else %}
-                         <dd rel="dc:creator" class="editor" property="foaf:name" typeof="foaf:Organization" itemtype="http://schema.org/Organization">{{ contributor['organization'] }}</dd>
+                         <dd rel="dc:creator" class="editor" property="foaf:name" typeof="foaf:Organization" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</dd>
                           {% endif %}
                       {%  endfor %}
                       {% endif %}
@@ -60,16 +58,16 @@
 
                     <ul class="fileslist">
                         {% for link in pubdata['displayLinks']['Document']|sort(attribute='rank') %}
-                            <li> <a href="{{ link["url"] }}" target="_blank" title="{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %} {% if link["size"]  %}({{ link["size"] }}){% endif %}</a> </li>
+                            <li> <a href="{{ link["url"] }}" target="_blank" title="{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}({{ link["linkFileType"]["text"] }}){% endif %}</a> </li>
                         {% endfor %}
                         {% for link in pubdata['displayLinks']['Index Page']|sort(attribute='rank') %}
-                            <li> <a href="{{ link["url"] }}" target="_blank" title="{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %} {% if link["size"]  %}({{ link["size"] }}){% endif %}</a> </li>
+                            <li> <a href="{{ link["url"] }}" target="_blank" title="{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}({{ link["linkFileType"]["text"] }}){% endif %}</a> </li>
                         {% endfor %}
                     </ul>
 
                     <ul class="plates">
                             {% for link in pubdata['displayLinks']['Plate']|sort(attribute='rank') %}
-                            <li> <a href="{{ link["url"] }}" target="_blank" title="{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}"><strong>{{ link["text"] }}</strong> ({% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %}{% if link["size"]  %}{{ link["size"] }}{% endif %})</a> </li>
+                            <li> <a href="{{ link["url"] }}" target="_blank" title="{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}"><strong>{{ link["text"] }}</strong> ({% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %})</a> </li>
                         {% endfor %}
                     </ul>
 
