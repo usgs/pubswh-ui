@@ -21,6 +21,7 @@ supersedes_url = app.config['SUPERSEDES_URL']
 browse_url = app.config['BROWSE_URL']
 search_url = app.config['BASE_SEARCH_URL']
 
+
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
 PER_PAGE = 5
@@ -95,14 +96,10 @@ def other_resources():
     return render_template('other_resources.html', other_resources=pull_feed(feed_url))
 
 
-@app.route('/browse/')
-def browse():
-    browsecontent = getbrowsecontent(browse_url)
-    return render_template('browse.html', browsecontent=browsecontent)
-
+@app.route('/browse/', defaults={'path': ''})
 @app.route('/browse/<path:path>')
-def browse_path(path):
-    browsecontent = getbrowsecontent(browse_url+path)
+def browse(path):
+    browsecontent = getbrowsecontent(browse_url+path, "../browse/")
     return render_template('browse.html', browsecontent=browsecontent)
 
 
