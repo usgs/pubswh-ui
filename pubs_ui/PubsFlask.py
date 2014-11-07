@@ -95,14 +95,14 @@ def other_resources():
     return render_template('other_resources.html', other_resources=pull_feed(feed_url))
 
 
-@app.route('/browse/', defaults={'path': ''})
+@app.route('/browse/')
+def browse():
+    browsecontent = getbrowsecontent(browse_url)
+    return render_template('browse.html', browsecontent=browsecontent)
+
 @app.route('/browse/<path:path>')
-def browse(path):
-    #hack to troubleshoot mod_wsgi problem
-    if path[0:7] == 'browse/' and path == 'browse/':
-        browsecontent = getbrowsecontent(browse_url+path[7:])
-    else:
-        browsecontent = getbrowsecontent(browse_url+path)
+def browse_path(path):
+    browsecontent = getbrowsecontent(browse_url+path)
     return render_template('browse.html', browsecontent=browsecontent)
 
 
