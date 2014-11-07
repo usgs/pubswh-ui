@@ -15,6 +15,7 @@ LOOKUP_URL = ''
 SUPERSEDES_URL = ''
 BROWSE_URL = ''
 BASE_SEARCH_URL = ''
+BROWSE_REPLACE = ''
 
 try:
     from local_settings import *
