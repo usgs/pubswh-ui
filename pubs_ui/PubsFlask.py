@@ -21,6 +21,7 @@ lookup_url = app.config['LOOKUP_URL']
 supersedes_url = app.config['SUPERSEDES_URL']
 browse_url = app.config['BROWSE_URL']
 search_url = app.config['BASE_SEARCH_URL']
+browse_replace = app.config['BROWSE_REPLACE']
 
 
 #should requests verify the certificates for ssl connections
@@ -101,7 +102,7 @@ def other_resources():
 @app.route('/browse/<path:path>')
 def browse(path):
     app.logger.info("path: "+path)
-    browsecontent = getbrowsecontent(browse_url+path, "../browse")
+    browsecontent = getbrowsecontent(browse_url+path, browse_replace)
     return render_template('browse.html', browsecontent=browsecontent)
 
 
