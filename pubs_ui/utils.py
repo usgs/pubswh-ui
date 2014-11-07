@@ -179,7 +179,7 @@ def supersedes(supersedes_url, index_id):
             'title': supersede_array['titleInfo']['title']}
 
 
-def getbrowsecontent(browseurl):
+def getbrowsecontent(browseurl, browsereplace):
     """
     Gets the content of the legacy browse interface so that it can be used without extension.
     :param browseurl: url of legacy browse interface
@@ -187,6 +187,8 @@ def getbrowsecontent(browseurl):
     """
     content = requests.get(browseurl).text
     soup = BeautifulSoup(content)
+    for a in soup.findAll('a'):
+        a['href'] = a['href'].replace("browse/", browsereplace)
     browse_content = {'links':soup.find('div', {"id": "pubs-browse-links"}).contents}
     browse_content['breadcrumbs'] = soup.find('div', {"id": "pubs-browse-breadcrumbs"}).contents
     browse_content['header'] = soup.find('div', {"id": "pubs-browse-header"}).contents
