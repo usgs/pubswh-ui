@@ -9,6 +9,7 @@ from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent
                    SearchPublications, contributor_lists)
 from forms import ContactForm, SearchForm
 from pubs_ui import app
+import logging
 
 #set UTF-8 to be default throughout app
 reload(sys)
@@ -99,6 +100,7 @@ def other_resources():
 @app.route('/browse/', defaults={'path': ''})
 @app.route('/browse/<path:path>')
 def browse(path):
+    app.logger.info("path: "+path)
     browsecontent = getbrowsecontent(browse_url+path, "../browse")
     return render_template('browse.html', browsecontent=browsecontent)
 

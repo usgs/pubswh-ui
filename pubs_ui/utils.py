@@ -5,6 +5,8 @@ import feedparser
 from bs4 import BeautifulSoup
 import re
 from operator import itemgetter
+from pubs_ui import app
+
 
 
 def pubdetails(pubdata):
@@ -185,6 +187,7 @@ def getbrowsecontent(browseurl, browsereplace):
     :param browseurl: url of legacy browse interface
     :return: html content of links, breadcrumb, and title
     """
+    app.logger.info("url to call: "+browseurl)
     content = requests.get(browseurl).text
     soup = BeautifulSoup(content)
     for a in soup.findAll('a'):
