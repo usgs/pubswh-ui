@@ -99,7 +99,7 @@ def other_resources():
 @app.route('/browse/', defaults={'path': ''})
 @app.route('/browse/<path:path>')
 def browse(path):
-    browsecontent = getbrowsecontent(browse_url+path, "../browse/")
+    browsecontent = getbrowsecontent(browse_url+path, "browse")
     return render_template('browse.html', browsecontent=browsecontent)
 
 
