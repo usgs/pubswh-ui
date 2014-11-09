@@ -9,7 +9,8 @@
         {% block main %}
         <main role ="main">
             <article>
-                <img id="thumbnail" src="{{ pubdata['displayLinks']['Thumbnail'][0]['url'] }}" alt="thumbnail"/>
+                {# this image is being dynamically resized to 200 pixels from whatever it might have been #}
+                <img id="thumbnail" src="{{resized_img_src(pubdata['displayLinks']['Thumbnail'][0]['url'], width=200)}}" alt="thumbnail"/>
 
                 <hgroup>
                     <h3 property="dc:title" datatype="" rel="dc:type" href="http://purl.org/dc/dcmitype/Text">{{ pubdata['title']|safe }}</h3>
