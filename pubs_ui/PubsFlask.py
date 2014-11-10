@@ -30,10 +30,13 @@ PER_PAGE = 5
 @app.route('/')
 def index():
     sp = SearchPublications(search_url)
-    recent_publications = sp.get_pubs_search_results(params=None) # bring back recent publications
+    recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6}) # bring back recent publications
+    recent_pubs_content = recent_publications_resp[0]
+    pubs_records = recent_pubs_content['records']
     form = SearchForm(None, obj=request.args)
     return render_template('home.html',
-                           recent_publications=recent_publications, form=form
+                           recent_publications=pubs_records, 
+                           form=form
                            )
 
 

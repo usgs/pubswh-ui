@@ -135,6 +135,10 @@ $(document).ready(function(){
                 <aside id="new_pubs">
 
                 	<h3>New Publications by USGS Authors</h3>
+                	
+                	{% for recent_publication in recent_publications %}
+                		{{ recent_publication.title }}
+                	{% endfor %}
 
                 </aside>
 
