@@ -5,6 +5,7 @@ Created on Oct 15, 2014
 '''
 import sys
 
+
 DEBUG = True
 SECRET_KEY = ''
 VERIFY_CERT = True
@@ -16,6 +17,7 @@ SUPERSEDES_URL = ''
 BROWSE_URL = ''
 BASE_SEARCH_URL = ''
 BROWSE_REPLACE = ''
+
 
 try:
     from local_settings import *
