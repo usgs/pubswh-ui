@@ -31,7 +31,7 @@ def get_publication_type(json_content):
 def display_publication_info(json_content):
     publication_year = json_content['publicationYear']
     series_title_text = json_content['seriesTitle']['text']
-    if json_content.get('seriesTitle', False) and json_content.get('seriesNumber', False):
+    if json_content.get('seriesTitle', None) and json_content.get('seriesNumber', None):
         series_number = json_content['seriesNumber']
         chapter = json_content.get('chapter', None)
         subchapter = json_content.get('subChapter', None)
@@ -53,7 +53,7 @@ def display_publication_info(json_content):
                                                                             title=series_title_text,
                                                                             series_number=series_number
                                                                             )           
-    elif json_content.get('seriesTitle', False) and json_content.get('publicationType', False).get('text', False) == 'Article':
+    elif json_content.get('seriesTitle', None) and json_content.get('publicationType', None).get('text', None) == 'Article':
         try:
             volume = json_content['volume']
             pub_info = '{publication_year}, {title} ({volume})'.format(publication_year=publication_year,
