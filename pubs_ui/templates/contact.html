@@ -9,17 +9,17 @@
 	    <h1>Contact us!</h1>
 	      <h2>Contact</h2>
 	  <form id="contactForm" action="{{ url_for('contact') }}" method=post>
-	    {{ form.hidden_tag() }}
+	    {{ contact_form.hidden_tag() }}
 	
-	    {{ form.name(placeholder="Name") }}
+	    {{ contact_form.name(placeholder="Name") }}
 	
-	    {{ form.email(placeholder="Email") }}
+	    {{ contact_form.email(placeholder="Email") }}
 	
-	    {{ form.subject(placeholder="Subject") }}
+	    {{ contact_form.subject(placeholder="Subject") }}
 	
-	    {{ form.message(placeholder="Write a Message") }}
+	    {{ contact_form.message(placeholder="Write a Message") }}
 	
-	    {{ form.submit }}
+	    {{ contact_form.submit }}
 	  </form>
   </div>
 
