@@ -137,7 +137,7 @@ $(document).ready(function(){
                 	<h3>New Publications by USGS Authors</h3>
                 	
                 	{% for recent_publication in recent_publications %}
-                		<p>{{ recent_publication.title }}; {{ recent_publication|getpubtype }}</p>
+						<p>{{ recent_publication.title|safe }}, {{ recent_publication|display_pub_info }}</p>
                 	{% endfor %}
 
                 </aside>
