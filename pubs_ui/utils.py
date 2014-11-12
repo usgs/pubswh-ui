@@ -250,8 +250,6 @@ class SearchPublications(object):
         except ValueError:
             search_result_json = None
         resp_status_code = search_result_obj.status_code
-        get_url = search_result_obj.url
-        app.logger.info('get_url: {0}'.format(get_url))
         return search_result_json, resp_status_code
 
 
