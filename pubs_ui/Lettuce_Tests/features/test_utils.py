@@ -3,7 +3,7 @@ from nose.tools import assert_equal
 from lettuce import *
 import json
 from requests import get
-from pubs_ui.utils import pull_feed, pubdetails, getbrowsecontent, create_display_links
+from pubs_ui.utils import pull_feed, pubdetails, getbrowsecontent, create_display_links, jsonify_geojson
 
 ###pull_feed scenarios###
 @step(r'I have created a mock xml at a mock url')
@@ -75,8 +75,7 @@ def mock_pubs_links(step):
 @step(r'I create_display_links using the dummy list')
 def display_links(step):
     world.output = create_display_links(world.body)
-    world.expected_output = {'displayLinks': {'Plate': [{u'url': u'http://pubs.usgs.gov/ar/01/plate-1.pdf', 'text': u'Plate 1', u'rank': 1, u'type': {u'text': u'Plate', u'id': 17}, u'id': 5344307, u'linkFileType': {u'text': u'pdf', u'id': 1}, u'size': u'9056'}], 'Document': [{u'url': u'http://pubs.usgs.gov/ar/01/report.pdf', u'linkFileType': {u'text': u'pdf', u'id': 1}, u'type': {u'text': u'Document', u'id': 11}, u'id': 5166317, u'rank': 300}], 'Thumbnail': [{u'url': u'http://pubs.usgs.gov/ar/01/report-thumb.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5277443, u'rank': 0}], 'Index Page': []}, u'links': [{u'url': u'http://pubs.usgs.gov/ar/01/report-thumb.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5277443, u'rank': 0}, {u'url': u'http://pubs.usgs.gov/ar/01/report.pdf', u'linkFileType': {u'text': u'pdf', u'id': 1}, u'type': {u'text': u'Document', u'id': 11}, u'id': 5166317, u'rank': 300}, {u'url': u'http://pubs.usgs.gov/ar/01/plate-1.pdf', 'text': u'Plate 1', u'rank': 1, u'type': {u'text': u'Plate', u'id': 17}, u'id': 5344307, u'linkFileType': {u'text': u'pdf', u'id': 1}, u'size': u'9056'}]}
-
+    world.expected_output = {'displayLinks': {'Project Site': [], 'Application Site': [], 'Raw Data': [], 'Document': [{u'url': u'http://pubs.usgs.gov/ar/01/report.pdf', u'linkFileType': {u'text': u'pdf', u'id': 1}, u'type': {u'text': u'Document', u'id': 11}, u'id': 5166317, u'rank': 300}], 'Thumbnail': [{u'url': u'http://pubs.usgs.gov/ar/01/report-thumb.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5277443, u'rank': 0}], 'Metadata': [], 'Plate': [{u'url': u'http://pubs.usgs.gov/ar/01/plate-1.pdf', 'text': u'Plate 1', u'rank': 1, u'type': {u'text': u'Plate', u'id': 17}, u'id': 5344307, u'linkFileType': {u'text': u'pdf', u'id': 1}, u'size': u'9056'}], 'Spatial Data': [], 'Companion Files': [], 'Illustration': [], 'Appendix': [], 'Index Page': [], 'Chapter': [], 'Read Me': [], 'Version History': [], 'Database': [], 'Cover': [], 'Authors Website': [], 'Errata': [], 'Additional Report Piece': [], 'Related Work': [], 'Abstract': [], 'Referenced Work': [], 'Digital Object Identifier': [], 'Image': []}, u'links': [{u'url': u'http://pubs.usgs.gov/ar/01/report-thumb.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5277443, u'rank': 0}, {u'url': u'http://pubs.usgs.gov/ar/01/report.pdf', u'linkFileType': {u'text': u'pdf', u'id': 1}, u'type': {u'text': u'Document', u'id': 11}, u'id': 5166317, u'rank': 300}, {u'url': u'http://pubs.usgs.gov/ar/01/plate-1.pdf', 'text': u'Plate 1', u'rank': 1, u'type': {u'text': u'Plate', u'id': 17}, u'id': 5344307, u'linkFileType': {u'text': u'pdf', u'id': 1}, u'size': u'9056'}]}
 @step(r'I am given a list of links for use in the jinja template')
 def test_links_ouput(step):
     assert_equal(world.output, world.expected_output)
@@ -109,4 +108,29 @@ def make_url(step):
     world.url = "http://pubs.er.usgs.gov/browse"
     world.expected_output = '{\'breadcrumbs\': [u\'\\n\', <a href="browse">Browse USGS Pubs Warehouse</a>, u\'\\n\'], \'links\': [u\'\\n\', <ul>\n<li><a alt="Official USGS Publications" href="browse/usgs-publications">Official USGS Publications</a></li>\n<li><a alt="Scientific Journal Articles by USGS Authors" href="browse/journals/all/">Scientific Journal Articles by USGS Authors</a></li>\n<li><a alt="Other US Government Publications" href="browse/other-pubs/all/">Other US Government Publications</a></li>\n<li><a alt="State, Local, and other government publications" href="browse/state-local/all/">State, Local, and other government publications</a></li>\n<li><a alt="Books, Reports, Conference Proceedings and other publications" href="browse/books-reports-conference/all/">Books, Reports, Conference Proceedings and other publications</a></li>\n</ul>, u\'\\n\'], \'header\': [u\'Please select a category of interest\']}'
 
-    
+###jsonify_geojson scenarios###
+@step(r'we have created a fake pubs record with a geographic extents string')
+def imitation_geojson(step):
+    world.body = {'id': 12345, "geographicExtents": '{ "type": "FeatureCollection", "features": [ { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [ [ [ -72.745833,44.0625 ], [ -72.745833,44.075 ], [ -72.741667,44.075 ], [ -72.741667,44.0625 ], [ -72.745833,44.0625 ] ] ] } } ] }'}
+
+@step(r'I make a record with parsable json')
+def make_json(step):
+    world.output = jsonify_geojson(world.body)
+    world.expected_output = {'id': 12345, "geographicExtents": {u'type': u'FeatureCollection', u'features': [{u'geometry': {u'type': u'Polygon', u'coordinates': [[[-72.745833, 44.0625], [-72.745833, 44.075], [-72.741667, 44.075], [-72.741667, 44.0625], [-72.745833, 44.0625]]]}, u'type': u'Feature', u'properties': {}}]}}
+
+@step(r'I see a record was created correctly')
+def test_geojson_output(step):
+    assert_equal(world.output, world.expected_output)
+
+@step(r'we have created a fake pubs record with an invalid geographic extents string')
+def imitation_bad_geojson(step):
+    world.body = {'id': 12345, "geographicExtents": '{ "type": "FeatureCollection", "features": [ { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [ [ [ -72.745833,44.0625 ], [ -72.745833,44.075 ], [ -72.741667,44.075 ], [ -72.741667,44.0625 ], [ -72.745833,44.0625 ] ] ] } } ] '}
+
+@step(r'I try to make a record with parseable json and catch an error')
+def make_json(step):
+    world.output = jsonify_geojson(world.body)
+    world.expected_output = {'id': 12345}
+
+@step(r'I see the record has geographicExtents dropped')
+def test_geojson_output(step):
+    assert_equal(world.output, world.expected_output)

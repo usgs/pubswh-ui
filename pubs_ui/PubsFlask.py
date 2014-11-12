@@ -6,7 +6,7 @@ from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
 from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
-                   SearchPublications, contributor_lists)
+                   SearchPublications, contributor_lists, jsonify_geojson)
 from forms import ContactForm, SearchForm
 from pubs_ui import app
 
@@ -44,11 +44,11 @@ def index():
 #contact form
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
-    form = ContactForm()
+    contact_form = ContactForm()
     if request.method == 'POST':
         return 'Form posted.'
     elif request.method == 'GET':
-        return render_template('contact.html', form=form)
+        return render_template('contact.html', contact_form=contact_form)
 
 
 #leads to rendered html for publication page
@@ -59,6 +59,7 @@ def publication(indexId):
     pubdata = pubdetails(pubreturn)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
+    pubdata = jsonify_geojson(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:
