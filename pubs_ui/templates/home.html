@@ -136,9 +136,29 @@ $(document).ready(function(){
 
                 	<h3>New Publications by USGS Authors</h3>
                 	
+                	<table>
+                		<td>
+                			<div class="pubs-thumbnail"></div>
+                		</td>
+                	</table>
+                	
+                	<table>
                 	{% for recent_publication in recent_publications %}
-						<p>{{ recent_publication.title|safe }}, {{ recent_publication|display_pub_info }}</p>
+                		<tr>
+                			<td>
+                				<div class="pubs-thumbnail"></div>
+                			</td>
+                		</tr>
+                		<tr>
+                			<div class="recent-pubs-title">
+                				{{ recent_publication.title|safe }}
+                			</div>
+                			<div class="recent-pub-info">
+                				{{ recent_publication|display_pub_info }}
+                			</div>
+                		</tr>
                 	{% endfor %}
+                	</table>
 
                 </aside>
 

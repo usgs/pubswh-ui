@@ -30,7 +30,7 @@ PER_PAGE = 5
 
 @app.route('/')
 def index():
-    sp = SearchPublications(search_url, citation_url)
+    sp = SearchPublications(search_url)
     recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6}) # bring back recent publications
     recent_pubs_content = recent_publications_resp[0]
     pubs_records = recent_pubs_content['records']

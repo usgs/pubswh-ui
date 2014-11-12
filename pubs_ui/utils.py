@@ -208,9 +208,8 @@ class SearchPublications(object):
     :param str search_url: URL without any search parameters appended
     """
     
-    def __init__(self, search_url, citation_url):
+    def __init__(self, search_url):
         self.search_url = search_url
-        self.citation_url = citation_url
         
     def get_pubs_search_results(self, params=None):
         """
@@ -233,26 +232,6 @@ class SearchPublications(object):
         get_url = search_result_obj.url
         app.logger.info('get_url: {0}'.format(get_url))
         return search_result_json, resp_status_code
-    
-    def get_recent_publications(self, params=None):
-        
-        default_params = {
-                          'last_x_days': 7,
-                          'orderby': 'dispPubDate',
-                          'page': 1,
-                          'page_size': 6
-                          }
-        if params:
-            get_params = params
-        else:
-            get_params = default_params
-        search_result_obj = requests.get(url=self.citation_url, params=get_params)
-        status_code = search_result_obj.status_code
-        search_result_json = search_result_obj.json()
-        search_result_content = search_result_json['modsCollection']['mods']
-        get_url = search_result_obj.url
-        app.logger.info('get_url: {0}'.format(get_url))
-        return search_result_content, status_code
 
 
 def contributor_lists(record):
