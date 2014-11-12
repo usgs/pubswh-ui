@@ -1,6 +1,7 @@
 import sys
 import json
 from flask import render_template, abort, request, Response, jsonify
+from flask_mail import Message
 from requests import get
 from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
@@ -8,7 +9,7 @@ from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
                    SearchPublications, contributor_lists, jsonify_geojson)
 from forms import ContactForm, SearchForm
-from pubs_ui import app
+from pubs_ui import app, mail
 
 #set UTF-8 to be default throughout app
 reload(sys)
@@ -49,6 +50,18 @@ def index():
 def contact():
     contact_form = ContactForm()
     if request.method == 'POST':
+        human_name = contact_form.name.data
+        human_email = contact_form.email.data
+        subject_line = contact_form.subject.data
+        message_body = contact_form.message.data
+        # app.logger.info('subject: {0}'.format(subject_line))
+        msg = Message(subject=subject_line,
+                      sender=(human_name, human_email),
+                      reply_to='pubsv2_no_reply@usgs.gov',
+                      recipients=['usgs.biodata@gmail.com'],
+                      body=message_body
+                      )
+        mail.send(msg)            
         return 'Form posted.'
     elif request.method == 'GET':
         return render_template('contact.html', contact_form=contact_form)
