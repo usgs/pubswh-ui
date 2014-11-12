@@ -7,6 +7,8 @@ Created on Nov 10, 2014
 
 def get_publication_type(json_content):
     """
+    THIS FUNCTION IS DEPRECATED
+    
     Parse JSON content to get the publication
     type for display with recent publications.
     
@@ -67,7 +69,8 @@ def display_publication_info(json_content):
         except KeyError:
             volume = None
             pub_info = '{publication_year}, {title} {start_page}'.format(publication_year=publication_year,
-                                                                         title=series_title_text
+                                                                         title=series_title_text,
+                                                                         start_page=start_page
                                                                          )
         if end_page:
             full_pub_info = '{pub_info}-{end_page}'.format(pub_info=pub_info, end_page=end_page)
