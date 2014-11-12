@@ -57,8 +57,8 @@ def contact():
         # app.logger.info('subject: {0}'.format(subject_line))
         msg = Message(subject=subject_line,
                       sender=(human_name, human_email),
-                      reply_to='pubsv2_no_reply@usgs.gov',
-                      recipients=['usgs.biodata@gmail.com'],
+                      reply_to=('PUBSV2_NO_REPLY', 'pubsv2_no_reply@usgs.gov'),
+                      recipients=['servicedesk@usgs.gov'],
                       body=message_body
                       )
         mail.send(msg)            
