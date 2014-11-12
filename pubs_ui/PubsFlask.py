@@ -26,7 +26,7 @@ browse_replace = app.config['BROWSE_REPLACE']
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
-PER_PAGE = 5
+
 
 @app.route('/')
 def index():
