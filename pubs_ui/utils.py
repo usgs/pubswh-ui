@@ -9,7 +9,6 @@ from pubs_ui import app
 import json
 
 
-
 def pubdetails(pubdata):
     """
     build the ordered list to make the 'Publications details' box
@@ -233,7 +232,7 @@ class SearchPublications(object):
     def __init__(self, search_url):
         self.search_url = search_url
         
-    def get_pubs_search_results(self, params):
+    def get_pubs_search_results(self, params=None):
         """
         Searches Pubs API for a specified query parameter
         

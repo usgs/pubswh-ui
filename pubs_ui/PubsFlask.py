@@ -20,20 +20,24 @@ lookup_url = app.config['LOOKUP_URL']
 supersedes_url = app.config['SUPERSEDES_URL']
 browse_url = app.config['BROWSE_URL']
 search_url = app.config['BASE_SEARCH_URL']
+citation_url = app.config['BASE_CITATION_URL']
 browse_replace = app.config['BROWSE_REPLACE']
 
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
-PER_PAGE = 5
+
 
 @app.route('/')
 def index():
     sp = SearchPublications(search_url)
-    recent_publications = sp.get_pubs_search_results(params=None) # bring back recent publications
+    recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6}) # bring back recent publications
+    recent_pubs_content = recent_publications_resp[0]
+    pubs_records = recent_pubs_content['records']
     form = SearchForm(None, obj=request.args)
     return render_template('home.html',
-                           recent_publications=recent_publications, form=form
+                           recent_publications=pubs_records, 
+                           form=form
                            )
 
 
