@@ -1,9 +1,9 @@
-# import logging
+import logging
 from pubs_ui import app as application
 
 
 if __name__ == '__main__':
-    """
+
     # set-up some very simple logging for local development
     FORMAT = '%(asctime)s %(message)s'
     fmt = logging.Formatter(FORMAT)
@@ -11,5 +11,5 @@ if __name__ == '__main__':
     handler.setLevel(logging.INFO)
     handler.setFormatter(fmt)
     application.logger.addHandler(handler)
-    """
+
     application.run(port=5050)
