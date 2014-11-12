@@ -45,4 +45,12 @@ Feature: Test all pub_ui utilities
 		When I get the links, breadcrumbs, and titles from the url
 		Then I am returned a list for the links, breadcrumbs, and titles
 
-	
+	Scenario: jsonify_geojson functions correctly with a geographic extents string from pubs warehouse
+        Given we have created a fake pubs record with a geographic extents string
+        When I make a record with parsable json
+        Then I see a record was created correctly
+
+    Scenario: jsonify_geojson drops the record if the json parse fails
+        Given we have created a fake pubs record with an invalid geographic extents string
+        When I try to make a record with parseable json and catch an error
+        Then I see the record has geographicExtents dropped
