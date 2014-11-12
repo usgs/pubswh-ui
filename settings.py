@@ -11,6 +11,7 @@ SECRET_KEY = ''
 VERIFY_CERT = True
 COLLECT_STATIC_ROOT = 'static/'
 COLLECT_STORAGE = 'flask.ext.collect.storage.file'
+MAIL_USERNAME = 'PUBSV2_NO_REPLY'
 PUB_URL = ''
 LOOKUP_URL = ''
 SUPERSEDES_URL = ''
