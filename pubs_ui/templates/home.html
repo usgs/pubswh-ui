@@ -151,7 +151,7 @@ $(document).ready(function(){
                 		</tr>
                 		<tr>
                 			<div class="recent-pubs-title">
-                				{{ recent_publication.title|safe }}
+                				<a href="{{ url_for('publication', indexId = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
                 			</div>
                 			<div class="recent-pub-info">
                 				{{ recent_publication|display_pub_info }}
