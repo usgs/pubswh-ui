@@ -19,7 +19,7 @@ BROWSE_URL = ''
 BASE_SEARCH_URL = ''
 BASE_CITATION_URL = ''
 BROWSE_REPLACE = ''
-RECAPTCHA_PUBLIC_KEY = '6LfisP0SAAAAAKcg5-a5bEeV4slFfQZr5_7XfqXf'
+RECAPTCHA_PUBLIC_KEY = '6LfisP0SAAAAAKcg5-a5bEeV4slFfQZr5_7XfqXf' # using google's recaptcha API
 RECAPTCHA_PRIVATE_KEY = '' # may be superseded by PRIVATE_KEY in local_settings.py
 
 

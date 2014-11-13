@@ -51,19 +51,22 @@ def index():
 def contact():
     contact_form = ContactForm()
     if request.method == 'POST':
-        human_name = contact_form.name.data
-        human_email = contact_form.email.data
-        subject_line = 'Pubs Warehouse User Comments'
-        message_body = contact_form.message.data
-        # app.logger.info('msg: {0}'.format(message_body))
-        msg = Message(subject=subject_line,
-                      sender=(human_name, human_email),
-                      reply_to=('PUBSV2_NO_REPLY', 'pubsv2_no_reply@usgs.gov'),
-                      recipients=contact_recipients,
-                      body=message_body
-                      )
-        mail.send(msg)            
-        return 'Form posted.'
+        if contact_form.validate_on_submit():
+            human_name = contact_form.name.data
+            human_email = contact_form.email.data
+            subject_line = 'Pubs Warehouse User Comments'
+            message_body = contact_form.message.data
+            # app.logger.info('msg: {0}'.format(message_body))
+            msg = Message(subject=subject_line,
+                          sender=(human_name, human_email),
+                          reply_to=('PUBSV2_NO_REPLY', 'pubsv2_no_reply@usgs.gov'),
+                          recipients=contact_recipients,
+                          body=message_body
+                          )
+            mail.send(msg)            
+            return 'Form posted.'
+        else:
+            return render_template('contact.html', contact_form=contact_form)
     elif request.method == 'GET':
         return render_template('contact.html', contact_form=contact_form)
 
