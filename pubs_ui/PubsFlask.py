@@ -66,7 +66,7 @@ def contact():
             mail.send(msg)            
             return 'Form posted.'
         else:
-            return render_template('contact.html', contact_form=contact_form)
+            return render_template('contact.html', contact_form=contact_form) # redisplay the form with errors if validation fails
     elif request.method == 'GET':
         return render_template('contact.html', contact_form=contact_form)
 
