@@ -53,7 +53,6 @@ def contact():
     if request.method == 'POST':
         human_name = contact_form.name.data
         human_email = contact_form.email.data
-        # subject_line = contact_form.subject.data
         subject_line = 'Pubs Warehouse User Comments'
         message_body = contact_form.message.data
         # app.logger.info('msg: {0}'.format(message_body))
