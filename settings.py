@@ -20,6 +20,11 @@ BASE_SEARCH_URL = ''
 BASE_CITATION_URL = ''
 BROWSE_REPLACE = ''
 
+if DEBUG:
+    CONTACT_RECIPIENTS = ['ayan@usgs.gov']
+else:
+    CONTACT_RECIPIENTS = ['servicedesk@usgs.gov']
+
 
 try:
     from local_settings import *
