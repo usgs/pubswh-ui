@@ -59,14 +59,14 @@ def contact():
                 sender_str = '({name}, {email})'.format(name=human_name, email=human_email)
             else:
                 sender_str = '({email})'.format(email=human_email)
-            subject_line = 'Pubs Warehouse User Comments'
+            subject_line = 'Pubs Warehouse User Comments' # this is want Remedy filters on to determine if an email goes to the pubs support group
             message_body = contact_form.message.data
             message_content = EMAIL_RESPONSE.format(contact_str=sender_str, message_body=message_body)
             # app.logger.info('msg: {0}'.format(message_body))
             msg = Message(subject=subject_line,
                           sender=(human_name, human_email),
-                          reply_to=('PUBSV2_NO_REPLY', 'pubsv2_no_reply@usgs.gov'),
-                          recipients=contact_recipients,
+                          reply_to=('PUBSV2_NO_REPLY', 'pubsv2_no_reply@usgs.gov'), # this is not what Remedy filters on to determine if a message goes to the pubs support group...
+                          recipients=contact_recipients, # will go to servicedesk@usgs.gov if application has DEBUG = False
                           body=message_content
                           )
             mail.send(msg)            
