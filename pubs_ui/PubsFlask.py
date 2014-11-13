@@ -9,6 +9,7 @@ from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
                    SearchPublications, contributor_lists, jsonify_geojson)
 from forms import ContactForm, SearchForm
+from canned_text import EMAIL_RESPONSE
 from pubs_ui import app, mail
 
 #set UTF-8 to be default throughout app
@@ -54,14 +55,19 @@ def contact():
         if contact_form.validate_on_submit():
             human_name = contact_form.name.data
             human_email = contact_form.email.data
+            if human_name:
+                sender_str = '({name}, {email})'.format(name=human_name, email=human_email)
+            else:
+                sender_str = '({email})'.format(email=human_email)
             subject_line = 'Pubs Warehouse User Comments'
             message_body = contact_form.message.data
+            message_content = EMAIL_RESPONSE.format(contact_str=sender_str, message_body=message_body)
             # app.logger.info('msg: {0}'.format(message_body))
             msg = Message(subject=subject_line,
                           sender=(human_name, human_email),
                           reply_to=('PUBSV2_NO_REPLY', 'pubsv2_no_reply@usgs.gov'),
                           recipients=contact_recipients,
-                          body=message_body
+                          body=message_content
                           )
             mail.send(msg)            
             return 'Form posted.'

@@ -10,7 +10,10 @@
 	      <h2>Contact</h2>
 	  <form id="contactForm" action="{{ url_for('contact') }}" method=post>
 	    {{ contact_form.hidden_tag() }}
-	
+		
+		{% for name_error in contact_form.name.errors %}
+			{{ name_error }}
+		{% endfor %}
 	    {{ contact_form.name(placeholder="Name") }}
 		
 		{% for email_error in contact_form.email.errors %}
