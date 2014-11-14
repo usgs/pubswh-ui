@@ -35,6 +35,12 @@ except ImportError:
     pass
 
 # variables used for testing purposes
-testing = sys.argv[0].endswith('nosetests')
-if testing:
+nose_testing = sys.argv[0].endswith('nosetests') # returns True if 'nosetests' is a command line argument
+if 'lettuce' in sys.argv[0]: # determine if a lettuce is being run
+    lettuce_testing = True
+else:
+    lettuce_testing = False
+if nose_testing or lettuce_testing:
+    WTF_CSRF_ENABLED = False
+    TESTING = True
     BASE_SEARCH_URL = 'https://pubs-fake.er.usgs.gov/pubs-services/publication/'
