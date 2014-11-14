@@ -5,8 +5,8 @@ Created on Nov 14, 2014
 '''
 
 from lettuce import world, step
-from nose.tools import assert_true, assert_equals
-from pubs_ui import app
+from nose.tools import assert_true, assert_equal
+from pubs_ui import app, mail
 
 # Contact page responds with a contact form
 @step
@@ -71,7 +71,9 @@ def i_have_filled_out_the_firm_with_at_least_a_message_and_email_and_filled_out_
     
 @step
 def i_submit_the_correctly_filled_out_form(step):
-    post_response = world.test_client.post(world.contact_url, data=world.contact_data, follow_redirects=True)
+    with mail.record_messages() as outbox:
+        post_response = world.test_client.post(world.contact_url, data=world.contact_data, follow_redirects=True)
+    world.outbox = outbox
     world.post_response_content = post_response.get_data()
     
 @step
@@ -83,3 +85,20 @@ def my_form_results_in_a_success_message(step):
     else:
         message_found = False
     assert_true(message_found)
+    
+@step
+def the_email_is_sent_to_the_recipents_specified_in_settings_with_correct_headings(step):
+    outbox_len = len(world.outbox)
+    assert_equal(outbox_len, 1)
+    
+    message_sender = world.outbox[0].sender
+    expected_sender = 'Earl of Lemongrab <lemongrab@usgs.gov>'
+    assert_equal(message_sender, expected_sender)
+    
+    message_recipient = world.outbox[0].recipients
+    expected_recipient = app.config['CONTACT_RECIPIENTS']
+    assert_equal(message_recipient, expected_recipient)
+    
+    message_subject = world.outbox[0].subject
+    expected_subject = 'Pubs Warehouse User Comments'
+    assert_equal(message_subject, expected_subject)

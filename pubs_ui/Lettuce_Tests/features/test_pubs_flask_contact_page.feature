@@ -22,3 +22,4 @@ Feature: Submit help ticket to Remedy via contact page
 		Given I have filled out the firm with at least a message and email and filled out the captcha
 		When I submit the correctly filled out form
 		Then my form results in a success message
+		And the email is sent to the recipents specified in settings with correct headings
