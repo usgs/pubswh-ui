@@ -72,11 +72,9 @@ def contact():
             mail.send(msg)            
             return redirect(url_for('contact_confirmation')) # redirect to a confirmation page after successful validation and message sending
         else:
-            skitty = contact_form.validate_on_submit()
-            skitty = contact_form.errors.items()
-            return render_template('contact.html', contact_form=contact_form, skitty=skitty) # redisplay the form with errors if validation fails
+            return render_template('contact.html', contact_form=contact_form) # redisplay the form with errors if validation fails
     elif request.method == 'GET':
-        return render_template('contact.html', contact_form=contact_form, skitty='good skitty')
+        return render_template('contact.html', contact_form=contact_form)
 
     
 @app.route('/contact_confirm')
