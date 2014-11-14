@@ -4,7 +4,7 @@ Created on Nov 14, 2014
 @author: ayan
 '''
 
-from lettuce import world, step
+from lettuce import world, step, before
 from nose.tools import assert_true, assert_equal
 from pubs_ui import app, mail
 
