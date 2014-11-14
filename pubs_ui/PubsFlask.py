@@ -9,6 +9,7 @@ from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
                    SearchPublications, contributor_lists, jsonify_geojson)
 from forms import ContactForm, SearchForm
+from canned_text import EMAIL_RESPONSE
 from pubs_ui import app, mail
 
 #set UTF-8 to be default throughout app
@@ -23,6 +24,7 @@ browse_url = app.config['BROWSE_URL']
 search_url = app.config['BASE_SEARCH_URL']
 citation_url = app.config['BASE_CITATION_URL']
 browse_replace = app.config['BROWSE_REPLACE']
+contact_recipients = app.config['CONTACT_RECIPIENTS']
 
 
 #should requests verify the certificates for ssl connections
@@ -50,19 +52,27 @@ def index():
 def contact():
     contact_form = ContactForm()
     if request.method == 'POST':
-        human_name = contact_form.name.data
-        human_email = contact_form.email.data
-        subject_line = contact_form.subject.data
-        message_body = contact_form.message.data
-        # app.logger.info('subject: {0}'.format(subject_line))
-        msg = Message(subject=subject_line,
-                      sender=(human_name, human_email),
-                      reply_to=('PUBSV2_NO_REPLY', 'pubsv2_no_reply@usgs.gov'),
-                      recipients=['servicedesk@usgs.gov'],
-                      body=message_body
-                      )
-        mail.send(msg)            
-        return 'Form posted.'
+        if contact_form.validate_on_submit():
+            human_name = contact_form.name.data
+            human_email = contact_form.email.data
+            if human_name:
+                sender_str = '({name}, {email})'.format(name=human_name, email=human_email)
+            else:
+                sender_str = '({email})'.format(email=human_email)
+            subject_line = 'Pubs Warehouse User Comments'
+            message_body = contact_form.message.data
+            message_content = EMAIL_RESPONSE.format(contact_str=sender_str, message_body=message_body)
+            # app.logger.info('msg: {0}'.format(message_body))
+            msg = Message(subject=subject_line,
+                          sender=(human_name, human_email),
+                          reply_to=('PUBSV2_NO_REPLY', 'pubsv2_no_reply@usgs.gov'),
+                          recipients=contact_recipients,
+                          body=message_content
+                          )
+            mail.send(msg)            
+            return 'Form posted.'
+        else:
+            return render_template('contact.html', contact_form=contact_form) # redisplay the form with errors if validation fails
     elif request.method == 'GET':
         return render_template('contact.html', contact_form=contact_form)
 
