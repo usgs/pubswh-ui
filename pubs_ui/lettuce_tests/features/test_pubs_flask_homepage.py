@@ -72,7 +72,6 @@ def i_access_the_homepage_url_with_the_working_service(step):
     with world.client as c:
         response = c.get(world.index_url)
     world.response_content = response.get_data()
-    print(world.response_content)
     
 @step
 def i_should_see_the_imitated_pubs_content_on_the_page(step):
