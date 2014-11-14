@@ -1,6 +1,6 @@
 import sys
 import json
-from flask import render_template, abort, request, Response, jsonify
+from flask import render_template, abort, request, Response, jsonify, url_for, redirect
 from flask_mail import Message
 from requests import get
 from webargs.flaskparser import FlaskParser
@@ -70,11 +70,19 @@ def contact():
                           body=message_content
                           )
             mail.send(msg)            
-            return 'Form posted.'
+            return redirect(url_for('contact_confirmation')) # redirect to a confirmation page after successful validation and message sending
         else:
-            return render_template('contact.html', contact_form=contact_form) # redisplay the form with errors if validation fails
+            skitty = contact_form.validate_on_submit()
+            skitty = contact_form.errors.items()
+            return render_template('contact.html', contact_form=contact_form, skitty=skitty) # redisplay the form with errors if validation fails
     elif request.method == 'GET':
-        return render_template('contact.html', contact_form=contact_form)
+        return render_template('contact.html', contact_form=contact_form, skitty='good skitty')
+
+    
+@app.route('/contact_confirm')
+def contact_confirmation():
+    confirmation_message = 'Thank you for contacting the USGS Publications Warehouse support team.'
+    return render_template('contact_confirm.html', confirm_message=confirmation_message)
 
 
 #leads to rendered html for publication page

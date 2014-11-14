@@ -8,7 +8,7 @@ Feature: Test that pubs_ui views are working
 		And I created a Flask client to test the homepage with the failing service
 		When I access the homepage URL with the failing service backend
 		Then I should see a 200 status code from the homepage
-		
+	
 	Scenario: Homepage responds if service is working
 		Given I have imitated a working search service from pubs
 		And I created a Flask client to test the homepage with the working service

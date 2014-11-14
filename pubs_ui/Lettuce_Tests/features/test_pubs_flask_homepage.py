@@ -76,11 +76,13 @@ def i_access_the_homepage_url_with_the_working_service(step):
     
 @step
 def i_should_see_the_imitated_pubs_content_on_the_page(step):
-    title_index = world.response_content.find('Das Boot')
-    if title_index == -1:
-        world.imitated_content_found = False
-    else:
+    title_index = world.response_content.find('Das Boot') # determine if the imitated title is in the page content
+    if title_index > -1:
         world.imitated_content_found = True
+    else:
+        world.imitated_content_found = False
     assert_true(world.imitated_content_found)
+    httpretty.disable()
+    httpretty.reset()
     
     
