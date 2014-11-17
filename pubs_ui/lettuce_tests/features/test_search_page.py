@@ -79,4 +79,6 @@ def i_access_the_search_url_with_a_simulated_query_string(step):
 @step
 def i_should_see_the_fake_content_i_created_in_the_response(step):
     assert_in('Das Boot', world.response_content)
+    httpretty.disable()
+    httpretty.reset()
     
