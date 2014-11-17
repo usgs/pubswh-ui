@@ -158,7 +158,6 @@ def api_webargs():
     sp = SearchPublications(search_url)
     search_results, resp_status_code = sp.get_pubs_search_results(params=search_kwargs) # go out to the pubs API and get the search results
     try:
-        print(search_results)
         search_result_records = search_results['records']
         record_count = search_results['recordCount']
         pagination = Pagination(page=page, total=record_count, per_page=per_page, record_name='Search Results')
