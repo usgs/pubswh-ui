@@ -27,7 +27,6 @@ def i_have_imitated_a_failing_search_service_from_pubs(step):
 def i_created_a_flask_client_to_test_the_search_with_the_failing_service(step):
     world.client = app.test_client()
     
-
 @step
 def i_access_the_search_url_with_a_simulated_query(step):
     world.pubs_search = '/search?q=state_name'
