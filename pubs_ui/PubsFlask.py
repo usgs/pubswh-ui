@@ -5,12 +5,13 @@ from flask_mail import Message
 from requests import get
 from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
+from flask.ext.images import resized_img_src
 from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
                    SearchPublications, contributor_lists, jsonify_geojson)
 from forms import ContactForm, SearchForm
 from canned_text import EMAIL_RESPONSE
-from pubs_ui import app, mail
+from pubs_ui import app, mail, images
 
 #set UTF-8 to be default throughout app
 reload(sys)
@@ -91,11 +92,12 @@ def publication(indexId):
     pubdata = pubdetails(pubreturn)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
+    thumbnail = resized_img_src(pubdata['displayLinks']['Thumbnail'][0]['url'], width=200)
     pubdata = jsonify_geojson(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:
-        return render_template('publication.html', indexID=indexId, pubdata=pubdata)
+        return render_template('publication.html', indexID=indexId, pubdata=pubdata, thumbnail=thumbnail)
 
 
 #leads to json for selected endpoints
