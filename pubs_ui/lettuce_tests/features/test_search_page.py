@@ -45,7 +45,7 @@ def i_should_see_a_200_status_code_from_the_search_page(step):
     
 # Search bar with working search
 @step
-def i_have_imitated_a_working_search_service_from_pubs(step):
+def i_have_imitated_a_working_search_service_from_pubs_with_fake_data(step):
     world.search_url = search_url
     world.pub_record = {'records': [
                                     {'seriesTitle': {'text': 'Hop on Pop'},
