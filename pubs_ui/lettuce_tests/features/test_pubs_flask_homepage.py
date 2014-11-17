@@ -76,5 +76,6 @@ def i_access_the_homepage_url_with_the_working_service(step):
 @step
 def i_should_see_the_imitated_pubs_content_on_the_page(step):
     assert_in('Das Boot', world.response_content)
-    
+    httpretty.disable()
+    httpretty.enable()
     
