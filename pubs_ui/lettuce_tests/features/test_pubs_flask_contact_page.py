@@ -8,7 +8,9 @@ from lettuce import world, step
 from nose.tools import assert_in, assert_equal
 from pubs_ui import app, mail
 
-# Contact page responds with a contact form
+"""
+Contact page responds with a contact form
+"""
 @step
 def i_have_the_url_to_the_contact_page(step):
     world.contact_url = '/contact'
@@ -30,7 +32,9 @@ def i_should_see_a_contact_form_with_an_email_field(step):
     assert_in(world.expected_email_field_index, world.response_content)
     
 
-# Email field contains a invalid email
+"""
+Email field contains a invalid email
+"""
 @step
 def i_have_created_an_invalid_email(step):
     world.contact_url = '/contact'
@@ -46,9 +50,11 @@ def i_put_an_invalid_email_in_the_email_field(step):
 def i_should_see_an_invalid_email_message_on_return(step):
     world.invalid_message = 'Invalid email address'
     assert_in(world.invalid_message, world.post_response_content)
+
     
-    
-# Successful form submittal message
+"""    
+Successful form submittal message
+"""
 @step
 def i_have_filled_out_the_firm_with_at_least_a_message_and_email_and_filled_out_the_captcha(step):
     world.contact_url = '/contact'

@@ -7,7 +7,10 @@ from lettuce import world, step
 from nose.tools import assert_equal
 from pubs_ui.custom_filters import display_publication_info
 
-# Pubs JSON contains chapter and subchapter
+
+"""
+Pubs JSON contains chapter and subchapter
+"""
 @step
 def i_have_json_with_a_chapter_and_subchapter(step):
     world.chapter_subchapter_json = {
@@ -28,7 +31,9 @@ def i_should_see_a_string_with_chapter_and_subchapter(step):
     assert_equal(world.result, world.expected)
 
 
-# Pubs JSON contains chapter and no subchapter
+"""
+Pubs JSON contains chapter and no subchapter
+"""
 @step
 def i_have_json_with_a_chapter_and_no_subchapter(step):
     world.chapter_no_subchapter_json = {
@@ -68,8 +73,10 @@ def i_create_a_pub_info_string_using_the_pub_type_and_end_page_json(step):
 def i_should_see_a_string_without_the_volume_and_with_end_page(step):
     assert_equal(world.result, world.expected)
 
-   
-# Pubs JSON contains publication type, end page, and volume
+
+"""   
+Pubs JSON contains publication type, end page, and volume
+"""
 @step
 def i_have_json_using_pub_type_and_end_page_and_volume(step):
     world.pub_type_end_page_vol_json = {
@@ -91,7 +98,9 @@ def i_should_see_a_string_with_volume_and_end_page(step):
     assert_equal(world.result, world.expected)
     
     
-# Pubs JSON does not contain chapter
+"""
+Pubs JSON does not contain chapter
+"""
 @step
 def i_have_json_that_does_not_have_a_chapter(step):
     world.json_no_chapter = {
