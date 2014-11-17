@@ -48,11 +48,11 @@ def i_should_see_a_200_status_code_from_the_search_page(step):
 def i_have_imitated_a_working_search_service_from_pubs(step):
     world.search_url = search_url
     world.pub_record = {'records': [
-                                    {'seriesTitle': {'text': 'Das Boot'},
-                                     'publicationYear': '2021',
-                                     'seriesNumber': 14,
-                                     'chapter': 18,
-                                     'subChapter': 4
+                                    {'seriesTitle': {'text': 'Hop on Pop'},
+                                     'publicationYear': '1990',
+                                     'seriesNumber': 41,
+                                     'chapter': 11,
+                                     'subChapter': 2
                                      }
                                     ],
                         'recordCount': 1
@@ -71,14 +71,14 @@ def i_created_a_flask_client_to_access_the_search_with_the_working_service(step)
     
 @step
 def i_access_the_search_url_with_a_simulated_query_string(step):
-    world.pubs_search = '/search?q=boot'
+    world.pubs_search = '/search?q=pop'
     with world.client as c:
         response = c.get(world.pubs_search)
     world.response_content = response.get_data()
     
 @step
 def i_should_see_the_fake_content_i_created_in_the_response(step):
-    assert_in('Das Boot', world.response_content)
+    assert_in('Hop on Pop', world.response_content)
     httpretty.disable()
     httpretty.reset()
     
