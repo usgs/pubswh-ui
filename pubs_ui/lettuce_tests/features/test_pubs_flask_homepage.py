@@ -6,7 +6,7 @@ Created on Nov 13, 2014
 import json
 from lettuce import world, step
 import httpretty
-from nose.tools import assert_equal, assert_true
+from nose.tools import assert_equal, assert_in
 from pubs_ui import app
 
 search_url = app.config['BASE_SEARCH_URL']
@@ -52,7 +52,8 @@ def i_have_imitated_a_working_search_service_from_pubs(step):
                                      'chapter': 18,
                                      'subChapter': 4
                                      }
-                                    ]
+                                    ],
+                        'recordCount': 1
                         }
     httpretty.enable()
     httpretty.register_uri(httpretty.GET,
@@ -75,13 +76,7 @@ def i_access_the_homepage_url_with_the_working_service(step):
     
 @step
 def i_should_see_the_imitated_pubs_content_on_the_page(step):
-    title_index = world.response_content.find('Das Boot') # determine if the imitated title is in the page content
-    if title_index > -1:
-        world.imitated_content_found = True
-    else:
-        world.imitated_content_found = False
-    assert_true(world.imitated_content_found)
+    assert_in('Das Boot', world.response_content)
     httpretty.disable()
-    httpretty.reset()
-    
+    httpretty.enable()
     

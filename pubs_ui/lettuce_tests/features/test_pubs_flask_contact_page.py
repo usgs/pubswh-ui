@@ -5,10 +5,12 @@ Created on Nov 14, 2014
 '''
 
 from lettuce import world, step
-from nose.tools import assert_true, assert_equal
+from nose.tools import assert_in, assert_equal
 from pubs_ui import app, mail
 
-# Contact page responds with a contact form
+"""
+Contact page responds with a contact form
+"""
 @step
 def i_have_the_url_to_the_contact_page(step):
     world.contact_url = '/contact'
@@ -25,15 +27,14 @@ def i_access_the_contact_page_through_the_url(step):
     
 @step
 def i_should_see_a_contact_form_with_an_email_field(step):
-    email_field_index = world.response_content.find('name="email"')
-    if email_field_index > -1:
-        world.field_found = True
-    else:
-        world.field_found = False
-    assert_true(world.field_found)
+    #email_field_index = world.response_content.find('name="email"')
+    world.expected_email_field_index = 'name="email"'
+    assert_in(world.expected_email_field_index, world.response_content)
     
 
-# Email field contains a invalid email
+"""
+Email field contains a invalid email
+"""
 @step
 def i_have_created_an_invalid_email(step):
     world.contact_url = '/contact'
@@ -48,15 +49,12 @@ def i_put_an_invalid_email_in_the_email_field(step):
 @step
 def i_should_see_an_invalid_email_message_on_return(step):
     world.invalid_message = 'Invalid email address'
-    invalid_message_index = world.post_response_content.find(world.invalid_message)
-    if invalid_message_index > -1:
-        invalid_message_found = True
-    else:
-        invalid_message_found = False
-    assert_true(invalid_message_found)
+    assert_in(world.invalid_message, world.post_response_content)
+
     
-    
-# Successful form submittal message
+"""    
+Successful form submittal message
+"""
 @step
 def i_have_filled_out_the_firm_with_at_least_a_message_and_email_and_filled_out_the_captcha(step):
     world.contact_url = '/contact'
@@ -79,12 +77,7 @@ def i_submit_the_correctly_filled_out_form(step):
 @step
 def my_form_results_in_a_success_message(step):
     world.confirm_message = 'Thank you for'
-    confirm_message_index = world.post_response_content.find(world.confirm_message)
-    if confirm_message_index > -1:
-        message_found = True
-    else:
-        message_found = False
-    assert_true(message_found)
+    assert_in(world.confirm_message, world.post_response_content)
     
 @step
 def the_email_is_sent_to_the_recipents_specified_in_settings_with_correct_headings(step):
