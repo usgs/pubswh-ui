@@ -13,7 +13,9 @@ from pubs_ui import app
 search_url = app.config['BASE_SEARCH_URL']
 
 
-# Search bar with broken service
+"""
+Search bar with broken service
+"""
 @step
 def i_have_imitated_a_failing_search_service_from_pubs(step):
     world.search_url = search_url
@@ -27,7 +29,6 @@ def i_have_imitated_a_failing_search_service_from_pubs(step):
 def i_created_a_flask_client_to_test_the_search_with_the_failing_service(step):
     world.client = app.test_client()
     
-
 @step
 def i_access_the_search_url_with_a_simulated_query(step):
     world.pubs_search = '/search?q=state_name'
@@ -42,8 +43,10 @@ def i_should_see_a_200_status_code_from_the_search_page(step):
     httpretty.disable()
     httpretty.reset()
     
-    
-# Search bar with working search
+
+"""   
+Search bar with working search
+"""
 @step
 def i_have_imitated_a_working_search_service_from_pubs_with_fake_data(step):
     world.search_url = search_url
