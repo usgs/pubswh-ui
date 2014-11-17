@@ -52,7 +52,8 @@ def i_have_imitated_a_working_search_service_from_pubs(step):
                                      'chapter': 18,
                                      'subChapter': 4
                                      }
-                                    ]
+                                    ],
+                        'recordCount': 1
                         }
     httpretty.enable()
     httpretty.register_uri(httpretty.GET,
