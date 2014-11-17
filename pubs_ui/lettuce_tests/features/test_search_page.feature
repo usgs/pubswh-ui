@@ -10,7 +10,7 @@ Feature: Navigation bar search bar
 		Then I should see a 200 status code from the search page
 		
 	Scenario: Search bar with working search
-		Given I have imitated a working search service from pubs
+		Given I have imitated a working search service from pubs with fake data
 		And I created a Flask client to access the search with the working service
 		When I access the search URL with a simulated query string
 		Then I should see the fake content I created in the response
