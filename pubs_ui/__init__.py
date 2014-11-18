@@ -9,6 +9,7 @@ app.config.from_object('settings') # load configuration before passing the app o
 images = Images(app)
 mail = Mail(app)
 app.jinja_env.filters['display_pub_info'] = display_publication_info
+app.jinja_env.globals.update(wsgi_str=app.config['WSGI_STR'])
 
 
 import PubsFlask
