@@ -5,13 +5,12 @@ from flask_mail import Message
 from requests import get
 from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
-from flask.ext.images import resized_img_src
 from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
                    SearchPublications, contributor_lists, jsonify_geojson)
 from forms import ContactForm, SearchForm
 from canned_text import EMAIL_RESPONSE
-from pubs_ui import app, mail, images
+from pubs_ui import app, mail
 
 #set UTF-8 to be default throughout app
 reload(sys)
