@@ -91,11 +91,13 @@ def publication(indexId):
     pubdata = pubdetails(pubreturn)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
+    # thumbnail = resized_img_src(pubdata['displayLinks']['Thumbnail'][0]['url'], width=200)
+    img_source = pubdata['displayLinks']['Thumbnail'][0]['url']
     pubdata = jsonify_geojson(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:
-        return render_template('publication.html', indexID=indexId, pubdata=pubdata)
+        return render_template('publication.html', indexID=indexId, pubdata=pubdata, img_source=img_source)
 
 
 #leads to json for selected endpoints
