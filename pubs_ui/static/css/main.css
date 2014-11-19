@@ -491,6 +491,21 @@ form#contactForm input#submit:hover{
 /* ==========================================================================
    Search styles
    ========================================================================== */ 
+#search-results{
+	text-align:left;
+	margin-top:15px;
+}  
+
+ #search-results article{
+ margin:0;
+ padding-left:15px;}
+ 
+.searchContributors,
+.pubinfo{
+	color:#006621;
+	font-size:.85em;
+}
+ 
 .search-results{
 	padding-left:15px;
 }
