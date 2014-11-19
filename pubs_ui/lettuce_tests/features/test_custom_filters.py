@@ -117,3 +117,23 @@ def i_create_a_pub_info_string_without_a_chapter(step):
 @step
 def i_should_see_a_string_with_year_and_title_and_series_number(step):
     assert_equal(world.result, world.expected)
+    
+
+# Pubs JSON does not contain a seriesTitle
+@step
+def i_have_json_that_does_not_contain_a_series_title(step):
+    world.json_no_series_title = {
+                                  'publicationYear': 1651,
+                                  'publicationType': {'text': 'Article'},
+                                  'volume': 32,
+                                  'startPage': 10
+                                  }
+    
+@step
+def i_create_a_pub_info_string_without_a_series_title(step):
+    world.result = display_publication_info(world.json_no_series_title)
+    world.expected = '1651, Article'
+    
+@step
+def i_should_see_a_info_string_with_publication_type(step):
+    assert_equal(world.result, world.expected)
