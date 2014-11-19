@@ -1,6 +1,6 @@
 import sys
 import json
-from flask import render_template, abort, request, Response, jsonify
+from flask import render_template, abort, request, Response, jsonify, url_for, redirect
 from flask_mail import Message
 from requests import get
 from webargs.flaskparser import FlaskParser
@@ -59,22 +59,28 @@ def contact():
                 sender_str = '({name}, {email})'.format(name=human_name, email=human_email)
             else:
                 sender_str = '({email})'.format(email=human_email)
-            subject_line = 'Pubs Warehouse User Comments'
+            subject_line = 'Pubs Warehouse User Comments' # this is want Remedy filters on to determine if an email goes to the pubs support group
             message_body = contact_form.message.data
             message_content = EMAIL_RESPONSE.format(contact_str=sender_str, message_body=message_body)
             # app.logger.info('msg: {0}'.format(message_body))
             msg = Message(subject=subject_line,
                           sender=(human_name, human_email),
-                          reply_to=('PUBSV2_NO_REPLY', 'pubsv2_no_reply@usgs.gov'),
-                          recipients=contact_recipients,
+                          reply_to=('PUBSV2_NO_REPLY', 'pubsv2_no_reply@usgs.gov'), # this is not what Remedy filters on to determine if a message goes to the pubs support group...
+                          recipients=contact_recipients, # will go to servicedesk@usgs.gov if application has DEBUG = False
                           body=message_content
                           )
             mail.send(msg)            
-            return 'Form posted.'
+            return redirect(url_for('contact_confirmation')) # redirect to a confirmation page after successful validation and message sending
         else:
             return render_template('contact.html', contact_form=contact_form) # redisplay the form with errors if validation fails
     elif request.method == 'GET':
         return render_template('contact.html', contact_form=contact_form)
+
+    
+@app.route('/contact_confirm')
+def contact_confirmation():
+    confirmation_message = 'Thank you for contacting the USGS Publications Warehouse support team.'
+    return render_template('contact_confirm.html', confirm_message=confirmation_message)
 
 
 #leads to rendered html for publication page
@@ -85,11 +91,13 @@ def publication(indexId):
     pubdata = pubdetails(pubreturn)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
+    # thumbnail = resized_img_src(pubdata['displayLinks']['Thumbnail'][0]['url'], width=200)
+    img_source = pubdata['displayLinks']['Thumbnail'][0]['url']
     pubdata = jsonify_geojson(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:
-        return render_template('publication.html', indexID=indexId, pubdata=pubdata)
+        return render_template('publication.html', indexID=indexId, pubdata=pubdata, img_source=img_source)
 
 
 #leads to json for selected endpoints
