@@ -137,3 +137,7 @@ def i_create_a_pub_info_string_without_a_series_title(step):
 @step
 def i_should_see_a_info_string_with_publication_type(step):
     assert_equal(world.result, world.expected)
+    
+    
+# Pubs JSON does not contain a seriesTitle with larger work
+@step

@@ -63,7 +63,6 @@ def display_publication_info(json_content):
         else:
             full_pub_info = pub_info
     else:
-<<<<<<< HEAD
         if publication_type_text:
             pub_info ='{publication_year}, {publication_type}'.format(publication_year=publication_year,
                                                                       publication_type = publication_type_text
@@ -77,8 +76,4 @@ def display_publication_info(json_content):
                                                                      )
         else:
             full_pub_info = pub_info    
-    return full_pub_info        
-=======
-        pass
     return full_pub_info
->>>>>>> pubs-master/master
