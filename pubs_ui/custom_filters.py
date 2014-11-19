@@ -54,4 +54,3 @@ def display_publication_info(json_content):
     else:
         pass
     return full_pub_info
-        
