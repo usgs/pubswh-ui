@@ -8,6 +8,8 @@ from operator import itemgetter
 from pubs_ui import app
 import json
 
+#should requests verify the certificates for ssl connections
+verify_cert = app.config['VERIFY_CERT']
 
 def pubdetails(pubdata):
     """
@@ -196,7 +198,7 @@ def supersedes(supersedes_url, index_id):
     """
 
     supersede_array = requests.get(supersedes_url,
-                                   params={'prod_id': index_id}).json()['modsCollection']['mods'][0]['relatedItem'][0]
+                                   params={'prod_id': index_id}, verify=verify_cert).json()['modsCollection']['mods'][0]['relatedItem'][0]
     #TODO: deal with pubs with more than one relationship
     return {'type': supersede_array['@type'], 'index_id': supersede_array['identifier']['#text'],
             'title': supersede_array['titleInfo']['title']}
@@ -208,7 +210,7 @@ def getbrowsecontent(browseurl, browsereplace):
     :param browseurl: url of legacy browse interface
     :return: html content of links, breadcrumb, and title
     """
-    content = requests.get(browseurl).text
+    content = requests.get(browseurl, verify=verify_cert).text
     soup = BeautifulSoup(content)
     for a in soup.findAll('a'):
         a['href'] = a['href'].replace("browse", browsereplace)
@@ -241,7 +243,7 @@ class SearchPublications(object):
         :return: query results (or None) and response status code.
         :rtype: tuple
         """
-        search_result_obj = requests.get(url=self.search_url, params=params)
+        search_result_obj = requests.get(url=self.search_url, params=params, verify=verify_cert)
         try:
             search_result_json = search_result_obj.json()
             for record in search_result_json['records']:
