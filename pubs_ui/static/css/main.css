@@ -489,6 +489,57 @@ form#contactForm input#submit:hover{
 }
 
 /* ==========================================================================
+   Search styles
+   ========================================================================== */ 
+.search-results{
+	padding-left:15px;
+}
+
+h1.search-results{
+	margin-bottom:5px;
+}
+
+.pagination-page-info{
+	margin-top:15px;
+	width:95%;
+}
+
+.pagination-page-info b{
+	background:#fff;
+	border:1px solid #808080;
+	font-size:1.2em;
+}
+
+.search-title{
+	color:rgb(0,51,102);
+	text-decoration:none;
+	font-size:1.2em;
+}
+
+.pagination-nav{
+	margin-bottom:15px;
+	text-align:center;
+}
+
+.pagination-nav ul{
+	margin:0;
+	padding:0;
+}
+
+.pagination-nav a{
+	color:#808080;
+	text-decoration:none;
+	margin-right:10px;
+	
+}
+
+.pagination-nav a:hover{
+	color:#000;
+	text-decoration:underline;
+}
+
+
+/* ==========================================================================
    other styles
    ========================================================================== */
    
@@ -802,6 +853,24 @@ form#contactForm textarea{
 form#contactForm input#submit{
 	width:200px;
 }
+
+/* ==========================================================================
+   Search styles
+   ========================================================================== */  
+
+.pagination-page-info b{
+	
+	font-size:1.4em;
+}
+
+.pagination-nav a{
+	color:#808080;
+	text-decoration:none;
+	font-size:1.4em;
+	margin-right:20px;
+	
+}
+
 
   
 }

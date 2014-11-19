@@ -135,7 +135,21 @@ $(document).ready(function(){
                 <aside id="new_pubs">
 
                 	<h3>New Publications by USGS Authors</h3>
-
+                	
+                	<table>
+                		<td>
+                			<div class="pubs-thumbnail"></div>
+                		</td>
+                	</table>
+                	
+                	{% for recent_publication in recent_publications %}
+               			<div class="recent-pubs-title">
+               				<a href="{{ url_for('publication', indexId = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
+               			</div>
+               			<div class="recent-pub-info">
+               				{{ recent_publication|display_pub_info }}
+               			</div>
+                	{% endfor %}
                 </aside>
 
             </article>

@@ -9,17 +9,26 @@
 	    <h1>Contact us!</h1>
 	      <h2>Contact</h2>
 	  <form id="contactForm" action="{{ url_for('contact') }}" method=post>
-	    {{ form.hidden_tag() }}
+	    {{ contact_form.hidden_tag() }}
+		
+		{% for name_error in contact_form.name.errors %}
+			{{ name_error }}
+		{% endfor %}
+	    {{ contact_form.name(placeholder="Name") }}
+		
+		{% for email_error in contact_form.email.errors %}
+			{{ email_error }}
+		{% endfor %}
+	    {{ contact_form.email(placeholder="Email") }}
 	
-	    {{ form.name(placeholder="Name") }}
-	
-	    {{ form.email(placeholder="Email") }}
-	
-	    {{ form.subject(placeholder="Subject") }}
-	
-	    {{ form.message(placeholder="Write a Message") }}
-	
-	    {{ form.submit }}
+	    {{ contact_form.message(placeholder="Write a Message") }}
+	    
+	    {% for captcha_error in contact_form.recaptcha.errors %}
+	    	{{ captcha_error }}
+	    {% endfor %}
+	    {{ contact_form.recaptcha }}
+
+	    {{ contact_form.submit }}
 	  </form>
   </div>
 

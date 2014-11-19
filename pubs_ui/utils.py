@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import re
 from operator import itemgetter
 from pubs_ui import app
-
+import json
 
 
 def pubdetails(pubdata):
@@ -70,10 +70,31 @@ def create_display_links(pubdata):
     :return: pubdata with new displayLinks array
     """
     display_links = {
-        'Thumbnail': [],
-        'Index Page': [],
+        'Abstract': [],
+        'Additional Report Piece': [],
+        'Appendix': [],
+        'Application Site': [],
+        'Authors Website': [],
+        'Chapter': [],
+        'Companion Files': [],
+        'Cover': [],
+        'Database': [],
+        'Digital Object Identifier': [],
         'Document': [],
-        'Plate': []
+        'Errata': [],
+        'Illustration': [],
+        'Image': [],
+        'Index Page': [],
+        'Metadata': [],
+        'Plate': [],
+        'Project Site': [],
+        'Raw Data': [],
+        'Read Me': [],
+        'Referenced Work': [],
+        'Related Work': [],
+        'Spatial Data': [],
+        'Thumbnail': [],
+        'Version History': []
     }
     links = pubdata.get("links")
     for linktype in display_links:
@@ -187,7 +208,6 @@ def getbrowsecontent(browseurl, browsereplace):
     :param browseurl: url of legacy browse interface
     :return: html content of links, breadcrumb, and title
     """
-    app.logger.info("url to call: "+browseurl)
     content = requests.get(browseurl).text
     soup = BeautifulSoup(content)
     for a in soup.findAll('a'):
@@ -212,7 +232,7 @@ class SearchPublications(object):
     def __init__(self, search_url):
         self.search_url = search_url
         
-    def get_pubs_search_results(self, params):
+    def get_pubs_search_results(self, params=None):
         """
         Searches Pubs API for a specified query parameter
         
@@ -290,3 +310,20 @@ def concatenate_contributor_names(contributors):
             contributor_dict = {"type": 'corporation', "text": contributor.get('organization')}
         contributor_list.append(contributor_dict)
     return contributor_list
+
+def jsonify_geojson(record):
+    """
+    turns the stringified geojson into actual json
+    :param record:
+    :return record with geojson in geographicExtents:
+    """
+    geojson = record.get('geographicExtents')
+    if geojson is not None:
+        try:
+            geojson = json.loads(geojson)
+            record['geographicExtents'] = geojson
+        except Exception as e:
+            app.logger.info("Prod ID "+str(record['id'])+" geographicExtents json parse error: "+str(e))
+            del record['geographicExtents']
+    return record
+

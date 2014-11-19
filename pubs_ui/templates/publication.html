@@ -8,11 +8,16 @@
 
         {% block main %}
         <main role ="main">
-            <article>
-                <img id="thumbnail" src="{{ pubdata['displayLinks']['Thumbnail'][0]['url'] }}" alt="thumbnail"/>
+            <article itemscope itemtype="http://schema.org/ScholarlyArticle">
+                {# this image is being dynamically resized to 200 pixels from whatever it might have been #}
+                {# <img id="thumbnail" src="{{resized_img_src(pubdata['displayLinks']['Thumbnail'][0]['url'], width=200)}}" alt="thumbnail"/> #}
+                <img id="thumbnail" src="{{ wsgi_str }}{{ url_for('images', filename=pubdata['displayLinks']['Thumbnail'][0]['url'], width=200) }}" alt="thumbnail"/>
+                {# stand-in until there is a working jpeg image library on wsgi servers
+                <img id="thumbnail" src="{{ pubdata['displayLinks']['Thumbnail'][0]['url'] }}" alt="thumbnail"/> #}
+				
 
                 <hgroup>
-                    <h3 property="dc:title" datatype="" rel="dc:type" href="http://purl.org/dc/dcmitype/Text">{{ pubdata['title']|safe }}</h3>
+                    <h3 itemprop="name">{{ pubdata['title']|safe }}</h3>
                     {% if pubdata['seriesTitle'] %}
                     <h4>{{ pubdata['seriesTitle']['text'] }} {{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %}</h4>
                     {% endif %}
@@ -29,18 +34,18 @@
                       <dt>Authored by:</dt>
                       {% for contributor in pubdata['authorsListTyped']  %}
                           {% if contributor['type'] == "person"  %}
-                        <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ contributor['text'] }}</dd>
+                        <dd itemprop="author" itemtype="http://schema.org/Person">{{ contributor['text'] }}</dd>
                           {% else %}
-                         <dd rel="dc:creator" class="author" property="foaf:name" typeof="foaf:Organization" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</dd>
+                         <dd itemprop="author" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</dd>
                           {% endif %}
                       {%  endfor %}
                       {% if pubdata['editorsList'] %}
                       <dt class="clear">Edited by:</dt>
                       {% for contributor in pubdata['editorsListTyped']  %}
                           {% if contributor['type'] == "person"  %}
-                        <dd rel="dc:creator" class="editor" property="foaf:name" typeof="foaf:Person" itemtype="http://schema.org/Person">{{ contributor['text'] }}</dd>
+                        <dd itemprop="editor" itemtype="http://schema.org/Person">{{ contributor['text'] }}</dd>
                           {% else %}
-                         <dd rel="dc:creator" class="editor" property="foaf:name" typeof="foaf:Organization" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</dd>
+                         <dd itemprop="editor" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</dd>
                           {% endif %}
                       {%  endfor %}
                       {% endif %}
