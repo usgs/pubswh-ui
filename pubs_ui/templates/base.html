@@ -8,7 +8,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="title" content="USGS Publications Warehouse">
-        <meta name="description" content="Pubs Warehouse provides access to over 100,000 publications written by USGS over the century-plus history of the bureau">
+        {% block head %} {% endblock %}
         <meta name="keywords" content>
         <meta name="authors" content="William Blondeau, Stephan Kochaver, James Kreft, Martin Wernimont, Andrew Yan">
         <meta name="publisher" content="Center for Integrated Data Analytics">
@@ -17,7 +17,6 @@
         <meta name="revised" content>
         <meta name="review" content>
         <meta name="expires" content="never">
-        {% block head %} {% endblock %}
         {% block page_style %}{% endblock page_style %}
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/normalize.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/main.css') }}">
