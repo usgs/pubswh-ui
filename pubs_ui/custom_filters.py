@@ -48,9 +48,9 @@ def display_publication_info(json_content):
         try:
             volume = json_content['volume']
             pub_info = '{publication_year}, {title} ({volume})'.format(publication_year=publication_year,
-                                                                                    title=series_title_text,
-                                                                                    volume=volume
-                                                                                    )
+                                                                       title=series_title_text,
+                                                                       volume=volume
+                                                                       )
         except KeyError:
             volume = None
             pub_info = '{publication_year}, {title}'.format(publication_year=publication_year,
