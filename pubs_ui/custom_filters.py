@@ -73,8 +73,7 @@ def display_publication_info(json_content):
         else:
             pub_info = '{publication_year}'.format(publication_year=publication_year)
         if json_content.get('largerWorkTitle', None):
-            full_pub_info = '{pub_info}, {larger_work_title}'.format(
-                                                                     pub_info=pub_info,
+            full_pub_info = '{pub_info}, {larger_work_title}'.format(pub_info=pub_info,
                                                                      larger_work_title=json_content.get('largerWorkTitle', None)
                                                                      )
         else:
