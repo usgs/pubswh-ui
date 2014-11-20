@@ -62,7 +62,6 @@ def contact():
             subject_line = 'Pubs Warehouse User Comments' # this is want Remedy filters on to determine if an email goes to the pubs support group
             message_body = contact_form.message.data
             message_content = EMAIL_RESPONSE.format(contact_str=sender_str, message_body=message_body)
-            # app.logger.info('msg: {0}'.format(message_body))
             msg = Message(subject=subject_line,
                           sender=(human_name, human_email),
                           reply_to=('PUBSV2_NO_REPLY', 'pubsv2_no_reply@usgs.gov'), # this is not what Remedy filters on to determine if a message goes to the pubs support group...
@@ -91,7 +90,6 @@ def publication(indexId):
     pubdata = pubdetails(pubreturn)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
-    # thumbnail = resized_img_src(pubdata['displayLinks']['Thumbnail'][0]['url'], width=200)
     img_source = pubdata['displayLinks']['Thumbnail'][0]['url']
     pubdata = jsonify_geojson(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
