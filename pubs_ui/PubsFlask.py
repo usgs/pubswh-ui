@@ -34,6 +34,7 @@ verify_cert = app.config['VERIFY_CERT']
 @app.route('/')
 def index():
     sp = SearchPublications(search_url)
+    print(search_url)
     recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6}) # bring back recent publications
     recent_pubs_content = recent_publications_resp[0]
     try:
@@ -91,7 +92,6 @@ def publication(indexId):
     pubdata = pubdetails(pubreturn)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
-    # thumbnail = resized_img_src(pubdata['displayLinks']['Thumbnail'][0]['url'], width=200)
     img_source = pubdata['displayLinks']['Thumbnail'][0]['url']
     pubdata = jsonify_geojson(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':

@@ -47,17 +47,20 @@ def display_publication_info(json_content):
         end_page = json_content.get('endPage', None)
         try:
             volume = json_content['volume']
-            pub_info = '{publication_year}, {title} ({volume}) {start_page}'.format(publication_year=publication_year,
+            pub_info = '{publication_year}, {title} ({volume})'.format(publication_year=publication_year,
                                                                                     title=series_title_text,
-                                                                                    volume=volume,
-                                                                                    start_page=start_page
+                                                                                    volume=volume
                                                                                     )
         except KeyError:
             volume = None
-            pub_info = '{publication_year}, {title} {start_page}'.format(publication_year=publication_year,
-                                                                         title=series_title_text,
-                                                                         start_page=start_page
-                                                                         )
+            pub_info = '{publication_year}, {title}'.format(publication_year=publication_year,
+                                                            title=series_title_text
+                                                            )
+        if start_page:
+            pub_info = '{pub_info} {start_page}'.format(pub_info=pub_info, start_page=start_page)
+        else:
+            pub_info = pub_info
+            
         if end_page:
             full_pub_info = '{pub_info}-{end_page}'.format(pub_info=pub_info, end_page=end_page)
         else:
