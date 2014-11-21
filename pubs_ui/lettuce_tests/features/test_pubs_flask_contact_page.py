@@ -80,7 +80,7 @@ def my_form_results_in_a_success_message(step):
     assert_in(world.confirm_message, world.post_response_content)
     
 @step
-def the_email_is_sent_to_the_recipents_specified_in_settings_with_correct_headings(step):
+def the_email_is_sent_to_the_recipients_specified_in_settings_with_correct_headings(step):
     outbox_len = len(world.outbox)
     assert_equal(outbox_len, 1)
     

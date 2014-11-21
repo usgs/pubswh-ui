@@ -117,3 +117,68 @@ def i_create_a_pub_info_string_without_a_chapter(step):
 @step
 def i_should_see_a_string_with_year_and_title_and_series_number(step):
     assert_equal(world.result, world.expected)
+    
+
+"""
+Pubs JSON does not contain a seriesTitle
+"""
+@step
+def i_have_json_that_does_not_contain_a_series_title(step):
+    world.json_no_series_title = {
+                                  'publicationYear': 1651,
+                                  'publicationType': {'text': 'Article'},
+                                  'volume': 32,
+                                  'startPage': 10
+                                  }
+    
+@step
+def i_create_a_pub_info_string_without_a_series_title(step):
+    world.result = display_publication_info(world.json_no_series_title)
+    world.expected = '1651, Article'
+    
+@step
+def i_should_see_a_info_string_with_publication_type_and_year(step):
+    assert_equal(world.result, world.expected)
+    
+
+"""   
+Pubs JSON does not contain a seriesTitle with larger work
+"""
+@step
+def i_have_json_that_does_not_control_a_series_title_with_larger_work_title(step):
+    world.json_larger_work = {
+                              'publicationYear': 1492,
+                              'volume': 5,
+                              'startPage': 78,
+                              'largerWorkTitle': 'A Larger Work'
+                              }
+    
+@step
+def i_create_a_pub_info_string_from_json_without_series_title_but_with_larger_work_title(step):
+    world.result = display_publication_info(world.json_larger_work)
+    world.expected = '1492, A Larger Work'
+    
+@step
+def i_should_see_an_info_string_with_publication_year_and_larger_work_title(step):
+    assert_equal(world.result, world.expected)
+    
+
+"""
+Pubs JSON article does not contain a start page
+"""
+@step
+def i_have_publication_json_from_an_article_without_a_start_page(step):
+    world.pub_without_start_page = {
+                                    'publicationYear': 2043,
+                                    'seriesTitle': {'text': 'Incan Conquest of the World'},
+                                    'publicationType': {'text': 'Article'}                               
+                                    }
+
+@step
+def i_create_a_pub_info_string_for_a_pub_without_a_start_page(page):
+    world.result = display_publication_info(world.pub_without_start_page)
+    world.expected = '2043, Incan Conquest of the World'
+    
+@step
+def i_should_see_an_info_string_with_publication_year_and_series_title(step):
+    assert_equal(world.result, world.expected)

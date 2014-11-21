@@ -27,3 +27,18 @@ Feature: Test custom Jinja2 filter display_publication_info
 		Given I have JSON that does not have a chapter
 		When I create a pub info string without a chapter
 		Then I should see a string with year and title and series number
+	
+	Scenario: Pubs JSON does not contain a seriesTitle
+		Given I have JSON that does not contain a series title
+		When I create a pub info string without a series title
+		Then I should see a info string with publication type and year
+		
+	Scenario: Pubs JSON does not contain a seriesTitle with larger work
+		Given I have JSON that does not control a series title with larger work title
+		When I create a pub info string from JSON without series title but with larger work title
+		Then I should see an info string with publication year and larger work title
+		
+	Scenario: Pubs JSON article does not contain a start page
+		Given I have publication JSON from an article without a start page
+		When I create a pub info string for a pub without a start page
+		Then I should see an info string with publication year and series title
