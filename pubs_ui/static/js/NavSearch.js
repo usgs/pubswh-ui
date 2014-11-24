@@ -12,7 +12,7 @@ function createSearchString(searchUrl, searchBoxId) {
 
 
 $(document).ready(function() {
-	navBarId = '#mysearch2';
+	var navBarId = '#mysearch2';
 	$(navBarId).bind("enterKey", function(e) {
 		var fullSearchUrl = createSearchString(BASE_SEARCH_PAGE_URL, navBarId);
 		//console.log(fullSearchUrl);

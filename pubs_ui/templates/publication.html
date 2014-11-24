@@ -10,11 +10,7 @@
         <main role ="main">
             <article itemscope itemtype="http://schema.org/ScholarlyArticle">
                 {# this image is being dynamically resized to 200 pixels from whatever it might have been #}
-                {# <img id="thumbnail" src="{{resized_img_src(pubdata['displayLinks']['Thumbnail'][0]['url'], width=200)}}" alt="thumbnail"/> #}
                 <img id="thumbnail" src="{{ wsgi_str }}{{ url_for('images', filename=pubdata['displayLinks']['Thumbnail'][0]['url'], width=200) }}" alt="thumbnail"/>
-                {# stand-in until there is a working jpeg image library on wsgi servers
-                <img id="thumbnail" src="{{ pubdata['displayLinks']['Thumbnail'][0]['url'] }}" alt="thumbnail"/> #}
-				
 
                 <hgroup>
                     <h3 itemprop="name">{{ pubdata['title']|safe }}</h3>
@@ -63,16 +59,16 @@
 
                     <ul class="fileslist">
                         {% for link in pubdata['displayLinks']['Document']|sort(attribute='rank') %}
-                            <li> <a href="{{ link["url"] }}" target="_blank" title="{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}({{ link["linkFileType"]["text"] }}){% endif %}</a> </li>
+                            <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }} else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}({{ link["linkFileType"]["text"] }}){% endif %}</a> </li>
                         {% endfor %}
                         {% for link in pubdata['displayLinks']['Index Page']|sort(attribute='rank') %}
-                            <li> <a href="{{ link["url"] }}" target="_blank" title="{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}({{ link["linkFileType"]["text"] }}){% endif %}</a> </li>
+                            <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }} else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}({{ link["linkFileType"]["text"] }}){% endif %}</a> </li>
                         {% endfor %}
                     </ul>
 
                     <ul class="plates">
                             {% for link in pubdata['displayLinks']['Plate']|sort(attribute='rank') %}
-                            <li> <a href="{{ link["url"] }}" target="_blank" title="{% if link["description"] %}{{ link["description"] }} else {{ link["type"]["text"] }} {% endif %}"><strong>{{ link["text"] }}</strong> ({% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %})</a> </li>
+                            <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }} else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["text"] }}</strong> ({% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %})</a> </li>
                         {% endfor %}
                     </ul>
 
@@ -82,7 +78,7 @@
                 </aside>
 
                     <h4>Suggested Citation</h4>
-                    <p class="reference">{{ pubdata['usgsCitation'] }}, <a href="http://dx.doi.org/{{ pubdata["doi"] }}">http://dx.doi.org/{{ pubdata["doi"] }}</a><p>
+                    <p class="reference">{{ pubdata['usgsCitation'] }}, <a href="http://dx.doi.org/{{ pubdata['doi'] }}">http://dx.doi.org/{{ pubdata["doi"] }}</a><p>
                 <!--Table of Contents Goes here eventually-->
 
 
