@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block head %}
 	<title>New Publications by USGS Authors</title>
 	<meta name="description" content="Explore publications from the last seven days">
 {% endblock head %}
@@ -14,8 +15,9 @@
     {% for pub in new_pubs %}
 
         <article>
-            <h4 class="search-title">{{ pub['title']
-{% block head %} }}</h4>
+            <h4> {{ pub['title'] }}</h4>
+            <p> {{ pub['docAbstract'].split(' ')|join(' ')|striptags }}</p>
+
         </article>
 
     {% endfor %}
