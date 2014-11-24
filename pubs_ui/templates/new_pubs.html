@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+	<title>New Publications by USGS Authors</title>
+	<meta name="description" content="Explore publications from the last seven days">
+{% endblock head %}
+
+{% block page_style %}
+	<link rel="stylesheet" href="{{ url_for('static', filename = 'css/pagination.css') }}">
+{% endblock page_style %}
+
+{% block main %}
+
+    <section id="new_pubs">
+
+    {% for pub in new_pubs %}
+
+        <article>
+            <h4 class="search-title">{{ pub['title']
+{% block head %} }}</h4>
+        </article>
+
+    {% endfor %}
+
+    </section>
+
+{% endblock main %}
