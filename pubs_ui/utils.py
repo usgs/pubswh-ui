@@ -43,7 +43,7 @@ def pubdetails(pubdata):
         ['temporalStart', 'Time Range Start:'],
         ['temporalEnd', 'Time Range End:'],
         ['conferenceTitle', 'Conference Title:'],
-        ['conferenceLocation', 'Conference Location'],
+        ['conferenceLocation', 'Conference Location:'],
         ['conferenceDate', 'Conference Date:']
     ]
     for detail in detailslist:
