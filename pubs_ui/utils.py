@@ -249,8 +249,13 @@ class SearchPublications(object):
             for record in search_result_json['records']:
                 if record.get("authors") is not None:
                     contributor_lists(record)
+            error_response = None
         except ValueError:
             search_result_json = None
+            error_response = search_result_obj.text
+        except TypeError:
+            search_result_json = None
+            error_response = search_result_obj.text
         resp_status_code = search_result_obj.status_code
         return search_result_json, resp_status_code
 

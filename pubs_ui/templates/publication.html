@@ -54,16 +54,24 @@
 
                 </section>
 
-                <section id="suggested">
+                <section id="links">
 
+                    {% macro linkdisplay(link) %}
+                        <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }} else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}({{ link["linkFileType"]["text"] }}){% endif %}</a>
+                    {% endmacro %}
 
                     <ul class="fileslist">
                         {% for link in pubdata['displayLinks']['Document']|sort(attribute='rank') %}
-                            <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }} else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}({{ link["linkFileType"]["text"] }}){% endif %}</a> </li>
+                            {{ linkdisplay(link) }}
                         {% endfor %}
                         {% for link in pubdata['displayLinks']['Index Page']|sort(attribute='rank') %}
-                            <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }} else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}({{ link["linkFileType"]["text"] }}){% endif %}</a> </li>
+                            {{ linkdisplay(link) }}
                         {% endfor %}
+                        {% for link in pubdata['displayLinks']['Index Page']|sort(attribute='rank') %}
+                            {{ linkdisplay(link) }}
+                        {% endfor %}
+
+
                     </ul>
 
                     <ul class="plates">
