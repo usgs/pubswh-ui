@@ -190,7 +190,8 @@ def site_map():
         app_urls.append((str(url_rule), str(url_rule.endpoint)))
     
     return render_template('site_map.html', app_urls=app_urls)
-    
+
+
 @app.route('/newpubs')
 def new_pubs():
     r = get(pub_url+'publication/', params={'pub_x_days': 7}, verify=verify_cert)
