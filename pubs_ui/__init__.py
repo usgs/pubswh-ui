@@ -18,6 +18,7 @@ if app.config['DEBUG']:
     app.logger.addHandler(handler)
 images = Images(app)
 mail = Mail(app)
+app.view_functions['images'] = images.handle_request
 app.jinja_env.filters['display_pub_info'] = display_publication_info
 app.jinja_env.globals.update(wsgi_str=app.config['WSGI_STR'])
 
