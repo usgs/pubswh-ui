@@ -171,10 +171,25 @@ def api_webargs():
                            search_service_down=search_service_down,
                            form=form
                            )
-
+'''
 @app.route('/newpubs')
 def new_pubs():
     r = get(pub_url+'publication/', params={'pub_x_days': 7}, verify=verify_cert)
     pubreturn = r.json()
     pubdata = contributor_lists(pubreturn)
     return render_template('new_pubs.html', new_pubs=pubdata['records'])
+'''
+
+@app.route('/newpubs')
+def new_pubs():
+    sp = SearchPublications(search_url)
+    recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6}) #bring back recent publications
+    recent_pubs_content = recent_publications_resp[0]
+    try:
+        pubs_records = recent_pubs_content['records']
+    except TypeError:
+        pubs_records = [] # return an empty list recent_pubs_content is None (e.g. the service is down)
+    form = SearchForm(None, obj=request.args)
+    return render_template('new_pubs.html',
+                           new_pubs=pubs_records,
+                           form=form)
