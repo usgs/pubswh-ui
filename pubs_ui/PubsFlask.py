@@ -177,3 +177,17 @@ def api_webargs():
 
     # print 'webarg param: ', search_kwargs
     #TODO: map the webargs to the Pubs Warehouse Java API, generate output
+
+   
+@app.route('/site-map')
+def site_map():
+    """
+    View for troubleshooting application URL rules
+    """
+    app_urls = []
+    
+    for url_rule in app.url_map.iter_rules():
+        app_urls.append(str(url_rule))
+    
+    return render_template('site_map.html', app_urls=app_urls)
+    
