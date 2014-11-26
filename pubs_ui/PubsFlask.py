@@ -34,7 +34,7 @@ verify_cert = app.config['VERIFY_CERT']
 @app.route('/')
 def index():
     sp = SearchPublications(search_url)
-    recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6}) # bring back recent publications
+    recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6}) #bring back recent publications
     recent_pubs_content = recent_publications_resp[0]
     try:
         pubs_records = recent_pubs_content['records']
@@ -191,3 +191,9 @@ def site_map():
     
     return render_template('site_map.html', app_urls=app_urls)
     
+@app.route('/newpubs')
+def new_pubs():
+    r = get(pub_url+'publication/', params={'pub_x_days': 7}, verify=verify_cert)
+    pubreturn = r.json()
+    pubdata = contributor_lists(pubreturn)
+    return render_template('new_pubs.html', new_pubs=pubdata['records'])
