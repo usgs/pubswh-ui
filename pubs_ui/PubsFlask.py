@@ -187,7 +187,7 @@ def site_map():
     app_urls = []
     
     for url_rule in app.url_map.iter_rules():
-        app_urls.append(str(url_rule))
+        app_urls.append((str(url_rule), str(url_rule.endpoint)))
     
     return render_template('site_map.html', app_urls=app_urls)
     
