@@ -174,7 +174,23 @@ def api_webargs():
 
 @app.route('/newpubs')
 def new_pubs():
-    r = get(pub_url+'publication/', params={'pub_x_days': 7}, verify=verify_cert)
-    pubreturn = r.json()
-    pubdata = contributor_lists(pubreturn)
-    return render_template('new_pubs.html', new_pubs=pubdata['records'])
+
+    sp = SearchPublications(search_url)
+    recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6}) #bring back recent publications
+
+    '''
+    #TODO: Get page to reload with new request after checkbox ("num_series" in new_pubs.html is checked). Retain checked state after reload.
+    if request.form.get("num_series"):
+        recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6, 'subtypeName': 'USGS Numbered Series'})
+    '''
+
+    recent_pubs_content = recent_publications_resp[0]
+    try:
+        pubs_records = recent_pubs_content['records']
+    except TypeError:
+        pubs_records = [] # return an empty list recent_pubs_content is None (e.g. the service is down)
+    form = SearchForm(None, obj=request.args)
+
+    return render_template('new_pubs.html',
+                           new_pubs=pubs_records,
+                           form=form)
