@@ -179,7 +179,7 @@ def new_pubs():
     recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6}) #bring back recent publications
 
     '''
-    #TODO: Get page to reload with new request after checkbox ("num_series" in new_pubs.html is checked)
+    #TODO: Get page to reload with new request after checkbox ("num_series" in new_pubs.html is checked). Retain checked state after reload.
     if request.form.get("num_series"):
         recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6, 'subtypeName': 'USGS Numbered Series'})
     '''
