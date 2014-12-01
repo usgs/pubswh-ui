@@ -445,10 +445,6 @@ h1,
 .h1 {
   font-size: 36px;
 }
-h2,
-.h2 {
-  font-size: 30px;
-}
 h3,
 .h3 {
   font-size: 24px;
@@ -755,8 +751,8 @@ pre code {
   }
 }
 .container-fluid {
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 10px;
+  padding-left: 10px;
   margin-right: auto;
   margin-left: auto;
 }
