@@ -26,61 +26,12 @@
 	                	<label for="mysearch2">Search for publications </label>
 	                	<form style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q"> {{ form.q(placeholder="search terms") }}</form>
 	                </section>
-	{# Commenting advanced search content out now, it may come back
-	                <section id="advanced" style="display:none">
-	
-	                	<label for="advancedSearch">Limit by... </label>
-	
-	                    <form id="advancedSearch">
-	
-	                    	<select class="empty">
-	                        	<option>Choose Category...</option>
-	                        </select><input type="text"/>
-	
-	                        <select class="empty">
-	                        	<option>Choose Category...</option>
-	                        </select><input type="text"/>
-	
-	                        <select class="empty">
-	                        	<option>Choose Category...</option>
-	                        </select><input type="text"/>
-	
-	                        <select class="empty">
-	                        	<option>Choose Category...</option>
-	                        </select><input type="text"/>
-	
-	
-	                    </form>
-	
-	                </section>
-	
-	                <section id="advanced_options" style="display:none">
-	
-	                	<p id="add">Add another field</p> <p id="bar2">|</p> <p id="clear">Clear</p>
-	
-	                </section>
-	
-	                <section id="checklist">
-	
-	                	<input type="checkbox"/>
-	
-	                    <label>Not a Scientist?<strong>Limit search to products written for the general public</strong></label><br><br>
-	
-	                    <input type="checkbox"/><label>Looking for journal articles? <strong>Limit search to papers published in scientific journals</strong></label><br><br>
-	
-	                    <input type="checkbox"/><label>Available Online</label>
-	
-	                    <input type="checkbox"/><label>Only USGS Numbered Series</label><br>
-	
-	                    <button>Search</button> <p id="bar">|</p> <p class="toggle">Advanced Search</p>
-	
-	                </section>
-	#}
+
 	                <section id="options">
 	
 	                	<h3>Don't want to search?</h3>
 	
-	                    	<h4><a href="http://pubs.er.usgs.gov/service/rss?xsl=..%2Fxslt%2Frss.xsl&orderby=dispPubDate&last_x_days=7&context=3">Explore recent publication by USGS Authors</a></h4>
+	                    	<h4><a href="{{ url_for('new_pubs') }}">Explore recent publication by USGS Authors</a></h4>
 	
 	                        <h4><a href="{{ url_for('browse') }}">Browse all of Pubs Warehouse by publication type and year</a></h4>
 	
@@ -109,6 +60,8 @@
 	                </section>
                 
                 </section>
+                </article>
+
                 
                 <section class="col-lg-4">
 
@@ -133,6 +86,7 @@
 	                </aside>
                 
                 </section>
+    </main>
 {% endblock %}
 
 {% block url %}<a href="{{ url_for('index') }}">http://pubs.er.usgs.gov{{ url_for('index') }}</a>{% endblock %}
