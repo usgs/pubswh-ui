@@ -17,9 +17,9 @@
         <article>
             <h4><a class="search-title" href="{{ url_for('publication', indexId = result['indexId']) }}">{{ result['title']|safe }}</a></h4>
             <p class="pubinfo">{{ result|display_pub_info }}</p>
-            {% if result['authorsList']|length > 0 %}<p>{{ result['authorsList'] }}</p>{% endif %}
+            {% if result['authorsList']|length > 0 %}<p>{{ result['authorsList']|join(', ') }}</p>{% endif %}
             {% if result['editorsList']|length > 0 %}<p class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</p>{% endif %}
-            {% if result['docAbstract']  %} <p>{{ result['docAbstract'] }}</p> {% endif %}
+            {% if result['docAbstract']  %} <p>{{ result['docAbstract']|safe }}</p> {% endif %}
         </article>
 
     {% endfor %}
@@ -33,3 +33,4 @@
     </label>
 
 {% endblock main %}
+
