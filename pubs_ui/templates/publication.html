@@ -4,10 +4,12 @@
     <meta NAME="title" content="{{ pubdata['title'] }}" />
     <meta name="description" content="{% if pubdata['docAbstract']  %}{{ pubdata['docAbstract'].split(' ')[0:150]|join(' ')|striptags }}...{% endif %}" />
     <META NAME="abstract" CONTENT="{% if pubdata['docAbstract']  %}{{ pubdata['docAbstract']|striptags }}{% endif %}" />
-    {% for author in pubdata['authorsList'] %}
-    <meta content="{{ author }}"/>
+    {% for author in pubdata['authorsList'] %}<meta NAME="author" content="{{ author }}"/>
+    {% endfor %}
 
-{% endblock %}
+
+
+{% endblock head %}
 
 
 

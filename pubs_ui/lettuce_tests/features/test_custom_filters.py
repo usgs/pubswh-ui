@@ -1,8 +1,8 @@
-'''
+"""
 Created on Nov 12, 2014
 
 @author: ayan
-'''
+"""
 from lettuce import world, step
 from nose.tools import assert_equal
 from pubs_ui.custom_filters import display_publication_info
