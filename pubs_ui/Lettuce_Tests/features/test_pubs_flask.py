@@ -1,4 +1,3 @@
-import flask
 import httpretty
 from lettuce import *
 from nose.tools import assert_equal
@@ -24,7 +23,7 @@ def app_call(step):
 def asset_status(step):
     assert_equal(world.status_code, 200)
     httpretty.reset()
-    httpretty.diable()
+    httpretty.disable
 
 @step(r'I have state_name query to search')
 def set_query_uri(step):
@@ -51,6 +50,6 @@ def contact_url(step):
 
 @step(r'I look for a response from the app')
 def contact_call(step):
-    with app.test_client as c:
+    with app.test_client() as c:
         response = c.get(world.contact_url)
         world.status_code = response.status_code
