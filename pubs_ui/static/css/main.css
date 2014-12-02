@@ -269,7 +269,7 @@ header {
 }
 nav {
   width: 100%;
-  height: 30px;
+  height: 32px;
   background: #003366;
   font-family: Verdana;
   color: #fff;
@@ -410,7 +410,7 @@ h2#abstract_head {
   padding: 5px 0 0 15px;
   border-top: 1px solid #000000;
   border-bottom: 1px solid #000000;
-  height: 30px;
+  min-height: 30px;
   margin-bottom: 10px;
 }
 .fileslist a,
@@ -438,14 +438,14 @@ address p {
 }
 #details{width:100%;
 		min-height:100px;
-		margin:10px 0 0 0;}
+		margin:10px 0 -20px 0;}
 		
 #details h4 {
   color: #8c8c8c;
   padding-left:10px;
   background: #dddddd;
   margin-bottom: 0px;
-  width:96%
+  width:100%
 }
 		
 #details dl{width:100%;
@@ -455,7 +455,7 @@ address p {
 			
 #details dl dt{
 				float:left;
-				width:45%;
+				width:50%;
 				text-align:right;
 				border-right:2px solid #fff;
 				padding:3px;}
@@ -976,17 +976,9 @@ form#contactForm input#submit{
   article{
     width: 980px;
     margin: 0 auto;
-  }
-  
-  #abstract,
-  #details,
-  hgroup,
-  #contributors {
-    width: 650px;
-  }
-  article {
     position: relative;
   }
+ 
   #suggested {
     position: absolute;
     top: 15px;
@@ -996,6 +988,7 @@ form#contactForm input#submit{
   }
   #abstract {
     margin-top: 20px;
+    line-height:1.7em;
   }
   
 

@@ -58,10 +58,10 @@
                 <section id="abstract">
                     <h2 id="abstract_head">Abstract</h2>
                     {{ pubdata['docAbstract']|safe }}
-
+                    
                 </section>
 
-                <section id="suggested">
+                <section id="links">
 
                     {% macro linkdisplay(link_type) %}
                         {% for link in pubdata['displayLinks'][link_type]|sort(attribute='rank') %}
@@ -71,7 +71,31 @@
                         {% endfor %}
                     {% endmacro %}
 
-                    <ul class="fileslist">
+                    <ul class="plates">
+                            {% for link in pubdata['displayLinks']['Plate']|sort(attribute='rank') %}
+                            <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }} else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["text"] }}</strong> ({% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %})</a> </li>
+                        {% endfor %}
+                    </ul>
+
+
+                </section>
+
+
+
+                <section id="details">
+                    <h4 id="" class="dark">Additional Publication Details</h4>
+                    <dl id="publication_details">
+                      {% for detail in pubdata['details'] %}
+                          <dt class="{{ loop.cycle('', 'dark') }}">{{ detail.keys()[0] }}</dt>
+                          <dd class="{{ loop.cycle('', 'dark') }}">{{ detail.values()[0] }}</dd>
+                      {% endfor %}
+                    </dl>
+
+
+
+                </section>
+                
+                <ul class="fileslist">
                         {{ linkdisplay('Index Page') }}
                         {{ linkdisplay('Document') }}
                         {{ linkdisplay('Abstract') }}
@@ -96,38 +120,9 @@
                         {{ linkdisplay('Spatial Data') }}
                         {{ linkdisplay('Version History') }}
                     </ul>
-
-                    <ul class="plates">
-                            {% for link in pubdata['displayLinks']['Plate']|sort(attribute='rank') %}
-                            <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }} else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["text"] }}</strong> ({% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %})</a> </li>
-                        {% endfor %}
-                    </ul>
-
-
-                <aside>
+                
+                <section>
                     <p class="adobeReader">Part or all of this report is presented in Portable Document Format (PDF). For best results viewing and printing PDF documents, it is recommended that you download the documents to your computer and open them with Adobe Reader. PDF documents opened from your browser may not display or print as intended. Download the latest version of <a href="http://get.adobe.com/reader/">Adobe Reader</a>, free of charge. More information about viewing, downloading, and printing report files can be found <a href="http://pubs.usgs.gov/potential_problems.html">here</a>.</p>
-                </aside>
-
-                    <h4>Suggested Citation</h4>
-                    <p class="reference">{{ pubdata['usgsCitation'] }}, <a href="http://dx.doi.org/{{ pubdata['doi'] }}">http://dx.doi.org/{{ pubdata["doi"] }}</a><p>
-                <!--Table of Contents Goes here eventually-->
-
-
-                </section>
-
-
-
-                <section id="details">
-                    <h4 id="" class="dark">Additional Publication Details</h4>
-                    <dl id="publication_details">
-                      {% for detail in pubdata['details'] %}
-                          <dt class="{{ loop.cycle('', 'dark') }}">{{ detail.keys()[0] }}</dt>
-                          <dd class="{{ loop.cycle('', 'dark') }}">{{ detail.values()[0] }}</dd>
-                      {% endfor %}
-                    </dl>
-
-
-
                 </section>
 
             </article>
