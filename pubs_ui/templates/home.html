@@ -10,120 +10,81 @@
 
 {% endblock head %}
 {% block main %}
-            <article id="index_article">
 
-                <section id="welcome">
-                	<h1>Welcome to the USGS Publications Warehouse</h1>
-                    <h3>Pubs Warehouse provides access to over 100,000 publications written by USGS scientists over the century-plus history of the bureau</h3>
+		<main class="container-fluid">
+		
+            <article class="row-fluid">
+            
+				<section class="col-lg-8">
+				
+	                <section id="welcome">
+	                	<h1>Welcome to the USGS Publications Warehouse</h1>
+	                    <h3>Pubs Warehouse provides access to over 130,000 publications written by USGS scientists over the century-plus history of the bureau</h3>
+	                </section>
+	
+	                <section id="search">
+	                	<label for="mysearch2">Search for publications </label>
+	                	<form style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q">{{ form.q(placeholder="search terms") }}</form>
+	                </section>
+
+	                <section id="options">
+	
+	                	<h3>Don't want to search?</h3>
+	
+	                    	<h4><a href="{{ url_for('new_pubs') }}">Explore recent publications by USGS Authors</a></h4>
+	
+	                        <h4><a href="{{ url_for('browse') }}">Browse all of Pubs Warehouse by publication type and year</a></h4>
+	
+	                </section>
+	
+	                <section id="links">
+	
+	                	<h3>More links</h3>
+	
+	                    	<h4><a href="{{ url_for('faq') }}">FAQS</a></h4>
+	
+	                        <h4><a href="{{ url_for('web_service_docs') }}">Web Service Documentation</a></h4>
+	
+	                    	<h4><a href="{{ url_for('other_resources') }}">Other Resources</a></h4>
+	
+	                        <h4><a href="{{ url_for('usgs_series') }}">Descriptions of US Geological Survey Report Series</a></h4>
+	
+	                </section>
+	
+	                <section id = "twitter">
+	                    <a class="twitter-timeline" href="https://twitter.com/USGS_Pubs" data-widget-id="514473582231957504">Tweets by @USGS_Pubs</a>
+	                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	
+	                </section>
+                
                 </section>
+                </article>
 
-                <section id="search">
-                	<label for="mysearch2">Search for publications </label>
-                	<form style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q"> {{ form.q(placeholder="search terms") }}</form>
+                
+                <section class="col-lg-4">
+
+	                <aside id="new_pubs">
+	
+	                	<h3><a href="{{ url_for('new_pubs') }}">New Publications by USGS Authors</a></h3>
+	                	
+	                	<table>
+	                		<td>
+	                			<div class="pubs-thumbnail"></div>
+	                		</td>
+	                	</table>
+	                	
+	                	{% for recent_publication in recent_publications %}
+	               			<div class="recent-pubs-title">
+	               				<a href="{{ url_for('publication', indexId = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
+	               			</div>
+	               			<div class="recent-pub-info">
+	               				{{ recent_publication|display_pub_info }}
+	               			</div>
+	                	{% endfor %}
+	                </aside>
+                
                 </section>
-{# Commenting advanced search content out now, it may come back
-                <section id="advanced" style="display:none">
-
-                	<label for="advancedSearch">Limit by... </label>
-
-                    <form id="advancedSearch">
-
-                    	<select class="empty">
-                        	<option>Choose Category...</option>
-                        </select><input type="text"/>
-
-                        <select class="empty">
-                        	<option>Choose Category...</option>
-                        </select><input type="text"/>
-
-                        <select class="empty">
-                        	<option>Choose Category...</option>
-                        </select><input type="text"/>
-
-                        <select class="empty">
-                        	<option>Choose Category...</option>
-                        </select><input type="text"/>
-
-
-                    </form>
-
-                </section>
-
-                <section id="advanced_options" style="display:none">
-
-                	<p id="add">Add another field</p> <p id="bar2">|</p> <p id="clear">Clear</p>
-
-                </section>
-
-                <section id="checklist">
-
-                	<input type="checkbox"/>
-
-                    <label>Not a Scientist?<strong>Limit search to products written for the general public</strong></label><br><br>
-
-                    <input type="checkbox"/><label>Looking for journal articles? <strong>Limit search to papers published in scientific journals</strong></label><br><br>
-
-                    <input type="checkbox"/><label>Available Online</label>
-
-                    <input type="checkbox"/><label>Only USGS Numbered Series</label><br>
-
-                    <button>Search</button> <p id="bar">|</p> <p class="toggle">Advanced Search</p>
-
-                </section>
-#}
-                <section id="options">
-
-                	<h3>Don't want to search?</h3>
-
-                    	<h4><a href="{{ url_for('new_pubs') }}">Explore recent publication by USGS Authors</a></h4>
-
-                        <h4><a href="{{ url_for('browse') }}">Browse all of Pubs Warehouse by publication type and year</a></h4>
-
-                        <h4><a href="http://pubs.er.usgs.gov/news/newsView">Publications Warehouse News</a></h4>
-
-                </section>
-
-                <section id="links">
-
-                	<h3>More links</h3>
-
-                    	<h4><a href="{{ url_for('faq') }}">FAQS</a></h4>
-
-                        <h4><a href="{{ url_for('web_service_docs') }}">Web Service Documentation</a></h4>
-
-                    	<h4><a href="{{ url_for('other_resources') }}">Other Resources</a></h4>
-
-                        <h4><a href="{{ url_for('usgs_series') }}">Descriptions of US Geological Survey Report Series</a></h4>
-
-                </section>
-
-                <section id = "twitter">
-                    <a class="twitter-timeline" href="https://twitter.com/USGS_Pubs" data-widget-id="514473582231957504">Tweets by @USGS_Pubs</a>
-                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-
-                </section>
-
-                <aside id="new_pubs">
-
-                	<h3>New Publications by USGS Authors</h3>
-                	
-                	<table>
-                		<td>
-                			<div class="pubs-thumbnail"></div>
-                		</td>
-                	</table>
-                	
-                	{% for recent_publication in recent_publications %}
-               			<div class="recent-pubs-title">
-               				<a href="{{ url_for('publication', indexId = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
-               			</div>
-               			<div class="recent-pub-info">
-               				{{ recent_publication|display_pub_info }}
-               			</div>
-                	{% endfor %}
-                </aside>
-
-            </article>
+    </main>
 {% endblock %}
 
 {% block url %}<a href="{{ url_for('index') }}">http://pubs.er.usgs.gov{{ url_for('index') }}</a>{% endblock %}

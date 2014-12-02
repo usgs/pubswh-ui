@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block main %}
-	<div class="space">
+<main class="container-fluid">
 	    <h1>Contact us!</h1>
 	      <h2>Contact</h2>
 	  <form id="contactForm" action="{{ url_for('contact') }}" method=post>
@@ -31,7 +31,6 @@
 
 	    {{ contact_form.submit }}
 	  </form>
-  </div>
-
+</main>
 {% endblock %}
 {% block url %}<a href="{{ url_for('contact') }}">http://pubs.er.usgs.gov{{ url_for('contact') }}</a>{% endblock %}

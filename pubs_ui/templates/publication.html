@@ -1,8 +1,15 @@
 {% extends 'base.html' %}
 {% block head %}
     <title>{{ pubdata['title'] }}</title>
-    <meta name="description" content="{{ pubdata['abstract'] }}">
-{% endblock %}
+    <meta NAME="title" content="{{ pubdata['title'] }}" />
+    <meta name="description" content="{% if pubdata['docAbstract']  %}{{ pubdata['docAbstract'].split(' ')[0:150]|join(' ')|striptags }}...{% endif %}" />
+    <META NAME="abstract" CONTENT="{% if pubdata['docAbstract']  %}{{ pubdata['docAbstract']|striptags }}{% endif %}" />
+    {% for author in pubdata['authorsList'] %}<meta NAME="author" content="{{ author }}"/>
+    {% endfor %}
+
+
+
+{% endblock head %}
 
 
 
@@ -54,16 +61,40 @@
 
                 </section>
 
-                <section id="suggested">
+                <section id="links">
 
+                    {% macro linkdisplay(link_type) %}
+                        {% for link in pubdata['displayLinks'][link_type]|sort(attribute='rank') %}
+                        <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }}
+                                                                                    else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong>
+                                                                                {% if link["linkFileType"]  %}({{ link["linkFileType"]["text"] }}){% endif %}</a></li>
+                        {% endfor %}
+                    {% endmacro %}
 
                     <ul class="fileslist">
-                        {% for link in pubdata['displayLinks']['Document']|sort(attribute='rank') %}
-                            <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }} else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}({{ link["linkFileType"]["text"] }}){% endif %}</a> </li>
-                        {% endfor %}
-                        {% for link in pubdata['displayLinks']['Index Page']|sort(attribute='rank') %}
-                            <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }} else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong> {% if link["linkFileType"]  %}({{ link["linkFileType"]["text"] }}){% endif %}</a> </li>
-                        {% endfor %}
+                        {{ linkdisplay('Index Page') }}
+                        {{ linkdisplay('Document') }}
+                        {{ linkdisplay('Abstract') }}
+                        {{ linkdisplay('Additional Report Piece') }}
+                        {{ linkdisplay('Appendix') }}
+                        {{ linkdisplay('Application Site') }}
+                        {{ linkdisplay('Authors Website') }}
+                        {{ linkdisplay('Chapter') }}
+                        {{ linkdisplay('Companion Files') }}
+                        {{ linkdisplay('Cover') }}
+                        {{ linkdisplay('Database') }}
+                        {{ linkdisplay('Digital Object Identifier') }}
+                        {{ linkdisplay('Errata') }}
+                        {{ linkdisplay('Illustration') }}
+                        {{ linkdisplay('Image') }}
+                        {{ linkdisplay('Metadata') }}
+                        {{ linkdisplay('Project Site') }}
+                        {{ linkdisplay('Raw Data') }}
+                        {{ linkdisplay('Read Me') }}
+                        {{ linkdisplay('Referenced Work') }}
+                        {{ linkdisplay('Related Work') }}
+                        {{ linkdisplay('Spatial Data') }}
+                        {{ linkdisplay('Version History') }}
                     </ul>
 
                     <ul class="plates">
