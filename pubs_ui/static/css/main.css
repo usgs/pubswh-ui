@@ -263,6 +263,7 @@ article{padding:0 10px;}
   margin: 0;
   padding: 0;
 }
+
 header {
   display: none;
 }
@@ -351,6 +352,7 @@ article {
   padding: 10px;
   font-family: Verdana;
 }
+
 article h3,
 article h4,
 article h5,
@@ -373,8 +375,9 @@ dl#contributors dt {float:left;
   margin:0 5px 0 0;
   font-weight: 600;
 }
-dl#contributors dd {margin:0 10px 0 0; 
-					float:left;
+dl#contributors dd {
+	margin:0 10px 0 0; 
+	display:inline;
 }
 dl#contributors .clear {
   clear: both;
@@ -397,6 +400,7 @@ h2#abstract_head {
   background: #f0f0f0;
   border: 1px solid #000000;
   padding: 10px;
+  margin-top:10px;
 }
 #suggested p {
   text-indent: 0;
@@ -845,7 +849,7 @@ footer p{margin:0;}
     float: left;
     margin: 0 10px 15px 0;
   }
-  dl#contributors {min-height:255px;
+  dl#contributors {min-height:50px;
     font-size: .9em;
   }
   dl#contributors .clear {
@@ -988,6 +992,7 @@ form#contactForm input#submit{
     top: 15px;
     right: 10px;
     width: 300px;
+    margin-top:0;
   }
   #abstract {
     margin-top: 20px;
