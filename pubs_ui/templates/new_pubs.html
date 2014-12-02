@@ -15,6 +15,7 @@
     {% for result in new_pubs %}
 
         <article>
+
             <h4><a class="search-title" href="{{ url_for('publication', indexId = result['indexId']) }}">{{ result['title']|safe }}</a></h4>
             <p class="pubinfo">{{ result|display_pub_info }}</p>
             {% if result['authorsList']|length > 0 %}<p>{{ result['authorsList']|join(', ') }}</p>{% endif %}
@@ -33,4 +34,3 @@
     </label>
 
 {% endblock main %}
-
