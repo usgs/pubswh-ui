@@ -19,23 +19,21 @@
 				
 	                <section id="welcome">
 	                	<h1>Welcome to the USGS Publications Warehouse</h1>
-	                    <h3>Pubs Warehouse provides access to over 100,000 publications written by USGS scientists over the century-plus history of the bureau</h3>
+	                    <h3>Pubs Warehouse provides access to over 130,000 publications written by USGS scientists over the century-plus history of the bureau</h3>
 	                </section>
 	
 	                <section id="search">
 	                	<label for="mysearch2">Search for publications </label>
-	                	<form style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q"> {{ form.q(placeholder="search terms") }}</form>
+	                	<form style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q">{{ form.q(placeholder="search terms") }}</form>
 	                </section>
 
 	                <section id="options">
 	
 	                	<h3>Don't want to search?</h3>
 	
-	                    	<h4><a href="{{ url_for('new_pubs') }}">Explore recent publication by USGS Authors</a></h4>
+	                    	<h4><a href="{{ url_for('new_pubs') }}">Explore recent publications by USGS Authors</a></h4>
 	
 	                        <h4><a href="{{ url_for('browse') }}">Browse all of Pubs Warehouse by publication type and year</a></h4>
-	
-	                        <h4><a href="http://pubs.er.usgs.gov/news/newsView">Publications Warehouse News</a></h4>
 	
 	                </section>
 	
@@ -67,7 +65,7 @@
 
 	                <aside id="new_pubs">
 	
-	                	<h3>New Publications by USGS Authors</h3>
+	                	<h3><a href="{{ url_for('new_pubs') }}">New Publications by USGS Authors</a></h3>
 	                	
 	                	<table>
 	                		<td>

@@ -55,7 +55,9 @@ def i_have_imitated_a_working_search_service_from_pubs_with_fake_data(step):
                                      'publicationYear': '1990',
                                      'seriesNumber': 41,
                                      'chapter': 11,
-                                     'subChapter': 2
+                                     'subChapter': 2,
+                                     'indexid': '789044',
+                                     'title': 'a title'
                                      }
                                     ],
                         'recordCount': 1
