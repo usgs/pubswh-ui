@@ -91,6 +91,9 @@ def publication(indexId):
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
+    thumbnail_link = pubdata['displayLinks']['Thumbnail'][0]['url']
+    thumbmail_link_test = thumbnail_link.replace('pubs', 'pubs-test')
+    pubdata['displayLinks']['Thumbnail'][0]['url'] = thumbmail_link_test
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:
@@ -171,6 +174,23 @@ def api_webargs():
                            search_service_down=search_service_down,
                            form=form
                            )
+
+    # print 'webarg param: ', search_kwargs
+    #TODO: map the webargs to the Pubs Warehouse Java API, generate output
+
+   
+@app.route('/site-map')
+def site_map():
+    """
+    View for troubleshooting application URL rules
+    """
+    app_urls = []
+    
+    for url_rule in app.url_map.iter_rules():
+        app_urls.append((str(url_rule), str(url_rule.endpoint)))
+    
+    return render_template('site_map.html', app_urls=app_urls)
+
 
 @app.route('/newpubs')
 def new_pubs():
