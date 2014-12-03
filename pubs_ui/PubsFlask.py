@@ -26,7 +26,7 @@ citation_url = app.config['BASE_CITATION_URL']
 browse_replace = app.config['BROWSE_REPLACE']
 contact_recipients = app.config['CONTACT_RECIPIENTS']
 replace_pubs_with_pubs_test = app.config.get('REPLACE_PUBS_WITH_PUBS_TEST')
-
+replace_str = app.config.get('REPLACE_STR')
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
@@ -94,7 +94,7 @@ def publication(indexId):
     pubdata = jsonify_geojson(pubdata)
     if replace_pubs_with_pubs_test:
         thumbnail_link = pubdata['displayLinks']['Thumbnail'][0]['url']
-        thumbmail_link_test = thumbnail_link.replace('pubs', 'pubs-test')
+        thumbmail_link_test = thumbnail_link.replace('pubs', replace_str)
         pubdata['displayLinks']['Thumbnail'][0]['url'] = thumbmail_link_test
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
