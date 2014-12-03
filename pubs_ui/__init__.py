@@ -1,6 +1,4 @@
 import logging
-from logging.handlers import TimedRotatingFileHandler
-from requestlogger import WSGILogger, ApacheFormatter
 from flask import Flask, request
 from flask.ext.images import Images
 from flask_mail import Mail
@@ -17,7 +15,6 @@ handler.setFormatter(fmt)
 werkzeug_logger = logging.getLogger('werkzeug')
 werkzeug_handler = logging.FileHandler('requests.log')
 
-wsgi_log_handlers = [TimedRotatingFileHandler('wsgi_access.log', 'd', 7)]
 
 app = Flask(__name__)
 app.config.from_object('settings') # load configuration before passing the app object to other things
@@ -41,7 +38,5 @@ app.jinja_env.filters['display_pub_info'] = display_publication_info
 app.jinja_env.globals.update(wsgi_str=app.config['WSGI_STR'])
 app.jinja_env.globals.update(GOOGLE_ANALYTICS_CODE=app.config['GOOGLE_ANALYTICS_CODE'])
 
-
-app.wsgi_app = WSGILogger(app, wsgi_log_handlers, ApacheFormatter())
 
 import PubsFlask
