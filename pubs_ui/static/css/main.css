@@ -263,6 +263,7 @@ article{padding:0 10px;}
   margin: 0;
   padding: 0;
 }
+
 header {
   display: none;
 }
@@ -351,6 +352,7 @@ article {
   padding: 10px;
   font-family: Verdana;
 }
+
 article h3,
 article h4,
 article h5,
@@ -373,8 +375,9 @@ dl#contributors dt {float:left;
   margin:0 5px 0 0;
   font-weight: 600;
 }
-dl#contributors dd {margin:0 10px 0 0; 
-					float:left;
+dl#contributors dd {
+	margin:0 10px 0 0; 
+	display:inline;
 }
 dl#contributors .clear {
   clear: both;
@@ -393,10 +396,13 @@ h2#abstract_head {
   font-weight: 400;
   margin:10px 0 10px 0;
 }
+
+hgroup h4{
+	margin-top:5px;
+}
 #suggested {
-  background: #f0f0f0;
-  border: 1px solid #000000;
-  padding: 10px;
+  margin-top:10px;
+  clear:both;
 }
 #suggested p {
   text-indent: 0;
@@ -406,7 +412,7 @@ h2#abstract_head {
   padding: 5px 0 0 15px;
   border-top: 1px solid #000000;
   border-bottom: 1px solid #000000;
-  height: 30px;
+  min-height: 30px;
   margin-bottom: 10px;
 }
 .fileslist a,
@@ -434,14 +440,14 @@ address p {
 }
 #details{width:100%;
 		min-height:100px;
-		margin:10px 0 0 0;}
+		margin:10px 0 -20px 0;}
 		
 #details h4 {
   color: #8c8c8c;
   padding-left:10px;
   background: #dddddd;
   margin-bottom: 0px;
-  width:96%
+  width:100%
 }
 		
 #details dl{width:100%;
@@ -451,7 +457,7 @@ address p {
 			
 #details dl dt{
 				float:left;
-				width:45%;
+				width:50%;
 				text-align:right;
 				border-right:2px solid #fff;
 				padding:3px;}
@@ -845,7 +851,7 @@ footer p{margin:0;}
     float: left;
     margin: 0 10px 15px 0;
   }
-  dl#contributors {min-height:255px;
+  dl#contributors {min-height:50px;
     font-size: .9em;
   }
   dl#contributors .clear {
@@ -972,30 +978,14 @@ form#contactForm input#submit{
   article{
     width: 980px;
     margin: 0 auto;
-  }
-  
-  #abstract,
-  #details,
-  hgroup,
-  #contributors {
-    width: 650px;
-  }
-  article {
     position: relative;
   }
-  #suggested {
-    position: absolute;
-    top: 15px;
-    right: 10px;
-    width: 300px;
-  }
+ 
   #abstract {
     margin-top: 20px;
+    line-height:1.7em;
   }
   
-
-
-
 /* ==========================================================================
    other styles
    ========================================================================== */
