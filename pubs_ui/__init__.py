@@ -12,6 +12,7 @@ handler.setLevel(logging.INFO)
 handler.setFormatter(fmt)
 # application.logger.addHandler(handler)
 
+
 app = Flask(__name__)
 app.config.from_object('settings') # load configuration before passing the app object to other things
 
