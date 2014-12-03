@@ -31,4 +31,5 @@ sure==1.2.7
 testtools==1.1.0
 urllib3==1.7.1
 webargs==0.7.0
+wsgi-request-logger==0.4.1
 wsgiref==0.1.2
