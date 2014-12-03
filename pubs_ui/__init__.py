@@ -12,9 +12,6 @@ handler.setLevel(logging.INFO)
 handler.setFormatter(fmt)
 # application.logger.addHandler(handler)
 
-werkzeug_logger = logging.getLogger('werkzeug')
-werkzeug_handler = logging.FileHandler('requests.log')
-
 
 app = Flask(__name__)
 app.config.from_object('settings') # load configuration before passing the app object to other things
@@ -30,7 +27,6 @@ def log_request():
 
 if app.config['DEBUG']:
     app.logger.addHandler(handler)
-    werkzeug_logger.addHandler(werkzeug_handler)
 images = Images(app)
 mail = Mail(app)
 app.view_functions['images'] = images.handle_request
