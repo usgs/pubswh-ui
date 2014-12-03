@@ -91,9 +91,9 @@ def publication(indexId):
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
-    thumbnail_link = pubdata['displayLinks']['Thumbnail'][0]['url']
-    thumbmail_link_test = thumbnail_link.replace('pubs', 'pubs-test')
-    pubdata['displayLinks']['Thumbnail'][0]['url'] = thumbmail_link_test
+    #thumbnail_link = pubdata['displayLinks']['Thumbnail'][0]['url']
+    #thumbmail_link_test = thumbnail_link.replace('pubs', 'pubs-test')
+    #pubdata['displayLinks']['Thumbnail'][0]['url'] = thumbmail_link_test
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:
