@@ -1,8 +1,9 @@
 import logging
-from flask import Flask
+from flask import Flask, request
 from flask.ext.images import Images
 from flask_mail import Mail
 from pubs_ui.custom_filters import display_publication_info
+
 
 FORMAT = '%(asctime)s %(message)s'
 fmt = logging.Formatter(FORMAT)
@@ -14,6 +15,16 @@ handler.setFormatter(fmt)
 
 app = Flask(__name__)
 app.config.from_object('settings') # load configuration before passing the app object to other things
+
+@app.before_request
+def log_request():
+    if app.config.get('LOG_REQUESTS'):
+        request_str = str(request)
+        request_headers = str(request.headers)
+        log_str = 'Request: ({0}); Headers: ({1})'.format(request_str, request_headers)
+        app.logger.info(log_str)
+
+
 if app.config['DEBUG']:
     app.logger.addHandler(handler)
 images = Images(app)

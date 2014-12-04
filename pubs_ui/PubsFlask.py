@@ -25,7 +25,7 @@ search_url = app.config['BASE_SEARCH_URL']
 citation_url = app.config['BASE_CITATION_URL']
 browse_replace = app.config['BROWSE_REPLACE']
 contact_recipients = app.config['CONTACT_RECIPIENTS']
-
+replace_pubs_with_pubs_test = app.config.get('REPLACE_PUBS_WITH_PUBS_TEST')
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
@@ -91,9 +91,16 @@ def publication(indexId):
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
-    thumbnail_link = pubdata['displayLinks']['Thumbnail'][0]['url']
-    thumbmail_link_test = thumbnail_link.replace('pubs', 'pubs-test')
-    pubdata['displayLinks']['Thumbnail'][0]['url'] = thumbmail_link_test
+    # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov.
+    # Flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI
+    # The Apache rewrite changes this to pubs-test.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI, where there is
+    # no image with the signature 'skjcvjkdejiwI' which leads to a failure to find the image. Instead of allowing
+    # Apache to do the rewrite, this code snippet executes the rewrite so the correct signature is preserved for
+    # a given image URL.
+    if replace_pubs_with_pubs_test:
+        thumbnail_link = pubdata['displayLinks']['Thumbnail'][0]['url']
+        thumbmail_link_test = thumbnail_link.replace('pubs', 'pubs-test')
+        pubdata['displayLinks']['Thumbnail'][0]['url'] = thumbmail_link_test
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:

@@ -23,6 +23,8 @@ RECAPTCHA_PUBLIC_KEY = '6LfisP0SAAAAAKcg5-a5bEeV4slFfQZr5_7XfqXf' # using google
 RECAPTCHA_PRIVATE_KEY = '' # see RECAPTCHA_PRIVATE_KEY in local_settings.py
 WSGI_STR = ''
 GOOGLE_ANALYTICS_CODE = ''
+LOG_REQUESTS = False
+REPLACE_PUBS_WITH_PUBS_TEST = False
 
 
 if DEBUG:
@@ -35,6 +37,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 # variables used for testing purposes
 nose_testing = sys.argv[0].endswith('nosetests') # returns True if 'nosetests' is a command line argument
