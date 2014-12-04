@@ -37,9 +37,9 @@
                       <dt>Authored by:</dt>
                       {% for contributor in pubdata['authorsListTyped']  %}
                           {% if contributor['type'] == "person"  %}
-                        <dd itemprop="author" itemtype="http://schema.org/Person">{{ contributor['text'] }}</dd>
+                        <dd itemprop="author" itemtype="http://schema.org/Person">{{ contributor['text'] }},</dd>
                           {% else %}
-                         <dd itemprop="author" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</dd>
+                         <dd itemprop="author" itemtype="http://schema.org/Organization">{{ contributor['text'] }},</dd>
                           {% endif %}
                       {%  endfor %}
                       {% if pubdata['editorsList'] %}
@@ -102,7 +102,7 @@
 
                 
 
-                <section id="abstract">
+                <section itemprop="description" id="abstract" >
                     <h2 id="abstract_head">Abstract</h2>
                     {{ pubdata['docAbstract']|safe }}
                     
