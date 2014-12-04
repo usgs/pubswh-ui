@@ -104,17 +104,34 @@ textarea {
    Author's custom styles
    ========================================================================== */
    
-.col-lg-8,
-.col-lg-4{
-	margin:0 !important;
-	padding:0 15px 0 0 !important;
+.headersearch{
+	color:#000;
+	height:22px;
 }
    
 /* ==========================================================================
    Index styles
    ========================================================================== */
- 
-#new_pubs{display:none;}
+   
+#new_pubs{
+	width:100%;
+	min-height:200px;
+	border:1px solid #808080;
+	border-radius:5px;
+	text-align:center;
+	margin-bottom:15px;
+	clear:both;
+}
+
+.recent-pubs-title{
+	padding:10px;
+	font-weight:bold;
+	color:#003366;
+	margin-bottom:-5px;}
+	
+.recent-pub-info{
+	margin-bottom:15px;
+}
 
 header {
   display: none !important;
@@ -252,7 +269,9 @@ article{padding:0 10px;}
 			
 #links{margin:0 0 15px 0;}
 
-#twitter{margin:0 0 10px 10px;}	
+#twitter{
+	margin:0 0 10px 10px;
+	clear:both;}	
    
 /* ==========================================================================
    Publication.html styles
@@ -276,7 +295,7 @@ nav {
   position: relative;
 }
 nav img {
-  float: left;
+  float: right;
   padding: 6px 0 0  5px;
   margin-right: 10px;
 }
@@ -288,8 +307,8 @@ img#bars {
 }
 #mobile_ul {
   list-style: none;
-  float: right;
-  margin:6px 0 0 0;
+  float: left;
+  margin:6px 0 0 5px;
   padding:0;
 }
 #mobile_ul li {
@@ -309,11 +328,11 @@ img#bars {
   top: 29px;
   background: rgba(240, 240, 240, 0.95);
   width: 100%;
-  height: 61px;
+  height: 81px;
 }
 #mobile_ul li:hover ul li {
   float: none;
-  height: 30px;
+  height: 40px;
   border-bottom: 1px solid #000000;
   text-align: center;
 }
@@ -321,9 +340,10 @@ img#bars {
   color: #000;
   display: inline-block;
   width: 100%;
-  height: 26px;
-  padding-top: 4px;
+  height: 38px;
+  padding-top: 6px;
   text-decoration: none;
+  font-size:1.2em;
 }
 #mobile_ul li:hover ul li a:hover {
   color: #003366;
@@ -331,7 +351,7 @@ img#bars {
 }
 #center {
   margin: 0 auto;
-  width: 162px;
+  width:240px;
 }
 nav label {
   display: none;
@@ -861,6 +881,9 @@ footer p{margin:0;}
   #abstract {
     clear: both;
   }
+#center {
+  width:162px;
+}
 }
 /*media query*/
 @media screen and (min-width: 768px) {
@@ -927,10 +950,11 @@ form#contactForm input#submit{
    Index styles
    ========================================================================== */
    
-#index_article{width:100%;
-				position:relative;
-				padding:0;
-				margin:0;} 
+.index_article{
+	width:100%;
+	position:relative;
+	padding:0;
+	margin:0;} 
 
 #welcome,
 #search,
@@ -938,32 +962,18 @@ form#contactForm input#submit{
 #options,
 #links,
 #advanced,
-#advanced_options{width:100%;
+#advanced_options{width:59%;
 		margin-left:15px;} 
    
-#new_pubs{display:block;
-		width:100%;
-		min-height:200px;
+#new_pubs{
+		width:39%;
 		position:absolute;
-		top:10px;
-		left:0px;
-		border:1px solid #808080;
-		border-radius:5px;
-		text-align:center;}
+		top:0px;
+		right:0px;}
 		
 #new_pubs h3{padding:5px;
 			color:rgb(0,51,102);}
 			
-.recent-pubs-title{
-	padding:10px;
-	font-weight:bold;
-	color:#003366;
-	margin-bottom:-5px;}
-	
-.recent-pub-info{
-	margin-bottom:15px;
-}
-
    
 /* ==========================================================================
    publication.html styles
@@ -985,6 +995,7 @@ form#contactForm input#submit{
     margin-top: 20px;
     line-height:1.7em;
   }
+  
   
 /* ==========================================================================
    other styles
