@@ -38,11 +38,6 @@ try:
 except ImportError:
     pass
 
-# some safety in case REPLACE_PUBS_WITH_PUBS_TEST is set to True
-if REPLACE_PUBS_WITH_PUBS_TEST:
-    REPLACE_STR = 'pubs-test'
-else:
-    REPLACE_STR = 'pubs'
 
 # variables used for testing purposes
 nose_testing = sys.argv[0].endswith('nosetests') # returns True if 'nosetests' is a command line argument
