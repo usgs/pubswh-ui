@@ -91,8 +91,8 @@ def publication(indexId):
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
-    # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov
-    # flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI
+    # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov.
+    # Flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI
     # The Apache rewrite changes this to pubs-test.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI, where there is
     # no image with the signature 'skjcvjkdejiwI' which leads to a failure to find the image. Instead of allowing
     # Apache to do the rewrite, this code snippet executes the rewrite so the correct signature is preserved for
