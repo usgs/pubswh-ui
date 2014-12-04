@@ -27,6 +27,11 @@
            <!--[if lt IE 7]>
                 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
             <![endif]-->
+            
+            <!--[if IE 8]>
+				<link rel="stylesheet" href="{{ url_for('static', filename = 'css/ie8.css') }}">
+			<![endif]-->
+			
         <header>
             <section id="usgs_logo">
                 <img src="{{ url_for('static', filename = 'img/usgslogo.jpg') }}" alt="usgs logo"/>
@@ -45,18 +50,7 @@
         </header>
 
         <nav>
-            <img src="{{ url_for('static', filename='img/usgs_logo_mobile.png') }}" alt="usgs mobile logo"/>
-            <ul id="desktop_ul">
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
-            </ul>
-            <section id="center">
-                <label for="mysearch2">Search: </label>
-                <form style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q">
-                    <input id="q" name="q" placeholder="search terms" type="search" value="">
-                </form>
-            </section>
-            <ul id="mobile_ul">
+        <ul id="mobile_ul">
                 <li><img id="bars" src="{{ url_for('static', filename='img/bars.png') }}" alt="mobile menu bars"/>
                     <ul>
 
@@ -65,6 +59,18 @@
                     </ul>
                 </li>
             </ul>
+            <img src="{{ url_for('static', filename='img/usgs_logo_mobile.png') }}" alt="usgs mobile logo"/>
+            <ul id="desktop_ul">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+            <section id="center">
+                <label for="mysearch2">Search: </label>
+                <form style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q">
+                    <input id="q" class="headersearch" name="q" placeholder="search terms" type="search" value="">
+                </form>
+            </section>
+            
         </nav>
         {% block main %}{% endblock %}
         <footer>
