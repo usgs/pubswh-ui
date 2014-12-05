@@ -230,8 +230,10 @@ def getbrowsecontent(browseurl, browsereplace):
     :param browseurl: url of legacy browse interface
     :return: html content of links, breadcrumb, and title
     """
-    content = requests.get(browseurl, verify=verify_cert).text
-    soup = BeautifulSoup(content)
+    app.logger.info('The get_browse_content function is being called')
+    content = requests.get(browseurl, verify=verify_cert)
+    app.logger.info(str(content.status_code)+ "  " +str(content.url))
+    soup = BeautifulSoup(content.text)
     for a in soup.findAll('a'):
         a['href'] = a['href'].replace("browse", browsereplace)
     browse_content = {'links':soup.find('div', {"id": "pubs-browse-links"}).contents}
