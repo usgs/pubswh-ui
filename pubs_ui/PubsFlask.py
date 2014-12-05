@@ -217,6 +217,7 @@ def new_pubs():
     search_kwargs = {'pubs_x_days': 7, 'page_size': 6} #bring back recent publications
 
     if request.args.get('num_series') == 'y':
+        num_form = NumSeries(num_series=True)
         search_kwargs['subtypeName'] = 'USGS Numbered Series'
 
     recent_publications_resp = sp.get_pubs_search_results(params=search_kwargs)
