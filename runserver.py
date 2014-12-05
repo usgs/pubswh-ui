@@ -13,3 +13,5 @@ if __name__ == '__main__':
     else:
         host = '127.0.0.1'
     application.run(host=host, port=5050)
+    # run from the command line as follows
+    # python runserver.py -ht <ip address of your choice>
