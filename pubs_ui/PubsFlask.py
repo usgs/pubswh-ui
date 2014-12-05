@@ -37,9 +37,6 @@ def robots():
     return render_template('robots.txt', robots_welcome=robots_welcome)
 
 
-
-
-
 @app.route('/')
 def index():
     sp = SearchPublications(search_url)
