@@ -26,9 +26,15 @@ citation_url = app.config['BASE_CITATION_URL']
 browse_replace = app.config['BROWSE_REPLACE']
 contact_recipients = app.config['CONTACT_RECIPIENTS']
 replace_pubs_with_pubs_test = app.config.get('REPLACE_PUBS_WITH_PUBS_TEST')
+robots_welcome = app.config.get('ROBOTS_WELCOME')
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
+
+
+@app.route('/robots.txt')
+def robots():
+    return render_template('robots.txt', robots_welcome=robots_welcome)
 
 
 @app.route('/')
@@ -121,24 +127,28 @@ def lookup(endpoint):
 
 @app.route('/documentation/faq')
 def faq():
+    app.logger.info('The FAQ function is being called')
     feed_url = 'https://internal.cida.usgs.gov/wiki/createrssfeed.action?types=page&spaces=PUBSWI&title=Pubs+Other+Resources&labelString=pw_faq&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
     return render_template('faq.html', faq_content=pull_feed(feed_url))
 
 
 @app.route('/documentation/usgs_series')
 def usgs_series():
+    app.logger.info('The USGS Series function is being called')
     feed_url = 'https://internal.cida.usgs.gov/wiki/createrssfeed.action?types=page&spaces=PUBSWI&title=USGS+Series+Definitions&labelString=usgs_series&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
     return render_template('usgs_series.html', usgs_series_content=pull_feed(feed_url))
 
 
 @app.route('/documentation/web_service_documentation')
 def web_service_docs():
+    app.logger.info('The web_service_docs function is being called')
     feed_url = 'https://internal.cida.usgs.gov/wiki/createrssfeed.action?types=page&spaces=PUBSWI&title=Pubs+Other+Resources&labelString=pubs_webservice_docs&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
     return render_template('webservice_docs.html', web_service_docs=pull_feed(feed_url))
 
 
 @app.route('/documentation/other_resources')
 def other_resources():
+    app.logger.info('The other_resources function is being called')
     feed_url = 'https://internal.cida.usgs.gov/wiki/createrssfeed.action?types=page&spaces=PUBSWI&title=Pubs+Other+Resources&labelString=other_resources&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
     return render_template('other_resources.html', other_resources=pull_feed(feed_url))
 
