@@ -10,6 +10,11 @@
 
 {% block main %}
 
+    <form id = num_series method="GET" action="/newpubs">
+        <p>{{ num_form.num_series }} USGS Numbered Series</p>
+        <button type="submit" class="btn"> Search </button>
+    </form>
+
     <section id="new_pub">
 
     {% for result in new_pubs %}
@@ -26,10 +31,5 @@
     {% endfor %}
 
     </section>
-    
-    <form id = num_series method="GET" action="/newpubs">
-        <p>{{ num_form.num_series }} USGS Numbered Series</p>
-        <button type="submit" class="btn"> Search </button>
-    </form>
 
 {% endblock main %}

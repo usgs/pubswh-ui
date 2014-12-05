@@ -211,19 +211,15 @@ def site_map():
 
 @app.route('/newpubs', methods = ['GET'])
 def new_pubs():
-    parser = FlaskParser()
-    request_args = parser.parse(search_args, request)
 
     num_form = NumSeries()
     sp = SearchPublications(search_url)
     search_kwargs = {'pubs_x_days': 7, 'page_size': 6} #bring back recent publications
 
-    recent_publications_resp = sp.get_pubs_search_results(params=search_kwargs)
-
     if request.args.get('num_series') == 'y':
-        recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6, 'subtypeName': 'USGS Numbered Series'})
+        search_kwargs['subtypeName'] = 'USGS Numbered Series'
 
-
+    recent_publications_resp = sp.get_pubs_search_results(params=search_kwargs)
     recent_pubs_content = recent_publications_resp[0]
 
     try:
