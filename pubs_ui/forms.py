@@ -17,4 +17,4 @@ class SearchForm(Form):
     q = SearchField("Search Terms")
 
 class NumSeries(Form):
-    num_series = BooleanField()
+    num_series = BooleanField('num_series')

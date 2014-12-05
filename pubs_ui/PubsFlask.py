@@ -201,23 +201,27 @@ def site_map():
 
 @app.route('/newpubs', methods = ['GET'])
 def new_pubs():
+    parser = FlaskParser()
+    request_args = parser.parse(search_args, request)
 
+    num_form = NumSeries()
     sp = SearchPublications(search_url)
-    recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6}) #bring back recent publications
+    search_kwargs = {'pubs_x_days': 7, 'page_size': 6} #bring back recent publications
 
-    form = NumSeries()
+    recent_publications_resp = sp.get_pubs_search_results(params=search_kwargs)
 
-    if form.num_series:
+    if request.args.get('num_series') == 'y':
         recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6, 'subtypeName': 'USGS Numbered Series'})
 
+
     recent_pubs_content = recent_publications_resp[0]
+
     try:
         pubs_records = recent_pubs_content['records']
     except TypeError:
-        pubs_records = [] # return an empty list recent_pubs_content is None (e.g. the service is down)
-    form = SearchForm(None, obj=request.args)
+        pubs_records = []  # return an empty list recent_pubs_content is None (e.g. the service is down)
 
     return render_template('new_pubs.html',
                            new_pubs=pubs_records,
-                           form=form)
+                           num_form=num_form)
 
