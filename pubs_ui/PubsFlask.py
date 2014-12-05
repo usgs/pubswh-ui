@@ -214,7 +214,7 @@ def new_pubs():
 
     num_form = NumSeries()
     sp = SearchPublications(search_url)
-    search_kwargs = {'pubs_x_days': 7, 'page_size': 6} #bring back recent publications
+    search_kwargs = {'pub_x_days': 7} #bring back recent publications
 
     if request.args.get('num_series') == 'y':
         num_form = NumSeries(num_series=True)
@@ -222,6 +222,8 @@ def new_pubs():
 
     recent_publications_resp = sp.get_pubs_search_results(params=search_kwargs)
     recent_pubs_content = recent_publications_resp[0]
+
+
 
     try:
         pubs_records = recent_pubs_content['records']
