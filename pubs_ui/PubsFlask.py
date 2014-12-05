@@ -26,9 +26,18 @@ citation_url = app.config['BASE_CITATION_URL']
 browse_replace = app.config['BROWSE_REPLACE']
 contact_recipients = app.config['CONTACT_RECIPIENTS']
 replace_pubs_with_pubs_test = app.config.get('REPLACE_PUBS_WITH_PUBS_TEST')
+robots_welcome = app.config.get('ROBOTS_WELCOME')
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
+
+
+@app.route('/robots.txt')
+def robots():
+    return render_template('robots.txt', robots_welcome=robots_welcome)
+
+
+
 
 
 @app.route('/')

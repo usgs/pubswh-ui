@@ -1,0 +1,8 @@
+{% if robots_welcome == True %}
+User-agent: *
+Disallow: /tmp/
+Disallow: /apex/
+{% else %}
+User-agent: *
+Disallow: /
+{% endif %}
