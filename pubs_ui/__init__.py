@@ -10,21 +10,22 @@ fmt = logging.Formatter(FORMAT)
 handler = logging.FileHandler('pubs_ui.log')
 handler.setLevel(logging.INFO)
 handler.setFormatter(fmt)
-# application.logger.addHandler(handler)
+
 
 app = Flask(__name__)
 app.config.from_object('settings') # load configuration before passing the app object to other things
 
+
 @app.before_request
 def log_request():
-    if app.config.get('LOG_REQUESTS'):
+    if app.config.get('LOGGING_ON'):
         request_str = str(request)
         request_headers = str(request.headers)
         log_str = 'Request: ({0}); Headers: ({1})'.format(request_str, request_headers)
         app.logger.info(log_str)
 
 
-if app.config['DEBUG']:
+if app.config.get('LOGGING_ON'):
     app.logger.addHandler(handler)
 images = Images(app)
 mail = Mail(app)

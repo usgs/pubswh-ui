@@ -25,7 +25,7 @@ search_url = app.config['BASE_SEARCH_URL']
 citation_url = app.config['BASE_CITATION_URL']
 browse_replace = app.config['BROWSE_REPLACE']
 contact_recipients = app.config['CONTACT_RECIPIENTS']
-
+replace_pubs_with_pubs_test = app.config.get('REPLACE_PUBS_WITH_PUBS_TEST')
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
@@ -91,9 +91,16 @@ def publication(indexId):
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
-    #thumbnail_link = pubdata['displayLinks']['Thumbnail'][0]['url']
-    #thumbmail_link_test = thumbnail_link.replace('pubs', 'pubs-test')
-    #pubdata['displayLinks']['Thumbnail'][0]['url'] = thumbmail_link_test
+    # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov.
+    # Flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI
+    # The Apache rewrite changes this to pubs-test.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI, where there is
+    # no image with the signature 'skjcvjkdejiwI' which leads to a failure to find the image. Instead of allowing
+    # Apache to do the rewrite, this code snippet executes the rewrite so the correct signature is preserved for
+    # a given image URL.
+    if replace_pubs_with_pubs_test:
+        thumbnail_link = pubdata['displayLinks']['Thumbnail'][0]['url']
+        thumbmail_link_test = thumbnail_link.replace('pubs', 'pubs-test')
+        pubdata['displayLinks']['Thumbnail'][0]['url'] = thumbmail_link_test
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:
@@ -114,25 +121,25 @@ def lookup(endpoint):
 
 @app.route('/documentation/faq')
 def faq():
-    feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=myUSGS+4.0+RSS+Feed&labelString=pw_faq&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=600&showContent=true&confirm=Create+RSS+Feed'
+    feed_url = 'https://internal.cida.usgs.gov/wiki/createrssfeed.action?types=page&spaces=PUBSWI&title=Pubs+Other+Resources&labelString=pw_faq&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
     return render_template('faq.html', faq_content=pull_feed(feed_url))
 
 
 @app.route('/documentation/usgs_series')
 def usgs_series():
-    feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=myUSGS+4.0+RSS+Feed&labelString=usgs_series&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
+    feed_url = 'https://internal.cida.usgs.gov/wiki/createrssfeed.action?types=page&spaces=PUBSWI&title=USGS+Series+Definitions&labelString=usgs_series&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
     return render_template('usgs_series.html', usgs_series_content=pull_feed(feed_url))
 
 
 @app.route('/documentation/web_service_documentation')
 def web_service_docs():
-    feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=myUSGS+4.0+RSS+Feed&labelString=pubs_webservice_docs&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3650&showContent=true&confirm=Create+RSS+Feed'
+    feed_url = 'https://internal.cida.usgs.gov/wiki/createrssfeed.action?types=page&spaces=PUBSWI&title=Pubs+Other+Resources&labelString=pubs_webservice_docs&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
     return render_template('webservice_docs.html', web_service_docs=pull_feed(feed_url))
 
 
 @app.route('/documentation/other_resources')
 def other_resources():
-    feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=myUSGS+4.0+RSS+Feed&labelString=other_resources&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3650&showContent=true&confirm=Create+RSS+Feed'
+    feed_url = 'https://internal.cida.usgs.gov/wiki/createrssfeed.action?types=page&spaces=PUBSWI&title=Pubs+Other+Resources&labelString=other_resources&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
     return render_template('other_resources.html', other_resources=pull_feed(feed_url))
 
 
@@ -213,3 +220,4 @@ def new_pubs():
     return render_template('new_pubs.html',
                            new_pubs=pubs_records,
                            form=form)
+
