@@ -9,6 +9,11 @@
 {% endblock page_style %}
 
 {% block main %}
+<h1>USGS Publications Added in the Last Week.</h1>
+    <form id = num_series method="GET" action="/newpubs">
+        <p>{{ num_form.num_series }} USGS Numbered Series</p>
+        <button type="submit" class="btn"> Search </button>
+    </form>
 
     <section id="new_pub">
 
@@ -26,11 +31,5 @@
     {% endfor %}
 
     </section>
-
-    <label class="control checkbox">
-      <input name="num_series" type="checkbox" value = "{{ false }}"/>
-      <span class="control-indicator"></span>
-      USGS Numbered Series
-    </label>
 
 {% endblock main %}

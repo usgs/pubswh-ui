@@ -8,7 +8,7 @@ from flask.ext.paginate import Pagination
 from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
                    SearchPublications, contributor_lists, jsonify_geojson)
-from forms import ContactForm, SearchForm
+from forms import ContactForm, SearchForm, NumSeries
 from canned_text import EMAIL_RESPONSE
 from pubs_ui import app, mail
 
@@ -209,25 +209,28 @@ def site_map():
     return render_template('site_map.html', app_urls=app_urls)
 
 
-@app.route('/newpubs')
+@app.route('/newpubs', methods = ['GET'])
 def new_pubs():
 
+    num_form = NumSeries()
     sp = SearchPublications(search_url)
-    recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6}) #bring back recent publications
+    search_kwargs = {'pub_x_days': 7} #bring back recent publications
 
-    '''
-    #TODO: Get page to reload with new request after checkbox ("num_series" in new_pubs.html is checked). Retain checked state after reload.
-    if request.form.get("num_series"):
-        recent_publications_resp = sp.get_pubs_search_results(params={'pubs_x_days': 7, 'page_size': 6, 'subtypeName': 'USGS Numbered Series'})
-    '''
+    if request.args.get('num_series') == 'y':
+        num_form = NumSeries(num_series=True)
+        search_kwargs['subtypeName'] = 'USGS Numbered Series'
 
+    recent_publications_resp = sp.get_pubs_search_results(params=search_kwargs)
     recent_pubs_content = recent_publications_resp[0]
+
+
+
     try:
         pubs_records = recent_pubs_content['records']
     except TypeError:
-        pubs_records = [] # return an empty list recent_pubs_content is None (e.g. the service is down)
-    form = SearchForm(None, obj=request.args)
+        pubs_records = []  # return an empty list recent_pubs_content is None (e.g. the service is down)
 
     return render_template('new_pubs.html',
                            new_pubs=pubs_records,
-                           form=form)
+                           num_form=num_form)
+
