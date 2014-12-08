@@ -38,6 +38,7 @@ def pubdetails(pubdata):
         ['edition', 'Edition:'],
         ['volume', 'Volume'],
         ['issue', 'Issue:'],
+        ['publicationYear', 'Year Published:'],
         ['language', 'Language:'],
         ['publisher', 'Publisher:'],
         ['publisherLocation', 'Publisher location:'],

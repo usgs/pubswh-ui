@@ -23,18 +23,6 @@ def enable_mock(step):
 def mock_output(step):
     world.expected_output = u'<html><body><div class="feed"><div style="border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; padding: 10px;"><h4 id="OtherResources-Ordering:">Ordering:</h4><p> All this test text </p></div></div></body></html>'
 
-@step(r'I point to a live feed url on the wiki')
-def live_url(step):
-    world.feed_url = r'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=myUSGS+4.0+RSS+Feed&labelString=other_resources&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3650&showContent=true&confirm=Create+RSS+Feed'
-
-@step(r'I define what ouput we would normally expect from this page')
-def live_output(step):
-    world.expected_output = '<html><body><div class="feed"> \n<div style="border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; padding: 10px;">\n<h4 id="OtherResources-Ordering:">Ordering:</h4><p><a class="external-link" href="http://www.usgs.gov/pubprod/" rel="nofollow">Maps, Imagery, and Publications Home Page</a><br/><a class="external-link" href="http://www.usgs.gov/pubprod/maps.html" rel="nofollow">Maps, Imagery, and Publications &gt; Maps</a></p><h4 id="OtherResources-Borrowing:">Borrowing:</h4><p><a class="external-link" href="http://www.usgs.gov/library" rel="nofollow">USGS Library</a><br/><a class="external-link" href="http://www.gpoaccess.gov/libraries.html" rel="nofollow">GPO Access: Federal Depository Libraries</a><br/><a class="external-link" href="http://www.worldcat.org/" rel="nofollow">WorldCat</a></p><h4 id="OtherResources-AskAnExpert:">Ask An Expert:</h4><p>Ask USGS<br/>USGS Contact Us<br/>Natural Science Information Home Page<br/>USGS Library: Ask a Librarian<br/>USGS TerraWeb for KIDS!</p><h4 id="OtherResources-Other:">Other:</h4><p>USGS Real-Time Data Search Assistance<br/>Maps, Imagery, and Publications &gt; Aerial Photographs and Satellite Image</p>\n</div>\n\n</div></body></html>'
-    
-@step(r'I run pull_feed under normal circumstances')
-def run_pull_feed(step):
-    world.output = pull_feed(world.feed_url)
-
 @step(r'I see that pull_feed gave the expected output')
 def test_pull_feed(step):
     assert_equal(world.expected_output, world.output)
@@ -50,7 +38,7 @@ def set_mock_pubs(step):
 @step(r'I find fake details with pubdetails')   
 def get_pubdetails(step):
     world.output = pubdetails(world.body)
-    world.expected_output = {u'publicationType': {u'text': u'Report', u'id': 18}, u'publicationYear': u'1880', 'details': [{'Publication type:': u'Report'}]}
+    world.expected_output = {u'publicationType': {u'text': u'Report', u'id': 18}, u'publicationYear': u'1880', 'details': [{'Publication type:': u'Report'}, {'Year Published:': u'1880'}]}
 
 @step(r'I am returned an expected result')
 def test_pubdetails(step):
@@ -65,7 +53,7 @@ def get_first_details(step):
     r = get(world.live_url)
     json = r.json()
     world.output = len(str(pubdetails(json))) #Measure json lengths (as strings) since there is a lot of data
-    world.expected_output = 1680
+    world.expected_output = 1710
 
 ###display-link scenarios###
 @step(r'I have a fake json full of pubs-related links')

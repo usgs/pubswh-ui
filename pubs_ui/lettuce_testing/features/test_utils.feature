@@ -8,12 +8,6 @@ Feature: Test all pub_ui utilities
 		And I defined the output we would expect for the mock from pull_feed
 		When I pull_feed the fake url
 		Then I see that pull_feed gave the expected output
-		
-	Scenario: pull_feed behaves correctly
-		Given I point to a live feed url on the wiki
-		And I define what ouput we would normally expect from this page
-		When I run pull_feed under normal circumstances
-		Then I see that pull_feed gave the expected output
 
 	Scenario: pubdetails functions correctly
 		Given I have some fake json pubs metadata

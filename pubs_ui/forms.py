@@ -14,7 +14,12 @@ class ContactForm(Form):
 
 
 class SearchForm(Form):
-    q = SearchField("Search Terms")
+    q = StringField("Search for Publications")
+    title = StringField("Title")
+    contributor = StringField("Author Name")
+    year = StringField("Year Published")
+    contributingOffice = StringField("Contributing Office")
+
 
 class NumSeries(Form):
     num_series = BooleanField('num_series')
