@@ -13,5 +13,6 @@ search_args = {
                'title': Arg(str, multiple=True),
                'author': Arg(str, multiple=True),
                'year': Arg(str, multiple=True),
-               'abstract': Arg(str, multiple=True)
+               'abstract': Arg(str, multiple=True),
+               'contributingOffice': Arg(str, multiple=True)
                }

@@ -11,6 +11,7 @@ from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent
 from forms import ContactForm, SearchForm, NumSeries
 from canned_text import EMAIL_RESPONSE
 from pubs_ui import app, mail
+import arrow
 
 #set UTF-8 to be default throughout app
 reload(sys)
@@ -40,7 +41,7 @@ def robots():
 @app.route('/')
 def index():
     sp = SearchPublications(search_url)
-    recent_publications_resp = sp.get_pubs_search_results(params={'pub_x_days': 7, 'page_size': 6}) #bring back recent publications
+    recent_publications_resp = sp.get_pubs_search_results(params={'pub_x_days': 30, 'page_size': 6}) #bring back recent publications
     recent_pubs_content = recent_publications_resp[0]
     try:
         pubs_records = recent_pubs_content['records']
@@ -97,6 +98,7 @@ def publication(indexId):
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
+    pubdata['formattedModifiedDateTime'] = arrow.get(pubdata['lastModifiedDate']).format('MMMM DD, YYYY HH:mm:ss')
     # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov.
     # Flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI
     # The Apache rewrite changes this to pubs-test.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI, where there is
@@ -214,7 +216,7 @@ def new_pubs():
 
     num_form = NumSeries()
     sp = SearchPublications(search_url)
-    search_kwargs = {'pub_x_days': 7} #bring back recent publications
+    search_kwargs = {'pub_x_days': 30} #bring back recent publications
 
     if request.args.get('num_series') == 'y':
         num_form = NumSeries(num_series=True)

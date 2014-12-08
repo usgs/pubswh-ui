@@ -6,6 +6,9 @@
     <META NAME="abstract" CONTENT="{% if pubdata['docAbstract']  %}{{ pubdata['docAbstract']|striptags }}{% endif %}" />
     {% for author in pubdata['authorsList'] %}<meta NAME="author" content="{{ author }}"/>
     {% endfor %}
+    <meta name = "revised" content="{{ pubdata['lastModifiedDate'] }}"/>
+    <meta name = "created" content="{{ pubdata['displaytoPublicDate'] }}"/>
+    <meta name = "date" content="{{ pubdata['publicationYear'] }}"/>
 
 
 
@@ -53,6 +56,11 @@
                       {%  endfor %}
                       {% endif %}
                     </dl>
+                </section>
+                <section>
+                    {% if pubdata['doi'] %}<p>DOI: <a href="http://dx.doi.org/{{ pubdata['doi'] }}">{{ pubdata['doi'] }}</a></p>{% endif %}
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-text="USGS Pub" data-via="USGS_Pubs" data-dnt="true">Tweet</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                 </section>
                 
                 <section id="suggested">
@@ -121,14 +129,14 @@
 
                 </section>
                 
-                <section>
+                <aside>
                     <p class="adobeReader">Part or all of this report is presented in Portable Document Format (PDF). For best results viewing and printing PDF documents, it is recommended that you download the documents to your computer and open them with Adobe Reader. PDF documents opened from your browser may not display or print as intended. Download the latest version of <a href="http://get.adobe.com/reader/">Adobe Reader</a>, free of charge. More information about viewing, downloading, and printing report files can be found <a href="http://pubs.usgs.gov/potential_problems.html">here</a>.</p>
-                </section>
+                </aside>
 
             </article>
         </main>
         {% endblock %}
 
         {% block url %}<a href="{{ url_for('publication', indexId = pubdata['indexId']) }}">http://pubs.er.usgs.gov{{ url_for('publication', indexId = pubdata['indexId']) }}</a>{% endblock %}
-
+        {% block modtime %}{{ pubdata['formattedModifiedDateTime'] }}{% endblock %}
 

@@ -3,8 +3,8 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head lang="en">
-        <meta charset="UTF-8">
+        <head lang="en">
+            <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="title" content="USGS Publications Warehouse">
@@ -93,7 +93,7 @@
                 URL: {% block url %}{% endblock %}<br />
                 Page Contact Information: <a href="{{ url_for('contact') }}">Pubs Warehouse Contact Page</a><br />
 
-                Page Last Modified: Monday, August 04, 2014, 11:39:38 AM
+                    Page Last Modified: {% block modtime %}{% endblock %}
          </p>
 	     </footer>
 

@@ -21,8 +21,21 @@
 	                </section>
 	
 	                <section id="search">
-	                	<label for="mysearch2">Search for publications </label>
-	                	<form style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q">{{ form.q(placeholder="search terms") }}</form>
+	                	<form style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q">
+                            <input type="checkbox" id="advanced" role="button" value="" />
+                            <label for="advanced" onclick="">
+                                <span id='advanced_search'>Advanced Search</span>
+                                <span id= 'hide_advanced'>Hide Advanced</span>
+                            </label>
+                            <div id='first' class='fancyform'>
+                                {{ form.q.label }}{{ form.q(placeholder="search terms") }}
+                            </div>
+                            <div id='second' class='fancyform'>
+                                 {{ form.title.label }}{{ form.title(placeholder = 'enter title') }}
+                                 {{ form.contributingOffice.label }}{{ form.contributingOffice(placeholder = 'e.g. Texas Water Science Center') }}
+                            </div>
+                            <button type="submit" class="btn">Search</button>
+                        </form>
 	                </section>
 
 	                <section id="options">
@@ -73,10 +86,9 @@
                 
                 
                  <section id = "twitter">
-	                    <a class="twitter-timeline" href="https://twitter.com/USGS_Pubs" data-widget-id="514473582231957504">Tweets by @USGS_Pubs</a>
-	                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-	
-	                </section>
+                     <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/USGS_Pubs" data-widget-id="541086703717347328">Tweets by @USGS_Pubs</a>
+                     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                 </section>
 	                
 	          </article>      
     </main>
