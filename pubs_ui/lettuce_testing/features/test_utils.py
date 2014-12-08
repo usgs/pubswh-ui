@@ -23,6 +23,11 @@ def enable_mock(step):
 def mock_output(step):
     world.expected_output = u'<html><body><div class="feed"><div style="border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; padding: 10px;"><h4 id="OtherResources-Ordering:">Ordering:</h4><p> All this test text </p></div></div></body></html>'
 
+@step(r'I see that pull_feed gave the expected output')
+def test_pull_feed(step):
+    assert_equal(world.expected_output, world.output)
+    httpretty.disable()
+    httpretty.reset()
     
 ###pubdetails scenarios###
 @step(r'I have some fake json pubs metadata')
