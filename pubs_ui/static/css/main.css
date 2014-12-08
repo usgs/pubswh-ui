@@ -976,12 +976,12 @@ form#contactForm input#submit{
 			color:rgb(0,51,102);}
 
 /* CSS needed for show/hide of advanced search */
-div#first {
+fieldset#first {
     float: left;
     width: 60%;
 }
 
-div#second {
+fieldset#second {
     float: left;
     display: none;
     visibility: hidden;
@@ -1015,7 +1015,7 @@ input#advanced[type=checkbox] {
     visibility: hidden;
 }
 
-input[type=checkbox]:checked ~ div#second {
+input[type=checkbox]:checked ~ fieldset#second {
     display: block;
     visibility: visible;
     width: 100%;

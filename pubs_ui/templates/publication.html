@@ -40,18 +40,18 @@
                       <dt>Authored by:</dt>
                       {% for contributor in pubdata['authorsListTyped']  %}
                           {% if contributor['type'] == "person"  %}
-                        <dd itemprop="author" itemtype="http://schema.org/Person">{{ contributor['text'] }},</dd>
+                        <dd itemprop="author" itemtype="http://schema.org/Person">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</dd>
                           {% else %}
-                         <dd itemprop="author" itemtype="http://schema.org/Organization">{{ contributor['text'] }},</dd>
+                         <dd itemprop="author" itemtype="http://schema.org/Organization">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</dd>
                           {% endif %}
                       {%  endfor %}
                       {% if pubdata['editorsList'] %}
                       <dt class="clear">Edited by:</dt>
                       {% for contributor in pubdata['editorsListTyped']  %}
                           {% if contributor['type'] == "person"  %}
-                        <dd itemprop="editor" itemtype="http://schema.org/Person">{{ contributor['text'] }}</dd>
+                        <dd itemprop="editor" itemtype="http://schema.org/Person">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</dd>
                           {% else %}
-                         <dd itemprop="editor" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</dd>
+                         <dd itemprop="editor" itemtype="http://schema.org/Organization">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</dd>
                           {% endif %}
                       {%  endfor %}
                       {% endif %}

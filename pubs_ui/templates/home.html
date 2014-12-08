@@ -27,13 +27,13 @@
                                 <span id='advanced_search'>Advanced Search</span>
                                 <span id= 'hide_advanced'>Hide Advanced</span>
                             </label>
-                            <div id='first' class='fancyform'>
+                            <fieldset id='first' class='fancyform'>
                                 {{ form.q.label }}{{ form.q(placeholder="search terms") }}
-                            </div>
-                            <div id='second' class='fancyform'>
+                            </fieldset>
+                            <fieldset id='second' class='fancyform'>
                                  {{ form.title.label }}{{ form.title(placeholder = 'enter title') }}
                                  {{ form.contributingOffice.label }}{{ form.contributingOffice(placeholder = 'e.g. Texas Water Science Center') }}
-                            </div>
+                            </fieldset>
                             <button type="submit" class="btn">Search</button>
                         </form>
 	                </section>
