@@ -96,8 +96,8 @@ def contact_confirmation():
 def publication(indexId):
     r = get(pub_url+'publication/'+indexId, params={'mimetype': 'json'}, verify=verify_cert)
     pubreturn = r.json()
-    pubreturn = add_supersede_pubs(pubreturn)
     pubdata = pubdetails(pubreturn)
+    pubdata = add_supersede_pubs(pubdata)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
