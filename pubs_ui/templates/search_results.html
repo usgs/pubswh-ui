@@ -13,10 +13,6 @@
 
     {% if pagination %}
         <h1 class="search-results">Search Results</h1>
-        <section class = "search-results">
-            <p>Your search returned {{ result_summary['record_count'] }} results</p>
-            <p>Page {{ result_summary['page_number'] }}, records {{ result_summary['record_min'] }} - {{ result_summary['record_max'] }}</p>
-		</section>
 
         <section id="search">
             {% if advanced == True %}
@@ -27,6 +23,10 @@
                 <a href="{{ request.url }}&advanced=True">Advanced Search</a>
             {% endif %}
         </section>
+        <section class = "search-results">
+            <p>{{ result_summary['record_count'] }} results</p>
+            <p>Page {{ result_summary['page_number'] }}, results {{ result_summary['record_min'] }} - {{ result_summary['record_max'] }}</p>
+		</section>
 
         <section id="search-results">
 				{% for result in search_result_records %}

@@ -173,7 +173,7 @@ def search_results():
     form = SearchForm(None, obj=request.args,)
     #populate form based on parameter
     form.advanced.data = True
-    form_element_list = ['q','title','contributingOffice']
+    form_element_list = ['q', 'title', 'contributingOffice', 'contributor', 'typeName', 'subtypeName', 'seriesName', 'reportNumber', 'year']
     for element in form_element_list:
         if len(search_kwargs[element]) > 0:
             form[element].data = search_kwargs[element][0]
