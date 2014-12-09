@@ -1,7 +1,7 @@
 __author__ = 'jameskreft'
 
 from flask.ext.wtf import Form, RecaptchaField
-from wtforms import StringField, TextAreaField, SubmitField, validators, BooleanField
+from wtforms import StringField, TextAreaField, SubmitField, validators, BooleanField, HiddenField
 from wtforms.fields.html5 import SearchField
 
 
@@ -19,6 +19,7 @@ class SearchForm(Form):
     contributor = StringField("Author Name")
     year = StringField("Year Published")
     contributingOffice = StringField("Contributing Office")
+    advanced = HiddenField('advanced')
 
 
 class NumSeries(Form):

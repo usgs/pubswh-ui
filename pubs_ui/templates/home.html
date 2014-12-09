@@ -21,7 +21,13 @@
 	                </section>
 	
 	                <section id="search">
-                        {% include 'search_form.html' %}
+                        {% if advanced == 'True' %}
+                            {% include 'advanced_search_form.html' %}
+                            <a href="{{ request.base_url }}">Basic Search</a>
+                        {% else %}
+                            {% include 'search_form.html' %}
+                            <a href="{{ request.url }}?advanced=True">Advanced Search</a>
+                        {% endif %}
 	                </section>
                 
 	                <aside id="new_pubs">
