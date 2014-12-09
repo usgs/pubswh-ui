@@ -315,25 +315,26 @@ nav ul#desktop_ul {
   display: none;
 }
 img#bars {
-  padding: 0;
+  padding: 6px 0 0 0;
 }
 #mobile_ul {
   list-style: none;
   float: left;
-  margin:6px 0 0 5px;
   padding:0;
+  width:35px;
+  height:30px;
 }
 #mobile_ul li {
   margin: 0;
-  min-height: 25px;
+  min-height: 30px;
 }
 
-#mobile_ul li ul {
+#mobile_ul li ul#mobile_list {
 	margin:0;
 	padding:0;
   display: none;
 }
-#mobile_ul li:hover ul {
+#mobile_ul li ul {
   display: block;
   clear: both;
   position: absolute;
@@ -345,13 +346,13 @@ img#bars {
   background:#fff;
   box-shadow:0 5px 5px rgba(0,0,0,.3);
 }
-#mobile_ul li:hover ul li {
+#mobile_ul li ul li {
   float: none;
   min-height: 40px;
   border-bottom: 1px solid #000000;
   text-align: center;
 }
-#mobile_ul li:hover ul li a {
+#mobile_ul li ul li a {
   color: #000;
   display: inline-block;
   width: 100%;
@@ -361,7 +362,7 @@ img#bars {
   text-decoration: none;
   font-size:1.2em;
 }
-#mobile_ul li:hover ul li a:hover {
+#mobile_ul li ul li a:hover {
   color: #003366;
   background: rgb(220,220,220);
 }
