@@ -60,7 +60,10 @@ def i_have_imitated_a_working_search_service_from_pubs_with_fake_data(step):
                                      'title': 'a title'
                                      }
                                     ],
-                        'recordCount': 1
+                        'recordCount': 1,
+                        "pageSize": "1",
+                        "pageRowStart": "0",
+                        "pageNumber": "1"
                         }
     httpretty.enable()
     httpretty.register_uri(httpretty.GET,
