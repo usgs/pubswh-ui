@@ -170,7 +170,9 @@ def search_results():
     search_kwargs = parser.parse(search_args, request)
     print 'webarg param: ', search_kwargs
     form = SearchForm(None, obj=request.args,)
-    form.q.data = search_kwargs['q'][0]
+    #populate form based on parameter
+    if len(search_kwargs['q']) > 0:
+        form.q.data = search_kwargs['q'][0]
     if search_kwargs.get('page_size') is None:
         search_kwargs['page_size'] = '25'
     if search_kwargs.get('page') is None:
@@ -185,8 +187,14 @@ def search_results():
         record_count = search_results['recordCount']
         pagination = Pagination(page=int(search_kwargs['page_number']), total=record_count, per_page=int(search_kwargs['page_size']), record_name='Search Results', bs_version=3)
         search_service_down = None
+        start_plus_size = int(search_results['pageRowStart'])+int(search_results['pageSize'])
+        if record_count < start_plus_size:
+            record_max = record_count
+        else:
+            record_max = start_plus_size
+
         result_summary = {'record_count':record_count, 'page_number':search_results['pageNumber'], 'records_per_page':search_results['pageSize'],
-                          'record_min':(int(search_results['pageRowStart'])+1), 'record_max':(int(search_results['pageRowStart'])+int(search_results['pageSize'])) }
+                          'record_min':(int(search_results['pageRowStart'])+1), 'record_max':record_max }
         print result_summary
     except TypeError:
         search_result_records = None

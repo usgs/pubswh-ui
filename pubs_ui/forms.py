@@ -14,7 +14,7 @@ class ContactForm(Form):
 
 
 class SearchForm(Form):
-    q = StringField("Search for Publications")
+    q = SearchField("Search for Publications")
     title = StringField("Title")
     contributor = StringField("Author Name")
     year = StringField("Year Published")
