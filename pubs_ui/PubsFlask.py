@@ -7,7 +7,7 @@ from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
 from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
-                   SearchPublications, contributor_lists, jsonify_geojson)
+                   SearchPublications, contributor_lists, jsonify_geojson, add_supersede_pubs)
 from forms import ContactForm, SearchForm, NumSeries
 from canned_text import EMAIL_RESPONSE
 from pubs_ui import app, mail
@@ -96,6 +96,7 @@ def contact_confirmation():
 def publication(indexId):
     r = get(pub_url+'publication/'+indexId, params={'mimetype': 'json'}, verify=verify_cert)
     pubreturn = r.json()
+    pubreturn = add_supersede_pubs(pubreturn)
     pubdata = pubdetails(pubreturn)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)

@@ -7,6 +7,9 @@ import re
 from operator import itemgetter
 from pubs_ui import app
 import json
+from urlparse import urljoin
+from copy import deepcopy
+
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
@@ -356,4 +359,215 @@ def jsonify_geojson(record):
             app.logger.info("Prod ID "+str(record['id'])+" geographicExtents json parse error: "+str(e))
             del record['geographicExtents']
     return record
+
+def preceding_and_superseding(context_id, supersedes_service_url):
+    """
+    Obtains supersede info for the context publication from an external (legacy) 
+    service, and converts that info into an unambiguous form. Note that, 
+    although the service endpoint is parameterized, that's only a convenience
+    for exercising and testing this operation. This function contains 
+    hard-wired assumptions about 
+        - how the context_id is included in the service call;
+        - the structure and semantics of the legacy service's return value.
+
+    This function will therefore need to be changed if the supersedes service 
+    definition changes.
+
+    :param context_id: prod_id of context publication
+    :param supersedes_service_url: url for supersede information service
+    :return: dict containing three items:
+        'predecessors':related items that the context list-valued ub supersedes
+        'context_id': the index (prod) ID of the context pub. Included as 
+            confirmation only; identical to the 'context_id' param.
+        'successors': related items that supersede the context pub
+    """
+    response = requests.get(supersedes_service_url,params={'prod_id': context_id})
+    related = response.json()['modsCollection']['mods'][0]['relatedItem']
+
+    # REMARKS ABOUT SERVICE RETURNED VALUE ASSUMPTIONS
+    #
+    # The service returns JSON, which is converted into Python structures.
+    #
+    # Note that, despite the structure of the response, the "mods" array will
+    # have at most only one contained element.
+    #
+    # Concerning the sense of the terminology, the occurrence of 
+    # '"@type": "succeeding"' or '"@type": "preceding"' refers to the 
+    # relationship of the linked pub TO the context pub. 
+    #
+    # To put it another way, the "@type" relationship descriptor assumes 
+    # that the linked pub is the SUBJECT, and the context pub is the OBJECT. 
+    # This can be subtly confusing for those of us who have absorbed the RDF 
+    # conventions about framing the predicate from the viewpoint of the subject.
+    # 
+    # Just think of the @type as saying "This linked pub is ___ the context pub."
+
+    predecessors = []
+    successors = []
+
+    for item in related:
+        item_summary_info = {'index_id': item['identifier']['#text'],
+                'title': item['titleInfo']['title'], 'date': item['originInfo']['dateIssued']}
+
+        if item['@type'] == 'preceding':
+            predecessors.append(item_summary_info)
+        elif item['@type'] == 'succeeding':
+            successors.append(item_summary_info)
+
+    return {'predecessors': predecessors, 'context_item': context_id, 'successors': successors}
+
+
+def make_relationship_graph(context_pub_dict, related_pub_dict, related_pub_relation):
+    """
+    Creates an "@graph" item for inclusion in the "relationship" element. This
+    function exists to isolate the creation of the @graph element from external
+    code. It will need to be modified if the desired return format changes, or 
+    if the assumed format of the parameters changes.
+    
+    The graph makes safe copies of its dict params.
+
+    :param context_pub_dict: the graph's basic representation of the context publication
+    :param related_pub_dict: the graph's basic representation of the related publication
+    :param related_pub_relation: description of the related publication's relation to the
+        context publication.
+    :returns: a dictionary with one item: key="@graph", value=a list containing 
+        safe copies of the context publication and related publication, both in 
+        @graph member form.
+    """
+    # necessary to make a deep, rather than shallow, copy - we do
+    # not want to make any changes to the parameter.
+    return_context_pub_dict = deepcopy(context_pub_dict)
+    return_related_pub_dict = deepcopy(related_pub_dict)
+
+    related_pub_url = related_pub_dict['@id']
+
+    # relationship type is stashed in context_pub_dict: the "subject", if we can
+    # safely call it that. However, it points to the related item. (NOTE:
+    # this should be revisited. It's a confusing way to represent
+    # a predicate.)
+    if related_pub_relation == 'successor':
+        # context pub is replaced by related pub, so we describe the context pub as
+        return_context_pub_dict['rdaw:replacedByWork'] = related_pub_url
+
+    elif related_pub_relation == 'predecessor':
+        # context pub replaces related pub, so we describe the context pub as
+        return_context_pub_dict['rdaw:replacementOfWork'] = related_pub_url
+
+    return {'@graph': [return_context_pub_dict, return_related_pub_dict]}
+
+
+def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pubs_base_url):
+    """
+    Accepts publication data JSON for the desired context publication,
+    extracts the context publication's index_id, calls precedes_supersedes_url
+    for that index_id. If the current publication supersedes, and/or
+    is superseded by, any other publications, inserts summary info about 
+    those pubs into the passed context_pubdata. 
+    This function delegates formulation of @graph items to 
+    make_relationship_graph().
+
+    context_pubdata: the Python decode of the JSON representation of the 
+        context publication
+    supersedes_service_url: the endpoint of the service from which info about
+        related items should be obtained
+    param pubs_base_url: the url needed to compose a publication URL given 
+        a known prod_id
+    """
+    return_pubdata = deepcopy(context_pubdata)
+    index_id = context_pubdata['indexId']
+    pub_url = urljoin(pubs_base_url, index_id)
+
+    # this LITERAL is probably OK for this particular use. However, it
+    # needs to be exported to a configuration.
+    pub_type = 'rdac:Work'
+    
+    # obtain predecessor and successor related items
+    pre_super =  preceding_and_superseding(index_id, supersedes_service_url)
+
+    if pre_super['predecessors'] or pre_super['successors']:
+
+        # ensure 'relationships' is set up
+        if 'relationships' not in return_pubdata:
+            return_pubdata['relationships'] = {}
+        if '@context' not in return_pubdata['relationships']:
+            return_pubdata['relationships']['@context'] = {}
+
+        # JSON - Python conversion: the JSON appears to have 
+        # multiple named elements with the samed name ('@graph'). 
+        # should use a list of dictionaries,
+        # rather than a dictionary, to represent these named items
+        # robustly in Python. This may turn out to be an issue,
+        # since we need to name this list rather than letting it remain
+        # anonymous.
+
+        if not 'relationships' in return_pubdata:
+            return_pubdata['relationships'] = []
+        if not 'graphs' in return_pubdata['relationships']:
+            return_pubdata['relationships']['graphs'] = []
+
+        return_pubdata['relationships']['@context']['dc'] = 'http://purl.org/dc/elements/1.1/'
+        return_pubdata['relationships']['@context']['xsd'] = 'http://www.w3.org/2001/XMLSchema#'
+        return_pubdata['relationships']['@context']['rdac'] = 'http://rdaregistry.info/Elements/c/'
+        return_pubdata['relationships']['@context']['rdaw'] = 'http://rdaregistry.info/Elements/w/'
+
+        return_pubdata['relationships']['@context']['rdaw:replacedByWork'] = {'@type': '@id'}
+        return_pubdata['relationships']['@context']['rdaw:replacementOfWork'] = {'@type': '@id'}
+
+        # make parameter for context publication
+        this_pub = {
+                '@id': pub_url,
+                '@type': pub_type,
+                'dc:title': return_pubdata['title']
+            }
+
+        # add any linked data for superseding another publication
+        for item in pre_super['predecessors']:
+            related_pub = {
+                '@id':  urljoin(pubs_base_url, item['index_id']),
+
+                '@type': pub_type,
+                'dc:title': item['title']
+                }
+            if item['date']:
+                related_pub['dc:date'] = item['date']
+
+            return_pubdata['relationships']['graphs'].append(
+                    make_relationship_graph(this_pub, related_pub, 'predecessor'))
+
+        # add any linked data for being superseded by another publication
+        for item in pre_super['successors']:
+            related_pub = {
+                '@id': urljoin(pubs_base_url, item['index_id']),
+
+                '@type': pub_type,
+                'dc:title': item['title']
+                }
+            if item['date']:
+                related_pub['dc:date'] = item['date']
+
+            return_pubdata['relationships']['graphs'].append(
+                    make_relationship_graph(this_pub, related_pub, 'successor'))
+
+    return return_pubdata
+
+
+def add_supersede_pubs(context_pubdata):
+    """
+    Obtains superseding/superseded pubs info for a "context" pub from an 
+    external (legacy) endpoint. Inserts that info into a copy of the
+     "context_pubdata" parameter.
+
+    :param context_pubreturn: the decoded JSON describing the context pub
+    :return: a copy of the "context_pubdata" parameter with all obtained
+        supersede information inserted in the "@context" item.
+    """
+
+    supersedes_service_url = 'http://pubs.er.usgs.gov/service/citation/json/extras' 
+    pubs_base_url = 'http://pubs.er.usgs.gov/publication/'
+
+
+    return_pubdata = apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pubs_base_url)
+
+    return return_pubdata
+
 
