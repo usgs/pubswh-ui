@@ -18,7 +18,7 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
         <script src="{{ url_for('static', filename = 'js/vendor/modernizr-2.6.2.min.js') }}"></script>
         <script>
-        	BASE_SEARCH_PAGE_URL = "{{ url_for('api_webargs')}}"
+        	BASE_SEARCH_PAGE_URL = "{{ url_for('search_results')}}"
         </script>
         {% block page_script %}{% endblock page_script %}
         
@@ -66,7 +66,7 @@
             </ul>
             <section id="center">
                 <label for="mysearch2">Search: </label>
-                <form style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q">
+                <form style="display: inline;" action="{{ url_for('search_results') }}" method="get" name="q">
                     <input id="q" class="headersearch" name="q" placeholder="search terms" type="search" value="">
                 </form>
             </section>
