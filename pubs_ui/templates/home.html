@@ -21,35 +21,15 @@
 	                </section>
 	
 	                <section id="search">
-                        {% include 'search_form.html' %}
-	                </section>
-
-	                <section id="options">
-	
-	                	<h3>Don't want to search?</h3>
-	
-	                    	<h4><a href="{{ url_for('new_pubs') }}">Explore recent publications by USGS Authors</a></h4>
-	
-	                        <h4><a href="{{ url_for('browse') }}">Browse all of Pubs Warehouse by publication type and year</a></h4>
-	
-	                </section>
-	
-	                <section id="links">
-	
-	                	<h3>More links</h3>
-	
-	                    	<h4><a href="{{ url_for('faq') }}">FAQS</a></h4>
-	
-	                        <h4><a href="{{ url_for('web_service_docs') }}">Web Service Documentation</a></h4>
-	
-	                    	<h4><a href="{{ url_for('other_resources') }}">Other Resources</a></h4>
-	
-	                        <h4><a href="{{ url_for('usgs_series') }}">Descriptions of US Geological Survey Report Series</a></h4>
-	
+                        {% if advanced == 'True' %}
+                            {% include 'advanced_search_form.html' %}
+                            <a href="{{ request.base_url }}">Basic Search</a>
+                        {% else %}
+                            {% include 'search_form.html' %}
+                            <a href="{{ request.url }}?advanced=True">Advanced Search</a>
+                        {% endif %}
 	                </section>
                 
-
-
 	                <aside id="new_pubs">
 	
 	                	<h3><a href="{{ url_for('new_pubs') }}">New Publications by USGS Authors</a></h3>

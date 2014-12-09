@@ -20,6 +20,13 @@
         <script>
         	BASE_SEARCH_PAGE_URL = "{{ url_for('search_results')}}"
         </script>
+        <script>function toggle_visibility(id) {
+       var e = document.getElementById(id);
+       if(e.style.display == 'block')
+          e.style.display = 'none';
+       else
+          e.style.display = 'block';
+    }</script>
         {% block page_script %}{% endblock page_script %}
         
     </head>
@@ -51,11 +58,17 @@
 
         <nav>
         <ul id="mobile_ul">
-                <li><img id="bars" src="{{ url_for('static', filename='img/bars.png') }}" alt="mobile menu bars"/>
-                    <ul>
+                <li onclick="toggle_visibility('mobile_list');"><img id="bars" src="{{ url_for('static', filename='img/bars.png') }}" alt="mobile menu bars"/>
+                    <ul id="mobile_list">
 
                         <li><a href="{{ url_for( 'index') }}">Home</a></li>
                         <li><a href="{{ url_for( 'contact') }}">Contact</a></li>
+                        <li><a href="{{ url_for('new_pubs') }}">Explore recent publication by USGS Authors</a></li>
+                		<li><a href="{{ url_for('browse') }}">Browse all of Pubs Warehouse by Publication type and year</a></li>
+                        <li><a href="{{ url_for('faq') }}">FAQS</a></li>
+                		<li><a href="{{ url_for('web_service_docs') }}">Web Service Documentation</a></li>
+                		<li><a href="{{ url_for('other_resources') }}">Other Resources</a></li>
+                		<li><a href="{{ url_for('usgs_series') }}">Descriptions of US Geological Survey Report Series</a></li>
                     </ul>
                 </li>
             </ul>
@@ -63,6 +76,20 @@
             <ul id="desktop_ul">
                 <li><a href="{{ url_for('index') }}">Home</a></li>
                 <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="#">Explore</a>
+                	<ul id="longer">
+                		<li><a href="{{ url_for('new_pubs') }}">Explore recent publication by USGS Authors</a></li>
+                		<li><a href="{{ url_for('browse') }}">Browse all of Pubs Warehouse by Publication type and year</a></li>
+                	</ul>
+                </li>
+                <li><a  id="long" href="#">Documentation</a>
+                	<ul>
+                		<li><a href="{{ url_for('faq') }}">FAQS</a></li>
+                		<li><a href="{{ url_for('web_service_docs') }}">Web Service Documentation</a></li>
+                		<li><a href="{{ url_for('other_resources') }}">Other Resources</a></li>
+                		<li><a href="{{ url_for('usgs_series') }}">Descriptions of US Geological Survey Report Series</a></li>
+                	</ul>
+                </li>
             </ul>
             <section id="center">
                 <label for="mysearch2">Search: </label>
