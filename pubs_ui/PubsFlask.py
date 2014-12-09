@@ -48,9 +48,11 @@ def index():
     except TypeError:
         pubs_records = [] # return an empty list recent_pubs_content is None (e.g. the service is down)
     form = SearchForm(None, obj=request.args)
+    form.advanced.data = True
     return render_template('home.html',
                            recent_publications=pubs_records, 
-                           form=form
+                           form=form,
+                           advanced=request.args.get('advanced')
                            )
 
 
@@ -170,8 +172,11 @@ def search_results():
     search_kwargs = parser.parse(search_args, request)
     form = SearchForm(None, obj=request.args,)
     #populate form based on parameter
-    if len(search_kwargs['q']) > 0:
-        form.q.data = search_kwargs['q'][0]
+    form.advanced.data = True
+    form_element_list = ['q','title','contributingOffice']
+    for element in form_element_list:
+        if len(search_kwargs[element]) > 0:
+            form[element].data = search_kwargs[element][0]
     if search_kwargs.get('page_size') is None:
         search_kwargs['page_size'] = '25'
     if search_kwargs.get('page') is None:
@@ -181,6 +186,7 @@ def search_results():
 
     sp = SearchPublications(search_url)
     search_results, resp_status_code = sp.get_pubs_search_results(params=search_kwargs) # go out to the pubs API and get the search results
+    print search_kwargs
     try:
         search_result_records = search_results['records']
         record_count = search_results['recordCount']
@@ -198,11 +204,10 @@ def search_results():
         search_result_records = None
         pagination = None
         search_service_down = 'The backend services appear to be down with a {0} status.'.format(resp_status_code)
-        record_count = 0
         result_summary = {}
     return render_template('search_results.html', 
+                           advanced=search_kwargs['advanced'],
                            result_summary=result_summary,
-                           record_count=record_count,
                            search_result_records=search_result_records,
                            pagination=pagination,
                            search_service_down=search_service_down,
