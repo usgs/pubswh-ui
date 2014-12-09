@@ -12,17 +12,20 @@
 {% block main %}
 
     {% if pagination %}
-		<section id="results" class="search-results">
-                {{ pagination.info|safe }}
-		</section>
         <h1 class="search-results">Search Results</h1>
-        <form class="search-results" style="display: inline;" action="{{ url_for('api_webargs') }}" method="get" name="q">
-            {{ form.q(placeholder="search terms") }}
-        </form>
+        <section class = "search-results">
+            <p>Your search returned {{ result_summary['record_count'] }} results</p>
+            <p>Page {{ result_summary['page_number'] }}, records {{ result_summary['record_min'] }} - {{ result_summary['record_max'] }}</p>
+		</section>
+
+        <section id="search">
+            {% include 'search_form.html' %}
+        </section>
+
         <section id="search-results">
 				{% for result in search_result_records %}
 					<article>
-                        <h4><a class="search-title" href="{{ url_for('publication', indexId = result['indexId']) }}">{{ result['title']|safe }}</a></h4>
+                        <h5><a class="search-title" href="{{ url_for('publication', indexId = result['indexId']) }}">{{ result['title']|safe }}</a></h5>
                         <p class="pubinfo">{{ result|display_pub_info }}</p>
                         {% if result['authorsList']|length > 0 %}<p class="searchContributors">{{ result['authorsList']|join(', ') }}</p>{% endif %}
                         {% if result['editorsList']|length > 0 %}<p class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</p>{% endif %}

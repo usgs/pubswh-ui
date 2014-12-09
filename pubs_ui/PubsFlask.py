@@ -165,37 +165,50 @@ def browse(path):
 
 #this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
 @app.route('/search', methods=['GET'])
-def api_webargs():
+def search_results():
     parser = FlaskParser()
     search_kwargs = parser.parse(search_args, request)
-    form = SearchForm(None, obj=request.args)
-    per_page = 15
-    try:
-        page = int(request.args.get('page', 1))
-    except ValueError:
-        page = 1
-    search_kwargs['page_size'] = per_page
-    search_kwargs['page_number'] = page
+    form = SearchForm(None, obj=request.args,)
+    #populate form based on parameter
+    if len(search_kwargs['q']) > 0:
+        form.q.data = search_kwargs['q'][0]
+    if search_kwargs.get('page_size') is None:
+        search_kwargs['page_size'] = '25'
+    if search_kwargs.get('page') is None:
+        search_kwargs['page'] = '1'
+    if search_kwargs.get('page_number') is None and search_kwargs.get('page') is not None:
+        search_kwargs['page_number'] = search_kwargs['page']
+
     sp = SearchPublications(search_url)
     search_results, resp_status_code = sp.get_pubs_search_results(params=search_kwargs) # go out to the pubs API and get the search results
     try:
         search_result_records = search_results['records']
         record_count = search_results['recordCount']
-        pagination = Pagination(page=page, total=record_count, per_page=per_page, record_name='Search Results')
+        pagination = Pagination(page=int(search_kwargs['page_number']), total=record_count, per_page=int(search_kwargs['page_size']), record_name='Search Results', bs_version=3)
         search_service_down = None
+        start_plus_size = int(search_results['pageRowStart'])+int(search_results['pageSize'])
+        if record_count < start_plus_size:
+            record_max = record_count
+        else:
+            record_max = start_plus_size
+
+        result_summary = {'record_count':record_count, 'page_number':search_results['pageNumber'], 'records_per_page':search_results['pageSize'],
+                          'record_min':(int(search_results['pageRowStart'])+1), 'record_max':record_max }
     except TypeError:
         search_result_records = None
         pagination = None
         search_service_down = 'The backend services appear to be down with a {0} status.'.format(resp_status_code)
+        record_count = 0
+        result_summary = {}
     return render_template('search_results.html', 
+                           result_summary=result_summary,
+                           record_count=record_count,
                            search_result_records=search_result_records,
                            pagination=pagination,
                            search_service_down=search_service_down,
                            form=form
                            )
 
-    # print 'webarg param: ', search_kwargs
-    #TODO: map the webargs to the Pubs Warehouse Java API, generate output
 
    
 @app.route('/site-map')

@@ -33,5 +33,6 @@ search_args = {
                 "mod_x_days": Arg(str, multiple=False),
                 "mod_date_low": Arg(str, multiple=False),
                 "mod_date_high": Arg(str, multiple=False),
-                "orderBy": Arg(str, multiple=False)
+                "orderBy": Arg(str, multiple=False),
+                "page": Arg(str, multiple=False)
                }
