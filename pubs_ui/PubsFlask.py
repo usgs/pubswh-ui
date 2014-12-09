@@ -168,7 +168,6 @@ def browse(path):
 def search_results():
     parser = FlaskParser()
     search_kwargs = parser.parse(search_args, request)
-    print 'webarg param: ', search_kwargs
     form = SearchForm(None, obj=request.args,)
     #populate form based on parameter
     if len(search_kwargs['q']) > 0:
@@ -195,7 +194,6 @@ def search_results():
 
         result_summary = {'record_count':record_count, 'page_number':search_results['pageNumber'], 'records_per_page':search_results['pageSize'],
                           'record_min':(int(search_results['pageRowStart'])+1), 'record_max':record_max }
-        print result_summary
     except TypeError:
         search_result_records = None
         pagination = None
