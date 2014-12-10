@@ -13,7 +13,6 @@ from copy import deepcopy
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
-supersedes_url = app.config['SUPERSEDES_URL']
 base_search_url = app.config['BASE_SEARCH_URL']
 
 
@@ -542,7 +541,7 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, url
     return return_pubdata
 
 
-def add_supersede_pubs(context_pubdata, url_root):
+def add_supersede_pubs(context_pubdata, supersedes_url, url_root):
     """
     Obtains superseding/superseded pubs info for a "context" pub from an 
     external (legacy) endpoint. Inserts that info into a copy of the
@@ -554,7 +553,7 @@ def add_supersede_pubs(context_pubdata, url_root):
     """
 
 
-    return_pubdata = apply_preceding_and_superseding(context_pubdata, supersedes_url, url_root )
+    return_pubdata = apply_preceding_and_superseding(context_pubdata, supersedes_url, url_root)
 
     return return_pubdata
 

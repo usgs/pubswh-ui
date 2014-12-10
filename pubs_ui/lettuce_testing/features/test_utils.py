@@ -6,8 +6,8 @@ from requests import get
 from pubs_ui import app
 from pubs_ui.utils import pull_feed, pubdetails, getbrowsecontent, create_display_links, jsonify_geojson, add_supersede_pubs
 
-base_search_url = app.config['BASE_SEARCH_URL']
-supersedes_url = app.config['SUPERSEDES_URL']
+
+
 
 ###pull_feed scenarios###
 @step(r'I have created a mock xml at a mock url')
@@ -127,20 +127,22 @@ def make_json(step):
 def test_geojson_output(step):
     assert_equal(world.output, world.expected_output)
 
-@step(u'Given I have a static Python representation of JSON data for a publication known to have related superseding or preceding publications')
+@step(r'Given I have a static Python representation of JSON data for a publication known to have related superseding or preceding publications')
 def given_i_have_a_static_python_representation_of_json_data_for_a_publication_known_to_have_related_superseding_or_preceding_publications(step):
     
     fs03301_pubdata_json = '{"id":30722,"lastModifiedDate":"2014-04-03T08:41:19.000","indexId":"fs03301","displayToPublicDate":"2001-07-01T00:00:00.000","publicationYear":"2001","publicationType":{"id":18,"text":"Report"},"publicationSubtype":{"id":5,"text":"USGS Numbered Series"},"seriesTitle":{"id":313,"text":"Fact Sheet","onlineIssn":"2327-6932","printIssn":"2327-6916"},"seriesNumber":"033-01","title":"U.S. Geological Survey World Wide Web Information","docAbstract":"The U.S. Geological Survey (USGS) invites\\nyou to explore an earth science virtual library\\nof digital information, publications, and data.\\nThe USGS World Wide Web sites offer an\\narray of information that reflects scientific\\nresearch and monitoring programs conducted\\nin the areas of natural hazards, environmental\\nresources, and cartography. This list\\nprovides gateways to access a cross section of\\nthe digital information on the USGS World\\nWide Web sites.","language":"English","publisher":"U.S. Geological Survey","publisherLocation":"Reston, VA","usgsCitation":"U.S. Geological Survey World Wide Web Information; 2001; FS; 033-01; U.S. Geological Survey","productDescription":"2 p.","numberOfPages":"2","authors":[{"contributorId":59386,"corporation":true,"usgs":true,"id":203794,"contributorType":{"id":1,"text":"Authors"},"rank":1}],"editors":[],"costCenters":[],"links":[{"id":5252714,"rank":0,"type":{"id":24,"text":"Thumbnail"},"url":"http://pubs.er.usgs.gov/thumbnails/fs03301.jpg"},{"id":5386208,"type":{"id":11,"text":"Document"},"url":"http://pubs.usgs.gov/fs/0033-01/report.pdf"}],"edition":"Supersedes FS 037-00 & Superseded by FS 055-03"}'
     
     world.fs03301_pubdata_python = json.loads(fs03301_pubdata_json)
 
-@step(u'When I pass it to add_supersede_pubs')
+@step(r'When I pass it to add_supersede_pubs')
 def when_i_pass_it_to_add_supersede_pubs(step):
 
     # invoke the function we're testing
-    world.fs03301_pubdata_with_supersede = add_supersede_pubs(world.fs03301_pubdata_python, 'http://pubs.er.usgs.gov/')
+    world.fs03301_pubdata_with_supersede = add_supersede_pubs(world.fs03301_pubdata_python,
+                                                              "http://pubs.er.usgs.gov/service/citation/json/extras",
+                                                              'http://pubs.er.usgs.gov/')
 
-@step(u'Then I receive a copy that is identical except for the addition of the link information')
+@step(r'Then I receive a copy that is identical except for the addition of the link information')
 def then_i_receive_a_copy_that_is_identical_except_for_the_addition_of_the_link_information(step):
 
     # less unwieldy variable name
