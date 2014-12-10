@@ -445,7 +445,7 @@ def make_relationship_graph(context_pub_dict, related_pub_dict, related_pub_rela
     return {'@graph': [return_context_pub_dict, return_related_pub_dict]}
 
 
-def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pubs_base_url):
+def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, url_root):
     """
     Accepts publication data JSON for the desired context publication,
     extracts the context publication's index_id, calls precedes_supersedes_url
@@ -463,7 +463,7 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pub
         a known prod_id
     """
 
-    base_ID_url = 'http://pubs.er.usgs.gov/publication/'
+    base_ID_url = urljoin(url_root,'publication/')
     return_pubdata = deepcopy(context_pubdata)
     index_id = context_pubdata['indexId']
     pub_url = urljoin(base_ID_url, index_id)
@@ -542,7 +542,7 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pub
     return return_pubdata
 
 
-def add_supersede_pubs(context_pubdata):
+def add_supersede_pubs(context_pubdata, url_root):
     """
     Obtains superseding/superseded pubs info for a "context" pub from an 
     external (legacy) endpoint. Inserts that info into a copy of the
@@ -554,7 +554,7 @@ def add_supersede_pubs(context_pubdata):
     """
 
 
-    return_pubdata = apply_preceding_and_superseding(context_pubdata, supersedes_url, base_search_url)
+    return_pubdata = apply_preceding_and_superseding(context_pubdata, supersedes_url, url_root )
 
     return return_pubdata
 

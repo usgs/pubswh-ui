@@ -99,7 +99,7 @@ def publication(indexId):
     r = get(pub_url+'publication/'+indexId, params={'mimetype': 'json'}, verify=verify_cert)
     pubreturn = r.json()
     pubdata = pubdetails(pubreturn)
-    pubdata = add_supersede_pubs(pubdata)
+    pubdata = add_supersede_pubs(pubdata, request.url_root)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
