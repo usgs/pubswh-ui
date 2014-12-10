@@ -7,7 +7,7 @@ from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
 from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
-                   SearchPublications, contributor_lists, jsonify_geojson)
+                   SearchPublications, contributor_lists, jsonify_geojson, add_supersede_pubs)
 from forms import ContactForm, SearchForm, NumSeries
 from canned_text import EMAIL_RESPONSE
 from pubs_ui import app, mail
@@ -97,6 +97,7 @@ def publication(indexId):
     r = get(pub_url+'publication/'+indexId, params={'mimetype': 'json'}, verify=verify_cert)
     pubreturn = r.json()
     pubdata = pubdetails(pubreturn)
+    pubdata = add_supersede_pubs(pubdata)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
