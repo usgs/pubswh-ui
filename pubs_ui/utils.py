@@ -13,6 +13,9 @@ from copy import deepcopy
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
+supersedes_service_url = app.config['SUPERSEDES_URL']
+pubs_base_url = app.config['BASE_SEARCH_URL']
+
 
 def pubdetails(pubdata):
     """
@@ -562,9 +565,6 @@ def add_supersede_pubs(context_pubdata):
     :return: a copy of the "context_pubdata" parameter with all obtained
         supersede information inserted in the "@context" item.
     """
-
-    supersedes_service_url = 'http://pubs.er.usgs.gov/service/citation/json/extras' 
-    pubs_base_url = 'http://pubs.er.usgs.gov/publication/'
 
 
     return_pubdata = apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pubs_base_url)
