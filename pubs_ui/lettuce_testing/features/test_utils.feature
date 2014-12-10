@@ -48,3 +48,9 @@ Feature: Test all pub_ui utilities
         Given we have created a fake pubs record with an invalid geographic extents string
         When I try to make a record with parseable json and catch an error
         Then I see the record has geographicExtents dropped
+
+	Scenario: supersedes and precedes functions behave correctly
+		Given I have a static Python representation of JSON data for a publication known to have related superseding or preceding publications
+		When I pass it to add_supersede_pubs
+		Then I receive a copy that is identical except for the addition of the link information
+
