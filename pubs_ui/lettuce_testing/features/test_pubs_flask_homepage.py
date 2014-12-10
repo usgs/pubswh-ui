@@ -50,7 +50,18 @@ def i_have_imitated_a_working_search_service_from_pubs(step):
                                      'publicationYear': '2021',
                                      'seriesNumber': 14,
                                      'chapter': 18,
-                                     'subChapter': 4
+                                     'subChapter': 4,
+                                     'links': [
+                                          {
+                                            "id": 5398296,
+                                            "type": {
+                                                    "id": 24,
+                                                    "text": "Thumbnail"
+                                                    },
+                                            "url": "http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg"
+                                        }
+                                     ]
+
                                      }
                                     ],
                         'recordCount': 1
