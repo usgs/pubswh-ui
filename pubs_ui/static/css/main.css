@@ -122,6 +122,25 @@ textarea {
 	clear:both;
 }
 
+#new_pubs{
+	margin:0 0 10px 0;
+	clear:both;}
+		
+#new_pubs h3{padding:5px;
+			color:rgb(0,51,102);
+			margin-top:10px;}
+			
+#new_pubs a:hover{
+	text-decoration:underline;
+	color:#000;
+}
+
+.pubs-thumbnail{
+	background:red;
+	clear:both;
+	padding:0 15px 0 15px;
+}
+
 #twitter{
 	width:100%;
 	min-height:200px;
@@ -134,7 +153,7 @@ textarea {
 }
 
 .recent-pub-title{
-	padding:10px;
+	padding:0 10px 10px 10px;
 	font-weight:bold;
 	color:#003366;
 	margin-bottom:-5px;
@@ -142,7 +161,7 @@ textarea {
 }
 	
 .recent-pub-info{
-	margin-bottom:15px;
+	margin:0 0 15px 15px;
     text-align: left;
 
 }
@@ -1040,18 +1059,6 @@ form#contactForm input#submit{
 #new_pubs{width:59%;
 		margin-left:15px;} 
    
-#new_pubs{
-		margin:0 0 10px 10px;
-	clear:both;}
-		
-#new_pubs h3{padding:5px;
-			color:rgb(0,51,102);
-			margin-top:10px;}
-			
-#new_pubs a:hover{
-	text-decoration:underline;
-	color:#000;
-}
 
 
    
