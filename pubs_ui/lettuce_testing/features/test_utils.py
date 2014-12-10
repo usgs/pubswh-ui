@@ -3,7 +3,10 @@ from nose.tools import assert_equal
 from lettuce import *
 import json
 from requests import get
+from pubs_ui import app
 from pubs_ui.utils import pull_feed, pubdetails, getbrowsecontent, create_display_links, jsonify_geojson, add_supersede_pubs
+
+base_search_url = app.config['BASE_SEARCH_URL']
 
 ###pull_feed scenarios###
 @step(r'I have created a mock xml at a mock url')
@@ -159,9 +162,9 @@ def then_i_receive_a_copy_that_is_identical_except_for_the_addition_of_the_link_
             pubs_superseded_by_context.append(graph_pubs[0]['rdaw:replacementOfWork'])
 
     # expected additions
-    assert u'http://pubs.er.usgs.gov/publication/fs07199' in pubs_superseded_by_context
-    assert u'http://pubs.er.usgs.gov/publication/fs03700' in pubs_superseded_by_context
-    assert u'http://pubs.er.usgs.gov/publication/fs05503' in pubs_that_supersede_context
+    assert base_search_url+'/fs07199' in pubs_superseded_by_context
+    assert base_search_url+'/fs03700' in pubs_superseded_by_context
+    assert base_search_url+'/fs05503' in pubs_that_supersede_context
 
     # did the process damage the rest of the pubs data?
     prior_pubsdata =  world.fs03301_pubdata_python
