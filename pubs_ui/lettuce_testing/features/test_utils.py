@@ -7,6 +7,7 @@ from pubs_ui import app
 from pubs_ui.utils import pull_feed, pubdetails, getbrowsecontent, create_display_links, jsonify_geojson, add_supersede_pubs
 
 base_search_url = app.config['BASE_SEARCH_URL']
+supersedes_url = app.config['SUPERSEDES_URL']
 
 ###pull_feed scenarios###
 @step(r'I have created a mock xml at a mock url')
