@@ -445,7 +445,7 @@ def make_relationship_graph(context_pub_dict, related_pub_dict, related_pub_rela
     return {'@graph': [return_context_pub_dict, return_related_pub_dict]}
 
 
-def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pubs_base_url):
+def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, url_root):
     """
     Accepts publication data JSON for the desired context publication,
     extracts the context publication's index_id, calls precedes_supersedes_url
@@ -462,10 +462,11 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pub
     param pubs_base_url: the url needed to compose a publication URL given 
         a known prod_id
     """
-    pubs_base_url = pubs_base_url+'/'
+
+    base_ID_url = urljoin(url_root,'publication/')
     return_pubdata = deepcopy(context_pubdata)
     index_id = context_pubdata['indexId']
-    pub_url = urljoin(pubs_base_url, index_id)
+    pub_url = urljoin(base_ID_url, index_id)
 
     # this LITERAL is probably OK for this particular use. However, it
     # needs to be exported to a configuration.
@@ -513,7 +514,7 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pub
         # add any linked data for superseding another publication
         for item in pre_super['predecessors']:
             related_pub = {
-                '@id':  urljoin(pubs_base_url, item['index_id']),
+                '@id':  urljoin(base_ID_url, item['index_id']),
 
                 '@type': pub_type,
                 'dc:title': item['title']
@@ -527,7 +528,7 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pub
         # add any linked data for being superseded by another publication
         for item in pre_super['successors']:
             related_pub = {
-                '@id': urljoin(pubs_base_url, item['index_id']),
+                '@id': urljoin(base_ID_url, item['index_id']),
 
                 '@type': pub_type,
                 'dc:title': item['title']
@@ -541,7 +542,7 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pub
     return return_pubdata
 
 
-def add_supersede_pubs(context_pubdata):
+def add_supersede_pubs(context_pubdata, url_root):
     """
     Obtains superseding/superseded pubs info for a "context" pub from an 
     external (legacy) endpoint. Inserts that info into a copy of the
@@ -553,7 +554,7 @@ def add_supersede_pubs(context_pubdata):
     """
 
 
-    return_pubdata = apply_preceding_and_superseding(context_pubdata, supersedes_url, base_search_url)
+    return_pubdata = apply_preceding_and_superseding(context_pubdata, supersedes_url, url_root )
 
     return return_pubdata
 
