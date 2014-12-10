@@ -17,7 +17,7 @@
 				
 	                <section id="welcome">
 	                	<h1>Welcome to the USGS Publications Warehouse</h1>
-	                    <h3>Pubs Warehouse provides access to over 130,000 publications written by USGS scientists over the century-plus history of the bureau</h3>
+	                    <h4>Pubs Warehouse provides access to over 130,000 publications written by USGS scientists over the century-plus history of the bureau</h4>
 	                </section>
 	
 	                <section id="search">
@@ -32,16 +32,11 @@
                 
 	                <aside id="new_pubs">
 	
-	                	<h3><a href="{{ url_for('new_pubs') }}">New Publications by USGS Authors</a></h3>
-
-	                	<table>
-	                		<td>
-	                			<div class="pubs-thumbnail"></div>
-	                		</td>
-	                	</table>
+	                	<h3 id="new_pubs_title"><a href="{{ url_for('new_pubs') }}">New Publications by USGS Authors</a></h3>
 
 	                	{% for recent_publication in recent_publications %}
-	               			<div class="recent-pubs-title">
+	               			<div class="pubs-thumbnail"><img id="thumbnail" src="{{ wsgi_str }}{{ url_for('images', filename=recent_publication['displayLinks']['Thumbnail'][0]['url'], width=50) }}" alt="thumbnail"/></div>
+                            <div class="recent-pub-title">
 	               				<a href="{{ url_for('publication', indexId = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
 	               			</div>
 	               			<div class="recent-pub-info">

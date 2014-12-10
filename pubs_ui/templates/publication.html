@@ -67,17 +67,26 @@
 
                     {% macro linkdisplay(link_type) %}
                         {% for link in pubdata['displayLinks'][link_type]|sort(attribute='rank') %}
-                        <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }}
-                                                                                    else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["type"]["text"] }}</strong>
-                                                                                {% if link["linkFileType"]  %}({{ link["linkFileType"]["text"] }}){% endif %}</a></li>
+                        <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }}{% else %}{{ link['type']['text'] }}{% endif %}">
+
+
+
+
+                                                                                <strong>
+                                                                                {% if link['description'] %}
+                                                                                    {{ link['description'] }}
+                                                                                {% else %}
+                                                                                    {{ link['type']['text'] }}
+                                                                                {% endif %}
+                                                                                </strong>
+                                                                                {% if link["linkFileType"]  %}
+                                                                                    ({{ link["linkFileType"]["text"] }})
+                                                                                {% endif %}
+                                                                                </a></li>
                         {% endfor %}
                     {% endmacro %}
 
-                    <ul class="plates">
-                            {% for link in pubdata['displayLinks']['Plate']|sort(attribute='rank') %}
-                            <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }} else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["text"] }}</strong> ({% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %})</a> </li>
-                        {% endfor %}
-                    </ul>
+
                     
                     <ul class="fileslist">
                         {{ linkdisplay('Index Page') }}
@@ -104,6 +113,11 @@
                         {{ linkdisplay('Spatial Data') }}
                         {{ linkdisplay('Version History') }}
                     </ul>
+                    <ul class="plates">
+                            {% for link in pubdata['displayLinks']['Plate']|sort(attribute='rank') %}
+                            <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }} else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["text"] }}</strong> ({% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %})</a> </li>
+                        {% endfor %}
+                    </ul>
 
 
                 </section>
@@ -128,9 +142,9 @@
 
 
                 </section>
-                
+
                 <aside>
-                    <p class="adobeReader">Part or all of this report is presented in Portable Document Format (PDF). For best results viewing and printing PDF documents, it is recommended that you download the documents to your computer and open them with Adobe Reader. PDF documents opened from your browser may not display or print as intended. Download the latest version of <a href="http://get.adobe.com/reader/">Adobe Reader</a>, free of charge. More information about viewing, downloading, and printing report files can be found <a href="http://pubs.usgs.gov/potential_problems.html">here</a>.</p>
+                    <p class="adobeReader"><small>Part or all of this report may be presented in Portable Document Format (PDF). For best results viewing and printing PDF documents, it is recommended that you download the documents to your computer and open them with Adobe Reader. PDF documents opened from your browser may not display or print as intended. Download the latest version of <a href="http://get.adobe.com/reader/">Adobe Reader</a>, free of charge. More information about viewing, downloading, and printing report files can be found <a href="http://pubs.usgs.gov/potential_problems.html">here</a>.</small></p>
                 </aside>
 
             </article>
