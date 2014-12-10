@@ -163,9 +163,9 @@ def then_i_receive_a_copy_that_is_identical_except_for_the_addition_of_the_link_
             pubs_superseded_by_context.append(graph_pubs[0]['rdaw:replacementOfWork'])
 
     # expected additions
-    assert base_search_url+'/fs07199' in pubs_superseded_by_context
-    assert base_search_url+'/fs03700' in pubs_superseded_by_context
-    assert base_search_url+'/fs05503' in pubs_that_supersede_context
+    assert 'http://pubs.er.usgs.gov/publication/fs07199' in pubs_superseded_by_context
+    assert 'http://pubs.er.usgs.gov/publication/fs03700' in pubs_superseded_by_context
+    assert 'http://pubs.er.usgs.gov/publication/fs05503' in pubs_that_supersede_context
 
     # did the process damage the rest of the pubs data?
     prior_pubsdata =  world.fs03301_pubdata_python

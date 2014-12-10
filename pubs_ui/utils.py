@@ -462,10 +462,11 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pub
     param pubs_base_url: the url needed to compose a publication URL given 
         a known prod_id
     """
-    pubs_base_url = pubs_base_url+'/'
+
+    base_ID_url = 'http://pubs.er.usgs.gov/publication/'
     return_pubdata = deepcopy(context_pubdata)
     index_id = context_pubdata['indexId']
-    pub_url = urljoin(pubs_base_url, index_id)
+    pub_url = urljoin(base_ID_url, index_id)
 
     # this LITERAL is probably OK for this particular use. However, it
     # needs to be exported to a configuration.
@@ -513,7 +514,7 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pub
         # add any linked data for superseding another publication
         for item in pre_super['predecessors']:
             related_pub = {
-                '@id':  urljoin(pubs_base_url, item['index_id']),
+                '@id':  urljoin(base_ID_url, item['index_id']),
 
                 '@type': pub_type,
                 'dc:title': item['title']
@@ -527,7 +528,7 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pub
         # add any linked data for being superseded by another publication
         for item in pre_super['successors']:
             related_pub = {
-                '@id': urljoin(pubs_base_url, item['index_id']),
+                '@id': urljoin(base_ID_url, item['index_id']),
 
                 '@type': pub_type,
                 'dc:title': item['title']
