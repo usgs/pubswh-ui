@@ -1,6 +1,6 @@
 <form style="display: inline;" action="{{ url_for('search_results') }}" method="get" name="q">
     <fieldset id='first' class='fancyform'>
-        {{ form.q(placeholder="search terms") }}
+        {{ form.q.label }}{{ form.q(placeholder="search terms") }}
     </fieldset>
     <fieldset id='second' class='fancyform'>
          {{ form.title.label }}{{ form.title(placeholder = 'enter title') }}

@@ -45,6 +45,8 @@ def index():
     recent_pubs_content = recent_publications_resp[0]
     try:
         pubs_records = recent_pubs_content['records']
+        for record in pubs_records:
+            record = create_display_links(record)
     except TypeError:
         pubs_records = [] # return an empty list recent_pubs_content is None (e.g. the service is down)
     form = SearchForm(None, obj=request.args)
