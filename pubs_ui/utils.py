@@ -382,7 +382,8 @@ def preceding_and_superseding(context_id, supersedes_service_url):
         'successors': related items that supersede the context pub
     """
     response = requests.get(supersedes_service_url,params={'prod_id': context_id})
-    related = response.json()['modsCollection']['mods'][0]['relatedItem']
+    response_content = response.json()
+    related= response_content.get('modsCollection').get('mods')[0].get('relatedItem')
 
     # REMARKS ABOUT SERVICE RETURNED VALUE ASSUMPTIONS
     #
@@ -404,15 +405,15 @@ def preceding_and_superseding(context_id, supersedes_service_url):
 
     predecessors = []
     successors = []
+    if related is not None:
+        for item in related:
+            item_summary_info = {'index_id': item['identifier']['#text'],
+                    'title': item['titleInfo']['title'], 'date': item['originInfo']['dateIssued']}
 
-    for item in related:
-        item_summary_info = {'index_id': item['identifier']['#text'],
-                'title': item['titleInfo']['title'], 'date': item['originInfo']['dateIssued']}
-
-        if item['@type'] == 'preceding':
-            predecessors.append(item_summary_info)
-        elif item['@type'] == 'succeeding':
-            successors.append(item_summary_info)
+            if item['@type'] == 'preceding':
+                predecessors.append(item_summary_info)
+            elif item['@type'] == 'succeeding':
+                successors.append(item_summary_info)
 
     return {'predecessors': predecessors, 'context_item': context_id, 'successors': successors}
 
