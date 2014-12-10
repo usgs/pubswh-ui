@@ -13,6 +13,9 @@ from copy import deepcopy
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
+supersedes_url = app.config['SUPERSEDES_URL']
+base_search_url = app.config['BASE_SEARCH_URL']
+
 
 def pubdetails(pubdata):
     """
@@ -211,21 +214,6 @@ def pull_feed(feed_url):
         post = unicode(soup)
 
     return post
-
-
-def supersedes(supersedes_url, index_id):
-    """
-    pull supersede info for a pub from legacy "extras" endpoint
-    :param supersedes_url:url for extras endpoint
-    :param index_id: index_id of pub
-    :return: dict of relevant supersede info
-    """
-
-    supersede_array = requests.get(supersedes_url,
-                                   params={'prod_id': index_id}, verify=verify_cert).json()['modsCollection']['mods'][0]['relatedItem'][0]
-    #TODO: deal with pubs with more than one relationship
-    return {'type': supersede_array['@type'], 'index_id': supersede_array['identifier']['#text'],
-            'title': supersede_array['titleInfo']['title']}
 
 
 def getbrowsecontent(browseurl, browsereplace):
@@ -474,6 +462,7 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pub
     param pubs_base_url: the url needed to compose a publication URL given 
         a known prod_id
     """
+    pubs_base_url = pubs_base_url+'/'
     return_pubdata = deepcopy(context_pubdata)
     index_id = context_pubdata['indexId']
     pub_url = urljoin(pubs_base_url, index_id)
@@ -563,11 +552,8 @@ def add_supersede_pubs(context_pubdata):
         supersede information inserted in the "@context" item.
     """
 
-    supersedes_service_url = 'http://pubs.er.usgs.gov/service/citation/json/extras' 
-    pubs_base_url = 'http://pubs.er.usgs.gov/publication/'
 
-
-    return_pubdata = apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pubs_base_url)
+    return_pubdata = apply_preceding_and_superseding(context_pubdata, supersedes_url, base_search_url)
 
     return return_pubdata
 
