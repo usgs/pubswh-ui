@@ -14,7 +14,7 @@ from copy import deepcopy
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
 supersedes_service_url = app.config['SUPERSEDES_URL']
-pubs_base_url = app.config['BASE_SEARCH_URL']
+base_search_url = app.config['BASE_SEARCH_URL']
 
 
 def pubdetails(pubdata):
@@ -567,7 +567,7 @@ def add_supersede_pubs(context_pubdata):
     """
 
 
-    return_pubdata = apply_preceding_and_superseding(context_pubdata, supersedes_service_url, pubs_base_url)
+    return_pubdata = apply_preceding_and_superseding(context_pubdata, supersedes_service_url, base_search_url)
 
     return return_pubdata
 
