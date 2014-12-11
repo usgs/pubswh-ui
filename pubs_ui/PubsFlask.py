@@ -103,11 +103,6 @@ def publication(indexId):
     r = get(pub_url+'publication/'+indexId, params={'mimetype': 'json'}, verify=verify_cert)
     pubreturn = r.json()
     pubdata = pubdetails(pubreturn)
-    app.logger.info(request)
-    app.logger.info('Full publication URL: {0}'.format(request.url))
-    url_root = request.url_root
-    url_root_str = 'URL root as passed by publication function: {0}'.format(url_root)
-    app.logger.info(url_root_str)
     pubdata = add_supersede_pubs(pubdata, supersedes_url, json_ld_id_base_url)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
@@ -124,7 +119,7 @@ def publication(indexId):
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:
-        return render_template('publication.html', indexID=indexId, pubdata=pubdata, url_root=url_root)
+        return render_template('publication.html', indexID=indexId, pubdata=pubdata)
 
 
 #leads to json for selected endpoints
