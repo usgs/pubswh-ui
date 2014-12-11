@@ -102,6 +102,8 @@ def publication(indexId):
     r = get(pub_url+'publication/'+indexId, params={'mimetype': 'json'}, verify=verify_cert)
     pubreturn = r.json()
     pubdata = pubdetails(pubreturn)
+    app.logger.info(request)
+    app.logger.info('Full publication URL: {0}'.format(request.url))
     url_root = request.url_root
     url_root_str = 'URL root as passed by publication function: {0}'.format(url_root)
     app.logger.info(url_root_str)
