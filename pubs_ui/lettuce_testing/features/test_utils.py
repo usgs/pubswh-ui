@@ -103,12 +103,12 @@ def make_url(step):
 ###jsonify_geojson scenarios###
 @step(r'we have created a fake pubs record with a geographic extents string')
 def imitation_geojson(step):
-    world.body = {'id': 12345, "geographicExtents": '{ "type": "FeatureCollection", "features": [ { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [ [ [ -72.745833,44.0625 ], [ -72.745833,44.075 ], [ -72.741667,44.075 ], [ -72.741667,44.0625 ], [ -72.745833,44.0625 ] ] ] } } ] }'}
+    world.body = {'id': 12345, 'title':'The Title', "geographicExtents": '{ "type": "FeatureCollection", "features": [ { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [ [ [ -72.745833,44.0625 ], [ -72.745833,44.075 ], [ -72.741667,44.075 ], [ -72.741667,44.0625 ], [ -72.745833,44.0625 ] ] ] } } ] }'}
 
 @step(r'I make a record with parsable json')
 def make_json(step):
     world.output = jsonify_geojson(world.body)
-    world.expected_output = {'id': 12345, "geographicExtents": {u'type': u'FeatureCollection', u'features': [{u'geometry': {u'type': u'Polygon', u'coordinates': [[[-72.745833, 44.0625], [-72.745833, 44.075], [-72.741667, 44.075], [-72.741667, 44.0625], [-72.745833, 44.0625]]]}, u'type': u'Feature', u'properties': {}}]}}
+    world.expected_output = {'id': 12345,'title':'The Title', "geographicExtents": {u'type': u'FeatureCollection', u'properties': {u'title':u'The Title'}, u'features': [{u'geometry': {u'type': u'Polygon', u'coordinates': [[[-72.745833, 44.0625], [-72.745833, 44.075], [-72.741667, 44.075], [-72.741667, 44.0625], [-72.745833, 44.0625]]]}, u'type': u'Feature', u'properties': {}}]}}
 
 @step(r'I see a record was created correctly')
 def test_geojson_output(step):
@@ -116,7 +116,7 @@ def test_geojson_output(step):
 
 @step(r'we have created a fake pubs record with an invalid geographic extents string')
 def imitation_bad_geojson(step):
-    world.body = {'id': 12345, "geographicExtents": '{ "type": "FeatureCollection", "features": [ { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [ [ [ -72.745833,44.0625 ], [ -72.745833,44.075 ], [ -72.741667,44.075 ], [ -72.741667,44.0625 ], [ -72.745833,44.0625 ] ] ] } } ] '}
+    world.body = {'id': 12345, "geographicExtents": '{ "type": "FeatureCollection",  "features": [ { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [ [ [ -72.745833,44.0625 ], [ -72.745833,44.075 ], [ -72.741667,44.075 ], [ -72.741667,44.0625 ], [ -72.745833,44.0625 ] ] ] } } ] '}
 
 @step(r'I try to make a record with parseable json and catch an error')
 def make_json(step):
