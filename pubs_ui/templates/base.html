@@ -28,8 +28,9 @@
           e.style.display = 'block';
     }</script>
         {% block page_script %}{% endblock page_script %}
-        
-    </head>
+        <script type="application/javascript" src="https://www.usgs.gov/scripts/analytics/usgs-analytics.js"></script>
+
+        </head>
     <body>
            <!--[if lt IE 7]>
                 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -139,7 +140,9 @@
         ga('send', 'pageview');
 
         </script>
-        <script type='application/javascript' src='http://www.usgs.gov/scripts/analytics/usgs-analytics.js'></script>
+        {% block page_footer_script %}{% endblock page_footer_script %}
+
+
 
 
 
