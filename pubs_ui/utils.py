@@ -461,7 +461,8 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, url
     param pubs_base_url: the url needed to compose a publication URL given 
         a known prod_id
     """
-
+    
+    url_root = url_root.replace('wsgi/pubs_ui/', '')
     base_ID_url = urljoin(url_root,'publication/')
     return_pubdata = deepcopy(context_pubdata)
     index_id = context_pubdata['indexId']
