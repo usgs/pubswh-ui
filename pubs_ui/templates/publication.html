@@ -149,6 +149,7 @@
         {% block url %}<a href="{{ url_for('publication', indexId = pubdata['indexId']) }}">http://pubs.er.usgs.gov{{ url_for('publication', indexId = pubdata['indexId']) }}</a>{% endblock %}
         {% block modtime %}{{ pubdata['formattedModifiedDateTime'] }}{% endblock %}
         {% block page_footer_script %}
+        {%- if pubdata["geographicExtents"] -%}
         <script type=text/javascript>
 
                         // create a map
@@ -160,14 +161,12 @@
                         osmLayer = new L.TileLayer(osmTile, { maxZoom: 18, attribution: osmCopyright } );
                         map.addLayer(osmLayer);
 
-                        // set the map's starting view
-                        //map.setView( new L.LatLng(35, -88), 7 );
-
                         // include GeoJSON inside this JavaScript
                         var pubextent = {{ pubdata["geographicExtents"]|tojson|safe }};
                         L.geoJson( pubextent ).addTo(map);
 
                         map.fitBounds(L.geoJson( pubextent ).getBounds());
                     </script>
+            {% endif %}
         {% endblock page_footer_script %}
 
