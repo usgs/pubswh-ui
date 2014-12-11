@@ -7,7 +7,7 @@ from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
 from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
-                   SearchPublications, contributor_lists, jsonify_geojson, add_supersede_pubs)
+                   SearchPublications, contributor_lists, jsonify_geojson, add_supersede_pubs, change_to_pubs_test)
 from forms import ContactForm, SearchForm, NumSeries
 from canned_text import EMAIL_RESPONSE
 from pubs_ui import app, mail
@@ -47,6 +47,9 @@ def index():
         pubs_records = recent_pubs_content['records']
         for record in pubs_records:
             record = create_display_links(record)
+            if replace_pubs_with_pubs_test:
+                record['displayLinks']['Thumbnail'][0]['url'] = change_to_pubs_test(record['displayLinks']['Thumbnail'][0]['url'])
+
     except TypeError:
         pubs_records = [] # return an empty list recent_pubs_content is None (e.g. the service is down)
     form = SearchForm(None, obj=request.args)
@@ -111,9 +114,7 @@ def publication(indexId):
     # Apache to do the rewrite, this code snippet executes the rewrite so the correct signature is preserved for
     # a given image URL.
     if replace_pubs_with_pubs_test:
-        thumbnail_link = pubdata['displayLinks']['Thumbnail'][0]['url']
-        thumbmail_link_test = thumbnail_link.replace('pubs', 'pubs-test')
-        pubdata['displayLinks']['Thumbnail'][0]['url'] = thumbmail_link_test
+        pubdata['displayLinks']['Thumbnail'][0]['url'] = change_to_pubs_test(pubdata['displayLinks']['Thumbnail'][0]['url'])
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:

@@ -368,7 +368,7 @@ def preceding_and_superseding(context_id, supersedes_service_url):
             confirmation only; identical to the 'context_id' param.
         'successors': related items that supersede the context pub
     """
-    response = requests.get(supersedes_service_url,params={'prod_id': context_id})
+    response = requests.get(supersedes_service_url,params={'prod_id': context_id},verify=verify_cert)
     response_content = response.json()
     related= response_content.get('modsCollection').get('mods')[0].get('relatedItem')
 
@@ -557,4 +557,13 @@ def add_supersede_pubs(context_pubdata, supersedes_url, url_root):
 
     return return_pubdata
 
+def change_to_pubs_test(pubs_url):
+    """
+    flips pubs urls to pubs-test urls to work around annoying apache config on test tier
+    :param url: a pubs.er.usgs.gov url
+    :return: a pubs-test.er.usgs.gov url
+    """
+    pubs_test_url = pubs_url.replace('pubs.er', 'pubs-test.er')
+
+    return pubs_test_url
 
