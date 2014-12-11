@@ -28,6 +28,7 @@ browse_replace = app.config['BROWSE_REPLACE']
 contact_recipients = app.config['CONTACT_RECIPIENTS']
 replace_pubs_with_pubs_test = app.config.get('REPLACE_PUBS_WITH_PUBS_TEST')
 robots_welcome = app.config.get('ROBOTS_WELCOME')
+json_ld_id_base_url = app.config.get('JSON_LD_ID_BASE_URL')
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
@@ -107,7 +108,7 @@ def publication(indexId):
     url_root = request.url_root
     url_root_str = 'URL root as passed by publication function: {0}'.format(url_root)
     app.logger.info(url_root_str)
-    pubdata = add_supersede_pubs(pubdata, supersedes_url, url_root)
+    pubdata = add_supersede_pubs(pubdata, supersedes_url, json_ld_id_base_url)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
