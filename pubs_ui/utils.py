@@ -514,9 +514,9 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, url
         for item in pre_super['predecessors']:
             related_pub = {
                 '@id':  urljoin(base_ID_url, item['index_id']),
-
                 '@type': pub_type,
-                'dc:title': item['title']
+                'dc:title': item['title'],
+                'app_url_root': url_root
                 }
             if item['date']:
                 related_pub['dc:date'] = item['date']
