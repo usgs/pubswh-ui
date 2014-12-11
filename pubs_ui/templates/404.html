@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>404</title>
-</head>
-<body>
-<h1>404!</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block head %}
+	<title>404 USGS Publications Warehouse</title>
+    {% include 'meta.html' %}
+{% endblock head %}
+
+{% block main %}
+	<h1>404 page not found</h1>
+    <p>There was no page found at this location.  Please check your URL and try again. If you think that this page is shown in error, please <a href="{{ url_for('contact') }}">Contact us</a></p>
+{% endblock main %}
+
+{% block url %}<a href="{{ request.url }}">{{ request.url }}</a>{% endblock %}

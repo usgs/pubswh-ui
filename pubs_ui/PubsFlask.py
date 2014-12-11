@@ -101,6 +101,8 @@ def contact_confirmation():
 @app.route('/publication/<indexId>')
 def publication(indexId):
     r = get(pub_url+'publication/'+indexId, params={'mimetype': 'json'}, verify=verify_cert)
+    if r.status_code == 404:
+        return render_template('404.html')
     pubreturn = r.json()
     pubdata = pubdetails(pubreturn)
     pubdata = add_supersede_pubs(pubdata, supersedes_url, json_ld_id_base_url)
