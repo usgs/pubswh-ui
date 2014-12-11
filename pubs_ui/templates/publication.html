@@ -122,11 +122,13 @@
                     <h2 id="abstract_head">Abstract</h2>
                     {{ pubdata['docAbstract']|safe }}
                 </section>
+                {%- if pubdata["geographicExtents"] -%}
                 <section>
                     <script type=text/javascript>
                         {{ pubdata["geographicExtents"]|tojson|safe }}
                     </script>
                 </section>
+                {%- endif -%}
 
                 <section id="details">
                     <h4 id="" class="dark">Additional Publication Details</h4>
