@@ -4,7 +4,7 @@ from lettuce import *
 import json
 from requests import get
 from pubs_ui import app
-from pubs_ui.utils import pull_feed, pubdetails, getbrowsecontent, create_display_links, jsonify_geojson, add_supersede_pubs
+from pubs_ui.utils import pull_feed, pubdetails, getbrowsecontent, create_display_links, jsonify_geojson, add_supersede_data
 
 
 
@@ -138,7 +138,7 @@ def given_i_have_a_static_python_representation_of_json_data_for_a_publication_k
 def when_i_pass_it_to_add_supersede_pubs(step):
 
     # invoke the function we're testing
-    world.fs03301_pubdata_with_supersede = add_supersede_pubs(world.fs03301_pubdata_python,
+    world.fs03301_pubdata_with_supersede = add_supersede_data(world.fs03301_pubdata_python,
                                                               "http://pubs.er.usgs.gov/service/citation/json/extras",
                                                               'http://pubs.er.usgs.gov/')
 

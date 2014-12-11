@@ -445,7 +445,7 @@ def make_relationship_graph(context_pub_dict, related_pub_dict, related_pub_rela
     return {'@graph': [return_context_pub_dict, return_related_pub_dict]}
 
 
-def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, url_root):
+def add_supersede_data(context_pubdata, supersedes_service_url, url_root):
     """
     Accepts publication data JSON for the desired context publication,
     extracts the context publication's index_id, calls precedes_supersedes_url
@@ -541,22 +541,6 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, url
 
     return return_pubdata
 
-
-def add_supersede_pubs(context_pubdata, supersedes_url, url_root):
-    """
-    Obtains superseding/superseded pubs info for a "context" pub from an 
-    external (legacy) endpoint. Inserts that info into a copy of the
-     "context_pubdata" parameter.
-
-    :param context_pubreturn: the decoded JSON describing the context pub
-    :return: a copy of the "context_pubdata" parameter with all obtained
-        supersede information inserted in the "@context" item.
-    """
-
-
-    return_pubdata = apply_preceding_and_superseding(context_pubdata, supersedes_url, url_root)
-
-    return return_pubdata
 
 def change_to_pubs_test(pubs_url):
     """
