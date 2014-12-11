@@ -9,7 +9,10 @@
     <meta name = "revised" content="{{ pubdata['lastModifiedDate'] }}"/>
     <meta name = "created" content="{{ pubdata['displaytoPublicDate'] }}"/>
     <meta name = "date" content="{{ pubdata['publicationYear'] }}"/>
-
+    {% block page_script %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaflet.css') }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/leaflet-0.7.3/leaflet.js') }}"></script>
+    {% endblock page_script %}
 
 
 {% endblock head %}
@@ -124,9 +127,9 @@
                 </section>
                 {%- if pubdata["geographicExtents"] -%}
                 <section>
-                    <script type=text/javascript>
-                        {{ pubdata["geographicExtents"]|tojson|safe }}
-                    </script>
+                    <h4>Geospatial Extents</h4>
+                    <div id="mymap" style="width:90%;height:450px;"></div>
+
                 </section>
                 {%- endif -%}
 
@@ -139,13 +142,32 @@
                       {% endfor %}
                     </dl>
                 </section>
-                <aside>
-                    <p class="adobeReader"><small>Part or all of this report may be presented in Portable Document Format (PDF). For best results viewing and printing PDF documents, it is recommended that you download the documents to your computer and open them with Adobe Reader. PDF documents opened from your browser may not display or print as intended. Download the latest version of <a href="http://get.adobe.com/reader/">Adobe Reader</a>, free of charge. More information about viewing, downloading, and printing report files can be found <a href="http://pubs.usgs.gov/potential_problems.html">here</a>.</small></p>
-                </aside>
             </article>
         </main>
         {% endblock %}
 
         {% block url %}<a href="{{ url_for('publication', indexId = pubdata['indexId']) }}">http://pubs.er.usgs.gov{{ url_for('publication', indexId = pubdata['indexId']) }}</a>{% endblock %}
         {% block modtime %}{{ pubdata['formattedModifiedDateTime'] }}{% endblock %}
+        {% block page_footer_script %}
+        <script type=text/javascript>
+
+                        // create a map
+                        map = new L.Map('mymap');
+
+                        // create the OpenStreetMap layer
+                        osmTile = "http://tile.openstreetmap.org/{z}/{x}/{y}.png";
+                        osmCopyright = "Map data &copy; 2012 OpenStreetMap contributors";
+                        osmLayer = new L.TileLayer(osmTile, { maxZoom: 18, attribution: osmCopyright } );
+                        map.addLayer(osmLayer);
+
+                        // set the map's starting view
+                        //map.setView( new L.LatLng(35, -88), 7 );
+
+                        // include GeoJSON inside this JavaScript
+                        var pubextent = {{ pubdata["geographicExtents"]|tojson|safe }};
+                        L.geoJson( pubextent ).addTo(map);
+
+                        map.fitBounds(L.geoJson( pubextent ).getBounds());
+                    </script>
+        {% endblock page_footer_script %}
 
