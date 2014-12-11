@@ -103,6 +103,8 @@ def publication(indexId):
     pubreturn = r.json()
     pubdata = pubdetails(pubreturn)
     url_root = request.url_root
+    url_root_str = 'URL root as passed by publication function: {0}'.format(url_root)
+    app.logger.info(url_root_str)
     pubdata = add_supersede_pubs(pubdata, supersedes_url, url_root)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
