@@ -156,7 +156,7 @@
                         map = new L.Map('mymap');
 
                         // create the OpenStreetMap layer
-                        osmTile = "http://tile.openstreetmap.org/{z}/{x}/{y}.png";
+                        osmTile = "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png";
                         osmCopyright = "Map data &copy; 2012 OpenStreetMap contributors";
                         osmLayer = new L.TileLayer(osmTile, { maxZoom: 18, attribution: osmCopyright } );
                         map.addLayer(osmLayer);
