@@ -39,22 +39,27 @@
                 <section>
                     <dl id="contributors">
                       <dt>Authored by:</dt>
+                        <dd>
                       {% for contributor in pubdata['authorsListTyped']  %}
                           {% if contributor['type'] == "person"  %}
-                        <dd itemprop="author" itemtype="http://schema.org/Person">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</dd>
+                        <span itemprop="author" itemtype="http://schema.org/Person">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</span>
                           {% else %}
-                         <dd itemprop="author" itemtype="http://schema.org/Organization">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</dd>
+                         <span itemprop="author" itemtype="http://schema.org/Organization">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</span>
                           {% endif %}
+
                       {%  endfor %}
+                        </dd>
                       {% if pubdata['editorsList'] %}
                       <dt class="clear">Edited by:</dt>
-                      {% for contributor in pubdata['editorsListTyped']  %}
+                      <dd>
+                          {% for contributor in pubdata['editorsListTyped']  %}
                           {% if contributor['type'] == "person"  %}
-                        <dd itemprop="editor" itemtype="http://schema.org/Person">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</dd>
+                        <span itemprop="editor" itemtype="http://schema.org/Person">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</span>
                           {% else %}
-                         <dd itemprop="editor" itemtype="http://schema.org/Organization">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</dd>
+                         <span itemprop="editor" itemtype="http://schema.org/Organization">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</span>
                           {% endif %}
                       {%  endfor %}
+                          </dd>
                       {% endif %}
                     </dl>
                 </section>
@@ -66,29 +71,22 @@
                 
                 <section id="suggested">
 
-                    {% macro linkdisplay(link_type) %}
-                        {% for link in pubdata['displayLinks'][link_type]|sort(attribute='rank') %}
+                    {%- macro linkdisplay(link_type) -%}
+                        {%- for link in pubdata['displayLinks'][link_type]|sort(attribute='rank') -%}
                         <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }}{% else %}{{ link['type']['text'] }}{% endif %}">
-
-
-
-
-                                                                                <strong>
-                                                                                {% if link['description'] %}
-                                                                                    {{ link['description'] }}
-                                                                                {% else %}
-                                                                                    {{ link['type']['text'] }}
-                                                                                {% endif %}
-                                                                                </strong>
-                                                                                {% if link["linkFileType"]  %}
-                                                                                    ({{ link["linkFileType"]["text"] }})
-                                                                                {% endif %}
-                                                                                </a></li>
-                        {% endfor %}
-                    {% endmacro %}
-
-
-                    
+                            <strong>
+                            {%- if link['description'] -%}
+                                {{ link['description'] }}
+                            {%- else -%}
+                                {{ link['type']['text'] }}
+                            {%- endif -%}
+                            </strong>
+                            {%- if link["linkFileType"]  -%}
+                                ({{ link["linkFileType"]["text"] }})
+                            {%- endif -%}
+                            </a></li>
+                        {%- endfor -%}
+                    {%- endmacro -%}
                     <ul class="fileslist">
                         {{ linkdisplay('Index Page') }}
                         {{ linkdisplay('Document') }}
@@ -114,21 +112,21 @@
                         {{ linkdisplay('Spatial Data') }}
                         {{ linkdisplay('Version History') }}
                     </ul>
+
                     <ul class="plates">
-                            {% for link in pubdata['displayLinks']['Plate']|sort(attribute='rank') %}
+                        {%- for link in pubdata['displayLinks']['Plate']|sort(attribute='rank') -%}
                             <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }} else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["text"] }}</strong> ({% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %})</a> </li>
-                        {% endfor %}
+                        {%- endfor -%}
                     </ul>
-
-
                 </section>
-
-                
-
                 <section itemprop="description" id="abstract" >
                     <h2 id="abstract_head">Abstract</h2>
                     {{ pubdata['docAbstract']|safe }}
-                    
+                </section>
+                <section>
+                    <script type=text/javascript>
+                        {{ pubdata["geographicExtents"]|tojson|safe }}
+                    </script>
                 </section>
 
                 <section id="details">
@@ -139,15 +137,10 @@
                           <dd class="{{ loop.cycle('', 'dark') }}">{{ detail.values()[0] }}</dd>
                       {% endfor %}
                     </dl>
-
-
-
                 </section>
-
                 <aside>
                     <p class="adobeReader"><small>Part or all of this report may be presented in Portable Document Format (PDF). For best results viewing and printing PDF documents, it is recommended that you download the documents to your computer and open them with Adobe Reader. PDF documents opened from your browser may not display or print as intended. Download the latest version of <a href="http://get.adobe.com/reader/">Adobe Reader</a>, free of charge. More information about viewing, downloading, and printing report files can be found <a href="http://pubs.usgs.gov/potential_problems.html">here</a>.</small></p>
                 </aside>
-
             </article>
         </main>
         {% endblock %}

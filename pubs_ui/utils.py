@@ -341,6 +341,7 @@ def jsonify_geojson(record):
     if geojson is not None:
         try:
             geojson = json.loads(geojson)
+            geojson['properties'] = {'title':record.get('title')}
             record['geographicExtents'] = geojson
         except Exception as e:
             app.logger.info("Prod ID "+str(record['id'])+" geographicExtents json parse error: "+str(e))
