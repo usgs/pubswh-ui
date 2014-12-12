@@ -406,43 +406,7 @@ def preceding_and_superseding(context_id, supersedes_service_url):
     return {'predecessors': predecessors, 'context_item': context_id, 'successors': successors}
 
 
-def make_relationship_graph(context_pub_dict, related_pub_dict, related_pub_relation):
-    """
-    Creates an "@graph" item for inclusion in the "relationship" element. This
-    function exists to isolate the creation of the @graph element from external
-    code. It will need to be modified if the desired return format changes, or 
-    if the assumed format of the parameters changes.
-    
-    The graph makes safe copies of its dict params.
 
-    :param context_pub_dict: the graph's basic representation of the context publication
-    :param related_pub_dict: the graph's basic representation of the related publication
-    :param related_pub_relation: description of the related publication's relation to the
-        context publication.
-    :returns: a dictionary with one item: key="@graph", value=a list containing 
-        safe copies of the context publication and related publication, both in 
-        @graph member form.
-    """
-    # necessary to make a deep, rather than shallow, copy - we do
-    # not want to make any changes to the parameter.
-    return_context_pub_dict = deepcopy(context_pub_dict)
-    return_related_pub_dict = deepcopy(related_pub_dict)
-
-    related_pub_url = related_pub_dict['@id']
-
-    # relationship type is stashed in context_pub_dict: the "subject", if we can
-    # safely call it that. However, it points to the related item. (NOTE:
-    # this should be revisited. It's a confusing way to represent
-    # a predicate.)
-    if related_pub_relation == 'successor':
-        # context pub is replaced by related pub, so we describe the context pub as
-        return_context_pub_dict['rdaw:replacedByWork'] = related_pub_url
-
-    elif related_pub_relation == 'predecessor':
-        # context pub replaces related pub, so we describe the context pub as
-        return_context_pub_dict['rdaw:replacementOfWork'] = related_pub_url
-
-    return {'@graph': [return_context_pub_dict, return_related_pub_dict]}
 
 
 def add_supersede_data(context_pubdata, supersedes_service_url, url_root):
@@ -452,8 +416,7 @@ def add_supersede_data(context_pubdata, supersedes_service_url, url_root):
     for that index_id. If the current publication supersedes, and/or
     is superseded by, any other publications, inserts summary info about 
     those pubs into the passed context_pubdata. 
-    This function delegates formulation of @graph items to 
-    make_relationship_graph().
+
 
     context_pubdata: the Python decode of the JSON representation of the 
         context publication
@@ -495,7 +458,7 @@ def add_supersede_data(context_pubdata, supersedes_service_url, url_root):
         if not 'relationships' in return_pubdata:
             return_pubdata['relationships'] = []
         if not 'graphs' in return_pubdata['relationships']:
-            return_pubdata['relationships']['graphs'] = []
+            return_pubdata['relationships']['@graph'] = []
 
         return_pubdata['relationships']['@context']['dc'] = 'http://purl.org/dc/elements/1.1/'
         return_pubdata['relationships']['@context']['xsd'] = 'http://www.w3.org/2001/XMLSchema#'
@@ -509,9 +472,10 @@ def add_supersede_data(context_pubdata, supersedes_service_url, url_root):
         this_pub = {
                 '@id': pub_url,
                 '@type': pub_type,
-                'dc:title': return_pubdata['title']
+                'dc:title': return_pubdata['title'],
+                'dc:date': str(return_pubdata.get('publicationYear'))
             }
-
+        return_pubdata['relationships']['@graph'].append(this_pub)
         # add any linked data for superseding another publication
         for item in pre_super['predecessors']:
             related_pub = {
@@ -522,8 +486,16 @@ def add_supersede_data(context_pubdata, supersedes_service_url, url_root):
             if item['date']:
                 related_pub['dc:date'] = item['date']
 
-            return_pubdata['relationships']['graphs'].append(
-                    make_relationship_graph(this_pub, related_pub, 'predecessor'))
+
+            return_pubdata['relationships']['@graph'].append(related_pub)
+
+            relationship = {
+            "@id": urljoin(base_ID_url, item['index_id']),
+            "@type": "rdac:Work",
+            "dc:title": item['title'],
+            "rdaw:replacedByWork": pub_url
+            }
+            return_pubdata['relationships']['@graph'].append(relationship)
 
         # add any linked data for being superseded by another publication
         for item in pre_super['successors']:
@@ -535,9 +507,16 @@ def add_supersede_data(context_pubdata, supersedes_service_url, url_root):
                 }
             if item['date']:
                 related_pub['dc:date'] = item['date']
+            return_pubdata['relationships']['@graph'].append(related_pub)
 
-            return_pubdata['relationships']['graphs'].append(
-                    make_relationship_graph(this_pub, related_pub, 'successor'))
+            relationship = {
+            "@id": urljoin(base_ID_url, item['index_id']),
+            "@type": "rdac:Work",
+            "dc:title": item['title'],
+            "rdaw:replacedByWork": pub_url
+            }
+            return_pubdata['relationships']['@graph'].append(relationship)
+
 
     return return_pubdata
 
