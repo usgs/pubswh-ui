@@ -227,10 +227,9 @@ def getbrowsecontent(browseurl, browsereplace):
     soup = BeautifulSoup(content.text)
     for a in soup.findAll('a'):
         a['href'] = a['href'].replace("browse", browsereplace)
-    browse_content = {'links': soup.find('div', {"id": "pubs-browse-links"}).contents}
-    browse_content['breadcrumbs'] = soup.find('div', {"id": "pubs-browse-breadcrumbs"}).contents
-    browse_content['header'] = soup.find('div', {"id": "pubs-browse-header"}).contents
-
+    browse_content = {'links': soup.find('div', {"id": "pubs-browse-links"}).contents,
+                      'breadcrumbs': soup.find('div', {"id": "pubs-browse-breadcrumbs"}).contents,
+                      'header': soup.find('div', {"id": "pubs-browse-header"}).contents}
     return browse_content
 
 
