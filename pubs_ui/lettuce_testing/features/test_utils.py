@@ -149,7 +149,7 @@ def then_i_receive_a_copy_that_is_identical_except_for_the_addition_of_the_link_
     pubsdata = world.fs03301_pubdata_with_supersede
 
     # list of relationship graphs inserted for supersede data
-    graphs = pubsdata['relationships']['graphs']
+    graph = pubsdata['relationships']['@graph']
 
     pubs_that_supersede_context = []
     pubs_superseded_by_context = []

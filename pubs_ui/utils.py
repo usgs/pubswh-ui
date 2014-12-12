@@ -457,7 +457,7 @@ def add_supersede_data(context_pubdata, supersedes_service_url, url_root):
 
         if not 'relationships' in return_pubdata:
             return_pubdata['relationships'] = []
-        if not 'graphs' in return_pubdata['relationships']:
+        if '@graph' not in return_pubdata['relationships']:
             return_pubdata['relationships']['@graph'] = []
 
         return_pubdata['relationships']['@context']['dc'] = 'http://purl.org/dc/elements/1.1/'
@@ -481,42 +481,22 @@ def add_supersede_data(context_pubdata, supersedes_service_url, url_root):
             related_pub = {
                 '@id':  urljoin(base_ID_url, item['index_id']),
                 '@type': pub_type,
-                'dc:title': item['title']
-                }
+                'dc:title': item['title'],
+                "rdaw:replacedByWork": pub_url}
             if item['date']:
                 related_pub['dc:date'] = item['date']
-
-
             return_pubdata['relationships']['@graph'].append(related_pub)
-
-            relationship = {
-            "@id": urljoin(base_ID_url, item['index_id']),
-            "@type": "rdac:Work",
-            "dc:title": item['title'],
-            "rdaw:replacedByWork": pub_url
-            }
-            return_pubdata['relationships']['@graph'].append(relationship)
-
         # add any linked data for being superseded by another publication
         for item in pre_super['successors']:
             related_pub = {
                 '@id': urljoin(base_ID_url, item['index_id']),
-
                 '@type': pub_type,
-                'dc:title': item['title']
+                'dc:title': item['title'],
+                "rdaw:replacementOfWork": pub_url
                 }
             if item['date']:
                 related_pub['dc:date'] = item['date']
             return_pubdata['relationships']['@graph'].append(related_pub)
-
-            relationship = {
-            "@id": urljoin(base_ID_url, item['index_id']),
-            "@type": "rdac:Work",
-            "dc:title": item['title'],
-            "rdaw:replacedByWork": pub_url
-            }
-            return_pubdata['relationships']['@graph'].append(relationship)
-
 
     return return_pubdata
 
