@@ -269,6 +269,12 @@ class SearchPublications(object):
 
 
 def contributor_lists(record):
+    """
+
+    :param record: The full pubs record
+    :return: The pub record with two kinds of additional lists- one with
+    concatenated names and another with concatenated names and types
+    """
     contributor_types = ['authors', 'editors']
     for contributor_type in contributor_types:
         if record.get(contributor_type) is not None:
