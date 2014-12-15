@@ -172,6 +172,8 @@ def manipulate_plate_links(display_links):
                             text = file_name[0].split("_")
 
                 link["text"] = text
+                link['text'][1] = str(link['text'][1])
+                link['text'] = " ".join(link['text']).title()
             if link.get('linkFileType') is None:
                 link['linkFileType'] = {'text': file_name[1]}
         display_links["Plate"] = sorted(display_links["Plate"], key=itemgetter('text'))
@@ -179,8 +181,7 @@ def manipulate_plate_links(display_links):
         for link in display_links["Plate"]:
             link['rank'] = rankcounter
             rankcounter += 1
-            link['text'][1] = str(link['text'][1])
-            link['text'] = " ".join(link['text']).title()
+
     return display_links
 
 
