@@ -221,16 +221,13 @@ def getbrowsecontent(browseurl, browsereplace):
     :param browseurl: url of legacy browse interface
     :return: html content of links, breadcrumb, and title
     """
-    app.logger.info('The get_browse_content function is being called')
     content = requests.get(browseurl, verify=verify_cert)
-    app.logger.info(str(content.status_code)+ "  " +str(content.url))
     soup = BeautifulSoup(content.text)
     for a in soup.findAll('a'):
         a['href'] = a['href'].replace("browse", browsereplace)
-    browse_content = {'links':soup.find('div', {"id": "pubs-browse-links"}).contents}
-    browse_content['breadcrumbs'] = soup.find('div', {"id": "pubs-browse-breadcrumbs"}).contents
-    browse_content['header'] = soup.find('div', {"id": "pubs-browse-header"}).contents
-
+    browse_content = {'links': soup.find('div', {"id": "pubs-browse-links"}).contents,
+                      'breadcrumbs': soup.find('div', {"id": "pubs-browse-breadcrumbs"}).contents,
+                      'header': soup.find('div', {"id": "pubs-browse-header"}).contents}
     return browse_content
 
 
@@ -250,8 +247,7 @@ class SearchPublications(object):
     def get_pubs_search_results(self, params=None):
         """
         Searches Pubs API for a specified query parameter
-        
-        :param str search_url: URL without any search parameters appended
+
         :param dict params: dictionary of form {'key1': 'value1', 'key2': 'value2}
         :return: query results (or None) and response status code.
         :rtype: tuple
@@ -262,18 +258,21 @@ class SearchPublications(object):
             for record in search_result_json['records']:
                 if record.get("authors") is not None:
                     contributor_lists(record)
-            error_response = None
         except ValueError:
             search_result_json = None
-            error_response = search_result_obj.text
         except TypeError:
             search_result_json = None
-            error_response = search_result_obj.text
         resp_status_code = search_result_obj.status_code
         return search_result_json, resp_status_code
 
 
 def contributor_lists(record):
+    """
+
+    :param record: The full pubs record
+    :return: The pub record with two kinds of additional lists- one with
+    concatenated names and another with concatenated names and types
+    """
     contributor_types = ['authors', 'editors']
     for contributor_type in contributor_types:
         if record.get(contributor_type) is not None:
@@ -326,10 +325,11 @@ def concatenate_contributor_names(contributors):
                 contributor_name_list.append(contributor['suffix'])
             contributor_dict = {"type": 'person', "text": " ".join(contributor_name_list)}
         #corporate authors- the other side of the boolean
-        elif contributor['corporation'] is True:
+        else:
             contributor_dict = {"type": 'corporation', "text": contributor.get('organization')}
         contributor_list.append(contributor_dict)
     return contributor_list
+
 
 def jsonify_geojson(record):
     """
@@ -341,12 +341,13 @@ def jsonify_geojson(record):
     if geojson is not None:
         try:
             geojson = json.loads(geojson)
-            geojson['properties'] = {'title':record.get('title')}
+            geojson['properties'] = {'title': record.get('title')}
             record['geographicExtents'] = geojson
         except Exception as e:
             app.logger.info("Prod ID "+str(record['id'])+" geographicExtents json parse error: "+str(e))
             del record['geographicExtents']
     return record
+
 
 def preceding_and_superseding(context_id, supersedes_service_url):
     """
@@ -361,7 +362,7 @@ def preceding_and_superseding(context_id, supersedes_service_url):
     This function will therefore need to be changed if the supersedes service 
     definition changes.
 
-    :param context_id: prod_id of context publication
+    :param context_id: indexId of context publication
     :param supersedes_service_url: url for supersede information service
     :return: dict containing three items:
         'predecessors':related items that the context list-valued ub supersedes
@@ -369,9 +370,9 @@ def preceding_and_superseding(context_id, supersedes_service_url):
             confirmation only; identical to the 'context_id' param.
         'successors': related items that supersede the context pub
     """
-    response = requests.get(supersedes_service_url,params={'prod_id': context_id},verify=verify_cert)
+    response = requests.get(supersedes_service_url, params={'prod_id': context_id}, verify=verify_cert)
     response_content = response.json()
-    related= response_content.get('modsCollection').get('mods')[0].get('relatedItem')
+    related = response_content.get('modsCollection').get('mods')[0].get('relatedItem')
 
     # REMARKS ABOUT SERVICE RETURNED VALUE ASSUMPTIONS
     #
@@ -395,8 +396,8 @@ def preceding_and_superseding(context_id, supersedes_service_url):
     successors = []
     if related is not None:
         for item in related:
-            item_summary_info = {'index_id': item['identifier']['#text'],
-                    'title': item['titleInfo']['title'], 'date': item['originInfo']['dateIssued']}
+            item_summary_info = {'index_id': item['identifier']['#text'], 'title': item['titleInfo']['title'],
+                                 'date': item['originInfo']['dateIssued']}
 
             if item['@type'] == 'preceding':
                 predecessors.append(item_summary_info)
@@ -406,54 +407,14 @@ def preceding_and_superseding(context_id, supersedes_service_url):
     return {'predecessors': predecessors, 'context_item': context_id, 'successors': successors}
 
 
-def make_relationship_graph(context_pub_dict, related_pub_dict, related_pub_relation):
-    """
-    Creates an "@graph" item for inclusion in the "relationship" element. This
-    function exists to isolate the creation of the @graph element from external
-    code. It will need to be modified if the desired return format changes, or 
-    if the assumed format of the parameters changes.
-    
-    The graph makes safe copies of its dict params.
-
-    :param context_pub_dict: the graph's basic representation of the context publication
-    :param related_pub_dict: the graph's basic representation of the related publication
-    :param related_pub_relation: description of the related publication's relation to the
-        context publication.
-    :returns: a dictionary with one item: key="@graph", value=a list containing 
-        safe copies of the context publication and related publication, both in 
-        @graph member form.
-    """
-    # necessary to make a deep, rather than shallow, copy - we do
-    # not want to make any changes to the parameter.
-    return_context_pub_dict = deepcopy(context_pub_dict)
-    return_related_pub_dict = deepcopy(related_pub_dict)
-
-    related_pub_url = related_pub_dict['@id']
-
-    # relationship type is stashed in context_pub_dict: the "subject", if we can
-    # safely call it that. However, it points to the related item. (NOTE:
-    # this should be revisited. It's a confusing way to represent
-    # a predicate.)
-    if related_pub_relation == 'successor':
-        # context pub is replaced by related pub, so we describe the context pub as
-        return_context_pub_dict['rdaw:replacedByWork'] = related_pub_url
-
-    elif related_pub_relation == 'predecessor':
-        # context pub replaces related pub, so we describe the context pub as
-        return_context_pub_dict['rdaw:replacementOfWork'] = related_pub_url
-
-    return {'@graph': [return_context_pub_dict, return_related_pub_dict]}
-
-
-def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, url_root):
+def add_supersede_data(context_pubdata, supersedes_service_url, url_root):
     """
     Accepts publication data JSON for the desired context publication,
     extracts the context publication's index_id, calls precedes_supersedes_url
     for that index_id. If the current publication supersedes, and/or
     is superseded by, any other publications, inserts summary info about 
     those pubs into the passed context_pubdata. 
-    This function delegates formulation of @graph items to 
-    make_relationship_graph().
+
 
     context_pubdata: the Python decode of the JSON representation of the 
         context publication
@@ -463,18 +424,17 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, url
         a known prod_id
     """
     
-
-    base_ID_url = urljoin(url_root,'publication/')
+    base_id_url = urljoin(url_root, 'publication/')
     return_pubdata = deepcopy(context_pubdata)
     index_id = context_pubdata['indexId']
-    pub_url = urljoin(base_ID_url, index_id)
+    pub_url = urljoin(base_id_url, index_id)
 
     # this LITERAL is probably OK for this particular use. However, it
     # needs to be exported to a configuration.
     pub_type = 'rdac:Work'
     
     # obtain predecessor and successor related items
-    pre_super =  preceding_and_superseding(index_id, supersedes_service_url)
+    pre_super = preceding_and_superseding(index_id, supersedes_service_url)
 
     if pre_super['predecessors'] or pre_super['successors']:
 
@@ -483,88 +443,59 @@ def apply_preceding_and_superseding(context_pubdata, supersedes_service_url, url
             return_pubdata['relationships'] = {}
         if '@context' not in return_pubdata['relationships']:
             return_pubdata['relationships']['@context'] = {}
-
-        # JSON - Python conversion: the JSON appears to have 
-        # multiple named elements with the samed name ('@graph'). 
-        # should use a list of dictionaries,
-        # rather than a dictionary, to represent these named items
-        # robustly in Python. This may turn out to be an issue,
-        # since we need to name this list rather than letting it remain
-        # anonymous.
-
-        if not 'relationships' in return_pubdata:
-            return_pubdata['relationships'] = []
-        if not 'graphs' in return_pubdata['relationships']:
-            return_pubdata['relationships']['graphs'] = []
-
+        if '@graph' not in return_pubdata['relationships']:
+            return_pubdata['relationships']['@graph'] = []
+        #build @context object
+        #namespaces
         return_pubdata['relationships']['@context']['dc'] = 'http://purl.org/dc/elements/1.1/'
         return_pubdata['relationships']['@context']['xsd'] = 'http://www.w3.org/2001/XMLSchema#'
         return_pubdata['relationships']['@context']['rdac'] = 'http://rdaregistry.info/Elements/c/'
         return_pubdata['relationships']['@context']['rdaw'] = 'http://rdaregistry.info/Elements/w/'
-
+        #relationships
         return_pubdata['relationships']['@context']['rdaw:replacedByWork'] = {'@type': '@id'}
         return_pubdata['relationships']['@context']['rdaw:replacementOfWork'] = {'@type': '@id'}
 
-        # make parameter for context publication
-        this_pub = {
-                '@id': pub_url,
-                '@type': pub_type,
-                'dc:title': return_pubdata['title']
-            }
+        # build @graph object
+        # add base/context record
+        return_pubdata['relationships']['@graph'].append({
+            '@id': pub_url,
+            '@type': pub_type,
+            'dc:title': return_pubdata['title'],
+            'dc:date': str(return_pubdata.get('publicationYear'))
+        }
+        )
 
         # add any linked data for superseding another publication
         for item in pre_super['predecessors']:
             related_pub = {
-                '@id':  urljoin(base_ID_url, item['index_id']),
+                '@id':  urljoin(base_id_url, item['index_id']),
                 '@type': pub_type,
-                'dc:title': item['title']
-                }
+                'dc:title': item['title'],
+                "rdaw:replacedByWork": pub_url}
             if item['date']:
                 related_pub['dc:date'] = item['date']
-
-            return_pubdata['relationships']['graphs'].append(
-                    make_relationship_graph(this_pub, related_pub, 'predecessor'))
+            return_pubdata['relationships']['@graph'].append(related_pub)
 
         # add any linked data for being superseded by another publication
         for item in pre_super['successors']:
             related_pub = {
-                '@id': urljoin(base_ID_url, item['index_id']),
-
+                '@id': urljoin(base_id_url, item['index_id']),
                 '@type': pub_type,
-                'dc:title': item['title']
-                }
+                'dc:title': item['title'],
+                "rdaw:replacementOfWork": pub_url
+            }
             if item['date']:
                 related_pub['dc:date'] = item['date']
-
-            return_pubdata['relationships']['graphs'].append(
-                    make_relationship_graph(this_pub, related_pub, 'successor'))
+            return_pubdata['relationships']['@graph'].append(related_pub)
 
     return return_pubdata
 
-
-def add_supersede_pubs(context_pubdata, supersedes_url, url_root):
-    """
-    Obtains superseding/superseded pubs info for a "context" pub from an 
-    external (legacy) endpoint. Inserts that info into a copy of the
-     "context_pubdata" parameter.
-
-    :param context_pubreturn: the decoded JSON describing the context pub
-    :return: a copy of the "context_pubdata" parameter with all obtained
-        supersede information inserted in the "@context" item.
-    """
-
-
-    return_pubdata = apply_preceding_and_superseding(context_pubdata, supersedes_url, url_root)
-
-    return return_pubdata
 
 def change_to_pubs_test(pubs_url):
     """
     flips pubs urls to pubs-test urls to work around annoying apache config on test tier
-    :param url: a pubs.er.usgs.gov url
+    :param pubs_url: a pubs.er.usgs.gov url
     :return: a pubs-test.er.usgs.gov url
     """
     pubs_test_url = pubs_url.replace('pubs.er', 'pubs-test.er')
-
     return pubs_test_url
-

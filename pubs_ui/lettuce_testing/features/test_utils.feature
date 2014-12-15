@@ -49,8 +49,32 @@ Feature: Test all pub_ui utilities
         When I try to make a record with parseable json and catch an error
         Then I see the record has geographicExtents dropped
 
-	Scenario: supersedes and precedes functions behave correctly
-		Given I have a static Python representation of JSON data for a publication known to have related superseding or preceding publications
-		When I pass it to add_supersede_pubs
-		Then I receive a copy that is identical except for the addition of the link information
+	Scenario: preceding_and_superseding functions correctly
+        Given I have a mockup pubs legacy url that has preceding and superseding publications
+        When I make a dict object with preceding and superseding publications
+        Then I see the preceding and superseding records have been listed correctly
+
+    Scenario: supersedes and precedes functions behave correctly
+		Given I have a mocked base publication record, a base url, and a mocked supersedes endpoint
+        When I pass those variables to add_supersede_data
+		Then The relationships portion of the pub record should contain what I expect
+
+	Scenario: make_contributor_list functions correctly
+		Given we have imitated the authors data we would see from pubs
+		When I make a list with only authors
+		Then I see that the list was made correctly
+		When I make a list with only organizations
+		Then I see that the list was made correctly
+		When I make a list with both authors and organizations
+		Then I see that the list was made correctly
+
+	Scenario: SearchPublications functions correctly with data
+		Given we have created a fake url and mocked pubs responses
+		When I search through the publications
+		Then I am given the appropriate responses
+
+	Scenario: SearchPublications functions correctly with down service
+		Given we have created a fake url and mocked a down service
+		When I search through the failed service
+		Then I am given the appropriate responses
 

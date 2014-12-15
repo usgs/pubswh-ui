@@ -7,7 +7,7 @@ from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
 from arguments import search_args
 from utils import (pubdetails, pull_feed, create_display_links, getbrowsecontent,
-                   SearchPublications, contributor_lists, jsonify_geojson, add_supersede_pubs, change_to_pubs_test)
+                   SearchPublications, contributor_lists, jsonify_geojson, add_supersede_data, change_to_pubs_test)
 from forms import ContactForm, SearchForm, NumSeries
 from canned_text import EMAIL_RESPONSE
 from pubs_ui import app, mail
@@ -42,7 +42,7 @@ def robots():
 @app.route('/')
 def index():
     sp = SearchPublications(search_url)
-    recent_publications_resp = sp.get_pubs_search_results(params={'pub_x_days': 30, 'page_size': 6}) #bring back recent publications
+    recent_publications_resp = sp.get_pubs_search_results(params={'pub_x_days': 2, 'page_size': 6}) #bring back recent publications
     recent_pubs_content = recent_publications_resp[0]
     try:
         pubs_records = recent_pubs_content['records']
@@ -101,9 +101,11 @@ def contact_confirmation():
 @app.route('/publication/<indexId>')
 def publication(indexId):
     r = get(pub_url+'publication/'+indexId, params={'mimetype': 'json'}, verify=verify_cert)
+    if r.status_code == 404:
+        return render_template('404.html')
     pubreturn = r.json()
     pubdata = pubdetails(pubreturn)
-    pubdata = add_supersede_pubs(pubdata, supersedes_url, json_ld_id_base_url)
+    pubdata = add_supersede_data(pubdata, supersedes_url, json_ld_id_base_url)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
