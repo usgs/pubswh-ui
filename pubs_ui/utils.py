@@ -372,8 +372,15 @@ def preceding_and_superseding(context_id, supersedes_service_url):
         'successors': related items that supersede the context pub
     """
     response = requests.get(supersedes_service_url, params={'prod_id': context_id}, verify=verify_cert)
-    response_content = response.json()
-    related = response_content.get('modsCollection').get('mods')[0].get('relatedItem')
+    if response.status_code == 200:
+        response_content = response.json()
+        try:
+            related = response_content.get('modsCollection').get('mods')[0].get('relatedItem')
+        except TypeError:
+            related = None
+    else:
+        related = None
+
 
     # REMARKS ABOUT SERVICE RETURNED VALUE ASSUMPTIONS
     #

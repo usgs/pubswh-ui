@@ -31,7 +31,7 @@
         <section id="search-results">
 				{% for result in search_result_records %}
 					<article>
-                        <h5><a class="search-title" href="{{ url_for('publication', indexId = result['indexId']) }}">{{ result['title']|safe }}</a></h5>
+                        <h5><a href="{{ url_for('publication', indexId = result['indexId']) }}">{{ result['title']|safe }}</a></h5>
                         <p class="pubinfo">{{ result|display_pub_info }}</p>
                         {% if result['authorsList']|length > 0 %}<p class="searchContributors">{{ result['authorsList']|join(', ') }}</p>{% endif %}
                         {% if result['editorsList']|length > 0 %}<p class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</p>{% endif %}
