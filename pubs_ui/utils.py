@@ -257,8 +257,7 @@ class SearchPublications(object):
         try:
             search_result_json = search_result_obj.json()
             for record in search_result_json['records']:
-                if record.get("authors") is not None:
-                    contributor_lists(record)
+                contributor_lists(record)
         except ValueError:
             search_result_json = None
         except TypeError:
