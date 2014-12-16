@@ -274,11 +274,13 @@ def contributor_lists(record):
     :return: The pub record with two kinds of additional lists- one with
     concatenated names and another with concatenated names and types
     """
-    contributor_types = ['authors', 'editors']
+    contributor_types = ['authors', 'editors', 'compilers']
     for contributor_type in contributor_types:
-        if record.get(contributor_type) is not None:
-            record[contributor_type+"List"] = make_contributor_list(record[contributor_type])
-            record[contributor_type+"ListTyped"] = concatenate_contributor_names(record[contributor_type])
+        if record.get('contributors') is not None:
+            if record['contributors'].get(contributor_type) is not None:
+                record[contributor_type+"List"] = make_contributor_list(record['contributors'][contributor_type])
+                record[contributor_type+"ListTyped"] = \
+                    concatenate_contributor_names(record['contributors'][contributor_type])
     return record
 
 
@@ -380,8 +382,6 @@ def preceding_and_superseding(context_id, supersedes_service_url):
             related = None
     else:
         related = None
-
-
     # REMARKS ABOUT SERVICE RETURNED VALUE ASSUMPTIONS
     #
     # The service returns JSON, which is converted into Python structures.
@@ -399,7 +399,6 @@ def preceding_and_superseding(context_id, supersedes_service_url):
     # conventions about framing the predicate from the viewpoint of the subject.
     # 
     # Just think of the @type as saying "This linked pub is ___ the context pub."
-
     predecessors = []
     successors = []
     if related is not None:
