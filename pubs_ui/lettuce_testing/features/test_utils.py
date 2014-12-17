@@ -69,7 +69,63 @@ def mock_pubs_links(step):
 @step(r'I create_display_links using the dummy list')
 def display_links(step):
     world.output = create_display_links(world.body)
-    world.expected_output = {'displayLinks': {'Project Site': [], 'Application Site': [], 'Raw Data': [], 'Document': [{u'url': u'http://pubs.usgs.gov/ar/01/report.pdf', u'linkFileType': {u'text': u'pdf', u'id': 1}, u'type': {u'text': u'Document', u'id': 11}, u'id': 5166317, u'rank': 300}], 'Thumbnail': [{u'url': u'http://pubs.usgs.gov/ar/01/report-thumb.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5277443, u'rank': 0}], 'Metadata': [], 'Plate': [{u'url': u'http://pubs.usgs.gov/ar/01/plate-1.pdf', 'text': u'Plate 1', u'rank': 1, u'type': {u'text': u'Plate', u'id': 17}, u'id': 5344307, u'linkFileType': {u'text': u'pdf', u'id': 1}, u'size': u'9056'}], 'Spatial Data': [], 'Companion Files': [], 'Illustration': [], 'Appendix': [], 'Index Page': [], 'Chapter': [], 'Read Me': [], 'Version History': [], 'Database': [], 'Cover': [], 'Authors Website': [], 'Errata': [], 'Additional Report Piece': [], 'Related Work': [], 'Abstract': [], 'Referenced Work': [], 'Digital Object Identifier': [], 'Image': []}, u'links': [{u'url': u'http://pubs.usgs.gov/ar/01/report-thumb.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5277443, u'rank': 0}, {u'url': u'http://pubs.usgs.gov/ar/01/report.pdf', u'linkFileType': {u'text': u'pdf', u'id': 1}, u'type': {u'text': u'Document', u'id': 11}, u'id': 5166317, u'rank': 300}, {u'url': u'http://pubs.usgs.gov/ar/01/plate-1.pdf', 'text': u'Plate 1', u'rank': 1, u'type': {u'text': u'Plate', u'id': 17}, u'id': 5344307, u'linkFileType': {u'text': u'pdf', u'id': 1}, u'size': u'9056'}]}
+    world.expected_output ={'displayLinks': {'Abstract': [],
+                  'Additional Report Piece': [],
+                  'Appendix': [],
+                  'Application Site': [],
+                  'Authors Website': [],
+                  'Chapter': [],
+                  'Companion Files': [],
+                  'Cover': [],
+                  'Database': [],
+                  'Digital Object Identifier': [],
+                  'Document': [{u'id': 5166317,
+                                u'linkFileType': {u'id': 1,
+                                                  u'text': u'pdf'},
+                                u'rank': 300,
+                                u'type': {u'id': 11, u'text': u'Document'},
+                                u'url': u'http://pubs.usgs.gov/ar/01/report.pdf'}],
+                  'Errata': [],
+                  'Illustration': [],
+                  'Image': [],
+                  'Index Page': [],
+                  'Metadata': [],
+                  'Plate': [{u'id': 5344307,
+                             u'linkFileType': {u'id': 1, u'text': u'pdf'},
+                             u'rank': 1,
+                             u'size': u'9056',
+                             'text': u'Plate 1',
+                             u'type': {u'id': 17, u'text': u'Plate'},
+                             u'url': u'http://pubs.usgs.gov/ar/01/plate-1.pdf'}],
+                  'Project Site': [],
+                  'Raw Data': [],
+                  'Read Me': [],
+                  'Referenced Work': [],
+                  'Related Work': [],
+                  'Spatial Data': [],
+                  'Thumbnail': [{u'id': 5277443,
+                                 u'rank': 0,
+                                 u'type': {u'id': 24,
+                                           u'text': u'Thumbnail'},
+                                 u'url': u'http://pubs.usgs.gov/ar/01/report-thumb.jpg'}],
+                  'Version History': []},
+                     u'links': [{u'id': 5277443,
+                                 u'rank': 0,
+                                 u'type': {u'id': 24, u'text': u'Thumbnail'},
+                                 u'url': u'http://pubs.usgs.gov/ar/01/report-thumb.jpg'},
+                                {u'id': 5166317,
+                                 u'linkFileType': {u'id': 1, u'text': u'pdf'},
+                                 u'rank': 300,
+                                 u'type': {u'id': 11, u'text': u'Document'},
+                                 u'url': u'http://pubs.usgs.gov/ar/01/report.pdf'},
+                                {u'id': 5344307,
+                                 u'linkFileType': {u'id': 1, u'text': u'pdf'},
+                                 u'rank': 400,
+                                 u'size': u'9056',
+                                 u'type': {u'id': 17, u'text': u'Plate'},
+                                 u'url': u'http://pubs.usgs.gov/ar/01/plate-1.pdf'}]}
+
+
 @step(r'I am given a list of links for use in the jinja template')
 def test_links_ouput(step):
     assert_equal(world.output, world.expected_output)
@@ -103,6 +159,108 @@ def test_content(step):
 def make_url(step):
     world.url = "http://pubs.er.usgs.gov/browse"
     world.expected_output = '{\'breadcrumbs\': [u\'\\n\', <a href="browse">Browse USGS Pubs Warehouse</a>, u\'\\n\'], \'links\': [u\'\\n\', <ul>\n<li><a alt="Official USGS Publications" href="browse/usgs-publications">Official USGS Publications</a></li>\n<li><a alt="Scientific Journal Articles by USGS Authors" href="browse/journals/all/">Scientific Journal Articles by USGS Authors</a></li>\n<li><a alt="Other US Government Publications" href="browse/other-pubs/all/">Other US Government Publications</a></li>\n<li><a alt="State, Local, and other government publications" href="browse/state-local/all/">State, Local, and other government publications</a></li>\n<li><a alt="Books, Reports, Conference Proceedings and other publications" href="browse/books-reports-conference/all/">Books, Reports, Conference Proceedings and other publications</a></li>\n</ul>, u\'\\n\'], \'header\': [u\'Please select a category of interest\']}'
+
+"""
+manipulate links scenarios
+"""
+@step(r'I have a index page links that point to USGS and NGMDB')
+def imitation_links_data(step):
+    world.original_index_display_links = {'links': [{'id': 5396477,
+            'type': {'id': 23, 'text': 'Spatial Data'},
+            'url': 'http://pubs.usgs.gov/sim/3310/GIS_files'},
+           {'id': 5396475,
+            'type': {'id': 17, 'text': 'Plate'},
+            'url': 'http://pubs.usgs.gov/sim/3310/pdf/sim3310_sheet1.pdf'},
+           {'id': 5396476,
+            'type': {'id': 17, 'text': 'Plate'},
+            'url': 'http://pubs.usgs.gov/sim/3310/pdf/sim3310_sheet2.pdf'},
+           {'id': 5396470,
+            'type': {'id': 15, 'text': 'Index Page'},
+            'url': 'http://pubs.usgs.gov/sim/3310/'},
+           {'id': 5396470,
+            'type': {'id': 15, 'text': 'Index Page'},
+            'url': 'http://ngmdb.usgs.gov/sim/3310/'},
+           {'id': 5396478,
+            'type': {'id': 24, 'text': 'Thumbnail'},
+            'url': 'http://pubs.er.usgs.gov/thumbnails/sim3310.jpg'}]}
+
+@step(r'I manipulate the links with create display links')
+def create_display_links_with_index_pages(step):
+    world.displaylinks_output =create_display_links(world.original_index_display_links)
+    world.expected_displaylinks_output = {'displayLinks': {'Abstract': [],
+                  'Additional Report Piece': [],
+                  'Appendix': [],
+                  'Application Site': [],
+                  'Authors Website': [],
+                  'Chapter': [],
+                  'Companion Files': [],
+                  'Cover': [],
+                  'Database': [],
+                  'Digital Object Identifier': [],
+                  'Document': [],
+                  'Errata': [],
+                  'Illustration': [],
+                  'Image': [],
+                  'Index Page': [{'id': 5396470,
+                                  'rank': 1,
+                                  'text': 'USGS Index Page',
+                                  'type': {'id': 15, 'text': 'Index Page'},
+                                  'url': 'http://pubs.usgs.gov/sim/3310/'},
+                                 {'id': 5396470,
+                                  'rank': 2,
+                                  'text': 'National Geologic Map Database Index Page',
+                                  'type': {'id': 15, 'text': 'Index Page'},
+                                  'url': 'http://ngmdb.usgs.gov/sim/3310/'}],
+                  'Metadata': [],
+                  'Plate': [{'id': 5396475,
+                             'linkFileType': {'text': 'pdf'},
+                             'rank': 1,
+                             'text': 'Sheet 1',
+                             'type': {'id': 17, 'text': 'Plate'},
+                             'url': 'http://pubs.usgs.gov/sim/3310/pdf/sim3310_sheet1.pdf'},
+                            {'id': 5396476,
+                             'linkFileType': {'text': 'pdf'},
+                             'rank': 2,
+                             'text': 'Sheet 2',
+                             'type': {'id': 17, 'text': 'Plate'},
+                             'url': 'http://pubs.usgs.gov/sim/3310/pdf/sim3310_sheet2.pdf'}],
+                  'Project Site': [],
+                  'Raw Data': [],
+                  'Read Me': [],
+                  'Referenced Work': [],
+                  'Related Work': [],
+                  'Spatial Data': [{'id': 5396477,
+                                    'rank': 1,
+                                    'type': {'id': 23,
+                                             'text': 'Spatial Data'},
+                                    'url': 'http://pubs.usgs.gov/sim/3310/GIS_files'}],
+                  'Thumbnail': [{'id': 5396478,
+                                 'rank': 1,
+                                 'type': {'id': 24, 'text': 'Thumbnail'},
+                                 'url': 'http://pubs.er.usgs.gov/thumbnails/sim3310.jpg'}],
+                  'Version History': []},
+ 'links': [{'id': 5396477,
+            'type': {'id': 23, 'text': 'Spatial Data'},
+            'url': 'http://pubs.usgs.gov/sim/3310/GIS_files'},
+           {'id': 5396475,
+            'type': {'id': 17, 'text': 'Plate'},
+            'url': 'http://pubs.usgs.gov/sim/3310/pdf/sim3310_sheet1.pdf'},
+           {'id': 5396476,
+            'type': {'id': 17, 'text': 'Plate'},
+            'url': 'http://pubs.usgs.gov/sim/3310/pdf/sim3310_sheet2.pdf'},
+           {'id': 5396470,
+            'type': {'id': 15, 'text': 'Index Page'},
+            'url': 'http://pubs.usgs.gov/sim/3310/'},
+           {'id': 5396470,
+            'type': {'id': 15, 'text': 'Index Page'},
+            'url': 'http://ngmdb.usgs.gov/sim/3310/'},
+           {'id': 5396478,
+            'type': {'id': 24, 'text': 'Thumbnail'},
+            'url': 'http://pubs.er.usgs.gov/thumbnails/sim3310.jpg'}]}
+
+@step(r'I get the rejiggered display links that I expect')
+def test_displaylins_output(step):
+    assert_equal(world.expected_displaylinks_output, world.displaylinks_output)
 
 """
 jsonify_geojson scenarios

@@ -62,7 +62,7 @@
                 <li onclick="toggle_visibility('mobile_list');"><img id="bars" src="{{ url_for('static', filename='img/bars.png') }}" alt="mobile menu bars"/>
                     <ul id="mobile_list">
 
-                        <li><a href="{{ url_for( 'index') }}">Home</a></li>
+                        <li><a href="{{ url_for( 'index') }}">USGS Publications Warehouse</a></li>
                         <li><a href="{{ url_for( 'contact') }}">Contact</a></li>
                         <li><a href="{{ url_for('new_pubs') }}">Explore recent publication by USGS Authors</a></li>
                 		<li><a href="{{ url_for('browse') }}">Browse all of Pubs Warehouse by Publication type and year</a></li>
@@ -75,8 +75,7 @@
             </ul>
             <img src="{{ url_for('static', filename='img/usgs_logo_mobile.png') }}" alt="usgs mobile logo"/>
             <ul id="desktop_ul">
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a id='nav_title' href="{{ url_for('index') }}">USGS Publications Warehouse</a></li>
                 <li><a href="#">Explore</a>
                 	<ul id="longer">
                 		<li><a href="{{ url_for('new_pubs') }}">Explore recent publication by USGS Authors</a></li>
@@ -91,6 +90,7 @@
                 		<li><a href="{{ url_for('usgs_series') }}">Descriptions of US Geological Survey Report Series</a></li>
                 	</ul>
                 </li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
             </ul>
             <section id="center">
                 <label for="mysearch2">Search: </label>

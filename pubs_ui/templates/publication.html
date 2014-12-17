@@ -40,7 +40,7 @@
 
                 <section>
                     <dl id="contributors">
-                      <dt>Authored by:</dt>
+                      <dt>By:</dt>
                         <dd>
                       {%- for contributor in pubdata['authorsListTyped']  -%}
                           {%- if contributor['type'] == "person"  -%}
@@ -68,7 +68,7 @@
                     </dl>
                 </section>
                 <section>
-                    {% if pubdata['doi'] %}<p>DOI: <a href="http://dx.doi.org/{{ pubdata['doi'] }}">{{ pubdata['doi'] }}</a></p>{% endif %}
+                    {% if pubdata['doi'] %}<h6>DOI: <a href="http://dx.doi.org/{{ pubdata['doi'] }}">{{ pubdata['doi'] }}</a></h6>{% endif %}
                     <a href="https://twitter.com/share" class="twitter-share-button" data-text="USGS Pub" data-via="USGS_Pubs" data-dnt="true">Tweet</a>
                     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                 </section>
@@ -93,11 +93,11 @@
                             </a>
                     {%- endmacro %}
 
-                    {%- macro linkdisplaylists(link_type, link_type_text) -%}
+                    {%- macro linkdisplaylists(link_type, link_type_text_single, link_type_text_multiple) -%}
                         {% if pubdata['displayLinks'][link_type]|length == 1  %}
-                            <li>{{ link_type }}: {{ linkdisplay(pubdata['displayLinks'][link_type][0]) }}</li>
+                            <li>{{ link_type_text_single }}: {{ linkdisplay(pubdata['displayLinks'][link_type][0]) }}</li>
                         {%- elif pubdata['displayLinks'][link_type]|length > 1 -%}
-                            <li>{{ link_type_text }}</li>
+                            <li>{{ link_type_text_multiple }}</li>
                             <ul class="filessublist">
                             {%- for link in pubdata['displayLinks'][link_type]|sort(attribute='rank') -%}
                                 <li>{{ linkdisplay(link) }}</li>
@@ -105,32 +105,31 @@
                             </ul>
                         {% endif %}
                     {%- endmacro -%}
-                    <h4>Outside Links:</h4>
+                    <h4>Links</h4>
                     <ul class="fileslist">
-                        {{- linkdisplaylists('Index Page','Index Pages') -}}
-                        {{- linkdisplaylists('Document','Documents') -}}
-                        {{- linkdisplaylists('Plate','Plates')  -}}
-                        {{- linkdisplaylists('Abstract','Abstract') -}}
-                        {{- linkdisplaylists('Additional Report Piece','Additional Report Pieces') -}}
-                        {{- linkdisplaylists('Appendix', 'Appendices') -}}
-                        {{- linkdisplaylists('Application Site','Application Sites') -}}
-                        {{- linkdisplaylists('Authors Website','Authors Website') -}}
-                        {{- linkdisplaylists('Chapter','Chapters') -}}
-                        {{- linkdisplaylists('Companion Files','Companion Files') -}}
-                        {{- linkdisplaylists('Cover','Covers') -}}
-                        {{- linkdisplaylists('Database','Databases') -}}
-                        {{- linkdisplaylists('Digital Object Identifier','Digital Object Identifiers') -}}
-                        {{- linkdisplaylists('Errata','Errata') -}}
-                        {{- linkdisplaylists('Illustration','Illustration') -}}
-                        {{- linkdisplaylists('Image','Image') -}}
-                        {{- linkdisplaylists('Metadata','Metadata') -}}
-                        {{- linkdisplaylists('Project Site','Project Sites') -}}
-                        {{- linkdisplaylists('Raw Data', 'Raw Data') -}}
-                        {{- linkdisplaylists('Read Me','Read Me') -}}
-                        {{- linkdisplaylists('Referenced Work','Referenced Work') -}}
-                        {{- linkdisplaylists('Related Work','Related Works') -}}
-                        {{- linkdisplaylists('Spatial Data','Spatial Data') -}}
-                        {{- linkdisplaylists('Version History','Version History') -}}
+                        {{- linkdisplaylists('Index Page','More information','More Information') -}}
+                        {{- linkdisplaylists('Document','Document','Documents') -}}
+                        {{- linkdisplaylists('Plate', 'Plate','Plates')  -}}
+                        {{- linkdisplaylists('Abstract','Abstract','Abstracts') -}}
+                        {{- linkdisplaylists('Additional Report Piece','Additional Report Piece','Additional Report Pieces') -}}
+                        {{- linkdisplaylists('Appendix', 'Appendix', 'Appendices') -}}
+                        {{- linkdisplaylists('Application Site','Application Site','Application Sites') -}}
+                        {{- linkdisplaylists('Authors Website','Authors Website','Authors Website') -}}
+                        {{- linkdisplaylists('Chapter','Chapter','Chapters') -}}
+                        {{- linkdisplaylists('Companion Files','Companion File','Companion Files') -}}
+                        {{- linkdisplaylists('Cover','Cover','Covers') -}}
+                        {{- linkdisplaylists('Database','Database','Databases') -}}
+                        {{- linkdisplaylists('Errata','Errata','Errata') -}}
+                        {{- linkdisplaylists('Illustration','Illustration','Illustration') -}}
+                        {{- linkdisplaylists('Image','Image','Image') -}}
+                        {{- linkdisplaylists('Metadata','Metadata','Metadata') -}}
+                        {{- linkdisplaylists('Project Site','Project Site','Project Sites') -}}
+                        {{- linkdisplaylists('Raw Data', 'Raw Data', 'Raw Data') -}}
+                        {{- linkdisplaylists('Read Me','Read Me','Read Me') -}}
+                        {{- linkdisplaylists('Referenced Work','Referenced Work','Referenced Work') -}}
+                        {{- linkdisplaylists('Related Work','Related Work','Related Works') -}}
+                        {{- linkdisplaylists('Spatial Data','Spatial Data','Spatial Data') -}}
+                        {{- linkdisplaylists('Version History','Version History','Version History') -}}
                     </ul>
                 </section>
                 <section itemprop="description" id="abstract" >

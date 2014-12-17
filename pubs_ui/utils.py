@@ -8,7 +8,7 @@ from operator import itemgetter
 from pubs_ui import app
 import json
 from urlparse import urljoin
-from copy import deepcopy
+from copy import deepcopy, copy
 
 
 #should requests verify the certificates for ssl connections
@@ -97,6 +97,19 @@ def create_display_links(pubdata):
     :param pubdata:
     :return: pubdata with new displayLinks array
     """
+    if pubdata.get('doi') is not None and pubdata.get('publicationSubtype').get('text') != ('USGS Numbered Series' or 'USGS Unnumbered Series') :
+        pubdata['links'].append(
+        {
+          "rank": None,
+          "text": "Publisher Index Page (via DOI)",
+          "type": {
+            "id": 15,
+            "text": "Index Page"
+          },
+          "url": "http://dx.doi.org/"+pubdata['doi']
+        })
+
+
     display_links = {
         'Abstract': [],
         'Additional Report Piece': [],
@@ -124,25 +137,54 @@ def create_display_links(pubdata):
         'Thumbnail': [],
         'Version History': []
     }
-    links = pubdata.get("links")
-    for linktype in display_links:
-        rankcounter = 1
+    links = deepcopy(pubdata.get("links"))
+    #sort links into the different link types
+    for key, value in display_links.iteritems():
         for link in links:
-            if link['type']['text'] == linktype:
-                if link.get('rank') is None:
-                    link['rank'] = rankcounter
-                    rankcounter += 1
-                display_links[linktype].append(link)
+            if link['type']['text'] == key:
+                value.append(link)
+    #smash index page and plate links around
     display_links = manipulate_plate_links(display_links)
+    display_links = manipulate_index_page_links(display_links)
+    #shove a rank onto everything that doesn't have one
+    for key, value in display_links.iteritems():
+        rank_counter = 1
+        for link in value:
+            if link.get("rank") is None:
+                link['rank'] = rank_counter
+                rank_counter +=1
+
     pubdata["displayLinks"] = display_links
     return pubdata
 
+
+def manipulate_index_page_links(display_links):
+    """
+    This function rejiggers display text for index page links
+    :param display_links:
+    :return:
+    """
+    #only do something if there are links in the plate links section
+    if len(display_links.get('Index Page')) > 0:
+        for link in display_links["Index Page"]:
+            if link.get("text") is None and 'pubs.usgs.gov' in link["url"]:
+                link["text"] = "USGS Index Page"
+                link["rank"] = 1
+            elif link.get("text") is None and 'ngmdb.usgs.gov' in link["url"]:
+                link["text"] = "National Geologic Map Database Index Page"
+                link["rank"] = 2
+            elif link.get("text") is None:
+                link["text"] = "Publisher Index Page"
+                link['rank'] = 3
+            elif link.get("text") == "Publisher Index Page (via DOI)":
+                link['rank'] = 4
+    return display_links
 
 def manipulate_plate_links(display_links):
     """
     This function rejiggers plate link displays for plate links that are named regularly but do not have display text or
     a proper order
-    :param display_links:
+    :param display_links: the
     :return: display links with rejiggered plate link order
     """
     #only do something if there are links in the plate links section
@@ -156,6 +198,7 @@ def manipulate_plate_links(display_links):
                     try:
                         text = file_name[0].title().split('-')
                         text[1] = int(text[1])
+                        link['rank'] = text[1]
                     except (ValueError, IndexError):
                         text = file_name[0].title().split('-')
                 if len(file_name[0].split("_")) > 1:
@@ -163,11 +206,13 @@ def manipulate_plate_links(display_links):
                         text = file_name[0].split("_")[-1]
                         text = re.split('(\d+)', text)[0:2]
                         text[1] = int(text[1])
+                        link['rank'] = text[1]
                     except (ValueError, IndexError):
                         try:
                             text = file_name[0].split("_")[0]
                             text = re.split('(\d+)', text)[0:2]
                             text[1] = int(text[1])
+                            link['rank'] = text[1]
                         except (ValueError, IndexError):
                             text = file_name[0].split("_")
 
@@ -177,11 +222,6 @@ def manipulate_plate_links(display_links):
             if link.get('linkFileType') is None:
                 link['linkFileType'] = {'text': file_name[1]}
         display_links["Plate"] = sorted(display_links["Plate"], key=itemgetter('text'))
-        rankcounter = 1
-        for link in display_links["Plate"]:
-            link['rank'] = rankcounter
-            rankcounter += 1
-
     return display_links
 
 
