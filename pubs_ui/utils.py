@@ -222,12 +222,6 @@ def manipulate_plate_links(display_links):
             if link.get('linkFileType') is None:
                 link['linkFileType'] = {'text': file_name[1]}
         display_links["Plate"] = sorted(display_links["Plate"], key=itemgetter('text'))
-        rankcounter = 1
-        for link in display_links["Plate"]:
-            if link.get('rank') is None:
-                link['rank'] = rankcounter
-                rankcounter += 1
-
     return display_links
 
 
