@@ -873,7 +873,7 @@ footer p{margin:0;}
   }
   nav ul#desktop_ul {
     display: block;
-    width: 400px;
+    width: 550px;
     height: 30px;
     position: absolute;
     left: 0px;
@@ -886,7 +886,8 @@ footer p{margin:0;}
   nav ul li {
     float: left;
     margin-right: 12px;
-    text-align: center;
+    text-align: left;
+
   }
   
   nav ul li a {
@@ -899,6 +900,10 @@ footer p{margin:0;}
   }
   nav ul li a#long {
     width: 115px;
+  }
+  nav ul li a#nav_title {
+    width: 220px;
+    padding-left: 5px;
   }
   nav ul li a:hover {
     background: #fff;
