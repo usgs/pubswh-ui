@@ -155,7 +155,6 @@ textarea {
 .recent-pub-title{
 	padding:0 10px 10px 10px;
 	font-weight:bold;
-	color:#003366;
 	margin-bottom:-5px;
     text-align: left;
 }
@@ -180,6 +179,10 @@ nav {
 
 nav h4{margin:0;
 		padding:5px 0 0 5px;}
+
+nav a:visited{
+    color: #fff;
+}
 		
 main#index{font-family:Arial;
 	color:#808080;
@@ -481,24 +484,32 @@ hgroup h4{
   min-height: 30px;
   margin-bottom: 10px;
 }
-.fileslist a,
+
+.basic-advanced a{
+      color: #428bca;
+}
+.basic-advanced a:visited {
+color: #428bca;
+text-decoration: none;
+}
+
 address a,
-aside a,
 #table_contents a {
   color: #003366;
 }
 .fileslist a {
   font-size: .85em;
 }
-.fileslist a:hover,
+
 address a:hover,
-aside a:hover,
 #table_contents a:hover {
   text-decoration: none;
 }
 address p {
   font-style: normal;
 }
+
+
 #table_contents {
   font-size: .85em;
   padding: 0 0 0 15px;
@@ -612,7 +623,12 @@ h1.search-results{
 .search-title{
 	color:rgb(0,51,102);
 	text-decoration:none;
-	font-size:1.2em;
+
+}
+
+.search-title.a:link {
+    color: #1a0dab;
+    text-decoration: none;
 }
 
 .pagination-nav{
@@ -1115,6 +1131,8 @@ li.p1{
 h1.otherPages{
 	font-size:2em;
 	margin-left:15px;}
+
+
 	
 /* ==========================================================================
    browse styles

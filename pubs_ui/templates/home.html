@@ -23,10 +23,10 @@
 	                <section id="search">
                         {% if advanced == 'True' %}
                             {% include 'advanced_search_form.html' %}
-                            <a href="{{ request.base_url }}">Basic Search</a>
+                            <span class="basic-advanced"><a  href="{{ request.base_url }}">Basic Search</a></span>
                         {% else %}
                             {% include 'search_form.html' %}
-                            <a href="{{ request.url }}?advanced=True">Advanced Search</a>
+                            <span class="basic-advanced"><a href="{{ request.url }}?advanced=True">Advanced Search</a></span>
                         {% endif %}
 	                </section>
                 

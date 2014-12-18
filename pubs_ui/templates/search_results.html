@@ -17,10 +17,10 @@
         <section id="search">
             {% if advanced == True %}
                 {% include 'advanced_search_form.html' %}
-                <a href="{{ request.base_url }}?q={{ request.args['q'] }}">Basic Search</a>
+                <span class="basic-advanced"><a class="basic-advanced" href="{{ request.base_url }}?q={{ request.args['q'] }}">Basic Search</a></span
             {% else %}
                 {% include 'search_form.html' %}
-                <a href="{{ request.url }}&advanced=True">Advanced Search</a>
+                <span class="basic-advanced"><a href="{{ request.url }}&advanced=True">Advanced Search</a></span>
             {% endif %}
         </section>
         <section class = "search-results">
@@ -31,7 +31,7 @@
         <section id="search-results">
 				{% for result in search_result_records %}
 					<article>
-                        <h5><a href="{{ url_for('publication', indexId = result['indexId']) }}">{{ result['title']|safe }}</a></h5>
+                        <h5  class="search-title"><a href="{{ url_for('publication', indexId = result['indexId']) }}">{{ result['title']|safe }}</a></h5>
                         <h6 class="pubinfo">{{ result|display_pub_info }}</h6>
                         {% if result['authorsList']|length > 0 %}<h6 class="searchContributors">{{ result['authorsList']|join(', ') }}</h6>{% endif %}
                         {% if result['editorsList']|length > 0 %}<h6 class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</h6>{% endif %}
