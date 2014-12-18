@@ -35,6 +35,7 @@ app.jinja_env.lstrip_blocks = True
 app.jinja_env.filters['display_pub_info'] = display_publication_info
 app.jinja_env.globals.update(wsgi_str=app.config['WSGI_STR'])
 app.jinja_env.globals.update(GOOGLE_ANALYTICS_CODE=app.config['GOOGLE_ANALYTICS_CODE'])
+app.jinja_env.globals.update(LAST_MODIFIED=app.config.get('DEPLOYED'))
 
 
 import PubsFlask
