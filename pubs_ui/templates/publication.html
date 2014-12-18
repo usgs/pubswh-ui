@@ -68,7 +68,7 @@
                     </dl>
                 </section>
                 <section>
-                    {% if pubdata['doi'] %}<h6>DOI: <a href="http://dx.doi.org/{{ pubdata['doi'] }}">{{ pubdata['doi'] }}</a></h6>{% endif %}
+                    {% if pubdata['doi'] %}<h6>DOI: <a itemprop="sameAs" href="http://dx.doi.org/{{ pubdata['doi'] }}">{{ pubdata['doi'] }}</a></h6>{% endif %}
                     <a href="https://twitter.com/share" class="twitter-share-button" data-text="USGS Pub" data-via="USGS_Pubs" data-dnt="true">Tweet</a>
                     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                 </section>
@@ -133,7 +133,7 @@
                     </ul>
                 </section>
                 <section itemprop="description" id="abstract" >
-                    <h2 id="abstract_head">Abstract</h2>
+                    <h4 id="abstract_head">Abstract</h4>
                     {{ pubdata['docAbstract']|safe }}
                 </section>
                 {%- if pubdata["geographicExtents"] -%}
