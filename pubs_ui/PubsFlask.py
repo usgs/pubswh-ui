@@ -29,6 +29,7 @@ contact_recipients = app.config['CONTACT_RECIPIENTS']
 replace_pubs_with_pubs_test = app.config.get('REPLACE_PUBS_WITH_PUBS_TEST')
 robots_welcome = app.config.get('ROBOTS_WELCOME')
 json_ld_id_base_url = app.config.get('JSON_LD_ID_BASE_URL')
+google_webmaster_tools_code = app.config.get('GOOGLE_WEBMASTER_TOOLS_CODE')
 
 #should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
@@ -38,6 +39,9 @@ verify_cert = app.config['VERIFY_CERT']
 def robots():
     return render_template('robots.txt', robots_welcome=robots_welcome)
 
+@app.route('/'+google_webmaster_tools_code+'.html')
+def webmaster_tools_verification():
+    return render_template('google_site_verification.html')
 
 @app.route('/')
 def index():
