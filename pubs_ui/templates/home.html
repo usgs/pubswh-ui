@@ -23,16 +23,16 @@
 	                <section id="search">
                         {% if advanced == 'True' %}
                             {% include 'advanced_search_form.html' %}
-                            <a href="{{ request.base_url }}">Basic Search</a>
+                            <span class="basic-advanced"><a  href="{{ request.base_url }}">Basic Search</a></span>
                         {% else %}
                             {% include 'search_form.html' %}
-                            <a href="{{ request.url }}?advanced=True">Advanced Search</a>
+                            <span class="basic-advanced"><a href="{{ request.url }}?advanced=True">Advanced Search</a></span>
                         {% endif %}
 	                </section>
                 
 	                <aside id="new_pubs">
 	
-	                	<h3 id="new_pubs_title"><a href="{{ url_for('new_pubs') }}">New Publications by USGS Authors</a></h3>
+	                	<h3 id="new_pubs_title"><a id="new_pubs_title_link" href="{{ url_for('new_pubs') }}">New Publications by USGS Authors</a></h3>
 
 	                	{% for recent_publication in recent_publications %}
 	               			<div class="pubs-thumbnail"><img id="thumbnail" src="{{ wsgi_str }}{% if recent_publication['displayLinks']['Thumbnail'][0]['url'] %}{{ url_for('images', filename=recent_publication['displayLinks']['Thumbnail'][0]['url'], width=50) }}{% else %}{{ url_for('images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=50) }}{% endif %}" alt="thumbnail"/></div>

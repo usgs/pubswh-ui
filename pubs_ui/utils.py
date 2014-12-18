@@ -8,10 +8,10 @@ from operator import itemgetter
 from pubs_ui import app
 import json
 from urlparse import urljoin
-from copy import deepcopy, copy
+from copy import deepcopy
 
 
-#should requests verify the certificates for ssl connections
+# should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
 base_search_url = app.config['BASE_SEARCH_URL']
 
@@ -25,13 +25,14 @@ def pubdetails(pubdata):
     """
 
     pubdata['details'] = []
-    #details list element has len of 2 or 3.  If 2, the item is coming back as a simple Key:value object, but if three
+    # details list element has len of 2 or 3.  If 2, the item is coming back as a simple Key:value object, but if three
     # there are either lists or dicts. the first item in the list is the param in pubdata, the 2nd or 3rd is the display
     # descriptor and the second if it exists is the secondary key needed to get the text.
     detailslist = [
         ['publicationType', 'text', 'Publication type:'],
         ['publicationSubtype', 'text', 'Publication Subtype:'],
-        ['seriesName', 'Series name:'],
+        ['title', 'Title:'],
+        ['seriesTitle', 'text', 'Series title:'],
         ['seriesNumber', 'Series number:'],
         ['subseriesTitle', 'Subseries'],
         ['chapter', 'Chapter:'],
@@ -75,10 +76,11 @@ def pubdetails(pubdata):
     for detail in detailslist:
 
         if len(detail) == 3:
-            #if the detail exists and is a dict with a couple key:value pairs, get the right value
+            # if the detail exists and is a dict with a couple key:value pairs, get the right value
             if pubdata.get(detail[0]) is not None and isinstance(pubdata.get(detail[0]), dict):
                 pubdata['details'].append({detail[2]: pubdata[detail[0]].get(detail[1])})
-            #if the thing is a list of dicts and if there is something in the list, concatenate the values into a string
+            # if the thing is a list of dicts and if there is something in the list,
+            # concatenate the values into a string
             elif pubdata.get(detail[0]) is not None and isinstance(pubdata.get(detail[0]), list) \
                     and len(pubdata.get(detail[0])) > 0:
                 dd = []
@@ -97,18 +99,18 @@ def create_display_links(pubdata):
     :param pubdata:
     :return: pubdata with new displayLinks array
     """
-    if pubdata.get('doi') is not None and pubdata.get('publicationSubtype').get('text') != ('USGS Numbered Series' or 'USGS Unnumbered Series') :
+    if pubdata.get('doi') is not None and pubdata.get('publicationSubtype').get('text') != \
+            ('USGS Numbered Series' or 'USGS Unnumbered Series'):
         pubdata['links'].append(
-        {
-          "rank": None,
-          "text": "Publisher Index Page (via DOI)",
-          "type": {
-            "id": 15,
-            "text": "Index Page"
-          },
-          "url": "http://dx.doi.org/"+pubdata['doi']
-        })
-
+            {
+                "rank": None,
+                "text": "Publisher Index Page (via DOI)",
+                "type": {
+                        "id": 15,
+                        "text": "Index Page"
+                },
+                "url": "http://dx.doi.org/"+pubdata['doi']
+            })
 
     display_links = {
         'Abstract': [],
@@ -138,21 +140,21 @@ def create_display_links(pubdata):
         'Version History': []
     }
     links = deepcopy(pubdata.get("links"))
-    #sort links into the different link types
+    # sort links into the different link types
     for key, value in display_links.iteritems():
         for link in links:
             if link['type']['text'] == key:
                 value.append(link)
-    #smash index page and plate links around
+    # smash index page and plate links around
     display_links = manipulate_plate_links(display_links)
     display_links = manipulate_index_page_links(display_links)
-    #shove a rank onto everything that doesn't have one
+    # shove a rank onto everything that doesn't have one
     for key, value in display_links.iteritems():
         rank_counter = 1
         for link in value:
             if link.get("rank") is None:
                 link['rank'] = rank_counter
-                rank_counter +=1
+                rank_counter += 1
 
     pubdata["displayLinks"] = display_links
     return pubdata
@@ -164,7 +166,7 @@ def manipulate_index_page_links(display_links):
     :param display_links:
     :return:
     """
-    #only do something if there are links in the plate links section
+    # only do something if there are links in the index page links section
     if len(display_links.get('Index Page')) > 0:
         for link in display_links["Index Page"]:
             if link.get("text") is None and 'pubs.usgs.gov' in link["url"]:
@@ -180,6 +182,7 @@ def manipulate_index_page_links(display_links):
                 link['rank'] = 4
     return display_links
 
+
 def manipulate_plate_links(display_links):
     """
     This function rejiggers plate link displays for plate links that are named regularly but do not have display text or
@@ -187,7 +190,7 @@ def manipulate_plate_links(display_links):
     :param display_links: the
     :return: display links with rejiggered plate link order
     """
-    #only do something if there are links in the plate links section
+    # only do something if there are links in the plate links section
     if len(display_links.get("Plate")) > 0:
         for link in display_links["Plate"]:
             url = link["url"]
@@ -332,9 +335,9 @@ def make_contributor_list(contributors):
     :return list of concatenated author names in given family suffix or corporate name
     :rtype: list
     """
-    #turn the list of dicts into smaller, sorted list of dicts
+    # turn the list of dicts into smaller, sorted list of dicts
     typed_contributor_list = concatenate_contributor_names(contributors)
-    #only grab the string portion of the tuple, put it into its own list.
+    # only grab the string portion of the tuple, put it into its own list.
     contributor_list = []
     for contributor in typed_contributor_list:
         contributor_list.append(contributor["text"])
@@ -348,17 +351,17 @@ def concatenate_contributor_names(contributors):
     :param list contributors: a list of dicts of a contributor type (authors, editors, etc)
     :return:
     """
-    #Sort the contributors by the rank that comes out of the web service- ranks is something that will always be there
-    #  (it is fundamental to the pubs data model, so we don't have to deal with it not being there
+    # Sort the contributors by the rank that comes out of the web service- ranks is something that will always be there
+    # (it is fundamental to the pubs data model, so we don't have to deal with it not being there
     sorted_contributors = sorted(contributors, key=itemgetter('rank'))
-    #empty list to build the names
+    # empty list to build the names
     contributor_list = []
     for contributor in sorted_contributors:
-        #test for the boolean "corporation" flag for each contributor
+        # test for the boolean "corporation" flag for each contributor
         if contributor['corporation'] is False:
-            #list to set up join
+            # list to set up join
             contributor_name_list = []
-            #add parts of name to the list if they exist and aren't empty strings
+            # add parts of name to the list if they exist and aren't empty strings
             if contributor.get("given") is not None and len(contributor.get("given")) > 0:
                 contributor_name_list.append(contributor['given'])
             if contributor.get("family") is not None and len(contributor.get("family")) > 0:
@@ -366,7 +369,7 @@ def concatenate_contributor_names(contributors):
             if contributor.get("suffix") is not None and len(contributor.get("suffix")) > 0:
                 contributor_name_list.append(contributor['suffix'])
             contributor_dict = {"type": 'person', "text": " ".join(contributor_name_list)}
-        #corporate authors- the other side of the boolean
+        # corporate authors- the other side of the boolean
         else:
             contributor_dict = {"type": 'corporation', "text": contributor.get('organization')}
         contributor_list.append(contributor_dict)
@@ -491,13 +494,13 @@ def add_supersede_data(context_pubdata, supersedes_service_url, url_root):
             return_pubdata['relationships']['@context'] = {}
         if '@graph' not in return_pubdata['relationships']:
             return_pubdata['relationships']['@graph'] = []
-        #build @context object
-        #namespaces
+        # build @context object
+        # namespaces
         return_pubdata['relationships']['@context']['dc'] = 'http://purl.org/dc/elements/1.1/'
         return_pubdata['relationships']['@context']['xsd'] = 'http://www.w3.org/2001/XMLSchema#'
         return_pubdata['relationships']['@context']['rdac'] = 'http://rdaregistry.info/Elements/c/'
         return_pubdata['relationships']['@context']['rdaw'] = 'http://rdaregistry.info/Elements/w/'
-        #relationships
+        # relationships
         return_pubdata['relationships']['@context']['rdaw:replacedByWork'] = {'@type': '@id'}
         return_pubdata['relationships']['@context']['rdaw:replacementOfWork'] = {'@type': '@id'}
 

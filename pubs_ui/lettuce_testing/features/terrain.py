@@ -1,10 +1,10 @@
-'''
+"""
 Created on Nov 14, 2014
 
 @author: ayan
 
 File for general hacking in lettuce tests
-'''
+"""
 
 from lettuce import before, after
 from coverage import coverage
@@ -15,6 +15,7 @@ cov = coverage()
 @before.all
 def prepare_coverage():
     cov.start()
+
 
 @after.all
 def collect_coverage(total_results):
