@@ -127,13 +127,24 @@ textarea {
 	clear:both;}
 		
 #new_pubs h3{padding:5px;
-			color:rgb(0,51,102);
-			margin-top:10px;}
-			
-#new_pubs a:hover{
-	text-decoration:underline;
-	color:#000;
+			 color: #000;
+			margin-top:10px;
+            }
+
+
+#new_pubs a#new_pubs_title_link:link{
+	color: #000;
 }
+
+#new_pubs a#new_pubs_title_link:visited{
+	color: #000;
+}
+
+#new_pubs a#new_pubs_title_link:active{
+	color: #000;
+}
+
+
 
 .pubs-thumbnail{
 	background:red;
@@ -150,11 +161,12 @@ textarea {
 
 #new_pubs_title{
     text-align: center;
+    color:#000;
 }
+
 
 .recent-pub-title{
 	padding:0 10px 10px 10px;
-	font-weight:bold;
 	margin-bottom:-5px;
     text-align: left;
 }
@@ -180,9 +192,17 @@ nav {
 nav h4{margin:0;
 		padding:5px 0 0 5px;}
 
+nav a:link{
+    color: #fff;
+}
+
 nav a:visited{
     color: #fff;
 }
+nav a:active{
+    color: #fff;
+}
+
 		
 main#index{font-family:Arial;
 	color:#808080;
@@ -594,7 +614,14 @@ form#contactForm input#submit:hover{
  #search-results article{
  margin:0;
  padding-left:15px;}
- 
+
+ .searchAbstract {
+     text-indent: 0;
+     padding-left: 5px;
+     line-height: 130%;
+
+ }
+
 .searchContributors,
 .pubinfo{
 	color:#006621;

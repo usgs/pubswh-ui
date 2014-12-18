@@ -35,7 +35,7 @@
                         <h6 class="pubinfo">{{ result|display_pub_info }}</h6>
                         {% if result['authorsList']|length > 0 %}<h6 class="searchContributors">{{ result['authorsList']|join(', ') }}</h6>{% endif %}
                         {% if result['editorsList']|length > 0 %}<h6 class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</h6>{% endif %}
-                        {% if result['docAbstract']  %}<p>{{ result['docAbstract'].split(' ')[0:50]|join(' ')|striptags }}...</p>{% endif %}
+                        {% if result['docAbstract']  %}<p class="searchAbstract">{{ result['docAbstract'].split(' ')[0:50]|join(' ')|striptags }}...</p>{% endif %}
 					</article>
 				{% endfor %}
         </section>
