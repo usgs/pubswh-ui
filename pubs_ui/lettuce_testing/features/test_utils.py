@@ -57,7 +57,7 @@ def get_first_details(step):
     r = get(world.live_url)
     json = r.json()
     world.output = len(str(pubdetails(json))) #Measure json lengths (as strings) since there is a lot of data
-    world.expected_output = 1748
+    world.expected_output = 1893
 
 """
 display-link scenarios
