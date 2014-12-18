@@ -121,7 +121,7 @@
                 URL: {% block url %}{% endblock %}<br />
                 Page Contact Information: <a href="{{ url_for('contact') }}">Pubs Warehouse Contact Page</a><br />
 
-                    Page Last Modified: {% block modtime %}{% endblock %}
+                    Page Last Modified: {% block modtime %}{{ LAST_MODIFIED }}{% endblock %}
          </p>
 	     </footer>
 

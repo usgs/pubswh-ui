@@ -41,6 +41,11 @@ except ImportError:
     pass
 
 
+try:
+    from deploy_date import *
+except ImportError:
+    pass
+
 # variables used for testing purposes
 nose_testing = sys.argv[0].endswith('nosetests') # returns True if 'nosetests' is a command line argument
 if 'lettuce' in sys.argv[0]: # determine if a lettuce is being run
