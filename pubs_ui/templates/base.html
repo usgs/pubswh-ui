@@ -92,6 +92,7 @@
                 	</ul>
                 </li>
                 <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                {% if current_user.is_authenticated() %}<li><a href="{{ url_for('logout_page') }}">Logout</a></li>{% endif %}
             </ul>
             <section id="center">
                 <label for="mysearch2">Search: </label>

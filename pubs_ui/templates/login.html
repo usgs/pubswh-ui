@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block head %}
+	<title>Log in to the Publications Warehouse</title>
+	<meta name="description" content="Log in to the Pubs Warehouse">
+{% endblock head %}
+
+{% block page_style %}
+	<link rel="stylesheet" href="{{ url_for('static', filename = 'css/pagination.css') }}">
+{% endblock page_style %}
+
+{% block main %}
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+  <h1>Sign In</h1>
+  {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
+  <form action="" method="post" name="login">
+      {{ form.hidden_tag() }}
+      <p>
+          Please enter your AD name:<br>
+          {{ form.username(size=80) }}<br>
+      </p>
+      <p>password: {{ form.password }}</p>
+      <p><input type="submit" value="Sign In"></p>
+  </form>
+
+{% endblock %}

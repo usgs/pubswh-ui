@@ -2,7 +2,9 @@ import logging
 from flask import Flask, request
 from flask.ext.images import Images
 from flask_mail import Mail
+from flask_login import LoginManager, UserMixin
 from pubs_ui.custom_filters import display_publication_info
+from itsdangerous import URLSafeTimedSerializer
 
 
 FORMAT = '%(asctime)s %(message)s'
@@ -12,9 +14,16 @@ handler.setLevel(logging.INFO)
 handler.setFormatter(fmt)
 
 
+
 app = Flask(__name__)
 app.config.from_object('settings') # load configuration before passing the app object to other things
 
+max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
+login_manager = LoginManager()
+
+login_manager.init_app(app)
+
+login_serializer = URLSafeTimedSerializer(app.secret_key)
 
 @app.before_request
 def log_request():
@@ -23,6 +32,12 @@ def log_request():
         request_headers = str(request.headers)
         log_str = 'Request: ({0}); Headers: ({1})'.format(request_str, request_headers)
         app.logger.info(log_str)
+
+
+
+
+
+
 
 
 if app.config.get('LOGGING_ON'):
@@ -35,7 +50,8 @@ app.jinja_env.lstrip_blocks = True
 app.jinja_env.filters['display_pub_info'] = display_publication_info
 app.jinja_env.globals.update(wsgi_str=app.config['WSGI_STR'])
 app.jinja_env.globals.update(GOOGLE_ANALYTICS_CODE=app.config['GOOGLE_ANALYTICS_CODE'])
+app.jinja_env.globals.update(GOOGLE_WEBMASTER_TOOLS_CODE=app.config['GOOGLE_WEBMASTER_TOOLS_CODE'])
 app.jinja_env.globals.update(LAST_MODIFIED=app.config.get('DEPLOYED'))
-
+app.jinja_env.globals.update(ANNOUNCEMENT_BLOCK=app.config['ANNOUNCEMENT_BLOCK'])
 
 import PubsFlask

@@ -112,7 +112,12 @@ textarea {
 /* ==========================================================================
    Index styles
    ========================================================================== */
-   
+#announcement{
+    font-size: 150%;
+    padding: 15px;
+
+}
+
 #new_pubs{
 	width:100%;
 	min-height:200px;
@@ -916,7 +921,7 @@ footer p{margin:0;}
   }
   nav ul#desktop_ul {
     display: block;
-    width: 550px;
+    width: 650px;
     height: 30px;
     position: absolute;
     left: 0px;
@@ -948,6 +953,7 @@ footer p{margin:0;}
     width: 220px;
     padding-left: 5px;
   }
+
   nav ul li a:hover {
     background: #fff;
     color: #003366;

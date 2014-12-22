@@ -17,7 +17,7 @@
         <section id="search">
             {% if advanced == True %}
                 {% include 'advanced_search_form.html' %}
-                <span class="basic-advanced"><a class="basic-advanced" href="{{ request.base_url }}?q={{ request.args['q'] }}">Basic Search</a></span
+                <span class="basic-advanced"><a class="basic-advanced" href="{{ request.base_url }}?q={{ request.args['q'] }}">Basic Search</a></span>
             {% else %}
                 {% include 'search_form.html' %}
                 <span class="basic-advanced"><a href="{{ request.url }}&advanced=True">Advanced Search</a></span>

@@ -10,8 +10,12 @@
     <meta name = "created" content="{{ pubdata['displaytoPublicDate'] }}"/>
     <meta name = "date" content="{{ pubdata['publicationYear'] }}"/>
     {% block page_script %}
+       {%- if pubdata["geographicExtents"] -%}
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaflet.css') }}">
         <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/leaflet-0.7.3/leaflet.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js.map') }}"></script>
+       {% endif %}
     {% endblock page_script %}
 
 
@@ -163,18 +167,30 @@
         {%- if pubdata["geographicExtents"] -%}
         <script type=text/javascript>
 
-                        // create a map
-                        map = new L.Map('mymap');
 
-                        // create the OpenStreetMap layer
-                        osmTile = "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png";
-                        osmCopyright = "Map data &copy; 2012 OpenStreetMap contributors";
-                        osmLayer = new L.TileLayer(osmTile, { maxZoom: 18, attribution: osmCopyright } );
-                        map.addLayer(osmLayer);
+
+
+                        //add esri basemap layers
+                        var topo = L.esri.basemapLayer('Topographic',{ detectRetina: true, zIndex: 3}),
+                         oceans = L.esri.basemapLayer('Oceans',{ detectRetina: true, zIndex: 1});
+                        // create a map
+                        map = new L.Map('mymap', {layers:[topo]});
+
+                        var baseMaps = {
+                            "esri Oceans": oceans,
+                            "esri Topographic": topo
+
+                        };
+
+                        L.control.layers(baseMaps).addTo(map);
+                        L.esri.basemapLayer('OceansLabels',{zIndex: 2}).addTo(map);
+
 
                         // include GeoJSON inside this JavaScript
                         var pubextent = {{ pubdata["geographicExtents"]|tojson|safe }};
                         L.geoJson( pubextent ).addTo(map);
+
+
 
                         map.fitBounds(L.geoJson( pubextent ).getBounds());
                     </script>
