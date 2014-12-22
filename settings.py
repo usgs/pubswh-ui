@@ -4,6 +4,7 @@ Created on Oct 15, 2014
 @author: ayan
 '''
 import sys
+from datetime import timedelta
 
 
 DEBUG = True
@@ -25,9 +26,14 @@ WSGI_STR = ''
 GOOGLE_ANALYTICS_CODE = ''
 JSON_LD_ID_BASE_URL = ''
 GOOGLE_WEBMASTER_TOOLS_CODE = 'ertoifsdbnerngdjnasdw9rsdn'  # random string, set real code in local_settings.py on prod
+ANNOUNCEMENT_BLOCK = ''
 LOGGING_ON = False
 REPLACE_PUBS_WITH_PUBS_TEST = False
 ROBOTS_WELCOME = False
+REMEMBER_COOKIE_DURATION = timedelta(days=1)
+AUTH_ENDPOINT_URL = ''
+PREVIEW_ENDPOINT_URL = ''
+
 
 
 if DEBUG:

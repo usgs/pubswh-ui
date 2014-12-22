@@ -9,6 +9,8 @@ from pubs_ui import app
 import json
 from urlparse import urljoin
 from copy import deepcopy
+from itsdangerous import URLSafeTimedSerializer
+import arrow
 
 
 # should requests verify the certificates for ssl connections
@@ -548,3 +550,47 @@ def change_to_pubs_test(pubs_url):
     """
     pubs_test_url = pubs_url.replace('pubs.er', 'pubs-test.er')
     return pubs_test_url
+
+def generate_auth_header(request):
+    """
+    This is used to generate the auth header to make requests back to the pubs-services endpoints
+    :param request: the request object to get the cookie
+    :return: A authorization header that can be sent along to the pubs-services endpoint
+    """
+    login_serializer = URLSafeTimedSerializer(app.secret_key)
+    # get the token cookie from the request
+    token_cookie = request.cookies.get('remember_token')
+    # set a max age variable that is the same max age as the cookie can be.
+    max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
+    # decrypt the cookie to get the username and the token
+    session_data = login_serializer.loads(token_cookie, max_age=max_age)
+    # get the token from the session data
+    mypubs_token = session_data[1]
+    # build the auth value to send to the mypubs server
+    auth_value = 'Bearer  '+mypubs_token
+    # build the Authorization header
+    header = {'Authorization': auth_value}
+    return header
+
+def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url):
+    """
+    Takes publication data from the pubs-services API and smashes it around so that it is friendly for jinja2 templates
+    :param pubdata: data for a single publication from the pubs-services endpoint
+    :return: pubdata
+    """
+    pubdata = pubdetails(pubdata)
+    pubdata = add_supersede_data(pubdata, supersedes_url, json_ld_id_base_url)
+    pubdata = create_display_links(pubdata)
+    pubdata = contributor_lists(pubdata)
+    pubdata = jsonify_geojson(pubdata)
+    pubdata['formattedModifiedDateTime'] = arrow.get(pubdata['lastModifiedDate']).format('MMMM DD, YYYY HH:mm:ss')
+    # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov.
+    # Flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI
+    # The Apache rewrite changes this to pubs-test.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI, where there is
+    # no image with the signature 'skjcvjkdejiwI' which leads to a failure to find the image. Instead of allowing
+    # Apache to do the rewrite, this code snippet executes the rewrite so the correct signature is preserved for
+    # a given image URL.
+    if replace_pubs_with_pubs_test:
+        pubdata['displayLinks']['Thumbnail'][0]['url'] = change_to_pubs_test(
+            pubdata['displayLinks']['Thumbnail'][0]['url'])
+    return pubdata
