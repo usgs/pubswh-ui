@@ -214,6 +214,10 @@ def restricted_page(index_id):
 def robots():
     return render_template('robots.txt', robots_welcome=robots_welcome)
 
+@app.route('/opensearch.xml')
+def open_search():
+    return render_template('opensearch.xml')
+
 
 @app.route('/' + google_webmaster_tools_code + '.html')
 def webmaster_tools_verification():
