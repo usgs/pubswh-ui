@@ -11,9 +11,8 @@ from utils import (pull_feed, create_display_links, getbrowsecontent,
 from forms import ContactForm, SearchForm, NumSeries, LoginForm
 from canned_text import EMAIL_RESPONSE
 from pubs_ui import app, mail
-from datetime import date, timedelta, datetime
+from datetime import date, timedelta
 from dateutil import parser as dateparser
-import arrow
 from flask_login import (LoginManager, login_required, login_user, logout_user, UserMixin)
 from itsdangerous import URLSafeTimedSerializer
 
