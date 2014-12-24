@@ -15,6 +15,7 @@ from datetime import date, timedelta
 from dateutil import parser as dateparser
 from flask_login import (LoginManager, login_required, login_user, logout_user, UserMixin)
 from itsdangerous import URLSafeTimedSerializer
+from operator import itemgetter
 import arrow
 
 # set UTF-8 to be default throughout app
@@ -447,6 +448,7 @@ def new_pubs():
 
     try:
         pubs_records = recent_pubs_content['records']
+        pubs_records.sort(key=itemgetter('displayToPublicDate'), reverse=True)
         for record in pubs_records:
             record['FormattedDisplayToPublicDate'] = arrow.get(record['displayToPublicDate']).format('MMMM DD, YYYY HH:mm')
     except TypeError:
