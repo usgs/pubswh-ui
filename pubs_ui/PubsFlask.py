@@ -11,6 +11,8 @@ from utils import (pull_feed, create_display_links, getbrowsecontent,
 from forms import ContactForm, SearchForm, NumSeries, LoginForm
 from canned_text import EMAIL_RESPONSE
 from pubs_ui import app, mail
+from datetime import date, timedelta
+from dateutil import parser as dateparser
 from flask_login import (LoginManager, login_required, login_user, logout_user, UserMixin)
 from itsdangerous import URLSafeTimedSerializer
 
@@ -421,9 +423,23 @@ def new_pubs():
     sp = SearchPublications(search_url)
     search_kwargs = {'pub_x_days': 30}  # bring back recent publications
 
+    #Search if num_series subtype was checked in form
     if request.args.get('num_series') == 'y':
-        num_form = NumSeries(num_series=True)
+        num_form.num_series.data = True
         search_kwargs['subtypeName'] = 'USGS Numbered Series'
+
+    #Handles dates from form. Searches back to date selected or defaults to past 30 days.
+    if request.args.get('date_range'):
+        time_diff = date.today() - dateparser.parse(request.args.get('date_range')).date()
+        day_diff = time_diff.days
+        if not day_diff > 0:
+            num_form.date_range.data = date.today() - timedelta(30)
+            search_kwargs['pub_x_days'] = 30
+        else:
+            num_form.date_range.data = dateparser.parse(request.args.get('date_range'))
+            search_kwargs['pub_x_days'] = day_diff
+    else:
+        num_form.date_range.data = date.today() - timedelta(30)
 
     recent_publications_resp = sp.get_pubs_search_results(params=search_kwargs)
     recent_pubs_content = recent_publications_resp[0]
