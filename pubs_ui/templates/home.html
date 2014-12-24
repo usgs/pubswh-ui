@@ -38,7 +38,7 @@
 	                	{% for recent_publication in recent_publications %}
 	               			<div class="pubs-thumbnail"><img id="thumbnail" src="{{ wsgi_str }}{% if recent_publication['displayLinks']['Thumbnail'][0]['url'] %}{{ url_for('images', filename=recent_publication['displayLinks']['Thumbnail'][0]['url'], width=50) }}{% else %}{{ url_for('images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=50) }}{% endif %}" alt="thumbnail"/></div>
                             <div class="recent-pub-title">
-	               				<a href="{{ url_for('publication', indexId = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
+	               				<a href="{{ url_for('publication', index_id = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
 	               			</div>
 	               			<div class="recent-pub-info">
 	               				{{ recent_publication|display_pub_info }}

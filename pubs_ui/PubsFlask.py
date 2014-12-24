@@ -35,6 +35,7 @@ google_webmaster_tools_code = app.config.get('GOOGLE_WEBMASTER_TOOLS_CODE')
 auth_endpoint_url = app.config.get('AUTH_ENDPOINT_URL')
 preview_endpoint_url = app.config.get('PREVIEW_ENDPOINT_URL')
 max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
+login_page_path = app.config['LOGIN_PAGE_PATH']
 
 
 # should requests verify the certificates for ssl connections
@@ -47,7 +48,8 @@ login_serializer = URLSafeTimedSerializer(app.secret_key)
 # Flask-Login Login Manager
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = '/login/'
+login_manager.login_view = login_page_path
+
 
 class User(UserMixin):
     """
@@ -86,6 +88,7 @@ class User(UserMixin):
         if userid:
             return User(userid, token)
         return None
+
 
 @login_manager.user_loader
 def load_user(userid):
@@ -136,7 +139,6 @@ def load_token(token):
     if user:
         return user
     return None
-
 
 
 @app.route("/logout/")
@@ -196,23 +198,27 @@ def restricted_page(index_id):
     published_status = get(pub_url + 'publication/' + index_id,
                            params={'mimetype': 'json'}, verify=verify_cert).status_code
     # go out to mypubs and get the record
-    response = get(preview_endpoint_url+index_id+'/preview', headers=auth_header, verify=verify_cert, params={'mimetype': 'json'})
+    response = get(preview_endpoint_url+index_id+'/preview', headers=auth_header, verify=verify_cert,
+                   params={'mimetype': 'json'})
     print "preview status code: ", response.status_code
     if response.status_code == 200:
         record = response.json()
         pubdata = munge_pubdata_for_display(record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
         return render_template("preview.html", indexID=index_id, pubdata=pubdata)
-    # if the publication has been published (so it it out of mypubs) redirect to the right URL
+    # if the publication has been published (so it is out of mypubs) redirect to the right URL
     elif response.status_code == 404 and published_status == 200:
         return redirect(url_for('publication', indexId=index_id))
     elif response.status_code == 404 and published_status == 404:
         return render_template('404.html')
 
 
-
 @app.route('/robots.txt')
 def robots():
     return render_template('robots.txt', robots_welcome=robots_welcome)
+
+@app.route('/opensearch.xml')
+def open_search():
+    return render_template('opensearch.xml')
 
 
 @app.route('/' + google_webmaster_tools_code + '.html')
@@ -285,9 +291,9 @@ def contact_confirmation():
 
 
 # leads to rendered html for publication page
-@app.route('/publication/<indexId>')
-def publication(indexId):
-    r = get(pub_url + 'publication/' + indexId, params={'mimetype': 'json'}, verify=verify_cert)
+@app.route('/publication/<index_id>')
+def publication(index_id):
+    r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
     if r.status_code == 404:
         return render_template('404.html')
     pubreturn = r.json()
@@ -295,7 +301,7 @@ def publication(indexId):
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:
-        return render_template('publication.html', indexID=indexId, pubdata=pubdata)
+        return render_template('publication.html', indexID=index_id, pubdata=pubdata)
 
 
 # leads to json for selected endpoints
@@ -367,23 +373,23 @@ def search_results():
         search_kwargs['page_number'] = search_kwargs['page']
 
     sp = SearchPublications(search_url)
-    search_results, resp_status_code = sp.get_pubs_search_results(
+    search_results_response, resp_status_code = sp.get_pubs_search_results(
         params=search_kwargs)  # go out to the pubs API and get the search results
     try:
-        search_result_records = search_results['records']
-        record_count = search_results['recordCount']
+        search_result_records = search_results_response['records']
+        record_count = search_results_response['recordCount']
         pagination = Pagination(page=int(search_kwargs['page_number']), total=record_count,
                                 per_page=int(search_kwargs['page_size']), record_name='Search Results', bs_version=3)
         search_service_down = None
-        start_plus_size = int(search_results['pageRowStart']) + int(search_results['pageSize'])
+        start_plus_size = int(search_results_response['pageRowStart']) + int(search_results_response['pageSize'])
         if record_count < start_plus_size:
             record_max = record_count
         else:
             record_max = start_plus_size
 
-        result_summary = {'record_count': record_count, 'page_number': search_results['pageNumber'],
-                          'records_per_page': search_results['pageSize'],
-                          'record_min': (int(search_results['pageRowStart']) + 1), 'record_max': record_max}
+        result_summary = {'record_count': record_count, 'page_number': search_results_response['pageNumber'],
+                          'records_per_page': search_results_response['pageSize'],
+                          'record_min': (int(search_results_response['pageRowStart']) + 1), 'record_max': record_max}
     except TypeError:
         search_result_records = None
         pagination = None
@@ -395,8 +401,7 @@ def search_results():
                            search_result_records=search_result_records,
                            pagination=pagination,
                            search_service_down=search_service_down,
-                           form=form
-    )
+                           form=form)
 
 
 @app.route('/site-map')
@@ -416,7 +421,7 @@ def site_map():
 def new_pubs():
     num_form = NumSeries()
     sp = SearchPublications(search_url)
-    search_kwargs = {'pub_x_days': 30}  #bring back recent publications
+    search_kwargs = {'pub_x_days': 30}  # bring back recent publications
 
     #Search if num_series subtype was checked in form
     if request.args.get('num_series') == 'y':
@@ -447,4 +452,3 @@ def new_pubs():
     return render_template('new_pubs.html',
                            new_pubs=pubs_records,
                            num_form=num_form)
-
