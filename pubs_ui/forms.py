@@ -2,7 +2,7 @@ __author__ = 'jameskreft'
 
 from flask.ext.wtf import Form, RecaptchaField
 from wtforms import StringField, TextAreaField, SubmitField, validators, BooleanField, HiddenField
-from wtforms.fields.html5 import SearchField
+from wtforms.fields.html5 import SearchField, DateField
 
 
 class ContactForm(Form):
@@ -28,3 +28,4 @@ class SearchForm(Form):
 
 class NumSeries(Form):
     num_series = BooleanField('num_series')
+    date_range = DateField('date_range')
