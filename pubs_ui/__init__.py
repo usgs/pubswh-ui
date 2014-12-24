@@ -18,12 +18,7 @@ handler.setFormatter(fmt)
 app = Flask(__name__)
 app.config.from_object('settings') # load configuration before passing the app object to other things
 
-max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
-login_manager = LoginManager()
 
-login_manager.init_app(app)
-
-login_serializer = URLSafeTimedSerializer(app.secret_key)
 
 @app.before_request
 def log_request():
@@ -32,12 +27,6 @@ def log_request():
         request_headers = str(request.headers)
         log_str = 'Request: ({0}); Headers: ({1})'.format(request_str, request_headers)
         app.logger.info(log_str)
-
-
-
-
-
-
 
 
 if app.config.get('LOGGING_ON'):
