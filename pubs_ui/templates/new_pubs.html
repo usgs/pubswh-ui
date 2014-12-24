@@ -21,7 +21,7 @@
 
         <article>
 
-            <h4><a class="search-title" href="{{ url_for('publication', indexId = result['indexId']) }}">{{ result['title']|safe }}</a></h4>
+            <h4><a class="search-title" href="{{ url_for('publication', index_id = result['indexId']) }}">{{ result['title']|safe }}</a></h4>
             <p class="pubinfo">{{ result|display_pub_info }}</p>
             {% if result['authorsList']|length > 0 %}<p>{{ result['authorsList']|join(', ') }}</p>{% endif %}
             {% if result['editorsList']|length > 0 %}<p class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</p>{% endif %}
