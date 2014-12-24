@@ -112,7 +112,12 @@ textarea {
 /* ==========================================================================
    Index styles
    ========================================================================== */
-   
+#announcement{
+    font-size: 150%;
+    padding: 15px;
+
+}
+
 #new_pubs{
 	width:100%;
 	min-height:200px;
@@ -127,13 +132,24 @@ textarea {
 	clear:both;}
 		
 #new_pubs h3{padding:5px;
-			color:rgb(0,51,102);
-			margin-top:10px;}
-			
-#new_pubs a:hover{
-	text-decoration:underline;
-	color:#000;
+			 color: #000;
+			margin-top:10px;
+            }
+
+
+#new_pubs a#new_pubs_title_link:link{
+	color: #000;
 }
+
+#new_pubs a#new_pubs_title_link:visited{
+	color: #000;
+}
+
+#new_pubs a#new_pubs_title_link:active{
+	color: #000;
+}
+
+
 
 .pubs-thumbnail{
 	background:red;
@@ -150,12 +166,12 @@ textarea {
 
 #new_pubs_title{
     text-align: center;
+    color:#000;
 }
+
 
 .recent-pub-title{
 	padding:0 10px 10px 10px;
-	font-weight:bold;
-	color:#003366;
 	margin-bottom:-5px;
     text-align: left;
 }
@@ -180,6 +196,18 @@ nav {
 
 nav h4{margin:0;
 		padding:5px 0 0 5px;}
+
+nav a:link{
+    color: #fff;
+}
+
+nav a:visited{
+    color: #fff;
+}
+nav a:active{
+    color: #fff;
+}
+
 		
 main#index{font-family:Arial;
 	color:#808080;
@@ -481,24 +509,32 @@ hgroup h4{
   min-height: 30px;
   margin-bottom: 10px;
 }
-.fileslist a,
+
+.basic-advanced a{
+      color: #428bca;
+}
+.basic-advanced a:visited {
+color: #428bca;
+text-decoration: none;
+}
+
 address a,
-aside a,
 #table_contents a {
   color: #003366;
 }
 .fileslist a {
   font-size: .85em;
 }
-.fileslist a:hover,
+
 address a:hover,
-aside a:hover,
 #table_contents a:hover {
   text-decoration: none;
 }
 address p {
   font-style: normal;
 }
+
+
 #table_contents {
   font-size: .85em;
   padding: 0 0 0 15px;
@@ -583,7 +619,14 @@ form#contactForm input#submit:hover{
  #search-results article{
  margin:0;
  padding-left:15px;}
- 
+
+ .searchAbstract {
+     text-indent: 0;
+     padding-left: 5px;
+     line-height: 130%;
+
+ }
+
 .searchContributors,
 .pubinfo{
 	color:#006621;
@@ -612,7 +655,12 @@ h1.search-results{
 .search-title{
 	color:rgb(0,51,102);
 	text-decoration:none;
-	font-size:1.2em;
+
+}
+
+.search-title.a:link {
+    color: #1a0dab;
+    text-decoration: none;
 }
 
 .pagination-nav{
@@ -873,7 +921,7 @@ footer p{margin:0;}
   }
   nav ul#desktop_ul {
     display: block;
-    width: 400px;
+    width: 650px;
     height: 30px;
     position: absolute;
     left: 0px;
@@ -886,7 +934,8 @@ footer p{margin:0;}
   nav ul li {
     float: left;
     margin-right: 12px;
-    text-align: center;
+    text-align: left;
+
   }
   
   nav ul li a {
@@ -900,6 +949,11 @@ footer p{margin:0;}
   nav ul li a#long {
     width: 115px;
   }
+  nav ul li a#nav_title {
+    width: 220px;
+    padding-left: 5px;
+  }
+
   nav ul li a:hover {
     background: #fff;
     color: #003366;
@@ -1110,6 +1164,8 @@ li.p1{
 h1.otherPages{
 	font-size:2em;
 	margin-left:15px;}
+
+
 	
 /* ==========================================================================
    browse styles

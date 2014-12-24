@@ -11,6 +11,8 @@ from pubs_ui.custom_filters import display_publication_info
 """
 Pubs JSON contains chapter and subchapter
 """
+
+
 @step
 def i_have_json_with_a_chapter_and_subchapter(step):
     world.chapter_subchapter_json = {
@@ -21,11 +23,13 @@ def i_have_json_with_a_chapter_and_subchapter(step):
                                      'subChapter': 4
                                      }
 
+
 @step
 def i_create_a_pub_info_string_with_chapter_and_subchapter(step):
     world.result = display_publication_info(world.chapter_subchapter_json)
     world.expected = '2021, Das Boot 14 18 4'
     
+
 @step
 def i_should_see_a_string_with_chapter_and_subchapter(step):
     assert_equal(world.result, world.expected)

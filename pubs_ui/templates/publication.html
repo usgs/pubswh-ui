@@ -10,8 +10,12 @@
     <meta name = "created" content="{{ pubdata['displaytoPublicDate'] }}"/>
     <meta name = "date" content="{{ pubdata['publicationYear'] }}"/>
     {% block page_script %}
+       {%- if pubdata["geographicExtents"] -%}
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaflet.css') }}">
         <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/leaflet-0.7.3/leaflet.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js.map') }}"></script>
+       {% endif %}
     {% endblock page_script %}
 
 
@@ -40,89 +44,100 @@
 
                 <section>
                     <dl id="contributors">
-                      <dt>Authored by:</dt>
+                      <dt>By:</dt>
                         <dd>
-                      {% for contributor in pubdata['authorsListTyped']  %}
-                          {% if contributor['type'] == "person"  %}
-                        <span itemprop="author" itemtype="http://schema.org/Person">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</span>
-                          {% else %}
-                         <span itemprop="author" itemtype="http://schema.org/Organization">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</span>
-                          {% endif %}
+                      {%- for contributor in pubdata['authorsListTyped']  -%}
+                          {%- if contributor['type'] == "person"  -%}
+                        <span itemprop="author" itemtype="http://schema.org/Person">{{ contributor['text'] }}</span>
+                          {%- else -%}
+                         <span itemprop="author" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</span>
+                          {%- endif -%}
+                          {% if not loop.last %}, {% endif %}
 
-                      {%  endfor %}
+                      {%-  endfor -%}
                         </dd>
                       {% if pubdata['editorsList'] %}
                       <dt class="clear">Edited by:</dt>
                       <dd>
-                          {% for contributor in pubdata['editorsListTyped']  %}
-                          {% if contributor['type'] == "person"  %}
-                        <span itemprop="editor" itemtype="http://schema.org/Person">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</span>
-                          {% else %}
-                         <span itemprop="editor" itemtype="http://schema.org/Organization">{{ contributor['text'] }}{% if not loop.last %},{% endif %}</span>
-                          {% endif %}
-                      {%  endfor %}
+                          {%- for contributor in pubdata['editorsListTyped']  -%}
+                          {%- if contributor['type'] == "person"  -%}
+                        <span itemprop="editor" itemtype="http://schema.org/Person">{{ contributor['text'] }}</span>
+                          {%- else -%}
+                         <span itemprop="editor" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</span>
+                          {%- endif -%}
+                          {% if not loop.last %}, {% endif %}
+                      {%-  endfor -%}
                           </dd>
-                      {% endif %}
+                      {%- endif -%}
                     </dl>
                 </section>
                 <section>
-                    {% if pubdata['doi'] %}<p>DOI: <a href="http://dx.doi.org/{{ pubdata['doi'] }}">{{ pubdata['doi'] }}</a></p>{% endif %}
+                    {% if pubdata['doi'] %}<h6>DOI: <a itemprop="sameAs" href="http://dx.doi.org/{{ pubdata['doi'] }}">{{ pubdata['doi'] }}</a></h6>{% endif %}
                     <a href="https://twitter.com/share" class="twitter-share-button" data-text="USGS Pub" data-via="USGS_Pubs" data-dnt="true">Tweet</a>
                     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                 </section>
                 
                 <section id="suggested">
-
-                    {%- macro linkdisplay(link_type) -%}
-                        {%- for link in pubdata['displayLinks'][link_type]|sort(attribute='rank') -%}
-                        <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }}{% else %}{{ link['type']['text'] }}{% endif %}">
+                    {% macro linkdisplay(link) -%}
+                        <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }}{% else %}{{ link['type']['text'] }}{% endif -%}">
                             <strong>
-                            {%- if link['description'] -%}
-                                {{ link['description'] }}
+                            {%- if link['text'] -%}
+                                {{- link['text'] -}}
                             {%- else -%}
-                                {{ link['type']['text'] }}
+                                {{- link['type']['text'] -}}
                             {%- endif -%}
                             </strong>
-                            {%- if link["linkFileType"]  -%}
+                            {%- if link["linkFileType"] and link["size"]   %}
+                                 ({{ link["size"] }} {{ link["linkFileType"]["text"] }})
+                            {% elif link["linkFileType"] %}
                                 ({{ link["linkFileType"]["text"] }})
-                            {%- endif -%}
-                            </a></li>
-                        {%- endfor -%}
-                    {%- endmacro -%}
-                    <ul class="fileslist">
-                        {{ linkdisplay('Index Page') }}
-                        {{ linkdisplay('Document') }}
-                        {{ linkdisplay('Abstract') }}
-                        {{ linkdisplay('Additional Report Piece') }}
-                        {{ linkdisplay('Appendix') }}
-                        {{ linkdisplay('Application Site') }}
-                        {{ linkdisplay('Authors Website') }}
-                        {{ linkdisplay('Chapter') }}
-                        {{ linkdisplay('Companion Files') }}
-                        {{ linkdisplay('Cover') }}
-                        {{ linkdisplay('Database') }}
-                        {{ linkdisplay('Digital Object Identifier') }}
-                        {{ linkdisplay('Errata') }}
-                        {{ linkdisplay('Illustration') }}
-                        {{ linkdisplay('Image') }}
-                        {{ linkdisplay('Metadata') }}
-                        {{ linkdisplay('Project Site') }}
-                        {{ linkdisplay('Raw Data') }}
-                        {{ linkdisplay('Read Me') }}
-                        {{ linkdisplay('Referenced Work') }}
-                        {{ linkdisplay('Related Work') }}
-                        {{ linkdisplay('Spatial Data') }}
-                        {{ linkdisplay('Version History') }}
-                    </ul>
+                            {%- elif link["size"]   %}
+                                 ({{ link["size"] }})
+                            {% endif -%}
+                            </a>
+                    {%- endmacro %}
 
-                    <ul class="plates">
-                        {%- for link in pubdata['displayLinks']['Plate']|sort(attribute='rank') -%}
-                            <li> <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }} else {{ link['type']['text'] }} {% endif %}"><strong>{{ link["text"] }}</strong> ({% if link["linkFileType"]  %}{{ link["linkFileType"]["text"] }}{% endif %})</a> </li>
-                        {%- endfor -%}
+                    {%- macro linkdisplaylists(link_type, link_type_text_single, link_type_text_multiple) -%}
+                        {% if pubdata['displayLinks'][link_type]|length == 1  %}
+                            <li>{{ link_type_text_single }}: {{ linkdisplay(pubdata['displayLinks'][link_type][0]) }}</li>
+                        {%- elif pubdata['displayLinks'][link_type]|length > 1 -%}
+                            <li>{{ link_type_text_multiple }}</li>
+                            <ul class="filessublist">
+                            {%- for link in pubdata['displayLinks'][link_type]|sort(attribute='rank') -%}
+                                <li>{{ linkdisplay(link) }}</li>
+                            {%- endfor -%}
+                            </ul>
+                        {% endif %}
+                    {%- endmacro -%}
+                    <h4>Links</h4>
+                    <ul class="fileslist">
+                        {{- linkdisplaylists('Index Page','More information','More Information') -}}
+                        {{- linkdisplaylists('Document','Document','Documents') -}}
+                        {{- linkdisplaylists('Plate', 'Plate','Plates')  -}}
+                        {{- linkdisplaylists('Abstract','Abstract','Abstracts') -}}
+                        {{- linkdisplaylists('Additional Report Piece','Additional Report Piece','Additional Report Pieces') -}}
+                        {{- linkdisplaylists('Appendix', 'Appendix', 'Appendices') -}}
+                        {{- linkdisplaylists('Application Site','Application Site','Application Sites') -}}
+                        {{- linkdisplaylists('Authors Website','Authors Website','Authors Website') -}}
+                        {{- linkdisplaylists('Chapter','Chapter','Chapters') -}}
+                        {{- linkdisplaylists('Companion Files','Companion File','Companion Files') -}}
+                        {{- linkdisplaylists('Cover','Cover','Covers') -}}
+                        {{- linkdisplaylists('Database','Database','Databases') -}}
+                        {{- linkdisplaylists('Errata','Errata','Errata') -}}
+                        {{- linkdisplaylists('Illustration','Illustration','Illustration') -}}
+                        {{- linkdisplaylists('Image','Image','Image') -}}
+                        {{- linkdisplaylists('Metadata','Metadata','Metadata') -}}
+                        {{- linkdisplaylists('Project Site','Project Site','Project Sites') -}}
+                        {{- linkdisplaylists('Raw Data', 'Raw Data', 'Raw Data') -}}
+                        {{- linkdisplaylists('Read Me','Read Me','Read Me') -}}
+                        {{- linkdisplaylists('Referenced Work','Referenced Work','Referenced Work') -}}
+                        {{- linkdisplaylists('Related Work','Related Work','Related Works') -}}
+                        {{- linkdisplaylists('Spatial Data','Spatial Data','Spatial Data') -}}
+                        {{- linkdisplaylists('Version History','Version History','Version History') -}}
                     </ul>
                 </section>
                 <section itemprop="description" id="abstract" >
-                    <h2 id="abstract_head">Abstract</h2>
+                    <h4 id="abstract_head">Abstract</h4>
                     {{ pubdata['docAbstract']|safe }}
                 </section>
                 {%- if pubdata["geographicExtents"] -%}
@@ -152,18 +167,39 @@
         {%- if pubdata["geographicExtents"] -%}
         <script type=text/javascript>
 
-                        // create a map
-                        map = new L.Map('mymap');
 
-                        // create the OpenStreetMap layer
-                        osmTile = "http://tile.openstreetmap.org/{z}/{x}/{y}.png";
-                        osmCopyright = "Map data &copy; 2012 OpenStreetMap contributors";
-                        osmLayer = new L.TileLayer(osmTile, { maxZoom: 18, attribution: osmCopyright } );
-                        map.addLayer(osmLayer);
+
+
+                        //add esri basemap layers
+                        var topo = L.esri.basemapLayer('Topographic',{ zIndex: 3}),
+                         oceans = L.esri.basemapLayer('Oceans',{ detectRetina: true, zIndex: 1}),
+                                streets = L.esri.basemapLayer('Streets', {zIndex: 3});
+
+                        var oceanlabels =  L.esri.basemapLayer('OceansLabels',{zIndex: 2})
+
+                        // create a map
+
+                        map = new L.Map('mymap', {layers:[topo]});
+
+                        var baseMaps = {
+                            "Oceans": oceans,
+                            "Topographic": topo,
+                            "Streets": streets
+
+                        };
+
+                        var overlayMaps = {
+                            "Ocean Labels": oceanlabels
+                        };
+
+                        L.control.layers(baseMaps, overlayMaps).addTo(map);
+
 
                         // include GeoJSON inside this JavaScript
                         var pubextent = {{ pubdata["geographicExtents"]|tojson|safe }};
                         L.geoJson( pubextent ).addTo(map);
+
+
 
                         map.fitBounds(L.geoJson( pubextent ).getBounds());
                     </script>

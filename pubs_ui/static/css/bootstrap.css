@@ -288,12 +288,16 @@ textarea {
   line-height: inherit;
 }
 a {
-  color: #428bca;
+  color: #1a0dab;
   text-decoration: none;
 }
-a:hover,
+a:hover {
+  color: #1a0dab;
+  text-decoration: underline;
+}
+
 a:focus {
-  color: #2a6496;
+  color: #1a0dab;
   text-decoration: underline;
 }
 a:focus {
@@ -301,6 +305,12 @@ a:focus {
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
+
+a:visited {
+color: #660099;
+text-decoration: none;
+}
+
 figure {
   margin: 0;
 }

@@ -59,12 +59,12 @@
 
         <nav>
         <ul id="mobile_ul">
-                <li onclick="toggle_visibility('mobile_list');"><img id="bars" src="{{ url_for('static', filename='img/bars.png') }}" alt="mobile menu bars"/>
-                    <ul id="mobile_list">
+            <li onclick="toggle_visibility('mobile_list');"><img id="bars" src="{{ url_for('static', filename='img/bars.png') }}" alt="mobile menu bars"/>
+                <ul id="mobile_list">
 
-                        <li><a href="{{ url_for( 'index') }}">Home</a></li>
+                        <li><a href="{{ url_for( 'index') }}">USGS Publications Warehouse</a></li>
                         <li><a href="{{ url_for( 'contact') }}">Contact</a></li>
-                        <li><a href="{{ url_for('new_pubs') }}">Explore recent publication by USGS Authors</a></li>
+                        <li><a href="{{ url_for('new_pubs') }}">Explore recent publications by USGS Authors</a></li>
                 		<li><a href="{{ url_for('browse') }}">Browse all of Pubs Warehouse by Publication type and year</a></li>
                         <li><a href="{{ url_for('faq') }}">FAQS</a></li>
                 		<li><a href="{{ url_for('web_service_docs') }}">Web Service Documentation</a></li>
@@ -74,12 +74,12 @@
                 </li>
             </ul>
             <img src="{{ url_for('static', filename='img/usgs_logo_mobile.png') }}" alt="usgs mobile logo"/>
+        </ul>
             <ul id="desktop_ul">
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a id='nav_title' href="{{ url_for('index') }}">USGS Publications Warehouse</a></li>
                 <li><a href="#">Explore</a>
                 	<ul id="longer">
-                		<li><a href="{{ url_for('new_pubs') }}">Explore recent publication by USGS Authors</a></li>
+                		<li><a href="{{ url_for('new_pubs') }}">Explore recent publications by USGS Authors</a></li>
                 		<li><a href="{{ url_for('browse') }}">Browse all of Pubs Warehouse by Publication type and year</a></li>
                 	</ul>
                 </li>
@@ -91,6 +91,8 @@
                 		<li><a href="{{ url_for('usgs_series') }}">Descriptions of US Geological Survey Report Series</a></li>
                 	</ul>
                 </li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                {% if current_user.is_authenticated() %}<li><a href="{{ url_for('logout_page') }}">Logout</a></li>{% endif %}
             </ul>
             <section id="center">
                 <label for="mysearch2">Search: </label>
@@ -121,7 +123,7 @@
                 URL: {% block url %}{% endblock %}<br />
                 Page Contact Information: <a href="{{ url_for('contact') }}">Pubs Warehouse Contact Page</a><br />
 
-                    Page Last Modified: {% block modtime %}{% endblock %}
+                    Page Last Modified: {% block modtime %}{{ LAST_MODIFIED }}{% endblock %}
          </p>
 	     </footer>
 
