@@ -12,7 +12,7 @@
 {% block main %}
 
 		<main class="container-fluid">
-        	{% if ANNOUNCEMENT_BLOCK|length > 0 %}<span id="announcement">{{ ANNOUNCEMENT_BLOCK }}</span>{% endif %}
+        	{% if ANNOUNCEMENT_BLOCK|length > 0 %}<span id="announcement">{{ ANNOUNCEMENT_BLOCK|safe }}</span>{% endif %}
 		
             <article class="index_article">
 				
