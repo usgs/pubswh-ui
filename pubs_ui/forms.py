@@ -28,8 +28,8 @@ class SearchForm(Form):
 
 
 class NumSeries(Form):
-    num_series = BooleanField('num_series')
-    date_range = DateField('date_range')
+    num_series = BooleanField('Only USGS Numbered Series')
+    date_range = DateField('Include publications back to date:   ')
 
 
 
