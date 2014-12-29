@@ -3,6 +3,9 @@ User-agent: *
 Disallow: /tmp/
 Disallow: /apex/
 Disallow: /mypubs/
+Disallow: /newpubs/
+Disallow: /search/
+Disallow: /service/
 {% else %}
 User-agent: *
 Disallow: /
