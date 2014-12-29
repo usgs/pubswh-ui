@@ -4,11 +4,33 @@
     <meta NAME="title" content="{{ pubdata['title'] }}" />
     <meta name="description" content="{% if pubdata['docAbstract']  %}{{ pubdata['docAbstract'].split(' ')[0:150]|join(' ')|striptags }}...{% endif %}" />
     <META NAME="abstract" CONTENT="{% if pubdata['docAbstract']  %}{{ pubdata['docAbstract']|striptags }}{% endif %}" />
-    {% for author in pubdata['authorsList'] %}<meta NAME="author" content="{{ author }}"/>
-    {% endfor %}
+    {% for author in pubdata['authorsList'] %}<meta NAME="author" content="{{ author }}"/>{% endfor %}
     <meta name = "revised" content="{{ pubdata['lastModifiedDate'] }}"/>
     <meta name = "created" content="{{ pubdata['displaytoPublicDate'] }}"/>
     <meta name = "date" content="{{ pubdata['publicationYear'] }}"/>
+
+    <!-- meta tags for google scholar indexing and zotero/mendeley parsing -->
+    <meta name="citation_title" content="{{ pubdata['title'] }}" />
+    <meta name="citation_publication_date" content="{{ pubdata['publicationYear'] }}" />
+    <meta name="citation_date" content="{{ pubdata['publicationYear'] }}" />
+    <meta name="citation_online_date" content="{{ pubdata['displayToPublicDate'] }}" />
+    {% for author in pubdata['authorsList'] %}<meta NAME="citation_author" content="{{ author }}"/>{% endfor %}
+    {% if pubdata['abstract'] %}<meta name="citation_abstract" content="{{ pubdata['abstract']|striptags }}" />{% endif %}
+    {% if pubdata['displayLinks']['document']|length > 0  %}<meta name="citation_pdf_url" content="{{ pubdata['displayLinks']['document'][0] }}" />{% endif %}
+    {% if pubdata['conferenceTitle'] %}<meta name="citation_conference_title" content="{{ pubdata['conferenceTitle'] }}" />{% endif %}
+    {% if pubdata['seriesTitle'] %}<meta name="citation_journal_title" content="{{ pubdata['seriesTitle']['text'] }}" />{% endif %}
+    {% if pubdata['volume'] %}<meta name="citation_volume" content="{{ pubdata['volume'] }}" />{% endif %}
+    {% if pubdata['issue'] %}<meta name="citation_issue" content="{{ pubdata['issue'] }}" />{% endif %}
+    {% if pubdata['seriesTitle']['onlineIssn'] %}<meta name="citation_issn" content="{{ pubdata['seriesTitle']['onlineIssn'] }}" />{% endif %}
+    {% if pubdata['isbn'] %}<meta name="citation_isbn" content="{{ pubdata['isbn'] }}" />{% endif %}
+    {% if pubdata['startPage'] %}<meta name="citation_firstpage" content="{{ pubdata['startPage'] }}" />{% endif %}
+    {% if pubdata['endPage'] %}<meta name="citation_lastpage" content="{{ pubdata['endPage'] }}" />{% endif %}
+    {% if pubdata['publicationType']['text'] == 'Thesis' %}<meta name="citation_dissertation_institution" content="{{ pubdata['publisher'] }}" />{% endif %}
+    {% if pubdata['publicationType']['text'] == 'Report' %}<meta name="citation_technical_report_institution" content="{{ pubdata['publisher'] }}" />{% endif %}
+    {% if pubdata['publicationType']['text'] == 'Report' %}<meta name="citation_technical_report_number" content="{{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}" />{% endif %}
+    {% if pubdata['doi'] %}<meta name="citation_doi" content="{{ pubdata['doi'] }}" />{% endif %}
+
+
     {% block page_script %}
        {%- if pubdata["geographicExtents"] -%}
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaflet.css') }}">

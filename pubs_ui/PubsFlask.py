@@ -142,6 +142,9 @@ def load_token(token):
         return user
     return None
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 @app.route("/logout/")
 def logout_page():
@@ -457,3 +460,36 @@ def new_pubs():
     return render_template('new_pubs.html',
                            new_pubs=pubs_records,
                            num_form=num_form)
+
+@app.route('/storesearch/search:advance/page=1/series_cd=<series_code>/year=<pub_year>/report_number=<report_number>')
+def store_links(series_code, pub_year, report_number):
+    """
+    This is a function to deal with the fact that the USGS store has dumb links to the warehouse based on the legacy search.
+    :param series_code: the series code, which we will have to map to series name
+    :param pub_year: the publication year, two digit, so we will have to make a guess as to what century they want
+    :param report_number: report number- we can generally just pass this through
+    :return:
+    """
+    pubcodes = {'AR':'Annual Report', 'A':'Antarctic Map', 'B':'Bulletin', 'CIR':'Circular', 'CP':'Circum-Pacific Map',
+                'COAL':'Coal Map', 'DS':'Data Series', 'FS':'Fact Sheet', 'GF':'Folios of the Geologic Atlas',
+                'GIP':'General Information Product', 'GQ':'Geologic Quadrangle', 'GP':'Geophysical Investigation Map',
+                'HA':'Hydrologic Atlas', 'HU':'Hydrologic Unit', 'I':'IMAP', 'L':'Land Use/ Land Cover',
+                'MINERAL':'Mineral Commodities Summaries', 'MR':'Mineral Investigations Resource Map',
+                'MF':'Miscellaneous Field Studies Map', 'MB':'Missouri Basin Study', 'M':'Monograph',
+                'OC':'Oil and Gas Investigation Chart', 'OM':'Oil and Gas Investigation Map', 'OFR':'Open-File Report',
+                'PP':'Professional Paper', 'RP':'Resource Publication', 'SIM':'Scientific Investigations Map',
+                'SIR':'Scientific Investigations Report', 'TM':'Techniques and Methods',
+                'TWRI':'Techniques of Water-Resource Investigation', 'TEI':'Trace Elements Investigations',
+                'TEM':'Trace Elements Memorandum', 'WDR':'Water Data Report', 'WSP':'Water Supply Paper',
+                'WRI':'Water-Resources Investigations Report'}
+
+    # horrible hack to deal with the fact that the USGS store apparently never heard of 4 digit dates
+    if int(pub_year) >= 30:
+        pub_year = '19'+pub_year
+    elif int(pub_year) < 30:
+        pub_year = '20'+pub_year
+
+    args = {'year': pub_year, 'seriesName': pubcodes.get(series_code), 'reportNumber': report_number, 'advanced':True }
+
+    return redirect(url_for('search_results', seriesName=pubcodes.get(series_code), reportNumber=report_number,
+                            year=pub_year, advanced=True))
