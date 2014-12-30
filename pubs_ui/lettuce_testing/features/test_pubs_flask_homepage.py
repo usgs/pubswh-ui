@@ -36,10 +36,9 @@ def i_access_the_homepage_url_with_the_failing_service_backend(step):
     
 @step
 def i_should_see_a_200_status_code_from_the_homepage(step):
-    assert_equal(world.response_status_code, world.expected)
     httpretty.disable()
     httpretty.reset()
-    
+    assert_equal(world.response_status_code, world.expected)
     
 # Homepage responds if service is working
 @step
@@ -87,7 +86,7 @@ def i_access_the_homepage_url_with_the_working_service(step):
     
 @step
 def i_should_see_the_imitated_pubs_content_on_the_page(step):
-    assert_in('Das Boot', world.response_content)
     httpretty.disable()
     httpretty.enable()
+    assert_in('Das Boot', world.response_content)
     

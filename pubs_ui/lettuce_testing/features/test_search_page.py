@@ -39,10 +39,9 @@ def i_access_the_search_url_with_a_simulated_query(step):
     
 @step
 def i_should_see_a_200_status_code_from_the_search_page(step):
-    assert_equal(world.response_status_code, world.expected)
     httpretty.disable()
     httpretty.reset()
-    
+    assert_equal(world.response_status_code, world.expected)
 
 """   
 Search bar with working search
@@ -86,7 +85,6 @@ def i_access_the_search_url_with_a_simulated_query_string(step):
     
 @step
 def i_should_see_the_fake_content_i_created_in_the_response(step):
-    assert_in('Hop on Pop', world.response_content)
     httpretty.disable()
     httpretty.reset()
-    
+    assert_in('Hop on Pop', world.response_content)
