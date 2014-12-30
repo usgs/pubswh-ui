@@ -466,7 +466,8 @@ def new_pubs():
 
 
 @app.route('/legacysearch/search:advance/page=1/series_cd=<series_code>/year=<pub_year>/report_number=<report_number>')
-def legacy_search(series_code, pub_year, report_number):
+@app.route('/legacysearch/search:advance/page=1/series_cd=<series_code>/report_number=<report_number>')
+def legacy_search(series_code=None, report_number=None, pub_year=None):
     """
     This is a function to deal with the fact that the USGS store has dumb links to the warehouse
     based on the legacy search, which had all the query params in a backslash-delimited group.  A couple lines of
@@ -495,10 +496,12 @@ def legacy_search(series_code, pub_year, report_number):
                          'WRI': 'Water-Resources Investigations Report'}
 
     # horrible hack to deal with the fact that the USGS store apparently never heard of 4 digit dates
-    if 30 <= int(pub_year) < 100:
-        pub_year = ''.join(['19', pub_year])
-    elif int(pub_year) < 30:
-        pub_year = ''.join(['20', pub_year])
+
+    if pub_year is not None:
+        if 30 <= int(pub_year) < 100:
+            pub_year = ''.join(['19', pub_year])
+        elif int(pub_year) < 30:
+            pub_year = ''.join(['20', pub_year])
 
     return redirect(url_for('search_results', seriesName=usgs_series_codes.get(series_code), reportNumber=report_number,
-                            year=pub_year, advanced=True))
+                    year=pub_year, advanced=True))

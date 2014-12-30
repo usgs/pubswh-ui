@@ -21,13 +21,15 @@
     {% if pubdata['seriesTitle'] %}<meta name="citation_journal_title" content="{{ pubdata['seriesTitle']['text'] }}" />{% endif %}
     {% if pubdata['volume'] %}<meta name="citation_volume" content="{{ pubdata['volume'] }}" />{% endif %}
     {% if pubdata['issue'] %}<meta name="citation_issue" content="{{ pubdata['issue'] }}" />{% endif %}
-    {% if pubdata['seriesTitle']['onlineIssn'] %}<meta name="citation_issn" content="{{ pubdata['seriesTitle']['onlineIssn'] }}" />{% endif %}
+    {% if pubdata['seriesTitle']%}<meta name="citation_issn" content="{{ pubdata['seriesTitle']['onlineIssn'] }}" />{% endif %}
     {% if pubdata['isbn'] %}<meta name="citation_isbn" content="{{ pubdata['isbn'] }}" />{% endif %}
     {% if pubdata['startPage'] %}<meta name="citation_firstpage" content="{{ pubdata['startPage'] }}" />{% endif %}
     {% if pubdata['endPage'] %}<meta name="citation_lastpage" content="{{ pubdata['endPage'] }}" />{% endif %}
-    {% if pubdata['publicationType']['text'] == 'Thesis' %}<meta name="citation_dissertation_institution" content="{{ pubdata['publisher'] }}" />{% endif %}
-    {% if pubdata['publicationType']['text'] == 'Report' %}<meta name="citation_technical_report_institution" content="{{ pubdata['publisher'] }}" />{% endif %}
-    {% if pubdata['publicationType']['text'] == 'Report' %}<meta name="citation_technical_report_number" content="{{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}" />{% endif %}
+    {% if pubdata['publicationType'] %}
+        {% if pubdata['publicationType']['text'] == 'Thesis' %}<meta name="citation_dissertation_institution" content="{{ pubdata['publisher'] }}" />{% endif %}
+        {% if pubdata['publicationType']['text'] == 'Report' %}<meta name="citation_technical_report_institution" content="{{ pubdata['publisher'] }}" />{% endif %}
+        {% if pubdata['publicationType']['text'] == 'Report' %}<meta name="citation_technical_report_number" content="{{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}" />{% endif %}
+    {% endif %}
     {% if pubdata['doi'] %}<meta name="citation_doi" content="{{ pubdata['doi'] }}" />{% endif %}
 
 
@@ -194,11 +196,11 @@
 
 
                         //add esri basemap layers
-                        var topo = L.esri.basemapLayer('Topographic',{ zIndex: 3}),
-                         oceans = L.esri.basemapLayer('Oceans',{ detectRetina: true, zIndex: 1}),
-                                streets = L.esri.basemapLayer('Streets', {zIndex: 3});
+                        var topo = L.esri.basemapLayer('Topographic'),
+                         oceans = L.esri.basemapLayer('Oceans',{ detectRetina: true}),
+                                streets = L.esri.basemapLayer('Streets');
 
-                        var oceanlabels =  L.esri.basemapLayer('OceansLabels',{zIndex: 2})
+                        var oceanlabels =  L.esri.basemapLayer('OceansLabels')
 
                         // create a map
 
