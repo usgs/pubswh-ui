@@ -1,8 +1,8 @@
-'''
+"""
 Created on Oct 15, 2014
 
 @author: ayan
-'''
+"""
 import sys
 from datetime import timedelta
 
@@ -36,7 +36,6 @@ PREVIEW_ENDPOINT_URL = ''
 LOGIN_PAGE_PATH = ''
 
 
-
 if DEBUG:
     CONTACT_RECIPIENTS = ['ayan@usgs.gov', 'jkreft@usgs.gov']
 else:
@@ -55,8 +54,8 @@ except ImportError:
     pass
 
 # variables used for testing purposes
-nose_testing = sys.argv[0].endswith('nosetests') # returns True if 'nosetests' is a command line argument
-if 'lettuce' in sys.argv[0]: # determine if a lettuce is being run
+nose_testing = sys.argv[0].endswith('nosetests')  # returns True if 'nosetests' is a command line argument
+if 'lettuce' in sys.argv[0]:  # determine if a lettuce is being run
     lettuce_testing = True
 else:
     lettuce_testing = False
