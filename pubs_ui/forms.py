@@ -1,10 +1,12 @@
 __author__ = 'jameskreft'
 
 from flask.ext.wtf import Form, RecaptchaField
-from wtforms import StringField, TextAreaField, SubmitField, validators, BooleanField, HiddenField, PasswordField
+from wtforms import StringField, TextAreaField, SubmitField, validators, BooleanField, HiddenField, PasswordField, SelectField
 from wtforms.fields.html5 import SearchField, DateField
 from wtforms.validators import DataRequired
-
+from pubs_ui import app
+from requests import get
+lookup_url = app.config['LOOKUP_URL']
 
 class ContactForm(Form):
     name = StringField("Name")
@@ -22,7 +24,13 @@ class SearchForm(Form):
     contributingOffice = StringField("Contributing Office")
     typeName = StringField("Publication Type")
     subtypeName = StringField("Publication Subtype")
-    seriesName = StringField("Series Name")
+    #seriesName = StringField("Series Name")
+
+    seriesNameList = []
+    for series in get(lookup_url + 'publicationseries', params={'mimetype': 'json'}).json():
+        seriesNameList.append((series['id'], series['text']))
+    seriesName = SelectField(label="Series Name", choices=seriesNameList)
+
     reportNumber = StringField("Report Number")
     advanced = HiddenField('advanced')
 
