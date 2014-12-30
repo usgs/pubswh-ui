@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block head %}
 	<title>New Publications by USGS Authors</title>
-	<meta name="description" content="Explore publications from the last seven days">
+	<meta name="description" content="Explore publications recently added to the USGS Publications Warehouse">
 {% endblock head %}
 
 {% block page_style %}
@@ -9,22 +9,26 @@
 {% endblock page_style %}
 
 {% block main %}
-<h1>USGS Publications Added in the Last Week.</h1>
-    <form id = num_series method="GET" action="/newpubs">
-        <p>{{ num_form.num_series }} USGS Numbered Series</p>
-        <p>{{ num_form.date_range }} Search Back to Date</p>
-        <button type="submit" class="btn"> Search </button>
-    </form>
+<h1>Publications recently added to the Pubs Warehouse </h1>
+    <section id="new_pubs_form">
+        <form style="display:inline;" id = num_series method="GET" action="{{ url_for('new_pubs') }}">
+        <p>{{ num_form.num_series }}  {{ num_form.num_series.label }}</p>
+        <p>{{ num_form.date_range.label }} (500 records max) {{ num_form.date_range }}</p>
+        <button type="submit" class="btn">Filter</button>
+        </form>
+    </section>
 
-    <section id="new_pub">
+
+    <section>
 
     {% for result in new_pubs %}
 
         <article>
 
             <h4><a class="search-title" href="{{ url_for('publication', index_id = result['indexId']) }}">{{ result['title']|safe }}</a></h4>
+            <p>Released {{ result['FormattedDisplayToPublicDate'] }} EST</p>
             <p class="pubinfo">{{ result|display_pub_info }}</p>
-            {% if result['authorsList']|length > 0 %}<p>{{ result['authorsList']|join(', ') }}</p>{% endif %}
+            {% if result['authorsList']|length > 0 %}<p class="searchContributors">{{ result['authorsList']|join(', ') }}</p>{% endif %}
             {% if result['editorsList']|length > 0 %}<p class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</p>{% endif %}
             {% if result['docAbstract']  %} <p>{{ result['docAbstract']|safe }}</p> {% endif %}
         </article>

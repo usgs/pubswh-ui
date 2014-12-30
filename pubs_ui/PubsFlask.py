@@ -15,6 +15,8 @@ from datetime import date, timedelta
 from dateutil import parser as dateparser
 from flask_login import (LoginManager, login_required, login_user, logout_user, UserMixin)
 from itsdangerous import URLSafeTimedSerializer
+from operator import itemgetter
+import arrow
 
 # set UTF-8 to be default throughout app
 reload(sys)
@@ -421,7 +423,7 @@ def site_map():
 def new_pubs():
     num_form = NumSeries()
     sp = SearchPublications(search_url)
-    search_kwargs = {'pub_x_days': 30}  # bring back recent publications
+    search_kwargs = {'pub_x_days': 30, "page_size": 500}  # bring back recent publications
 
     #Search if num_series subtype was checked in form
     if request.args.get('num_series') == 'y':
@@ -446,6 +448,9 @@ def new_pubs():
 
     try:
         pubs_records = recent_pubs_content['records']
+        pubs_records.sort(key=itemgetter('displayToPublicDate'), reverse=True)
+        for record in pubs_records:
+            record['FormattedDisplayToPublicDate'] = arrow.get(record['displayToPublicDate']).format('MMMM DD, YYYY HH:mm')
     except TypeError:
         pubs_records = []  # return an empty list recent_pubs_content is None (e.g. the service is down)
 
