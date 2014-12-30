@@ -4,11 +4,11 @@
     </fieldset>
     <fieldset id='second' class='fancyform'>
          {{ form.title.label }}{{ form.title(placeholder = 'enter title') }}
-         {{ form.contributingOffice.label }}{{ form.contributingOffice(placeholder = 'e.g. Texas Water Science Center') }}
+         {{ form.contributingOffice.label }}{{ form.contributingOffice() }}
          {{ form.contributor.label }}{{ form.contributor(placeholder = 'Name or part of name') }}
          {{ form.year.label }}{{ form.year(placeholder = 'e.g. 2014') }}
-         {{ form.typeName.label }}{{ form.typeName(placeholder='e.g. Report, Article, etc') }}
-         {{ form.subtypeName.label }}{{ form.subtypeName(placeholder='e.g. USGS Numbered Series, Journal Article, etc') }}
+         {{ form.typeName.label }}{{ form.typeName() }}
+         {{ form.subtypeName.label }}{{ form.subtypeName() }}
          {{ form.seriesName.label }}{{ form.seriesName() }}
          {{ form.reportNumber.label }}{{ form.reportNumber(placeholder='2014-3113') }}
          {{ form.advanced() }}
