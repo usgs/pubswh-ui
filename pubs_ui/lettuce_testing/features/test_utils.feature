@@ -54,15 +54,25 @@ Feature: Test all pub_ui utilities
         When I try to make a record with parseable json and catch an error
         Then I see the record has geographicExtents dropped
 
-	Scenario: preceding_and_superseding functions correctly
+	Scenario: add_legacy_data functions correctly with preceding and superseding
         Given I have a mockup pubs legacy url that has preceding and superseding publications
         When I make a dict object with preceding and superseding publications
         Then I see the preceding and superseding records have been listed correctly
 
-    Scenario: supersedes and precedes functions behave correctly
+    Scenario: add legacy data functions behave correctly with supersede data
 		Given I have a mocked base publication record, a base url, and a mocked supersedes endpoint
-        When I pass those variables to add_supersede_data
+        When I pass those variables to add_legacy_data
 		Then The relationships portion of the pub record should contain what I expect
+
+	Scenario: add_legacy_data functions correctly with a store item
+	  	Given I have a mockup pubs legacy url that has a store item
+	  	When I make a dict object with the store offer information
+	  	Then I see that the store information has been listed correctly
+
+  	Scenario: add_legacy_data functions add offers if they are there
+		Given I have a mocked base publication record, a base url, and a mocked legacy endpoint
+        When I pass those store variables to add_legacy_data
+		Then The offers portion of the pub record should contain what I expect
 
 	Scenario: make_contributor_list functions correctly
 		Given we have imitated the authors data we would see from pubs

@@ -56,8 +56,8 @@ def pubdetails(pubdata):
         ['largerWorkType', 'text', 'Publication type:'],
         ['largerWorkSubtype', 'text', 'Publication Subtype:'],
         ['largerWorkTitle', 'text', 'Larger Work Title:'],
-        ['startPage', 'Start page:'],
-        ['endPage', 'End page:'],
+        ['startPage', 'First page:'],
+        ['endPage', 'Last page:'],
         ['temporalStart', 'Time Range Start:'],
         ['temporalEnd', 'Time Range End:'],
         ['conferenceTitle', 'Conference Title:'],
@@ -396,7 +396,7 @@ def jsonify_geojson(record):
     return record
 
 
-def preceding_and_superseding(context_id, supersedes_service_url):
+def legacy_api_info(context_id, supersedes_service_url):
     """
     Obtains supersede info for the context publication from an external (legacy) 
     service, and converts that info into an unambiguous form. Note that, 
@@ -424,8 +424,14 @@ def preceding_and_superseding(context_id, supersedes_service_url):
             related = response_content.get('modsCollection').get('mods')[0].get('relatedItem')
         except TypeError:
             related = None
+        try:
+            product = response_content.get('modsCollection').get('mods')[0].get('product')
+        except TypeError:
+            product = None
     else:
         related = None
+        product = None
+
     # REMARKS ABOUT SERVICE RETURNED VALUE ASSUMPTIONS
     #
     # The service returns JSON, which is converted into Python structures.
@@ -443,6 +449,31 @@ def preceding_and_superseding(context_id, supersedes_service_url):
     # conventions about framing the predicate from the viewpoint of the subject.
     # 
     # Just think of the @type as saying "This linked pub is ___ the context pub."
+    offers = None
+    if product is not None:
+        # check if the product is in stock or not
+        product_availabilty = 'schema:OutOfStock'
+        if product[0].get('availability') == 'Y':
+            product_availabilty = 'schema:InStock'
+        # build the offers object
+        offers = {
+            "@context":
+                {"schema": "http://schema.org/"},
+            "@type": "schema:ScholarlyArticle",
+            "schema:offers": {
+                "@type": "schema:Offer",
+                "schema:availability": product_availabilty,
+                "schema:price": product[0].get('price'),
+                "schema:priceCurrency": "USD",
+                "schema:url": product[0].get('url'),
+                "schema:seller": {
+                    "@type": "schema:Organization",
+                    "schema:name": "USGS Store",
+                    "schema:url": "http://store.usgs.gov"}
+                }
+            }
+
+
     predecessors = []
     successors = []
     if related is not None:
@@ -455,10 +486,10 @@ def preceding_and_superseding(context_id, supersedes_service_url):
             elif item['@type'] == 'succeeding':
                 successors.append(item_summary_info)
 
-    return {'predecessors': predecessors, 'context_item': context_id, 'successors': successors}
+    return {'predecessors': predecessors, 'context_item': context_id, 'successors': successors, 'offers': offers}
 
 
-def add_supersede_data(context_pubdata, supersedes_service_url, url_root):
+def add_legacy_data(context_pubdata, supersedes_service_url, url_root):
     """
     Accepts publication data JSON for the desired context publication,
     extracts the context publication's index_id, calls precedes_supersedes_url
@@ -485,7 +516,7 @@ def add_supersede_data(context_pubdata, supersedes_service_url, url_root):
     pub_type = 'rdac:Work'
     
     # obtain predecessor and successor related items
-    pre_super = preceding_and_superseding(index_id, supersedes_service_url)
+    pre_super = legacy_api_info(index_id, supersedes_service_url)
 
     if pre_super['predecessors'] or pre_super['successors']:
 
@@ -538,7 +569,9 @@ def add_supersede_data(context_pubdata, supersedes_service_url, url_root):
             if item['date']:
                 related_pub['dc:date'] = item['date']
             return_pubdata['relationships']['@graph'].append(related_pub)
-
+    # add offer data from the USGS store if it exists
+    if pre_super['offers']:
+        return_pubdata['offers'] = pre_super['offers']
     return return_pubdata
 
 
@@ -550,6 +583,7 @@ def change_to_pubs_test(pubs_url):
     """
     pubs_test_url = pubs_url.replace('pubs.er', 'pubs-test.er')
     return pubs_test_url
+
 
 def generate_auth_header(request):
     """
@@ -572,6 +606,7 @@ def generate_auth_header(request):
     header = {'Authorization': auth_value}
     return header
 
+
 def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url):
     """
     Takes publication data from the pubs-services API and smashes it around so that it is friendly for jinja2 templates
@@ -579,7 +614,7 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     :return: pubdata
     """
     pubdata = pubdetails(pubdata)
-    pubdata = add_supersede_data(pubdata, supersedes_url, json_ld_id_base_url)
+    pubdata = add_legacy_data(pubdata, supersedes_url, json_ld_id_base_url)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
