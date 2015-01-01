@@ -49,7 +49,7 @@
         {% block main %}
         <main role ="main">
             <article itemscope itemtype="http://schema.org/ScholarlyArticle">
-            {% if pubdata['publicationType']['text'] == 'Report' %}<abbr class="unapi-id" title="{{ pubdata['indexId'] }}"></abbr>{% endif %}
+            {% if pubdata['publicationType']['text'] == 'Report' %}<abbr class="unapi-id" title="{{ pubdata['indexId'] }}"><!-- avoid empty --></abbr>{% endif %}
 
 
             {% macro thumbnail_image() %}

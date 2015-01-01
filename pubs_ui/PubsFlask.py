@@ -511,6 +511,7 @@ def legacy_search(series_code=None, report_number=None, pub_year=None):
 def unapi():
     """
     this is an unapi format, which appears to be the only way to get a good export to zotero that has all the Zotero fields
+    Documented here: http://unapi.info/specs/
     :return:
     """
     formats = {'rdf_bibliontology': {'type': 'application/xml', 'docs': "http://bibliontology.com/specification"}}
