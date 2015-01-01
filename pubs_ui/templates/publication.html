@@ -8,8 +8,7 @@
     <meta name = "revised" content="{{ pubdata['lastModifiedDate'] }}"/>
     <meta name = "created" content="{{ pubdata['displaytoPublicDate'] }}"/>
     <meta name = "date" content="{{ pubdata['publicationYear'] }}"/>
-
-    <!-- meta tags for google scholar indexing and zotero/mendeley parsing -->
+  <!-- meta tags for google scholar indexing and zotero/mendeley parsing -->
     <meta name="citation_title" content="{{ pubdata['title'] }}" />
     <meta name="citation_publication_date" content="{{ pubdata['publicationYear'] }}" />
     <meta name="citation_date" content="{{ pubdata['publicationYear'] }}" />
@@ -50,6 +49,8 @@
         {% block main %}
         <main role ="main">
             <article itemscope itemtype="http://schema.org/ScholarlyArticle">
+            {% if pubdata['publicationType']['text'] == 'Report' %}<abbr class="unapi-id" title="{{ pubdata['indexId'] }}"></abbr>{% endif %}
+
 
             {% macro thumbnail_image() %}
                 {# this image is being dynamically resized to 200 pixels from whatever it might have been #}

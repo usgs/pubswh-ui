@@ -1,0 +1,58 @@
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:res="http://purl.org/vocab/resourcelist/schema#"
+ xmlns:z="http://www.zotero.org/namespaces/export#"
+ xmlns:dcterms="http://purl.org/dc/terms/"
+ xmlns:bibo="http://purl.org/ontology/bibo/"
+ xmlns:address="http://schemas.talis.com/2005/address/schema#"
+ xmlns:foaf="http://xmlns.com/foaf/0.1/">
+    <bibo:Report rdf:about="http://pubs.er.usgs.gov/publication/{{ pubdata['indexId'] }}">
+        <dcterms:title>{{ pubdata['title']|e }}</dcterms:title>
+        <dcterms:abstract>{{ pubdata['docAbstract']|e }}</dcterms:abstract>
+        {% if pubdata['seriesNumber'] %}
+                    <bibo:number>{{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %}</bibo:number>
+        {% endif %}
+        <dcterms:type>{% if pubdata['publicationSubtype']  %}{{ pubdata['publicationSubtype']['text'] }}{% endif %}</dcterms:type>
+        <dcterms:publisher>
+            <foaf:Organization>
+                <address:localityName>{% if pubdata['publisherLocation']  %}{{ pubdata['publisherLocation'] }}{% endif %}</address:localityName>
+                <foaf:name>{% if pubdata['publisher']  %}{{ pubdata['publisher'] }}{% endif %}</foaf:name>
+            </foaf:Organization>
+        </dcterms:publisher>
+        <dcterms:date>{% if pubdata['publicationYear']  %}{{ pubdata['publicationYear'] }}{% endif %}</dcterms:date>
+        <bibo:pages>{% if pubdata['numberOfPages']  %}{{ pubdata['numberOfPages'] }}{% endif %}</bibo:pages>
+        <bibo:uri>http://pubs.er.usgs.gov/publication/{{ pubdata['indexId'] }}</bibo:uri>
+        <z:extra>{% if pubdata['ipdsId']  %}{{ pubdata['ipdsId'] }}{% endif %}</z:extra>
+        {% if pubdata['contributors']['authors'] %}
+        <bibo:authorList>
+            <rdf:Seq>
+                {% for author in pubdata['contributors']['authors']|sort(attribute='rank') %}
+                <rdf:li rdf:nodeID="{{ author['contributorId'] }}"/>
+                {% endfor %}
+            </rdf:Seq>
+        </bibo:authorList>
+        {% for author in pubdata['contributors']['authors']|sort(attribute='rank') %}
+        <dcterms:creator rdf:nodeID="{{ author['contributorId'] }}"/>
+        {% endfor %}
+        {% endif %}
+        {% if pubdata['seriesTitle'] %}
+        <dcterms:isPartOf>
+            <bibo:Series>
+               <dcterms:title>{{pubdata['seriesTitle']['text']}}</dcterms:title>
+            </bibo:Series>
+        </dcterms:isPartOf>
+        {% endif %}
+    </bibo:Report>
+    {% if pubdata['contributors']['authors'] %}
+    {% for author in pubdata['contributors']['authors'] %}
+    {% if author['corporation'] == False %}
+    <foaf:Person rdf:nodeID="{{ author['contributorId'] }}">
+        <foaf:givenname>{{ author['given'] }}</foaf:givenname>
+        <foaf:surname>{{ author['family'] }}{% if author['suffix'] %} {{ author['suffix'] }}{% endif %}</foaf:surname>
+    </foaf:Person>
+    {% else  %}
+    <foaf:Organization rdf:nodeID="{{ author['contributorId'] }}">{{ author['organization'] }}</foaf:Organization>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+</rdf:RDF>
