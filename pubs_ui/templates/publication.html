@@ -8,8 +8,7 @@
     <meta name = "revised" content="{{ pubdata['lastModifiedDate'] }}"/>
     <meta name = "created" content="{{ pubdata['displaytoPublicDate'] }}"/>
     <meta name = "date" content="{{ pubdata['publicationYear'] }}"/>
-
-    <!-- meta tags for google scholar indexing and zotero/mendeley parsing -->
+  <!-- meta tags for google scholar indexing and zotero/mendeley parsing -->
     <meta name="citation_title" content="{{ pubdata['title'] }}" />
     <meta name="citation_publication_date" content="{{ pubdata['publicationYear'] }}" />
     <meta name="citation_date" content="{{ pubdata['publicationYear'] }}" />
@@ -50,10 +49,24 @@
         {% block main %}
         <main role ="main">
             <article itemscope itemtype="http://schema.org/ScholarlyArticle">
+            {% if pubdata['publicationType']['text'] == 'Report' %}<abbr class="unapi-id" title="{{ pubdata['indexId'] }}"><!-- avoid empty --></abbr>{% endif %}
+
+
+            {% macro thumbnail_image() %}
                 {# this image is being dynamically resized to 200 pixels from whatever it might have been #}
-
                 <img id="thumbnail" src="{{ wsgi_str }}{{ url_for('images', filename=pubdata['displayLinks']['Thumbnail'][0]['url'], width=200) }}" alt="thumbnail"/>
+            {% endmacro %}
 
+            {% if pubdata['displayLinks']['Document']|length >= 1 %}
+                <a title ="Main document link, right click the download or save as" href="{{ pubdata['displayLinks']['Document'][0]['url'] }}">{{ thumbnail_image() }}</a>
+            {% elif pubdata['displayLinks']['Index Page']|length >= 1 %}
+                <a title ="Go to {% if pubdata['displayLinks']['Index Page'][0]['text'] -%}
+                                    {{- pubdata['displayLinks']['Index Page'][0]['text'] -}}
+                                {%- else -%} Publisher Index Page
+                                {%- endif  %} for more information" href="{{ pubdata['displayLinks']['Index Page'][0]['url'] }}">{{ thumbnail_image() }}</a>
+            {% else %}
+                {{ thumbnail_image() }}
+            {% endif %}
                 <hgroup>
                     <h3 itemprop="name">{{ pubdata['title']|safe }}</h3>
                     {% if pubdata['seriesTitle'] %}

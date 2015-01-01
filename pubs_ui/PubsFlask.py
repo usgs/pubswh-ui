@@ -505,3 +505,26 @@ def legacy_search(series_code=None, report_number=None, pub_year=None):
 
     return redirect(url_for('search_results', seriesName=usgs_series_codes.get(series_code), reportNumber=report_number,
                     year=pub_year, advanced=True))
+
+
+@app.route('/unapi')
+def unapi():
+    """
+    this is an unapi format, which appears to be the only way to get a good export to zotero that has all the Zotero fields
+    Documented here: http://unapi.info/specs/
+    :return:
+    """
+    formats = {'rdf_bibliontology': {'type': 'application/xml', 'docs': "http://bibliontology.com/specification"}}
+    unapi_id = request.args.get('id')
+    print "unapi id! ", unapi_id
+    unapi_format = request.args.get('format')
+    if unapi_format is None or unapi_format not in formats:
+        return render_template('unapi_formats.xml', unapi_id=unapi_id, formats=formats,  mimetype='text/xml')
+    if unapi_id is not None and unapi_format in formats:
+        r = get(pub_url + 'publication/' + unapi_id, params={'mimetype': 'json'}, verify=verify_cert)
+        if r.status_code == 404:
+            return render_template('404.html'), 404
+        pubdata = r.json()
+        print pubdata
+        return render_template('rdf_bibliontology.rdf', pubdata=pubdata, formats=formats,  mimetype='text/xml')
+
