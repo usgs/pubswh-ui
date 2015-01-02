@@ -512,19 +512,22 @@ def unapi():
     """
     this is an unapi format, which appears to be the only way to get a good export to zotero that has all the Zotero fields
     Documented here: http://unapi.info/specs/
-    :return:
+    :return: rendered template of (at this time) bibontology rdf, which maps directly to Zotero Fields
     """
-    formats = {'rdf_bibliontology': {'type': 'application/xml', 'docs': "http://bibliontology.com/specification"}}
+
+    formats = {'rdf_bibliontology': {'type': 'application/xml', 'docs': "http://bibliontology.com/specification",
+                                     'template': 'rdf_bibliontology.rdf'}}
     unapi_id = request.args.get('id')
-    print "unapi id! ", unapi_id
     unapi_format = request.args.get('format')
     if unapi_format is None or unapi_format not in formats:
+        if unapi_id is not None:
+            unapi_id = unapi_id.split('/')[-1]
         return render_template('unapi_formats.xml', unapi_id=unapi_id, formats=formats,  mimetype='text/xml')
     if unapi_id is not None and unapi_format in formats:
+        unapi_id = unapi_id.split('/')[-1]
         r = get(pub_url + 'publication/' + unapi_id, params={'mimetype': 'json'}, verify=verify_cert)
         if r.status_code == 404:
             return render_template('404.html'), 404
         pubdata = r.json()
-        print pubdata
-        return render_template('rdf_bibliontology.rdf', pubdata=pubdata, formats=formats,  mimetype='text/xml')
+        return render_template(formats[unapi_format]['template'], pubdata=pubdata, formats=formats,  mimetype='text/xml')
 
