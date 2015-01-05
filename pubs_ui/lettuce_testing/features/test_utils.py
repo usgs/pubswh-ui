@@ -58,7 +58,7 @@ def get_first_details(step):
     r = get(world.live_url)
     json = r.json()
     world.output = len(str(pubdetails(json))) #Measure json lengths (as strings) since there is a lot of data
-    world.expected_output = 1893
+    world.expected_output = 1896
 
 """
 display-link scenarios
@@ -134,7 +134,7 @@ def test_links_ouput(step):
 @step(r"I create_display_links from the pub's response")
 def live_display_links(step):
     world.output = len(create_display_links(get(world.live_url).json()))
-    world.expected_output = 21 #check all necessary components are there.
+    world.expected_output = 20 #check all necessary components are there.
 """
 getbrowsecontent scenarios
 """
