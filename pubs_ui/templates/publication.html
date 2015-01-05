@@ -49,16 +49,20 @@
         {% block main %}
         <main role ="main">
             <article itemscope itemtype="http://schema.org/ScholarlyArticle">
-            {% if pubdata['publicationType']['text'] == 'Report' %}<abbr class="unapi-id" title="{{ pubdata['indexId'] }}"><!-- avoid empty --></abbr>{% endif %}
+            {% if pubdata['publicationType']['text'] == 'Report' %}<abbr class="unapi-id" title="http://pubs.er.usgs.gov/publication/{{ pubdata['indexId'] }}"><!-- avoid empty --></abbr>{% endif %}
 
 
             {% macro thumbnail_image() %}
                 {# this image is being dynamically resized to 200 pixels from whatever it might have been #}
+                {% if pubdata['displayLinks']['Thumbnail']|length > 0 %}
                 <img id="thumbnail" src="{{ wsgi_str }}{{ url_for('images', filename=pubdata['displayLinks']['Thumbnail'][0]['url'], width=200) }}" alt="thumbnail"/>
+                {% else %}
+                <img id="thumbnail" src="{{ wsgi_str }}{{ url_for('images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=200) }}" alt="thumbnail"/>
+                {% endif %}
             {% endmacro %}
 
             {% if pubdata['displayLinks']['Document']|length >= 1 %}
-                <a title ="Main document link, right click the download or save as" href="{{ pubdata['displayLinks']['Document'][0]['url'] }}">{{ thumbnail_image() }}</a>
+                <a title ="Main document link, right click to download or save as" href="{{ pubdata['displayLinks']['Document'][0]['url'] }}">{{ thumbnail_image() }}</a>
             {% elif pubdata['displayLinks']['Index Page']|length >= 1 %}
                 <a title ="Go to {% if pubdata['displayLinks']['Index Page'][0]['text'] -%}
                                     {{- pubdata['displayLinks']['Index Page'][0]['text'] -}}
