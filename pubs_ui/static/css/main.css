@@ -119,6 +119,13 @@ textarea {
 
 #new-pubs-h1{margin-left:15px;}
 
+.filter-button{
+	background:#eee;
+	width:100px;
+	height:35px;
+	border-radius:5px;
+}
+
 /* ==========================================================================
    Index styles
    ========================================================================== */
