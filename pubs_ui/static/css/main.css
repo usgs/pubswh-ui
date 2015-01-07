@@ -114,8 +114,10 @@ textarea {
    ========================================================================== */
 
 #new_pubs_form{
-    padding-left: 30px;
+    padding-left: 15px;
 }
+
+#new-pubs-h1{margin-left:15px;}
 
 /* ==========================================================================
    Index styles
@@ -131,13 +133,10 @@ textarea {
 	min-height:200px;
 	border:1px solid #808080;
 	border-radius:5px;
-	margin-bottom:15px;
+	margin:0 0 10px 0;
+	padding-bottom:25px;
 	clear:both;
 }
-
-#new_pubs{
-	margin:0 0 10px 0;
-	clear:both;}
 		
 #new_pubs h3{padding:5px;
 			 color: #000;
@@ -520,6 +519,7 @@ hgroup h4{
 
 .basic-advanced a{
       color: #428bca;
+      margin-left:10px;
 }
 .basic-advanced a:visited {
 color: #428bca;
@@ -619,6 +619,11 @@ form#contactForm input#submit:hover{
 /* ==========================================================================
    Search styles
    ========================================================================== */ 
+   
+.no-margin{margin-left:0 !important;}   
+   
+#search{margin-left:15px;}
+
 #search-results{
 	text-align:left;
 	margin-top:15px;
@@ -1101,12 +1106,13 @@ form#contactForm input#submit{
    #twitter{
 	width:29%;
 	position:absolute;
-	top:0px;
-	right:0px;
+	top:0;
+	right:0;
 	}	
    
 .index_article{
 	width:100%;
+	min-height:600px;
 	position:relative;
 	padding:0;
 	margin:0;} 
@@ -1118,8 +1124,9 @@ form#contactForm input#submit{
 #links,
 #advanced,
 #advanced_options,
-#new_pubs{width:59%;
-		margin-left:15px;} 
+#new_pubs{
+	width:59%;
+		} 
    
 
 

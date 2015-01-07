@@ -9,7 +9,7 @@
 {% endblock page_style %}
 
 {% block main %}
-<h1>Publications recently added to the Pubs Warehouse </h1>
+<h1 id="new-pubs-h1">Publications recently added to the Pubs Warehouse </h1>
     <section id="new_pubs_form">
         <form style="display:inline;" id = num_series method="GET" action="{{ url_for('new_pubs') }}">
         <p>{{ num_form.num_series }}  {{ num_form.num_series.label }}</p>
