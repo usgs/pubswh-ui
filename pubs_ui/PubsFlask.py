@@ -85,8 +85,7 @@ class User(UserMixin):
         required by Flask-Login.
         """
         # since we are offloading authentication of the user to the backend, we are assuming that if we have an
-        # unexpired token, we have a valid user, so we are just putting in a dummy string to keep flask-login happy
-        print "get! ", str(userid)
+        # unexpired token, we have a valid user, so we are just grabbing the token from the cookie and carrying on
         if userid:
             return User(userid, token)
         return None
