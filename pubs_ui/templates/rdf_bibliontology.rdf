@@ -54,7 +54,7 @@
                 <dcterms:date>{{ pubdata['publicationYear'] }}</dcterms:date>
                 <bibo:Journal>
                     <dcterms:title>{{ pubdata['seriesTitle']['text'] }}</dcterms:title>
-                    <bibo:issn>{{ pubdata['seriesTitle']['text']['onlineIssn'] }}</bibo:issn>
+                    <bibo:issn>{{ pubdata['seriesTitle']['onlineIssn'] }}</bibo:issn>
                 </bibo:Journal>
             </bibo:Issue>
             {% endif %}
