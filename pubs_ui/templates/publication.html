@@ -166,8 +166,8 @@
                         {{- linkdisplaylists('Cover','Cover','Covers') -}}
                         {{- linkdisplaylists('Database','Database','Databases') -}}
                         {{- linkdisplaylists('Errata','Errata','Errata') -}}
-                        {{- linkdisplaylists('Illustration','Illustration','Illustration') -}}
-                        {{- linkdisplaylists('Image','Image','Image') -}}
+                        {{- linkdisplaylists('Illustration','Illustration','Illustrations') -}}
+                        {{- linkdisplaylists('Image','Image','Images') -}}
                         {{- linkdisplaylists('Metadata','Metadata','Metadata') -}}
                         {{- linkdisplaylists('Project Site','Project Site','Project Sites') -}}
                         {{- linkdisplaylists('Raw Data', 'Raw Data', 'Raw Data') -}}
@@ -176,6 +176,8 @@
                         {{- linkdisplaylists('Related Work','Related Work','Related Works') -}}
                         {{- linkdisplaylists('Spatial Data','Spatial Data','Spatial Data') -}}
                         {{- linkdisplaylists('Version History','Version History','Version History') -}}
+                        {% if pubdata['pubHasNoLinks'] == True %}<li>The Publications Warehouse does not have links to digital versions of this publication at this time</li>{% endif %}
+                        {% if pubdata['offers'] %}<li itemprop = "offers" itemscope itemtype="http://schema.org/Offer">Paper versions of this publication are <link itemprop="availability" href="http://schema.org/InStock">in stock and available from the <a itemprop="url" href="{{ pubdata['offers']['schema:offers']['schema:url'] }}">USGS Store</a></li>{% endif %}
                     </ul>
                 </section>
                 <section itemprop="description" id="abstract" >
