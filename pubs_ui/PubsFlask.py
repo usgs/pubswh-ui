@@ -386,7 +386,6 @@ def search_results():
     try:
         search_result_records = search_results_response['records']
         record_count = search_results_response['recordCount']
-        print 'stuff!',search_kwargs.get('page_number')
         pagination = Pagination(page=int(search_kwargs['page_number']), total=record_count,
                                 per_page=int(search_kwargs['page_size']), record_name='Search Results', bs_version=3)
         search_service_down = None
