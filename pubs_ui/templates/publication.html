@@ -6,7 +6,7 @@
     <META NAME="abstract" CONTENT="{% if pubdata['docAbstract']  %}{{ pubdata['docAbstract']|striptags }}{% endif %}" />
     {% for author in pubdata['authorsList'] %}<meta NAME="author" content="{{ author }}"/>{% endfor %}
     <meta name = "revised" content="{{ pubdata['lastModifiedDate'] }}"/>
-    <meta name = "created" content="{{ pubdata['displaytoPublicDate'] }}"/>
+    <meta name = "created" content="{{ pubdata['displayToPublicDate'] }}"/>
     <meta name = "date" content="{{ pubdata['publicationYear'] }}"/>
   <!-- meta tags for google scholar indexing and zotero/mendeley parsing -->
     <meta name="citation_title" content="{{ pubdata['title'] }}" />
@@ -177,7 +177,7 @@
                         {{- linkdisplaylists('Spatial Data','Spatial Data','Spatial Data') -}}
                         {{- linkdisplaylists('Version History','Version History','Version History') -}}
                         {% if pubdata['pubHasNoLinks'] == True %}<li>The Publications Warehouse does not have links to digital versions of this publication at this time</li>{% endif %}
-                        {% if pubdata['offers'] %}<li itemprop = "offers" itemscope itemtype="http://schema.org/Offer">Paper versions of this publication are <link itemprop="availability" href="http://schema.org/InStock">in stock and available from the <a itemprop="url" href="{{ pubdata['offers']['schema:offers']['schema:url'] }}">USGS Store</a></li>{% endif %}
+                        {% if pubdata['offers'] %}<li itemprop = "offers" itemscope itemtype="http://schema.org/Offer">Paper version: <link itemprop="availability" href="http://schema.org/InStock">In stock and available from the <a itemprop="url" href="{{ pubdata['offers']['schema:offers']['schema:url'] }}"><strong>USGS Store</strong></a></li>{% endif %}
                     </ul>
                 </section>
                 <section itemprop="description" id="abstract" >
