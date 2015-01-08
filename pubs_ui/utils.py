@@ -144,6 +144,7 @@ def create_display_links(pubdata):
     }
     links = deepcopy(pubdata.get("links"))
     # sort links into the different link types
+
     for key, value in display_links.iteritems():
         for link in links:
             if link['type']['text'] == key:
@@ -160,6 +161,12 @@ def create_display_links(pubdata):
                 rank_counter += 1
 
     pubdata["displayLinks"] = display_links
+    # set a variable so that we can display something if the pub has no links other than a thumbnail
+    pub_has_no_links = True
+    for key, value in display_links.iteritems():
+        if key != 'Thumbnail' and len(value) > 0:
+            pub_has_no_links = False
+    pubdata['pubHasNoLinks'] = pub_has_no_links
     return pubdata
 
 
