@@ -85,8 +85,7 @@ class User(UserMixin):
         required by Flask-Login.
         """
         # since we are offloading authentication of the user to the backend, we are assuming that if we have an
-        # unexpired token, we have a valid user, so we are just putting in a dummy string to keep flask-login happy
-        print "get! ", str(userid)
+        # unexpired token, we have a valid user, so we are just grabbing the token from the cookie and carrying on
         if userid:
             return User(userid, token)
         return None
@@ -141,6 +140,11 @@ def load_token(token):
     if user:
         return user
     return None
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 
 @app.route("/logout/")
@@ -425,12 +429,12 @@ def new_pubs():
     sp = SearchPublications(search_url)
     search_kwargs = {'pub_x_days': 30, "page_size": 500}  # bring back recent publications
 
-    #Search if num_series subtype was checked in form
+    # Search if num_series subtype was checked in form
     if request.args.get('num_series') == 'y':
         num_form.num_series.data = True
         search_kwargs['subtypeName'] = 'USGS Numbered Series'
 
-    #Handles dates from form. Searches back to date selected or defaults to past 30 days.
+    # Handles dates from form. Searches back to date selected or defaults to past 30 days.
     if request.args.get('date_range'):
         time_diff = date.today() - dateparser.parse(request.args.get('date_range')).date()
         day_diff = time_diff.days
@@ -450,10 +454,79 @@ def new_pubs():
         pubs_records = recent_pubs_content['records']
         pubs_records.sort(key=itemgetter('displayToPublicDate'), reverse=True)
         for record in pubs_records:
-            record['FormattedDisplayToPublicDate'] = arrow.get(record['displayToPublicDate']).format('MMMM DD, YYYY HH:mm')
+            record['FormattedDisplayToPublicDate'] = \
+                arrow.get(record['displayToPublicDate']).format('MMMM DD, YYYY HH:mm')
     except TypeError:
         pubs_records = []  # return an empty list recent_pubs_content is None (e.g. the service is down)
 
     return render_template('new_pubs.html',
                            new_pubs=pubs_records,
                            num_form=num_form)
+
+
+@app.route('/legacysearch/search:advance/page=1/series_cd=<series_code>/year=<pub_year>/report_number=<report_number>')
+@app.route('/legacysearch/search:advance/page=1/series_cd=<series_code>/report_number=<report_number>')
+def legacy_search(series_code=None, report_number=None, pub_year=None):
+    """
+    This is a function to deal with the fact that the USGS store has dumb links to the warehouse
+    based on the legacy search, which had all the query params in a backslash-delimited group.  A couple lines of
+    javascript on the index page (see the bottom script block on the index page) passes the legacy query string to this
+    function, and then this function reinterprets the string and redirects to the new search.
+
+    :param series_code: the series code, which we will have to map to series name
+    :param pub_year: the publication year, two digit, so we will have to make a guess as to what century they want
+    :param report_number: report number- we can generally just pass this through
+    :return: redirect to new search page with legacy arguments mapped to new arguments
+    """
+    # all the pubcodes that might be coming from the USGS store
+    usgs_series_codes = {'AR': 'Annual Report', 'A': 'Antarctic Map', 'B': 'Bulletin', 'CIR': 'Circular',
+                         'CP': 'Circum-Pacific Map', 'COAL': 'Coal Map', 'DS': 'Data Series', 'FS': 'Fact Sheet',
+                         'GF': 'Folios of the Geologic Atlas', 'GIP': 'General Information Product',
+                         'GQ': 'Geologic Quadrangle', 'GP': 'Geophysical Investigation Map', 'HA': 'Hydrologic Atlas',
+                         'HU': 'Hydrologic Unit', 'I': 'IMAP', 'L': 'Land Use/ Land Cover',
+                         'MINERAL': 'Mineral Commodities Summaries', 'MR': 'Mineral Investigations Resource Map',
+                         'MF': 'Miscellaneous Field Studies Map', 'MB': 'Missouri Basin Study', 'M': 'Monograph',
+                         'OC': 'Oil and Gas Investigation Chart', 'OM': 'Oil and Gas Investigation Map',
+                         'OFR': 'Open-File Report', 'PP': 'Professional Paper', 'RP': 'Resource Publication',
+                         'SIM': 'Scientific Investigations Map', 'SIR': 'Scientific Investigations Report',
+                         'TM': 'Techniques and Methods', 'TWRI': 'Techniques of Water-Resource Investigation',
+                         'TEI': 'Trace Elements Investigations', 'TEM': 'Trace Elements Memorandum',
+                         'WDR': 'Water Data Report', 'WSP': 'Water Supply Paper',
+                         'WRI': 'Water-Resources Investigations Report'}
+
+    # horrible hack to deal with the fact that the USGS store apparently never heard of 4 digit dates
+
+    if pub_year is not None:
+        if 30 <= int(pub_year) < 100:
+            pub_year = ''.join(['19', pub_year])
+        elif int(pub_year) < 30:
+            pub_year = ''.join(['20', pub_year])
+
+    return redirect(url_for('search_results', seriesName=usgs_series_codes.get(series_code), reportNumber=report_number,
+                    year=pub_year, advanced=True))
+
+
+@app.route('/unapi')
+def unapi():
+    """
+    this is an unapi format, which appears to be the only way to get a good export to zotero that has all the Zotero fields
+    Documented here: http://unapi.info/specs/
+    :return: rendered template of (at this time) bibontology rdf, which maps directly to Zotero Fields
+    """
+
+    formats = {'rdf_bibliontology': {'type': 'application/xml', 'docs': "http://bibliontology.com/specification",
+                                     'template': 'rdf_bibliontology.rdf'}}
+    unapi_id = request.args.get('id')
+    unapi_format = request.args.get('format')
+    if unapi_format is None or unapi_format not in formats:
+        if unapi_id is not None:
+            unapi_id = unapi_id.split('/')[-1]
+        return render_template('unapi_formats.xml', unapi_id=unapi_id, formats=formats,  mimetype='text/xml')
+    if unapi_id is not None and unapi_format in formats:
+        unapi_id = unapi_id.split('/')[-1]
+        r = get(pub_url + 'publication/' + unapi_id, params={'mimetype': 'json'}, verify=verify_cert)
+        if r.status_code == 404:
+            return render_template('404.html'), 404
+        pubdata = r.json()
+        return render_template(formats[unapi_format]['template'], pubdata=pubdata, formats=formats,  mimetype='text/xml')
+

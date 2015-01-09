@@ -2,7 +2,8 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/html"> <!--<![endif]-->
         <head lang="en">
             <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,6 +18,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename= 'css/bootstrap.css') }}">
         <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
         <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('open_search') }}" title="USGS Pubs">
+        <link rel="unapi-server" type="application/xml" title="unAPI" href="{{ url_for('unapi') }}" />
         <script src="{{ url_for('static', filename = 'js/vendor/modernizr-2.6.2.min.js') }}"></script>
         <script>
         	BASE_SEARCH_PAGE_URL = "{{ url_for('search_results')}}"
@@ -96,8 +98,8 @@
                 {% if current_user.is_authenticated() %}<li><a href="{{ url_for('logout_page') }}">Logout</a></li>{% endif %}
             </ul>
             <section id="center">
-                <label for="mysearch2">Search: </label>
                 <form style="display: inline;" action="{{ url_for('search_results') }}" method="get" name="q">
+                    <label for="q">Search:</label>
                     <input id="q" class="headersearch" name="q" placeholder="search terms" type="search" value="">
                 </form>
             </section>

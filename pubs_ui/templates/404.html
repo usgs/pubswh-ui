@@ -8,6 +8,13 @@
 {% block main %}
 	<h1>404 page not found</h1>
     <p>There was no page found at this location.  Please check your URL and try again. If you think that this page is shown in error, please <a href="{{ url_for('contact') }}">Contact us</a></p>
+    <p>Otherwise, you may find what you are looking for by searching the Pubs Warehouse</p>
+    <p><form style="display: inline;" action="/search" method="get" name="q">
+        <input id="q" name="q" placeholder="search terms" type="search" value="">
+    <button type="submit" class="btn">Search</button>
+    </form>
+    </p>
+
 {% endblock main %}
 
 {% block url %}<a href="{{ request.url }}">{{ request.url }}</a>{% endblock %}

@@ -21,7 +21,7 @@
 	                    <h4>The Pubs Warehouse provides access to over 130,000 publications written by USGS scientists over the century-plus history of the bureau</h4>
 	                </section>
 	
-	                <section id="search">
+	                <section id="search" class="no-margin">
                         {% if advanced == 'True' %}
                             {% include 'advanced_search_form.html' %}
                             <span class="basic-advanced"><a  href="{{ request.base_url }}">Basic Search</a></span>
@@ -54,6 +54,19 @@
 	                
 	          </article>      
     </main>
+
 {% endblock %}
 
 {% block url %}<a href="{{ url_for('index') }}">http://pubs.er.usgs.gov{{ url_for('index') }}</a>{% endblock %}
+
+{% block page_footer_script %}
+    <!-- script to deal with the fact that the store has poorly constructed links based on the old pubs warehouse search -->
+    <script type="text/javascript">
+    			//grab the contents of the fragment
+                var searchstring = window.location.href.split('#')[1];
+                //pass the contents of the fragment to the storesearch endpoint for further munging and redirection
+                if (searchstring){
+                	window.location = "/legacysearch/" + searchstring;
+                    }
+        </script>
+{% endblock page_footer_script %}

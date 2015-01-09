@@ -4,11 +4,34 @@
     <meta NAME="title" content="{{ pubdata['title'] }}" />
     <meta name="description" content="{% if pubdata['docAbstract']  %}{{ pubdata['docAbstract'].split(' ')[0:150]|join(' ')|striptags }}...{% endif %}" />
     <META NAME="abstract" CONTENT="{% if pubdata['docAbstract']  %}{{ pubdata['docAbstract']|striptags }}{% endif %}" />
-    {% for author in pubdata['authorsList'] %}<meta NAME="author" content="{{ author }}"/>
-    {% endfor %}
+    {% for author in pubdata['authorsList'] %}<meta NAME="author" content="{{ author }}"/>{% endfor %}
     <meta name = "revised" content="{{ pubdata['lastModifiedDate'] }}"/>
-    <meta name = "created" content="{{ pubdata['displaytoPublicDate'] }}"/>
+    <meta name = "created" content="{{ pubdata['displayToPublicDate'] }}"/>
     <meta name = "date" content="{{ pubdata['publicationYear'] }}"/>
+  <!-- meta tags for google scholar indexing and zotero/mendeley parsing -->
+    <meta name="citation_title" content="{{ pubdata['title'] }}" />
+    <meta name="citation_publication_date" content="{{ pubdata['publicationYear'] }}" />
+    <meta name="citation_date" content="{{ pubdata['publicationYear'] }}" />
+    <meta name="citation_online_date" content="{{ pubdata['displayToPublicDate'] }}" />
+    {% for author in pubdata['authorsList'] %}<meta NAME="citation_author" content="{{ author }}"/>{% endfor %}
+    {% if pubdata['abstract'] %}<meta name="citation_abstract" content="{{ pubdata['abstract']|striptags }}" />{% endif %}
+    {% if pubdata['displayLinks']['document']|length > 0  %}<meta name="citation_pdf_url" content="{{ pubdata['displayLinks']['document'][0] }}" />{% endif %}
+    {% if pubdata['conferenceTitle'] %}<meta name="citation_conference_title" content="{{ pubdata['conferenceTitle'] }}" />{% endif %}
+    {% if pubdata['seriesTitle'] %}<meta name="citation_journal_title" content="{{ pubdata['seriesTitle']['text'] }}" />{% endif %}
+    {% if pubdata['volume'] %}<meta name="citation_volume" content="{{ pubdata['volume'] }}" />{% endif %}
+    {% if pubdata['issue'] %}<meta name="citation_issue" content="{{ pubdata['issue'] }}" />{% endif %}
+    {% if pubdata['seriesTitle']%}<meta name="citation_issn" content="{{ pubdata['seriesTitle']['onlineIssn'] }}" />{% endif %}
+    {% if pubdata['isbn'] %}<meta name="citation_isbn" content="{{ pubdata['isbn'] }}" />{% endif %}
+    {% if pubdata['startPage'] %}<meta name="citation_firstpage" content="{{ pubdata['startPage'] }}" />{% endif %}
+    {% if pubdata['endPage'] %}<meta name="citation_lastpage" content="{{ pubdata['endPage'] }}" />{% endif %}
+    {% if pubdata['publicationType'] %}
+        {% if pubdata['publicationType']['text'] == 'Thesis' %}<meta name="citation_dissertation_institution" content="{{ pubdata['publisher'] }}" />{% endif %}
+        {% if pubdata['publicationType']['text'] == 'Report' %}<meta name="citation_technical_report_institution" content="{{ pubdata['publisher'] }}" />{% endif %}
+        {% if pubdata['publicationType']['text'] == 'Report' %}<meta name="citation_technical_report_number" content="{{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}" />{% endif %}
+    {% endif %}
+    {% if pubdata['doi'] %}<meta name="citation_doi" content="{{ pubdata['doi'] }}" />{% endif %}
+
+
     {% block page_script %}
        {%- if pubdata["geographicExtents"] -%}
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaflet.css') }}">
@@ -26,10 +49,28 @@
         {% block main %}
         <main role ="main">
             <article itemscope itemtype="http://schema.org/ScholarlyArticle">
+            {% if pubdata['publicationType']['text'] == 'Report' %}<abbr class="unapi-id" title="http://pubs.er.usgs.gov/publication/{{ pubdata['indexId'] }}"><!-- avoid empty --></abbr>{% endif %}
+
+
+            {% macro thumbnail_image() %}
                 {# this image is being dynamically resized to 200 pixels from whatever it might have been #}
-
+                {% if pubdata['displayLinks']['Thumbnail']|length > 0 %}
                 <img id="thumbnail" src="{{ wsgi_str }}{{ url_for('images', filename=pubdata['displayLinks']['Thumbnail'][0]['url'], width=200) }}" alt="thumbnail"/>
+                {% else %}
+                <img id="thumbnail" src="{{ wsgi_str }}{{ url_for('images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=200) }}" alt="thumbnail"/>
+                {% endif %}
+            {% endmacro %}
 
+            {% if pubdata['displayLinks']['Document']|length >= 1 %}
+                <a title ="Main document link, right click to download or save as" href="{{ pubdata['displayLinks']['Document'][0]['url'] }}">{{ thumbnail_image() }}</a>
+            {% elif pubdata['displayLinks']['Index Page']|length >= 1 %}
+                <a title ="Go to {% if pubdata['displayLinks']['Index Page'][0]['text'] -%}
+                                    {{- pubdata['displayLinks']['Index Page'][0]['text'] -}}
+                                {%- else -%} Publisher Index Page
+                                {%- endif  %} for more information" href="{{ pubdata['displayLinks']['Index Page'][0]['url'] }}">{{ thumbnail_image() }}</a>
+            {% else %}
+                {{ thumbnail_image() }}
+            {% endif %}
                 <hgroup>
                     <h3 itemprop="name">{{ pubdata['title']|safe }}</h3>
                     {% if pubdata['seriesTitle'] %}
@@ -125,8 +166,8 @@
                         {{- linkdisplaylists('Cover','Cover','Covers') -}}
                         {{- linkdisplaylists('Database','Database','Databases') -}}
                         {{- linkdisplaylists('Errata','Errata','Errata') -}}
-                        {{- linkdisplaylists('Illustration','Illustration','Illustration') -}}
-                        {{- linkdisplaylists('Image','Image','Image') -}}
+                        {{- linkdisplaylists('Illustration','Illustration','Illustrations') -}}
+                        {{- linkdisplaylists('Image','Image','Images') -}}
                         {{- linkdisplaylists('Metadata','Metadata','Metadata') -}}
                         {{- linkdisplaylists('Project Site','Project Site','Project Sites') -}}
                         {{- linkdisplaylists('Raw Data', 'Raw Data', 'Raw Data') -}}
@@ -135,6 +176,8 @@
                         {{- linkdisplaylists('Related Work','Related Work','Related Works') -}}
                         {{- linkdisplaylists('Spatial Data','Spatial Data','Spatial Data') -}}
                         {{- linkdisplaylists('Version History','Version History','Version History') -}}
+                        {% if pubdata['pubHasNoLinks'] == True %}<li>The Publications Warehouse does not have links to digital versions of this publication at this time</li>{% endif %}
+                        {% if pubdata['offers'] %}<li itemprop = "offers" itemscope itemtype="http://schema.org/Offer">Paper version: <link itemprop="availability" href="http://schema.org/InStock">In stock and available from the <a itemprop="url" href="{{ pubdata['offers']['schema:offers']['schema:url'] }}"><strong>USGS Store</strong></a></li>{% endif %}
                     </ul>
                 </section>
                 <section itemprop="description" id="abstract" >
@@ -172,11 +215,11 @@
 
 
                         //add esri basemap layers
-                        var topo = L.esri.basemapLayer('Topographic',{ zIndex: 3}),
-                         oceans = L.esri.basemapLayer('Oceans',{ detectRetina: true, zIndex: 1}),
-                                streets = L.esri.basemapLayer('Streets', {zIndex: 3});
+                        var topo = L.esri.basemapLayer('Topographic'),
+                         oceans = L.esri.basemapLayer('Oceans',{ detectRetina: true}),
+                                streets = L.esri.basemapLayer('Streets');
 
-                        var oceanlabels =  L.esri.basemapLayer('OceansLabels',{zIndex: 2})
+                        var oceanlabels =  L.esri.basemapLayer('OceansLabels')
 
                         // create a map
 
