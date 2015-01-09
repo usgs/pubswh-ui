@@ -6,7 +6,22 @@ from wtforms.fields.html5 import SearchField, DateField
 from wtforms.validators import DataRequired
 from pubs_ui import app
 from requests import get
+
 lookup_url = app.config['LOOKUP_URL']
+
+
+def get_field_list(lookup_name):
+    '''
+    Using the lookup URL from the local settings this function will make a list of all the records in the json response
+    for a lookup field. Used for creating dropdown select fields in the advanced search form.
+    :param lookup_name: The name of the publication lookup type.
+    :return: An unordered list of all the response records.
+    '''
+    field_list = []
+    for record in get(lookup_url + lookup_name, params={'mimetype': 'json'}).json():
+        field_list.append((record['id'], record['text']))
+    return field_list
+
 
 class ContactForm(Form):
     name = StringField("Name")
@@ -23,27 +38,19 @@ class SearchForm(Form):
     year = StringField("Year Published")
 
     #Grabs the list of Contributing Office names and IDs from the lookup url. Then puts them into the selectfield list
-    contributorList = []
-    for type in get(lookup_url + 'costcenters', params={'mimetype': 'json'}).json():
-        contributorList.append((type['id'], type['text']))
+    contributorList = get_field_list('costcenters')
     contributingOffice = SelectField(label="Contributing Office", choices=sorted(contributorList))
 
     #Grabs the list of Publication Types names and IDs from the lookup url. Then puts them into the selectfield list
-    typeList = []
-    for type in get(lookup_url + 'publicationtypes', params={'mimetype': 'json'}).json():
-        typeList.append((type['id'], type['text']))
+    typeList = get_field_list('publicationtypes')
     typeName = SelectField(label="Type Name", choices=sorted(typeList))
 
     #Grabs the list of Publication Subtypes names and IDs from the lookup url. Then puts them into the selectfield list
-    subtypeNameList = []
-    for name in get(lookup_url + 'publicationsubtypes', params={'mimetype': 'json'}).json():
-        subtypeNameList.append((name['id'], name['text']))
+    subtypeNameList = get_field_list('publicationsubtypes')
     subtypeName = SelectField(label="Subtype Name", choices=sorted(subtypeNameList))
 
     #Grabs the list of Publication Series names and IDs from the lookup url. Then puts them into the selectfield list
-    seriesNameList = []
-    for series in get(lookup_url + 'publicationseries', params={'mimetype': 'json'}).json():
-        seriesNameList.append((series['id'], series['text']))
+    seriesNameList = get_field_list('publicationseries')
     seriesName = SelectField(label="Series Name", choices=sorted(seriesNameList))
 
     reportNumber = StringField("Report Number")
