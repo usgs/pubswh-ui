@@ -20,9 +20,9 @@ def create_mock(step):
     
 @step(r'I pull_feed the fake url')
 def enable_mock(step):
-    world.output = pull_feed("http://test_url/test")
     httpretty.disable()
     httpretty.reset()
+    world.output = pull_feed("http://test_url/test")
 
 @step(r'I defined the output we would expect for the mock from pull_feed')
 def mock_output(step):
@@ -149,9 +149,9 @@ def mockup_browse(step):
     world.expected_output = '{\'breadcrumbs\': [<a href="browse">Browse USGS Pubs Warehouse</a>], \'links\': [<ul><li><a alt="Official USGS Publications" href="browse/usgs-publications">Official USGS Publications</a></li><li><a alt="Scientific Journal Articles by USGS Authors" href="browse/journals/all/">ScientificJournal Articles by USGS Authors</a></li><li><a alt="Other US Government Publications" href="browse/other-pubs/all/">Other US Government Publications</a></li><li><a alt="State, Local, and other government publications" href="browse/state-local/all/">State, Local, and other government publications</a></li><li><a alt="Books, Reports, Conference Proceedings and other publications" href="browse/books-reports-conference/all/">Books, Reports, Conference Proceedings and other publications</a></li></ul>], \'header\': [u\'Please select a category of interest\']}'
 @step(r"I get the links, breadcrumbs, and titles from the url")
 def browse_content(step):
-    world.output = str(getbrowsecontent(world.url, "browse"))
     httpretty.disable()
     httpretty.reset()
+    world.output = str(getbrowsecontent(world.url, "browse"))
 
 @step(r"I am returned a list for the links, breadcrumbs, and titles")
 def test_content(step):
@@ -452,12 +452,12 @@ def search_pubs(step):
 
 @step(r'I am given the appropriate responses')
 def check_responses(step):
+        httpretty.disable()
+        httpretty.reset()
+
         response_content, status_code = world.response
         assert_equal(status_code, world.expected_status_code)
         assert_equal(response_content, world.expected_return_content)
-
-        httpretty.disable()
-        httpretty.reset()
 
 
 @step(r'we have created a fake url and mocked a down service')
