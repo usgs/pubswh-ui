@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-    <ShortName>USGS Pubs Search</ShortName>
+    <ShortName>USGS Pubs WH</ShortName>
     <LongName>USGS Publications Warehouse Search</LongName>
     <Description>The Pubs Warehouse provides access to over 130,000 publications written by USGS scientists over the century-plus history of the bureau</Description>
     <Image height="16" width="16" type="image/x-icon"
@@ -12,7 +12,7 @@
     <Url type="application/rss+xml"
         template="http://pubs.er.usgs.gov/publication/rss?q={searchTerms?}&amp;format=rss"/>
     <Url type="text/html"
-        template="http://pubs.er.usgs.gov/search/?q={searchTerms}&amp;page={startPage?}"/>
+        template="http://pubs.er.usgs.gov/search?q={searchTerms}&amp;page={startPage?}"/>
     <Url type="application/opensearchdescription+xml"
       rel="self"
       template="https://pubs.er.usgs.gov/opensearch.xml" />
