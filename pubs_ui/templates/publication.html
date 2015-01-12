@@ -192,6 +192,12 @@
 
                 </section>
                 {%- endif -%}
+                {% if pubdata['TableOfContents'] %}
+                <section>
+                    <h4>Table of Contents</h4>
+                    {{ pubdata['tableOfContents']|safe }}
+                </section>
+                {% endif %}
 
                 <section id="details">
                     <h4 id="" class="dark">Additional Publication Details</h4>
