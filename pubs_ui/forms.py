@@ -18,8 +18,16 @@ def get_field_list(lookup_name):
     :return: An unordered list of all the response records.
     '''
     field_list = []
-    for record in get(lookup_url + lookup_name, params={'mimetype': 'json'}).json():
-        field_list.append((record['id'], record['text']))
+    # catch errors from killing page builds
+    try:
+        records = get(lookup_url + lookup_name, params={'mimetype': 'json'}).json()
+    except:
+        records = [{'error': 'error'}]
+
+    for record in records :
+        field_list.append((record['text'], record['text']))
+    field_list.insert(0, ('', ''))
+
     return field_list
 
 
