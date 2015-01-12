@@ -22,9 +22,9 @@ def get_field_list(lookup_name):
     try:
         records = get(lookup_url + lookup_name, params={'mimetype': 'json'}).json()
     except:
-        records = [{'error': 'error'}]
+        records = [{'text': 'error'}]
 
-    for record in records :
+    for record in records:
         field_list.append((record['text'], record['text']))
     field_list.insert(0, ('', ''))
 
