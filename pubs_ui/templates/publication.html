@@ -137,13 +137,14 @@
                                  ({{ link["size"] }})
                             {% endif -%}
                             </a>
+                            {%- if link['linkHelpText'] %} <small>{{ link['linkHelpText']|safe }}</small>{% endif %}
                     {%- endmacro %}
 
                     {%- macro linkdisplaylists(link_type, link_type_text_single, link_type_text_multiple) -%}
                         {% if pubdata['displayLinks'][link_type]|length == 1  %}
                             <li>{{ link_type_text_single }}: {{ linkdisplay(pubdata['displayLinks'][link_type][0]) }}</li>
                         {%- elif pubdata['displayLinks'][link_type]|length > 1 -%}
-                            <li>{{ link_type_text_multiple }}</li>
+                            <li>{{ link_type_text_multiple }}:</li>
                             <ul class="filessublist">
                             {%- for link in pubdata['displayLinks'][link_type]|sort(attribute='rank') -%}
                                 <li>{{ linkdisplay(link) }}</li>
@@ -191,6 +192,12 @@
 
                 </section>
                 {%- endif -%}
+                {% if pubdata['TableOfContents'] %}
+                <section>
+                    <h4>Table of Contents</h4>
+                    {{ pubdata['tableOfContents']|safe }}
+                </section>
+                {% endif %}
 
                 <section id="details">
                     <h4 id="" class="dark">Additional Publication Details</h4>

@@ -371,12 +371,14 @@ def search_results():
     for element in form_element_list:
         if len(search_kwargs[element]) > 0:
             form[element].data = search_kwargs[element][0]
-    if search_kwargs.get('page_size') is None:
+    if search_kwargs.get('page_size') is None or search_kwargs.get('page_size') == '':
         search_kwargs['page_size'] = '25'
-    if search_kwargs.get('page') is None:
+    if search_kwargs.get('page') is None or search_kwargs.get('page') == '':
         search_kwargs['page'] = '1'
-    if search_kwargs.get('page_number') is None and search_kwargs.get('page') is not None:
+    if (search_kwargs.get('page_number') is None or search_kwargs.get('page_number') == '') \
+            and search_kwargs.get('page') is not None:
         search_kwargs['page_number'] = search_kwargs['page']
+
 
     sp = SearchPublications(search_url)
     search_results_response, resp_status_code = sp.get_pubs_search_results(
