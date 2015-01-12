@@ -8,6 +8,8 @@ from pubs_ui import app
 from requests import get
 
 lookup_url = app.config['LOOKUP_URL']
+# should requests verify the certificates for ssl connections
+verify_cert = app.config['VERIFY_CERT']
 
 
 def get_field_list(lookup_name):
@@ -20,7 +22,7 @@ def get_field_list(lookup_name):
     field_list = []
     # catch errors from killing page builds
     try:
-        records = get(lookup_url + lookup_name, params={'mimetype': 'json'}).json()
+        records = get(lookup_url + lookup_name, params={'mimetype': 'json'}, verify=verify_cert).json()
     except:
         records = [{'text': 'error'}]
 
