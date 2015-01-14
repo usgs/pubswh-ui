@@ -161,12 +161,12 @@
 								</ul>
                 			{% endfor %}
                 		{% endif %}
-                		{% if related_pubs['supercede_info']|length > 0 %}
-                			<li>Superceding Publications:</li>
-                			{% for supercede_pub in related_pubs['supercede_info'] %}
+                		{% if related_pubs['supersede_info']|length > 0 %}
+                			<li>Superseding Publications:</li>
+                			{% for supersede_pub in related_pubs['supersede_info'] %}
                 				<ul>
                 					<li class="filessublist">
-                						<a href="{{ url_for('publication', index_id = supercede_pub['id']) }}">{{ supercede_pub['title'] }} ({{ supercede_pub['year']}})</a>
+                						<a href="{{ url_for('publication', index_id = supersede_pub['id']) }}">{{ supersede_pub['title'] }} ({{ supersede_pub['year']}})</a>
                 					</li>
                 				</ul>
                 			{% endfor %}
@@ -198,7 +198,7 @@
                         {{- linkdisplaylists('Related Work','Related Work','Related Works') -}}
                         {{- linkdisplaylists('Spatial Data','Spatial Data','Spatial Data') -}}
                         {{- linkdisplaylists('Version History','Version History','Version History') -}}
-                        {{ related_links() }}
+                        {{- related_links() -}}
                         {% if pubdata['pubHasNoLinks'] == True %}
                         	<li>The Publications Warehouse does not have links to digital versions of this publication at this time</li>
                         {% endif %}

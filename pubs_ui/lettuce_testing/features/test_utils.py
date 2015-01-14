@@ -522,7 +522,7 @@ def execute_supersedes_parsing(step):
 def check_supersedes_parsing(step):
     httpretty.disable()
     httpretty.reset()
-    expected = {'supercede_info': [{'year': u'2003', 'id': u'fs05503', 'title': u'U.S. Geological Survey World Wide Web Information'}], 'precede_info': [{'year': u'1999', 'id': u'fs07199', 'title': u'U.S. Geological Survey World Wide Web Information'}, {'year': u'2000', 'id': u'fs03700', 'title': u'U.S. Geological Survey World Wide Web Information'}], 'precede_len': 2, 'supercede_len': 1}
+    expected = {'supersede_info': [{'year': u'2003', 'id': u'fs05503', 'title': u'U.S. Geological Survey World Wide Web Information'}], 'precede_info': [{'year': u'1999', 'id': u'fs07199', 'title': u'U.S. Geological Survey World Wide Web Information'}, {'year': u'2000', 'id': u'fs03700', 'title': u'U.S. Geological Survey World Wide Web Information'}], 'precede_len': 2, 'supersede_len': 1}
     assert_equal(expected, world.parse_result)
     
 @step(r'I have mocked a failing supersedes URL')
@@ -544,9 +544,9 @@ def check_failing_supercedes_parse_resp(step):
     httpretty.disable()
     httpretty.enable()
     expected = {'precede_len': 0,
-                'supercede_len': 0,
+                'supersede_len': 0,
                 'precede_info': [],
-                'supercede_info': []
+                'supersede_info': []
                 }
     assert_equal(expected, world.failing_result)
     

@@ -687,9 +687,9 @@ def extract_related_pub_info(supersedes_url, verify_cert=True):
     related_length = len(related_items)
     if related_length == 0:
         relations = {'precede_len': 0,
-                     'supercede_len': 0,
+                     'supersede_len': 0,
                      'precede_info': [],
-                     'supercede_info': []
+                     'supersede_info': []
                      }
     elif related_length >= 1:
         for related_item in related_items:
@@ -706,9 +706,9 @@ def extract_related_pub_info(supersedes_url, verify_cert=True):
             elif item_type == 'succeeding':
                 superceding_info.append(item_info)
         relations = {'precede_len': len(preceding_info),
-                     'supercede_len': len(superceding_info),
+                     'supersede_len': len(superceding_info),
                      'precede_info': sort_list_of_dicts(preceding_info, 'year'),
-                     'supercede_info': sort_list_of_dicts(superceding_info, 'year')
+                     'supersede_info': sort_list_of_dicts(superceding_info, 'year')
                      }
     else:
         raise Exception('Failed to parse supersede information.')
