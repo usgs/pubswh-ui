@@ -63,3 +63,5 @@ if nose_testing or lettuce_testing:
     WTF_CSRF_ENABLED = False
     TESTING = True
     BASE_SEARCH_URL = 'https://pubs-fake.er.usgs.gov/pubs-services/publication/'
+    PUB_URL = 'https://pubs-fake.er.usgs.gov/pubs-services/'
+    SUPERSEDES_URL = 'http://cida-eros-pubsfake.er.usgs.gov:8080/pubs2_ui/service/citation/json/extras?'
