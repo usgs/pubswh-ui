@@ -7,7 +7,8 @@ from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
 from arguments import search_args
 from utils import (pull_feed, create_display_links, getbrowsecontent,
-                   SearchPublications, change_to_pubs_test, generate_auth_header, munge_pubdata_for_display)
+                   SearchPublications, change_to_pubs_test, generate_auth_header, 
+                   munge_pubdata_for_display, extract_related_pub_info)
 from forms import ContactForm, SearchForm, NumSeries, LoginForm
 from canned_text import EMAIL_RESPONSE
 from pubs_ui import app, mail
@@ -21,6 +22,7 @@ import arrow
 # set UTF-8 to be default throughout app
 reload(sys)
 sys.setdefaultencoding("utf-8")
+
 
 pub_url = app.config['PUB_URL']
 lookup_url = app.config['LOOKUP_URL']
@@ -303,11 +305,17 @@ def publication(index_id):
     if r.status_code == 404:
         return render_template('404.html')
     pubreturn = r.json()
+    supersedes_full_url = '{0}prod_id={1}'.format(supersedes_url, index_id)
+    related_pubs = extract_related_pub_info(supersedes_full_url, verify_cert)
     pubdata = munge_pubdata_for_display(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:
-        return render_template('publication.html', indexID=index_id, pubdata=pubdata)
+        return render_template('publication.html', 
+                               indexID=index_id, 
+                               pubdata=pubdata,
+                               related_pubs=related_pubs
+                               )
 
 
 # leads to json for selected endpoints

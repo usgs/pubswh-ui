@@ -637,3 +637,79 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
         pubdata['displayLinks']['Thumbnail'][0]['url'] = change_to_pubs_test(
             pubdata['displayLinks']['Thumbnail'][0]['url'])
     return pubdata
+
+
+def sort_list_of_dicts(list_to_be_sorted, key_name, reverse=False):
+    """
+    Sort a list of dictionaries by a specified key.
+    
+    :param list list_to_be_sorted: list of dictionaries to be sorted
+    :param str key_name: key in the dictionaries to be sorted by
+    :param bool reverse: should the dictionaries be sorted in descending order
+    :return: sorted list of dictionaries by specified key
+    :rtype: list
+    
+    """
+    new_list = sorted(list_to_be_sorted, key=itemgetter(key_name), reverse=reverse)
+    return new_list
+
+
+def extract_related_pub_info(supersedes_url, verify_cert=True):
+    """
+    Submit a request to the supersedes URL to get the preceding
+    and superceding information for a publication. Parse out the
+    id, title, and publication year of the related publication.
+    
+    If the supersedes service is unresponsive, this function will
+    return a dictionary containing empty lists for precede_info
+    and supercede_info.
+    
+    :param str supersedes_url: URL to the supercedes information for a publication
+    :param bool verify_cert: boolean to tell requests whether or not to verify a SSL cert when doing a request
+    :return: a dictionary containing a list containing dictionaries of related publication information
+    :rtype: dict
+    
+    """
+    preceding_info = []  # this list may have multiple elements in it
+    superceding_info = []  # this list should never have more than 1 element in it
+    resp = requests.get(supersedes_url, verify=verify_cert)
+    try:
+        resp_json = resp.json()
+    except ValueError:
+        resp_json = {}
+    mods_collection = resp_json.get('modsCollection', {})
+    mods = mods_collection.get('mods', [])
+    try:
+        mod_0 = mods[0]
+    except IndexError:
+        mod_0 = {}
+    related_items = mod_0.get('relatedItem', [])
+    related_length = len(related_items)
+    if related_length == 0:
+        relations = {'precede_len': 0,
+                     'supercede_len': 0,
+                     'precede_info': [],
+                     'supercede_info': []
+                     }
+    elif related_length >= 1:
+        for related_item in related_items:
+            item_type = related_item.get('@type')
+            item_id = related_item.get('identifier', {}).get('#text')  # identifier returns an empty dictionary if it cannot be found
+            item_title = related_item.get('titleInfo', {}).get('title')
+            item_year = related_item.get('originInfo', {}).get('dateIssued')
+            item_info = {'id': item_id,
+                         'title': item_title,
+                         'year': item_year
+                         }
+            if item_type == 'preceding':
+                preceding_info.append(item_info)
+            elif item_type == 'succeeding':
+                superceding_info.append(item_info)
+        relations = {'precede_len': len(preceding_info),
+                     'supercede_len': len(superceding_info),
+                     'precede_info': sort_list_of_dicts(preceding_info, 'year'),
+                     'supercede_info': sort_list_of_dicts(superceding_info, 'year')
+                     }
+    else:
+        raise Exception('Failed to parse supersede information.')
+    return relations

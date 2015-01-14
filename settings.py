@@ -9,7 +9,7 @@ from datetime import timedelta
 
 DEBUG = True
 SECRET_KEY = ''
-VERIFY_CERT = True
+VERIFY_CERT = False
 COLLECT_STATIC_ROOT = 'static/'
 COLLECT_STORAGE = 'flask.ext.collect.storage.file'
 MAIL_USERNAME = 'PUBSV2_NO_REPLY'

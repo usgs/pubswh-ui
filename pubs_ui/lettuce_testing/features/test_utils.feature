@@ -92,4 +92,21 @@ Feature: Test all pub_ui utilities
 		Given we have created a fake url and mocked a down service
 		When I search through the failed service
 		Then I am given the appropriate responses
-
+	
+	@WIP1
+	Scenario: Sorting of a list of dictionaries works correctly
+		Given I have a list of dictionaries
+		When I provide the list and a valid key name
+		Then I see a list sorted by the specified key
+	
+	@WIP2	
+	Scenario: Parsing of supersedes info works correctly
+		Given I have mocked a supersedes URL and publication supersedes JSON
+		When I pass the URL to extract_related_pub_info
+		Then I see a dictionary containing the preceding and superseding publications
+		
+	@WIP3
+	Scenario: Parsing of supersedes info handles an inoperable backend
+		Given I have mocked a failing supersedes URL
+		When I pass the failing URL to extract_related_pub_info
+		Then I see a dictionary containing empty preceding and superseding publication lists
