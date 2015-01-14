@@ -637,3 +637,68 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
         pubdata['displayLinks']['Thumbnail'][0]['url'] = change_to_pubs_test(
             pubdata['displayLinks']['Thumbnail'][0]['url'])
     return pubdata
+
+
+def sort_list_of_dicts(list_to_be_sorted, key_name, reverse=False):
+    """
+    Sort a list of dictionaries by a specified key.
+    
+    :param list list_to_be_sorted: list of dictionaries to be sorted
+    :param str key_name: key in the dictionaries to be sorted by
+    :param bool reverse: should the dictionaries be sorted in descending order
+    :return: sorted list of dictionaries by specified key
+    :rtype: list
+    
+    """
+    new_list = sorted(list_to_be_sorted, key=itemgetter(key_name), reverse=reverse)
+    return new_list
+
+
+def extract_related_pub_info(pubdata):
+    """
+    Take some json-ld publication and extract the 
+    information for preceding and superseding
+    publications. If no preceding or superseding
+    information is present, empty lists are returned
+    for each.
+    
+    :param dict pubdata: publication JSON data
+    :return: a dictionary containing a list containing dictionaries of related publication information
+    :rtype: dict
+    
+    """
+    preceding_info = []  # this list may have multiple elements in it
+    superceding_info = []  # this list should never have more than 1 element in it
+    graph = pubdata.get('relationships', {}).get('@graph', [])
+    related_pubs = []
+    for graph_element in graph:
+        if graph_element.has_key('rdaw:replacedByWork') or graph_element.has_key('rdaw:replacementOfWork'):
+            related_pubs.append(graph_element)
+    related_length = len(related_pubs)
+    if related_length == 0:
+        relations = {'precede_len': 0,
+                     'supersede_len': 0,
+                     'precede_info': [],
+                     'supersede_info': []
+                     }
+    elif related_length >= 1:
+        for related_pub in related_pubs:
+            item_year = related_pub['dc:date']
+            item_title = related_pub['dc:title']
+            item_id = related_pub['@id'].rsplit('/', 1)[1]  # provides an absolute URL, but this extracts the id so a relative URL can be made
+            item_info = {'id': item_id,
+                         'title': item_title,
+                         'year': item_year
+                         }
+            if related_pub.has_key('rdaw:replacedByWork'):
+                preceding_info.append(item_info)
+            elif related_pub.has_key('rdaw:replacementOfWork'):
+                superceding_info.append(item_info)
+        relations = {'precede_len': len(preceding_info),
+                     'supersede_len': len(superceding_info),
+                     'precede_info': sort_list_of_dicts(preceding_info, 'year'),
+                     'supersede_info': sort_list_of_dicts(superceding_info, 'year')
+                     }
+    else:
+        raise Exception('Failed to parse supersede information.')
+    return relations
