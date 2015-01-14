@@ -24,13 +24,13 @@ def get_field_list(lookup_name):
     try:
         records = get(lookup_url + lookup_name, params={'mimetype': 'json'}, verify=verify_cert).json()
     except:
-        records = [{'text': 'error'}, {'text':'example'}, {'text':'example'}, {'text':'example'}, {'text':'example'}]
+        records = [{'text': 'error'}, {'text': 'error1'}, {'text': 'error2'}, {'text': 'error3'}, {'text': 'error4'}]
 
     for record in records:
         field_list.append((record['text'], record['text']))
     field_list.insert(0, ('', ''))
-
-    return field_list
+    deduped_field_list = list(set(field_list))
+    return deduped_field_list
 
 
 class ContactForm(Form):
