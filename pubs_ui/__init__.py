@@ -14,10 +14,8 @@ handler.setLevel(logging.INFO)
 handler.setFormatter(fmt)
 
 
-
 app = Flask(__name__)
-app.config.from_object('settings') # load configuration before passing the app object to other things
-
+app.config.from_object('settings')  # load configuration before passing the app object to other things
 
 
 @app.before_request
