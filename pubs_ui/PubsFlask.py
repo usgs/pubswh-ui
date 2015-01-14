@@ -305,9 +305,8 @@ def publication(index_id):
     if r.status_code == 404:
         return render_template('404.html')
     pubreturn = r.json()
-    supersedes_full_url = '{0}prod_id={1}'.format(supersedes_url, index_id)
-    related_pubs = extract_related_pub_info(supersedes_full_url, verify_cert)
     pubdata = munge_pubdata_for_display(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+    related_pubs = extract_related_pub_info(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     else:

@@ -502,51 +502,15 @@ def check_sort_results(step):
 """
 Parse superseding information scenario
 """
-@step(r'I have mocked a supersedes URL and publication supersedes JSON')
+@step(r'I have mocked some publication JSON')
 def mock_supersedes(step):
-    world.mock_supersedes = 'http://cida-eros-pubsfake.er.usgs.gov:8080/pubs2_ui/service/citation/json/extras?prod_id=rj17u'
-    mock_supersedes_data = { "modsCollection": { "@rowCount": "1", "mods": [{ "identifier": { "@type": "pw", "#text": "rj17u"}, "location": { "url": [{ "@note": "THUMBNAIL", "#text": "http://pubs.er.usgs.gov/thumbnails/rj17u.jpg"}, { "@note": "DOCUMENT", "#text": "http://pubs.usgs.gov/fs/0033-01/report.pdf"}] }, "relatedItem": [{ "base_id": { "@type": "pw", "#text": "rj17u"}, "@type": "succeeding", "identifier": { "@type": "pw", "#text": "fs05503"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "2003"}}, { "base_id": { "@type": "pw", "#text": "rj17u"}, "@type": "preceding", "identifier": { "@type": "pw", "#text": "fs07199"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "1999"}}, { "base_id": { "@type": "pw", "#text": "rj17u"}, "@type": "preceding", "identifier": { "@type": "pw", "#text": "fs03700"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "2000"}}] }] }}
-    httpretty.enable()
-    httpretty.register_uri(httpretty.GET,
-                           world.mock_supersedes,
-                           body=str(json.dumps(mock_supersedes_data)),
-                           content_type='application/json',
-                           status=200
-                           )
-
-@step(r'I pass the URL to extract_related_pub_info')
+    world.mock_supersedes = {u'seriesNumber': u'071-99', u'links': [{u'url': u'http://pubs.usgs.gov/fs/1999/0071/report.pdf', u'rank': 300, u'type': {u'text': u'Document', u'id': 11}, u'id': 5107809, u'linkFileType': {u'text': u'pdf', u'id': 1}}, {u'url': u'http://pubs.usgs.gov/fs/1999/0071/report-thumb.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5231293, u'rank': 0}], u'edition': u'-', u'authorsList': [u'U.S. Geological Survey'], u'displayLinks': {u'Project Site': [], u'Application Site': [], u'Raw Data': [], u'Document': [{u'url': u'http://pubs.usgs.gov/fs/1999/0071/report.pdf', u'rank': 300, u'type': {u'text': u'Document', u'id': 11}, u'id': 5107809, u'linkFileType': {u'text': u'pdf', u'id': 1}}], u'Thumbnail': [{u'url': u'http://pubs.usgs.gov/fs/1999/0071/report-thumb.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5231293, u'rank': 0}], u'Metadata': [], u'Plate': [], u'Spatial Data': [], u'Companion Files': [], u'Illustration': [], u'Appendix': [], u'Index Page': [], u'Chapter': [], u'Read Me': [], u'Version History': [], u'Database': [], u'Cover': [], u'Authors Website': [], u'Errata': [], u'Additional Report Piece': [], u'Related Work': [], u'Abstract': [], u'Referenced Work': [], u'Digital Object Identifier': [], u'Image': []}, u'pubHasNoLinks': False, u'id': 5329, u'relationships': {u'@context': {u'rdac': u'http://rdaregistry.info/Elements/c/', u'rdaw:replacedByWork': {u'@type': u'@id'}, u'rdaw': u'http://rdaregistry.info/Elements/w/', u'dc': u'http://purl.org/dc/elements/1.1/', u'rdaw:replacementOfWork': {u'@type': u'@id'}, u'xsd': u'http://www.w3.org/2001/XMLSchema#'}, u'@graph': [{u'dc:date': u'1999', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs-fake.er.usgs.gov/publication/rj17u', u'@type': u'rdac:Work'}, {u'dc:date': u'1997', u'dc:title': u'U.S. Geological Survey World Wide Web information', u'@id': u'http://pubs-fake.er.usgs.gov/publication/fs12196', u'@type': u'rdac:Work', u'rdaw:replacedByWork': u'http://pubs-fake.er.usgs.gov/publication/rj17u'}, {u'dc:date': u'1997', u'dc:title': u'U.S. Geological Survey World Wide Web information', u'@id': u'http://pubs-fake.er.usgs.gov/publication/fs12196', u'@type': u'rdac:Work', u'rdaw:replacedByWork': u'http://pubs-fake.er.usgs.gov/publication/rj17u'}, {u'dc:date': u'2000', u'rdaw:replacementOfWork': u'http://pubs-fake.er.usgs.gov/publication/rj17u', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs-fake.er.usgs.gov/publication/fs03700', u'@type': u'rdac:Work'}, {u'dc:date': u'2001', u'rdaw:replacementOfWork': u'http://pubs-fake.er.usgs.gov/publication/rj17u', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs-fake.er.usgs.gov/publication/fs03301', u'@type': u'rdac:Work'}, {u'dc:date': u'2003', u'rdaw:replacementOfWork': u'http://pubs-fake.er.usgs.gov/publication/rj17u', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs-fake.er.usgs.gov/publication/fs05503', u'@type': u'rdac:Work'}]}, u'productDescription': u'2 p.', u'publisherLocation': u'Reston, VA', u'contributors': {u'authors': [{u'corporation': True, u'rank': 1, u'contributorType': {u'text': u'Authors', u'id': 1}, u'organization': u'U.S. Geological Survey', u'contributorId': 128075, u'text': u'U.S. Geological Survey', u'id': 528496, u'usgs': False}]}, u'docAbstract': u'The U.S. Geological Survey (USGS) invites you to explore an earth science virtual library of digital information, publications, and data. The USGS Internet World Wide Web sites offer an array of information that reflects scientific research and monitoring programs conducted in the areas of natural hazards, environmental resources, and cartography. This list provides gateways to access a cross section of the digital information on the USGS World Wide Web sites.', u'details': [{u'Publication type:': u'Report'}, {u'Publication Subtype:': u'USGS Numbered Series'}, {u'Title:': u'U.S. Geological Survey World Wide Web Information'}, {u'Series title:': u'Fact Sheet'}, {u'Series number:': u'071-99'}, {u'Edition:': u'-'}, {u'Year Published:': u'1999'}, {u'Language:': u'ENGLISH'}, {u'Publisher:': u'U.S.Geological Survey'}, {u'Publisher location:': u'Reston, VA'}, {u'Contributing office(s):': u'U.S. Geological Survey'}, {u'Description:': u'2 p.'}], u'lastModifiedDate': u'2012-03-16T17:16:05.000', u'seriesTitle': {u'onlineIssn': u'2327-6932', u'text': u'Fact Sheet', u'id': 313, u'printIssn': u'2327-6916'}, u'publicationType': {u'text': u'Report', u'id': 18}, u'costCenters': [{u'text': u'U.S. Geological Survey', u'id': 595}], u'indexId': u'rj17u', u'formattedModifiedDateTime': u'March 16, 2012 17:16:05', u'publisher': u'U.S.Geological Survey', u'publicationYear': u'1999', u'language': u'ENGLISH', u'title': u'U.S. Geological Survey World Wide Web Information', u'displayToPublicDate': u'1994-01-01T00:00:00.000', u'publicationSubtype': {u'text': u'USGS Numbered Series', u'id': 5}, u'authorsListTyped': [{u'text': u'U.S. Geological Survey', u'type': u'corporation'}], u'usgsCitation': u'U.S. Geological Survey World Wide Web Information; 1999; FS; 071-99; Geological Survey (U.S.)'}
+    
+@step(r'I pass the JSON to extract_related_pub_info')
 def execute_supersedes_parsing(step):
-    world.parse_result = extract_related_pub_info(world.mock_supersedes, verify_cert=False)
+    world.parse_result = extract_related_pub_info(world.mock_supersedes)
     
 @step(r'I see a dictionary containing the preceding and superseding publications')
 def check_supersedes_parsing(step):
-    httpretty.disable()
-    httpretty.reset()
-    expected = {'supersede_info': [{'year': u'2003', 'id': u'fs05503', 'title': u'U.S. Geological Survey World Wide Web Information'}], 'precede_info': [{'year': u'1999', 'id': u'fs07199', 'title': u'U.S. Geological Survey World Wide Web Information'}, {'year': u'2000', 'id': u'fs03700', 'title': u'U.S. Geological Survey World Wide Web Information'}], 'precede_len': 2, 'supersede_len': 1}
+    expected = {'precede_info': [{'year': u'1997', 'id': u'fs12196', 'title': u'U.S. Geological Survey World Wide Web information'}, {'year': u'1997', 'id': u'fs12196', 'title': u'U.S. Geological Survey World Wide Web information'}], 'supersede_info': [{'year': u'2000', 'id': u'fs03700', 'title': u'U.S. Geological Survey World Wide Web Information'}, {'year': u'2001', 'id': u'fs03301', 'title': u'U.S. Geological Survey World Wide Web Information'}, {'year': u'2003', 'id': u'fs05503', 'title': u'U.S. Geological Survey World Wide Web Information'}], 'precede_len': 2, 'supersede_len': 3}
     assert_equal(expected, world.parse_result)
-    
-@step(r'I have mocked a failing supersedes URL')
-def mock_failing_supersedes_url(step):
-    world.failing_supersedes = 'http://cida-eros-pubsfake.er.usgs.gov:8080/pubs2_ui/service/citation/json/extras?prod_id=rj21u'
-    httpretty.enable()
-    httpretty.register_uri(httpretty.GET,
-                           world.failing_supersedes,
-                           content_type='application/json',
-                           status=500
-                           )
-    
-@step(r'I pass the failing URL to extract_related_pub_info')
-def execute_failing_supercedes_call(step):
-    world.failing_result = extract_related_pub_info(world.failing_supersedes, False)
-    
-@step(r'I see a dictionary containing empty preceding and superseding publication lists')
-def check_failing_supercedes_parse_resp(step):
-    httpretty.disable()
-    httpretty.enable()
-    expected = {'precede_len': 0,
-                'supersede_len': 0,
-                'precede_info': [],
-                'supersede_info': []
-                }
-    assert_equal(expected, world.failing_result)
-    

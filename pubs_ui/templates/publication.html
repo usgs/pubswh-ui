@@ -151,7 +151,7 @@
                     {%- endmacro -%}
                     
                     {% macro related_links() %}
-                		{% if related_pubs['precede_info']|length > 0 %}
+                		{% if related_pubs['precede_len']  > 0 %}
                 			<li>Preceding Publications:</li>
                 			{% for precede_pub in related_pubs['precede_info'] %}
 								<ul>
@@ -161,7 +161,7 @@
 								</ul>
                 			{% endfor %}
                 		{% endif %}
-                		{% if related_pubs['supersede_info']|length > 0 %}
+                		{% if related_pubs['supersede_len'] > 0 %}
                 			<li>Superseding Publications:</li>
                 			{% for supersede_pub in related_pubs['supersede_info'] %}
                 				<ul>

@@ -654,37 +654,27 @@ def sort_list_of_dicts(list_to_be_sorted, key_name, reverse=False):
     return new_list
 
 
-def extract_related_pub_info(supersedes_url, verify_cert=True):
+def extract_related_pub_info(pubdata):
     """
-    Submit a request to the supersedes URL to get the preceding
-    and superceding information for a publication. Parse out the
-    id, title, and publication year of the related publication.
+    Take some json-ld publication and extract the 
+    information for preceding and superseding
+    publications. If no preceding or superseding
+    information is present, empty lists are returned
+    for each.
     
-    If the supersedes service is unresponsive, this function will
-    return a dictionary containing empty lists for precede_info
-    and supercede_info.
-    
-    :param str supersedes_url: URL to the supercedes information for a publication
-    :param bool verify_cert: boolean to tell requests whether or not to verify a SSL cert when doing a request
+    :param dict pubdata: publication JSON data
     :return: a dictionary containing a list containing dictionaries of related publication information
     :rtype: dict
     
     """
     preceding_info = []  # this list may have multiple elements in it
     superceding_info = []  # this list should never have more than 1 element in it
-    resp = requests.get(supersedes_url, verify=verify_cert)
-    try:
-        resp_json = resp.json()
-    except ValueError:
-        resp_json = {}
-    mods_collection = resp_json.get('modsCollection', {})
-    mods = mods_collection.get('mods', [])
-    try:
-        mod_0 = mods[0]
-    except IndexError:
-        mod_0 = {}
-    related_items = mod_0.get('relatedItem', [])
-    related_length = len(related_items)
+    graph = pubdata.get('relationships', {}).get('@graph', [])
+    related_pubs = []
+    for graph_element in graph:
+        if graph_element.has_key('rdaw:replacedByWork') or graph_element.has_key('rdaw:replacementOfWork'):
+            related_pubs.append(graph_element)
+    related_length = len(related_pubs)
     if related_length == 0:
         relations = {'precede_len': 0,
                      'supersede_len': 0,
@@ -692,18 +682,17 @@ def extract_related_pub_info(supersedes_url, verify_cert=True):
                      'supersede_info': []
                      }
     elif related_length >= 1:
-        for related_item in related_items:
-            item_type = related_item.get('@type')
-            item_id = related_item.get('identifier', {}).get('#text')  # identifier returns an empty dictionary if it cannot be found
-            item_title = related_item.get('titleInfo', {}).get('title')
-            item_year = related_item.get('originInfo', {}).get('dateIssued')
+        for related_pub in related_pubs:
+            item_year = related_pub['dc:date']
+            item_title = related_pub['dc:title']
+            item_id = related_pub['@id'].rsplit('/', 1)[1]  # provides an absolute URL, but this extracts the id so a relative URL can be made
             item_info = {'id': item_id,
                          'title': item_title,
                          'year': item_year
                          }
-            if item_type == 'preceding':
+            if related_pub.has_key('rdaw:replacedByWork'):
                 preceding_info.append(item_info)
-            elif item_type == 'succeeding':
+            elif related_pub.has_key('rdaw:replacementOfWork'):
                 superceding_info.append(item_info)
         relations = {'precede_len': len(preceding_info),
                      'supersede_len': len(superceding_info),
