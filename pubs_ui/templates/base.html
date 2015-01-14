@@ -16,6 +16,8 @@
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/normalize.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/main.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename= 'css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename= 'css/select2.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename= 'css/select2-bootstrap.css') }}">
         <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
         <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('open_search') }}" title="USGS Pubs">
         <link rel="unapi-server" type="application/xml" title="unAPI" href="{{ url_for('unapi') }}" />
@@ -131,6 +133,10 @@
 	     </footer>
 
 		<script type="text/javascript" src="{{ url_for('static', filename='js/vendor/jquery-1.11.1.min.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/select2.js') }}"></script>
+		<script type="text/javascript">
+  			$('select').select2();
+		</script>
         <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='js/vendor/jquery-1.11.1.min.js') }}"><\/script>')</script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/plugins.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/bootstrap.js') }}"></script>

@@ -24,7 +24,7 @@ def get_field_list(lookup_name):
     try:
         records = get(lookup_url + lookup_name, params={'mimetype': 'json'}, verify=verify_cert).json()
     except:
-        records = [{'text': 'error'}]
+        records = [{'text': 'error'}, {'text':'example'}, {'text':'example'}, {'text':'example'}, {'text':'example'}]
 
     for record in records:
         field_list.append((record['text'], record['text']))
