@@ -301,7 +301,6 @@ def contact_confirmation():
 # leads to rendered html for publication page
 @app.route('/publication/<index_id>')
 def publication(index_id):
-    print(pub_url)
     r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
     if r.status_code == 404:
         return render_template('404.html')
