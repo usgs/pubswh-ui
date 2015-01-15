@@ -16,7 +16,6 @@ supersedes_url = app.config['SUPERSEDES_URL']
 def i_have_imitated_json_from_the_pubs_and_supersedes_api_and_a_client(step):
     world.pub_id = 'fake88421'
     world.pub_url = '{0}publication/{1}'.format(pub_url, world.pub_id)
-    print(pub_url)
     world.supersedes_url = supersedes_url
     world.client = app.test_client()
     mock_supersedes = {u'modsCollection': {u'@rowCount': u'1', u'mods': [{u'identifier': {u'#text': u'fake88421', u'@type': u'pw'}, u'location': {u'url': [{u'@note': u'THUMBNAIL', u'#text': u'http://pubs.er.usgs.gov/thumbnails/fake88421.jpg'}, {u'@note': u'DOCUMENT', u'#text': u'http://pubs.usgs.gov/fs/0033-01/report.pdf'}]}, u'relatedItem': [{u'titleInfo': {u'title': u'U.S. Geological Survey World Wide Web Information'}, u'identifier': {u'#text': u'fs05503', u'@type': u'pw'}, u'originInfo': {u'dateIssued': u'2003'}, u'@type': u'succeeding', u'base_id': {u'#text': u'fake88421', u'@type': u'pw'}}, {u'titleInfo': {u'title': u'U.S. Geological Survey World Wide Web Information'}, u'identifier': {u'#text': u'fs07199', u'@type': u'pw'}, u'originInfo': {u'dateIssued': u'2370'}, u'@type': u'preceding', u'base_id': {u'#text': u'fake88421', u'@type': u'pw'}}, {u'titleInfo': {u'title': u'U.S. Geological Survey World Wide Web Information'}, u'identifier': {u'#text': u'fs03700', u'@type': u'pw'}, u'originInfo': {u'dateIssued': u'2000'}, u'@type': u'preceding', u'base_id': {u'#text': u'fake88421', u'@type': u'pw'}}]}]}}
