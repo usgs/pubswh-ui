@@ -7,4 +7,4 @@ Feature: Publication pages
 		Given I have imitated JSON from the pubs and supersedes API and a client
 		When I access the publication page
 		Then I should see a 200 status code
-		And I should see the some of the fake supersedes content
+		And I should see some of the fake supersedes content

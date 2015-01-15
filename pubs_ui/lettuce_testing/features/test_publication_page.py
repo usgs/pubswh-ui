@@ -51,6 +51,6 @@ def i_should_see_a_200_status_code(step):
     assert_equal(expected, world.resp_status)
     
 @step
-def i_should_see_the_some_of_the_fake_supersedes_content(step):
+def i_should_see_some_of_the_fake_supersedes_content(step):
     expected_snippet = 'Web Information (2370)'
     assert_in(expected_snippet, world.response_content)
