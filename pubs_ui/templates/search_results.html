@@ -48,4 +48,25 @@
 		{{ search_service_down }}
 	{% endif %}
 {% endblock main %}
+{% block page_footer_script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/select2.js') }}"></script>
+		<script type="text/javascript">
+  			$('#typeName').select2({
+        placeholder: "Choose a Publication Type" ,
+        allowClear: true
+    });
+            $('#subtypeName').select2({
+        placeholder: "Choose a Publication Subtype" ,
+        allowClear: true
+    });
+            $('#seriesName').select2({
+        placeholder: "Choose a Series Name or Journal Title" ,
+        allowClear: true
+    });
+            $('#contributingOffice').select2({
+        placeholder: "Choose a Contributing Office" ,
+        allowClear: true
+    });
+		</script>
+{% endblock page_footer_script %}
 {% block url %}<a href="..{{ request.path }}">http://pubs.er.usgs.gov{{ request.path }}</a>{% endblock %}

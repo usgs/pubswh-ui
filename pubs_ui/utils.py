@@ -53,11 +53,12 @@ def pubdetails(pubdata):
         ['costCenters', 'text', 'Contributing office(s):'],
         ['productDescription', 'Description:'],
         ['numberofPages', 'Number of pages:'],
-        ['largerWorkType', 'text', 'Publication type:'],
-        ['largerWorkSubtype', 'text', 'Publication Subtype:'],
+        ['largerWorkType', 'text', 'Larger Work Type:'],
+        ['largerWorkSubtype', 'text', 'Larger Work Subtype:'],
         ['largerWorkTitle', 'text', 'Larger Work Title:'],
         ['startPage', 'First page:'],
         ['endPage', 'Last page:'],
+        ['numberOfPages', 'Number of Pages:'],
         ['publicComments', 'Public Comments:'],
         ['temporalStart', 'Time Range Start:'],
         ['temporalEnd', 'Time Range End:'],
@@ -480,7 +481,6 @@ def legacy_api_info(context_id, supersedes_service_url):
                     "schema:url": "http://store.usgs.gov"}
                 }
             }
-
 
     predecessors = []
     successors = []
