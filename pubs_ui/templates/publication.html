@@ -96,7 +96,7 @@
                       {%-  endfor -%}
                         </dd>
                       {% if pubdata['editorsList'] %}
-                      <dt class="clear">Edited by:</dt>
+                      <dt>Edited by:</dt>
                       <dd>
                           {%- for contributor in pubdata['editorsListTyped']  -%}
                           {%- if contributor['type'] == "person"  -%}
@@ -230,7 +230,7 @@
                     <dl id="publication_details">
                       {% for detail in pubdata['details'] %}
                           <dt class="{{ loop.cycle('', 'dark') }}">{{ detail.keys()[0] }}</dt>
-                          <dd class="{{ loop.cycle('', 'dark') }}">{{ detail.values()[0] }}</dd>
+                          <dd class="{{ loop.cycle('', 'dark') }}">{{ detail.values()[0]|safe }}</dd>
                       {% endfor %}
                     </dl>
                 </section>

@@ -135,8 +135,20 @@
 		<script type="text/javascript" src="{{ url_for('static', filename='js/vendor/jquery-1.11.1.min.js') }}"></script>
 		<script type="text/javascript" src="{{ url_for('static', filename='js/select2.js') }}"></script>
 		<script type="text/javascript">
-  			$('select').select2({
-        placeholder: "Choose Something" ,
+  			$('#typeName').select2({
+        placeholder: "Choose a Publication Type" ,
+        allowClear: true
+    });
+            $('#subtypeName').select2({
+        placeholder: "Choose a Publication Subtype" ,
+        allowClear: true
+    });
+            $('#seriesName').select2({
+        placeholder: "Choose a Series Name or Journal Title" ,
+        allowClear: true
+    });
+            $('#contributingOffice').select2({
+        placeholder: "Choose a Contributing Office" ,
         allowClear: true
     });
 		</script>
