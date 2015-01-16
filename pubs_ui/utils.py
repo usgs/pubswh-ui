@@ -489,13 +489,17 @@ def legacy_api_info(context_id, supersedes_service_url):
     successors = []
     if related is not None:
         for item in related:
-            item_summary_info = {'index_id': item['identifier']['#text'], 'title': item['titleInfo']['title'],
+            try:
+                item_summary_info = {'index_id': item['identifier']['#text'], 'title': item['titleInfo']['title'],
                                  'date': item['originInfo']['dateIssued']}
 
-            if item['@type'] == 'preceding':
-                predecessors.append(item_summary_info)
-            elif item['@type'] == 'succeeding':
-                successors.append(item_summary_info)
+                if item['@type'] == 'preceding':
+                    predecessors.append(item_summary_info)
+                elif item['@type'] == 'succeeding':
+                    successors.append(item_summary_info)
+            except KeyError:
+                predecessors = []
+                successors = []
 
     return {'predecessors': predecessors, 'context_item': context_id, 'successors': successors, 'offers': offers}
 
