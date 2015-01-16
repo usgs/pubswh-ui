@@ -53,11 +53,12 @@ def pubdetails(pubdata):
         ['costCenters', 'text', 'Contributing office(s):'],
         ['productDescription', 'Description:'],
         ['numberofPages', 'Number of pages:'],
-        ['largerWorkType', 'text', 'Publication type:'],
-        ['largerWorkSubtype', 'text', 'Publication Subtype:'],
+        ['largerWorkType', 'text', 'Larger Work Type:'],
+        ['largerWorkSubtype', 'text', 'Larger Work Subtype:'],
         ['largerWorkTitle', 'text', 'Larger Work Title:'],
         ['startPage', 'First page:'],
         ['endPage', 'Last page:'],
+        ['numberOfPages', 'Number of Pages:'],
         ['publicComments', 'Public Comments:'],
         ['temporalStart', 'Time Range Start:'],
         ['temporalEnd', 'Time Range End:'],
@@ -230,8 +231,11 @@ def manipulate_plate_links(display_links):
                             text = file_name[0].split("_")
 
                 link["text"] = text
-                link['text'][1] = str(link['text'][1])
-                link['text'] = " ".join(link['text']).title()
+                try:
+                    link['text'][1] = str(link['text'][1])
+                    link['text'] = " ".join(link['text']).title()
+                except (ValueError, TypeError):
+                    link['text'] = str(link["text"]).title()
             if link.get('linkFileType') is None:
                 link['linkFileType'] = {'text': file_name[1]}
         display_links["Plate"] = sorted(display_links["Plate"], key=itemgetter('text'))
@@ -481,7 +485,6 @@ def legacy_api_info(context_id, supersedes_service_url):
                 }
             }
 
-
     predecessors = []
     successors = []
     if related is not None:
@@ -685,7 +688,8 @@ def extract_related_pub_info(pubdata):
         for related_pub in related_pubs:
             item_year = related_pub['dc:date']
             item_title = related_pub['dc:title']
-            item_id = related_pub['@id'].rsplit('/', 1)[1]  # provides an absolute URL, but this extracts the id so a relative URL can be made
+            # provides an absolute URL, but this extracts the id so a relative URL can be made
+            item_id = related_pub['@id'].rsplit('/', 1)[1]
             item_info = {'id': item_id,
                          'title': item_title,
                          'year': item_year
