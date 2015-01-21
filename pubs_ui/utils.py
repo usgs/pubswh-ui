@@ -237,7 +237,10 @@ def manipulate_plate_links(display_links):
                 except (ValueError, TypeError):
                     link['text'] = str(link["text"]).title()
             if link.get('linkFileType') is None:
-                link['linkFileType'] = {'text': file_name[1]}
+                try:
+                    link['linkFileType'] = {'text': file_name[1]}
+                except IndexError:
+                    link['linkFileType'] = None
         display_links["Plate"] = sorted(display_links["Plate"], key=itemgetter('text'))
     return display_links
 
