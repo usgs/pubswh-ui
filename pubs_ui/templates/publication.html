@@ -224,7 +224,10 @@
                     {{ pubdata['tableOfContents']|safe }}
                 </section>
                 {% endif %}
-
+                {# commenting out the USGS Numbered series information until it is more fully baked
+                {% if pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' %}
+                {% include 'USGS_series_aside.html' %}
+                {% endif %} #}
                 <section id="details">
                     <h4 id="" class="dark">Additional Publication Details</h4>
                     <dl id="publication_details">

@@ -103,7 +103,7 @@ def create_display_links(pubdata):
     :param pubdata:
     :return: pubdata with new displayLinks array
     """
-    if pubdata.get('doi') is not None and pubdata.get('publicationSubtype').get('text') != \
+    if pubdata.get('doi') is not None and pubdata.get('publicationSubtype', {}).get('text') != \
             ('USGS Numbered Series' or 'USGS Unnumbered Series'):
         pubdata['links'].append(
             {

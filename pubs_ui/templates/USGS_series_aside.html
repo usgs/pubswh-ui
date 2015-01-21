@@ -1,10 +1,17 @@
 {# this template is the block of code that we put in if the publication has information for the SPN- contact information, etc #}
+<aside>
+{% if pubdata['publishedDateStatement'] and pubdata['displayLinks']['Version History']|length > 0 %}
+    <a href='{{ pubdata['displayLinks']['Version History'][0]['url'] }}'><p>{{ pubdata['firstPosted'] }}</p></a>
+{% elif pubdata['publishedDateStatement'] %}
+    <p>{{ pubdata['publishedDateStatement'] }}</p>
+{% endif %}
 
-{% if pubdata['firstPosted'] %}
-{# TODO put in first posed, make it a link to revision history if revision history link exists #}
 {% if pubdata['contact'] %}
-{# TODO put in contact information #}
-{% if pubdata['displaylinks']['Document'] %}
-{# TODO put in pdf disclaimer #}
-
+    <p><strong>For additional information contact:</strong></p>
+{{ pubdata['contact']|safe }}
+{% endif %}
+{% if pubdata['displayLinks']['Document'] %}
+<p class="adobeReader">Part or all of this report is presented in Portable Document Format (PDF). For best results viewing and printing PDF documents, it is recommended that you download the documents to your computer and open them with Adobe Reader. PDF documents opened from your browser may not display or print as intended. Download the latest version of <a href="http://get.adobe.com/reader/">Adobe Reader</a>, free of charge. More information about viewing, downloading, and printing report files can be found <a href="http://pubs.usgs.gov/potential_problems.html">here</a>.</p>
+{% endif %}
+</aside>
 
