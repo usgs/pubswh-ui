@@ -234,7 +234,7 @@ def manipulate_plate_links(display_links):
                 try:
                     link['text'][1] = str(link['text'][1])
                     link['text'] = " ".join(link['text']).title()
-                except (ValueError, TypeError):
+                except (ValueError, TypeError, IndexError):
                     link['text'] = str(link["text"]).title()
             if link.get('linkFileType') is None:
                 try:
