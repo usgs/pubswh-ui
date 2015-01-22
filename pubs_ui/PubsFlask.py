@@ -217,7 +217,7 @@ def restricted_page(index_id):
     elif response.status_code == 404 and published_status == 200:
         return redirect(url_for('publication', indexId=index_id))
     elif response.status_code == 404 and published_status == 404:
-        return render_template('404.html')
+        return render_template('404.html'), 404
 
 
 @app.route('/robots.txt')
@@ -303,7 +303,7 @@ def contact_confirmation():
 def publication(index_id):
     r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
     if r.status_code == 404:
-        return render_template('404.html')
+        return render_template('404.html'), 404
     pubreturn = r.json()
     pubdata = munge_pubdata_for_display(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
     related_pubs = extract_related_pub_info(pubdata)
