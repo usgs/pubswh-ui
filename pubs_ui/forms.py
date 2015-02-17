@@ -64,7 +64,8 @@ class SearchForm(Form):
     seriesName = SelectField(label="Series Name", choices=sorted(seriesNameList))
 
     reportNumber = StringField("Report Number")
-    advanced = HiddenField('advanced')
+    g = HiddenField();
+    advanced = HiddenField()
 
 
 class NumSeries(Form):

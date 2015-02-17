@@ -7,8 +7,13 @@
 
 
 
-
 {% endblock head %}
+
+{% block page_style %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaflet.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'vendor/Leaflet.draw.0.2.3/leaflet.draw.css') }}">
+{% endblock page_style %}
+
 {% block main %}
 
 		<main class="container-fluid">
@@ -60,6 +65,11 @@
 {% block url %}<a href="{{ url_for('index') }}">http://pubs.er.usgs.gov{{ url_for('index') }}</a>{% endblock %}
 
 {% block page_footer_script %}
+	<script type="text/javascript" src="{{ url_for('static', filename = 'js/vendor/leaflet-0.7.3/leaflet.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename = 'vendor/Leaflet.draw.0.2.3/leaflet.draw.js') }}"></script>
+	
+	<script type="text/javascript" src="{{ url_for('static', filename='js/searchMap.js')}}"></script>
     <!-- script to deal with the fact that the store has poorly constructed links based on the old pubs warehouse search -->
     <script type="text/javascript">
     			//grab the contents of the fragment
