@@ -35,6 +35,7 @@ search_args = {
                 "mod_date_high": Arg(str, multiple=False),
                 "orderBy": Arg(str, multiple=False),
                 "page": Arg(str, multiple=False),
+                "g" : Arg(str, multiple=False),
                 "advanced": Arg(bool, multiple=False)
 
                }
