@@ -14,11 +14,7 @@ PUBS_WH.createSearchMap = function(mapDivId, geomInputId) {
 			color: '#ff0000',
 			fill : true
 	};
-		
-	var $geomInput = $('#' + geomInputId);
 	
-	var map = L.map('search-map-div', {});
-
 	var baseLayers = {
 		"Topographic" : L.esri.basemapLayer('Topographic'),
 		"Streets" : L.esri.basemapLayer('Streets'),
@@ -30,6 +26,12 @@ PUBS_WH.createSearchMap = function(mapDivId, geomInputId) {
 	};
 
 	var searchFeature = new L.FeatureGroup();
+	
+	var $geomInput = $('#' + geomInputId);
+	
+	var map = L.map('search-map-div', {
+		layers : [baseLayers.Topographic]
+	});
 	
 	// If $geomInput has a value, then add that feature to the feature group.
 	var initialGeomVal = $geomInput.val();	
