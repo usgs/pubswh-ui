@@ -31,6 +31,16 @@ PUBS_WH.createSearchMap = function(mapDivId, geomInputId) {
 		map.addLayer(searchFeature);
 	}
 	
+	searchFeature.on('layeradd', function(e) {
+		var wkt = new Wkt.Wkt();		
+		wkt.fromObject(e.layer);
+		$geomInput.val(wkt.write());
+	});
+	
+	searchFeature.on('layerremove', function(e) {
+		$geomInput.val('');
+	});
+	
 	var drawControl = new L.Control.Draw({
 		draw : {
 			polyline : false,
@@ -46,29 +56,27 @@ PUBS_WH.createSearchMap = function(mapDivId, geomInputId) {
 		edit : {
 			featureGroup : searchFeature,
 			edit : false,
-			remove : {}
+			remove : false
 		}
 	});
+	
+	var deleteFeatureControl = new PUBS_WH.ClearFeatureControl(searchFeature, {});
 
 	// Add controls
 	L.control.layers(baseLayers, overlayLayers).addTo(map);	
 	drawControl.addTo(map);
+	deleteFeatureControl.addTo(map);
 
 	// Handle draw control events
 	map.on('draw:created', function(e) {
 		searchFeature.addLayer(e.layer);
 		map.addLayer(searchFeature);
-
-		var wkt = new Wkt.Wkt();
-		wkt.fromObject(e.layer);
-		$geomInput.val(wkt.write());
 	});
 
 	map.on('draw:drawstart', function(e) {
 		if (searchFeature.getLayers().length !== 0) {
 			map.removeLayer(searchFeature);
 			searchFeature.clearLayers();
-			$geomInput.val('');
 		}
 	});
 
