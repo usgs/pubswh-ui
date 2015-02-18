@@ -24,7 +24,7 @@
 	                </section>
 	
 	                <section id="search" class="no-margin">
-                        {% if advanced == 'True' %}
+                        {% if form.data.advanced == 'True' %}
                             {% include 'advanced_search_form.html' %}
                             <span class="basic-advanced"><a  href="{{ request.base_url }}">Basic Search</a></span>
                         {% else %}
@@ -62,36 +62,9 @@
 {% block url %}<a href="{{ url_for('index') }}">http://pubs.er.usgs.gov{{ url_for('index') }}</a>{% endblock %}
 
 {% block page_footer_script %}
-	<script type="text/javascript" src="{{ url_for('static', filename = 'js/vendor/leaflet-0.7.3/leaflet.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename = 'vendor/Leaflet.draw/leaflet.draw.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename = 'vendor/Wicket/wicket.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename = 'vendor/Wicket/wicket-leaflet.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/select2.js') }}"></script>
-	
-	<script type="text/javascript" src="{{ url_for('static', filename='js/searchMap.js')}}"></script>
-    <!-- script to deal with the fact that the store has poorly constructed links based on the old pubs warehouse search -->
-    
-    <script type="text/javascript">    
-	    $(document).ready(function() {
-	  		$('#typeName').select2({
-	        	placeholder: "Choose a Publication Type" ,
-	        	allowClear: true
-	    	});
-	        $('#subtypeName').select2({
-	        	placeholder: "Choose a Publication Subtype" ,
-	        	allowClear: true
-	    	});
-	        $('#seriesName').select2({
-	        	placeholder: "Choose a Series Name or Journal Title" ,
-	        	allowClear: true
-	    	});
-	        $('#contributingOffice').select2({
-	        	placeholder: "Choose a Contributing Office" ,
-	        	allowClear: true
-	    	});
-	    	
-	    	var map = PUBS_WH.createSearchMap('search-map-div', 'g');
-	    });
-	</script>
+
+	{% if form.data.advanced == 'True' %}
+		{% include "advanced_search_form_script.html" %}
+	{% endif %}
+
 {% endblock page_footer_script %}

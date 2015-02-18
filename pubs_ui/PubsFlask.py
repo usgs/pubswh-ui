@@ -250,13 +250,10 @@ def index():
 
     except TypeError:
         pubs_records = []  # return an empty list recent_pubs_content is None (e.g. the service is down)
-    form = SearchForm(None, obj=request.args)
-    form.advanced.data = True
+    form = SearchForm(request.args)
     return render_template('home.html',
                            recent_publications=pubs_records,
-                           form=form,
-                           advanced=request.args.get('advanced'))
-
+                           form=form)
 
 # contact form
 @app.route('/contact', methods=['GET', 'POST'])
@@ -405,7 +402,6 @@ def search_results():
         search_service_down = 'The backend services appear to be down with a {0} status.'.format(resp_status_code)
         result_summary = {}
     return render_template('search_results.html',
-                           advanced=search_kwargs['advanced'],
                            result_summary=result_summary,
                            search_result_records=search_result_records,
                            pagination=pagination,
