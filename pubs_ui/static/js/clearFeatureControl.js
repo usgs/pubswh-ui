@@ -1,5 +1,13 @@
 var PUBS_WH = PUBS_WH || {};
 
+/*
+ * Leaflet control used to remove a feature group from the map and to clear its layers.
+ *  
+ * @constructor
+ * @param feature {L.FeatureGroup}
+ * @param options {Object} standard L.Control options
+ */ 
+
 PUBS_WH.ClearFeatureControl = L.Control.extend({
 	options: {
 		position: 'topleft'

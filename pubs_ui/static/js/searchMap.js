@@ -1,4 +1,13 @@
 var PUBS_WH = PUBS_WH || {};
+/*
+ * Creates a Leaflet map and controls to draw a search box and to update an input element
+ * when a box has been drawn or cleared.
+ * 
+ * @param mapDivId {String} id of the div where the search map will be created
+ * @param geomInputId {String} id of the input element whose value will be updated when
+ *        a polygon is drawn on the map.
+ * @return a Leaflet map object
+ */
 PUBS_WH.createSearchMap = function(mapDivId, geomInputId) {
 	
 	var SHAPE_OPTIONS = {
@@ -21,16 +30,19 @@ PUBS_WH.createSearchMap = function(mapDivId, geomInputId) {
 	};
 
 	var searchFeature = new L.FeatureGroup();
+	
 	// If $geomInput has a value, then add that feature to the feature group.
-	var initialGeomVal = $geomInput.val();
+	var initialGeomVal = $geomInput.val();	
+	var wkt;
 	if (initialGeomVal) {
-		var wkt = new Wkt.Wkt();
+		wkt = new Wkt.Wkt();
 		wkt.read(initialGeomVal);
 
 		searchFeature.addLayer(wkt.toObject(SHAPE_OPTIONS));
 		map.addLayer(searchFeature);
 	}
-	
+
+	// Add event handlers on the searchFeature layer to update $geomInput
 	searchFeature.on('layeradd', function(e) {
 		var wkt = new Wkt.Wkt();		
 		wkt.fromObject(e.layer);
@@ -41,6 +53,7 @@ PUBS_WH.createSearchMap = function(mapDivId, geomInputId) {
 		$geomInput.val('');
 	});
 	
+	// Create controls
 	var drawControl = new L.Control.Draw({
 		draw : {
 			polyline : false,
@@ -72,7 +85,6 @@ PUBS_WH.createSearchMap = function(mapDivId, geomInputId) {
 		searchFeature.addLayer(e.layer);
 		map.addLayer(searchFeature);
 	});
-
 	map.on('draw:drawstart', function(e) {
 		if (searchFeature.getLayers().length !== 0) {
 			map.removeLayer(searchFeature);
@@ -85,5 +97,4 @@ PUBS_WH.createSearchMap = function(mapDivId, geomInputId) {
 	map.setView([ 38.75, -100.45 ], 4);
 
 	return map;
-
 };
