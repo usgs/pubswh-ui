@@ -368,16 +368,10 @@ def browse(path):
 # this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
 @app.route('/search', methods=['GET'])
 def search_results():
+    form = SearchForm(request.args)
+
     parser = FlaskParser()
     search_kwargs = parser.parse(search_args, request)
-    form = SearchForm(None, obj=request.args, )
-    # populate form based on parameter
-    form.advanced.data = True
-    form_element_list = ['q', 'title', 'contributingOffice', 'contributor', 'typeName', 'subtypeName', 'seriesName',
-                         'reportNumber', 'year']
-    for element in form_element_list:
-        if len(search_kwargs[element]) > 0:
-            form[element].data = search_kwargs[element][0]
     if search_kwargs.get('page_size') is None or search_kwargs.get('page_size') == '':
         search_kwargs['page_size'] = '25'
     if search_kwargs.get('page') is None or search_kwargs.get('page') == '':

@@ -1,61 +1,81 @@
-(function() {
-
-	$(document).ready(function() {
-         //add esri basemap layers
-        var topo = L.esri.basemapLayer('Topographic');
-        var oceans = L.esri.basemapLayer('Oceans',{ detectRetina: true});
-        var streets = L.esri.basemapLayer('Streets');
-
-        var oceanlabels =  L.esri.basemapLayer('OceansLabels')
-
-        // create a map
-
-        map = L.map('search-map-div', {});
-        
-        var baseMaps = {
-            "Oceans": oceans,
-            "Topographic": topo,
-            "Streets": streets
-
-        };
-
-        var overlayMaps = {
-            "Ocean Labels": oceanlabels
-        };
-        
-        var searchFeature = new L.FeatureGroup();
-
-        L.control.layers(baseMaps, overlayMaps).addTo(map);
-        
-        var drawControl = new L.Control.Draw({
-        	draw : {
-        		polyline : false,
-        		circle : false,
-        		marker : false
-        	},
-        	edit : {
-        		featureGroup : searchFeature,
-        		edit : false,
-        		remove : {}
-        	}
-        });
-        map.addControl(drawControl);
-        
-        map.on('draw:created', function(e) {
-        	searchFeature.addLayer(e.layer);
-        	map.addLayer(searchFeature);
-        });
-        
-        map.on('draw:drawstart', function(e) {
-        	if (searchFeature.getLayers().length !== 0) {
-        		map.removeLayer(searchFeature);
-              	searchFeature.clearLayers();
-        	}
-        });
-        
-        map.setView([38.75,-100.45], 4);
-        L.esri.basemapLayer('Topographic').addTo(map);
-
-	});
+var PUBS_WH = PUBS_WH || {};
+PUBS_WH.createSearchMap = function(mapDivId, geomInputId) {
 	
-}());
+	var SHAPE_OPTIONS = {
+			color: '#ff0000',
+			fill : true
+	};
+		
+	var $geomInput = $('#' + geomInputId);
+	
+	var map = L.map('search-map-div', {});
+
+	var baseLayers = {
+		"Topographic" : L.esri.basemapLayer('Topographic'),
+		"Streets" : L.esri.basemapLayer('Streets'),
+		"Oceans" : L.esri.basemapLayer('Oceans')
+	};
+
+	var overlayLayers = {
+		"Ocean Labels" : L.esri.basemapLayer('OceansLabels')
+	};
+
+	var searchFeature = new L.FeatureGroup();
+	// If $geomInput has a value, then add that feature to the feature group.
+	var initialGeomVal = $geomInput.val();
+	if (initialGeomVal) {
+		var wkt = new Wkt.Wkt();
+		wkt.read(initialGeomVal);
+
+		searchFeature.addLayer(wkt.toObject(SHAPE_OPTIONS));
+		map.addLayer(searchFeature);
+	}
+	
+	var drawControl = new L.Control.Draw({
+		draw : {
+			polyline : false,
+			circle : false,
+			marker : false,
+			polygon : {
+				shapeOptions: SHAPE_OPTIONS
+			},
+			rectangle : {
+				shapeOptions: SHAPE_OPTIONS
+			}
+		},
+		edit : {
+			featureGroup : searchFeature,
+			edit : false,
+			remove : {}
+		}
+	});
+
+	// Add controls
+	L.control.layers(baseLayers, overlayLayers).addTo(map);	
+	drawControl.addTo(map);
+
+	// Handle draw control events
+	map.on('draw:created', function(e) {
+		searchFeature.addLayer(e.layer);
+		map.addLayer(searchFeature);
+
+		var wkt = new Wkt.Wkt();
+		wkt.fromObject(e.layer);
+		$geomInput.val(wkt.write());
+	});
+
+	map.on('draw:drawstart', function(e) {
+		if (searchFeature.getLayers().length !== 0) {
+			map.removeLayer(searchFeature);
+			searchFeature.clearLayers();
+			$geomInput.val('');
+		}
+	});
+
+	// Finish initializing the map
+	L.esri.basemapLayer('Topographic').addTo(map);
+	map.setView([ 38.75, -100.45 ], 4);
+
+	return map;
+
+};

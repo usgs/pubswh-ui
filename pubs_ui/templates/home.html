@@ -4,14 +4,11 @@
     <title>U.S. Geological Survey Publications Warehouse</title>
     <meta name="description" content="The Publications warehouse contains over 130,000 publications that cover the 150 year history of the USGS">
     {% include 'meta.html' %}
-
-
-
 {% endblock head %}
 
 {% block page_style %}
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaflet.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename = 'vendor/Leaflet.draw.0.2.3/leaflet.draw.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'vendor/Leaflet.draw/leaflet.draw.css') }}">
 {% endblock page_style %}
 
 {% block main %}
@@ -67,35 +64,34 @@
 {% block page_footer_script %}
 	<script type="text/javascript" src="{{ url_for('static', filename = 'js/vendor/leaflet-0.7.3/leaflet.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename = 'vendor/Leaflet.draw.0.2.3/leaflet.draw.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename = 'vendor/Leaflet.draw/leaflet.draw.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename = 'vendor/Wicket/wicket.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename = 'vendor/Wicket/wicket-leaflet.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/select2.js') }}"></script>
 	
 	<script type="text/javascript" src="{{ url_for('static', filename='js/searchMap.js')}}"></script>
     <!-- script to deal with the fact that the store has poorly constructed links based on the old pubs warehouse search -->
-    <script type="text/javascript">
-    			//grab the contents of the fragment
-                var searchstring = window.location.href.split('#')[1];
-                //pass the contents of the fragment to the storesearch endpoint for further munging and redirection
-                if (searchstring){
-                	window.location = "/legacysearch/" + searchstring;
-                    }
-        </script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/select2.js') }}"></script>
-		<script type="text/javascript">
-  			$('#typeName').select2({
-        placeholder: "Choose a Publication Type" ,
-        allowClear: true
-    });
-            $('#subtypeName').select2({
-        placeholder: "Choose a Publication Subtype" ,
-        allowClear: true
-    });
-            $('#seriesName').select2({
-        placeholder: "Choose a Series Name or Journal Title" ,
-        allowClear: true
-    });
-            $('#contributingOffice').select2({
-        placeholder: "Choose a Contributing Office" ,
-        allowClear: true
-    });
-		</script>
+    
+    <script type="text/javascript">    
+	    $(document).ready(function() {
+	  		$('#typeName').select2({
+	        	placeholder: "Choose a Publication Type" ,
+	        	allowClear: true
+	    	});
+	        $('#subtypeName').select2({
+	        	placeholder: "Choose a Publication Subtype" ,
+	        	allowClear: true
+	    	});
+	        $('#seriesName').select2({
+	        	placeholder: "Choose a Series Name or Journal Title" ,
+	        	allowClear: true
+	    	});
+	        $('#contributingOffice').select2({
+	        	placeholder: "Choose a Contributing Office" ,
+	        	allowClear: true
+	    	});
+	    	
+	    	var map = PUBS_WH.createSearchMap('search-map-div', 'g');
+	    });
+	</script>
 {% endblock page_footer_script %}
