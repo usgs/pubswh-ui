@@ -263,6 +263,11 @@ article{padding:0 10px;}
 				margin:0 0 15px 0;
 				padding:0 0 0 5px;}
 				
+#search fieldset .select2-container {
+	margin: 0 0 15px 0;
+	font-size: 1.3em;
+}
+				
 #advanced{background:none;
 			width:100%;
 			min-height:200px;
@@ -300,6 +305,18 @@ article{padding:0 10px;}
 			text-indent:0;
 			cursor:pointer;
 			display:inline;}
+			
+#search-map-label {
+	display:block;
+    margin:0 0 5px 0;
+	font-size:1.2em;
+	font-weight: bold;	
+}
+			
+#search-map-div {
+	height: 400px;
+	margin: 0 0 15px 0;
+}
 			
 #search-map-div .leaflet-control label {
 	font-weight: normal;
