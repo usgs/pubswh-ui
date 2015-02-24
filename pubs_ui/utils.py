@@ -436,11 +436,11 @@ def legacy_api_info(context_id, supersedes_service_url):
     if response.status_code == 200:
         response_content = response.json()
         try:
-            related = response_content.get('modsCollection').get('mods')[0].get('relatedItem')
+            related = response_content.get('modsCollection', {}).get('mods', [{}])[0].get('relatedItem')
         except TypeError:
             related = None
         try:
-            product = response_content.get('modsCollection').get('mods')[0].get('product')
+            product = response_content.get('modsCollection', {}).get('mods', [{}])[0].get('product')
         except TypeError:
             product = None
     else:

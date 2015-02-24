@@ -1,13 +1,14 @@
 {# this template is the block of code that we put in if the publication has information for the SPN- contact information, etc #}
 <aside>
-{% if pubdata['publishedDateStatement'] and pubdata['displayLinks']['Version History']|length > 0 %}
-    <a href='{{ pubdata['displayLinks']['Version History'][0]['url'] }}'><p>{{ pubdata['firstPosted'] }}</p></a>
-{% elif pubdata['publishedDateStatement'] %}
-    <p>{{ pubdata['publishedDateStatement'] }}</p>
+    {% if pubdata['revisedDate'] and pubdata['displayLinks']['Version History']|length > 0 %}
+    <a href='{{ pubdata['displayLinks']['Version History'][0]['url'] }}'><p>{{ pubdata['revisedDate'] }}</p></a>
+        {% endif %}
+{% if pubdata['publishedDate'] %}
+    <p>First Posted {{ pubdata['publishedDate'] }}</p>
 {% endif %}
 
 {% if pubdata['contact'] %}
-    <p><strong>For additional information contact:</strong></p>
+    <strong>For additional information contact:</strong><br/>
 {{ pubdata['contact']|safe }}
 {% endif %}
 {% if pubdata['displayLinks']['Document'] %}
