@@ -66,5 +66,13 @@
 	{% if form.data.advanced == 'True' %}
 		{% include "advanced_search_form_script.html" %}
 	{% endif %}
+    <script type="text/javascript">
+    			//grab the contents of the fragment
+                var searchstring = window.location.href.split('#')[1];
+                //pass the contents of the fragment to the storesearch endpoint for further munging and redirection
+                if (searchstring){
+                	window.location = "/legacysearch/" + searchstring;
+                    }
+    </script>
 
 {% endblock page_footer_script %}
