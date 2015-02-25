@@ -1,4 +1,5 @@
 {%- for result in search_result_records -%}
+{%- if result['publicationType'] -%}
 {%- if result['publicationType']['text'] == 'Article' %}
 TY  - JOUR
 T2  - {% if result['seriesTitle'] %}{{ result['seriesTitle']['text'] }}{% endif %}
@@ -50,6 +51,7 @@ SN  - {{ result['seriesNumber'] }}{% if result['chapter'] %}{{ result['chapter']
 SP  - {% if result['startPage'] %}{{ result['startPage'] }}-{{ result['endPage'] }}{% else %}{{ result['numberOfPages'] }}{% endif %}
 T2  - {% if result['seriesTitle'] %}{{result['seriesTitle']['text'] }}{% endif %}
 VL  - {{ result['volume'] }}
+{%- endif -%}
 {%- else -%}
 TY  - GEN
 {%- endif -%}

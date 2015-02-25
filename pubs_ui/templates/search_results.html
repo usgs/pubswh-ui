@@ -26,7 +26,7 @@
             {% endif %}
         </section>
         <section class = "search-results">
-            <p>{{ result_summary['record_count'] }} results</p>
+            <p>{{ result_summary['record_count'] }} results.  <a href="{{ request.url }}&page_size=1000&mimetype=ris">{% if result_summary['record_count'] <= 1000 %}Download search results as RIS{% else %}Download first 1000 search results as RIS{% endif %}</a></p>
             <p>Page {{ result_summary['page_number'] }}, results {{ result_summary['record_min'] }} - {{ result_summary['record_max'] }}</p>
 		</section>
 
