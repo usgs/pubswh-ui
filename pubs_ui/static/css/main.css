@@ -242,9 +242,11 @@ article{padding:0 10px;}
 
 #welcome h3{margin:5px 0 0 0;}
 
-#search label{display:block;
-			margin:0 0 5px 0;
-			font-size:1.2em;}
+#search fieldset label {
+	display:block;
+    margin:0 0 5px 0;
+	font-size:1.2em;
+}
 			
 #search button{
 	background:rgb(0,51,102);
@@ -253,13 +255,18 @@ article{padding:0 10px;}
 	margin-bottom:15px;
 }
 			
-#search input{width:97%;
+#search fieldset input{width:97%;
 				height:34px;
 				font-size:1.3em;
 				border:1px solid #808080;
 				border-radius:5px;
 				margin:0 0 15px 0;
 				padding:0 0 0 5px;}
+				
+#search fieldset .select2-container {
+	margin: 0 0 15px 0;
+	font-size: 1.3em;
+}
 				
 #advanced{background:none;
 			width:100%;
@@ -298,6 +305,22 @@ article{padding:0 10px;}
 			text-indent:0;
 			cursor:pointer;
 			display:inline;}
+			
+#search-map-label {
+	display:block;
+    margin:0 0 5px 0;
+	font-size:1.2em;
+	font-weight: bold;	
+}
+			
+#search-map-div {
+	height: 400px;
+	margin: 0 0 15px 0;
+}
+			
+#search-map-div .leaflet-control label {
+	font-weight: normal;
+}
 			
 #checklist{clear:both;}
 				

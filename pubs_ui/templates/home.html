@@ -4,11 +4,13 @@
     <title>U.S. Geological Survey Publications Warehouse</title>
     <meta name="description" content="The Publications warehouse contains over 130,000 publications that cover the 150 year history of the USGS">
     {% include 'meta.html' %}
-
-
-
-
 {% endblock head %}
+
+{% block page_style %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaflet.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'vendor/Leaflet.draw/leaflet.draw.css') }}">
+{% endblock page_style %}
+
 {% block main %}
 
 		<main class="container-fluid">
@@ -22,7 +24,7 @@
 	                </section>
 	
 	                <section id="search" class="no-margin">
-                        {% if advanced == 'True' %}
+                        {% if form.data.advanced == 'True' %}
                             {% include 'advanced_search_form.html' %}
                             <span class="basic-advanced"><a  href="{{ request.base_url }}">Basic Search</a></span>
                         {% else %}
@@ -60,32 +62,9 @@
 {% block url %}<a href="{{ url_for('index') }}">http://pubs.er.usgs.gov{{ url_for('index') }}</a>{% endblock %}
 
 {% block page_footer_script %}
-    <!-- script to deal with the fact that the store has poorly constructed links based on the old pubs warehouse search -->
-    <script type="text/javascript">
-    			//grab the contents of the fragment
-                var searchstring = window.location.href.split('#')[1];
-                //pass the contents of the fragment to the storesearch endpoint for further munging and redirection
-                if (searchstring){
-                	window.location = "/legacysearch/" + searchstring;
-                    }
-        </script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/select2.js') }}"></script>
-		<script type="text/javascript">
-  			$('#typeName').select2({
-        placeholder: "Choose a Publication Type" ,
-        allowClear: true
-    });
-            $('#subtypeName').select2({
-        placeholder: "Choose a Publication Subtype" ,
-        allowClear: true
-    });
-            $('#seriesName').select2({
-        placeholder: "Choose a Series Name or Journal Title" ,
-        allowClear: true
-    });
-            $('#contributingOffice').select2({
-        placeholder: "Choose a Contributing Office" ,
-        allowClear: true
-    });
-		</script>
+
+	{% if form.data.advanced == 'True' %}
+		{% include "advanced_search_form_script.html" %}
+	{% endif %}
+
 {% endblock page_footer_script %}

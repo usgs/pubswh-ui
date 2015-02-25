@@ -250,13 +250,10 @@ def index():
 
     except TypeError:
         pubs_records = []  # return an empty list recent_pubs_content is None (e.g. the service is down)
-    form = SearchForm(None, obj=request.args)
-    form.advanced.data = True
+    form = SearchForm(request.args)
     return render_template('home.html',
                            recent_publications=pubs_records,
-                           form=form,
-                           advanced=request.args.get('advanced'))
-
+                           form=form)
 
 # contact form
 @app.route('/contact', methods=['GET', 'POST'])
@@ -368,16 +365,10 @@ def browse(path):
 # this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
 @app.route('/search', methods=['GET'])
 def search_results():
+    form = SearchForm(request.args)
+
     parser = FlaskParser()
     search_kwargs = parser.parse(search_args, request)
-    form = SearchForm(None, obj=request.args, )
-    # populate form based on parameter
-    form.advanced.data = True
-    form_element_list = ['q', 'title', 'contributingOffice', 'contributor', 'typeName', 'subtypeName', 'seriesName',
-                         'reportNumber', 'year']
-    for element in form_element_list:
-        if len(search_kwargs[element]) > 0:
-            form[element].data = search_kwargs[element][0]
     if search_kwargs.get('page_size') is None or search_kwargs.get('page_size') == '':
         search_kwargs['page_size'] = '25'
     if search_kwargs.get('page') is None or search_kwargs.get('page') == '':
@@ -415,7 +406,6 @@ def search_results():
         return Response(content, mimetype="application/x-research-info-systems",
                                headers={"Content-Disposition":"attachment;filename=PubsWarehouseResults.ris"})
     return render_template('search_results.html',
-                           advanced=search_kwargs['advanced'],
                            result_summary=result_summary,
                            search_result_records=search_result_records,
                            pagination=pagination,
