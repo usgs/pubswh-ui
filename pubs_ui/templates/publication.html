@@ -46,7 +46,7 @@
         {% block main %}
         <main role ="main">
             <article itemscope itemtype="http://schema.org/ScholarlyArticle">
-            {% if pubdata['publicationType']['text'] == 'Report' %}<abbr class="unapi-id" title="http://pubs.er.usgs.gov/publication/{{ pubdata['indexId'] }}"><!-- avoid empty --></abbr>{% endif %}
+            {% if pubdata['publicationType']['text'] == 'Article' or pubdata['publicationType']['text'] == 'Report' %}<abbr class="unapi-id" title="http://pubs.er.usgs.gov/publication/{{ pubdata['indexId'] }}"><!-- avoid empty --></abbr>{% endif %}
 
 
             {% macro thumbnail_image() %}
