@@ -46,6 +46,8 @@ class SearchForm(Form):
     title = StringField("Title")
     contributor = StringField("Contributor Name")
     year = StringField("Year Published")
+    startYear = StringField("Published starting in")
+    endYear = StringField("Published in or before")
 
     #Grabs the list of Contributing Office names and IDs from the lookup url. Then puts them into the selectfield list
     contributorList = get_field_list('costcenters')
@@ -53,11 +55,11 @@ class SearchForm(Form):
 
     #Grabs the list of Publication Types names and IDs from the lookup url. Then puts them into the selectfield list
     typeList = get_field_list('publicationtypes')
-    typeName = SelectField(label="Type Name", choices=sorted(typeList))
+    typeName = SelectField(label="Publication Type", choices=sorted(typeList))
 
     #Grabs the list of Publication Subtypes names and IDs from the lookup url. Then puts them into the selectfield list
     subtypeNameList = get_field_list('publicationsubtypes')
-    subtypeName = SelectField(label="Subtype Name", choices=sorted(subtypeNameList))
+    subtypeName = SelectField(label="Publication Subtype", choices=sorted(subtypeNameList))
 
     #Grabs the list of Publication Series names and IDs from the lookup url. Then puts them into the selectfield list
     seriesNameList = get_field_list('publicationseries')

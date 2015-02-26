@@ -3,10 +3,12 @@
         {{ form.q.label }}{{ form.q(placeholder="search terms") }}
     </fieldset>
     <fieldset id='second' class='fancyform'>
-         {{ form.title.label }}{{ form.title(placeholder = 'enter title') }}
-         {{ form.contributingOffice.label }}{{ form.contributingOffice(class="js-example-basic-single form-control", tabindex="-1", id='contributingOffice') }}
-         {{ form.contributor.label }}{{ form.contributor(placeholder = 'Name or part of name') }}
-         {{ form.year.label }}{{ form.year(placeholder = 'e.g. 2014') }}
+        {{ form.title.label }}{{ form.title(placeholder = 'enter title') }}
+        {{ form.contributingOffice.label }}{{ form.contributingOffice(class="js-example-basic-single form-control", tabindex="-1", id='contributingOffice') }}
+        {{ form.contributor.label }}{{ form.contributor(placeholder = 'Name or part of name') }}
+        {{ form.year.label }}{{ form.year(placeholder = 'e.g. 2014') }}
+        {{ form.startYear.label }}{{ form.startYear(placeholder = 'e.g. 1994') }}
+        {{ form.endYear.label }}{{ form.endYear(placeholder = 'e.g. 2012') }}
          {{ form.typeName.label }}{{ form.typeName(class="js-example-basic-single form-control", tabindex="-1", id='typeName') }}
          {{ form.subtypeName.label }}{{ form.subtypeName(class="js-example-basic-single form-control", tabindex="-1", id='subtypeName') }}
          {{ form.seriesName.label }}{{ form.seriesName(class="js-example-basic-single form-control", tabindex="-1", id='seriesName') }}

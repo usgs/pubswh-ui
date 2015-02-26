@@ -401,6 +401,10 @@ def search_results():
         pagination = None
         search_service_down = 'The backend services appear to be down with a {0} status.'.format(resp_status_code)
         result_summary = {}
+    if 'mimetype' in request.args and request.args.get("mimetype") == 'ris':
+        content = render_template('ris_output.ris', search_result_records=search_result_records)
+        return Response(content, mimetype="application/x-research-info-systems",
+                               headers={"Content-Disposition":"attachment;filename=PubsWarehouseResults.ris"})
     return render_template('search_results.html',
                            result_summary=result_summary,
                            search_result_records=search_result_records,

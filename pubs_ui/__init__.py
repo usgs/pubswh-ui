@@ -32,8 +32,6 @@ if app.config.get('LOGGING_ON'):
 images = Images(app)
 mail = Mail(app)
 app.view_functions['images'] = images.handle_request
-app.jinja_env.trim_blocks = True
-app.jinja_env.lstrip_blocks = True
 app.jinja_env.filters['display_pub_info'] = display_publication_info
 app.jinja_env.globals.update(wsgi_str=app.config['WSGI_STR'])
 app.jinja_env.globals.update(GOOGLE_ANALYTICS_CODE=app.config['GOOGLE_ANALYTICS_CODE'])
