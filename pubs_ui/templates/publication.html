@@ -208,9 +208,16 @@
                     </ul>
                 </section>
                 <section itemprop="description" id="abstract" >
+                <aside class="publicationAsideDesktop">
+                {% include 'USGS_series_aside.html' %}
+                </aside>
                     <h4 id="abstract_head">Abstract</h4>
+                    
                     {{ pubdata['docAbstract']|safe }}
+                    
+                    
                 </section>
+                
                 {%- if pubdata["geographicExtents"] -%}
                 <section>
                     <h4>Geospatial Extents</h4>
@@ -225,7 +232,9 @@
                 </section>
                 {% endif %}
                 {% if pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and pubdata['publishedDate'] %}
-                {% include 'USGS_series_aside.html' %}
+                <aside class="publicationAside">
+                	{% include 'USGS_series_aside.html' %}
+                </aside>
                 {% endif %}
                 <section id="details">
                     <h4 id="" class="dark">Additional Publication Details</h4>
