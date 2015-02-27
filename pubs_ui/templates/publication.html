@@ -208,9 +208,11 @@
                     </ul>
                 </section>
                 <section itemprop="description" id="abstract" >
-                <aside class="publicationAsideDesktop">
+                    {% if pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and pubdata['publishedDate'] %}
+                    <aside class="publicationAsideDesktop">
                 {% include 'USGS_series_aside.html' %}
                 </aside>
+                    {% endif %}
                     <h4 id="abstract_head">Abstract</h4>
                     
                     {{ pubdata['docAbstract']|safe }}
