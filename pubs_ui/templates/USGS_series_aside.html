@@ -1,5 +1,5 @@
 {# this template is the block of code that we put in if the publication has information for the SPN- contact information, etc #}
-<aside class="publicationAside">
+
     {% if pubdata['revisedDate'] and pubdata['displayLinks']['Version History']|length > 0 %}
     <a href='{{ pubdata['displayLinks']['Version History'][0]['url'] }}'><p>{{ pubdata['revisedDate'] }}</p></a>
         {% endif %}
@@ -14,5 +14,5 @@
 {% if pubdata['displayLinks']['Document'] %}
 <p class="adobeReader">Part or all of this report is presented in Portable Document Format (PDF). For best results viewing and printing PDF documents, it is recommended that you download the documents to your computer and open them with Adobe Reader. PDF documents opened from your browser may not display or print as intended. Download the latest version of <a href="http://get.adobe.com/reader/">Adobe Reader</a>, free of charge. More information about viewing, downloading, and printing report files can be found <a href="http://pubs.usgs.gov/potential_problems.html">here</a>.</p>
 {% endif %}
-</aside>
+
 
