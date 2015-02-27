@@ -1200,15 +1200,13 @@ form#contactForm input#submit{
     line-height:1.7em;
   }
   
-  #contributors,
-  .publicationTitle,
-  #suggested{
+  #abstract{
   width:69%;
   }
  
   .publicationAside{
 	position:absolute;
-	top:0;
+	top:445px;
 	right:0;
 	width:30%;
 }
