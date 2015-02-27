@@ -1,5 +1,5 @@
 {# this template is the block of code that we put in if the publication has information for the SPN- contact information, etc #}
-<aside>
+<aside class="publicationAside">
 {% if pubdata['revisedDate'] and pubdata['displayLinks']['Version History']|length > 0 %}
     <a href='{{ pubdata['displayLinks']['Version History'][0]['url'] }}'><p>{{ pubdata['revisedDate']|date_format }}</p></a>
     {% elif pubdata['revisedDate'] %}<p>{{ pubdata['revisedDate']|date_format }}</p>

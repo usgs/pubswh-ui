@@ -68,7 +68,7 @@
             {% else %}
                 {{ thumbnail_image() }}
             {% endif %}
-                <hgroup>
+                <hgroup class="publicationTitle">
                     <h3 itemprop="name">{{ pubdata['title']|safe }}</h3>
                     {% if pubdata['seriesTitle'] %}
                     <h4>{{ pubdata['seriesTitle']['text'] }} {{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %}</h4>
