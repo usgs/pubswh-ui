@@ -1,10 +1,10 @@
 {# this template is the block of code that we put in if the publication has information for the SPN- contact information, etc #}
 
-    {% if pubdata['revisedDate'] and pubdata['displayLinks']['Version History']|length > 0 %}
-    <a href='{{ pubdata['displayLinks']['Version History'][0]['url'] }}'><p>{{ pubdata['revisedDate'] }}</p></a>
-        {% endif %}
+{% if pubdata['revisedDate'] and pubdata['displayLinks']['Version History']|length > 0 %}
+    <a href='{{ pubdata['displayLinks']['Version History'][0]['url'] }}'><p>{{ pubdata['revisedDate']|date_format }}</p></a>
+{% endif %}
 {% if pubdata['publishedDate'] %}
-    <p>First Posted {{ pubdata['publishedDate'] }}</p>
+    <p>First Posted {{ pubdata['publishedDate']|date_format }}</p>
 {% endif %}
 
 {% if pubdata['contact'] %}
