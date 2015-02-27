@@ -585,15 +585,24 @@ address p {
 }
 
 .publicationAside{
-background: #f0f0f0;
+	background: #f0f0f0;
   	border: 1px solid #000000;
   	padding: 8px;
   	margin-top:10px;
 }
 
-.publicationAside p {
+.publicationAside p,
+.publicationAsideDesktop p {
   text-indent: 0;
   font-size: .85em;
+}
+
+.publicationAsideDesktop{
+	display:none;
+	background: #f0f0f0;
+  	border: 1px solid #000000;
+  	padding: 8px;
+  	margin-top:10px;
 }
 
 #details{width:100%;
@@ -1200,15 +1209,25 @@ form#contactForm input#submit{
     line-height:1.7em;
   }
   
-  #abstract{
-  width:69%;
+  #abstract > p:first-child{
+  float:left;
+  background:red;
   }
  
-  .publicationAside{
-	position:absolute;
-	top:445px;
-	right:0;
+  .publicationAsideDesktop{
+	float:right;
+	display:block;
 	width:30%;
+	clear:both
+}
+
+.publicationAsideDesktop p:first-child{
+	float:none;	
+}
+
+
+.publicationAside{
+	display:none;
 }
 
 
