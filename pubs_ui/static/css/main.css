@@ -583,6 +583,19 @@ address p {
   padding: 0 0 0 15px;
   line-height: 1.5em;
 }
+
+.publicationAside{
+background: #f0f0f0;
+  	border: 1px solid #000000;
+  	padding: 8px;
+  	margin-top:10px;
+}
+
+.publicationAside p {
+  text-indent: 0;
+  font-size: .85em;
+}
+
 #details{width:100%;
 		min-height:100px;
 		margin:10px 0 -20px 0;}
@@ -1177,18 +1190,34 @@ form#contactForm input#submit{
     display: none;
   }
   article{
-    width: 980px;
+    width: 1024px;
     margin: 0 auto;
     position: relative;
   }
  
   #abstract {
-    margin-top: 20px;
+    margin-top: 40px;
     line-height:1.7em;
   }
-
-
   
+  #contributors,
+  .publicationTitle,
+  #suggested{
+  width:69%;
+  }
+ 
+  .publicationAside{
+	position:absolute;
+	top:0;
+	right:0;
+	width:30%;
+}
+
+
+#details{
+	margin-bottom:230px;
+}
+
   
 /* ==========================================================================
    other styles
@@ -1214,7 +1243,6 @@ li.p1{
 h1.otherPages{
 	font-size:2em;
 	margin-left:15px;}
-
 
 	
 /* ==========================================================================
