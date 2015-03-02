@@ -219,7 +219,13 @@
                     
                     
                 </section>
-                
+                {% if pubdata['usgsCitation'] %}
+                <section>
+                    <h4>Suggested Citation</h4>
+                    <p id="suggested_citation">{{ pubdata['usgsCitation'] }}</p>
+                </section>
+                {% endif %}
+
                 {%- if pubdata["geographicExtents"] -%}
                 <section>
                     <h4>Geospatial Extents</h4>
@@ -227,7 +233,7 @@
 
                 </section>
                 {%- endif -%}
-                {% if pubdata['TableOfContents'] %}
+                {% if pubdata['tableOfContents'] %}
                 <section>
                     <h4>Table of Contents</h4>
                     {{ pubdata['tableOfContents']|safe }}
