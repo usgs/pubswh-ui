@@ -11,8 +11,8 @@
     {% elif pubdata['publicationType']['text'] == 'Article' %}
     <bibo:AcademicArticle rdf:about="http://pubs.er.usgs.gov/publication/{{ pubdata['indexId'] }}">
     {% endif %}
-        <dcterms:title>{{ pubdata['title']|e }}</dcterms:title>
-        <dcterms:abstract>{{ pubdata['docAbstract']|e }}</dcterms:abstract>
+        <dcterms:title>{{ pubdata['title']|striptags }}</dcterms:title>
+        <dcterms:abstract>{{ pubdata['docAbstract']|striptags }}</dcterms:abstract>
         <bibo:doi>{{ pubdata['doi'] }}</bibo:doi>
         {% if pubdata['seriesNumber'] %}
                     <bibo:number>{{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %}</bibo:number>
