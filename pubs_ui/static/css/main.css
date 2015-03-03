@@ -507,13 +507,14 @@ dl#contributors {margin:5px 0;
   font-size: .8em;
   
 }
-dl#contributors dt {float:left;
+dl#contributors dt {
+	float:left;
   margin:0 5px 0 0;
   font-weight: 600;
 }
 dl#contributors dd {
 	margin:0 10px 0 0; 
-	display:inline;
+	display:block;
 }
 dl#contributors .clear {
   clear: both;
