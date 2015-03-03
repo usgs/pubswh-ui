@@ -55,7 +55,7 @@ def pubdetails(pubdata):
         ['numberofPages', 'Number of pages:'],
         ['largerWorkType', 'text', 'Larger Work Type:'],
         ['largerWorkSubtype', 'text', 'Larger Work Subtype:'],
-        ['largerWorkTitle', 'text', 'Larger Work Title:'],
+        ['largerWorkTitle', 'Larger Work Title:'],
         ['startPage', 'First page:'],
         ['endPage', 'Last page:'],
         ['numberOfPages', 'Number of Pages:'],
@@ -494,7 +494,7 @@ def legacy_api_info(context_id, supersedes_service_url):
         for item in related:
             try:
                 item_summary_info = {'index_id': item['identifier']['#text'], 'title': item['titleInfo']['title'],
-                                 'date': item['originInfo']['dateIssued']}
+                                     'date': item['originInfo']['dateIssued']}
 
                 if item['@type'] == 'preceding':
                     predecessors.append(item_summary_info)
