@@ -607,7 +607,7 @@ address p {
 	background: #f0f0f0;
   	border: 1px solid #000000;
   	padding: 8px;
-  	margin-top:10px;
+  	margin:10px 0 0 25px;
 }
 
 #details{width:100%;
