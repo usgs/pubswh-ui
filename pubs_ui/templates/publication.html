@@ -208,7 +208,7 @@
                     </ul>
                 </section>
                 <section itemprop="description" id="abstract" >
-                    {% if pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and pubdata['publishedDate'] %}
+                    {% if pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and (pubdata['publishedDate'] or pubdata['contact']) %}
                     <aside class="publicationAsideDesktop">
                 {% include 'USGS_series_aside.html' %}
                 </aside>
@@ -221,10 +221,10 @@
                 </section>
                 {# include the publishedDate test so that we only display the Suggested Citation on Pubs the have been
                     dealt with by an SPN person #}
-                {% if pubdata['usgsCitation'] and pubdata['publishedDate']%}
+                {% if pubdata['usgsCitation'] and (pubdata['publishedDate'] or pubdata['contact']) %}
                 <section>
                     <h4>Suggested Citation</h4>
-                    <p id="suggested_citation">{{ pubdata['usgsCitation'] }}</p>
+                    <p id="suggested_citation">{{ pubdata['usgsCitation']|safe }}</p>
                 </section>
                 {% endif %}
 
@@ -241,7 +241,7 @@
                     {{ pubdata['tableOfContents']|safe }}
                 </section>
                 {% endif %}
-                {% if pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and pubdata['publishedDate'] %}
+                {% if pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and (pubdata['publishedDate'] or pubdata['contact']) %}
                 <aside class="publicationAside">
                 	{% include 'USGS_series_aside.html' %}
                 </aside>
