@@ -212,7 +212,8 @@ def restricted_page(index_id):
     if response.status_code == 200:
         record = response.json()
         pubdata = munge_pubdata_for_display(record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
-        return render_template("preview.html", indexID=index_id, pubdata=pubdata)
+        related_pubs = extract_related_pub_info(pubdata)
+        return render_template("preview.html", indexID=index_id, pubdata=pubdata, related_pubs=related_pubs)
     # if the publication has been published (so it is out of mypubs) redirect to the right URL
     elif response.status_code == 404 and published_status == 200:
         return redirect(url_for('publication', indexId=index_id))
