@@ -5,7 +5,7 @@
 
 {% if pubdata['revisedDate'] and pubdata['displayLinks']['Version History']|length > 0 %}
     <p><a href='{{ pubdata['displayLinks']['Version History'][0]['url'] }}'>Revised {{ pubdata['revisedDate']|date_format }}</a></p>
-{% elif pubdata['revisedDate']%}
+{% elif pubdata['revisedDate'] %}
     <p>Revised {{ pubdata['revisedDate']|date_format }}</p>
 {% endif %}
 
