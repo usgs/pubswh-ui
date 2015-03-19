@@ -9,8 +9,8 @@ VL  - {{ result['volume'] }}
 {%- elif result['publicationType']['text'] == 'Book' -%}
 TY  - BOOK
 {% if result['editorsList']|length > 0 -%}
-{%- for editor in result['editorsList'] -%}
-A3  - {{ editor }}
+{%- for editor in result['contributors']['editors'] -%}
+A3  - {{ editor['family'] }}{% if editor['suffix'] %} {{ editor['suffix'] }}{% endif %}, {{ editor['given'] }}
 {% endfor -%}
 {%- endif -%}
 CY  - {{ result['publisherLocation'] }}
@@ -37,8 +37,8 @@ VL  - {{ result['volume'] }}
 {%- elif result['publicationType']['text'] == 'Report' -%}
 TY  - RPRT
 {% if result['editorsList']|length > 0 -%}
-{%- for editor in result['editorsList'] -%}
-A2  - {{ editor }}
+{%- for editor in result['contributors']['editors'] -%}
+A2  - {{ editor['family'] }}{% if editor['suffix'] %} {{ editor['suffix'] }}{% endif %}, {{ editor['given'] }}
 {% endfor -%}
 {%- endif -%}
 A3  - {{ result['publisher'] }}
@@ -56,8 +56,8 @@ VL  - {{ result['volume'] }}
 TY  - GEN
 {%- endif -%}
 {% if result['authorsList']|length > 0 %}
-{% for author in result['authorsList'] -%}
-AU  - {{ author }}
+{% for author in result['contributors']['authors'] -%}
+AU  - {{ author['family'] }}{% if author['suffix'] %} {{ author['suffix'] }}{% endif %}, {{ author['given'] }}
 {% endfor -%}
 {% else %}
 {% endif -%}
