@@ -11,6 +11,7 @@ from urlparse import urljoin
 from copy import deepcopy
 from itsdangerous import URLSafeTimedSerializer
 import arrow
+import natsort
 
 
 # should requests verify the certificates for ssl connections
@@ -646,6 +647,12 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     if replace_pubs_with_pubs_test:
         pubdata['displayLinks']['Thumbnail'][0]['url'] = change_to_pubs_test(
             pubdata['displayLinks']['Thumbnail'][0]['url'])
+    if pubdata['interactions']:
+        pubdata['interactions'] = natsort.natsorted(pubdata['interactions'], key=lambda x: x['subject']['indexId'])
+        for interaction in pubdata['interactions']:
+            if interaction['predicate'] == "IS_PART_OF" and interaction['subject']['indexId'] != pubdata['indexId']:
+                pubdata['hasSubParts'] = True
+            else: pubdata['hasSubParts'] = False
     return pubdata
 
 

@@ -205,6 +205,22 @@
                         {% if pubdata['offers'] %}
                         	<li itemprop = "offers" itemscope itemtype="http://schema.org/Offer">Paper version: <link itemprop="availability" href="http://schema.org/InStock">In stock and available from the <a itemprop="url" href="{{ pubdata['offers']['schema:offers']['schema:url'] }}"><strong>USGS Store</strong></a></li>
                         {% endif %}
+                        {% if pubdata['interactions'] %}
+                            {% if pubdata['hasSubParts'] == True %}
+                            <li>Chapters:</li>
+                            {% endif %}
+                            {% for interaction in pubdata['interactions'] %}
+                                {% if interaction['predicate'] == "IS_PART_OF" and interaction['subject']['indexId'] != pubdata['indexId'] %}
+
+                                    <ul>
+                                        <li itemprop="hasPart" itemscope itemtype="http://schema.org/ScholarlyArticle" itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ interaction['subject']['indexId'] }}">{% if interaction['subject']['chapter'] %}Chapter {{ interaction['subject']['chapter'] }}{% if interaction['subject']['subChapter'] %} {{ interaction['subject']['subChapter'] }}{% endif %}: {% endif %}<a href="{{ JSON_LD_ID_BASE_URL }}/publication/{{ interaction['subject']['indexId'] }}"><span itemprop="name">{{ interaction['subject']['title'] }}</span></a> </li>
+                                    </ul>
+                                {% endif %}
+                                {% endfor %}
+                            {% if pubdata['isPartOf'] %}
+                                <li itemprop="isPartOf" itemscope itemtype="http://schema.org/ScholarlyArticle" itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}">Larger Work: <a href="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}"><span itemprop="name">{{ pubdata['isPartOf']['title'] }}</span></a></li>
+                            {% endif %}
+                        {% endif %}
                     </ul>
                 </section>
                 <section itemprop="description" id="abstract" >
