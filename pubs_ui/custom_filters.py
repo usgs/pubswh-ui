@@ -25,14 +25,14 @@ def display_publication_info(json_content):
         chapter = json_content.get('chapter', None)
         subchapter = json_content.get('subChapter', None)
         if chapter is not None and subchapter is not None:
-            pub_info = '{publication_year}, {title} {series_number} {chapter} {subchapter}'.format(publication_year=publication_year,
+            pub_info = '{publication_year}, {title} {series_number}-{chapter}-{subchapter}'.format(publication_year=publication_year,
                                                                                                    title=series_title_text,
                                                                                                    series_number=series_number,
                                                                                                    chapter=chapter,
                                                                                                    subchapter=subchapter
                                                                                                    )
         elif chapter is not None and subchapter is None:
-            pub_info = '{publication_year}, {title} {series_number} {chapter}'.format(publication_year=publication_year,
+            pub_info = '{publication_year}, {title} {series_number}-{chapter}'.format(publication_year=publication_year,
                                                                                       title=series_title_text,
                                                                                       series_number=series_number,
                                                                                       chapter=chapter

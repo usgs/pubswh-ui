@@ -11,6 +11,7 @@ from urlparse import urljoin
 from copy import deepcopy
 from itsdangerous import URLSafeTimedSerializer
 import arrow
+import natsort
 
 
 # should requests verify the certificates for ssl connections
@@ -624,6 +625,21 @@ def generate_auth_header(request):
     header = {'Authorization': auth_value}
     return header
 
+def make_chapter_data_for_display(pubdata):
+    """
+    take publication data and munges it around to make it easy to work with in jinja templates
+    :param pubdata:  data for a single publication from the pubs-services endpoint
+    :return: pubdata
+    """
+    if pubdata['interactions']:
+        # natural sort the indexIDs so that chapter 2 comes after chapter one and before chapter three
+        pubdata['interactions'] = natsort.natsorted(pubdata['interactions'], key=lambda x: x['subject']['indexId'])
+        # determine wheter to display the publication subparts chunk of the template
+        for interaction in pubdata['interactions']:
+            if interaction['predicate'] == "IS_PART_OF" and interaction['subject']['indexId'] != pubdata['indexId']:
+                pubdata['hasSubParts'] = True
+            else: pubdata['hasSubParts'] = False
+    return pubdata
 
 def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url):
     """
@@ -636,6 +652,7 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
+    pubdata = make_chapter_data_for_display(pubdata)
     pubdata['formattedModifiedDateTime'] = arrow.get(pubdata['lastModifiedDate']).format('MMMM DD, YYYY HH:mm:ss')
     # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov.
     # Flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI

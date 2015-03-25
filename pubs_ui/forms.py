@@ -77,6 +77,6 @@ class NumSeries(Form):
 
 
 class LoginForm(Form):
-    username = StringField('username', validators=[DataRequired()])
-    password = PasswordField('password', validators=[DataRequired()])
+    username = StringField('AD Username:', validators=[DataRequired()])
+    password = PasswordField('AD Password:', validators=[DataRequired()])
 
