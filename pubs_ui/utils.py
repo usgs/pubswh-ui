@@ -631,7 +631,7 @@ def make_chapter_data_for_display(pubdata):
     :param pubdata:  data for a single publication from the pubs-services endpoint
     :return: pubdata
     """
-    if pubdata['interactions']:
+    if len(pubdata.get('interactions')) > 0:
         # natural sort the indexIDs so that chapter 2 comes after chapter one and before chapter three
         pubdata['interactions'] = natsort.natsorted(pubdata['interactions'], key=lambda x: x['subject']['indexId'])
         # determine wheter to display the publication subparts chunk of the template
