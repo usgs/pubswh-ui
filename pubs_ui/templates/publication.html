@@ -221,6 +221,7 @@
                                 <li itemprop="isPartOf" itemscope itemtype="http://schema.org/ScholarlyArticle" itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}">Larger Work: <a href="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}"><span itemprop="name">{{ pubdata['isPartOf']['title'] }}</span></a></li>
                             {% endif %}
                         {% endif %}
+                        <li>Download citation as:  <a href="{{ request.base_url }}?mimetype=ris">RIS</a></li>
                     </ul>
                 </section>
                 <section itemprop="description" id="abstract" >

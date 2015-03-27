@@ -26,7 +26,12 @@
             {% endif %}
         </section>
         <section class = "search-results">
-            <p>{{ result_summary['record_count'] }} results.  <a href="{{ request.url }}&page_size=1000&mimetype=ris">{% if result_summary['record_count'] <= 1000 %}Download search results as RIS{% else %}Download first 1000 search results as RIS{% endif %}</a></p>
+            <p>{{ result_summary['record_count'] }} results.</p>
+            <p>Alternate formats:
+            <a href="{{ json_ld_base_url }}/search?page_size=3000&mimetype=ris{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{% if result_summary['record_count'] <= 3000 %}Download search results as RIS{% else %}RIS file of the first 3000 search results{% endif %}</a> |
+            <a href="{{ pub_url }}publication/rss/?pub_x_days=60{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">RSS feed based on this search</a> |
+            <a href="{{ pub_url }}publication/?page_size={{ result_summary['records_per_page'] }}&page_number={{ result_summary['page_number'] }}{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">JSON version of this page of results</a>
+            </p>
             <p>Page {{ result_summary['page_number'] }}, results {{ result_summary['record_min'] }} - {{ result_summary['record_max'] }}</p>
 		</section>
 

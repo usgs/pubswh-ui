@@ -307,6 +307,10 @@ def publication(index_id):
     related_pubs = extract_related_pub_info(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
+    if 'mimetype' in request.args and request.args.get("mimetype") == 'ris':
+        content =  render_template('ris_single.ris', result=pubdata)
+        return Response(content, mimetype="application/x-research-info-systems",
+                               headers={"Content-Disposition":"attachment;filename=USGS_PW_"+pubdata['indexId']+".ris"})
     else:
         return render_template('publication.html', 
                                indexID=index_id, 
@@ -411,7 +415,7 @@ def search_results():
                            search_result_records=search_result_records,
                            pagination=pagination,
                            search_service_down=search_service_down,
-                           form=form)
+                           form=form, pub_url=pub_url)
 
 
 @app.route('/site-map')
