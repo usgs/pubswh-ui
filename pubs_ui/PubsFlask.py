@@ -411,7 +411,7 @@ def search_results():
                            search_result_records=search_result_records,
                            pagination=pagination,
                            search_service_down=search_service_down,
-                           form=form)
+                           form=form, pub_url=pub_url)
 
 
 @app.route('/site-map')
