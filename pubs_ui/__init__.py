@@ -3,6 +3,7 @@ from flask import Flask, request
 from flask.ext.images import Images
 from flask_mail import Mail
 from pubs_ui.custom_filters import display_publication_info, date_format
+from flask.ext.assets import Environment, Bundle
 
 
 
@@ -15,6 +16,17 @@ handler.setFormatter(fmt)
 
 app = Flask(__name__)
 app.config.from_object('settings')  # load configuration before passing the app object to other things
+
+#set up Flask-assets for minification
+assets = Environment(app)
+
+js = Bundle(
+    'js/vendor/bootstrap.js',
+    'js/plugins.js',
+    filters='rjsmin',
+    output='js/base_libs.js'
+)
+assets.register('js_base_libs', js)
 
 
 @app.before_request
