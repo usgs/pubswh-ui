@@ -20,13 +20,36 @@ app.config.from_object('settings')  # load configuration before passing the app 
 #set up Flask-assets for minification
 assets = Environment(app)
 
-js = Bundle(
+js_base_libs = Bundle(
     'js/vendor/bootstrap.js',
     'js/plugins.js',
     filters='rjsmin',
     output='js/base_libs.js'
 )
-assets.register('js_base_libs', js)
+assets.register('js_base_libs', js_base_libs)
+
+
+js_advanced_search = Bundle(
+    'js/select2.js',
+    'js/searchMap.js',
+    'js/clearFeatureControl.js',
+    filters='rjsmin',
+    output='js/advanced_search.js'
+)
+assets.register('js_advanced_search', js_advanced_search)
+
+css_base = Bundle(
+    'css/normalize.css',
+    'css/main.css',
+    'css/bootstrap.css',
+    'css/select2.css',
+    'css/select2-bootstrap.css',
+    filters='cssmin',
+    output='css/min_base.css'
+)
+assets.register('css_base', css_base)
+
+
 
 
 @app.before_request
