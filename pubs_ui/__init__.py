@@ -3,6 +3,7 @@ from flask import Flask, request
 from flask.ext.images import Images
 from flask_mail import Mail
 from pubs_ui.custom_filters import display_publication_info, date_format
+from flask.ext.assets import Environment, Bundle
 
 
 
@@ -15,6 +16,40 @@ handler.setFormatter(fmt)
 
 app = Flask(__name__)
 app.config.from_object('settings')  # load configuration before passing the app object to other things
+
+#set up Flask-assets for minification
+assets = Environment(app)
+
+js_base_libs = Bundle(
+    'js/vendor/bootstrap.js',
+    'js/plugins.js',
+    filters='rjsmin',
+    output='js/base_libs.js'
+)
+assets.register('js_base_libs', js_base_libs)
+
+
+js_advanced_search = Bundle(
+    'js/select2.js',
+    'js/searchMap.js',
+    'js/clearFeatureControl.js',
+    filters='rjsmin',
+    output='js/advanced_search.js'
+)
+assets.register('js_advanced_search', js_advanced_search)
+
+css_base = Bundle(
+    'css/normalize.css',
+    'css/main.css',
+    'css/bootstrap.css',
+    'css/select2.css',
+    'css/select2-bootstrap.css',
+    filters='cssmin',
+    output='css/min_base.css'
+)
+assets.register('css_base', css_base)
+
+
 
 
 @app.before_request

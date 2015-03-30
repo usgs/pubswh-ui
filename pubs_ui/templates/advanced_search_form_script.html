@@ -3,11 +3,12 @@
 <script type="text/javascript" src="{{ url_for('static', filename = 'vendor/Leaflet.draw/leaflet.draw.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename = 'vendor/Wicket/wicket.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename = 'vendor/Wicket/wicket-leaflet.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/select2.js') }}"></script>
 
-<script type="text/javascript" src="{{ url_for('static', filename='js/searchMap.js')}}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/clearFeatureControl.js')}}"></script>
-<!-- script to deal with the fact that the store has poorly constructed links based on the old pubs warehouse search -->
+ {% assets "js_advanced_search" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+ {% endassets %}
+
+
 
 <script type="text/javascript">    
     $(document).ready(function() {

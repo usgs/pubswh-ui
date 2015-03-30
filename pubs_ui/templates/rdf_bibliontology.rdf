@@ -53,10 +53,12 @@
                 <bibo:volume>{{ pubdata['volume'] }}</bibo:volume>
                 <bibo:issue>{{ pubdata['issue'] }}</bibo:issue>
                 <dcterms:date>{{ pubdata['publicationYear'] }}</dcterms:date>
-                <bibo:Journal>
-                    <dcterms:title>{{ pubdata['seriesTitle']['text'] }}</dcterms:title>
-                    <bibo:issn>{{ pubdata['seriesTitle']['onlineIssn'] }}</bibo:issn>
-                </bibo:Journal>
+                <dcterms:isPartOf>
+                    <bibo:Journal>
+                        <dcterms:title>{{ pubdata['seriesTitle']['text'] }}</dcterms:title>
+                        <bibo:issn>{{ pubdata['seriesTitle']['onlineIssn'] }}</bibo:issn>
+                    </bibo:Journal>
+                </dcterms:isPartOf>
             </bibo:Issue>
             {% endif %}
         </dcterms:isPartOf>
