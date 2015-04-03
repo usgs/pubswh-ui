@@ -3,7 +3,10 @@ PubsWarehouse_UI
 
 To get this application running using the flask local dev server, there are three steps:
 
-1. Create a virtualenv using python 2.7.9 and add everything in the `requirements.txt` file
+1. Create a virtualenv using python 2.7.9 and install the requirements in 'requirements.txt'. This can be done as follows while in the project directory:
+  1. Run `virtualenv --python=python2.7 env`
+  2. Activate your virtualenv (depends on whether linux or windows)
+  3. Run `pip install -r requirements.txt`
  
 2. Create a  `local_settings.py` file under PubsWarehouse_UI folder, and add this file to .gitignore.  The contents of the files should looks like so:
 

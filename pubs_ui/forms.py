@@ -12,17 +12,24 @@ lookup_url = app.config['LOOKUP_URL']
 verify_cert = app.config['VERIFY_CERT']
 
 
-def get_field_list(lookup_name):
+def get_field_list(lookup_name, parameters=None):
     '''
     Using the lookup URL from the local settings this function will make a list of all the records in the json response
     for a lookup field. Used for creating dropdown select fields in the advanced search form.
     :param lookup_name: The name of the publication lookup type.
+    :param parameters: parameters to be added to the query, needs to be a dictionary
     :return: An unordered list of all the response records.
     '''
     field_list = []
+    base_params = {'mimetype': 'json'}
+    #add the mimetype param in addition to the rest of the parameters
+    if parameters is None:
+        params = base_params
+    else:
+        params = dict(parameters.items() + base_params.items())
     # catch errors from killing page builds
     try:
-        records = get(lookup_url + lookup_name, params={'mimetype': 'json'}, verify=verify_cert).json()
+        records = get(lookup_url + lookup_name, params=params, verify=verify_cert).json()
     except:
         records = [{'text': 'error'}, {'text': 'error1'}, {'text': 'error2'}, {'text': 'error3'}, {'text': 'error4'}]
 

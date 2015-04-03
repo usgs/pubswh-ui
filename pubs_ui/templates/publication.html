@@ -81,32 +81,33 @@
                     {% endif %}
                 </hgroup>
 
+                {# macro for generating the contributor lists, including commas & ands where they are supposed to be  #}
+                {% macro contributor_list(contributorListTyped, contributorKind) %}
+                    {%- for contributor in pubdata[contributorListTyped]  -%}
+                          {% if loop.length == 2 and loop.first != True %} and {% elif loop.last and loop.length > 2 %}and {% endif %}
+                          {%- if contributor['type'] == "person"  -%}
+                        <span itemprop="{{ contributorKind }}" itemtype="http://schema.org/Person">{{ contributor['text'] }}</span>
+                          {%- else -%}
+                         <span itemprop="{{ contributorKind }}" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</span>
+                          {%- endif -%}
+                          {% if not loop.last and loop.length > 2 %},
+                          {% endif %}
+                    {%-  endfor -%}
+                {% endmacro %}
+
                 <section>
                     <dl id="contributors">
+                      {% if pubdata['authorsList'] %}
                       <dt>By:</dt>
                         <dd>
-                      {%- for contributor in pubdata['authorsListTyped']  -%}
-                          {%- if contributor['type'] == "person"  -%}
-                        <span itemprop="author" itemtype="http://schema.org/Person">{{ contributor['text'] }}</span>
-                          {%- else -%}
-                         <span itemprop="author" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</span>
-                          {%- endif -%}
-                          {% if not loop.last %}, {% endif %}
-
-                      {%-  endfor -%}
+                            {{ contributor_list('authorsListTyped','author') }}
                         </dd>
+                      {% endif %}
                       {% if pubdata['editorsList'] %}
                       <dt>Edited by:</dt>
                       <dd>
-                          {%- for contributor in pubdata['editorsListTyped']  -%}
-                          {%- if contributor['type'] == "person"  -%}
-                        <span itemprop="editor" itemtype="http://schema.org/Person">{{ contributor['text'] }}</span>
-                          {%- else -%}
-                         <span itemprop="editor" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</span>
-                          {%- endif -%}
-                          {% if not loop.last %}, {% endif %}
-                      {%-  endfor -%}
-                          </dd>
+                         {{ contributor_list('editorsListTyped','editor') }}
+                      </dd>
                       {%- endif -%}
                     </dl>
                 </section>
@@ -213,12 +214,12 @@
                                 {% if interaction['predicate'] == "IS_PART_OF" and interaction['subject']['indexId'] != pubdata['indexId'] %}
 
                                     <ul>
-                                        <li itemprop="hasPart" itemscope itemtype="http://schema.org/ScholarlyArticle" itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ interaction['subject']['indexId'] }}">{% if interaction['subject']['chapter'] %}Chapter {{ interaction['subject']['chapter'] }}{% if interaction['subject']['subChapter'] %} {{ interaction['subject']['subChapter'] }}{% endif %}: {% endif %}<a href="{{ JSON_LD_ID_BASE_URL }}/publication/{{ interaction['subject']['indexId'] }}"><span itemprop="name">{{ interaction['subject']['title'] }}</span></a> </li>
+                                        <li itemprop="hasPart" itemscope itemtype="http://schema.org/ScholarlyArticle" itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ interaction['subject']['indexId'] }}">{% if interaction['subject']['chapter'] %}Chapter {{ interaction['subject']['chapter'] }}{% if interaction['subject']['subChapter'] %} {{ interaction['subject']['subChapter'] }}{% endif %}: {% endif %}<a href="{{ JSON_LD_ID_BASE_URL }}/publication/{{ interaction['subject']['indexId'] }}"><span itemprop="name">{{ interaction['subject']['title']|safe }}</span></a> </li>
                                     </ul>
                                 {% endif %}
                                 {% endfor %}
                             {% if pubdata['isPartOf'] %}
-                                <li itemprop="isPartOf" itemscope itemtype="http://schema.org/ScholarlyArticle" itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}">Larger Work: {% if pubdata['chapter'] %}This publication is Chapter {{ pubdata['chapter'] }}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %} in {% endif %}<a href="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}"><span itemprop="name">{{ pubdata['isPartOf']['title'] }}</span></a></li>
+                                <li itemprop="isPartOf" itemscope itemtype="http://schema.org/ScholarlyArticle" itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}">Larger Work: {% if pubdata['chapter'] %}This publication is Chapter {{ pubdata['chapter'] }}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %} in {% endif %}<a href="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}"><span itemprop="name">{{ pubdata['isPartOf']['title']|safe }}</span></a></li>
                             {% endif %}
                         {% endif %}
                         <li>Download citation as:  <a href="{{ request.base_url }}?mimetype=ris">RIS</a></li>
