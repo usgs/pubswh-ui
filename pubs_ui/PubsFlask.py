@@ -509,9 +509,10 @@ def legacy_search(series_code=None, report_number=None, pub_year=None):
             pub_year = ''.join(['19', pub_year])
         elif int(pub_year) < 30:
             pub_year = ''.join(['20', pub_year])
+        return redirect(url_for('search_results', q=series_code+" "+report_number, year=pub_year, advanced=True))
 
-    return redirect(url_for('search_results', seriesName=usgs_series_codes.get(series_code), reportNumber=report_number,
-                    year=pub_year, advanced=True))
+    return redirect(url_for('search_results', q=series_code+" "+report_number))
+
 
 
 @app.route('/unapi')

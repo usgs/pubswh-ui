@@ -81,32 +81,33 @@
                     {% endif %}
                 </hgroup>
 
+                {# macro for generating the contributor lists, including commas & ands where they are supposed to be  #}
+                {% macro contributor_list(contributorListTyped, contributorKind) %}
+                    {%- for contributor in pubdata[contributorListTyped]  -%}
+                          {% if loop.length == 2 and loop.first != True %} and {% elif loop.last and loop.length > 2 %}and {% endif %}
+                          {%- if contributor['type'] == "person"  -%}
+                        <span itemprop="{{ contributorKind }}" itemtype="http://schema.org/Person">{{ contributor['text'] }}</span>
+                          {%- else -%}
+                         <span itemprop="{{ contributorKind }}" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</span>
+                          {%- endif -%}
+                          {% if not loop.last and loop.length > 2 %},
+                          {% endif %}
+                    {%-  endfor -%}
+                {% endmacro %}
+
                 <section>
                     <dl id="contributors">
+                      {% if pubdata['authorsList'] %}
                       <dt>By:</dt>
                         <dd>
-                      {%- for contributor in pubdata['authorsListTyped']  -%}
-                          {%- if contributor['type'] == "person"  -%}
-                        <span itemprop="author" itemtype="http://schema.org/Person">{{ contributor['text'] }}</span>
-                          {%- else -%}
-                         <span itemprop="author" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</span>
-                          {%- endif -%}
-                          {% if not loop.last %}, {% endif %}
-
-                      {%-  endfor -%}
+                            {{ contributor_list('authorsListTyped','author') }}
                         </dd>
+                      {% endif %}
                       {% if pubdata['editorsList'] %}
                       <dt>Edited by:</dt>
                       <dd>
-                          {%- for contributor in pubdata['editorsListTyped']  -%}
-                          {%- if contributor['type'] == "person"  -%}
-                        <span itemprop="editor" itemtype="http://schema.org/Person">{{ contributor['text'] }}</span>
-                          {%- else -%}
-                         <span itemprop="editor" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</span>
-                          {%- endif -%}
-                          {% if not loop.last %}, {% endif %}
-                      {%-  endfor -%}
-                          </dd>
+                         {{ contributor_list('editorsListTyped','editor') }}
+                      </dd>
                       {%- endif -%}
                     </dl>
                 </section>
