@@ -17,6 +17,7 @@ from dateutil import parser as dateparser
 from flask_login import (LoginManager, login_required, login_user, logout_user, UserMixin)
 from itsdangerous import URLSafeTimedSerializer
 from operator import itemgetter
+from urllib import unquote
 import arrow
 
 # set UTF-8 to be default throughout app
@@ -188,7 +189,7 @@ def login_page():
             # prone to being messed-up by apache than the default implementation.
             if next_page is not None:
                     app.logger.info("Next page: "+str(next_page))
-                    next_split = next_page.split('/')  # split so we can get the end of the path
+                    next_split = unquote(next_page).split('/')  # split so we can get the end of the path
                     app.logger.info("Next split: "+str(next_split))
                     if next_split[-2] == 'preview':  # ok, we need to point to the preview endpoint
                         index_id = next_split[-1]
