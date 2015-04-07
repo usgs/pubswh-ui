@@ -186,7 +186,19 @@ def login_page():
             print "user was created"
             login_user(user, remember=True)
             flash('You were successfully logged in')
-            return redirect(request.args.get("next") or "/")
+            next_page = request.args.get("next")
+            # sort out where to redirect, taking this approach allows us to use url_for, which is super-useful, and less
+            # prone to being messed-up by apache than the default implementation.
+            if next_page is not None:
+                    next_split = next_page.split('/')  # split so we can get the end of the path
+                    if next_split[-2] == 'preview':  # ok, we need to point to the preview endpoint
+                        index_id = next_split[-1]
+                        print index_id
+                        return redirect(url_for('restricted_page', index_id=index_id))
+                    else:
+                        return redirect(url_for('index'))
+            else:
+                return redirect(url_for('index'))
         else:
             error = 'Username or Password is invalid '+str(mp_response.status_code)
 
