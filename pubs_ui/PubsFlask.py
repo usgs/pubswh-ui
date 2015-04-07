@@ -187,7 +187,9 @@ def login_page():
             # sort out where to redirect, taking this approach allows us to use url_for, which is super-useful, and less
             # prone to being messed-up by apache than the default implementation.
             if next_page is not None:
+                    app.logger.info("Next page: "+str(next_page))
                     next_split = next_page.split('/')  # split so we can get the end of the path
+                    app.logger.info("Next split: "+str(next_split))
                     if next_split[-2] == 'preview':  # ok, we need to point to the preview endpoint
                         index_id = next_split[-1]
                         return redirect(url_for('restricted_page', index_id=index_id))
