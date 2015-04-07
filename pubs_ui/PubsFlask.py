@@ -177,13 +177,10 @@ def login_page():
         payload = {'username': request.form['username'], 'password': request.form['password']}
         # POST the payload to the pubs auth endpoint
         pubs_login_url = auth_endpoint_url+'token'
-        print pubs_login_url
         mp_response = post(pubs_login_url, data=payload, verify=verify_cert)
         # if the pubs endpoint login is successful, then proceed with logging in
         if mp_response.status_code == 200:
-            print "pubs login worked"
             user = User(request.form['username'], mp_response.json().get('token'))
-            print "user was created"
             login_user(user, remember=True)
             flash('You were successfully logged in')
             next_page = request.args.get("next")
@@ -193,7 +190,6 @@ def login_page():
                     next_split = next_page.split('/')  # split so we can get the end of the path
                     if next_split[-2] == 'preview':  # ok, we need to point to the preview endpoint
                         index_id = next_split[-1]
-                        print index_id
                         return redirect(url_for('restricted_page', index_id=index_id))
                     else:
                         return redirect(url_for('index'))
