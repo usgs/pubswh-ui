@@ -227,7 +227,7 @@ def restricted_page(index_id):
         return render_template("preview.html", indexID=index_id, pubdata=pubdata, related_pubs=related_pubs)
     # if the publication has been published (so it is out of mypubs) redirect to the right URL
     elif response.status_code == 404 and published_status == 200:
-        return redirect(url_for('publication', indexId=index_id))
+        return redirect(url_for('publication', index_id=index_id))
     elif response.status_code == 404 and published_status == 404:
         return render_template('404.html'), 404
 
