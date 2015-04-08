@@ -28,25 +28,20 @@
         <section class = "search-results">
             <p>{{ result_summary['record_count'] }} results.</p>
             <p>Alternate formats:
-            <a href="{{ json_ld_base_url }}/search?page_size=3000&mimetype=ris{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{% if result_summary['record_count'] <= 3000 %}Download search results as RIS{% else %}RIS file of the first 3000 search results{% endif %}</a> |
-            <a href="{{ pub_url }}publication/rss/?pub_x_days=60{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">RSS feed based on this search</a> |
-            <a href="{{ pub_url }}publication/?page_size={{ result_summary['records_per_page'] }}&page_number={{ result_summary['page_number'] }}{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">JSON version of this page of results</a>
+            <a href="{{ json_ld_base_url }}/search?page_size=3000&mimetype=ris{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{% if result_summary['record_count'] <= 3000 %}Download search results as RIS{% else %}RIS file of the first 3000 search results{% endif %}</a> |
+            <a href="{{ pub_url }}publication/rss/?pub_x_days=60{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">RSS feed based on this search</a> |
+            <a href="{{ pub_url }}publication/?page_size={{ result_summary['records_per_page'] }}&page_number={{ result_summary['page_number'] }}{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">JSON version of this page of results</a>
             </p>
             <p>Page {{ result_summary['page_number'] }}, results {{ result_summary['record_min'] }} - {{ result_summary['record_max'] }}</p>
+		    <p>{% if request.args.map != 'True' %}<a href="{{ url_for('search_results') }}?map=True{% for key, value in request.args.iteritems() %}&{{ key }}={{ value|urlencode }}{% endfor %}">Show results on a map</a>{% endif %}
+		    {% if request.args.map == 'True' %}<a href="{{ url_for('search_results') }}?{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'map') %}{% if not loop.first %}&{% endif %}{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">Hide map</a>{% endif %}
+		    </p>
 		</section>
+        {% if request.args.map == 'True' %}
+            {% include 'search_results_map.html' %}
+        {% endif %}
+        {% include 'search_results_text.html' %}
 
-        <section id="search-results">
-				{% for result in search_result_records %}
-					<article>
-                        <h5  class="search-title"><a href="{{ url_for('publication', index_id = result['indexId']) }}">{{ result['title']|safe }}</a></h5>
-                        {% if current_user.is_authenticated() %}<small><a href="https://pubs.er.usgs.gov/mypubs/#/Publication/{{ result['id'] }}" target="_blank">(edit in MyPubs)</a></small>{% endif %}
-                        {% if result['authorsList']|length > 0 %}<h6 class="searchContributors">{{ result['authorsList']|join(', ') }}</h6>{% endif %}
-                        {% if result['editorsList']|length > 0 %}<h6 class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</h6>{% endif %}
-                        <h6 class="pubinfo">{{ result|display_pub_info }}</h6>
-                        {% if result['docAbstract']  %}<p class="searchAbstract">{{ result['docAbstract'].split(' ')[0:50]|join(' ')|striptags }}...</p>{% endif %}
-					</article>
-				{% endfor %}
-        </section>
 		<div>
             <section class="pagination-nav">
                 {{ pagination.links|safe }}

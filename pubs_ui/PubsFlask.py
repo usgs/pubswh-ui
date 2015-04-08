@@ -8,7 +8,7 @@ from flask.ext.paginate import Pagination
 from arguments import search_args
 from utils import (pull_feed, create_display_links, getbrowsecontent,
                    SearchPublications, change_to_pubs_test, generate_auth_header, 
-                   munge_pubdata_for_display, extract_related_pub_info)
+                   munge_pubdata_for_display, extract_related_pub_info, jsonify_geojson)
 from forms import ContactForm, SearchForm, NumSeries, LoginForm
 from canned_text import EMAIL_RESPONSE
 from pubs_ui import app, mail
@@ -421,6 +421,10 @@ def search_results():
         content = render_template('ris_output.ris', search_result_records=search_result_records)
         return Response(content, mimetype="application/x-research-info-systems",
                                headers={"Content-Disposition":"attachment;filename=PubsWarehouseResults.ris"})
+    if request.args.get('map') == 'True':
+        for record in search_result_records:
+            record = jsonify_geojson(record)
+
     return render_template('search_results.html',
                            result_summary=result_summary,
                            search_result_records=search_result_records,

@@ -1,0 +1,12 @@
+        <section id="search-results">
+				{% for result in search_result_records %}
+					<article>
+                        <h5  class="search-title"><a href="{{ url_for('publication', index_id = result['indexId']) }}">{{ result['title']|safe }}</a></h5>
+                        {% if current_user.is_authenticated() %}<small><a href="https://pubs.er.usgs.gov/mypubs/#/Publication/{{ result['id'] }}" target="_blank">(edit in MyPubs)</a></small>{% endif %}
+                        {% if result['authorsList']|length > 0 %}<h6 class="searchContributors">{{ result['authorsList']|join(', ') }}</h6>{% endif %}
+                        {% if result['editorsList']|length > 0 %}<h6 class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</h6>{% endif %}
+                        <h6 class="pubinfo">{{ result|display_pub_info }}</h6>
+                        {% if result['docAbstract']  %}<p class="searchAbstract">{{ result['docAbstract'].split(' ')[0:50]|join(' ')|striptags }}...</p>{% endif %}
+					</article>
+				{% endfor %}
+        </section>
