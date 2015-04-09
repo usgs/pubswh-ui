@@ -69,7 +69,7 @@ all_extents.features.push(pub_json_{{ result['indexId'] }}.features[0]);
 {% endif %}
 
 {% endfor %}
-
+//fit the bounds
 extents_map.fitBounds(L.geoJson( all_extents ).getBounds());
 
 
