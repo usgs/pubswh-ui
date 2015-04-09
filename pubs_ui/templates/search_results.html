@@ -6,9 +6,13 @@
 {% endblock head %}
 
 {% block page_style %}
+{% if request.args.map == 'True' %}
+	<link rel="stylesheet" href="{{ url_for('static', filename = 'css/mapbox.standalone.css') }}">
+{% endif %}
 	<link rel="stylesheet" href="{{ url_for('static', filename = 'css/pagination.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaflet.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'vendor/Leaflet.draw/leaflet.draw.css') }}">
+
 {% endblock page_style %}
 
 {% block main %}
@@ -56,6 +60,9 @@
 	{% if form.data.advanced == 'True' %}
 		{% include "advanced_search_form_script.html" %}
 	{% endif %}
+	{% if request.args.map == 'True' %}
+            {% include 'search_results_map_script.html' %}
+        {% endif %}
 	
 {% endblock page_footer_script %}
 
