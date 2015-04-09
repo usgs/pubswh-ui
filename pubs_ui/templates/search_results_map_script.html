@@ -88,12 +88,9 @@ function handleClick(e) {
         // if there's overlap, add some content to the popup: the layer name
         // and a table of attributes
         if (match.length) {
-            html += '<strong>' + layers[i].name +
-                '<button onclick="highlightMatch(this)" data-layer="' + i +
-                '" data-latlng="' +
-                [e.latlng.lat, e.latlng.lng] +
-                '">highlight</button></strong>';
-            html += propertyTable(match[0].feature.properties);
+            html += '<button onclick="highlightMatch(this)" data-layer="' + i +
+                '" data-latlng="' + [e.latlng.lat, e.latlng.lng] + '">highlight</button>';
+            html += '<a href="'+match[0].feature.properties.url+'" >  '+  match[0].feature.properties.Title+'</a></br>';
         }
     }
     if (html) {
