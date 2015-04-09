@@ -407,7 +407,7 @@ def jsonify_geojson(record):
             geojson['properties'] = {'title': record.get('title')}
             for feature in geojson['features']:
                 feature['id'] = record.get('indexId')+'.base_id'
-                feature['properties'] = {'Title': record.get('title'),
+                feature['properties'] = {'title': record.get('title'),
                                          'id': record.get('indexId'),
                                          'url': 'http://pubs.er.usgs.gov/publication/'+record.get('indexId'),
                                          'year': record.get('publicationYear')

@@ -125,9 +125,10 @@ function handleClick(e) {
         // if there's overlap, add some content to the popup: the layer name
         // and a table of attributes
         if (match.length) {
+            html += '<p><a href="'+match[0].feature.properties.url+'" >  '+  match[0].feature.properties.title+'</a> ('
+                    +match[0].feature.properties.year+') ';
             html += '<button onclick="highlightMatch(this)" data-layer="' + i +
-                '" data-latlng="' + [e.latlng.lat, e.latlng.lng] + '">highlight</button>';
-            html += '<a href="'+match[0].feature.properties.url+'" >  '+  match[0].feature.properties.Title+'</a></br>';
+                '" data-latlng="' + [e.latlng.lat, e.latlng.lng] + '">highlight</button></p>';
         }
     }
     if (html) {
@@ -158,14 +159,4 @@ function highlightMatch(that) {
     }
 }
 
-// create a simple table from the properties in a feature, like the
-// name of a state or district
-function propertyTable(o) {
-    var t = '<table>';
-    for (var k in o) {
-        t += '<tr><th class=extents_th>' + k + '</th><td>' + o[k] + '</td></tr>';
-    }
-    t += '</table>';
-    return t;
-}
 </script>
