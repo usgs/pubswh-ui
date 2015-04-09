@@ -407,7 +407,11 @@ def jsonify_geojson(record):
             geojson['properties'] = {'title': record.get('title')}
             for feature in geojson['features']:
                 feature['id'] = record.get('indexId')+'.base_id'
-                feature['properties'] = {'Title': record.get('title'), 'id' : record.get('indexId'), 'url':'http://pubs.er.usgs.gov/publication/'+record.get('indexId')}
+                feature['properties'] = {'Title': record.get('title'),
+                                         'id': record.get('indexId'),
+                                         'url': 'http://pubs.er.usgs.gov/publication/'+record.get('indexId'),
+                                         'year': record.get('publicationYear')
+                                         }
             record['geographicExtents'] = geojson
         except Exception as e:
             app.logger.info("Prod ID "+str(record['id'])+" geographicExtents json parse error: "+str(e))

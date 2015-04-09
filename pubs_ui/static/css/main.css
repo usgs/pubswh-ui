@@ -761,12 +761,18 @@ h1.search-results{
 	text-decoration:underline;
 }
 
+#extents_map_section {
+    margin-left: 15px;
+}
+
 #extents_map {
     height: 600px;
     width:90%;
     overflow:auto;
+    margin-left: inherit;
+    padding: 0 0 15px 0;
     position:relative;
-    padding: 15px;
+
 }
 .info {
     padding: 6px 8px;
