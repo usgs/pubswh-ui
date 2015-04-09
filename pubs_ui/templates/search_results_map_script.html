@@ -1,6 +1,8 @@
 
 {% if request.args.advanced != 'True' %}
 <script type="text/javascript" src="{{ url_for('static', filename = 'js/vendor/leaflet-0.7.3/leaflet.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js.map') }}"></script>
 {% endif %}
 <script type="text/javascript" src="{{ url_for('static', filename = 'vendor/mapbox/mapbox.js/v2.1.6/mapbox.standalone.js') }}"></script>
 
@@ -9,31 +11,66 @@
 
 <script type="application/javascript">
 
-var extents_map = L.map('extents_map')
+//set a general extent to allow for dynamic zooming to search result extents
+var all_extents = {
+                    "features": [],
+                    "properties": {
+                        "title": "all search pub extents"
+                    },
+                    "type": "FeatureCollection"
+                };
+
+//add esri basemap layers
+var topo = L.esri.basemapLayer('Topographic'),
+ oceans = L.esri.basemapLayer('Oceans',{ detectRetina: true}),
+        streets = L.esri.basemapLayer('Streets');
+
+var oceanlabels =  L.esri.basemapLayer('OceansLabels');
+
+
+var baseMaps = {
+                            "Oceans": oceans,
+                            "Topographic": topo,
+                            "Streets": streets
+
+                        };
+
+var overlayMaps = {
+    "Ocean Labels": oceanlabels
+};
+
+//actually create the map
+var extents_map = new L.map('extents_map', {layers:[topo]})
     .setView([38, -115], 4);
 
-// create the OpenStreetMap layer
-osmTile = "http://tile.openstreetmap.org/{z}/{x}/{y}.png";
-osmCopyright = "Map data &copy; 2012 OpenStreetMap contributors";
-osmLayer = new L.TileLayer(osmTile, { maxZoom: 18, attribution: osmCopyright } );
-extents_map.addLayer(osmLayer);
+//add the layers control for the map
+L.control.layers(baseMaps, overlayMaps).addTo(extents_map);
 
-var layers = []
+//base layers list for leaflet-pip
+var layers = [];
 
+//all publications that have extents
+{# iterate through the publications on the page #}
 {% for result in search_result_records %}
 {% if result['geographicExtents'] %}
 
-var pub_{{ result['indexId'] }} = L.mapbox.featureLayer({{ result['geographicExtents']|tojson|safe }})
+var pub_json_{{ result['indexId'] }} = {{ result['geographicExtents']|tojson|safe }};
+
+var pub_{{ result['indexId'] }} = L.mapbox.featureLayer(pub_json_{{ result['indexId'] }})
     .on('click', handleClick)
     .on('ready', resetStyles)
     .addTo(extents_map);
 
 layers.push({ name: 'pub_{{ result['indexId'] }}', layer: pub_{{ result['indexId'] }} });
 
+all_extents.features.push(pub_json_{{ result['indexId'] }}.features[0]);
+
+
 {% endif %}
 
 {% endfor %}
 
+extents_map.fitBounds(L.geoJson( all_extents ).getBounds());
 
 
 // This is the default style of layers when the user isn't interacting
