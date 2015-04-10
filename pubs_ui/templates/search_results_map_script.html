@@ -4,8 +4,8 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js.map') }}"></script>
 {% endif %}
-<script type="text/javascript" src="{{ url_for('static', filename = 'vendor/mapbox/mapbox.js/v2.1.6/mapbox.standalone.js') }}"></script>
 
+<script type="text/javascript" src="{{ url_for('static', filename = 'vendor/mapbox/mapbox.js/v2.1.6/mapbox.standalone.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename = 'vendor/mapbox/Leaflet-pip/leaflet-pip.min.js') }}"></script>
 
 
@@ -111,6 +111,7 @@ extents_map.on('popupclose', function() {
 });
 
 function handleClick(e) {
+    console.log('the thing was clicked!')
     var html = '';
     // look through each layer in order and see if the clicked point,
     // e.latlng, overlaps with one of the shapes in it.
@@ -122,12 +123,10 @@ function handleClick(e) {
             layers[i].layer,
             // whether to stop at first match
             false);
-        // if there's overlap, add some content to the popup: the layer name
-        // and a table of attributes
+        // if there's overlap, add some content to the popup: the publication title, links and some information
         if (match.length) {
-            html += '<p><a href="'+match[0].feature.properties.url+'" >  '+  match[0].feature.properties.title+'</a> </br>'
-                    +match[0].feature.properties.info;
-            html += '  <button class="btn" onclick="highlightMatch(this)" data-layer="' + i +
+            html += '<p><span class="search-title"><a href="'+match[0].feature.properties.url+'" >  '+  match[0].feature.properties.title+'</a> </span></br><span class="pubinfo">'
+                    +match[0].feature.properties.info+' </span> <button class="btn" onclick="highlightMatch(this)" data-layer="' + i +
                 '" data-latlng="' + [e.latlng.lat, e.latlng.lng] + '">highlight</button></p>';
         }
     }
