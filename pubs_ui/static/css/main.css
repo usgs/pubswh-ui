@@ -766,7 +766,7 @@ h1.search-results{
 }
 
 #extents_map {
-    height: 600px;
+    height: 800px;
     width:90%;
     overflow:auto;
     margin-left: inherit;
@@ -774,19 +774,7 @@ h1.search-results{
     position:relative;
 
 }
-.info {
-    padding: 6px 8px;
-    font: 14px/16px Arial, Helvetica, sans-serif;
-    background: white;
-    background: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    height:300px;
-    overflow:scroll;
-    overflow-y:auto;
-    word-wrap: normal;
-    max-width:45%;
-}
+
 
 
 

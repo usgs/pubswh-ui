@@ -125,14 +125,14 @@ function handleClick(e) {
         // if there's overlap, add some content to the popup: the layer name
         // and a table of attributes
         if (match.length) {
-            html += '<p><a href="'+match[0].feature.properties.url+'" >  '+  match[0].feature.properties.title+'</a> ('
-                    +match[0].feature.properties.year+') ';
-            html += '<button onclick="highlightMatch(this)" data-layer="' + i +
+            html += '<p><a href="'+match[0].feature.properties.url+'" >  '+  match[0].feature.properties.title+'</a> </br>'
+                    +match[0].feature.properties.info;
+            html += '  <button class="btn" onclick="highlightMatch(this)" data-layer="' + i +
                 '" data-latlng="' + [e.latlng.lat, e.latlng.lng] + '">highlight</button></p>';
         }
     }
     if (html) {
-        extents_map.openPopup(html, e.latlng);
+        extents_map.openPopup(html, e.latlng,{maxWidth: 350, minWidth: 250, maxHeight: 300, autoPan: true, closeButton: true, autoPanPadding: [5, 5]});
     }
 }
 
