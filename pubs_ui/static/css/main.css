@@ -768,7 +768,7 @@ h1.search-results{
 #extents_map {
     height: 800px;
     width:90%;
-    overflow:auto;
+    overflow:hidden;
     margin-left: inherit;
     padding: 0 0 15px 0;
     position:relative;

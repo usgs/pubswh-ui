@@ -111,7 +111,8 @@ extents_map.on('popupclose', function() {
 });
 
 function handleClick(e) {
-    console.log('the thing was clicked!')
+    console.log('the thing was clicked!');
+
     var html = '';
     // look through each layer in order and see if the clicked point,
     // e.latlng, overlaps with one of the shapes in it.
@@ -132,6 +133,7 @@ function handleClick(e) {
     }
     if (html) {
         extents_map.openPopup(html, e.latlng,{maxWidth: 350, minWidth: 250, maxHeight: 300, autoPan: true, closeButton: true, autoPanPadding: [5, 5]});
+
     }
 }
 
