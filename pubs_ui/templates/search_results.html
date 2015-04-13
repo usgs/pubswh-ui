@@ -3,6 +3,9 @@
 	<title>Search Results - USGS Publications Warehouse</title>
 	<meta name="description" content="Search results for USGS Publications Warehouse">
     {% include 'meta.html' %}
+     <meta name="totalResults" content="{{ result_summary['record_count'] }}"/>
+     <meta name="startIndex" content="{{ result_summary['record_min'] }}"/>
+     <meta name="itemsPerPage" content="{{ result_summary['records_per_page'] }}"/>
 {% endblock head %}
 
 {% block page_style %}
