@@ -7,7 +7,7 @@ from pubs_ui.utils import (pull_feed, pubdetails, getbrowsecontent, create_displ
                            jsonify_geojson, add_legacy_data, SearchPublications, 
                            make_contributor_list, legacy_api_info, sort_list_of_dicts,
                            extract_related_pub_info)
-
+from pubs_ui import app
 
 """
 pull_feed scenarios
@@ -274,13 +274,37 @@ jsonify_geojson scenarios
 """
 @step(r'we have created a fake pubs record with a geographic extents string')
 def imitation_geojson(step):
-    world.body = {'id': 12345, 'title':'The Title', "geographicExtents": '{ "type": "FeatureCollection", "features": [ { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [ [ [ -72.745833,44.0625 ], [ -72.745833,44.075 ], [ -72.741667,44.075 ], [ -72.741667,44.0625 ], [ -72.745833,44.0625 ] ] ] } } ] }'}
+    world.body = {'id': 12345, 'title':'The Title', 'indexId': 'pubIndexId', 'publicationYear':'1995', 'publicationType':'Report',
+                  "geographicExtents": '{ "type": "FeatureCollection", "features": [ { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [ [ [ -72.745833,44.0625 ], [ -72.745833,44.075 ], [ -72.741667,44.075 ], [ -72.741667,44.0625 ], [ -72.745833,44.0625 ] ] ] } } ] }'}
 
 @step(r'I make a record with parsable json')
 def make_json(step):
     world.output = jsonify_geojson(world.body)
-    world.expected_output = {'id': 12345,'title':'The Title', "geographicExtents": {u'type': u'FeatureCollection', u'properties': {u'title':u'The Title'}, u'features': [{u'geometry': {u'type': u'Polygon', u'coordinates': [[[-72.745833, 44.0625], [-72.745833, 44.075], [-72.741667, 44.075], [-72.741667, 44.0625], [-72.745833, 44.0625]]]}, u'type': u'Feature', u'properties': {}}]}}
-
+    world.expected_output = {'geographicExtents': {u'features': [{u'geometry': {u'coordinates': [[[-72.745833,
+                                                                       44.0625],
+                                                                      [-72.745833,
+                                                                       44.075],
+                                                                      [-72.741667,
+                                                                       44.075],
+                                                                      [-72.741667,
+                                                                       44.0625],
+                                                                      [-72.745833,
+                                                                       44.0625]]],
+                                                    u'type': u'Polygon'},
+                                      'id': 'pubIndexId.base_id',
+                                      u'properties': {'id': 'pubIndexId',
+                                                      'info': '1995',
+                                                      'title': 'The Title',
+                                                      'url': app.config.get('JSON_LD_ID_BASE_URL')+'publication/pubIndexId',
+                                                      'year': '1995'},
+                                      u'type': u'Feature'}],
+                       'properties': {'title': 'The Title'},
+                       u'type': u'FeatureCollection'},
+ 'id': 12345,
+ 'indexId': 'pubIndexId',
+ 'publicationType': 'Report',
+ 'publicationYear': '1995',
+ 'title': 'The Title'}
 @step(r'I see a record was created correctly')
 def test_geojson_output(step):
     assert_equal(world.output, world.expected_output)
