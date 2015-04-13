@@ -54,16 +54,16 @@ var layers = [];
 {% for result in search_result_records %}
     {% if result['geographicExtents'] %}
 
-    var pub_json_{{ result['indexId'] }} = {{ result['geographicExtents']|tojson|safe }};
+        var pub_json_{{ result['indexId'] }} = {{ result['geographicExtents']|tojson|safe }};
 
-    var pub_{{ result['indexId'] }} = L.mapbox.featureLayer(pub_json_{{ result['indexId'] }})
-        .on('click', handleClick)
-        .on('ready', resetStyles)
-        .addTo(extents_map);
+        var pub_{{ result['indexId'] }} = L.mapbox.featureLayer(pub_json_{{ result['indexId'] }})
+            .on('click', handleClick)
+            .on('ready', resetStyles)
+            .addTo(extents_map);
 
-    layers.push({ name: 'pub_{{ result['indexId'] }}', layer: pub_{{ result['indexId'] }} });
+        layers.push({ name: 'pub_{{ result['indexId'] }}', layer: pub_{{ result['indexId'] }} });
 
-    all_extents.features.push(pub_json_{{ result['indexId'] }}.features[0]);
+        all_extents.features.push(pub_json_{{ result['indexId'] }}.features[0]);
 
 
     {% endif %}
