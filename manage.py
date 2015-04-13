@@ -5,6 +5,7 @@ Created on Oct 17, 2014
 '''
 from flask.ext.script import Manager, Command
 from flask.ext.collect import Collect
+from flask.ext.assets import ManageAssets
 import arrow
 from pubs_ui import app as application
 
@@ -46,6 +47,7 @@ class ReportDeployDate(Command):
 manager = Manager(application)
 manager.add_command('collect', CollectStaticFiles())
 manager.add_command('date_report', ReportDeployDate())
+manager.add_command('assets', ManageAssets())
 
 
 if __name__ == '__main__':
