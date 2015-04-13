@@ -6,9 +6,13 @@
 {% endblock head %}
 
 {% block page_style %}
+{% if request.args.map == 'True' %}
+	<link rel="stylesheet" href="{{ url_for('static', filename = 'css/mapbox.standalone.css') }}">
+{% endif %}
 	<link rel="stylesheet" href="{{ url_for('static', filename = 'css/pagination.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaflet.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'vendor/Leaflet.draw/leaflet.draw.css') }}">
+
 {% endblock page_style %}
 
 {% block main %}
@@ -28,13 +32,17 @@
         <section class = "search-results">
             <p>{{ result_summary['record_count'] }} results.</p>
             <p>Alternate formats:
-            <a href="{{ json_ld_base_url }}/search?page_size=3000&mimetype=ris{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{% if result_summary['record_count'] <= 3000 %}Download search results as RIS{% else %}RIS file of the first 3000 search results{% endif %}</a> |
-            <a href="{{ pub_url }}publication/rss/?pub_x_days=60{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">RSS feed based on this search</a> |
-            <a href="{{ pub_url }}publication/?page_size={{ result_summary['records_per_page'] }}&page_number={{ result_summary['page_number'] }}{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">JSON version of this page of results</a>
+            <a href="{{ json_ld_base_url }}/search?page_size=3000&mimetype=ris{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{% if result_summary['record_count'] <= 3000 %}Download search results as RIS{% else %}RIS file of the first 3000 search results{% endif %}</a> |
+            <a href="{{ pub_url }}publication/rss/?pub_x_days=60{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">RSS feed based on this search</a> |
+            <a href="{{ pub_url }}publication/?page_size={{ result_summary['records_per_page'] }}&page_number={{ result_summary['page_number'] }}{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">JSON version of this page of results</a>
             </p>
             <p>Page {{ result_summary['page_number'] }}, results {{ result_summary['record_min'] }} - {{ result_summary['record_max'] }}</p>
+		    <p>{% if request.args.map != 'True' %}<a href="{{ url_for('search_results') }}?map=True{% for key, value in request.args.iteritems() %}&{{ key }}={{ value|urlencode }}{% endfor %}">Show results on a map</a>{% elif request.args.map == 'True'  %}<a href="{{ url_for('search_results') }}?{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'map') %}{% if not loop.first %}&{% endif %}{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">Hide map</a>{% endif %}
+		    </p>
 		</section>
-
+        {% if request.args.map == 'True' %}
+            {% include 'search_results_map.html' %}
+        {% endif %}
         <section id="search-results">
 				{% for result in search_result_records %}
 					<article>
@@ -47,6 +55,7 @@
 					</article>
 				{% endfor %}
         </section>
+
 		<div>
             <section class="pagination-nav">
                 {{ pagination.links|safe }}
@@ -61,6 +70,9 @@
 	{% if form.data.advanced == 'True' %}
 		{% include "advanced_search_form_script.html" %}
 	{% endif %}
+	{% if request.args.map == 'True' %}
+            {% include 'search_results_map_script.html' %}
+    {% endif %}
 	
 {% endblock page_footer_script %}
 

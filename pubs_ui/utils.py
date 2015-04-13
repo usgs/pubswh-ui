@@ -12,8 +12,9 @@ from copy import deepcopy
 from itsdangerous import URLSafeTimedSerializer
 import arrow
 import natsort
+from custom_filters import display_publication_info
 
-
+json_ld_id_base_url = app.config.get('JSON_LD_ID_BASE_URL')
 # should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
 base_search_url = app.config['BASE_SEARCH_URL']
@@ -405,6 +406,14 @@ def jsonify_geojson(record):
         try:
             geojson = json.loads(geojson)
             geojson['properties'] = {'title': record.get('title')}
+            for feature in geojson['features']:
+                feature['id'] = record.get('indexId')+'.base_id'
+                feature['properties'] = {'title': record.get('title'),
+                                         'id': record.get('indexId'),
+                                         'url': json_ld_id_base_url+'publication/'+record.get('indexId'),
+                                         'year': record.get('publicationYear'),
+                                         'info': display_publication_info(record)
+                                         }
             record['geographicExtents'] = geojson
         except Exception as e:
             app.logger.info("Prod ID "+str(record['id'])+" geographicExtents json parse error: "+str(e))

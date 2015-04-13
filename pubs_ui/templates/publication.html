@@ -32,14 +32,11 @@
     {% if pubdata['doi'] %}<meta name="citation_doi" content="{{ pubdata['doi'] }}" />{% endif %}
 
 
-    {% block page_script %}
+    {% block page_style %}
        {%- if pubdata["geographicExtents"] -%}
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaflet.css') }}">
-        <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/leaflet-0.7.3/leaflet.js') }}"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js') }}"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js.map') }}"></script>
        {% endif %}
-    {% endblock page_script %}
+    {% endblock page_style %}
 
 
 {% endblock head %}
@@ -286,6 +283,9 @@
         {% block modtime %}{{ pubdata['formattedModifiedDateTime'] }}{% endblock %}
         {% block page_footer_script %}
         {%- if pubdata["geographicExtents"] -%}
+        <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/leaflet-0.7.3/leaflet.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js.map') }}"></script>
         <script type=text/javascript>
 
 
@@ -296,7 +296,7 @@
                          oceans = L.esri.basemapLayer('Oceans',{ detectRetina: true}),
                                 streets = L.esri.basemapLayer('Streets');
 
-                        var oceanlabels =  L.esri.basemapLayer('OceansLabels')
+                        var oceanlabels =  L.esri.basemapLayer('OceansLabels');
 
                         // create a map
 
