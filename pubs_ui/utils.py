@@ -397,7 +397,7 @@ def concatenate_contributor_names(contributors):
 
 def jsonify_geojson(record):
     """
-    turns the stringified geojson into actual json
+    turns the stringified geojson into a python dictionary that can be dumped as valid geojson
     :param record:
     :return record with geojson in geographicExtents:
     """
