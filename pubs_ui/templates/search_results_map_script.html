@@ -126,12 +126,12 @@ function handleClick(e) {
         // if there's overlap, add some content to the popup: the publication title, links and some information
         if (match.length) {
             html += '<p><span class="search-title"><a href="'+match[0].feature.properties.url+'" >  '+  match[0].feature.properties.title+'</a> </span></br><span class="pubinfo">'
-                    +match[0].feature.properties.info+' </span> <button class="filter-button" onclick="highlightMatch(this)" data-layer="' + i +
-                '" data-latlng="' + [e.latlng.lat, e.latlng.lng] + '">highlight</button></p>';
+                    +match[0].feature.properties.info+' </span></br> <button class="filter-button" onclick="highlightMatch(this)" data-layer="' + i +
+                '" data-latlng="' + [e.latlng.lat, e.latlng.lng] + '">highlight</button></br></p>';
         }
     }
     if (html) {
-        extents_map.openPopup(html, e.latlng,{maxWidth: 350, minWidth: 150, maxHeight: 300, autoPan: true, closeButton: true, autoPanPadding: [5, 5]});
+        extents_map.openPopup(html, e.latlng,{maxWidth: 350, minWidth: 150, maxHeight: 300, offset:[0, -3], autoPan: true, closeButton: true, autoPanPadding: [5, 5]});
 
     }
 }
