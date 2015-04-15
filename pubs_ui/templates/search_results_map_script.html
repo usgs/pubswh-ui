@@ -127,7 +127,7 @@ function handleClick(e) {
         if (match.length) {
             html += '<p><span class="search-title"><a href="'+match[0].feature.properties.url+'" >  '+  match[0].feature.properties.title+'</a> </span></br><span class="pubinfo">'
                     +match[0].feature.properties.info+' </span></br> <button class="filter-button" onclick="highlightMatch(this)" data-layer="' + i +
-                '" data-latlng="' + [e.latlng.lat, e.latlng.lng] + '">highlight</button></br></p>';
+                '" data-latlng="' + [e.latlng.lat, e.latlng.lng] + '">highlight</button></p>';
         }
     }
     if (html) {
