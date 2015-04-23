@@ -136,6 +136,9 @@ def create_display_links(pubdata):
         'Index Page': [],
         'Metadata': [],
         'Plate': [],
+        'Sheet': [],
+        'Table': [],
+        'Dataset': [],
         'Project Site': [],
         'Raw Data': [],
         'Read Me': [],
@@ -634,6 +637,7 @@ def generate_auth_header(request):
     header = {'Authorization': auth_value}
     return header
 
+
 def make_chapter_data_for_display(pubdata):
     """
     take publication data and munges it around to make it easy to work with in jinja templates
@@ -647,8 +651,10 @@ def make_chapter_data_for_display(pubdata):
         for interaction in pubdata['interactions']:
             if interaction['predicate'] == "IS_PART_OF" and interaction['subject']['indexId'] != pubdata['indexId']:
                 pubdata['hasSubParts'] = True
-            else: pubdata['hasSubParts'] = False
+            else:
+                pubdata['hasSubParts'] = False
     return pubdata
+
 
 def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url):
     """
