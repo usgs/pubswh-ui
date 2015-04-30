@@ -60,7 +60,6 @@ def pubdetails(pubdata):
         ['largerWorkTitle', 'Larger Work Title:'],
         ['startPage', 'First page:'],
         ['endPage', 'Last page:'],
-        ['numberOfPages', 'Number of Pages:'],
         ['publicComments', 'Public Comments:'],
         ['temporalStart', 'Time Range Start:'],
         ['temporalEnd', 'Time Range End:'],
