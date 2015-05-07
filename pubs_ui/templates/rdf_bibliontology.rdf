@@ -13,7 +13,7 @@
     <bibo:AcademicArticle rdf:about="http://pubs.er.usgs.gov/publication/{{ pubdata['indexId'] }}">
     {% endif %}
         <dcterms:title>{{ pubdata['title']|striptags }}</dcterms:title>
-        <dcterms:abstract>{{ pubdata['docAbstract']|striptags }}</dcterms:abstract>
+        <dcterms:abstract>{{ pubdata['docAbstract'].split(' ')[0:450]|join(' ')|striptags }}</dcterms:abstract>
         <bibo:doi>{{ pubdata['doi'] }}</bibo:doi>
         {% if pubdata['seriesNumber'] %}
                     <bibo:number>{{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %}</bibo:number>
