@@ -668,6 +668,7 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     pubdata = jsonify_geojson(pubdata)
     pubdata = make_chapter_data_for_display(pubdata)
     pubdata['formattedModifiedDateTime'] = arrow.get(pubdata['lastModifiedDate']).format('MMMM DD, YYYY HH:mm:ss')
+    pubdata = munge_abstract(pubdata)
     # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov.
     # Flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI
     # The Apache rewrite changes this to pubs-test.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI, where there is
@@ -744,3 +745,31 @@ def extract_related_pub_info(pubdata):
     else:
         raise Exception('Failed to parse supersede information.')
     return relations
+
+def munge_abstract(pubdata):
+    """
+    Take an abstract, and if there is an h1 tag in there, take it out and put the contents in the abstract_label object,
+    else put abstract in there.  This is a hack until we can change the abstract type.
+    :param pubdata: data about a publication
+    :return:
+    """
+    if pubdata.get('docAbstract') is not None:
+        soup = BeautifulSoup(pubdata['docAbstract'], "html.parser")
+        #find the h1 tag
+        if soup.find('h1') is not None:
+            possible_header = soup.find('h1').contents[0]
+            soup.h1.extract()
+            app.logger.info("header?: "+possible_header)
+            abstract = soup.prettify()
+            pubdata['docAbstract'] = abstract
+            abstract_header = possible_header
+        else:
+            abstract_header = 'Abstract'
+    else:
+        abstract_header = 'Abstract'
+
+    pubdata['abstractHeader'] = abstract_header
+
+    return pubdata
+
+

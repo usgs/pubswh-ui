@@ -231,7 +231,7 @@
                 {% include 'USGS_series_aside.html' %}
                 </aside>
                     {% endif %}
-                    <h4 id="abstract_head">Abstract</h4>
+                    <h4 id="abstract_head">{{ pubdata['abstractHeader'] }}</h4>
                     
                     {{ pubdata['docAbstract']|safe }}
                     
@@ -243,6 +243,9 @@
                 <section>
                     <h4>Suggested Citation</h4>
                     <p id="suggested_citation">{{ pubdata['usgsCitation']|safe }}</p>
+                    <p>ISSN: {{  pubdata['seriesTitle']["onlineIssn"] }} (online)</p>
+                    {% if pubdata['onlineOnly'] == 'N' %}<p>ISSN: {{  pubdata['seriesTitle']["printIssn"] }} (print)</p>{% endif %}
+
                 </section>
                 {% endif %}
 
