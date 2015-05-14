@@ -502,19 +502,6 @@ def legacy_api_info(context_id, supersedes_service_url):
 
     predecessors = []
     successors = []
-    if related is not None:
-        for item in related:
-            try:
-                item_summary_info = {'index_id': item['identifier']['#text'], 'title': item['titleInfo']['title'],
-                                     'date': item['originInfo']['dateIssued']}
-
-                if item['@type'] == 'preceding':
-                    predecessors.append(item_summary_info)
-                elif item['@type'] == 'succeeding':
-                    successors.append(item_summary_info)
-            except KeyError:
-                predecessors = []
-                successors = []
 
     return {'predecessors': predecessors, 'context_item': context_id, 'successors': successors, 'offers': offers}
 
@@ -547,8 +534,9 @@ def add_legacy_data(context_pubdata, supersedes_service_url, url_root):
     
     # obtain predecessor and successor related items
     pre_super = legacy_api_info(index_id, supersedes_service_url)
+    interactions = return_pubdata.get('interactions')
 
-    if pre_super['predecessors'] or pre_super['successors']:
+    if interactions is not None:
 
         # ensure 'relationships' is set up
         if 'relationships' not in return_pubdata:
@@ -577,28 +565,30 @@ def add_legacy_data(context_pubdata, supersedes_service_url, url_root):
         }
         )
 
-        # add any linked data for superseding another publication
-        for item in pre_super['predecessors']:
-            related_pub = {
-                '@id':  urljoin(base_id_url, item['index_id']),
-                '@type': pub_type,
-                'dc:title': item['title'],
-                "rdaw:replacedByWork": pub_url}
-            if item['date']:
-                related_pub['dc:date'] = item['date']
-            return_pubdata['relationships']['@graph'].append(related_pub)
+        for interaction in interactions:
+            # add any linked data for superseding another publication
+            if interaction['predicate'] == "SUPERSEDED_BY" and interaction['object']['indexId'] == return_pubdata['indexId']:
+                related_pub = {
+                    '@id':  urljoin(base_id_url, interaction['subject']['indexId']),
+                    '@type': pub_type,
+                    'dc:title': interaction['subject']['title'],
+                    "rdaw:replacedByWork": pub_url}
+                if interaction['subject']['publicationYear']:
+                    related_pub['dc:date'] = interaction['subject']['publicationYear']
+                return_pubdata['relationships']['@graph'].append(related_pub)
+            # add any linked data for being superseded by another publication
+            if interaction['predicate'] == "SUPERSEDED_BY" and interaction['subject']['indexId'] == return_pubdata['indexId']:
+                related_pub = {
+                    '@id':  urljoin(base_id_url, interaction['object']['indexId']),
+                    '@type': pub_type,
+                    'dc:title': interaction['object']['title'],
+                    "rdaw:replacementOfWork": pub_url}
+                if interaction['object']['publicationYear']:
+                    related_pub['dc:date'] = interaction['object']['publicationYear']
+                return_pubdata['relationships']['@graph'].append(related_pub)
 
         # add any linked data for being superseded by another publication
-        for item in pre_super['successors']:
-            related_pub = {
-                '@id': urljoin(base_id_url, item['index_id']),
-                '@type': pub_type,
-                'dc:title': item['title'],
-                "rdaw:replacementOfWork": pub_url
-            }
-            if item['date']:
-                related_pub['dc:date'] = item['date']
-            return_pubdata['relationships']['@graph'].append(related_pub)
+
     # add offer data from the USGS store if it exists
     if pre_super['offers']:
         return_pubdata['offers'] = pre_super['offers']
