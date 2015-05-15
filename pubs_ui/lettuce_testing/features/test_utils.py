@@ -4,9 +4,9 @@ from lettuce import *
 import json
 from requests import get
 from pubs_ui.utils import (pull_feed, pubdetails, getbrowsecontent, create_display_links, 
-                           jsonify_geojson, add_legacy_data, SearchPublications, 
+                           jsonify_geojson, add_relationships_graphs, SearchPublications,
                            make_contributor_list, legacy_api_info, sort_list_of_dicts,
-                           extract_related_pub_info)
+                           extract_related_pub_info, munge_abstract)
 from pubs_ui import app
 
 """
@@ -331,48 +331,6 @@ def test_geojson_output(step):
 """
 pub relationship scenarios
 """
-@step(r'I have a mockup pubs legacy url that has preceding and superseding publications')
-def imitation_legacy_relationships_endpoint(step):
-    world.legacy_supersedes_url_base = 'http://pubs-fake.er.usgs.gov/service/citation/json/extras'
-    world.legacy_supersedes_url = 'http://pubs-fake.er.usgs.gov/service/citation/json/extras?prod_id=fs03700'
-    resp_data = '{ "modsCollection": { "@rowCount": "1", "mods": [{ "identifier": { "@type": "pw", "#text": "fs03700"}, "location": { "url": [{ "@note": "THUMBNAIL", "#text": "http://pubs.er.usgs.gov/thumbnails/fs03700.jpg"}, { "@displayLabel": "html", "@note": "INDEX PAGE", "#text": "http://pubs.usgs.gov/fs/2000/0037/"}, { "@note": "DOCUMENT", "#text": "http://pubs.usgs.gov/fs/0037-00/report.pdf"}] }, "relatedItem": [{ "base_id": { "@type": "pw", "#text": "fs03700"}, "@type": "succeeding", "identifier": { "@type": "pw", "#text": "fs03301"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "2001"}}, { "base_id": { "@type": "pw", "#text": "fs03700"}, "@type": "succeeding", "identifier": { "@type": "pw", "#text": "fs05503"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "2003"}}, { "base_id": { "@type": "pw", "#text": "fs03700"}, "@type": "preceding", "identifier": { "@type": "pw", "#text": "fs07199"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "1999"}}] }] }}'
-    httpretty.enable()
-    httpretty.register_uri(httpretty.GET,
-                           world.legacy_supersedes_url,
-                           body=resp_data,
-                           content_type='application/json',
-                           status=200)
-
-@step(r'I make a dict object with preceding and superseding publications')
-def use_preceding_superceding(step):
-    world.preceding_superseding_dict = legacy_api_info('fs03700','http://pubs-fake.er.usgs.gov/service/citation/json/extras')
-    world.expected_preceding_superseding_dict = {'offers':None, 'successors': [{'date': u'2001', 'index_id': u'fs03301', 'title': u'U.S. Geological Survey World Wide Web Information'}, {'date': u'2003', 'index_id': u'fs05503', 'title': u'U.S. Geological Survey World Wide Web Information'}], 'context_item': 'fs03700', 'predecessors': [{'date': u'1999', 'index_id': u'fs07199', 'title': u'U.S. Geological Survey World Wide Web Information'}]}
-
-@step(r'I see the preceding and superseding records have been listed correctly')
-def test_preseding_superseding(step):
-    assert_equal(world.preceding_superseding_dict, world.expected_preceding_superseding_dict)
-
-
-@step(r'I have a mocked base publication record, a base url, and a mocked supersedes endpoint')
-def given_i_have_a_static_python_representation_of_json_data_for_a_publication_known_to_have_related_superseding_or_preceding_publications(step):
-    world.fs03700_pubdata = {u'seriesNumber': u'037-00', u'links': [{u'url': u'http://pubs.usgs.gov/fs/2000/0037/', u'linkFileType': {u'text': u'html', u'id': 5}, u'type': {u'text': u'Index Page', u'id': 15}, u'id': 104111, u'rank': 100}, {u'url': u'http://pubs.usgs.gov/fs/0037-00/report.pdf', u'type': {u'text': u'Document', u'id': 11}, u'id': 5386211}, {u'url': u'http://pubs.er.usgs.gov/thumbnails/fs03700.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5231294, u'rank': 0}], u'indexId': u'fs03700', u'edition': u'Superseded by FS 033-01 & FS 055-03', u'id': 5330, u'productDescription': u'2 p.', u'publisherLocation': u'Reston, VA', u'title': u'U.S. Geological Survey World Wide Web Information', u'editors': [], u'seriesTitle': {u'onlineIssn': u'2327-6932', u'text': u'Fact Sheet', u'id': 313, u'printIssn': u'2327-6916'}, u'publisher': u'U.S. Geological Survey', u'lastModifiedDate': u'2014-04-03T08:43:13.000', u'costCenters': [], u'additionalOnlineFiles': u'N', u'authors': [{u'text': u'U.S. Geological Survey', u'rank': 1, u'contributorId': 128075, u'contributorType': {u'text': u'Authors', u'id': 1}, u'corporation': True, u'organization': u'U.S. Geological Survey', u'id': 528497, u'usgs': False}], u'numberOfPages': u'2', u'publicationType': {u'text': u'Report', u'id': 18}, u'publicationYear': u'2000', u'language': u'English', u'docAbstract': u'The U.S. Geological Survey (USGS)\ninvites you to explore an earth science\nvirtual library of digital information,\npublications, and data. The USGS World\nWide Web sites offer an array of information\nthat reflects scientific research\nand monitoring programs conducted in\nthe areas of natural hazards, environmental\nresources, and cartog-raphy. This list\nprovides gateways to access a cross\nsection of the digital information on the\nUSGS World Wide Web sites.', u'displayToPublicDate': u'2000-06-01T00:00:00.000', u'publicationSubtype': {u'text': u'USGS Numbered Series', u'id': 5}, u'usgsCitation': u'U.S. Geological Survey World Wide Web Information; 2000; FS; 037-00; U.S. Geological Survey'}
-    world.supersede_url_root = 'http://pubs.er.usgs.gov'
-
-@step(r'I pass those variables to add_legacy_data')
-def add_supersede_pubs(step):
-    world.fs03700_pubdata_with_supersede = add_legacy_data(world.fs03700_pubdata,
-                                                              world.legacy_supersedes_url_base,
-                                                              'http://pubs.er.usgs.gov/')
-    httpretty.reset()
-    httpretty.disable()
-
-    #new record with relationships in it
-    world.expected_fs03700_data_with_supersede = {u'seriesNumber': u'037-00', u'links': [{u'url': u'http://pubs.usgs.gov/fs/2000/0037/', u'rank': 100, u'type': {u'text': u'Index Page', u'id': 15}, u'id': 104111, u'linkFileType': {u'text': u'html', u'id': 5}}, {u'url': u'http://pubs.usgs.gov/fs/0037-00/report.pdf', u'type': {u'text': u'Document', u'id': 11}, u'id': 5386211, u'rank': 1}, {u'url': u'http://pubs.er.usgs.gov/thumbnails/fs03700.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5231294, u'rank': 0}], u'editorsListTyped': [], u'edition': u'Superseded by FS 033-01 & FS 055-03', u'authorsList': [u'U.S. Geological Survey'], u'editorsList': [], u'displayLinks': {u'Project Site': [], u'Application Site': [], u'Raw Data': [], u'Document': [{u'url': u'http://pubs.usgs.gov/fs/0037-00/report.pdf', u'type': {u'text': u'Document', u'id': 11}, u'id': 5386211, u'rank': 1}], u'Thumbnail': [{u'url': u'http://pubs.er.usgs.gov/thumbnails/fs03700.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5231294, u'rank': 0}], u'Metadata': [], u'Plate': [], u'Spatial Data': [], u'Companion Files': [], u'Illustration': [], u'Appendix': [], u'Index Page': [{u'url': u'http://pubs.usgs.gov/fs/2000/0037/', u'rank': 100, u'type': {u'text': u'Index Page', u'id': 15}, u'id': 104111, u'linkFileType': {u'text': u'html', u'id': 5}}], u'Chapter': [], u'Read Me': [], u'Version History': [], u'Database': [], u'Cover': [], u'Authors Website': [], u'Errata': [], u'Additional Report Piece': [], u'Related Work': [], u'Abstract': [], u'Referenced Work': [], u'Digital Object Identifier': [], u'Image': []}, u'id': 5330, u'relationships': {u'@context': {u'rdac': u'http://rdaregistry.info/Elements/c/', u'rdaw:replacedByWork': {u'@type': u'@id'}, u'rdaw': u'http://rdaregistry.info/Elements/w/', u'dc': u'http://purl.org/dc/elements/1.1/', u'rdaw:replacementOfWork': {u'@type': u'@id'}, u'xsd': u'http://www.w3.org/2001/XMLSchema#'}, u'@graph': [{u'dc:date': u'2000', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs.er.usgs.gov/publication/fs03700', u'@type': u'rdac:Work'}, {u'dc:date': u'1999', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs.er.usgs.gov/publication/fs07199', u'@type': u'rdac:Work', u'rdaw:replacedByWork': u'http://pubs.er.usgs.gov/publication/fs03700'}, {u'dc:date': u'2001', u'rdaw:replacementOfWork': u'http://pubs.er.usgs.gov/publication/fs03700', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs.er.usgs.gov/publication/fs03301', u'@type': u'rdac:Work'}, {u'dc:date': u'2003', u'rdaw:replacementOfWork': u'http://pubs.er.usgs.gov/publication/fs03700', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs.er.usgs.gov/publication/fs05503', u'@type': u'rdac:Work'}]}, u'formattedModifiedDateTime': u'April 03, 2014 08:43:13', u'publisherLocation': u'Reston, VA', u'docAbstract': u'The U.S. Geological Survey (USGS)\ninvites you to explore an earth science\nvirtual library of digital information,\npublications, and data. The USGS World\nWide Web sites offer an array of information\nthat reflects scientific research\nand monitoring programs conducted in\nthe areas of natural hazards, environmental\nresources, and cartog-raphy. This list\nprovides gateways to access a cross\nsection of the digital information on the\nUSGS World Wide Web sites.', u'editors': [], u'details': [{u'Publication type:': u'Report'}, {u'Publication Subtype:': u'USGS Numbered Series'}, {u'Series number:': u'037-00'}, {u'Edition:': u'Superseded by FS 033-01 & FS 055-03'}, {u'Year Published:': u'2000'}, {u'Language:': u'English'}, {u'Publisher:': u'U.S. Geological Survey'}, {u'Publisher location:': u'Reston, VA'}, {u'Description:': u'2 p.'}, {u'Additional Online Files(Y/N):': u'N'}], u'lastModifiedDate': u'2014-04-03T08:43:13.000', u'seriesTitle': {u'onlineIssn': u'2327-6932', u'text': u'Fact Sheet', u'id': 313, u'printIssn': u'2327-6916'}, u'publicationType': {u'text': u'Report', u'id': 18}, u'costCenters': [], u'indexId': u'fs03700', u'publicationYear': u'2000', u'productDescription': u'2 p.', u'authors': [{u'corporation': True, u'rank': 1, u'contributorType': {u'text': u'Authors', u'id': 1}, u'organization': u'U.S. Geological Survey', u'contributorId': 128075, u'text': u'U.S. Geological Survey', u'id': 528497, u'usgs': False}], u'numberOfPages': u'2', u'additionalOnlineFiles': u'N', u'language': u'English', u'publisher': u'U.S. Geological Survey', u'displayToPublicDate': u'2000-06-01T00:00:00.000', u'publicationSubtype': {u'text': u'USGS Numbered Series', u'id': 5}, u'authorsListTyped': [{u'text': u'U.S. Geological Survey', u'type': u'corporation'}], u'usgsCitation': u'U.S. Geological Survey World Wide Web Information; 2000; FS; 037-00; U.S. Geological Survey', u'title': u'U.S. Geological Survey World Wide Web Information'}
-
-
-@step(r'The relationships portion of the pub record should contain what I expect')
-def test_relationship_output(step):
-    assert_equal(world.fs03700_pubdata_with_supersede["relationships"], world.expected_fs03700_data_with_supersede["relationships"])
 
 
 @step(r'I have a mockup pubs legacy url that has a store item')
@@ -405,9 +363,9 @@ def given_i_have_a_static_python_representation_of_json_data_for_a_publication_k
     world.supersede_url_root = 'http://pubs.er.usgs.gov'
 
 
-@step(r'I pass those store variables to add_legacy_data')
+@step(r'I pass those store variables to add_relationships_graphs')
 def add_supersede_pubs(step):
-    world.sim3069_pubdata_with_offers = add_legacy_data(world.sim3069_pubdata,
+    world.sim3069_pubdata_with_offers = add_relationships_graphs(world.sim3069_pubdata,
                                                               world.legacy_supersedes_url_base,
                                                               'http://pubs.er.usgs.gov/')
     httpretty.reset()
@@ -544,3 +502,58 @@ def execute_supersedes_parsing(step):
 def check_supersedes_parsing(step):
     expected = {'precede_info': [{'year': u'1997', 'id': u'fs12196', 'title': u'U.S. Geological Survey World Wide Web information'}, {'year': u'1997', 'id': u'fs12196', 'title': u'U.S. Geological Survey World Wide Web information'}], 'supersede_info': [{'year': u'2000', 'id': u'fs03700', 'title': u'U.S. Geological Survey World Wide Web Information'}, {'year': u'2001', 'id': u'fs03301', 'title': u'U.S. Geological Survey World Wide Web Information'}, {'year': u'2003', 'id': u'fs05503', 'title': u'U.S. Geological Survey World Wide Web Information'}], 'precede_len': 2, 'supersede_len': 3}
     assert_equal(expected, world.parse_result)
+
+
+"""
+Munging abstract scenario
+"""
+
+
+@step("There is an publication record with a docAbstract that contains an H1 tag")
+def abstact_with_h1(step):
+    """
+    :type step lettuce.core.Step
+    """
+    #TODO: add mock record from dev.py
+    world.mock_pubs_with_h1 = 'foo'
+
+
+
+@step("I pass the publication record to munge_abstract")
+def step_impl(step):
+    """
+    :type step lettuce.core.Step
+    """
+    world.munged_abstract_result = munge_abstract(world.mock_pubs_with_h1)
+
+
+@step("I see a dictionary containing the abstractHeader data element and no h1 tags in the docAbstract data element")
+def step_impl(step):
+    """
+    :type step lettuce.core.Step
+    """
+    #TODO: add muncged mock record from dev.py
+
+
+@step("I have a mocked base publication record that has a populated interactions data element, and a base url")
+def step_impl(step):
+    """
+    :type step lettuce.core.Step
+    """
+    pass
+
+
+@step("I pass those interactions variables to add_relationships_graphs")
+def step_impl(step):
+    """
+    :type step lettuce.core.Step
+    """
+    pass
+
+
+@step("the relationships data element of the pubs record should contain what I expect")
+def step_impl(step):
+    """
+    :type step lettuce.core.Step
+    """
+    pass

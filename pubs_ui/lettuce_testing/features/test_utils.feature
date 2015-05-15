@@ -54,25 +54,20 @@ Feature: Test all pub_ui utilities
         When I try to make a record with parseable json and catch an error
         Then I see the record has geographicExtents dropped
 
-	Scenario: add_legacy_data functions correctly with preceding and superseding
-        Given I have a mockup pubs legacy url that has preceding and superseding publications
-        When I make a dict object with preceding and superseding publications
-        Then I see the preceding and superseding records have been listed correctly
-
-    Scenario: add legacy data functions behave correctly with supersede data
-		Given I have a mocked base publication record, a base url, and a mocked supersedes endpoint
-        When I pass those variables to add_legacy_data
-		Then The relationships portion of the pub record should contain what I expect
-
-	Scenario: add_legacy_data functions correctly with a store item
+	Scenario: add_relationships_graphs functions correctly with a store item
 	  	Given I have a mockup pubs legacy url that has a store item
 	  	When I make a dict object with the store offer information
 	  	Then I see that the store information has been listed correctly
 
-  	Scenario: add_legacy_data functions add offers if they are there
+  	Scenario: add_relationships_graphs functions add offers if they are there
 		Given I have a mocked base publication record, a base url, and a mocked legacy endpoint
-        When I pass those store variables to add_legacy_data
+        When I pass those store variables to add_relationships_graphs
 		Then The offers portion of the pub record should contain what I expect
+
+    Scenario: add_relationships_graphs adds relationships from new endpoint
+        Given I have a mocked base publication record that has a populated interactions data element, and a base url
+        When I pass those interactions variables to add_relationships_graphs
+        Then the relationships data element of the pubs record should contain what I expect
 
 	Scenario: make_contributor_list functions correctly
 		Given we have imitated the authors data we would see from pubs
@@ -102,3 +97,8 @@ Feature: Test all pub_ui utilities
 		Given I have mocked some publication JSON
 		When I pass the JSON to extract_related_pub_info
 		Then I see a dictionary containing the preceding and superseding publications
+
+    Scenario: An H1 tag at the beginning of an abstact is removed and the contents put in an abstract header
+        Given There is an publication record with a docAbstract that contains an H1 tag
+        When I pass the publication record to munge_abstract
+        Then I see a dictionary containing the abstractHeader data element and no h1 tags in the docAbstract data element
