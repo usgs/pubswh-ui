@@ -741,7 +741,6 @@ def munge_abstract(pubdata):
         if soup.find('h1') is not None:
             possible_header = soup.find('h1').contents[0]
             soup.h1.extract()
-            app.logger.info("header?: "+possible_header)
             abstract = soup.prettify()
             pubdata['docAbstract'] = abstract
             abstract_header = possible_header
