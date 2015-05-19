@@ -524,7 +524,7 @@ def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):
     # needs to be exported to a configuration.
     pub_type = 'rdac:Work'
     
-    # obtain predecessor and successor related items
+    # obtain data from legacy api (down to just store data now)
     pre_super = legacy_api_info(index_id, supersedes_service_url)
     #get interactions from the new endpoint to build json-LD object
     interactions = return_pubdata.get('interactions')
@@ -651,6 +651,7 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     pubdata = make_chapter_data_for_display(pubdata)
     pubdata['formattedModifiedDateTime'] = arrow.get(pubdata['lastModifiedDate']).format('MMMM DD, YYYY HH:mm:ss')
     pubdata = munge_abstract(pubdata)
+    pubdata = has_excel(pubdata)
     # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov.
     # Flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI
     # The Apache rewrite changes this to pubs-test.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI, where there is
@@ -660,6 +661,20 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     if replace_pubs_with_pubs_test:
         pubdata['displayLinks']['Thumbnail'][0]['url'] = change_to_pubs_test(
             pubdata['displayLinks']['Thumbnail'][0]['url'])
+    return pubdata
+
+
+def has_excel(pubdata):
+    """
+    sets a display variable so that if there is an excel document, we can display a link to an excel reader
+    :param pubdata:
+    :return: pubdata
+    """
+    pubdata['hasExcel'] = False
+    if pubdata.get('links') is not None:
+        for link in pubdata['links']:
+            if link.get('linkFileType', {}).get('text') == 'xlsx':
+                pubdata['hasExcel'] = True
     return pubdata
 
 

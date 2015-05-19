@@ -65,7 +65,7 @@ Feature: Test all pub_ui utilities
 		Then The offers portion of the pub record should contain what I expect
 
     Scenario: add_relationships_graphs adds relationships from new endpoint
-        Given I have a mocked base publication record that has a populated interactions data element, and a base url
+        Given I have a mocked base publication record that has a populated interactions data element, a base url, and a mocked legacy endpoint
         When I pass those interactions variables to add_relationships_graphs
         Then the relationships data element of the pubs record should contain what I expect
 

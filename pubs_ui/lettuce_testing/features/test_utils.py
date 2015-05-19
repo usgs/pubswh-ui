@@ -699,12 +699,94 @@ def step_impl(step):
     assert_equal(world.munged_abstract_result, world.munged_abstract_result_expected)
 
 
-@step("I have a mocked base publication record that has a populated interactions data element, and a base url")
+@step("I have a mocked base publication record that has a populated interactions data element, a base url, and a mocked legacy endpoint")
 def step_impl(step):
     """
     :type step lettuce.core.Step
     """
-    pass
+    world.pub_with_precede_and_supersede = \
+        {u'additionalOnlineFiles': u'N',
+         u'contributors': {u'authors': [{u'contributorId': 128075,
+                                         u'contributorType': {u'id': 1,
+                                                              u'text': u'Authors'},
+                                         u'corporation': True,
+                                         u'id': 528496,
+                                         u'organization': u'U.S. Geological Survey',
+                                         u'rank': 1,
+                                         u'text': u'U.S. Geological Survey',
+                                         u'usgs': False}]},
+         u'costCenters': [],
+         u'displayToPublicDate': u'1994-01-01T00:00:00.000',
+         u'docAbstract': u'<p>The U.S. Geological Survey (USGS) invites you to explore an earth science virtual library of digital information, publications, and data. The USGS Internet World Wide Web sites offer an array of information that reflects scientific research and monitoring programs conducted in the areas of natural hazards, environmental resources, and cartography. This list provides gateways to access a cross section of the digital information on the USGS World Wide Web sites.</p>',
+         u'edition': u'-',
+         u'id': 5329,
+         u'indexId': u'fs07199',
+         u'interactions': [{u'id': 1,
+                            u'object': {u'id': 5329,
+                                        u'indexId': u'fs07199',
+                                        u'publicationYear': u'1999',
+                                        u'text': u'fs07199 - 1999 - U.S. Geological Survey World Wide Web Information',
+                                        u'title': u'U.S. Geological Survey World Wide Web Information'},
+                            u'predicate': u'SUPERSEDED_BY',
+                            u'subject': {u'id': 5328,
+                                         u'indexId': u'fs12196',
+                                         u'publicationYear': u'1997',
+                                         u'text': u'fs12196 - 1997 - U.S. Geological Survey World Wide Web information',
+                                         u'title': u'U.S. Geological Survey World Wide Web information'}},
+                           {u'id': 2,
+                            u'object': {u'id': 53167,
+                                        u'indexId': u'fs05503',
+                                        u'publicationYear': u'2003',
+                                        u'text': u'fs05503 - 2003 - U.S. Geological Survey World Wide Web Information',
+                                        u'title': u'U.S. Geological Survey World Wide Web Information'},
+                            u'predicate': u'SUPERSEDED_BY',
+                            u'subject': {u'id': 5329,
+                                         u'indexId': u'fs07199',
+                                         u'publicationYear': u'1999',
+                                         u'text': u'fs07199 - 1999 - U.S. Geological Survey World Wide Web Information',
+                                         u'title': u'U.S. Geological Survey World Wide Web Information'}}],
+         u'language': u'ENGLISH',
+         u'lastModifiedDate': u'2015-05-19T09:06:22.000',
+         u'links': [{u'id': 139664,
+                     u'rank': 0,
+                     u'type': {u'id': 24, u'text': u'Thumbnail'},
+                     u'url': u'http://pubs.usgs.gov/fs/1999/0071/report-thumb.jpg'},
+                    {u'id': 32025,
+                     u'linkFileType': {u'id': 1, u'text': u'pdf'},
+                     u'rank': 300,
+                     u'type': {u'id': 11, u'text': u'Document'},
+                     u'url': u'http://pubs.usgs.gov/fs/1999/0071/report.pdf'}],
+         u'onlineOnly': u'N',
+         u'productDescription': u'2 p.',
+         u'publicationSubtype': {u'id': 5, u'text': u'USGS Numbered Series'},
+         u'publicationType': {u'id': 18, u'text': u'Report'},
+         u'publicationYear': u'1999',
+         u'publisher': u'U.S.Geological Survey',
+         u'publisherLocation': u'Reston, VA',
+         u'seriesNumber': u'071-99',
+         u'seriesTitle': {u'id': 313,
+                          u'onlineIssn': u'2327-6932',
+                          u'printIssn': u'2327-6916',
+                          u'text': u'Fact Sheet'},
+         u'supersededBy': {u'id': 53167,
+                           u'indexId': u'fs05503',
+                           u'publicationYear': u'2003',
+                           u'text': u'fs05503 - 2003 - U.S. Geological Survey World Wide Web Information',
+                           u'title': u'U.S. Geological Survey World Wide Web Information'},
+         u'text': u'fs07199 - 1999 - U.S. Geological Survey World Wide Web Information',
+         u'title': u'U.S. Geological Survey World Wide Web Information',
+         u'usgsCitation': u'U.S. Geological Survey World Wide Web Information; 1999; FS; 071-99; Geological Survey (U.S.)'}
+    world.legacy_supersedes_url_base = 'http://pubs-fake.er.usgs.gov/service/citation/json/extras'
+    world.legacy_supersedes_url = 'http://pubs-fake.er.usgs.gov/service/citation/json/extras?prod_id=fs07199'
+    resp_data = '{ "modsCollection": { "@rowCount": "1", "mods": [{ "identifier": { "@type": "pw", "#text": "fs07199"}, "location": { "url": [{ "@note": "THUMBNAIL", "#text": "http://pubs.usgs.gov/fs/1999/0071/report-thumb.jpg"}, { "@displayLabel": "pdf", "@note": "DOCUMENT", "#text": "http://pubs.usgs.gov/fs/1999/0071/report.pdf"}] }, "relatedItem": [{ "base_id": { "@type": "pw", "#text": "fs07199"}, "@type": "succeeding", "identifier": { "@type": "pw", "#text": "fs03700"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "2000"}}, { "base_id": { "@type": "pw", "#text": "fs07199"}, "@type": "succeeding", "identifier": { "@type": "pw", "#text": "fs03301"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "2001"}}, { "base_id": { "@type": "pw", "#text": "fs07199"}, "@type": "succeeding", "identifier": { "@type": "pw", "#text": "fs05503"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "2003"}}, { "base_id": { "@type": "pw", "#text": "fs07199"}, "@type": "preceding", "identifier": { "@type": "pw", "#text": "fs12196"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web information"}, "originInfo": { "dateIssued": "1997"}}] }] }}'
+    httpretty.enable()
+    httpretty.register_uri(httpretty.GET,
+                           world.legacy_supersedes_url,
+                           body=resp_data,
+                           content_type='application/json',
+                           status=200)
+
+
 
 
 @step("I pass those interactions variables to add_relationships_graphs")
@@ -712,7 +794,9 @@ def step_impl(step):
     """
     :type step lettuce.core.Step
     """
-    pass
+    world.superseded_publication_record_with_graph = add_relationships_graphs(world.pub_with_precede_and_supersede,
+                                                                              world.legacy_supersedes_url_base,
+                                                                              'http://127.0.0.1:5050/')
 
 
 @step("the relationships data element of the pubs record should contain what I expect")
@@ -720,4 +804,97 @@ def step_impl(step):
     """
     :type step lettuce.core.Step
     """
-    pass
+    expected_record = \
+        {u'additionalOnlineFiles': u'N',
+         u'contributors': {u'authors': [{u'contributorId': 128075,
+                                         u'contributorType': {u'id': 1,
+                                                              u'text': u'Authors'},
+                                         u'corporation': True,
+                                         u'id': 528496,
+                                         u'organization': u'U.S. Geological Survey',
+                                         u'rank': 1,
+                                         u'text': u'U.S. Geological Survey',
+                                         u'usgs': False}]},
+         u'costCenters': [],
+         u'displayToPublicDate': u'1994-01-01T00:00:00.000',
+         u'docAbstract': u'<p>The U.S. Geological Survey (USGS) invites you to explore an earth science virtual library of digital information, publications, and data. The USGS Internet World Wide Web sites offer an array of information that reflects scientific research and monitoring programs conducted in the areas of natural hazards, environmental resources, and cartography. This list provides gateways to access a cross section of the digital information on the USGS World Wide Web sites.</p>',
+         u'edition': u'-',
+         u'id': 5329,
+         u'indexId': u'fs07199',
+         u'interactions': [{u'id': 1,
+                            u'object': {u'id': 5329,
+                                        u'indexId': u'fs07199',
+                                        u'publicationYear': u'1999',
+                                        u'text': u'fs07199 - 1999 - U.S. Geological Survey World Wide Web Information',
+                                        u'title': u'U.S. Geological Survey World Wide Web Information'},
+                            u'predicate': u'SUPERSEDED_BY',
+                            u'subject': {u'id': 5328,
+                                         u'indexId': u'fs12196',
+                                         u'publicationYear': u'1997',
+                                         u'text': u'fs12196 - 1997 - U.S. Geological Survey World Wide Web information',
+                                         u'title': u'U.S. Geological Survey World Wide Web information'}},
+                           {u'id': 2,
+                            u'object': {u'id': 53167,
+                                        u'indexId': u'fs05503',
+                                        u'publicationYear': u'2003',
+                                        u'text': u'fs05503 - 2003 - U.S. Geological Survey World Wide Web Information',
+                                        u'title': u'U.S. Geological Survey World Wide Web Information'},
+                            u'predicate': u'SUPERSEDED_BY',
+                            u'subject': {u'id': 5329,
+                                         u'indexId': u'fs07199',
+                                         u'publicationYear': u'1999',
+                                         u'text': u'fs07199 - 1999 - U.S. Geological Survey World Wide Web Information',
+                                         u'title': u'U.S. Geological Survey World Wide Web Information'}}],
+         u'language': u'ENGLISH',
+         u'lastModifiedDate': u'2015-05-19T09:06:22.000',
+         u'links': [{u'id': 139664,
+                     u'rank': 0,
+                     u'type': {u'id': 24, u'text': u'Thumbnail'},
+                     u'url': u'http://pubs.usgs.gov/fs/1999/0071/report-thumb.jpg'},
+                    {u'id': 32025,
+                     u'linkFileType': {u'id': 1, u'text': u'pdf'},
+                     u'rank': 300,
+                     u'type': {u'id': 11, u'text': u'Document'},
+                     u'url': u'http://pubs.usgs.gov/fs/1999/0071/report.pdf'}],
+         u'onlineOnly': u'N',
+         u'productDescription': u'2 p.',
+         u'publicationSubtype': {u'id': 5, u'text': u'USGS Numbered Series'},
+         u'publicationType': {u'id': 18, u'text': u'Report'},
+         u'publicationYear': u'1999',
+         u'publisher': u'U.S.Geological Survey',
+         u'publisherLocation': u'Reston, VA',
+         'relationships': {'@context': {'dc': 'http://purl.org/dc/elements/1.1/',
+                                        'rdac': 'http://rdaregistry.info/Elements/c/',
+                                        'rdaw': 'http://rdaregistry.info/Elements/w/',
+                                        'rdaw:replacedByWork': {'@type': '@id'},
+                                        'rdaw:replacementOfWork': {'@type': '@id'},
+                                        'xsd': 'http://www.w3.org/2001/XMLSchema#'},
+                           '@graph': [{'@id': u'http://127.0.0.1:5050/publication/fs07199',
+                                       '@type': 'rdac:Work',
+                                       'dc:date': '1999',
+                                       'dc:title': u'U.S. Geological Survey World Wide Web Information'},
+                                      {'@id': u'http://127.0.0.1:5050/publication/fs12196',
+                                       '@type': 'rdac:Work',
+                                       'dc:date': u'1997',
+                                       'dc:title': u'U.S. Geological Survey World Wide Web information',
+                                       'rdaw:replacedByWork': u'http://127.0.0.1:5050/publication/fs07199'},
+                                      {'@id': u'http://127.0.0.1:5050/publication/fs05503',
+                                       '@type': 'rdac:Work',
+                                       'dc:date': u'2003',
+                                       'dc:title': u'U.S. Geological Survey World Wide Web Information',
+                                       'rdaw:replacementOfWork': u'http://127.0.0.1:5050/publication/fs07199'}]},
+         u'seriesNumber': u'071-99',
+         u'seriesTitle': {u'id': 313,
+                          u'onlineIssn': u'2327-6932',
+                          u'printIssn': u'2327-6916',
+                          u'text': u'Fact Sheet'},
+         u'supersededBy': {u'id': 53167,
+                           u'indexId': u'fs05503',
+                           u'publicationYear': u'2003',
+                           u'text': u'fs05503 - 2003 - U.S. Geological Survey World Wide Web Information',
+                           u'title': u'U.S. Geological Survey World Wide Web Information'},
+         u'text': u'fs07199 - 1999 - U.S. Geological Survey World Wide Web Information',
+         u'title': u'U.S. Geological Survey World Wide Web Information',
+         u'usgsCitation': u'U.S. Geological Survey World Wide Web Information; 1999; FS; 071-99; Geological Survey (U.S.)'}
+
+    assert_equal(world.superseded_publication_record_with_graph, expected_record)
