@@ -349,7 +349,7 @@ def imitation_legacy_relationships_endpoint(step):
 @step(r'I make a dict object with the store offer information')
 def use_preceding_superceding(step):
     world.preceding_superseding_dict = legacy_api_info('sim3069','http://pubs-fake.er.usgs.gov/service/citation/json/extras')
-    world.expected_preceding_superseding_dict = {'offers': {'@context': {'schema': 'http://schema.org/'}, '@type': 'schema:ScholarlyArticle', 'schema:offers': {'schema:seller': {'schema:name': 'USGS Store', '@type': 'schema:Organization', 'schema:url': 'http://store.usgs.gov'}, 'schema:url': u'http://store.usgs.gov/pubsordernow.jsp?~theme=gp&OSTORE=USGSGP&~OKCODE=STARTMATL&g_matnr=210862', 'schema:price': u'16', 'schema:availability': 'schema:InStock', 'schema:priceCurrency': 'USD', '@type': 'schema:Offer'}}, 'successors': [], 'context_item': 'sim3069', 'predecessors': []}
+    world.expected_preceding_superseding_dict = {'offers': {'@context': {'schema': 'http://schema.org/'}, '@type': 'schema:ScholarlyArticle', 'schema:offers': {'schema:seller': {'schema:name': 'USGS Store', '@type': 'schema:Organization', 'schema:url': 'http://store.usgs.gov'}, 'schema:url': u'http://store.usgs.gov/pubsordernow.jsp?~theme=gp&OSTORE=USGSGP&~OKCODE=STARTMATL&g_matnr=210862', 'schema:price': u'16', 'schema:availability': 'schema:InStock', 'schema:priceCurrency': 'USD', '@type': 'schema:Offer'}}, 'context_item': 'sim3069'}
 
 
 @step(r'I see that the store information has been listed correctly')
