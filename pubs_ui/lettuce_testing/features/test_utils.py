@@ -4,9 +4,9 @@ from lettuce import *
 import json
 from requests import get
 from pubs_ui.utils import (pull_feed, pubdetails, getbrowsecontent, create_display_links, 
-                           jsonify_geojson, add_legacy_data, SearchPublications, 
+                           jsonify_geojson, add_relationships_graphs, SearchPublications,
                            make_contributor_list, legacy_api_info, sort_list_of_dicts,
-                           extract_related_pub_info)
+                           extract_related_pub_info, munge_abstract)
 from pubs_ui import app
 
 """
@@ -331,48 +331,6 @@ def test_geojson_output(step):
 """
 pub relationship scenarios
 """
-@step(r'I have a mockup pubs legacy url that has preceding and superseding publications')
-def imitation_legacy_relationships_endpoint(step):
-    world.legacy_supersedes_url_base = 'http://pubs-fake.er.usgs.gov/service/citation/json/extras'
-    world.legacy_supersedes_url = 'http://pubs-fake.er.usgs.gov/service/citation/json/extras?prod_id=fs03700'
-    resp_data = '{ "modsCollection": { "@rowCount": "1", "mods": [{ "identifier": { "@type": "pw", "#text": "fs03700"}, "location": { "url": [{ "@note": "THUMBNAIL", "#text": "http://pubs.er.usgs.gov/thumbnails/fs03700.jpg"}, { "@displayLabel": "html", "@note": "INDEX PAGE", "#text": "http://pubs.usgs.gov/fs/2000/0037/"}, { "@note": "DOCUMENT", "#text": "http://pubs.usgs.gov/fs/0037-00/report.pdf"}] }, "relatedItem": [{ "base_id": { "@type": "pw", "#text": "fs03700"}, "@type": "succeeding", "identifier": { "@type": "pw", "#text": "fs03301"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "2001"}}, { "base_id": { "@type": "pw", "#text": "fs03700"}, "@type": "succeeding", "identifier": { "@type": "pw", "#text": "fs05503"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "2003"}}, { "base_id": { "@type": "pw", "#text": "fs03700"}, "@type": "preceding", "identifier": { "@type": "pw", "#text": "fs07199"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "1999"}}] }] }}'
-    httpretty.enable()
-    httpretty.register_uri(httpretty.GET,
-                           world.legacy_supersedes_url,
-                           body=resp_data,
-                           content_type='application/json',
-                           status=200)
-
-@step(r'I make a dict object with preceding and superseding publications')
-def use_preceding_superceding(step):
-    world.preceding_superseding_dict = legacy_api_info('fs03700','http://pubs-fake.er.usgs.gov/service/citation/json/extras')
-    world.expected_preceding_superseding_dict = {'offers':None, 'successors': [{'date': u'2001', 'index_id': u'fs03301', 'title': u'U.S. Geological Survey World Wide Web Information'}, {'date': u'2003', 'index_id': u'fs05503', 'title': u'U.S. Geological Survey World Wide Web Information'}], 'context_item': 'fs03700', 'predecessors': [{'date': u'1999', 'index_id': u'fs07199', 'title': u'U.S. Geological Survey World Wide Web Information'}]}
-
-@step(r'I see the preceding and superseding records have been listed correctly')
-def test_preseding_superseding(step):
-    assert_equal(world.preceding_superseding_dict, world.expected_preceding_superseding_dict)
-
-
-@step(r'I have a mocked base publication record, a base url, and a mocked supersedes endpoint')
-def given_i_have_a_static_python_representation_of_json_data_for_a_publication_known_to_have_related_superseding_or_preceding_publications(step):
-    world.fs03700_pubdata = {u'seriesNumber': u'037-00', u'links': [{u'url': u'http://pubs.usgs.gov/fs/2000/0037/', u'linkFileType': {u'text': u'html', u'id': 5}, u'type': {u'text': u'Index Page', u'id': 15}, u'id': 104111, u'rank': 100}, {u'url': u'http://pubs.usgs.gov/fs/0037-00/report.pdf', u'type': {u'text': u'Document', u'id': 11}, u'id': 5386211}, {u'url': u'http://pubs.er.usgs.gov/thumbnails/fs03700.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5231294, u'rank': 0}], u'indexId': u'fs03700', u'edition': u'Superseded by FS 033-01 & FS 055-03', u'id': 5330, u'productDescription': u'2 p.', u'publisherLocation': u'Reston, VA', u'title': u'U.S. Geological Survey World Wide Web Information', u'editors': [], u'seriesTitle': {u'onlineIssn': u'2327-6932', u'text': u'Fact Sheet', u'id': 313, u'printIssn': u'2327-6916'}, u'publisher': u'U.S. Geological Survey', u'lastModifiedDate': u'2014-04-03T08:43:13.000', u'costCenters': [], u'additionalOnlineFiles': u'N', u'authors': [{u'text': u'U.S. Geological Survey', u'rank': 1, u'contributorId': 128075, u'contributorType': {u'text': u'Authors', u'id': 1}, u'corporation': True, u'organization': u'U.S. Geological Survey', u'id': 528497, u'usgs': False}], u'numberOfPages': u'2', u'publicationType': {u'text': u'Report', u'id': 18}, u'publicationYear': u'2000', u'language': u'English', u'docAbstract': u'The U.S. Geological Survey (USGS)\ninvites you to explore an earth science\nvirtual library of digital information,\npublications, and data. The USGS World\nWide Web sites offer an array of information\nthat reflects scientific research\nand monitoring programs conducted in\nthe areas of natural hazards, environmental\nresources, and cartog-raphy. This list\nprovides gateways to access a cross\nsection of the digital information on the\nUSGS World Wide Web sites.', u'displayToPublicDate': u'2000-06-01T00:00:00.000', u'publicationSubtype': {u'text': u'USGS Numbered Series', u'id': 5}, u'usgsCitation': u'U.S. Geological Survey World Wide Web Information; 2000; FS; 037-00; U.S. Geological Survey'}
-    world.supersede_url_root = 'http://pubs.er.usgs.gov'
-
-@step(r'I pass those variables to add_legacy_data')
-def add_supersede_pubs(step):
-    world.fs03700_pubdata_with_supersede = add_legacy_data(world.fs03700_pubdata,
-                                                              world.legacy_supersedes_url_base,
-                                                              'http://pubs.er.usgs.gov/')
-    httpretty.reset()
-    httpretty.disable()
-
-    #new record with relationships in it
-    world.expected_fs03700_data_with_supersede = {u'seriesNumber': u'037-00', u'links': [{u'url': u'http://pubs.usgs.gov/fs/2000/0037/', u'rank': 100, u'type': {u'text': u'Index Page', u'id': 15}, u'id': 104111, u'linkFileType': {u'text': u'html', u'id': 5}}, {u'url': u'http://pubs.usgs.gov/fs/0037-00/report.pdf', u'type': {u'text': u'Document', u'id': 11}, u'id': 5386211, u'rank': 1}, {u'url': u'http://pubs.er.usgs.gov/thumbnails/fs03700.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5231294, u'rank': 0}], u'editorsListTyped': [], u'edition': u'Superseded by FS 033-01 & FS 055-03', u'authorsList': [u'U.S. Geological Survey'], u'editorsList': [], u'displayLinks': {u'Project Site': [], u'Application Site': [], u'Raw Data': [], u'Document': [{u'url': u'http://pubs.usgs.gov/fs/0037-00/report.pdf', u'type': {u'text': u'Document', u'id': 11}, u'id': 5386211, u'rank': 1}], u'Thumbnail': [{u'url': u'http://pubs.er.usgs.gov/thumbnails/fs03700.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5231294, u'rank': 0}], u'Metadata': [], u'Plate': [], u'Spatial Data': [], u'Companion Files': [], u'Illustration': [], u'Appendix': [], u'Index Page': [{u'url': u'http://pubs.usgs.gov/fs/2000/0037/', u'rank': 100, u'type': {u'text': u'Index Page', u'id': 15}, u'id': 104111, u'linkFileType': {u'text': u'html', u'id': 5}}], u'Chapter': [], u'Read Me': [], u'Version History': [], u'Database': [], u'Cover': [], u'Authors Website': [], u'Errata': [], u'Additional Report Piece': [], u'Related Work': [], u'Abstract': [], u'Referenced Work': [], u'Digital Object Identifier': [], u'Image': []}, u'id': 5330, u'relationships': {u'@context': {u'rdac': u'http://rdaregistry.info/Elements/c/', u'rdaw:replacedByWork': {u'@type': u'@id'}, u'rdaw': u'http://rdaregistry.info/Elements/w/', u'dc': u'http://purl.org/dc/elements/1.1/', u'rdaw:replacementOfWork': {u'@type': u'@id'}, u'xsd': u'http://www.w3.org/2001/XMLSchema#'}, u'@graph': [{u'dc:date': u'2000', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs.er.usgs.gov/publication/fs03700', u'@type': u'rdac:Work'}, {u'dc:date': u'1999', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs.er.usgs.gov/publication/fs07199', u'@type': u'rdac:Work', u'rdaw:replacedByWork': u'http://pubs.er.usgs.gov/publication/fs03700'}, {u'dc:date': u'2001', u'rdaw:replacementOfWork': u'http://pubs.er.usgs.gov/publication/fs03700', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs.er.usgs.gov/publication/fs03301', u'@type': u'rdac:Work'}, {u'dc:date': u'2003', u'rdaw:replacementOfWork': u'http://pubs.er.usgs.gov/publication/fs03700', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs.er.usgs.gov/publication/fs05503', u'@type': u'rdac:Work'}]}, u'formattedModifiedDateTime': u'April 03, 2014 08:43:13', u'publisherLocation': u'Reston, VA', u'docAbstract': u'The U.S. Geological Survey (USGS)\ninvites you to explore an earth science\nvirtual library of digital information,\npublications, and data. The USGS World\nWide Web sites offer an array of information\nthat reflects scientific research\nand monitoring programs conducted in\nthe areas of natural hazards, environmental\nresources, and cartog-raphy. This list\nprovides gateways to access a cross\nsection of the digital information on the\nUSGS World Wide Web sites.', u'editors': [], u'details': [{u'Publication type:': u'Report'}, {u'Publication Subtype:': u'USGS Numbered Series'}, {u'Series number:': u'037-00'}, {u'Edition:': u'Superseded by FS 033-01 & FS 055-03'}, {u'Year Published:': u'2000'}, {u'Language:': u'English'}, {u'Publisher:': u'U.S. Geological Survey'}, {u'Publisher location:': u'Reston, VA'}, {u'Description:': u'2 p.'}, {u'Additional Online Files(Y/N):': u'N'}], u'lastModifiedDate': u'2014-04-03T08:43:13.000', u'seriesTitle': {u'onlineIssn': u'2327-6932', u'text': u'Fact Sheet', u'id': 313, u'printIssn': u'2327-6916'}, u'publicationType': {u'text': u'Report', u'id': 18}, u'costCenters': [], u'indexId': u'fs03700', u'publicationYear': u'2000', u'productDescription': u'2 p.', u'authors': [{u'corporation': True, u'rank': 1, u'contributorType': {u'text': u'Authors', u'id': 1}, u'organization': u'U.S. Geological Survey', u'contributorId': 128075, u'text': u'U.S. Geological Survey', u'id': 528497, u'usgs': False}], u'numberOfPages': u'2', u'additionalOnlineFiles': u'N', u'language': u'English', u'publisher': u'U.S. Geological Survey', u'displayToPublicDate': u'2000-06-01T00:00:00.000', u'publicationSubtype': {u'text': u'USGS Numbered Series', u'id': 5}, u'authorsListTyped': [{u'text': u'U.S. Geological Survey', u'type': u'corporation'}], u'usgsCitation': u'U.S. Geological Survey World Wide Web Information; 2000; FS; 037-00; U.S. Geological Survey', u'title': u'U.S. Geological Survey World Wide Web Information'}
-
-
-@step(r'The relationships portion of the pub record should contain what I expect')
-def test_relationship_output(step):
-    assert_equal(world.fs03700_pubdata_with_supersede["relationships"], world.expected_fs03700_data_with_supersede["relationships"])
 
 
 @step(r'I have a mockup pubs legacy url that has a store item')
@@ -391,7 +349,7 @@ def imitation_legacy_relationships_endpoint(step):
 @step(r'I make a dict object with the store offer information')
 def use_preceding_superceding(step):
     world.preceding_superseding_dict = legacy_api_info('sim3069','http://pubs-fake.er.usgs.gov/service/citation/json/extras')
-    world.expected_preceding_superseding_dict = {'offers': {'@context': {'schema': 'http://schema.org/'}, '@type': 'schema:ScholarlyArticle', 'schema:offers': {'schema:seller': {'schema:name': 'USGS Store', '@type': 'schema:Organization', 'schema:url': 'http://store.usgs.gov'}, 'schema:url': u'http://store.usgs.gov/pubsordernow.jsp?~theme=gp&OSTORE=USGSGP&~OKCODE=STARTMATL&g_matnr=210862', 'schema:price': u'16', 'schema:availability': 'schema:InStock', 'schema:priceCurrency': 'USD', '@type': 'schema:Offer'}}, 'successors': [], 'context_item': 'sim3069', 'predecessors': []}
+    world.expected_preceding_superseding_dict = {'offers': {'@context': {'schema': 'http://schema.org/'}, '@type': 'schema:ScholarlyArticle', 'schema:offers': {'schema:seller': {'schema:name': 'USGS Store', '@type': 'schema:Organization', 'schema:url': 'http://store.usgs.gov'}, 'schema:url': u'http://store.usgs.gov/pubsordernow.jsp?~theme=gp&OSTORE=USGSGP&~OKCODE=STARTMATL&g_matnr=210862', 'schema:price': u'16', 'schema:availability': 'schema:InStock', 'schema:priceCurrency': 'USD', '@type': 'schema:Offer'}}, 'context_item': 'sim3069'}
 
 
 @step(r'I see that the store information has been listed correctly')
@@ -405,9 +363,9 @@ def given_i_have_a_static_python_representation_of_json_data_for_a_publication_k
     world.supersede_url_root = 'http://pubs.er.usgs.gov'
 
 
-@step(r'I pass those store variables to add_legacy_data')
+@step(r'I pass those store variables to add_relationships_graphs')
 def add_supersede_pubs(step):
-    world.sim3069_pubdata_with_offers = add_legacy_data(world.sim3069_pubdata,
+    world.sim3069_pubdata_with_offers = add_relationships_graphs(world.sim3069_pubdata,
                                                               world.legacy_supersedes_url_base,
                                                               'http://pubs.er.usgs.gov/')
     httpretty.reset()
@@ -544,3 +502,399 @@ def execute_supersedes_parsing(step):
 def check_supersedes_parsing(step):
     expected = {'precede_info': [{'year': u'1997', 'id': u'fs12196', 'title': u'U.S. Geological Survey World Wide Web information'}, {'year': u'1997', 'id': u'fs12196', 'title': u'U.S. Geological Survey World Wide Web information'}], 'supersede_info': [{'year': u'2000', 'id': u'fs03700', 'title': u'U.S. Geological Survey World Wide Web Information'}, {'year': u'2001', 'id': u'fs03301', 'title': u'U.S. Geological Survey World Wide Web Information'}, {'year': u'2003', 'id': u'fs05503', 'title': u'U.S. Geological Survey World Wide Web Information'}], 'precede_len': 2, 'supersede_len': 3}
     assert_equal(expected, world.parse_result)
+
+
+"""
+Munging abstract scenario
+"""
+
+
+@step("There is an publication record with a docAbstract that contains an H1 tag")
+def abstact_with_h1(step):
+    """
+    :type step lettuce.core.Step
+    """
+    world.mock_pubs_with_h1 = \
+        {u'additionalOnlineFiles': u'Y',
+         u'collaboration': u'Prepared in cooperation with the U.S. Department of Homeland Security-Federal Emergency Management Agency',
+         u'contributors': {u'authors': [{u'contributorId': 1868,
+                                         u'contributorType': {u'id': 1,
+                                                              u'text': u'Authors'},
+                                         u'corporation': False,
+                                         u'email': u'pzarriel@usgs.gov',
+                                         u'family': u'Zarriello',
+                                         u'given': u'Phillip J.',
+                                         u'id': 523154,
+                                         u'rank': 1,
+                                         u'text': u'Zarriello, Phillip J. pzarriel@usgs.gov',
+                                         u'usgs': True},
+                                        {u'contributorId': 1908,
+                                         u'contributorType': {u'id': 1,
+                                                              u'text': u'Authors'},
+                                         u'corporation': False,
+                                         u'email': u'destraub@usgs.gov',
+                                         u'family': u'Straub',
+                                         u'given': u'David E.',
+                                         u'id': 523155,
+                                         u'rank': 2,
+                                         u'text': u'Straub, David E. destraub@usgs.gov',
+                                         u'usgs': True},
+                                        {u'contributorId': 2210,
+                                         u'contributorType': {u'id': 1,
+                                                              u'text': u'Authors'},
+                                         u'corporation': False,
+                                         u'email': u'smwesten@usgs.gov',
+                                         u'family': u'Westenbroek',
+                                         u'given': u'Stephen M.',
+                                         u'id': 523156,
+                                         u'rank': 3,
+                                         u'text': u'Westenbroek, Stephen M. smwesten@usgs.gov',
+                                         u'usgs': True}]},
+         u'costCenters': [{u'id': 466, u'text': u'New England Water Science Center'}],
+         u'country': u'United States',
+         u'datum': u'North American Datum of 1983',
+         u'displayToPublicDate': u'2214-01-24T15:04:00.000',
+         u'docAbstract': u'<h1>Introduction</h1>\n<p>Heavy persistent rains from late February through March 2010 caused severe flooding and set, or nearly set, peaks of record for streamflows and water levels at many long-term U.S. Geological Survey streamgages in Rhode Island. In response to this flood, hydraulic models were updated for selected reaches covering about 33 river miles in Moshassuck and Woonasquatucket River Basins from the most recent approved Federal Emergency Management Agency flood insurance study (FIS) to simulate water-surface elevations (WSEs) from specified flows and boundary conditions. Reaches modeled include the main stem of the Moshassuck River and its main tributary, the West River, and three tributaries to the West River&mdash;Upper Canada Brook, Lincoln Downs Brook, and East Branch West River; and the main stem of the Woonasquatucket River. All the hydraulic models were updated to Hydrologic Engineering Center-River Analysis System (HEC-RAS) version 4.1.0 and incorporate new field-survey data at structures, high-resolution land-surface elevation data, and flood flows from a related study.</p>\n<p>&nbsp;</p>\n<p>The models were used to simulate steady-state WSEs at the 1- and 2-percent annual exceedance probability (AEP) flows, which is the estimated AEP of the 2010 flood in the Moshassuck River Basin and the Woonasquatucket River, respectively. The simulated WSEs were compared to the high-water mark (HWM) elevation data obtained in these basins in a related study following the March&ndash;April 2010 flood, which included 18 HWMs along the Moshassuck River and 45 HWMs along the Woonasquatucket River. Differences between the 2010 HWMs and the simulated 2- and 1-percent AEP WSEs from the FISs and the updated models developed in this study varied along the reach. Most differences could be attributed to the magnitude of the 2- and 1-percent AEP flows used in the FIS and updated model flows. Overall, the updated model and the FIS WSEs were not appreciably different when compared to the observed 2010 HWMs along the Woonasquatucket and Moshassuck Rivers.</p>',
+         u'doi': u'10.3133/ofr20135191',
+         u'geographicExtents': u'{ "type": "FeatureCollection", "features": [ { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [ [ [ -71.698837,41.7498 ], [ -71.698837,42.022263 ], [ -71.29921,42.022263 ], [ -71.29921,41.7498 ], [ -71.698837,41.7498 ] ] ] } } ] }',
+         u'id': 70073953,
+         u'indexId': u'ofr20135191',
+         u'interactions': [],
+         u'language': u'English',
+         u'lastModifiedDate': u'2015-04-30T15:45:48.000',
+         u'links': [{u'id': 281522,
+                     u'type': {u'id': 11, u'text': u'Document'},
+                     u'url': u'http://pubs.usgs.gov/sir/2013/5191/pdf/sir2013-5191.pdf'},
+                    {u'id': 281523,
+                     u'type': {u'id': 7, u'text': u'Companion Files'},
+                     u'url': u'http://pubs.usgs.gov/sir/2013/5191/tables/sir2013-5191_Tables3and4.xlsx'},
+                    {u'id': 281521,
+                     u'type': {u'id': 15, u'text': u'Index Page'},
+                     u'url': u'http://pubs.usgs.gov/sir/2013/5191/'},
+                    {u'id': 281524,
+                     u'type': {u'id': 3, u'text': u'Appendix'},
+                     u'url': u'http://pubs.usgs.gov/sir/2013/5191/appendix/sir2013-5191_Appendix1.xls'},
+                    {u'id': 281525,
+                     u'type': {u'id': 24, u'text': u'Thumbnail'},
+                     u'url': u'http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg'}],
+         u'numberOfPages': u'46',
+         u'onlineOnly': u'Y',
+         u'otherGeospatial': u'East Branch West River;Lincoln Downs Brook;Moshassuck River Basin;Upper Canada Brook;West River;Woonasquatucket River Basin',
+         u'productDescription': u'Report: v, 35 p.; Tables 3 and 4; Appendix 1',
+         u'projection': u'Polyconic projection',
+         u'publicationSubtype': {u'id': 5, u'text': u'USGS Numbered Series'},
+         u'publicationType': {u'id': 18, u'text': u'Report'},
+         u'publicationYear': u'2014',
+         u'publisher': u'U.S. Geological Survey',
+         u'publisherLocation': u'Reston, VA',
+         u'seriesNumber': u'2013-5191',
+         u'seriesTitle': {u'id': 334,
+                          u'onlineIssn': u'2328-0328',
+                          u'printIssn': u'2328-031X',
+                          u'text': u'Scientific Investigations Report'},
+         u'state': u'Rhode Island',
+         u'text': u'ofr20135191 - 2014 - Simulated and observed 2010 flood-water elevations in selected river reaches in the Moshassuck and Woonasquatucket River Basins, Rhode Island',
+         u'title': u'Simulated and observed 2010 flood-water elevations in selected river reaches in the Moshassuck and Woonasquatucket River Basins, Rhode Island',
+         u'usgsCitation': u'Simulated and observed 2010 flood-water elevations in selected river reaches in the Moshassuck and Woonasquatucket River Basins, Rhode Island; 2014; SIR; 2013-5191; Zarriello, Phillip J.; Straub, David E.; Westenbroek, Stephen M.'}
+
+
+@step("I pass the publication record to munge_abstract")
+def step_impl(step):
+    """
+    :type step lettuce.core.Step
+    """
+    world.munged_abstract_result = munge_abstract(world.mock_pubs_with_h1)
+    world.munged_abstract_result_expected = \
+        {'abstractHeader': u'Introduction', u'additionalOnlineFiles': u'Y',
+         u'collaboration':
+             u'Prepared in cooperation with the U.S. Department of Homeland Security-Federal Emergency Management Agency',
+         u'contributors': {u'authors': [{u'contributorId': 1868,
+                                         u'contributorType': {u'id': 1,
+                                                              u'text': u'Authors'},
+                                         u'corporation': False,
+                                         u'email': u'pzarriel@usgs.gov',
+                                         u'family': u'Zarriello',
+                                         u'given': u'Phillip J.',
+                                         u'id': 523154,
+                                         u'rank': 1,
+                                         u'text': u'Zarriello, Phillip J. pzarriel@usgs.gov',
+                                         u'usgs': True},
+                                        {u'contributorId': 1908,
+                                         u'contributorType': {u'id': 1,
+                                                              u'text': u'Authors'},
+                                         u'corporation': False,
+                                         u'email': u'destraub@usgs.gov',
+                                         u'family': u'Straub',
+                                         u'given': u'David E.',
+                                         u'id': 523155,
+                                         u'rank': 2,
+                                         u'text': u'Straub, David E. destraub@usgs.gov',
+                                         u'usgs': True},
+                                        {u'contributorId': 2210,
+                                         u'contributorType': {u'id': 1,
+                                                              u'text': u'Authors'},
+                                         u'corporation': False,
+                                         u'email': u'smwesten@usgs.gov',
+                                         u'family': u'Westenbroek',
+                                         u'given': u'Stephen M.',
+                                         u'id': 523156,
+                                         u'rank': 3,
+                                         u'text': u'Westenbroek, Stephen M. smwesten@usgs.gov',
+                                         u'usgs': True}]},
+         u'costCenters': [{u'id': 466, u'text': u'New England Water Science Center'}],
+         u'country': u'United States',
+         u'datum': u'North American Datum of 1983',
+         u'displayToPublicDate': u'2214-01-24T15:04:00.000',
+         u'docAbstract': u'<p>\n Heavy persistent rains from late February through March 2010 caused severe flooding and set, or nearly set, peaks of record for streamflows and water levels at many long-term U.S. Geological Survey streamgages in Rhode Island. In response to this flood, hydraulic models were updated for selected reaches covering about 33 river miles in Moshassuck and Woonasquatucket River Basins from the most recent approved Federal Emergency Management Agency flood insurance study (FIS) to simulate water-surface elevations (WSEs) from specified flows and boundary conditions. Reaches modeled include the main stem of the Moshassuck River and its main tributary, the West River, and three tributaries to the West River\u2014Upper Canada Brook, Lincoln Downs Brook, and East Branch West River; and the main stem of the Woonasquatucket River. All the hydraulic models were updated to Hydrologic Engineering Center-River Analysis System (HEC-RAS) version 4.1.0 and incorporate new field-survey data at structures, high-resolution land-surface elevation data, and flood flows from a related study.\n</p>\n<p>\n</p>\n<p>\n The models were used to simulate steady-state WSEs at the 1- and 2-percent annual exceedance probability (AEP) flows, which is the estimated AEP of the 2010 flood in the Moshassuck River Basin and the Woonasquatucket River, respectively. The simulated WSEs were compared to the high-water mark (HWM) elevation data obtained in these basins in a related study following the March\u2013April 2010 flood, which included 18 HWMs along the Moshassuck River and 45 HWMs along the Woonasquatucket River. Differences between the 2010 HWMs and the simulated 2- and 1-percent AEP WSEs from the FISs and the updated models developed in this study varied along the reach. Most differences could be attributed to the magnitude of the 2- and 1-percent AEP flows used in the FIS and updated model flows. Overall, the updated model and the FIS WSEs were not appreciably different when compared to the observed 2010 HWMs along the Woonasquatucket and Moshassuck Rivers.\n</p>',
+         u'doi': u'10.3133/ofr20135191',
+         u'geographicExtents': u'{ "type": "FeatureCollection", "features": [ { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [ [ [ -71.698837,41.7498 ], [ -71.698837,42.022263 ], [ -71.29921,42.022263 ], [ -71.29921,41.7498 ], [ -71.698837,41.7498 ] ] ] } } ] }',
+         u'id': 70073953,
+         u'indexId': u'ofr20135191',
+         u'interactions': [],
+         u'language': u'English',
+         u'lastModifiedDate': u'2015-04-30T15:45:48.000',
+         u'links': [{u'id': 281522,
+                     u'type': {u'id': 11, u'text': u'Document'},
+                     u'url': u'http://pubs.usgs.gov/sir/2013/5191/pdf/sir2013-5191.pdf'},
+                    {u'id': 281523,
+                     u'type': {u'id': 7, u'text': u'Companion Files'},
+                     u'url': u'http://pubs.usgs.gov/sir/2013/5191/tables/sir2013-5191_Tables3and4.xlsx'},
+                    {u'id': 281521,
+                     u'type': {u'id': 15, u'text': u'Index Page'},
+                     u'url': u'http://pubs.usgs.gov/sir/2013/5191/'},
+                    {u'id': 281524,
+                     u'type': {u'id': 3, u'text': u'Appendix'},
+                     u'url': u'http://pubs.usgs.gov/sir/2013/5191/appendix/sir2013-5191_Appendix1.xls'},
+                    {u'id': 281525,
+                     u'type': {u'id': 24, u'text': u'Thumbnail'},
+                     u'url': u'http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg'}],
+         u'numberOfPages': u'46',
+         u'onlineOnly': u'Y',
+         u'otherGeospatial': u'East Branch West River;Lincoln Downs Brook;Moshassuck River Basin;Upper Canada Brook;West River;Woonasquatucket River Basin',
+         u'productDescription': u'Report: v, 35 p.; Tables 3 and 4; Appendix 1',
+         u'projection': u'Polyconic projection',
+         u'publicationSubtype': {u'id': 5, u'text': u'USGS Numbered Series'},
+         u'publicationType': {u'id': 18, u'text': u'Report'},
+         u'publicationYear': u'2014',
+         u'publisher': u'U.S. Geological Survey',
+         u'publisherLocation': u'Reston, VA',
+         u'seriesNumber': u'2013-5191',
+         u'seriesTitle': {u'id': 334,
+                          u'onlineIssn': u'2328-0328',
+                          u'printIssn': u'2328-031X',
+                          u'text': u'Scientific Investigations Report'},
+         u'state': u'Rhode Island',
+         u'text': u'ofr20135191 - 2014 - Simulated and observed 2010 flood-water elevations in selected river reaches in the Moshassuck and Woonasquatucket River Basins, Rhode Island',
+         u'title': u'Simulated and observed 2010 flood-water elevations in selected river reaches in the Moshassuck and Woonasquatucket River Basins, Rhode Island',
+         u'usgsCitation': u'Simulated and observed 2010 flood-water elevations in selected river reaches in the Moshassuck and Woonasquatucket River Basins, Rhode Island; 2014; SIR; 2013-5191; Zarriello, Phillip J.; Straub, David E.; Westenbroek, Stephen M.'}
+
+
+
+
+@step("I see a dictionary containing the abstractHeader data element and no h1 tags in the docAbstract data element")
+def step_impl(step):
+    """
+    :type step lettuce.core.Step
+    """
+    assert_equal(world.munged_abstract_result, world.munged_abstract_result_expected)
+
+
+@step("I have a mocked base publication record that has a populated interactions data element, a base url, and a mocked legacy endpoint")
+def step_impl(step):
+    """
+    :type step lettuce.core.Step
+    """
+    world.pub_with_precede_and_supersede = \
+        {u'additionalOnlineFiles': u'N',
+         u'contributors': {u'authors': [{u'contributorId': 128075,
+                                         u'contributorType': {u'id': 1,
+                                                              u'text': u'Authors'},
+                                         u'corporation': True,
+                                         u'id': 528496,
+                                         u'organization': u'U.S. Geological Survey',
+                                         u'rank': 1,
+                                         u'text': u'U.S. Geological Survey',
+                                         u'usgs': False}]},
+         u'costCenters': [],
+         u'displayToPublicDate': u'1994-01-01T00:00:00.000',
+         u'docAbstract': u'<p>The U.S. Geological Survey (USGS) invites you to explore an earth science virtual library of digital information, publications, and data. The USGS Internet World Wide Web sites offer an array of information that reflects scientific research and monitoring programs conducted in the areas of natural hazards, environmental resources, and cartography. This list provides gateways to access a cross section of the digital information on the USGS World Wide Web sites.</p>',
+         u'edition': u'-',
+         u'id': 5329,
+         u'indexId': u'fs07199',
+         u'interactions': [{u'id': 1,
+                            u'object': {u'id': 5329,
+                                        u'indexId': u'fs07199',
+                                        u'publicationYear': u'1999',
+                                        u'text': u'fs07199 - 1999 - U.S. Geological Survey World Wide Web Information',
+                                        u'title': u'U.S. Geological Survey World Wide Web Information'},
+                            u'predicate': u'SUPERSEDED_BY',
+                            u'subject': {u'id': 5328,
+                                         u'indexId': u'fs12196',
+                                         u'publicationYear': u'1997',
+                                         u'text': u'fs12196 - 1997 - U.S. Geological Survey World Wide Web information',
+                                         u'title': u'U.S. Geological Survey World Wide Web information'}},
+                           {u'id': 2,
+                            u'object': {u'id': 53167,
+                                        u'indexId': u'fs05503',
+                                        u'publicationYear': u'2003',
+                                        u'text': u'fs05503 - 2003 - U.S. Geological Survey World Wide Web Information',
+                                        u'title': u'U.S. Geological Survey World Wide Web Information'},
+                            u'predicate': u'SUPERSEDED_BY',
+                            u'subject': {u'id': 5329,
+                                         u'indexId': u'fs07199',
+                                         u'publicationYear': u'1999',
+                                         u'text': u'fs07199 - 1999 - U.S. Geological Survey World Wide Web Information',
+                                         u'title': u'U.S. Geological Survey World Wide Web Information'}}],
+         u'language': u'ENGLISH',
+         u'lastModifiedDate': u'2015-05-19T09:06:22.000',
+         u'links': [{u'id': 139664,
+                     u'rank': 0,
+                     u'type': {u'id': 24, u'text': u'Thumbnail'},
+                     u'url': u'http://pubs.usgs.gov/fs/1999/0071/report-thumb.jpg'},
+                    {u'id': 32025,
+                     u'linkFileType': {u'id': 1, u'text': u'pdf'},
+                     u'rank': 300,
+                     u'type': {u'id': 11, u'text': u'Document'},
+                     u'url': u'http://pubs.usgs.gov/fs/1999/0071/report.pdf'}],
+         u'onlineOnly': u'N',
+         u'productDescription': u'2 p.',
+         u'publicationSubtype': {u'id': 5, u'text': u'USGS Numbered Series'},
+         u'publicationType': {u'id': 18, u'text': u'Report'},
+         u'publicationYear': u'1999',
+         u'publisher': u'U.S.Geological Survey',
+         u'publisherLocation': u'Reston, VA',
+         u'seriesNumber': u'071-99',
+         u'seriesTitle': {u'id': 313,
+                          u'onlineIssn': u'2327-6932',
+                          u'printIssn': u'2327-6916',
+                          u'text': u'Fact Sheet'},
+         u'supersededBy': {u'id': 53167,
+                           u'indexId': u'fs05503',
+                           u'publicationYear': u'2003',
+                           u'text': u'fs05503 - 2003 - U.S. Geological Survey World Wide Web Information',
+                           u'title': u'U.S. Geological Survey World Wide Web Information'},
+         u'text': u'fs07199 - 1999 - U.S. Geological Survey World Wide Web Information',
+         u'title': u'U.S. Geological Survey World Wide Web Information',
+         u'usgsCitation': u'U.S. Geological Survey World Wide Web Information; 1999; FS; 071-99; Geological Survey (U.S.)'}
+    world.legacy_supersedes_url_base = 'http://pubs-fake.er.usgs.gov/service/citation/json/extras'
+    world.legacy_supersedes_url = 'http://pubs-fake.er.usgs.gov/service/citation/json/extras?prod_id=fs07199'
+    resp_data = '{ "modsCollection": { "@rowCount": "1", "mods": [{ "identifier": { "@type": "pw", "#text": "fs07199"}, "location": { "url": [{ "@note": "THUMBNAIL", "#text": "http://pubs.usgs.gov/fs/1999/0071/report-thumb.jpg"}, { "@displayLabel": "pdf", "@note": "DOCUMENT", "#text": "http://pubs.usgs.gov/fs/1999/0071/report.pdf"}] }, "relatedItem": [{ "base_id": { "@type": "pw", "#text": "fs07199"}, "@type": "succeeding", "identifier": { "@type": "pw", "#text": "fs03700"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "2000"}}, { "base_id": { "@type": "pw", "#text": "fs07199"}, "@type": "succeeding", "identifier": { "@type": "pw", "#text": "fs03301"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "2001"}}, { "base_id": { "@type": "pw", "#text": "fs07199"}, "@type": "succeeding", "identifier": { "@type": "pw", "#text": "fs05503"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web Information"}, "originInfo": { "dateIssued": "2003"}}, { "base_id": { "@type": "pw", "#text": "fs07199"}, "@type": "preceding", "identifier": { "@type": "pw", "#text": "fs12196"}, "titleInfo": { "title": "U.S. Geological Survey World Wide Web information"}, "originInfo": { "dateIssued": "1997"}}] }] }}'
+    httpretty.enable()
+    httpretty.register_uri(httpretty.GET,
+                           world.legacy_supersedes_url,
+                           body=resp_data,
+                           content_type='application/json',
+                           status=200)
+
+
+
+
+@step("I pass those interactions variables to add_relationships_graphs")
+def step_impl(step):
+    """
+    :type step lettuce.core.Step
+    """
+    world.superseded_publication_record_with_graph = add_relationships_graphs(world.pub_with_precede_and_supersede,
+                                                                              world.legacy_supersedes_url_base,
+                                                                              'http://127.0.0.1:5050/')
+
+
+@step("the relationships data element of the pubs record should contain what I expect")
+def step_impl(step):
+    """
+    :type step lettuce.core.Step
+    """
+    expected_record = \
+        {u'additionalOnlineFiles': u'N',
+         u'contributors': {u'authors': [{u'contributorId': 128075,
+                                         u'contributorType': {u'id': 1,
+                                                              u'text': u'Authors'},
+                                         u'corporation': True,
+                                         u'id': 528496,
+                                         u'organization': u'U.S. Geological Survey',
+                                         u'rank': 1,
+                                         u'text': u'U.S. Geological Survey',
+                                         u'usgs': False}]},
+         u'costCenters': [],
+         u'displayToPublicDate': u'1994-01-01T00:00:00.000',
+         u'docAbstract': u'<p>The U.S. Geological Survey (USGS) invites you to explore an earth science virtual library of digital information, publications, and data. The USGS Internet World Wide Web sites offer an array of information that reflects scientific research and monitoring programs conducted in the areas of natural hazards, environmental resources, and cartography. This list provides gateways to access a cross section of the digital information on the USGS World Wide Web sites.</p>',
+         u'edition': u'-',
+         u'id': 5329,
+         u'indexId': u'fs07199',
+         u'interactions': [{u'id': 1,
+                            u'object': {u'id': 5329,
+                                        u'indexId': u'fs07199',
+                                        u'publicationYear': u'1999',
+                                        u'text': u'fs07199 - 1999 - U.S. Geological Survey World Wide Web Information',
+                                        u'title': u'U.S. Geological Survey World Wide Web Information'},
+                            u'predicate': u'SUPERSEDED_BY',
+                            u'subject': {u'id': 5328,
+                                         u'indexId': u'fs12196',
+                                         u'publicationYear': u'1997',
+                                         u'text': u'fs12196 - 1997 - U.S. Geological Survey World Wide Web information',
+                                         u'title': u'U.S. Geological Survey World Wide Web information'}},
+                           {u'id': 2,
+                            u'object': {u'id': 53167,
+                                        u'indexId': u'fs05503',
+                                        u'publicationYear': u'2003',
+                                        u'text': u'fs05503 - 2003 - U.S. Geological Survey World Wide Web Information',
+                                        u'title': u'U.S. Geological Survey World Wide Web Information'},
+                            u'predicate': u'SUPERSEDED_BY',
+                            u'subject': {u'id': 5329,
+                                         u'indexId': u'fs07199',
+                                         u'publicationYear': u'1999',
+                                         u'text': u'fs07199 - 1999 - U.S. Geological Survey World Wide Web Information',
+                                         u'title': u'U.S. Geological Survey World Wide Web Information'}}],
+         u'language': u'ENGLISH',
+         u'lastModifiedDate': u'2015-05-19T09:06:22.000',
+         u'links': [{u'id': 139664,
+                     u'rank': 0,
+                     u'type': {u'id': 24, u'text': u'Thumbnail'},
+                     u'url': u'http://pubs.usgs.gov/fs/1999/0071/report-thumb.jpg'},
+                    {u'id': 32025,
+                     u'linkFileType': {u'id': 1, u'text': u'pdf'},
+                     u'rank': 300,
+                     u'type': {u'id': 11, u'text': u'Document'},
+                     u'url': u'http://pubs.usgs.gov/fs/1999/0071/report.pdf'}],
+         u'onlineOnly': u'N',
+         u'productDescription': u'2 p.',
+         u'publicationSubtype': {u'id': 5, u'text': u'USGS Numbered Series'},
+         u'publicationType': {u'id': 18, u'text': u'Report'},
+         u'publicationYear': u'1999',
+         u'publisher': u'U.S.Geological Survey',
+         u'publisherLocation': u'Reston, VA',
+         'relationships': {'@context': {'dc': 'http://purl.org/dc/elements/1.1/',
+                                        'rdac': 'http://rdaregistry.info/Elements/c/',
+                                        'rdaw': 'http://rdaregistry.info/Elements/w/',
+                                        'rdaw:replacedByWork': {'@type': '@id'},
+                                        'rdaw:replacementOfWork': {'@type': '@id'},
+                                        'xsd': 'http://www.w3.org/2001/XMLSchema#'},
+                           '@graph': [{'@id': u'http://127.0.0.1:5050/publication/fs07199',
+                                       '@type': 'rdac:Work',
+                                       'dc:date': '1999',
+                                       'dc:title': u'U.S. Geological Survey World Wide Web Information'},
+                                      {'@id': u'http://127.0.0.1:5050/publication/fs12196',
+                                       '@type': 'rdac:Work',
+                                       'dc:date': u'1997',
+                                       'dc:title': u'U.S. Geological Survey World Wide Web information',
+                                       'rdaw:replacedByWork': u'http://127.0.0.1:5050/publication/fs07199'},
+                                      {'@id': u'http://127.0.0.1:5050/publication/fs05503',
+                                       '@type': 'rdac:Work',
+                                       'dc:date': u'2003',
+                                       'dc:title': u'U.S. Geological Survey World Wide Web Information',
+                                       'rdaw:replacementOfWork': u'http://127.0.0.1:5050/publication/fs07199'}]},
+         u'seriesNumber': u'071-99',
+         u'seriesTitle': {u'id': 313,
+                          u'onlineIssn': u'2327-6932',
+                          u'printIssn': u'2327-6916',
+                          u'text': u'Fact Sheet'},
+         u'supersededBy': {u'id': 53167,
+                           u'indexId': u'fs05503',
+                           u'publicationYear': u'2003',
+                           u'text': u'fs05503 - 2003 - U.S. Geological Survey World Wide Web Information',
+                           u'title': u'U.S. Geological Survey World Wide Web Information'},
+         u'text': u'fs07199 - 1999 - U.S. Geological Survey World Wide Web Information',
+         u'title': u'U.S. Geological Survey World Wide Web Information',
+         u'usgsCitation': u'U.S. Geological Survey World Wide Web Information; 1999; FS; 071-99; Geological Survey (U.S.)'}
+
+    assert_equal(world.superseded_publication_record_with_graph, expected_record)

@@ -423,7 +423,7 @@ def jsonify_geojson(record):
     return record
 
 
-def legacy_api_info(context_id, supersedes_service_url):
+def legacy_api_info(context_id, legacy_service_url):
     """
     Obtains supersede info for the context publication from an external (legacy) 
     service, and converts that info into an unambiguous form. Note that, 
@@ -433,30 +433,24 @@ def legacy_api_info(context_id, supersedes_service_url):
         - how the context_id is included in the service call;
         - the structure and semantics of the legacy service's return value.
 
-    This function will therefore need to be changed if the supersedes service 
+    This function will therefore need to be changed if the pubextra service
     definition changes.
 
     :param context_id: indexId of context publication
     :param supersedes_service_url: url for supersede information service
     :return: dict containing three items:
-        'predecessors':related items that the context list-valued ub supersedes
         'context_id': the index (prod) ID of the context pub. Included as 
             confirmation only; identical to the 'context_id' param.
-        'successors': related items that supersede the context pub
+        'offers': the object that contains a representations of the USGS store offer for the publication
     """
-    response = requests.get(supersedes_service_url, params={'prod_id': context_id}, verify=verify_cert)
+    response = requests.get(legacy_service_url, params={'prod_id': context_id}, verify=verify_cert)
     if response.status_code == 200:
         response_content = response.json()
-        try:
-            related = response_content.get('modsCollection', {}).get('mods', [{}])[0].get('relatedItem')
-        except TypeError:
-            related = None
         try:
             product = response_content.get('modsCollection', {}).get('mods', [{}])[0].get('product')
         except TypeError:
             product = None
     else:
-        related = None
         product = None
 
     # REMARKS ABOUT SERVICE RETURNED VALUE ASSUMPTIONS
@@ -500,26 +494,11 @@ def legacy_api_info(context_id, supersedes_service_url):
                 }
             }
 
-    predecessors = []
-    successors = []
-    if related is not None:
-        for item in related:
-            try:
-                item_summary_info = {'index_id': item['identifier']['#text'], 'title': item['titleInfo']['title'],
-                                     'date': item['originInfo']['dateIssued']}
 
-                if item['@type'] == 'preceding':
-                    predecessors.append(item_summary_info)
-                elif item['@type'] == 'succeeding':
-                    successors.append(item_summary_info)
-            except KeyError:
-                predecessors = []
-                successors = []
-
-    return {'predecessors': predecessors, 'context_item': context_id, 'successors': successors, 'offers': offers}
+    return {'context_item': context_id, 'offers': offers}
 
 
-def add_legacy_data(context_pubdata, supersedes_service_url, url_root):
+def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):
     """
     Accepts publication data JSON for the desired context publication,
     extracts the context publication's index_id, calls precedes_supersedes_url
@@ -529,7 +508,7 @@ def add_legacy_data(context_pubdata, supersedes_service_url, url_root):
 
 
     context_pubdata: the Python decode of the JSON representation of the 
-        context publication
+        context publication.  the most important elements here is called "interactions"
     supersedes_service_url: the endpoint of the service from which info about
         related items should be obtained
     param pubs_base_url: the url needed to compose a publication URL given 
@@ -545,10 +524,12 @@ def add_legacy_data(context_pubdata, supersedes_service_url, url_root):
     # needs to be exported to a configuration.
     pub_type = 'rdac:Work'
     
-    # obtain predecessor and successor related items
+    # obtain data from legacy api (down to just store data now)
     pre_super = legacy_api_info(index_id, supersedes_service_url)
+    #get interactions from the new endpoint to build json-LD object
+    interactions = return_pubdata.get('interactions')
 
-    if pre_super['predecessors'] or pre_super['successors']:
+    if interactions is not None:
 
         # ensure 'relationships' is set up
         if 'relationships' not in return_pubdata:
@@ -577,28 +558,29 @@ def add_legacy_data(context_pubdata, supersedes_service_url, url_root):
         }
         )
 
-        # add any linked data for superseding another publication
-        for item in pre_super['predecessors']:
-            related_pub = {
-                '@id':  urljoin(base_id_url, item['index_id']),
-                '@type': pub_type,
-                'dc:title': item['title'],
-                "rdaw:replacedByWork": pub_url}
-            if item['date']:
-                related_pub['dc:date'] = item['date']
-            return_pubdata['relationships']['@graph'].append(related_pub)
+        for interaction in interactions:
+            # add any linked data for superseding another publication
+            if interaction['predicate'] == "SUPERSEDED_BY" and interaction['object']['indexId'] == return_pubdata['indexId']:
+                related_pub = {
+                    '@id':  urljoin(base_id_url, interaction['subject']['indexId']),
+                    '@type': pub_type,
+                    'dc:title': interaction['subject']['title'],
+                    "rdaw:replacedByWork": pub_url}
+                if interaction['subject']['publicationYear']:
+                    related_pub['dc:date'] = interaction['subject']['publicationYear']
+                return_pubdata['relationships']['@graph'].append(related_pub)
+            # add any linked data for being superseded by another publication
+            if interaction['predicate'] == "SUPERSEDED_BY" and interaction['subject']['indexId'] == return_pubdata['indexId']:
+                related_pub = {
+                    '@id':  urljoin(base_id_url, interaction['object']['indexId']),
+                    '@type': pub_type,
+                    'dc:title': interaction['object']['title'],
+                    "rdaw:replacementOfWork": pub_url}
+                if interaction['object']['publicationYear']:
+                    related_pub['dc:date'] = interaction['object']['publicationYear']
+                return_pubdata['relationships']['@graph'].append(related_pub)
 
-        # add any linked data for being superseded by another publication
-        for item in pre_super['successors']:
-            related_pub = {
-                '@id': urljoin(base_id_url, item['index_id']),
-                '@type': pub_type,
-                'dc:title': item['title'],
-                "rdaw:replacementOfWork": pub_url
-            }
-            if item['date']:
-                related_pub['dc:date'] = item['date']
-            return_pubdata['relationships']['@graph'].append(related_pub)
+
     # add offer data from the USGS store if it exists
     if pre_super['offers']:
         return_pubdata['offers'] = pre_super['offers']
@@ -662,12 +644,14 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     :return: pubdata
     """
     pubdata = pubdetails(pubdata)
-    pubdata = add_legacy_data(pubdata, supersedes_url, json_ld_id_base_url)
+    pubdata = add_relationships_graphs(pubdata, supersedes_url, json_ld_id_base_url)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
     pubdata = make_chapter_data_for_display(pubdata)
     pubdata['formattedModifiedDateTime'] = arrow.get(pubdata['lastModifiedDate']).format('MMMM DD, YYYY HH:mm:ss')
+    pubdata = munge_abstract(pubdata)
+    pubdata = has_excel(pubdata)
     # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov.
     # Flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI
     # The Apache rewrite changes this to pubs-test.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI, where there is
@@ -677,6 +661,20 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     if replace_pubs_with_pubs_test:
         pubdata['displayLinks']['Thumbnail'][0]['url'] = change_to_pubs_test(
             pubdata['displayLinks']['Thumbnail'][0]['url'])
+    return pubdata
+
+
+def has_excel(pubdata):
+    """
+    sets a display variable so that if there is an excel document, we can display a link to an excel reader
+    :param pubdata:
+    :return: pubdata
+    """
+    pubdata['hasExcel'] = False
+    if pubdata.get('links') is not None:
+        for link in pubdata['links']:
+            if link.get('linkFileType', {}).get('text') == 'xlsx':
+                pubdata['hasExcel'] = True
     return pubdata
 
 
@@ -744,3 +742,30 @@ def extract_related_pub_info(pubdata):
     else:
         raise Exception('Failed to parse supersede information.')
     return relations
+
+def munge_abstract(pubdata):
+    """
+    Take an abstract, and if there is an h1 tag in there, take it out and put the contents in the abstract_label object,
+    else put abstract in there.  This is a hack until we can change the abstract type.
+    :param pubdata: data about a publication
+    :return:
+    """
+    if pubdata.get('docAbstract') is not None:
+        soup = BeautifulSoup(pubdata['docAbstract'], "html.parser")
+        #find the h1 tag
+        if soup.find('h1') is not None:
+            possible_header = soup.find('h1').contents[0]
+            soup.h1.extract()
+            abstract = soup.prettify()
+            pubdata['docAbstract'] = abstract
+            abstract_header = possible_header
+        else:
+            abstract_header = 'Abstract'
+    else:
+        abstract_header = 'Abstract'
+
+    pubdata['abstractHeader'] = abstract_header
+
+    return pubdata
+
+
