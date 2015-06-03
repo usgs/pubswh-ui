@@ -106,6 +106,12 @@
                          {{ contributor_list('editorsListTyped','editor') }}
                       </dd>
                       {%- endif -%}
+                    {% if pubdata['compilersList'] %}
+                      <dt>Compiled by:</dt>
+                      <dd>
+                         {{ contributor_list('compilersListTyped','compiler') }}
+                      </dd>
+                      {%- endif -%}
                     </dl>
                 </section>
                 <section>
