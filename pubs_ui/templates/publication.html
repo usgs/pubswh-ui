@@ -30,6 +30,9 @@
         {% if pubdata['publicationType']['text'] == 'Report' %}<meta name="citation_technical_report_number" content="{{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}" />{% endif %}
     {% endif %}
     {% if pubdata['doi'] %}<meta name="citation_doi" content="{{ pubdata['doi'] }}" />{% endif %}
+    {% if pubdata['displayLinks']['Document']|length >= 1 %}
+        <meta name="citation_pdf_url" content="{{ pubdata['displayLinks']['Document'][0]['url'] }}" />
+    {% endif %}
 
 
     {% block page_style %}
@@ -104,6 +107,12 @@
                       <dt>Edited by:</dt>
                       <dd>
                          {{ contributor_list('editorsListTyped','editor') }}
+                      </dd>
+                      {%- endif -%}
+                    {% if pubdata['compilersList'] %}
+                      <dt>Compiled by:</dt>
+                      <dd>
+                         {{ contributor_list('compilersListTyped','compiler') }}
                       </dd>
                       {%- endif -%}
                     </dl>
