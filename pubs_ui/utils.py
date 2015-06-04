@@ -38,7 +38,7 @@ def pubdetails(pubdata):
         ['title', 'Title:'],
         ['seriesTitle', 'text', 'Series title:'],
         ['seriesNumber', 'Series number:'],
-        ['subseriesTitle', 'Subseries'],
+        ['subseriesTitle', 'Subseries:'],
         ['chapter', 'Chapter:'],
         ['subchapterNumber', 'Sub-chapter:'],
         ['issn', 'online', 'ISSN (online):'],
@@ -425,7 +425,7 @@ def jsonify_geojson(record):
 
 def legacy_api_info(context_id, legacy_service_url):
     """
-    Obtains supersede info for the context publication from an external (legacy) 
+    Obtains usgs store info for the context publication from an external (legacy)
     service, and converts that info into an unambiguous form. Note that, 
     although the service endpoint is parameterized, that's only a convenience
     for exercising and testing this operation. This function contains 
@@ -436,9 +436,12 @@ def legacy_api_info(context_id, legacy_service_url):
     This function will therefore need to be changed if the pubextra service
     definition changes.
 
+    There are some bits of cruft in this function because it used to be used to used to access supersedes data,
+    which is now in the actual pubs service.
+
     :param context_id: indexId of context publication
-    :param supersedes_service_url: url for supersede information service
-    :return: dict containing three items:
+    :param legacy_service_url: url for legacy relationships information service
+    :return: dict containing two items:
         'context_id': the index (prod) ID of the context pub. Included as 
             confirmation only; identical to the 'context_id' param.
         'offers': the object that contains a representations of the USGS store offer for the publication
@@ -493,7 +496,6 @@ def legacy_api_info(context_id, legacy_service_url):
                     "schema:url": "http://store.usgs.gov"}
                 }
             }
-
 
     return {'context_item': context_id, 'offers': offers}
 
