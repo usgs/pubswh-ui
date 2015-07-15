@@ -629,7 +629,7 @@ def make_chapter_data_for_display(pubdata):
     """
     if len(pubdata.get('interactions')) > 0:
         # natural sort the indexIDs so that chapter 2 comes after chapter one and before chapter three
-        pubdata['interactions'] = natsort.natsorted(pubdata['interactions'], key=lambda x: x['subject']['indexId'])
+        pubdata['interactions'] = natsort.natsorted(pubdata['interactions'], key=lambda x: x['subject']['indexId'], alg=natsort.ns.IGNORECASE)
         # determine wheter to display the publication subparts chunk of the template
         for interaction in pubdata['interactions']:
             if interaction['predicate'] == "IS_PART_OF" and interaction['subject']['indexId'] != pubdata['indexId']:
