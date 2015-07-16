@@ -42,7 +42,7 @@
 			
         <header>
             <section id="usgs_logo">
-                <img src="{{ url_for('static', filename = 'img/usgslogo.jpg') }}" alt="usgs logo"/>
+                <a href="http://www.usgs.gov"><img src="{{ url_for('static', filename = 'img/usgslogo.jpg') }}" alt="usgs logo"/></a>
             </section>
             <section id="banner">
                 <img src="{{ url_for('static', filename = 'img/banner.png') }}" alt="banner"/>
@@ -74,7 +74,7 @@
                 </li>
             </ul>
             <img src="{{ url_for('static', filename='img/usgs_logo_mobile.png') }}" alt="usgs mobile logo"/>
-        </ul>
+
             <ul id="desktop_ul">
                 <li><a id='nav_title' href="{{ url_for('index') }}">USGS Publications Warehouse</a></li>
                 <li><a href="#">Explore</a>
