@@ -1,0 +1,10 @@
+#!/opt/tomcat/.jenkins/jobs/build_flask_ui/workspace/env/bin/python2.7
+# EASY-INSTALL-ENTRY-SCRIPT: 'unittest2==0.8.0','console_scripts','unit2'
+__requires__ = 'unittest2==0.8.0'
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('unittest2==0.8.0', 'console_scripts', 'unit2')()
+    )
