@@ -130,6 +130,7 @@ def create_display_links(pubdata):
         'Digital Object Identifier': [],
         'Document': [],
         'Errata': [],
+        'Figure': [],
         'Illustration': [],
         'Image': [],
         'Index Page': [],
