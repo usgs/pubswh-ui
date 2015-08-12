@@ -106,10 +106,15 @@ def load_user(userid):
     """
 
     token_cookie = request.cookies.get('remember_token')
-    session_data = login_serializer.loads(token_cookie, max_age=max_age)
-    # get the token from the session data
-    mypubs_token = session_data[1]
-    return User.get(userid, mypubs_token)
+    # TODO: catch a cookie that is too old and logout the user
+    try:
+        session_data = login_serializer.loads(token_cookie, max_age=max_age)
+        # get the token from the session data
+        mypubs_token = session_data[1]
+        return User.get(userid, mypubs_token)
+    except TypeError:  # this typeerror typically occurs when the token has expired.
+        logout_user()
+        flash('your login has expired, please log in again')
 
 
 @login_manager.token_loader
