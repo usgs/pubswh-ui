@@ -1,6 +1,6 @@
 {# this template is the block of code that we put in if the publication has information for the SPN- contact information, etc #}
 {% if pubdata['publishedDate'] %}
-    <p>First Posted {{ pubdata['publishedDate']|date_format }}</p>
+    <p>First posted {{ pubdata['publishedDate']|date_format }}</p>
 {% endif %}
 
 {% if pubdata['revisedDate'] and pubdata['displayLinks']['Version History']|length > 0 %}
