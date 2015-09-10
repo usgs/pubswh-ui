@@ -46,7 +46,7 @@ def pubdetails(pubdata):
         ['isbn', 'ISBN:'],
         ['doi', 'DOI:'],
         ['edition', 'Edition:'],
-        ['volume', 'Volume'],
+        ['volume', 'Volume:'],
         ['issue', 'Issue:'],
         ['publicationYear', 'Year Published:'],
         ['language', 'Language:'],
@@ -75,7 +75,7 @@ def pubdetails(pubdata):
         ['projection', 'Projection:'],
         ['scale', 'Scale:'],
         ['onlineOnly', 'Online Only (Y/N):'],
-        ['additionalOnlineFiles', 'Additional Online Files(Y/N):']
+        ['additionalOnlineFiles', 'Additional Online Files (Y/N):']
 
     ]
     for detail in detailslist:
