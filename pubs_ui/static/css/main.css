@@ -787,7 +787,22 @@ h1.search-results{
    other styles
    ========================================================================== */
    
+.confluenceTable {
+    border-collapse: collapse;
+}
 
+.confluenceTd {
+    border: 1px solid black;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.confluenceTh{
+    border: 1px solid black;
+    background: lightgray;
+    padding: 0.5rem;
+    text-align: left;
+}
 ul.toc-indentation li{
 	margin-bottom:10px;}
 

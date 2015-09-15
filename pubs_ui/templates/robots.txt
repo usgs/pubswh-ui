@@ -4,7 +4,7 @@ Disallow: /tmp/
 Disallow: /apex/
 Disallow: /mypubs/
 Disallow: /newpubs/
-Disallow: /search/
+Disallow: /search
 {% else %}
 User-agent: *
 Disallow: /
