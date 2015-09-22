@@ -5,6 +5,7 @@ from flask_mail import Message
 from requests import get, post
 from webargs.flaskparser import FlaskParser
 from flask.ext.paginate import Pagination
+from flask.ext.cache import Cache
 from arguments import search_args
 from utils import (pull_feed, create_display_links, getbrowsecontent,
                    SearchPublications, change_to_pubs_test, generate_auth_header, 
@@ -41,6 +42,7 @@ auth_endpoint_url = app.config.get('AUTH_ENDPOINT_URL')
 preview_endpoint_url = app.config.get('PREVIEW_ENDPOINT_URL')
 max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
 login_page_path = app.config['LOGIN_PAGE_PATH']
+cache_config = app.config['CACHE_CONFIG']
 
 
 # should requests verify the certificates for ssl connections
@@ -55,6 +57,14 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = login_page_path
 
+cache = Cache(app, config=cache_config)
+
+cache.init_app(app)
+
+def make_cache_key(*args, **kwargs):
+    path = request.path
+    args = str(hash(frozenset(request.args.items())))
+    return (path + args).encode('utf-8')
 
 class User(UserMixin):
     """
@@ -92,6 +102,7 @@ class User(UserMixin):
         if userid:
             return User(userid, token)
         return None
+
 
 
 @login_manager.user_loader
@@ -252,6 +263,7 @@ def webmaster_tools_verification():
 
 
 @app.route('/')
+@cache.cached(timeout=300, key_prefix=make_cache_key)
 def index():
     sp = SearchPublications(search_url)
     recent_publications_resp = sp.get_pubs_search_results(params={'pub_x_days': 7,
@@ -314,6 +326,7 @@ def contact_confirmation():
 
 # leads to rendered html for publication page
 @app.route('/publication/<index_id>')
+@cache.cached(timeout=600, key_prefix=make_cache_key)
 def publication(index_id):
     r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
     if r.status_code == 404:
@@ -348,6 +361,7 @@ def lookup(endpoint):
 
 
 @app.route('/documentation/faq')
+@cache.cached(timeout=600, key_prefix=make_cache_key)
 def faq():
     app.logger.info('The FAQ function is being called')
     feed_url = 'https://my.usgs.gov/confluence//createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=pw_faq&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -355,6 +369,7 @@ def faq():
 
 
 @app.route('/documentation/usgs_series')
+@cache.cached(timeout=600, key_prefix=make_cache_key)
 def usgs_series():
     app.logger.info('The USGS Series function is being called')
     feed_url = 'https://my.usgs.gov/confluence//createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=USGS+Series+Definitions&labelString=usgs_series&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -362,6 +377,7 @@ def usgs_series():
 
 
 @app.route('/documentation/web_service_documentation')
+@cache.cached(timeout=600, key_prefix=make_cache_key)
 def web_service_docs():
     app.logger.info('The web_service_docs function is being called')
     feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=pubs_webservice_docs&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -369,6 +385,7 @@ def web_service_docs():
 
 
 @app.route('/documentation/other_resources')
+@cache.cached(timeout=600, key_prefix=make_cache_key)
 def other_resources():
     app.logger.info('The other_resources function is being called')
     feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=other_resources&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -377,6 +394,7 @@ def other_resources():
 
 @app.route('/browse/', defaults={'path': ''})
 @app.route('/browse/<path:path>')
+@cache.cached(timeout=600, key_prefix=make_cache_key)
 def browse(path):
     app.logger.info("path: " + path)
     browsecontent = getbrowsecontent(browse_url + path, browse_replace)
@@ -385,6 +403,7 @@ def browse(path):
 
 # this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
 @app.route('/search', methods=['GET'])
+@cache.cached(timeout=20, key_prefix=make_cache_key)
 def search_results():
     form = SearchForm(request.args)
 
@@ -452,6 +471,7 @@ def site_map():
 
 
 @app.route('/newpubs', methods=['GET'])
+@cache.cached(timeout=60, key_prefix=make_cache_key)
 def new_pubs():
     num_form = NumSeries()
     sp = SearchPublications(search_url)
@@ -536,6 +556,7 @@ def legacy_search(series_code=None, report_number=None, pub_year=None):
 
 
 @app.route('/unapi')
+@cache.cached(timeout=600, key_prefix=make_cache_key)
 def unapi():
     """
     this is an unapi format, which appears to be the only way to get a good export to zotero that has all the Zotero fields
