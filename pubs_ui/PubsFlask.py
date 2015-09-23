@@ -20,6 +20,7 @@ from itsdangerous import URLSafeTimedSerializer
 from operator import itemgetter
 from urllib import unquote
 import arrow
+import redis
 
 # set UTF-8 to be default throughout app
 reload(sys)
@@ -43,6 +44,7 @@ preview_endpoint_url = app.config.get('PREVIEW_ENDPOINT_URL')
 max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
 login_page_path = app.config['LOGIN_PAGE_PATH']
 cache_config = app.config['CACHE_CONFIG']
+redis_config = app.config['REDIS_CONFIG']
 
 
 # should requests verify the certificates for ssl connections
@@ -347,6 +349,24 @@ def publication(index_id):
                                related_pubs=related_pubs
                                )
 
+#clears the cache for a specific page
+@app.route('/clear_cache/', defaults={'path': ''})
+@app.route('/clear_cache/<path:path>')
+def clear_cache(path):
+    if cache_config['CACHE_TYPE'] == 'redis':
+        args = str(hash(frozenset(request.args.items())))
+        key = cache_config['CACHE_KEY_PREFIX']+'/'+(path + args).encode('utf-8')
+        r = redis.StrictRedis(host=redis_config['host'], port=redis_config['port'], db=redis_config['db'])
+        r.delete(key)
+        return 'cache cleared '+path + " args: "+ str(request.args)
+    else:
+        cache.clear()
+        return "no redis cache, full cache cleared"
+
+@app.route('/clear_full_cache/')
+def clear_full_cache():
+    cache.clear()
+    return 'cache cleared'
 
 # leads to json for selected endpoints
 @app.route('/lookup/<endpoint>')
@@ -556,7 +576,6 @@ def legacy_search(series_code=None, report_number=None, pub_year=None):
 
 
 @app.route('/unapi')
-@cache.cached(timeout=600, key_prefix=make_cache_key)
 def unapi():
     """
     this is an unapi format, which appears to be the only way to get a good export to zotero that has all the Zotero fields
