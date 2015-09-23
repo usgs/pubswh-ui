@@ -35,7 +35,7 @@ AUTH_ENDPOINT_URL = ''
 PREVIEW_ENDPOINT_URL = ''
 LOGIN_PAGE_PATH = ''
 CACHE_CONFIG = {'CACHE_TYPE': 'null'}
-
+REDIS_CONFIG = ''
 
 if DEBUG:
     CONTACT_RECIPIENTS = ['ayan@usgs.gov', 'jkreft@usgs.gov']
