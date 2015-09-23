@@ -46,7 +46,8 @@ To get this application running using the flask local dev server, there are thre
  LOGIN_PAGE_PATH = '/login/'
  # verify ssl certificate for outside service calls
  VERIFY_CERT = True or False
-
+ #cache settings- see the documentation for flask-cache. For development, a cache type of simple works well with the development server.  redis is used on production
+ #CACHE_CONFIG = {'CACHE_TYPE': 'simple'}
  ```
 
 3. After you have created your `local_settings.py`, you can start the app by running `runserver.py`, which will give you an output like so:
