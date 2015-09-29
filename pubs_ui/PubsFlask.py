@@ -358,12 +358,9 @@ def publication(index_id):
 def clear_cache(path):
     if cache_config['CACHE_TYPE'] == 'redis':
         args = str(hash(frozenset(request.args.items())))
-
         key = cache_config['CACHE_KEY_PREFIX']+'/'+(path + args).encode('utf-8')
-        logged_in_key = cache_config['CACHE_KEY_PREFIX']+'/'+(path + args+'logged_in').encode('utf-8')
         r = redis.StrictRedis(host=redis_config['host'], port=redis_config['port'], db=redis_config['db'])
         r.delete(key)
-        r.delete(logged_in_key)
         return 'cache cleared '+path + " args: "+ str(request.args)
     else:
         cache.clear()
