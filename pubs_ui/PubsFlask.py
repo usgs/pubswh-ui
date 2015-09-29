@@ -15,7 +15,7 @@ from canned_text import EMAIL_RESPONSE
 from pubs_ui import app, mail
 from datetime import date, timedelta
 from dateutil import parser as dateparser
-from flask_login import (LoginManager, login_required, login_user, logout_user, UserMixin)
+from flask_login import (LoginManager, login_required, login_user, logout_user, UserMixin, current_user)
 from itsdangerous import URLSafeTimedSerializer
 from operator import itemgetter
 from urllib import unquote
@@ -66,7 +66,10 @@ cache.init_app(app)
 def make_cache_key(*args, **kwargs):
     path = request.path
     args = str(hash(frozenset(request.args.items())))
-    return (path + args).encode('utf-8')
+    if current_user.get_id():
+        return (path + args+'logged_in').encode('utf-8')
+    else:
+        return (path + args).encode('utf-8')
 
 class User(UserMixin):
     """
@@ -267,6 +270,7 @@ def webmaster_tools_verification():
 @app.route('/')
 @cache.cached(timeout=300, key_prefix=make_cache_key)
 def index():
+    user = current_user.get_id()
     sp = SearchPublications(search_url)
     recent_publications_resp = sp.get_pubs_search_results(params={'pub_x_days': 7,
                                                                   'page_size': 6})  # bring back recent publications
@@ -355,9 +359,12 @@ def publication(index_id):
 def clear_cache(path):
     if cache_config['CACHE_TYPE'] == 'redis':
         args = str(hash(frozenset(request.args.items())))
+
         key = cache_config['CACHE_KEY_PREFIX']+'/'+(path + args).encode('utf-8')
+        logged_in_key = cache_config['CACHE_KEY_PREFIX']+'/'+(path + args+'logged_in').encode('utf-8')
         r = redis.StrictRedis(host=redis_config['host'], port=redis_config['port'], db=redis_config['db'])
         r.delete(key)
+        r.delete(logged_in_key)
         return 'cache cleared '+path + " args: "+ str(request.args)
     else:
         cache.clear()
