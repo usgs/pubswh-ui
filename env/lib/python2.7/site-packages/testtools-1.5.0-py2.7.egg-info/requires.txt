@@ -1,0 +1,3 @@
+extras
+python-mimeparse
+unittest2>=0.8.0
