@@ -1,0 +1,34 @@
+<script type="text/javascript" src="{{ url_for('pubswh.static', filename = 'js/vendor/leaflet-0.7.3/leaflet.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('pubswh.static', filename='js/vendor/esri-leaflet-basemaps.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('pubswh.static', filename = 'vendor/Leaflet.draw/leaflet.draw.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('pubswh.static', filename = 'vendor/Wicket/wicket.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('pubswh.static', filename = 'vendor/Wicket/wicket-leaflet.js') }}"></script>
+
+ {% assets "js_advanced_search" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+ {% endassets %}
+
+
+
+<script type="text/javascript">    
+    $(document).ready(function() {
+  		$('#typeName').select2({
+        	placeholder: "Choose a Publication Type" ,
+        	allowClear: true
+    	});
+        $('#subtypeName').select2({
+        	placeholder: "Choose a Publication Subtype" ,
+        	allowClear: true
+    	});
+        $('#seriesName').select2({
+        	placeholder: "Choose a Series Name or Journal Title" ,
+        	allowClear: true
+    	});
+        $('#contributingOffice').select2({
+        	placeholder: "Choose a Contributing Office" ,
+        	allowClear: true
+    	});
+    	
+    	var map = PUBS_WH.createSearchMap('search-map-div', 'g');
+    });
+</script>

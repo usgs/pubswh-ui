@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-{# unapi id is the index ID for a publication #}
-
-<formats{% if unapi_id %} id="{{ unapi_id }}"{% endif %}>
-    {% for format in formats %}<format name="{{ format }}" type="{{ formats[format]['type'] }}" docs="{{ formats[format]['docs'] }}"/>{% endfor %}
-</formats>

@@ -10,7 +10,7 @@ Flask-WTF==0.10.3
 Jinja2==2.7.3
 MarkupSafe==0.23
 Pillow==2.6.1
-WTForms==2.0.1
+WTForms==2.0.2
 Werkzeug==0.9.6
 argparse==1.2.2
 arrow==0.4.4
@@ -34,7 +34,7 @@ python-dateutil==2.3
 python-mimeparse==0.1.4
 python-subunit==1.0.0
 redis==2.10.3
-requests==2.5.1
+requests==2.8.0
 six==1.8.0
 sure==1.2.7
 unittest2==0.8.0
