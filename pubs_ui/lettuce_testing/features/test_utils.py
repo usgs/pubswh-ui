@@ -3,7 +3,7 @@ from nose.tools import assert_equal
 from lettuce import *
 import json
 from requests import get
-from pubs_ui.utils import (pull_feed, pubdetails, getbrowsecontent, create_display_links, 
+from pubs_ui.pubswh.utils import (pull_feed, pubdetails, getbrowsecontent, create_display_links,
                            jsonify_geojson, add_relationships_graphs, SearchPublications,
                            make_contributor_list, legacy_api_info, sort_list_of_dicts,
                            extract_related_pub_info, munge_abstract)
