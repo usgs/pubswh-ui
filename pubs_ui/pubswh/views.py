@@ -1,6 +1,6 @@
 import sys
 import json
-from flask import render_template, abort, request, Response, jsonify, url_for, redirect, flash
+from flask import render_template, abort, request, Response, jsonify, url_for, redirect, flash, Blueprint
 from flask_mail import Message
 from requests import get, post
 from webargs.flaskparser import FlaskParser
@@ -26,6 +26,10 @@ import redis
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
+pubswh = Blueprint('pubswh', __name__,
+                   template_folder='templates',
+                   static_folder='static',
+                   static_url_path='/static/pubswh')
 
 pub_url = app.config['PUB_URL']
 lookup_url = app.config['LOOKUP_URL']
@@ -165,12 +169,12 @@ def load_token(token):
     return None
 
 
-@app.errorhandler(404)
+@pubswh.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
 
 
-@app.route("/logout/")
+@pubswh.route("/logout/")
 def logout_page():
     """
     Web Page to Logout User, then Redirect them to Index Page.
@@ -183,10 +187,10 @@ def logout_page():
 
     logout_user()
 
-    return redirect(url_for('index'))
+    return redirect(url_for('pubswh:index'))
 
 
-@app.route("/login/", methods=["GET", "POST"])
+@pubswh.route("/login/", methods=["GET", "POST"])
 def login_page():
     """
     Web Page to Display Login Form and process form.
@@ -213,18 +217,18 @@ def login_page():
                     app.logger.info("Next split: "+str(next_split))
                     if next_split[-2] == 'preview':  # ok, we need to point to the preview endpoint
                         index_id = next_split[-1]
-                        return redirect(url_for('restricted_page', index_id=index_id))
+                        return redirect(url_for('pubwh:restricted_page', index_id=index_id))
                     else:
-                        return redirect(url_for('index'))
+                        return redirect(url_for('pubswh:index'))
             else:
-                return redirect(url_for('index'))
+                return redirect(url_for('pubwh:index'))
         else:
             error = 'Username or Password is invalid '+str(mp_response.status_code)
 
     return render_template("login.html", form=form, error=error)
 
 
-@app.route("/preview/<index_id>")
+@pubswh.route("/preview/<index_id>")
 @login_required
 def restricted_page(index_id):
     """
@@ -236,7 +240,7 @@ def restricted_page(index_id):
     # build the url to call the endpoint
     published_status = get(pub_url + 'publication/' + index_id,
                            params={'mimetype': 'json'}, verify=verify_cert).status_code
-    # go out to mypubs and get the record
+    # go out to manage and get the record
     response = get(preview_endpoint_url+index_id+'/preview', headers=auth_header, verify=verify_cert,
                    params={'mimetype': 'json'})
     print "preview status code: ", response.status_code
@@ -245,34 +249,36 @@ def restricted_page(index_id):
         pubdata = munge_pubdata_for_display(record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
         related_pubs = extract_related_pub_info(pubdata)
         return render_template("preview.html", indexID=index_id, pubdata=pubdata, related_pubs=related_pubs)
-    # if the publication has been published (so it is out of mypubs) redirect to the right URL
+    # if the publication has been published (so it is out of manage) redirect to the right URL
     elif response.status_code == 404 and published_status == 200:
-        return redirect(url_for('publication', index_id=index_id))
+        return redirect(url_for('pubwh:publication', index_id=index_id))
     elif response.status_code == 404 and published_status == 404:
         return render_template('404.html'), 404
 
 
-@app.route('/robots.txt')
+@pubswh.route('/robots.txt')
 def robots():
     return render_template('robots.txt', robots_welcome=robots_welcome)
 
-@app.route('/opensearch.xml')
+@pubswh.route('/opensearch.xml')
 def open_search():
     return render_template('opensearch.xml')
 
 
-@app.route('/' + google_webmaster_tools_code + '.html')
+@pubswh.route('/' + google_webmaster_tools_code + '.html')
 def webmaster_tools_verification():
     return render_template('google_site_verification.html')
 
 
-@app.route('/')
+@pubswh.route('/')
 @cache.cached(timeout=300, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
 def index():
     user = current_user.get_id()
+
     sp = SearchPublications(search_url)
     recent_publications_resp = sp.get_pubs_search_results(params={'pub_x_days': 7,
                                                                   'page_size': 6})  # bring back recent publications
+
     recent_pubs_content = recent_publications_resp[0]
     try:
         pubs_records = recent_pubs_content['records']
@@ -290,7 +296,7 @@ def index():
                            form=form)
 
 # contact form
-@app.route('/contact', methods=['GET', 'POST'])
+@pubswh.route('/contact', methods=['GET', 'POST'])
 def contact():
     contact_form = ContactForm()
     if request.method == 'POST':
@@ -315,7 +321,7 @@ def contact():
                           body=message_content)
             mail.send(msg)
             return redirect(url_for(
-                'contact_confirmation'))  # redirect to a conf page after successful validation and message sending
+                'pubswh.contact_confirmation'))  # redirect to a conf page after successful validation and message sending
         else:
             return render_template('contact.html',
                                    contact_form=contact_form)  # redisplay the form with errors if validation fails
@@ -323,14 +329,14 @@ def contact():
         return render_template('contact.html', contact_form=contact_form)
 
 
-@app.route('/contact_confirm')
+@pubswh.route('/contact_confirm')
 def contact_confirmation():
     confirmation_message = 'Thank you for contacting the USGS Publications Warehouse support team.'
     return render_template('contact_confirm.html', confirm_message=confirmation_message)
 
 
 # leads to rendered html for publication page
-@app.route('/publication/<index_id>')
+@pubswh.route('/publication/<index_id>')
 @cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
 def publication(index_id):
     r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
@@ -353,8 +359,8 @@ def publication(index_id):
                                )
 
 #clears the cache for a specific page
-@app.route('/clear_cache/', defaults={'path': ''})
-@app.route('/clear_cache/<path:path>')
+@pubswh.route('/clear_cache/', defaults={'path': ''})
+@pubswh.route('/clear_cache/<path:path>')
 def clear_cache(path):
     if cache_config['CACHE_TYPE'] == 'redis':
         args = str(hash(frozenset(request.args.items())))
@@ -366,13 +372,13 @@ def clear_cache(path):
         cache.clear()
         return "no redis cache, full cache cleared"
 
-@app.route('/clear_full_cache/')
+@pubswh.route('/clear_full_cache/')
 def clear_full_cache():
     cache.clear()
     return 'cache cleared'
 
 # leads to json for selected endpoints
-@app.route('/lookup/<endpoint>')
+@pubswh.route('/lookup/<endpoint>')
 def lookup(endpoint):
     endpoint_list = ['costcenters', 'publicationtypes', 'publicationsubtypes', 'publicationseries']
     endpoint = endpoint.lower()
@@ -383,7 +389,7 @@ def lookup(endpoint):
         abort(404)
 
 
-@app.route('/documentation/faq')
+@pubswh.route('/documentation/faq')
 @cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
 def faq():
     app.logger.info('The FAQ function is being called')
@@ -391,7 +397,7 @@ def faq():
     return render_template('faq.html', faq_content=pull_feed(feed_url))
 
 
-@app.route('/documentation/usgs_series')
+@pubswh.route('/documentation/usgs_series')
 @cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
 def usgs_series():
     app.logger.info('The USGS Series function is being called')
@@ -399,7 +405,7 @@ def usgs_series():
     return render_template('usgs_series.html', usgs_series_content=pull_feed(feed_url))
 
 
-@app.route('/documentation/web_service_documentation')
+@pubswh.route('/documentation/web_service_documentation')
 @cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
 def web_service_docs():
     app.logger.info('The web_service_docs function is being called')
@@ -407,7 +413,7 @@ def web_service_docs():
     return render_template('webservice_docs.html', web_service_docs=pull_feed(feed_url))
 
 
-@app.route('/documentation/other_resources')
+@pubswh.route('/documentation/other_resources')
 @cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
 def other_resources():
     app.logger.info('The other_resources function is being called')
@@ -415,8 +421,8 @@ def other_resources():
     return render_template('other_resources.html', other_resources=pull_feed(feed_url))
 
 
-@app.route('/browse/', defaults={'path': ''})
-@app.route('/browse/<path:path>')
+@pubswh.route('/browse/', defaults={'path': ''})
+@pubswh.route('/browse/<path:path>')
 @cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
 def browse(path):
     app.logger.info("path: " + path)
@@ -425,7 +431,7 @@ def browse(path):
 
 
 # this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
-@app.route('/search', methods=['GET'])
+@pubswh.route('/search', methods=['GET'])
 @cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
 def search_results():
     form = SearchForm(request.args)
@@ -480,7 +486,7 @@ def search_results():
                            form=form, pub_url=pub_url)
 
 
-@app.route('/site-map')
+@pubswh.route('/site-map')
 def site_map():
     """
     View for troubleshooting application URL rules
@@ -493,7 +499,7 @@ def site_map():
     return render_template('site_map.html', app_urls=app_urls)
 
 
-@app.route('/newpubs', methods=['GET'])
+@pubswh.route('/newpubs', methods=['GET'])
 @cache.cached(timeout=60, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
 def new_pubs():
     num_form = NumSeries()
@@ -535,8 +541,8 @@ def new_pubs():
                            num_form=num_form)
 
 
-@app.route('/legacysearch/search:advance/page=1/series_cd=<series_code>/year=<pub_year>/report_number=<report_number>')
-@app.route('/legacysearch/search:advance/page=1/series_cd=<series_code>/report_number=<report_number>')
+@pubswh.route('/legacysearch/search:advance/page=1/series_cd=<series_code>/year=<pub_year>/report_number=<report_number>')
+@pubswh.route('/legacysearch/search:advance/page=1/series_cd=<series_code>/report_number=<report_number>')
 def legacy_search(series_code=None, report_number=None, pub_year=None):
     """
     This is a function to deal with the fact that the USGS store has dumb links to the warehouse
@@ -572,13 +578,13 @@ def legacy_search(series_code=None, report_number=None, pub_year=None):
             pub_year = ''.join(['19', pub_year])
         elif int(pub_year) < 30:
             pub_year = ''.join(['20', pub_year])
-        return redirect(url_for('search_results', q=series_code+" "+report_number, year=pub_year, advanced=True))
+        return redirect(url_for('pubswh:search_results', q=series_code+" "+report_number, year=pub_year, advanced=True))
 
-    return redirect(url_for('search_results', q=series_code+" "+report_number))
+    return redirect(url_for('pubswh:search_results', q=series_code+" "+report_number))
 
 
 
-@app.route('/unapi')
+@pubswh.route('/unapi')
 def unapi():
     """
     this is an unapi format, which appears to be the only way to get a good export to zotero that has all the Zotero fields

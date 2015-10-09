@@ -16,12 +16,12 @@
         {% assets "css_base" %}
         <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
         {% endassets %}
-        <link rel="stylesheet" href="{{ url_for('static', filename= 'vendor/font-awesome-4.3.0/css/font-awesome.min.css') }}">
-        <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
-        <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('open_search') }}" title="USGS Pubs">
-        <link rel="unapi-server" type="application/xml" title="unAPI" href="{{ url_for('unapi') }}" />
+        <link rel="stylesheet" href="{{ url_for('pubswh.static', filename= 'vendor/font-awesome-4.3.0/css/font-awesome.min.css') }}">
+        <link rel="shortcut icon" href="{{ url_for('pubswh.static', filename='img/favicon.ico') }}">
+        <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('pubswh.open_search') }}" title="USGS Pubs">
+        <link rel="unapi-server" type="application/xml" title="unAPI" href="{{ url_for('pubswh.unapi') }}" />
         <link rel="alternate" type="application/rss+xml" title="USGS Publications Warehouse RSS Feed" href="https://pubs.er.usgs.gov/pubs-services/publication/rss">
-        <script src="{{ url_for('static', filename = 'js/vendor/modernizr-2.6.2.min.js') }}"></script>
+        <script src="{{ url_for('pubswh.static', filename = 'js/vendor/modernizr-2.6.2.min.js') }}"></script>
         <script>function toggle_visibility(id) {
        var e = document.getElementById(id);
        if(e.style.display == 'block')
@@ -37,15 +37,15 @@
             <![endif]-->
             
             <!--[if IE 8]>
-				<link rel="stylesheet" href="{{ url_for('static', filename = 'css/ie8.css') }}">
+				<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/ie8.css') }}">
 			<![endif]-->
 			
         <header>
             <section id="usgs_logo">
-                <a href="http://www.usgs.gov"><img src="{{ url_for('static', filename = 'img/usgslogo.jpg') }}" alt="usgs logo"/></a>
+                <a href="http://www.usgs.gov"><img src="{{ url_for('pubswh.static', filename = 'img/usgslogo.jpg') }}" alt="usgs logo"/></a>
             </section>
             <section id="banner">
-                <img src="{{ url_for('static', filename = 'img/banner.png') }}" alt="banner"/>
+                <img src="{{ url_for('pubswh.static', filename = 'img/banner.png') }}" alt="banner"/>
             </section>
             <section id="header_nav">
                 <ul>
@@ -59,43 +59,43 @@
 
         <nav>
         <ul id="mobile_ul">
-            <li onclick="toggle_visibility('mobile_list');"><img id="bars" src="{{ url_for('static', filename='img/bars.png') }}" alt="mobile menu bars"/>
+            <li onclick="toggle_visibility('mobile_list');"><img id="bars" src="{{ url_for('pubswh.static', filename='img/bars.png') }}" alt="mobile menu bars"/>
                 <ul id="mobile_list">
 
-                        <li><a href="{{ url_for( 'index') }}">USGS Publications Warehouse</a></li>
-                        <li><a href="{{ url_for( 'contact') }}">Contact</a></li>
-                        <li><a href="{{ url_for('new_pubs') }}">Explore recent publications by USGS Authors</a></li>
-                		<li><a href="{{ url_for('browse') }}">Browse all of Pubs Warehouse by Publication type and year</a></li>
-                        <li><a href="{{ url_for('faq') }}">FAQS</a></li>
-                		<li><a href="{{ url_for('web_service_docs') }}">Web Service Documentation</a></li>
-                		<li><a href="{{ url_for('other_resources') }}">Other Resources</a></li>
-                		<li><a href="{{ url_for('usgs_series') }}">Descriptions of US Geological Survey Report Series</a></li>
+                        <li><a href="{{ url_for('pubswh.index') }}">USGS Publications Warehouse</a></li>
+                        <li><a href="{{ url_for('pubswh.contact') }}">Contact</a></li>
+                        <li><a href="{{ url_for('pubswh.new_pubs') }}">Explore recent publications by USGS Authors</a></li>
+                		<li><a href="{{ url_for('pubswh.browse') }}">Browse all of Pubs Warehouse by Publication type and year</a></li>
+                        <li><a href="{{ url_for('pubswh.faq') }}">FAQS</a></li>
+                		<li><a href="{{ url_for('pubswh.web_service_docs') }}">Web Service Documentation</a></li>
+                		<li><a href="{{ url_for('pubswh.other_resources') }}">Other Resources</a></li>
+                		<li><a href="{{ url_for('pubswh.usgs_series') }}">Descriptions of US Geological Survey Report Series</a></li>
                     </ul>
                 </li>
             </ul>
-            <img src="{{ url_for('static', filename='img/usgs_logo_mobile.png') }}" alt="usgs mobile logo"/>
+            <img src="{{ url_for('pubswh.static', filename='img/usgs_logo_mobile.png') }}" alt="usgs mobile logo"/>
 
             <ul id="desktop_ul">
-                <li><a id='nav_title' href="{{ url_for('index') }}">USGS Publications Warehouse</a></li>
+                <li><a id='nav_title' href="{{ url_for('pubswh.index') }}">USGS Publications Warehouse</a></li>
                 <li><a href="#">Explore</a>
                 	<ul id="longer">
-                		<li><a href="{{ url_for('new_pubs') }}">Explore recent publications by USGS Authors</a></li>
-                		<li><a href="{{ url_for('browse') }}">Browse all of Pubs Warehouse by Publication type and year</a></li>
+                		<li><a href="{{ url_for('pubswh.new_pubs') }}">Explore recent publications by USGS Authors</a></li>
+                		<li><a href="{{ url_for('pubswh.browse') }}">Browse all of Pubs Warehouse by Publication type and year</a></li>
                 	</ul>
                 </li>
                 <li><a  id="long" href="#">Documentation</a>
                 	<ul>
-                		<li><a href="{{ url_for('faq') }}">FAQS</a></li>
-                		<li><a href="{{ url_for('web_service_docs') }}">Web Service Documentation</a></li>
-                		<li><a href="{{ url_for('other_resources') }}">Other Resources</a></li>
-                		<li><a href="{{ url_for('usgs_series') }}">Descriptions of US Geological Survey Report Series</a></li>
+                		<li><a href="{{ url_for('pubswh.faq') }}">FAQS</a></li>
+                		<li><a href="{{ url_for('pubswh.web_service_docs') }}">Web Service Documentation</a></li>
+                		<li><a href="{{ url_for('pubswh.other_resources') }}">Other Resources</a></li>
+                		<li><a href="{{ url_for('pubswh.usgs_series') }}">Descriptions of US Geological Survey Report Series</a></li>
                 	</ul>
                 </li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
-                {% if current_user.is_authenticated() %}<li><a href="{{ url_for('logout_page') }}">Logout</a></li>{% endif %}
+                <li><a href="{{ url_for('pubswh.contact') }}">Contact</a></li>
+                {% if current_user.is_authenticated() %}<li><a href="{{ url_for('pubswh.logout_page') }}">Logout</a></li>{% endif %}
             </ul>
             <section id="center">
-                <form style="display: inline;" action="{{ url_for('search_results') }}" method="get" name="q">
+                <form style="display: inline;" action="{{ url_for('pubswh.search_results') }}" method="get" name="q">
                     <label for="q">Search:</label>
                     <input id="q" class="headersearch" name="q" placeholder="search terms" type="search" value="">
                 </form>
@@ -113,21 +113,21 @@
 	    </p>
 
          <p id="usgsfootertext">
-                <a href="http://usa.gov/"><img id="usa_gov" src="{{ url_for('static', filename='img/footer_graphic_usagov.jpg') }}" alt="USA.gov logo" title="USAGov: Government Made Easy" width="90" height="26" /></a>
+                <a href="http://usa.gov/"><img id="usa_gov" src="{{ url_for('pubswh.static', filename='img/footer_graphic_usagov.jpg') }}" alt="USA.gov logo" title="USAGov: Government Made Easy" width="90" height="26" /></a>
                 <a href="http://www.doi.gov/" title="U.S. Department of the Interior">U.S. Department of the Interior</a> |
                 <a href="http://www.usgs.gov/" title="U.S. Geological Survey">U.S. Geological Survey</a><br />
 
 
 
                 URL: {% block url %}{% endblock %}<br />
-                Page Contact Information: <a href="{{ url_for('contact') }}">Pubs Warehouse Contact Page</a><br />
+                Page Contact Information: <a href="{{ url_for('pubswh.contact') }}">Pubs Warehouse Contact Page</a><br />
 
                     Page Last Modified: {% block modtime %}{{ LAST_MODIFIED }}{% endblock %}
          </p>
 	     </footer>
 	     <script type="application/javascript" src="https://www.usgs.gov/scripts/analytics/usgs-analytics.js"></script>
 
-		<script type="text/javascript" src="{{ url_for('static', filename='js/vendor/jquery-1.11.1.min.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('pubswh.static', filename='js/vendor/jquery-1.11.1.min.js') }}"></script>
         {% assets "js_base_libs" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
         {% endassets %}

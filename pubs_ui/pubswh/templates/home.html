@@ -7,8 +7,8 @@
 {% endblock head %}
 
 {% block page_style %}
-        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaflet.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename = 'vendor/Leaflet.draw/leaflet.draw.css') }}">
+        <link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/leaflet.css') }}">
+        <link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'vendor/Leaflet.draw/leaflet.draw.css') }}">
 {% endblock page_style %}
 
 {% block main %}
@@ -35,12 +35,12 @@
                 
 	                <aside id="new_pubs">
 	
-	                	<h3 id="new_pubs_title"><a id="new_pubs_title_link" href="{{ url_for('new_pubs') }}">New Publications by USGS Authors</a></h3>
+	                	<h3 id="new_pubs_title"><a id="new_pubs_title_link" href="{{ url_for('pubswh.new_pubs') }}">New Publications by USGS Authors</a></h3>
 
 	                	{% for recent_publication in recent_publications %}
-	               			<div class="pubs-thumbnail"><img id="thumbnail" src="{{ wsgi_str }}{% if recent_publication['displayLinks']['Thumbnail'][0]['url'] %}{{ url_for('images', filename=recent_publication['displayLinks']['Thumbnail'][0]['url'], width=50) }}{% else %}{{ url_for('images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=50) }}{% endif %}" alt="thumbnail"/></div>
+	               			<div class="pubs-thumbnail"><img id="thumbnail" src="{{ wsgi_str }}{% if recent_publication['displayLinks']['Thumbnail'][0]['url'] %}{{ url_for('images', filename=recent_publication['displayLinks']['Thumbnail'][0]['url'], width=50) }}{% else %}{{ url_for('pubswh.images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=50) }}{% endif %}" alt="thumbnail"/></div>
                             <div class="recent-pub-title">
-	               				<a href="{{ url_for('publication', index_id = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
+	               				<a href="{{ url_for('pubswh.publication', index_id = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
 	               			</div>
 	               			<div class="recent-pub-info">
 	               				{{ recent_publication|display_pub_info }}
@@ -51,7 +51,7 @@
                 
                 
                  <section id = "twitter">
-                     <a href="http://www.lewisclarkinc.com/survey/index.php/723517/lang-en"><img id='survey_banner' src="{{ url_for("static", filename="img/USGS-survey-banner.jpg") }}" alt="Link to survey about USGS Publications"></a>
+                     <a href="http://www.lewisclarkinc.com/survey/index.php/723517/lang-en"><img id='survey_banner' src="{{ url_for("pubswh.static", filename="img/USGS-survey-banner.jpg") }}" alt="Link to survey about USGS Publications"></a>
                      <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/USGS_Pubs" data-widget-id="541086703717347328">Tweets by @USGS_Pubs</a>
                      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
                  </section>
@@ -61,7 +61,7 @@
 
 {% endblock %}
 
-{% block url %}<a href="{{ url_for('index') }}">http://pubs.er.usgs.gov{{ url_for('index') }}</a>{% endblock %}
+{% block url %}<a href="{{ url_for('pubswh.index') }}">http://pubs.er.usgs.gov{{ url_for('pubswh.index') }}</a>{% endblock %}
 
 {% block page_footer_script %}
 

@@ -1,12 +1,12 @@
 
 {% if request.args.advanced != 'True' %}
-<script type="text/javascript" src="{{ url_for('static', filename = 'js/vendor/leaflet-0.7.3/leaflet.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/vendor/esri-leaflet-basemaps.js.map') }}"></script>
+<script type="text/javascript" src="{{ url_for('pubswh.static', filename = 'js/vendor/leaflet-0.7.3/leaflet.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('pubswh.static', filename='js/vendor/esri-leaflet-basemaps.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('pubswh.static', filename='js/vendor/esri-leaflet-basemaps.js.map') }}"></script>
 {% endif %}
 
-<script type="text/javascript" src="{{ url_for('static', filename = 'vendor/mapbox/mapbox.js/v2.1.6/mapbox.standalone.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename = 'vendor/mapbox/leaflet-pip/leaflet-pip.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('pubswh.static', filename = 'vendor/mapbox/mapbox.js/v2.1.6/mapbox.standalone.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('pubswh.static', filename = 'vendor/mapbox/leaflet-pip/leaflet-pip.min.js') }}"></script>
 
 
 <script type="application/javascript">
@@ -15,7 +15,7 @@
 var all_extents = {
                     "features": [],
                     "properties": {
-                        "title": "all search pub extents"
+						"title": "all search pub extents"
                     },
                     "type": "FeatureCollection"
                 };

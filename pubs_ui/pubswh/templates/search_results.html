@@ -10,11 +10,11 @@
 
 {% block page_style %}
 {% if request.args.map == 'True' %}
-	<link rel="stylesheet" href="{{ url_for('static', filename = 'css/mapbox.standalone.css') }}">
+	<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/mapbox.standalone.css') }}">
 {% endif %}
-	<link rel="stylesheet" href="{{ url_for('static', filename = 'css/pagination.css') }}">
-	<link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaflet.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'vendor/Leaflet.draw/leaflet.draw.css') }}">
+	<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/pagination.css') }}">
+	<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/leaflet.css') }}">
+    <link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'vendor/Leaflet.draw/leaflet.draw.css') }}">
 
 {% endblock page_style %}
 
@@ -46,7 +46,7 @@
             <strong>|</strong> <a href="{{ pub_url }}publication/?page_size={{ result_summary['records_per_page'] }}&page_number={{ result_summary['page_number'] }}{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">JSON version of this page of results</a>
             </p>
             <p>Page {{ result_summary['page_number'] }}, results {{ result_summary['record_min'] }} - {{ result_summary['record_max'] }}</p>
-		    <p>{% if request.args.map != 'True' %}<a href="{{ url_for('search_results') }}?map=True{% for key, value in request.args.iteritems() %}&{{ key }}={{ value|urlencode }}{% endfor %}">Show results on a map</a>{% elif request.args.map == 'True'  %}<a href="{{ url_for('search_results') }}?{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'map') %}{% if not loop.first %}&{% endif %}{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">Hide map</a>{% endif %}
+		    <p>{% if request.args.map != 'True' %}<a href="{{ url_for('pubswh.search_results') }}?map=True{% for key, value in request.args.iteritems() %}&{{ key }}={{ value|urlencode }}{% endfor %}">Show results on a map</a>{% elif request.args.map == 'True'  %}<a href="{{ url_for('pubswh.search_results') }}?{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'map') %}{% if not loop.first %}&{% endif %}{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">Hide map</a>{% endif %}
 		    </p>
 		</section>
         {% if request.args.map == 'True' %}
@@ -55,7 +55,7 @@
         <section id="search-results">
 				{% for result in search_result_records %}
 					<article>
-                        <h5  class="search-title"><a href="{{ url_for('publication', index_id = result['indexId']) }}">{{ result['title']|safe }}</a></h5>
+                        <h5  class="search-title"><a href="{{ url_for('pubswh.publication', index_id = result['indexId']) }}">{{ result['title']|safe }}</a></h5>
                         {% if current_user.is_authenticated() %}<small><a href="https://pubs.er.usgs.gov/mypubs/#/Publication/{{ result['id'] }}" target="_blank">(edit in MyPubs)</a></small>{% endif %}
                         {% if result['authorsList']|length > 0 %}<h6 class="searchContributors">{{ result['authorsList']|join(', ') }}</h6>{% endif %}
                         {% if result['editorsList']|length > 0 %}<h6 class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</h6>{% endif %}

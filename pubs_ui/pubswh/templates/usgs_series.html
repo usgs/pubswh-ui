@@ -9,4 +9,4 @@
     <h1 class="otherPages">USGS Series descriptions</h1>
 {{ usgs_series_content|safe }}
 {% endblock %}
-{% block url %}<a href="{{ url_for('usgs_series') }}">http://pubs.er.usgs.gov{{ url_for('usgs_series') }}</a>{% endblock %}
+{% block url %}<a href="{{ url_for('pubswh.usgs_series') }}">http://pubs.er.usgs.gov{{ url_for('pubswh.usgs_series') }}</a>{% endblock %}

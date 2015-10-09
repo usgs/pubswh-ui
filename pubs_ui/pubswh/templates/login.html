@@ -5,7 +5,7 @@
 {% endblock head %}
 
 {% block page_style %}
-	<link rel="stylesheet" href="{{ url_for('static', filename = 'css/pagination.css') }}">
+	<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/pagination.css') }}">
 {% endblock page_style %}
 
 {% block main %}
@@ -35,4 +35,4 @@
 
 {% endblock %}
 
-{% block url %}<a href="{{ url_for('login_page') }}">http://pubs.er.usgs.gov{{ url_for('login_page') }}</a>{% endblock %}
+{% block url %}<a href="{{ url_for('pubswh.login_page') }}">http://pubs.er.usgs.gov{{ url_for('pubswh.login_page') }}</a>{% endblock %}

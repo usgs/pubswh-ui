@@ -12,7 +12,7 @@ from copy import deepcopy
 from itsdangerous import URLSafeTimedSerializer
 import arrow
 import natsort
-from custom_filters import display_publication_info
+from ..custom_filters import display_publication_info
 
 json_ld_id_base_url = app.config.get('JSON_LD_ID_BASE_URL')
 # should requests verify the certificates for ssl connections
@@ -615,7 +615,7 @@ def generate_auth_header(request):
     session_data = login_serializer.loads(token_cookie, max_age=max_age)
     # get the token from the session data
     mypubs_token = session_data[1]
-    # build the auth value to send to the mypubs server
+    # build the auth value to send to the manage server
     auth_value = 'Bearer  '+mypubs_token
     # build the Authorization header
     header = {'Authorization': auth_value}

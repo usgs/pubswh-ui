@@ -1,4 +1,4 @@
-<form style="display: inline;" action="{{ url_for('search_results') }}" method="get" name="q">
+<form style="display: inline;" action="{{ url_for('pubswh.search_results') }}" method="get" name="q">
         <fieldset>{{ form.q.label }}{{ form.q(placeholder="search terms") }}</fieldset>
     <button type="submit" class="btn">Search</button>
 </form>
