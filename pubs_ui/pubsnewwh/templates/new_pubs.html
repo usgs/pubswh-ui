@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block head %}
+	<title>New Publications by USGS Authors</title>
+	<meta name="description" content="Explore publications recently added to the USGS Publications Warehouse">
+{% endblock head %}
+
+{% block page_style %}
+	<link rel="stylesheet" href="{{ url_for('static', filename = 'css/pagination.css') }}">
+{% endblock page_style %}
+
+{% block main %}
+<h1 id="new-pubs-h1">Publications recently added to the Pubs Warehouse </h1>
+    <section id="new_pubs_form">
+        <form style="display:inline;" id = num_series method="GET" action="{{ url_for('new_pubs') }}">
+        <p>{{ num_form.num_series }}  {{ num_form.num_series.label }}</p>
+        <p>{{ num_form.date_range.label }} (500 records max) {{ num_form.date_range }}</p>
+        <button type="submit" class="filter-button">Filter</button>
+        </form>
+    </section>
+
+
+    <section>
+
+    {% for result in new_pubs %}
+
+        <article>
+
+            <h4><a class="search-title" href="{{ url_for('publication', index_id = result['indexId']) }}">{{ result['title']|safe }}</a></h4>
+            <p>Released {{ result['FormattedDisplayToPublicDate'] }} EST</p>
+            <p class="pubinfo">{{ result|display_pub_info }}</p>
+            {% if result['authorsList']|length > 0 %}<p class="searchContributors">{{ result['authorsList']|join(', ') }}</p>{% endif %}
+            {% if result['editorsList']|length > 0 %}<p class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</p>{% endif %}
+            {% if result['docAbstract']  %} <p>{{ result['docAbstract']|safe }}</p> {% endif %}
+        </article>
+
+    {% endfor %}
+
+    </section>
+
+{% endblock main %}

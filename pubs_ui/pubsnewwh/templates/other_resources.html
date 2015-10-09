@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block head %}
+    <title>Other Publications Resources- USGS Publications Warehouse</title>
+    <meta name="description" content="Other places to get information from the US Geological Survey">
+    {% include 'meta.html' %}
+{% endblock %}
+
+{% block main %}
+    <h1 class="otherPages">Other Resources</h1>
+{{ other_resources|safe }}
+{% endblock %}
+{% block url %}<a href="{{ url_for('other_resources') }}">http://pubs.er.usgs.gov{{ url_for('other_resources') }}</a>{% endblock %}

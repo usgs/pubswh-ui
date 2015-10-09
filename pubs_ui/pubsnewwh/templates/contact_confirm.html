@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block head %}
+	<title>Contact Us - Confirmation</title>
+    {% include 'meta.html' %}
+{% endblock head %}
+
+{% block main %}
+	<p>{{ confirm_message }}</p>
+{% endblock main %}
+
+{% block url %}
+	<a href="{{ url_for('contact_confirmation') }}">http://pubs.er.usgs.gov{{ url_for('contact_confirmation') }}</a>
+{% endblock %}
