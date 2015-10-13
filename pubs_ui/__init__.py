@@ -1,6 +1,7 @@
 import logging
 from flask import Flask, request
 from flask.ext.assets import Environment, Bundle
+from flask.ext.bower import Bower
 from flask.ext.images import Images
 from flask_mail import Mail
 
@@ -72,6 +73,9 @@ app.jinja_env.globals.update(GOOGLE_ANALYTICS_CODE=app.config['GOOGLE_ANALYTICS_
 app.jinja_env.globals.update(GOOGLE_WEBMASTER_TOOLS_CODE=app.config['GOOGLE_WEBMASTER_TOOLS_CODE'])
 app.jinja_env.globals.update(LAST_MODIFIED=app.config.get('DEPLOYED'))
 app.jinja_env.globals.update(ANNOUNCEMENT_BLOCK=app.config['ANNOUNCEMENT_BLOCK'])
+
+# Creates the bower blueprint
+bower = Bower(app)
 
 from pubswh.views import pubswh
 from manager.views import manager
