@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'pubswh/base.html' %}
 {% block head %}
     <title>{{ pubdata['title'] }}</title>
     <meta NAME="title" content="{{ pubdata['title'] }}" />
@@ -238,7 +238,7 @@
                 <section itemprop="description" id="abstract" >
                     {% if pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and (pubdata['publishedDate'] or pubdata['contact']) %}
                     <aside class="publicationAsideDesktop">
-                {% include 'USGS_series_aside.html' %}
+                {% include 'pubswh/USGS_series_aside.html' %}
                 </aside>
                     {% endif %}
                     <h4 id="abstract_head">{{ pubdata['abstractHeader'] }}</h4>
@@ -274,7 +274,7 @@
                 {% endif %}
                 {% if pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and (pubdata['publishedDate'] or pubdata['contact']) %}
                 <aside class="publicationAside">
-                	{% include 'USGS_series_aside.html' %}
+                	{% include 'pubswh/USGS_series_aside.html' %}
                 </aside>
                 {% endif %}
                 <section id="details">

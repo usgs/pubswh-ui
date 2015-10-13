@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'pubswh/base.html' %}
 {% block head %}
 	<title>Search Results - USGS Publications Warehouse</title>
 	<meta name="description" content="Search results for USGS Publications Warehouse">
-    {% include 'meta.html' %}
+    {% include 'pubswh/meta.html' %}
      <meta name="totalResults" content="{{ result_summary['record_count'] }}"/>
      <meta name="startIndex" content="{{ result_summary['record_min'] }}"/>
      <meta name="itemsPerPage" content="{{ result_summary['records_per_page'] }}"/>
@@ -25,10 +25,10 @@
 
         <section id="search">
             {% if form.data.advanced == 'True' %}
-                {% include 'advanced_search_form.html' %}
+                {% include 'pubswh/advanced_search_form.html' %}
                 <span class="basic-advanced"><a class="basic-advanced" href="{{ request.base_url }}?q={{ request.args['q'] }}">Basic Search</a></span>
             {% else %}
-                {% include 'search_form.html' %}
+                {% include 'pubswh/search_form.html' %}
                 <span class="basic-advanced"><a href="{{ request.url }}&advanced=True">Advanced Search</a></span>
             {% endif %}
         </section>
@@ -50,7 +50,7 @@
 		    </p>
 		</section>
         {% if request.args.map == 'True' %}
-            {% include 'search_results_map.html' %}
+            {% include 'pubswh/search_results_map.html' %}
         {% endif %}
         <section id="search-results">
 				{% for result in search_result_records %}
@@ -77,10 +77,10 @@
 {% block page_footer_script %}
 
 	{% if form.data.advanced == 'True' %}
-		{% include "advanced_search_form_script.html" %}
+		{% include "pubswh/advanced_search_form_script.html" %}
 	{% endif %}
 	{% if request.args.map == 'True' %}
-            {% include 'search_results_map_script.html' %}
+            {% include 'pubswh/search_results_map_script.html' %}
     {% endif %}
 	
 {% endblock page_footer_script %}
