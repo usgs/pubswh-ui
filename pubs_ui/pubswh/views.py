@@ -29,8 +29,7 @@ sys.setdefaultencoding("utf-8")
 pubswh = Blueprint('pubswh', __name__,
                    template_folder='templates',
                    static_folder='static',
-                   static_url_path='/static/pubswh')
-
+                   static_url_path='/pubswh/static')
 pub_url = app.config['PUB_URL']
 lookup_url = app.config['LOOKUP_URL']
 supersedes_url = app.config['SUPERSEDES_URL']
@@ -171,7 +170,7 @@ def load_token(token):
 
 @pubswh.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template('pubswh/404.html'), 404
 
 
 @pubswh.route("/logout/")
@@ -225,7 +224,7 @@ def login_page():
         else:
             error = 'Username or Password is invalid '+str(mp_response.status_code)
 
-    return render_template("login.html", form=form, error=error)
+    return render_template("pubswh/login.html", form=form, error=error)
 
 
 @pubswh.route("/preview/<index_id>")
@@ -248,26 +247,26 @@ def restricted_page(index_id):
         record = response.json()
         pubdata = munge_pubdata_for_display(record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
         related_pubs = extract_related_pub_info(pubdata)
-        return render_template("preview.html", indexID=index_id, pubdata=pubdata, related_pubs=related_pubs)
+        return render_template("pubswh/preview.html", indexID=index_id, pubdata=pubdata, related_pubs=related_pubs)
     # if the publication has been published (so it is out of manage) redirect to the right URL
     elif response.status_code == 404 and published_status == 200:
         return redirect(url_for('pubwh:publication', index_id=index_id))
     elif response.status_code == 404 and published_status == 404:
-        return render_template('404.html'), 404
+        return render_template('pubswh/404.html'), 404
 
 
 @pubswh.route('/robots.txt')
 def robots():
-    return render_template('robots.txt', robots_welcome=robots_welcome)
+    return render_template('pubswh/robots.txt', robots_welcome=robots_welcome)
 
 @pubswh.route('/opensearch.xml')
 def open_search():
-    return render_template('opensearch.xml')
+    return render_template('pubswh/opensearch.xml')
 
 
 @pubswh.route('/' + google_webmaster_tools_code + '.html')
 def webmaster_tools_verification():
-    return render_template('google_site_verification.html')
+    return render_template('pubswh/google_site_verification.html')
 
 
 @pubswh.route('/')
@@ -291,7 +290,7 @@ def index():
     except TypeError:
         pubs_records = []  # return an empty list recent_pubs_content is None (e.g. the service is down)
     form = SearchForm(request.args)
-    return render_template('home.html',
+    return render_template('pubswh/home.html',
                            recent_publications=pubs_records,
                            form=form)
 
@@ -323,16 +322,16 @@ def contact():
             return redirect(url_for(
                 'pubswh.contact_confirmation'))  # redirect to a conf page after successful validation and message sending
         else:
-            return render_template('contact.html',
+            return render_template('pubswh/contact.html',
                                    contact_form=contact_form)  # redisplay the form with errors if validation fails
     elif request.method == 'GET':
-        return render_template('contact.html', contact_form=contact_form)
+        return render_template('pubswh/contact.html', contact_form=contact_form)
 
 
 @pubswh.route('/contact_confirm')
 def contact_confirmation():
     confirmation_message = 'Thank you for contacting the USGS Publications Warehouse support team.'
-    return render_template('contact_confirm.html', confirm_message=confirmation_message)
+    return render_template('pubswh/contact_confirm.html', confirm_message=confirmation_message)
 
 
 # leads to rendered html for publication page
@@ -341,18 +340,18 @@ def contact_confirmation():
 def publication(index_id):
     r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
     if r.status_code == 404:
-        return render_template('404.html'), 404
+        return render_template('pubswh/404.html'), 404
     pubreturn = r.json()
     pubdata = munge_pubdata_for_display(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
     related_pubs = extract_related_pub_info(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'ris':
-        content =  render_template('ris_single.ris', result=pubdata)
+        content =  render_template('pubswh/ris_single.ris', result=pubdata)
         return Response(content, mimetype="application/x-research-info-systems",
                                headers={"Content-Disposition":"attachment;filename=USGS_PW_"+pubdata['indexId']+".ris"})
     else:
-        return render_template('publication.html', 
+        return render_template('pubswh/publication.html',
                                indexID=index_id, 
                                pubdata=pubdata,
                                related_pubs=related_pubs
@@ -394,7 +393,7 @@ def lookup(endpoint):
 def faq():
     app.logger.info('The FAQ function is being called')
     feed_url = 'https://my.usgs.gov/confluence//createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=pw_faq&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
-    return render_template('faq.html', faq_content=pull_feed(feed_url))
+    return render_template('pubswh/faq.html', faq_content=pull_feed(feed_url))
 
 
 @pubswh.route('/documentation/usgs_series')
@@ -402,7 +401,7 @@ def faq():
 def usgs_series():
     app.logger.info('The USGS Series function is being called')
     feed_url = 'https://my.usgs.gov/confluence//createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=USGS+Series+Definitions&labelString=usgs_series&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
-    return render_template('usgs_series.html', usgs_series_content=pull_feed(feed_url))
+    return render_template('pubswh/usgs_series.html', usgs_series_content=pull_feed(feed_url))
 
 
 @pubswh.route('/documentation/web_service_documentation')
@@ -410,7 +409,7 @@ def usgs_series():
 def web_service_docs():
     app.logger.info('The web_service_docs function is being called')
     feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=pubs_webservice_docs&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
-    return render_template('webservice_docs.html', web_service_docs=pull_feed(feed_url))
+    return render_template('pubswh/webservice_docs.html', web_service_docs=pull_feed(feed_url))
 
 
 @pubswh.route('/documentation/other_resources')
@@ -418,7 +417,7 @@ def web_service_docs():
 def other_resources():
     app.logger.info('The other_resources function is being called')
     feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=other_resources&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
-    return render_template('other_resources.html', other_resources=pull_feed(feed_url))
+    return render_template('pubswh/other_resources.html', other_resources=pull_feed(feed_url))
 
 
 @pubswh.route('/browse/', defaults={'path': ''})
@@ -427,7 +426,7 @@ def other_resources():
 def browse(path):
     app.logger.info("path: " + path)
     browsecontent = getbrowsecontent(browse_url + path, browse_replace)
-    return render_template('browse.html', browsecontent=browsecontent)
+    return render_template('pubswh/browse.html', browsecontent=browsecontent)
 
 
 # this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
@@ -471,14 +470,14 @@ def search_results():
         search_service_down = 'The backend services appear to be down with a {0} status.'.format(resp_status_code)
         result_summary = {}
     if 'mimetype' in request.args and request.args.get("mimetype") == 'ris':
-        content = render_template('ris_output.ris', search_result_records=search_result_records)
+        content = render_template('pubswh/ris_output.ris', search_result_records=search_result_records)
         return Response(content, mimetype="application/x-research-info-systems",
                                headers={"Content-Disposition":"attachment;filename=PubsWarehouseResults.ris"})
     if request.args.get('map') == 'True':
         for record in search_result_records:
             record = jsonify_geojson(record)
 
-    return render_template('search_results.html',
+    return render_template('pubswh/search_results.html',
                            result_summary=result_summary,
                            search_result_records=search_result_records,
                            pagination=pagination,
@@ -496,7 +495,7 @@ def site_map():
     for url_rule in app.url_map.iter_rules():
         app_urls.append((str(url_rule), str(url_rule.endpoint)))
 
-    return render_template('site_map.html', app_urls=app_urls)
+    return render_template('pubswh/site_map.html', app_urls=app_urls)
 
 
 @pubswh.route('/newpubs', methods=['GET'])
@@ -536,7 +535,7 @@ def new_pubs():
     except TypeError:
         pubs_records = []  # return an empty list recent_pubs_content is None (e.g. the service is down)
 
-    return render_template('new_pubs.html',
+    return render_template('pubswh/new_pubs.html',
                            new_pubs=pubs_records,
                            num_form=num_form)
 
@@ -599,12 +598,12 @@ def unapi():
     if unapi_format is None or unapi_format not in formats:
         if unapi_id is not None:
             unapi_id = unapi_id.split('/')[-1]
-        return render_template('unapi_formats.xml', unapi_id=unapi_id, formats=formats,  mimetype='text/xml')
+        return render_template('pubswh/unapi_formats.xml', unapi_id=unapi_id, formats=formats,  mimetype='text/xml')
     if unapi_id is not None and unapi_format in formats:
         unapi_id = unapi_id.split('/')[-1]
         r = get(pub_url + 'publication/' + unapi_id, params={'mimetype': 'json'}, verify=verify_cert)
         if r.status_code == 404:
-            return render_template('404.html'), 404
+            return render_template('pubswh/404.html'), 404
         pubdata = r.json()
         return render_template(formats[unapi_format]['template'], pubdata=pubdata, formats=formats,  mimetype='text/xml')
 

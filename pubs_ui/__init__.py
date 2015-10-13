@@ -51,8 +51,6 @@ css_base = Bundle(
 assets.register('css_base', css_base)
 
 
-
-
 @app.before_request
 def log_request():
     if app.config.get('LOGGING_ON'):
@@ -76,5 +74,8 @@ app.jinja_env.globals.update(LAST_MODIFIED=app.config.get('DEPLOYED'))
 app.jinja_env.globals.update(ANNOUNCEMENT_BLOCK=app.config['ANNOUNCEMENT_BLOCK'])
 
 from pubswh.views import pubswh
+from manager.views import manager
 
 app.register_blueprint(pubswh)
+app.register_blueprint(manager,
+                       url_prefix='/manager')

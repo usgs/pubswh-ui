@@ -1,9 +1,9 @@
 
-{% extends 'base.html' %}
+{% extends 'pubswh/base.html' %}
 {% block head %}
     <title>U.S. Geological Survey Publications Warehouse</title>
     <meta name="description" content="The Publications warehouse contains over 130,000 publications that cover the 150 year history of the USGS">
-    {% include 'meta.html' %}
+    {% include 'pubswh/meta.html' %}
 {% endblock head %}
 
 {% block page_style %}
@@ -25,10 +25,10 @@
 	
 	                <section id="search" class="no-margin">
                         {% if form.data.advanced == 'True' %}
-                            {% include 'advanced_search_form.html' %}
+                            {% include 'pubswh/advanced_search_form.html' %}
                             <span class="basic-advanced"><a  href="{{ request.base_url }}">Basic Search</a></span>
                         {% else %}
-                            {% include 'search_form.html' %}
+                            {% include 'pubswh/search_form.html' %}
                             <span class="basic-advanced"><a href="{{ request.url }}?advanced=True">Advanced Search</a></span>
                         {% endif %}
 	                </section>
@@ -66,7 +66,7 @@
 {% block page_footer_script %}
 
 	{% if form.data.advanced == 'True' %}
-		{% include "advanced_search_form_script.html" %}
+		{% include "pubswh/advanced_search_form_script.html" %}
 	{% endif %}
     <!-- This basically catches links that were built on the old search parameter url design, which was all in the "fragment" after the hash -->
     <script type="text/javascript">
