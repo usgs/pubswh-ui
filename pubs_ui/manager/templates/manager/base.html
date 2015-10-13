@@ -4,6 +4,11 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>{% block title %}USGS Publications Warehouse{% endblock %}</title>
+		{% block usgs_style %}
+			<link rel="stylesheet" href="{{ url_for('manager.static', filename='css/usgs_header_footer.css') }}" />
+		{% endblock %}
+		{% block page_style %}{% endblock %}
+		{% block head_script %}{% endblock %}
 	</head>
 	<body>
 		<header>
@@ -22,9 +27,6 @@
 					</ul>
 				</section>
 			{% endblock %}
-
-			{% block page_style %}{% endblock %}
-			{% block head_script %}{% endblock %}
 		  </header>
 
 		{% block main %}{% endblock %}
