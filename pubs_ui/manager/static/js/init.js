@@ -1,9 +1,15 @@
 /* jslint browser: true */
 
-define(['jquery'], function($) {
-    $(document).ready(function () {
-        "use strict";
+define([
+    'backbone',
+    'controller/AppRouter'
+], function(Backbone, AppRouter) {
+    "use strict";
 
-        $('h1').append('<p>Testing javascript</p>');
+    var router = new AppRouter();
+    Backbone.history.start({
+        root : 'manager'
     });
+
+    return router;
 });

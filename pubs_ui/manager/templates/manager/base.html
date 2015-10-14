@@ -33,7 +33,10 @@
 				{% endblock %}
 			  </header>
 
-			{% block main %}{% endblock %}
+			<div id="main-content">
+				{% block main %}
+				{% endblock %}
+			</div>
 			<footer>
 				{% block usgs_footer %}
 					<p id="usgsfooterbar">
@@ -58,8 +61,23 @@
 			</footer>
 		</div>
 		{% block common_page_script %}
-			<script type="text/javascript" src="{{ url_for('bower.static', filename='jquery/dist/jquery.js') }}"></script>
-			<script type="text/javascript" src="{{ url_for('bower.static', filename='bootstrap/dist/js/bootstrap.js') }}"></script>
+			<script type="text/javascript">
+				var require = {
+				baseUrl: "{{ url_for('manager.static', filename='js') }}",
+					paths: {
+						'jquery' : "{{ url_for('bower.static', filename='jquery/dist/jquery.js') }}",
+						'bootstrap' : "{{ url_for('bower.static', filename='bootstrap/dist/js/bootstrap.js') }}",
+						'text' : "{{ url_for('bower.static', filename='text/text.js') }}",
+						'underscore' : "{{ url_for('bower.static', filename='underscore/underscore.js') }}",
+						'backbone' : "{{ url_for('bower.static', filename='backbone/backbone.js') }}",
+						'handlebars' : "{{ url_for('bower.static', filename='handlebars/handlebars.amd.js') }}"
+					},
+					shim : {
+						'bootstrap' : ['jquery']
+					}
+				};
+			</script>
+			<script data-main="{{ url_for('manager.static', filename='js/init.js') }}" src="{{ url_for('bower.static', filename='requirejs/require.js') }}"></script>
 		{%  endblock %}
 		{% block page_script %}{% endblock %}
 
