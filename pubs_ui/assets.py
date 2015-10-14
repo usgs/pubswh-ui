@@ -26,10 +26,10 @@ bundles={
         filters='cssmin',
         output='css/min_base.css'
     ),
-    'manager_css' : Bundle(
+    'manager_style' : Bundle(
         'manager/css/usgs_header_footer.css',
         filters='cssmin',
-        output='css/manager_css'
+        output='css/manager_style.css'
     )
 }
 
