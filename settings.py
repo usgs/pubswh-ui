@@ -8,6 +8,7 @@ from datetime import timedelta
 
 
 DEBUG = True
+
 SECRET_KEY = ''
 VERIFY_CERT = True
 COLLECT_STATIC_ROOT = 'static/'
@@ -36,6 +37,9 @@ PREVIEW_ENDPOINT_URL = ''
 LOGIN_PAGE_PATH = ''
 CACHE_CONFIG = {'CACHE_TYPE': 'null'}
 REDIS_CONFIG = ''
+
+#Config for Flask-Assets
+ASSETS_DEBUG = False # to disable compression of js and css set to True
 
 if DEBUG:
     CONTACT_RECIPIENTS = ['ayan@usgs.gov', 'jkreft@usgs.gov']

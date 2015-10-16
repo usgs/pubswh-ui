@@ -1,6 +1,6 @@
 import logging
 from flask import Flask, request
-from flask.ext.assets import Environment, Bundle
+from flask.ext.bower import Bower
 from flask.ext.images import Images
 from flask_mail import Mail
 
@@ -17,39 +17,6 @@ handler.setFormatter(fmt)
 
 app = Flask(__name__)
 app.config.from_object('settings')  # load configuration before passing the app object to other things
-
-#set up Flask-assets for minification
-assets = Environment(app)
-
-js_base_libs = Bundle(
-    'pubswh/js/vendor/bootstrap.js',
-    'pubswh/js/plugins.js',
-    filters='rjsmin',
-    output='js/base_libs.js'
-)
-assets.register('js_base_libs', js_base_libs)
-
-
-js_advanced_search = Bundle(
-    'pubswh/js/select2.js',
-    'pubswh/js/searchMap.js',
-    'pubswh/js/clearFeatureControl.js',
-    filters='rjsmin',
-    output='js/advanced_search.js'
-)
-assets.register('js_advanced_search', js_advanced_search)
-
-css_base = Bundle(
-    'pubswh/css/normalize.css',
-    'pubswh/css/main.css',
-    'pubswh/css/bootstrap.css',
-    'pubswh/css/select2.css',
-    'pubswh/css/select2-bootstrap.css',
-    filters='cssmin',
-    output='css/min_base.css'
-)
-assets.register('css_base', css_base)
-
 
 @app.before_request
 def log_request():
@@ -73,6 +40,10 @@ app.jinja_env.globals.update(GOOGLE_WEBMASTER_TOOLS_CODE=app.config['GOOGLE_WEBM
 app.jinja_env.globals.update(LAST_MODIFIED=app.config.get('DEPLOYED'))
 app.jinja_env.globals.update(ANNOUNCEMENT_BLOCK=app.config['ANNOUNCEMENT_BLOCK'])
 
+# Creates the bower blueprint
+bower = Bower(app)
+
+import assets
 from pubswh.views import pubswh
 from manager.views import manager
 

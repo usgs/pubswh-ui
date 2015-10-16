@@ -1,0 +1,16 @@
+    baseUrl : '/pubs_ui/manager/static/js',
+    paths: {
+        'sinon' : '/pubs_ui/bower_components/sinon/lib/sinon',
+        'squire' : '/pubs_ui/bower_components/Squire.js/src/Squire',
+        'jquery' : '/pubs_ui/bower_components/jquery/dist/jquery',
+        'bootstrap' : '/pub_ui/bower_components/bootstrap/dist/js/bootstrap',
+        'underscore' : '/pubs_ui/bower_components/underscore/underscore',
+        'backbone' : '/pubs_ui/bower_components/backbone/backbone',
+        'handlebars' : '/pubs_ui/bower_components/handlebars/handlebars'
+    },
+    shim : {
+        'bootstrap' : ['jquery', 'underscore'],
+        'sinon' : {
+            'exports' : 'sinon'
+        }
+    }
