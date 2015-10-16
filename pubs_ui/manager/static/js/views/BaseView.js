@@ -37,7 +37,7 @@ define([
 		initialize: function (options) {
 			options = options || {};
 
-            this.context = options.context || {};
+			this.context = options.context || {};
 
 			if (_.has(options, 'template')) {
 				$.extend(this.context, options.context);

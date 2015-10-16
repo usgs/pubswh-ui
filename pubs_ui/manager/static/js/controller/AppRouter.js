@@ -1,26 +1,26 @@
 /*jslint browser: true */
 
 define([
-    'jquery',
-    'backbone',
-    'views/SearchView'
-], function($, Backbone, SearchView) {
-    "use strict";
+	'jquery',
+	'backbone',
+	'views/SearchView'
+], function ($, Backbone, SearchView) {
+	"use strict";
 
-    var appRouter = Backbone.Router.extend({
-        routes : {
-            '' : 'searchView',
-            'search' : 'searchView'
-        },
+	var appRouter = Backbone.Router.extend({
+		routes: {
+			'': 'searchView',
+			'search': 'searchView'
+		},
 
-        applicationContextDiv : '#main-content',
+		applicationContextDiv: '#main-content',
 
-        /*
-         * Create a view a put in in the applicationContextDiv. This view becomes the router's currentView
-         * @param {Backbone.View} view - The view to create
-         * @param {Object} opts - options to use when creating the view
-         */
-        showView : function(view, opts) {
+		/*
+		 * Create a view a put in in the applicationContextDiv. This view becomes the router's currentView
+		 * @param {Backbone.View} view - The view to create
+		 * @param {Object} opts - options to use when creating the view
+		 */
+		showView: function (view, opts) {
 			var newEl = $('<div />');
 
 			this.removeCurrentView();
@@ -31,20 +31,20 @@ define([
 			}, opts)).render();
 		},
 
-        /*
-         * Remove the currentView
-         */
-		removeCurrentView : function() {
+		/*
+		 * Remove the currentView
+		 */
+		removeCurrentView: function () {
 			if (this.currentView) {
 				this.currentView.remove();
 			}
 		},
 
-        searchView : function() {
-            this.showView(SearchView);
-        }
+		searchView: function () {
+			this.showView(SearchView);
+		}
 
-    });
+	});
 
-    return appRouter;
+	return appRouter;
 })
