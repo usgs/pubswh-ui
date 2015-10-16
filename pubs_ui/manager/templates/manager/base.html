@@ -70,10 +70,13 @@
 						'text' : "{{ url_for('bower.static', filename='text/text.js') }}",
 						'underscore' : "{{ url_for('bower.static', filename='underscore/underscore.js') }}",
 						'backbone' : "{{ url_for('bower.static', filename='backbone/backbone.js') }}",
-						'handlebars' : "{{ url_for('bower.static', filename='handlebars/handlebars.amd.js') }}"
+						'handlebars' : "{{ url_for('bower.static', filename='handlebars/handlebars.amd.js') }}",
+						'backbone.stickit' : "{{ url_for('bower.static', filename='backbone.stickit/backbone.stickit.js') }}"
 					},
 					shim : {
-						'bootstrap' : ['jquery', 'underscore']
+						'bootstrap' : ['jquery'],
+						'backbone' : ['jquery', 'underscore'],
+						'backbone.stickit' : ['backbone', 'underscore']
 					}
 				};
 			</script>
