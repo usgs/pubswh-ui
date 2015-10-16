@@ -31,7 +31,7 @@ define([
 		 *		@prop router {Backbone.Router instance} - defaults to null
 		 *		@prop template {Function} optional - Returns html to be rendered. Will override the template property.
 		 *		@prop context {Object} to be used when rendering templateName - defaults to {}
-		 *      @prop el {String} - render view in $el.
+		 * 		@prop el {String} - render view in $el.
 		 * @returns
 		 */
 		initialize: function (options) {
