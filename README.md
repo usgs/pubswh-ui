@@ -13,6 +13,7 @@ To get this application running using the flask local dev server, there are thre
  ```python
  SECRET_KEY = 'the_secret_key'
  DEBUG = True #you want debug to be true for development, but not production
+ ASSETS_DEBUG = True #Set to False if you want to compress assets.
 
  # URL for getting publication information
  PUB_URL = "[server of choice]/pubs-services/"

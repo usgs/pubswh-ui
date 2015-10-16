@@ -41,8 +41,6 @@ REDIS_CONFIG = ''
 #Config for Flask-Assets
 ASSETS_DEBUG = False # to disable compression of js and css set to True
 
-REQUIREJS_CONFIG = 'manager/static/require_config.js'
-
 if DEBUG:
     CONTACT_RECIPIENTS = ['ayan@usgs.gov', 'jkreft@usgs.gov']
 else:
