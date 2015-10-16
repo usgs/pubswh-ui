@@ -9,7 +9,7 @@
         'handlebars' : '/pubs_ui/bower_components/handlebars/handlebars'
     },
     shim : {
-        'bootstrap' : ['jquery'],
+        'bootstrap' : ['jquery', 'underscore'],
         'sinon' : {
             'exports' : 'sinon'
         }
