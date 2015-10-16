@@ -2,7 +2,7 @@ PubsWarehouse_UI
 ================
 
 To get this application running using the flask local dev server you need to create a local_settings.py file
-under PubsWarehouse_UI folder.  The contents of the files should looks like so:
+under PubsWarehouse_UI folder.  The contents of the file should looks like so:
 
  ```python
  SECRET_KEY = 'the_secret_key'
