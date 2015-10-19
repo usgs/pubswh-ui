@@ -3,8 +3,11 @@ from flask import Blueprint, render_template
 manager = Blueprint('manager', __name__,
                     template_folder='templates',
                     static_folder='static')
+
+
+@manager.route('/<path:path>')
 @manager.route('/')
-def show_search():
+def show_search(path=None):
     return render_template('manager/search.html')
 
 @manager.errorhandler(404)
