@@ -62,6 +62,12 @@
 		</div>
 		{% block common_page_script %}
 			<script type="text/javascript">
+				var PUBS = {
+						CONFIG : {
+							script_root: '{{ request.script_root }}'
+						}
+				};
+
 				var require = {
 				baseUrl: "{{ url_for('manager.static', filename='js') }}",
 					paths: {
