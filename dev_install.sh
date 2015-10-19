@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "This script assumes you have python 2.7, pip and virtualenv installed."
-echo "You will also need bower installed (npm install bower)"
+echo "You will also need bower and lessc installed (npm install -g bower and npm install -g less)"
 if [ ! -s local_settings.py ]; then
    echo "Please create a local_settings.py file before proceeding. See the README.md for what's required"
    exit
