@@ -5,7 +5,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>{% block title %}USGS Publications Warehouse{% endblock %}</title>
 		{% block usgs_style %}
-			<link rel="stylesheet" href="{{ url_for('bower.static', filename='bootstrap/dist/css/bootstrap.css') }}" />
 			{%  assets "manager_style" %}
 				<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
 			{% endassets %}
