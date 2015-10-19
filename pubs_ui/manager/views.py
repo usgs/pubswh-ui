@@ -7,8 +7,8 @@ manager = Blueprint('manager', __name__,
 
 @manager.route('/<path:path>')
 @manager.route('/')
-def show_search(path=None):
-    return render_template('manager/search.html')
+def show_app(path=None):
+    return render_template('manager/manager.html')
 
 @manager.errorhandler(404)
 def page_not_found(e):
