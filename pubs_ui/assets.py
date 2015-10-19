@@ -29,7 +29,8 @@ bundles={
     'manager_style' : Bundle(
         'manager/less/manager_custom.less',
         depends=[
-            'manager/less/usgs_header_footer.less'
+            'manager/less/usgs_header_footer.less',
+            'manager/less/search.less'
         ],
         filters='less,cssmin',
         output='gen/manager_style.css'
