@@ -1,7 +1,7 @@
 <div>
 	<div>
-		<div class="col-lg-3"> <!-- search and list view -->
-			<form class="row pub-search-section">
+		<div class="pub-search-container"> <!-- search and list view -->
+			<form class="pub-search-form">
 				{{#if advancedSearch}}
 					<label>Advanced </label><label>Search Criteria</label><br/>
 					<label>Advanced </label>
@@ -40,14 +40,14 @@
 				{{/if}}
 				<button type="submit" class="btn btn-default">Search</button>
 				{{#if advancedSearch}}
-					<button class="pull-right btn btn-link">Regular Search</button>
+					<button class="btn btn-link search-link-button">Regular Search</button>
 				{{else}}
-					<button class="pull-right btn btn-link" ng-hide="advancedSearch" >Advanced Search</button>
+					<button class="btn btn-link search-link-button" >Advanced Search</button>
 				{{/if}}
 			</form>
 			{{#if advancedSearch}}
 			{{else}}
-				<div class="row pub-lists-section">
+				<div class="pub-lists-section">
 					<label>View Lists</label><br/>
 					<div class="pub-list-grid-container">
 						<div class="pub-list-grid"></div>
@@ -55,12 +55,12 @@
 				</div>
 			{{/if}}
 		</div>
-		<div class="col-lg-9 pub-list-section">
+		<div class="pub-list-section">
 			<div id="pub-management-div">
-				<button class="btn btn-default" ng-click="editSelectedPublication()">Edit Selected</button>
+				<button class="btn btn-default">Edit Selected</button>
 				<a href="#/Publication" class="btn btn-default">Create</a>
-				<a href="#/Contributor" class="pull-right btn btn-default">Manage Contributors</a>
-				<button class="pull-right btn btn-default" ng-click="removeFromList()" ng-show="selectedPubsLists && selectedPubsLists.length == 1 && selectedPubs && selectedPubs.length > 0">Remove From List</button>
+				<a href="#/Contributor" class="pub-contributor-btn btn btn-default">Manage Contributors</a>
+				<button class="pub-remove-from-list-btn btn btn-default">Remove From List</button>
 			</div>
 			<div class="pub-grid-container">
 				{{#if advancedSearch}}
