@@ -2,13 +2,14 @@
 
 define([
 	'backbone',
-	'controller/AppRouter'
-], function (Backbone, AppRouter) {
+	'controller/AppRouter',
+	'module'
+], function (Backbone, AppRouter, module) {
 	"use strict";
 
 	var router = new AppRouter();
 	Backbone.history.start({
-		root: PUBS.CONFIG.script_root + '/manager/'
+		root: module.config().scriptRoot + '/manager/'
 	});
 
 	return router;
