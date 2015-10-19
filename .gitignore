@@ -18,3 +18,4 @@ lettucetests.xml
 /pubs_ui/static/
 /pubs_ui/bower_components/
 /target
+npm-debug.log
