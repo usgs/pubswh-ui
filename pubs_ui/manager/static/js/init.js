@@ -8,7 +8,7 @@ define([
 
 	var router = new AppRouter();
 	Backbone.history.start({
-		root: 'manager'
+		root: 'manager/'
 	});
 
 	return router;
