@@ -3,13 +3,12 @@ __author__ = 'jameskreft'
 from flask.ext.wtf import Form, RecaptchaField
 from wtforms import StringField, TextAreaField, SubmitField, validators, BooleanField, HiddenField, PasswordField, SelectField
 from wtforms.fields.html5 import SearchField, DateField
-from wtforms.validators import DataRequired
 from pubs_ui import app
 from requests import get
 
 lookup_url = app.config['LOOKUP_URL']
 # should requests verify the certificates for ssl connections
-verify_cert = app.config['VERIFY_CERT']
+g = app.config['VERIFY_CERT']
 
 
 def get_field_list(lookup_name, parameters=None):
@@ -81,9 +80,4 @@ class NumSeries(Form):
     num_series = BooleanField('Only USGS Numbered Series')
     date_range = DateField('Include publications back to date:   ')
 
-
-
-class LoginForm(Form):
-    username = StringField('AD Username:', validators=[DataRequired()])
-    password = PasswordField('AD Password:', validators=[DataRequired()])
 

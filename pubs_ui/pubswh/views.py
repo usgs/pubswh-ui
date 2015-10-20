@@ -1,26 +1,29 @@
-import sys
-import json
-from flask import render_template, abort, request, Response, jsonify, url_for, redirect, flash, Blueprint
-from flask_mail import Message
-from requests import get, post
-from webargs.flaskparser import FlaskParser
-from flask.ext.paginate import Pagination
-from flask.ext.cache import Cache
-from arguments import search_args
-from utils import (pull_feed, create_display_links, getbrowsecontent,
-                   SearchPublications, change_to_pubs_test, generate_auth_header, 
-                   munge_pubdata_for_display, extract_related_pub_info, jsonify_geojson)
-from forms import ContactForm, SearchForm, NumSeries, LoginForm
-from canned_text import EMAIL_RESPONSE
-from pubs_ui import app, mail
 from datetime import date, timedelta
 from dateutil import parser as dateparser
-from flask_login import (LoginManager, login_required, login_user, logout_user, UserMixin, current_user, )
-from itsdangerous import URLSafeTimedSerializer
+import json
 from operator import itemgetter
-from urllib import unquote
+import sys
+
 import arrow
 import redis
+from requests import get, post
+
+from flask import render_template, abort, request, Response, jsonify, url_for, redirect, Blueprint
+from flask.ext.cache import Cache
+from flask.ext.paginate import Pagination
+from flask_login import login_required, login_user, current_user
+from flask_mail import Message
+from webargs.flaskparser import FlaskParser
+
+from ..views import generate_auth_header
+from .. import app, mail
+from .arguments import search_args
+from .canned_text import EMAIL_RESPONSE
+from .forms import ContactForm, SearchForm, NumSeries
+from .utils import (pull_feed, create_display_links, getbrowsecontent,
+                   SearchPublications, change_to_pubs_test,
+                   munge_pubdata_for_display, extract_related_pub_info, jsonify_geojson)
+
 
 # set UTF-8 to be default throughout app
 reload(sys)
@@ -53,14 +56,6 @@ redis_config = app.config['REDIS_CONFIG']
 # should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
 
-# Login_serializer used to encrypt and decrypt the cookie token for the remember
-# me option of flask-login
-login_serializer = URLSafeTimedSerializer(app.secret_key)
-
-# Flask-Login Login Manager
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = login_page_path
 
 cache = Cache(app, config=cache_config)
 
@@ -72,159 +67,10 @@ def make_cache_key(*args, **kwargs):
     return (path + args).encode('utf-8')
 
 
-
-class User(UserMixin):
-    """
-    User Class for flask-Login
-    """
-    def __init__(self, user_ad_username=None, pubs_auth_token=None):
-        self.id = user_ad_username
-        self.auth_token = pubs_auth_token
-
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_auth_token(self):
-        """
-        Encode a secure token for cookie
-        """
-        data = [str(self.id), self.auth_token]
-        return login_serializer.dumps(data)
-
-    @staticmethod
-    def get(userid, token):
-        """
-        Static method to search the database and see if userid exists.  If it
-        does exist then return a User Object.  If not then return None as
-        required by Flask-Login.
-        """
-        # since we are offloading authentication of the user to the backend, we are assuming that if we have an
-        # unexpired token, we have a valid user, so we are just grabbing the token from the cookie and carrying on
-        if userid:
-            return User(userid, token)
-        return None
-
-
-
-@login_manager.user_loader
-def load_user(userid):
-    """
-    Flask-Login user_loader callback.
-    The user_loader function asks this function to get a User Object or return
-    None based on the userid.
-    The userid was stored in the session environment by Flask-Login.
-    user_loader stores the returned User object in current_user during every
-    flask request.
-    """
-
-    token_cookie = request.cookies.get('remember_token')
-    # TODO: catch a cookie that is too old and logout the user
-    try:
-        session_data = login_serializer.loads(token_cookie, max_age=max_age)
-        # get the token from the session data
-        mypubs_token = session_data[1]
-        return User.get(userid, mypubs_token)
-    except TypeError:  # this typeerror typically occurs when the token has expired.
-        logout_user()
-        flash('your login has expired, please log in again')
-
-
-@login_manager.token_loader
-def load_token(token):
-    """
-    Flask-Login token_loader callback.
-    The token_loader function asks this function to take the token that was
-    stored on the users computer process it to check if its valid and then
-    return a User Object if its valid or None if its not valid.
-    """
-
-    # The Token itself was generated by User.get_auth_token.  So it is up to
-    # us to known the format of the token data itself.
-
-    # The Token was encrypted using itsdangerous.URLSafeTimedSerializer which
-    # allows us to have a max_age on the token itself.  When the cookie is stored
-    # on the users computer it also has a exipry date, but could be changed by
-    # the user, so this feature allows us to enforce the exipry date of the token
-    # server side and not rely on the users cookie to exipre.
-    token_max_age = max_age
-
-    # Decrypt the Security Token, data = [ad_user_username, user_ad_token]
-    data = login_serializer.loads(token, max_age=token_max_age)
-
-    # generate the user object based on the contents of the cookie, if the cookie isn't expired
-    if data:
-        user = User(data[0], data[1])
-    else:
-        user = None
-    # return the user
-    if user:
-        return user
-    return None
-
-
 @pubswh.errorhandler(404)
 def page_not_found(e):
     return render_template('pubswh/404.html'), 404
 
-
-@pubswh.route("/logout/")
-def logout_page():
-    """
-    Web Page to Logout User, then Redirect them to Index Page.
-    """
-    auth_header = generate_auth_header(request)
-    logout_url = auth_endpoint_url+'logout'
-    response = post(logout_url, headers=auth_header, verify=verify_cert)
-    if response.status_code == 200:
-        print 'logout works!'
-
-    logout_user()
-
-    return redirect(url_for('pubswh:index'))
-
-
-@pubswh.route("/login/", methods=["GET", "POST"])
-def login_page():
-    """
-    Web Page to Display Login Form and process form.
-    """
-    form = LoginForm()
-    error = None
-    if request.method == "POST":
-        # take the form data and put it into the payload to send to the pubs auth endpoint
-        payload = {'username': request.form['username'], 'password': request.form['password']}
-        # POST the payload to the pubs auth endpoint
-        pubs_login_url = auth_endpoint_url+'token'
-        mp_response = post(pubs_login_url, data=payload, verify=verify_cert)
-        # if the pubs endpoint login is successful, then proceed with logging in
-        if mp_response.status_code == 200:
-            user = User(request.form['username'], mp_response.json().get('token'))
-            login_user(user, remember=True)
-            flash('You were successfully logged in')
-            next_page = request.args.get("next")
-            # sort out where to redirect, taking this approach allows us to use url_for, which is super-useful, and less
-            # prone to being messed-up by apache than the default implementation.
-            if next_page is not None:
-                    app.logger.info("Next page: "+str(next_page))
-                    next_split = unquote(next_page).split('/')  # split so we can get the end of the path
-                    app.logger.info("Next split: "+str(next_split))
-                    if next_split[-2] == 'preview':  # ok, we need to point to the preview endpoint
-                        index_id = next_split[-1]
-                        return redirect(url_for('pubwh:restricted_page', index_id=index_id))
-                    else:
-                        return redirect(url_for('pubswh:index'))
-            else:
-                return redirect(url_for('pubwh:index'))
-        else:
-            error = 'Username or Password is invalid '+str(mp_response.status_code)
-
-    return render_template("pubswh/login.html", form=form, error=error)
 
 
 @pubswh.route("/preview/<index_id>")
@@ -250,7 +96,7 @@ def restricted_page(index_id):
         return render_template("pubswh/preview.html", indexID=index_id, pubdata=pubdata, related_pubs=related_pubs)
     # if the publication has been published (so it is out of manage) redirect to the right URL
     elif response.status_code == 404 and published_status == 200:
-        return redirect(url_for('pubwh:publication', index_id=index_id))
+        return redirect(url_for('pubswh.publication', index_id=index_id))
     elif response.status_code == 404 and published_status == 404:
         return render_template('pubswh/404.html'), 404
 
@@ -577,9 +423,9 @@ def legacy_search(series_code=None, report_number=None, pub_year=None):
             pub_year = ''.join(['19', pub_year])
         elif int(pub_year) < 30:
             pub_year = ''.join(['20', pub_year])
-        return redirect(url_for('pubswh:search_results', q=series_code+" "+report_number, year=pub_year, advanced=True))
+        return redirect(url_for('pubswh.search_results', q=series_code+" "+report_number, year=pub_year, advanced=True))
 
-    return redirect(url_for('pubswh:search_results', q=series_code+" "+report_number))
+    return redirect(url_for('pubswh.search_results', q=series_code+" "+report_number))
 
 
 
