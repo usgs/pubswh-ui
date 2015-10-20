@@ -1,6 +1,12 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}Manage USGS Publications{% endblock %}
+
+{% block page_style %}
+	{%  assets "manager_style" %}
+		<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
+	{% endassets %}
+{% endblock %}
 
 {% block main %}
 	<h1>Manage USGS Publications</h1>

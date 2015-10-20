@@ -15,7 +15,7 @@ from flask_login import login_required, login_user, current_user
 from flask_mail import Message
 from webargs.flaskparser import FlaskParser
 
-from ..views import generate_auth_header
+from ..auth.views import generate_auth_header
 from .. import app, mail
 from .arguments import search_args
 from .canned_text import EMAIL_RESPONSE

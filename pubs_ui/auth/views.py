@@ -1,7 +1,7 @@
 
 from urllib import unquote
 
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, Blueprint
 from flask.ext.wtf import Form
 from flask_login import LoginManager, logout_user, UserMixin, login_user
 from itsdangerous import URLSafeTimedSerializer
@@ -9,7 +9,12 @@ from requests import post
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
 
-from . import app
+from .. import app
+
+auth = Blueprint('auth', __name__,
+                 template_folder='templates',
+                 static_folder='static',
+                 static_url_path='/auth/static')
 
 class LoginForm(Form):
     username = StringField('AD Username:', validators=[DataRequired()])
@@ -195,5 +200,5 @@ def login_page():
         else:
             error = 'Username or Password is invalid '+str(mp_response.status_code)
 
-    return render_template("pubswh/login.html", form=form, error=error)
+    return render_template("auth/login.html", form=form, error=error)
 
