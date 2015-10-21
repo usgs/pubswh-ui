@@ -8,7 +8,7 @@ from requests import get
 
 lookup_url = app.config['LOOKUP_URL']
 # should requests verify the certificates for ssl connections
-g = app.config['VERIFY_CERT']
+verify_cert = app.config['VERIFY_CERT']
 
 
 def get_field_list(lookup_name, parameters=None):
