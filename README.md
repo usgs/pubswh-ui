@@ -61,7 +61,7 @@ to take.
   1. Change directory to pubs_ui
   2. Run `bower install`
 
-You can start the app by running `runserver.py`, which will give you an output like so:
+You can start the app by running `run.py`, which will give you an output like so:
 
  ```python
  * Running on http://127.0.0.1:5050/
