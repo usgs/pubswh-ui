@@ -6,12 +6,12 @@ import sys
 
 import arrow
 import redis
-from requests import get, post
+from requests import get
 
 from flask import render_template, abort, request, Response, jsonify, url_for, redirect, Blueprint
 from flask.ext.cache import Cache
 from flask.ext.paginate import Pagination
-from flask_login import login_required, login_user, current_user
+from flask_login import login_required, current_user
 from flask_mail import Message
 from webargs.flaskparser import FlaskParser
 

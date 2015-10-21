@@ -1,6 +1,4 @@
 
-from urllib import unquote
-
 from flask import render_template, request, flash, redirect, url_for, Blueprint
 from flask.ext.wtf import Form
 from flask_login import LoginManager, logout_user, UserMixin, login_user
@@ -10,20 +8,23 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
 
 from .. import app
+from ..utils import get_url_rule, is_safe_url
+
 
 auth = Blueprint('auth', __name__,
                  template_folder='templates',
                  static_folder='static',
                  static_url_path='/auth/static')
 
-class LoginForm(Form):
-    username = StringField('AD Username:', validators=[DataRequired()])
-    password = PasswordField('AD Password:', validators=[DataRequired()])
-
 MAX_AGE = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
 AUTH_ENDPOINT_URL = app.config.get('AUTH_ENDPOINT_URL')
 # should requests verify the certificates for ssl connections
 VERIFY_CERT = app.config['VERIFY_CERT']
+
+
+class LoginForm(Form):
+    username = StringField('AD Username:', validators=[DataRequired()])
+    password = PasswordField('AD Password:', validators=[DataRequired()])
 
 # Login_serializer used to encrypt and decrypt the cookie token for the remember
 # me option of flask-login
@@ -183,18 +184,13 @@ def login_page():
             user = User(request.form['username'], mp_response.json().get('token'))
             login_user(user, remember=True)
             flash('You were successfully logged in')
+
             next_page = request.args.get("next")
-            # sort out where to redirect, taking this approach allows us to use url_for, which is super-useful, and less
-            # prone to being messed-up by apache than the default implementation.
-            if next_page is not None:
-                    app.logger.info("Next page: "+str(next_page))
-                    next_split = unquote(next_page).split('/')  # split so we can get the end of the path
-                    app.logger.info("Next split: "+str(next_split))
-                    if next_split[-2] == 'preview':  # ok, we need to point to the preview endpoint
-                        index_id = next_split[-1]
-                        return redirect(url_for('pubswh.restricted_page', index_id=index_id))
-                    else:
-                        return redirect(url_for('pubswh.index'))
+            app.logger.info("Next page: "+str(next_page))
+
+            if next_page is not None and is_safe_url(next_page, request.host_url):
+                return redirect(get_url_rule(next_page))
+
             else:
                 return redirect(url_for('pubswh.index'))
         else:
