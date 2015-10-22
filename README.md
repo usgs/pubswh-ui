@@ -69,11 +69,17 @@ You can start the app by running `run.py`, which will give you an output like so
  ```
 
 ##Tests
-This app has lettuce and unit tests. To run the lettuce tests do the following with your virtualenv activated or using the full path name to lettuce:
+This app has lettuce tests, python unit tests and jasmine (javascript) tests. To run the lettuce tests do the following with your virtualenv activated or using the full path name to lettuce:
 `lettuce --with-xunit pubs_ui/lettuce_testing`
 
 To run the unit tests do the following with your virtualenv activated or using the full path name to nosetests:
 `nosetests -w pubs_ui`
+
+To run the jasmine tests and to produce a code coverage report, run the following:
+`mvn verify`
+
+To run the jasmine tests using a browser, run the following:
+`mvn jasmine:bdd`
 
 
 ## Generating secret keys
