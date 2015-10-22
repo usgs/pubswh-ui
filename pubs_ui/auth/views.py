@@ -8,7 +8,7 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
 
 from .. import app
-from ..utils import get_url_rule, is_safe_url
+from ..utils import get_url_endpoint, is_safe_url
 
 
 auth = Blueprint('auth', __name__,
@@ -189,7 +189,7 @@ def login_page():
             app.logger.info("Next page: "+str(next_page))
 
             if next_page is not None and is_safe_url(next_page, request.host_url):
-                return redirect(get_url_rule(next_page))
+                return redirect(url_for(get_url_endpoint(next_page, 'pubswh.index')))
 
             else:
                 return redirect(url_for('pubswh.index'))
