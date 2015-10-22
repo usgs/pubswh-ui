@@ -1,10 +1,42 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}Manage USGS Publications{% endblock %}
+
+{% block page_style %}
+	{%  assets "manager_style" %}
+		<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
+	{% endassets %}
+{% endblock %}
 
 {% block main %}
 	<h1>Manage USGS Publications</h1>
 {% endblock %}
 
 {% block page_script %}
+	<script type="text/javascript">
+
+		var require = {
+			config: {
+				'init' : {
+					'scriptRoot' : "{{ request.script_root }}"
+				}
+			},
+			baseUrl: "{{ url_for('manager.static', filename='js') }}",
+			paths: {
+				'jquery' : "{{ url_for('bower.static', filename='jquery/dist/jquery.js') }}",
+				'bootstrap' : "{{ url_for('bower.static', filename='bootstrap/dist/js/bootstrap.js') }}",
+				'text' : "{{ url_for('bower.static', filename='text/text.js') }}",
+				'underscore' : "{{ url_for('bower.static', filename='underscore/underscore.js') }}",
+				'backbone' : "{{ url_for('bower.static', filename='backbone/backbone.js') }}",
+				'handlebars' : "{{ url_for('bower.static', filename='handlebars/handlebars.amd.js') }}",
+				'backbone.stickit' : "{{ url_for('bower.static', filename='backbone.stickit/backbone.stickit.js') }}"
+			},
+			shim : {
+				'bootstrap' : ['jquery'],
+				'backbone' : ['jquery', 'underscore'],
+				'backbone.stickit' : ['backbone', 'underscore']
+			}
+		};
+	</script>
+	<script data-main="init" src="{{ url_for('bower.static', filename='requirejs/require.js') }}"></script>
 {% endblock %}

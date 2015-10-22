@@ -61,14 +61,29 @@ to take.
   1. Change directory to pubs_ui
   2. Run `bower install`
 
-You can start the app by running `runserver.py`, which will give you an output like so:
+You can start the app by running `run.py`, which will give you an output like so:
 
  ```python
  * Running on http://127.0.0.1:5050/
  * Restarting with reloader
  ```
 
----
+##Tests
+This app has lettuce tests, python unit tests and jasmine (javascript) tests. To run the lettuce tests do the following with your virtualenv activated or using the full path name to lettuce:
+`lettuce --with-xunit pubs_ui/lettuce_testing`
+
+To run the unit tests do the following with your virtualenv activated or using the full path name to nosetests:
+`nosetests -w pubs_ui`
+
+To run the jasmine tests and to produce a code coverage report, run the following:
+`mvn verify`
+
+To run the jasmine tests using a browser, run the following:
+`mvn jasmine:bdd`
+
+
+## Generating secret keys
+
 
 If you want to generate a real secret key, you can do so trivially from the Python console by using `os.urandom()` like so:
 

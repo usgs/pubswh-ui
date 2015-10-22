@@ -44,9 +44,12 @@ app.jinja_env.globals.update(ANNOUNCEMENT_BLOCK=app.config['ANNOUNCEMENT_BLOCK']
 bower = Bower(app)
 
 import assets
-from pubswh.views import pubswh
-from manager.views import manager
 
+from auth.views import auth
+from manager.views import manager
+from pubswh.views import pubswh
+
+app.register_blueprint(auth)
 app.register_blueprint(pubswh)
 app.register_blueprint(manager,
                        url_prefix='/manager')

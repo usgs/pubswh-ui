@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+from flask_login import login_required
 
 manager = Blueprint('manager', __name__,
                     template_folder='templates',
@@ -7,6 +8,7 @@ manager = Blueprint('manager', __name__,
 
 @manager.route('/<path:path>')
 @manager.route('/')
+@login_required
 def show_app(path=None):
     return render_template('manager/manager.html')
 

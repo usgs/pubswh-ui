@@ -600,28 +600,6 @@ def change_to_pubs_test(pubs_url):
     return pubs_test_url
 
 
-def generate_auth_header(request):
-    """
-    This is used to generate the auth header to make requests back to the pubs-services endpoints
-    :param request: the request object to get the cookie
-    :return: A authorization header that can be sent along to the pubs-services endpoint
-    """
-    login_serializer = URLSafeTimedSerializer(app.secret_key)
-    # get the token cookie from the request
-    token_cookie = request.cookies.get('remember_token')
-    # set a max age variable that is the same max age as the cookie can be.
-    max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
-    # decrypt the cookie to get the username and the token
-    session_data = login_serializer.loads(token_cookie, max_age=max_age)
-    # get the token from the session data
-    mypubs_token = session_data[1]
-    # build the auth value to send to the manage server
-    auth_value = 'Bearer  '+mypubs_token
-    # build the Authorization header
-    header = {'Authorization': auth_value}
-    return header
-
-
 def make_chapter_data_for_display(pubdata):
     """
     take publication data and munges it around to make it easy to work with in jinja templates

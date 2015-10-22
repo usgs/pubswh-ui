@@ -6,6 +6,7 @@
 .project
 .Rhistory
 /pubs_ui.log
+/pubs_ui/pubs_ui.log
 coverage.xml
 lettucetests.xml
 *~
@@ -15,7 +16,8 @@ lettucetests.xml
 /pubs_ui/pubswh/static/.webassets-cache/
 /pubs_ui/pubswh/static/css/min_base.css
 /pubs_ui/pubswh/static/js/base_libs.js
-/pubs_ui/static/
+/pubs_ui/static/gen
+/pubs_ui/static/.webassets-cache
 /pubs_ui/bower_components/
 /target
 /phantomjsdriver.log

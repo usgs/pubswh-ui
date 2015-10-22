@@ -17,6 +17,11 @@ bundles={
         filters='rjsmin',
         output='gen/advanced_search.js'
     ),
+    'usgs_style' : Bundle(
+        'less/usgs_header_footer.less',
+        filters='less,cssmin',
+        output='usgs_style.css'
+    ),
     'css_base' : Bundle(
         'pubswh/css/normalize.css',
         'pubswh/css/main.css',
@@ -26,10 +31,18 @@ bundles={
         filters='cssmin',
         output='gen/min_base.css'
     ),
+    'auth_style' : Bundle(
+        'auth/less/auth.less',
+        depends=[
+            'less/usgs_header_footer.less'
+        ],
+        filters='less,cssmin',
+        output='gen/auth_style.css'
+    ),
     'manager_style' : Bundle(
         'manager/less/manager_custom.less',
         depends=[
-            'manager/less/usgs_header_footer.less',
+            'less/usgs_header_footer.less',
             'manager/less/search.less'
         ],
         filters='less,cssmin',

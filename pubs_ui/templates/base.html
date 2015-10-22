@@ -3,13 +3,15 @@
 	<head lang="en">
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		{% block meta_data %}{% endblock %}
+
 		<title>{% block title %}USGS Publications Warehouse{% endblock %}</title>
-		{% block usgs_style %}
-			{%  assets "manager_style" %}
+		{% block page_style %}
+			{% assets "usgs_style" %}
 				<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
 			{% endassets %}
 		{% endblock %}
-		{% block page_style %}{% endblock %}
 		{% block head_script %}{% endblock %}
 	</head>
 	<body>
@@ -59,34 +61,7 @@
 				{% endblock %}
 			</footer>
 		</div>
-		{% block common_page_script %}
-			<script type="text/javascript">
-
-				var require = {
-					config: {
-						'init' : {
-							'scriptRoot' : "{{ request.script_root }}"
-						}
-					},
-					baseUrl: "{{ url_for('manager.static', filename='js') }}",
-					paths: {
-						'jquery' : "{{ url_for('bower.static', filename='jquery/dist/jquery.js') }}",
-						'bootstrap' : "{{ url_for('bower.static', filename='bootstrap/dist/js/bootstrap.js') }}",
-						'text' : "{{ url_for('bower.static', filename='text/text.js') }}",
-						'underscore' : "{{ url_for('bower.static', filename='underscore/underscore.js') }}",
-						'backbone' : "{{ url_for('bower.static', filename='backbone/backbone.js') }}",
-						'handlebars' : "{{ url_for('bower.static', filename='handlebars/handlebars.amd.js') }}",
-						'backbone.stickit' : "{{ url_for('bower.static', filename='backbone.stickit/backbone.stickit.js') }}"
-					},
-					shim : {
-						'bootstrap' : ['jquery'],
-						'backbone' : ['jquery', 'underscore'],
-						'backbone.stickit' : ['backbone', 'underscore']
-					}
-				};
-			</script>
-			<script data-main="init" src="{{ url_for('bower.static', filename='requirejs/require.js') }}"></script>
-		{%  endblock %}
+		
 		{% block page_script %}{% endblock %}
 
 	</body>
