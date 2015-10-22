@@ -3,7 +3,10 @@ from urlparse import urlparse, urljoin
 
 from . import app
 
-def get_url_rule(url, wsgi_str=app.config['WSGI_STR']):
+def get_url_rule(url, wsgi_str=None):
+    if not wsgi_str:
+        wsgi_str = app.config['WSGI_STR']
+
     return url.replace(wsgi_str, '')
 
 def is_safe_url(target, host_url):
