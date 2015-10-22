@@ -6,6 +6,7 @@
 .project
 .Rhistory
 /pubs_ui.log
+/pubs_ui/pubs_ui.log
 coverage.xml
 lettucetests.xml
 *~
