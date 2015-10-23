@@ -451,5 +451,5 @@ def unapi():
         if r.status_code == 404:
             return render_template('pubswh/404.html'), 404
         pubdata = r.json()
-        return render_template(formats[unapi_format]['template'], pubdata=pubdata, formats=formats,  mimetype='text/xml')
+        return render_template('pubswh/'+formats[unapi_format]['template'], pubdata=pubdata, formats=formats,  mimetype='text/xml')
 
