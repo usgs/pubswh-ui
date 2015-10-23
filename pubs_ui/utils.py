@@ -1,6 +1,6 @@
 
-import sys
 from urlparse import urlparse, urljoin
+from urllib import unquote
 
 from werkzeug.exceptions import NotFound, MethodNotAllowed
 
@@ -17,7 +17,9 @@ def get_url_endpoint(url, server_name, fallback, wsgi_str=None):
     '''
     if not wsgi_str:
         wsgi_str = app.config['WSGI_STR']
-    this_rule = url.replace(wsgi_str, '')
+    app.logger.info('Decoded url ' + unquote(url))
+    this_rule = unquote(url).replace(wsgi_str, '')
+    app.logger.info('Rule is ' + this_rule)
 
     try:
         ma = app.url_map.bind(server_name)

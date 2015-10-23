@@ -19,6 +19,7 @@ class GetUrlEndpointTestCase(TestCase):
     def test_with_default_wsgi_str(self):
         self.assertEqual(get_url_endpoint('/contact', '127.0.0.1', self.fallback), ('pubswh.contact', {}))
         self.assertEqual(get_url_endpoint('/wsgi/test/contact', '127.0.0.1', self.fallback), ('pubswh.contact', {}))
+        self.assertEqual(get_url_endpoint('%2Fwsgi%2Ftest%2Fcontact', '127.0.0.1', self.fallback), ('pubswh.contact', {}))
 
     def test_with_user_wsgi_str(self):
         self.assertEqual(get_url_endpoint('/wsgi/test2/contact', '127.0.0.1', self.fallback, '/wsgi/test2'), ('pubswh.contact', {}))
