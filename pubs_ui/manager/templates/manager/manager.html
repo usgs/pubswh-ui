@@ -9,7 +9,10 @@
 {% endblock %}
 
 {% block main %}
-	<h1>Manage USGS Publications</h1>
+	<div id="manage-content-header">
+		<h1>Manage USGS Publications</h1>
+		{% if current_user.is_authenticated() %}<a href="{{ url_for('logout_page', forward='manager.show_app') }}">Logout</a>{% endif %}
+	</div>
 {% endblock %}
 
 {% block page_script %}

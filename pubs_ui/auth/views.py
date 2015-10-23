@@ -150,8 +150,8 @@ def load_token(token):
         return user
     return None
 
-@app.route("/logout/")
-def logout_page():
+@app.route("/logout/<forward>")
+def logout_page(forward):
     """
     Web Page to Logout User, then Redirect them to Index Page.
     """
@@ -163,7 +163,7 @@ def logout_page():
 
     logout_user()
 
-    return redirect(url_for('pubswh.index'))
+    return redirect(url_for(forward))
 
 
 @app.route("/login/", methods=["GET", "POST"])
