@@ -189,7 +189,9 @@ def login_page():
             app.logger.info("Next page: "+str(next_page))
 
             if next_page is not None and is_safe_url(next_page, request.host_url):
-                return redirect(url_for(get_url_endpoint(next_page, 'pubswh.index')))
+                endpoint = get_url_endpoint(next_page, request.environ['SERVER_NAME'], ('pubswh.index', {}))
+                url = url_for(endpoint[0], **endpoint[1])
+                return redirect(url)
 
             else:
                 return redirect(url_for('pubswh.index'))
