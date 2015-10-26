@@ -23,9 +23,12 @@ def show_app(path=None):
     return render_template('manager/manager.html')
 
 
-@manager.route('/services/<op>/')
-def services_proxy(op):
-    url = '%s%s/' % (SERVICES_ENDPOINT, op)
+@manager.route('/services/<op1>/')
+@manager.route('/services/<op1>/<op2>')
+def services_proxy(op1, op2=None):
+    url = '%s%s/' % (SERVICES_ENDPOINT, op1)
+    if op2 != None:
+        url = url + op2
     headers = generate_auth_header(request)
 
     proxy_request = Request(method=request.method,
