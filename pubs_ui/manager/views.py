@@ -23,8 +23,8 @@ def show_app(path=None):
     return render_template('manager/manager.html')
 
 
-@manager.route('/services/<op1>/')
-@manager.route('/services/<op1>/<op2>')
+@manager.route('/services/<op1>/', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@manager.route('/services/<op1>/<op2>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def services_proxy(op1, op2=None):
     url = '%s%s/' % (SERVICES_ENDPOINT, op1)
     if op2 != None:
