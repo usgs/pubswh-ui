@@ -38,6 +38,19 @@ define([
 				this.context.alertKind = kind;
 				this.context.message = message;
 			}
+		},
+
+		showSuccessAlert : function(message) {
+			this.showAlert(this.ALERT_KINDS.success, message);
+		},
+		showInfoAlert : function(message) {
+			this.showAlert(this.ALERT_KINDS.info, message);
+		},
+		showWarningAlert : function(message) {
+			this.showAlert(this.ALERT_KINDS.warning, message);
+		},
+		showDangerAlert : function(message) {
+			this.showAlert(this.ALERT_KINDS.danger, message);
 		}
 	});
 
