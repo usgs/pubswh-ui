@@ -30,6 +30,8 @@ def services_proxy(op1, op2=None):
     if op2 != None:
         url = url + op2
     headers = generate_auth_header(request)
+    if request.method != 'GET':
+        headers.update(request.headers)
 
     app.logger.info('Service URL is %s' % url)
     proxy_request = Request(method=request.method,
