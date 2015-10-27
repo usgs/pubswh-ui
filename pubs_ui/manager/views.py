@@ -26,11 +26,12 @@ def show_app(path=None):
 @manager.route('/services/<op1>/', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @manager.route('/services/<op1>/<op2>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def services_proxy(op1, op2=None):
-    url = '%s%s' % (SERVICES_ENDPOINT, op1)
+    url = '%s%s/' % (SERVICES_ENDPOINT, op1)
     if op2 != None:
-        url = url + '/' + op2
+        url = url + op2
     headers = generate_auth_header(request)
-    headers.update(request.headers)
+    if request.method != 'GET':
+        headers.update(request.headers)
 
     app.logger.info('Service URL is %s' % url)
     proxy_request = Request(method=request.method,
