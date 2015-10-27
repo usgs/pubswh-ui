@@ -69,6 +69,22 @@ define([
 		},
 
 		savePub : function() {
+			var self = this;
+
+			this.model.unset('interactions');
+			this.model.save({}, {
+				contentType : 'application/json',
+				headers : {
+					'Accept' : 'application/json'
+				},
+				success : function(model, response, options) {
+					self.alertView.showSuccessAlert('The publication was successfully saved');
+				},
+				error : function(model, response, options) {
+					self.alertView.showDangerAlert('Publication not saved.')
+					self.$('.validation-errors').html(JSON.stringify(response.responseJSON.validationErrors));
+				}
+			}).done(function() {})
 
 		},
 

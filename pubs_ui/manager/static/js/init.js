@@ -8,6 +8,7 @@ define([
 	"use strict";
 
 	var router = new AppRouter();
+
 	Backbone.history.start({
 		root: module.config().scriptRoot + '/manager/'
 	});

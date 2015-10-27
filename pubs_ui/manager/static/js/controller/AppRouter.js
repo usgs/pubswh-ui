@@ -50,15 +50,11 @@ define([
 			this.createView(SearchView).render();
 		},
 		publicationView : function(pubId) {
-			var model;
+			var model = new PublicationModel();
 			if (pubId) {
-				model = new PublicationModel({
-					id : pubId
-				});
+				model.set('id', pubId);
 			}
-			else {
-				model = new PublicationModel();
-			}
+
 			this.createView(PublicationView,
 				{
 					model : model
@@ -68,4 +64,4 @@ define([
 	});
 
 	return appRouter;
-})
+});
