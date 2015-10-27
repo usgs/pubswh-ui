@@ -34,7 +34,7 @@ login_serializer = URLSafeTimedSerializer(app.secret_key)
 # Flask-Login Login Manager
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login_page'
+login_manager.login_view = 'auth.login_page'
 
 class User(UserMixin):
     """
@@ -150,8 +150,8 @@ def load_token(token):
         return user
     return None
 
-@app.route("/logout/")
-def logout_page():
+@auth.route("/logout/<forward>")
+def logout_page(forward):
     """
     Web Page to Logout User, then Redirect them to Index Page.
     """
@@ -163,10 +163,10 @@ def logout_page():
 
     logout_user()
 
-    return redirect(url_for('pubswh.index'))
+    return redirect(url_for(forward))
 
 
-@app.route("/login/", methods=["GET", "POST"])
+@auth.route("/login/", methods=["GET", "POST"])
 def login_page():
     """
     Web Page to Display Login Form and process form.
@@ -183,7 +183,6 @@ def login_page():
         if mp_response.status_code == 200:
             user = User(request.form['username'], mp_response.json().get('token'))
             login_user(user, remember=True)
-            flash('You were successfully logged in')
 
             next_page = request.args.get("next")
             app.logger.info("Next page: "+str(next_page))
