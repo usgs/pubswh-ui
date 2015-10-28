@@ -1,5 +1,5 @@
 
-from requests import Request, Session, delete
+from requests import Request, Session
 
 from flask import Blueprint, render_template, request
 from flask_login import login_required
