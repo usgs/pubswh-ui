@@ -2,12 +2,21 @@
 
 define([
 	'underscore',
+	'jquery',
 	'backbone'
-], function(_, Backbone) {
+], function(_, $, Backbone) {
 	"use strict";
 
 	var model = Backbone.Model.extend({
 		urlRoot : '/manager/services/mppublications/',
+
+		/*
+		Need to remove interactions and text to work around an issue with some properties being returned that shouldn't be.
+		When PUBSTWO-1272 has been resolved, this can be removed.
+		 */
+		parse : function(response, options) {
+			return _.omit(response, ['interactions', 'text']);
+		},
 
 
 		fetch : function(options) {
@@ -22,11 +31,12 @@ define([
 			return Backbone.Model.prototype.fetch.call(this, params);
 		},
 
-		release : function() {
+		changeState : function(op) {
+			var self = this;
 			var deferred = $.Deferred();
 			if (this.has('id')) {
 				$.ajax({
-					url: this.urlRoot + 'release',
+					url: this.urlRoot + op,
 					method : 'POST',
 					headers : {
 						'Accept' : 'application/json'
@@ -38,13 +48,15 @@ define([
 						deferred.resolve(response)
 					},
 					error : function(jqXHR, textStatus, error) {
-						var resp = jqXHR.responseText;
-						if (resp.validationErrors && (resp.validationErrors > 0)) {
-							this.set('validationErrors', resp.validationErrors);
+						var resp = jqXHR.responseJSON;
+						if (_.has(resp, 'validationErrors')
+							&& _.isArray(resp.validationErrors)
+							&& (resp.validationErrors.length > 0)) {
+							self.set('validationErrors', resp.validationErrors);
 							deferred.reject(resp.validationErrors);
 						}
 						else {
-							deferred.reject('Unable to release Publication with error: ' + error);
+							deferred.reject('Unable to ' + op + ' the publication with error: ' + error);
 						}
 					}
 				});
@@ -53,6 +65,14 @@ define([
 				deferred.resolve();
 			}
 			return deferred.promise();
+		},
+
+		release : function() {
+			return this.changeState('release');
+		},
+
+		publish : function() {
+			return this.changeState('publish');
 		}
 	});
 

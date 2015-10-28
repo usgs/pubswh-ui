@@ -13,7 +13,7 @@ define([
 		routes: {
 			'': 'searchView',
 			'search': 'searchView',
-			'publication/' : 'publicationView',
+			'publication' : 'publicationView',
 			'publication/:pubId' : 'publicationView'
 		},
 
