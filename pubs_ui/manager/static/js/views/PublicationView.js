@@ -33,6 +33,15 @@ define([
 						return '';
 					}
 				}
+			},
+			'#pub-id-div input' : 'id',
+			'#pub-index-id-div input' : 'indexId',
+			'#ipds-div input' : 'ipdsId',
+			'#pub-display-to-public-div input' : {
+				observe : 'displayToPublicDate',
+				onGet : function(value) {
+					return value + ' ET';
+				}
 			}
 		},
 
@@ -40,7 +49,9 @@ define([
 
 		render : function() {
 			BaseView.prototype.render.apply(this, arguments);
-			this.$('#display-date').datetimepicker();
+			this.$('#display-date').datetimepicker({
+				format : 'YYYY-MM-DDTHH:mm:ss [E]T'
+			});
 			this.stickit();
 			this.alertView.setElement(this.$('.alert-container'));
 			this.confirmationDialogView.setElement(this.$('.confirmation-dialog-container')).render();
@@ -52,19 +63,6 @@ define([
 
 			this.alertView = new AlertView();
 			this.confirmationDialogView = new ConfirmationDialogView();
-
-			if (this.model.has('id')) {
-				this.model.fetch().done(function(){
-					self.context.model = self.model.attributes;
-					self.render();
-				}).fail(function(jqXHR, textStatus) {
-					self.render();
-					self.alertView.showDangerAlert('Unable to connect with services: ' + textStatus);
-				});
-			}
-			else {
-				this.render();
-			}
 		},
 
 		remove : function() {
