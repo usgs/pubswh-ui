@@ -3,13 +3,14 @@
 define([
 	'handlebars',
 	'underscore',
+	'bootstrap',
 	'datetimepicker',
 	'views/BaseView',
 	'views/AlertView',
 	'views/ConfirmationDialogView',
 	'text!hb_templates/publication.hbs',
 	'backbone.stickit'
-], function(Handlebars, _, datetimepicker, BaseView, AlertView, ConfirmationDialogView, hbTemplate, Stickit) {
+], function(Handlebars, _, bootstrap, datetimepicker, BaseView, AlertView, ConfirmationDialogView, hbTemplate, Stickit) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -40,7 +41,12 @@ define([
 			'#pub-display-to-public-div input' : {
 				observe : 'displayToPublicDate',
 				onGet : function(value) {
-					return value + ' ET';
+					if (value) {
+						return value + ' ET';
+					}
+					else {
+						return '';
+					}
 				}
 			}
 		},
@@ -48,11 +54,20 @@ define([
 		template : Handlebars.compile(hbTemplate),
 
 		render : function() {
+			var self = this;
 			BaseView.prototype.render.apply(this, arguments);
+
 			this.$('#display-date').datetimepicker({
 				format : 'YYYY-MM-DDTHH:mm:ss [E]T'
 			});
+			this.$('#display-date').on('dp.change', function(ev) {
+				self.model.set('displayToPublicDate', ev.date.format('YYYY-MM-DDTHH:mm:ss'));
+			});
+			$('[data-toggle="tooltip"]').tooltip();
+
+			/* Sets up the binding between DOM elements and the model */
 			this.stickit();
+
 			this.alertView.setElement(this.$('.alert-container'));
 			this.confirmationDialogView.setElement(this.$('.confirmation-dialog-container')).render();
 		},
@@ -60,6 +75,9 @@ define([
 		initialize : function(options) {
 			var self = this;
 			BaseView.prototype.initialize.apply(this, arguments);
+
+			this.context.id = this.model.get('id');
+			this.listenTo(this.model, 'change:id', this.updatePubId);
 
 			this.alertView = new AlertView();
 			this.confirmationDialogView = new ConfirmationDialogView();
@@ -70,6 +88,16 @@ define([
 			this.confirmationDialogView.remove();
 			BaseView.prototype.remove.apply(this, arguments);
 			return this;
+		},
+
+		updatePubId : function(model, newId) {
+			if (newId) {
+				this.$('#pub-preview-div').show();
+				this.$('#pub-preview-div a').attr('href', 'https://pubs.er.usgs.gov/preview/' + newId);
+			}
+			else {
+				this.$('#pub-preview-div').hide();
+			}
 		},
 
 		reloadPage : function() {
@@ -93,7 +121,9 @@ define([
 
 		savePub : function() {
 			var self = this;
+			var loadingDiv = this.$('.loading-indiciator');
 
+			loadingDiv.show();
 
 			return this.model.save({}, {
 				contentType : 'application/json',
@@ -114,6 +144,8 @@ define([
 						self.alertView.showDangerAlert('Publication not saved.');
 					}
 				}
+			}).always(function() {
+				loadingDiv.hide();
 			});
 		},
 
@@ -121,6 +153,8 @@ define([
 			var self = this;
 
 			var callPublish = function() {
+				var loadingDiv = self.$('.loading-indicator');
+				loadingDiv.show();
 				self.model.publish()
 					.done(function() {
 						self.returnToSearch();
@@ -132,6 +166,9 @@ define([
 						else {
 							self.alertView.showDangerAlert(error);
 						}
+					})
+					.always(function() {
+						loadingDiv.hide();
 					});
 			};
 

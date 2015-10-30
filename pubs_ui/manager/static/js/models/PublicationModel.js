@@ -8,7 +8,7 @@ define([
 	"use strict";
 
 	var model = Backbone.Model.extend({
-		urlRoot : '/manager/services/mppublications/',
+		urlRoot : '/manager/services/mppublications',
 
 		/*
 		Need to remove interactions and text to work around an issue with some properties being returned that shouldn't be.
@@ -34,9 +34,9 @@ define([
 		changeState : function(op) {
 			var self = this;
 			var deferred = $.Deferred();
-			if (this.has('id')) {
+			if (!this.isNew()) {
 				$.ajax({
-					url: this.urlRoot + op,
+					url: this.urlRoot +  '/' + op,
 					method : 'POST',
 					headers : {
 						'Accept' : 'application/json'
