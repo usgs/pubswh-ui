@@ -70,6 +70,10 @@ define([
 
 			this.alertView.setElement(this.$('.alert-container'));
 			this.confirmationDialogView.setElement(this.$('.confirmation-dialog-container')).render();
+
+			this.fetchPromise.fail(function(jqXhr) {
+				self.alertView.showDangerAlert('Can\'t retrieve the publication: ' + jqXhr.statusText);
+			})
 		},
 
 		initialize : function(options) {
@@ -78,6 +82,10 @@ define([
 
 			this.context.id = this.model.get('id');
 			this.listenTo(this.model, 'change:id', this.updatePubId);
+
+			if (this.context.id) {
+				this.fetchPromise = this.model.fetch();
+			}
 
 			this.alertView = new AlertView();
 			this.confirmationDialogView = new ConfirmationDialogView();

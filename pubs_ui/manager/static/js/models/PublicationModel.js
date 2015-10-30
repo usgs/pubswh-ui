@@ -31,6 +31,13 @@ define([
 			return Backbone.Model.prototype.fetch.call(this, params);
 		},
 
+		/*
+		 * @param {String} op - command that will be added to the url to perform an action on the pub
+		 * @return {Jquery.Promise} - If the model is empty, resolves returning nothing. If not emtpy,
+		 *     resolves with the received response if call succeeds, rejects with the validationErrors
+		 *     array if the response contains validation errors, rejects with an error message if the failed response does
+		 *     not contain validation errors.
+		 */
 		changeState : function(op) {
 			var self = this;
 			var deferred = $.Deferred();
@@ -67,10 +74,20 @@ define([
 			return deferred.promise();
 		},
 
+		/*
+		 * @return {Jquery.Promise} - resolves with the received response if the release succeeds, rejects with the validationErrors
+		 *     array if the response contains validation errors, rejects with an error message if the failed response does
+		 *     not contain validation errors.
+		 */
 		release : function() {
 			return this.changeState('release');
 		},
 
+		/*
+		 * @return {Jquery.Promise} - resolves with the received response if publish succeeds, rejects with the validationErrors
+		 *     array if the response contains validation errors, rejects with an error message if the failed response does
+		 *     not contain validation errors.
+		 */
 		publish : function() {
 			return this.changeState('publish');
 		}

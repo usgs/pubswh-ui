@@ -53,7 +53,6 @@ define([
 			var model = new PublicationModel();
 			if (pubId) {
 				model.set('id', pubId);
-				model.fetch();
 			}
 
 			this.createView(PublicationView,
