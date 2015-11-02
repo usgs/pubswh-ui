@@ -732,12 +732,13 @@ def munge_abstract(pubdata):
     :return:
     """
     if pubdata.get('docAbstract') is not None:
-        soup = BeautifulSoup(pubdata['docAbstract'], "html.parser")
+        abstract = deepcopy(pubdata['docAbstract'])
+        soup = BeautifulSoup(abstract, "html.parser")
         #find the h1 tag
         if soup.find('h1') is not None:
             possible_header = soup.find('h1').contents[0]
             soup.h1.extract()
-            abstract = soup.prettify()
+            abstract = str(soup)
             pubdata['docAbstract'] = abstract
             abstract_header = possible_header
         else:
