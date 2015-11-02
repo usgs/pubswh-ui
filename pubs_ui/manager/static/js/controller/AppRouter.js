@@ -3,14 +3,18 @@
 define([
 	'jquery',
 	'backbone',
-	'views/SearchView'
-], function ($, Backbone, SearchView) {
+	'views/SearchView',
+	'views/PublicationView',
+	'models/PublicationModel'
+], function ($, Backbone, SearchView, PublicationView, PublicationModel) {
 	"use strict";
 
 	var appRouter = Backbone.Router.extend({
 		routes: {
 			'': 'searchView',
-			'search': 'searchView'
+			'search': 'searchView',
+			'publication' : 'publicationView',
+			'publication/:pubId' : 'publicationView'
 		},
 
 		applicationContextDiv: '#main-content',
@@ -20,7 +24,7 @@ define([
 		 * @param {Backbone.View} view - The view to create
 		 * @param {Object} opts - options to use when creating the view
 		 */
-		showView: function (view, opts) {
+		createView: function (view, opts) {
 			var newEl = $('<div />');
 
 			this.removeCurrentView();
@@ -28,7 +32,9 @@ define([
 			this.currentView = new view($.extend({
 				el: newEl,
 				router: this
-			}, opts)).render();
+			}, opts));
+
+			return this.currentView;
 		},
 
 		/*
@@ -41,10 +47,21 @@ define([
 		},
 
 		searchView: function () {
-			this.showView(SearchView);
-		}
+			this.createView(SearchView).render();
+		},
+		publicationView : function(pubId) {
+			var model = new PublicationModel();
+			if (pubId) {
+				model.set('id', pubId);
+			}
 
+			this.createView(PublicationView,
+				{
+					model : model
+				}
+			);
+		}
 	});
 
 	return appRouter;
-})
+});
