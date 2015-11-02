@@ -18,7 +18,7 @@ bundles={
         output='gen/advanced_search.js'
     ),
     'usgs_style' : Bundle(
-        'less/usgs_header_footer.less',
+        'manager/less/usgs_header_footer.less',
         filters='less,cssmin',
         output='usgs_style.css'
     ),
