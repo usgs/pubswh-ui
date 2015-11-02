@@ -1,0 +1,106 @@
+<div>
+	<div>
+		<div class="pub-search-container"> <!-- search and list view -->
+			<form class="pub-search-form">
+				{{#if advancedSearch}}
+					<label>Advanced </label><label>Search Criteria</label><br/>
+					<label>Advanced </label>
+				{{/if}}
+				<input id="search-term-input" type="text" class="form-control"/><br/>
+				{{#if advancedSearch}}
+					<div class="row advanced-search-section">
+						<label for="search-prodID">ProdID</label>
+						<input id="search-prodID" type="text"/>
+						<br/>
+						<label for="search-indexID">IndexID</label>
+						<input id="search-indexID" type="text" />
+						<br/>
+						<label for="search-IPDS">IPDS Number</label>
+						<input id="search-IPDS" type="text"/>
+						<br/>
+						<label for="search-contributor">Contributor</label>
+						<input id="search-contributor" type="text" />
+						<br/>
+						<label for="search-title">Title</label>
+						<input id="search-title" type="text" />
+						<br/>
+						<label for="search-pubType">Pub Type</label>
+						<input id="search-pubType" type="text" />
+						<br/>
+						<label for="search-pubSubtype">Pub Subtype</label>
+						<input id="search-pubSubtype" type="text" />
+						<br/>
+						<label for="search-series">Series</label>
+						<input id="search-series" type="text" />
+						<br/>
+						<label for="search-year">Year</label>
+						<input id="search-year" type="text" />
+						<br/><br/>
+					</div>
+				{{/if}}
+				<button type="submit" class="btn btn-default">Search</button>
+				{{#if advancedSearch}}
+					<button class="btn btn-link search-link-button">Regular Search</button>
+				{{else}}
+					<button class="btn btn-link search-link-button" >Advanced Search</button>
+				{{/if}}
+			</form>
+			{{#if advancedSearch}}
+			{{else}}
+				<div class="pub-lists-section">
+					<label>View Lists</label><br/>
+					<div class="pub-list-grid-container">
+						<div class="pub-list-grid"></div>
+					</div>
+				</div>
+			{{/if}}
+		</div>
+		<div class="pub-list-section">
+			<div id="pub-management-div">
+				<button class="btn btn-default">Edit Selected</button>
+				<a href="#/Publication" class="btn btn-default">Create</a>
+				<a href="#/Contributor" class="pub-contributor-btn btn btn-default">Manage Contributors</a>
+				<button class="pub-remove-from-list-btn btn btn-default">Remove From List</button>
+			</div>
+			<div class="pub-grid-container">
+				{{#if advancedSearch}}
+				{{else}}
+					{{#if searchTerm}}
+						<span>Publications filtered by "{{searchTerm}}"</span>
+					{{else}}
+						{{#if selectedPubsList}}
+							<el>
+								{{#if searchTerm}}
+									<span>and</span>
+								{{/if}}
+								<span>Publications</span>
+								<span>contained in:</span>
+								<ul>
+									{{#each selectedPubsList}}
+										<li>{{this.text}}</li>
+									{{/each}}
+								</ul>
+							</el>
+						{{else}}
+							<span>All publications available</span>
+						{{/if}}
+					{{/if}}
+				{{/if}}
+				<div class="pub-grid"></div>
+			</div>
+		</div>
+	</div>
+
+	<div>
+		<form>
+ 			<label>List Assignments</label><br/>
+       	    <select id="lists-input" multiple class="form-control">
+				<option></option>
+				{{#each pubsList}}
+					<option value="{{this.id}}">{{this.text}}</option>
+				{{/each}}
+            </select><br/>
+			<button type="submit" class="btn btn-default" >Add To Lists</button>
+		</form>
+	</div>
+</div>
