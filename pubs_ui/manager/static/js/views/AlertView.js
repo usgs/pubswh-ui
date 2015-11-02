@@ -43,6 +43,10 @@ define([
 			}
 		},
 
+		/*
+		 * The following four functions make the alert window visible for the indicated alert kind.
+		 * @param {String} message - Message shown in alert window.
+		 */
 		showSuccessAlert : function(message) {
 			this.showAlert(this.ALERT_KINDS.success, message);
 		},

@@ -1,9 +1,8 @@
 /* jslint browser: true */
 define([
 	'squire',
-	'jquery',
-	'views/BaseView'
-], function(Squire, $, BaseView) {
+	'jquery'
+], function(Squire, $) {
 	"use strict";
 	describe('AlertView', function() {
 		var AlertView;
@@ -23,7 +22,7 @@ define([
 					el : '#test-div'
 				});
 				done();
-			})
+			});
 		});
 
 		afterEach(function() {

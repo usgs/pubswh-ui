@@ -7,11 +7,17 @@
         'text' : '/pubs_ui/bower_components/text/text',
         'underscore' : '/pubs_ui/bower_components/underscore/underscore',
         'backbone' : '/pubs_ui/bower_components/backbone/backbone',
-        'handlebars' : '/pubs_ui/bower_components/handlebars/handlebars'
+        'handlebars' : '/pubs_ui/bower_components/handlebars/handlebars',
+        'backbone.stickit' : '/pubs_ui/bower_components/backbone.stickit/backbone.stickit',
+		'moment' : '/pubs_ui/bower_components/moment/min/moment.min',
+		'datetimepicker' : '/pubs_ui/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min'
+
     },
     shim : {
         'bootstrap' : ['jquery', 'underscore'],
         'backbone' : ['jquery', 'underscore'],
+        'backbone.stickit' : ['backbone', 'underscore'],
+		'datetimepicker' : ['jquery', 'moment', 'bootstrap'],
         'sinon' : {
             'exports' : 'sinon'
         }

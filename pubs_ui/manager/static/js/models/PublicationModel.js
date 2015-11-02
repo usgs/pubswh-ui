@@ -60,7 +60,7 @@ define([
 							&& _.isArray(resp.validationErrors)
 							&& (resp.validationErrors.length > 0)) {
 							self.set('validationErrors', resp.validationErrors);
-							deferred.reject(resp.validationErrors);
+							deferred.reject(resp);
 						}
 						else {
 							deferred.reject('Unable to ' + op + ' the publication with error: ' + error);
@@ -90,6 +90,12 @@ define([
 		 */
 		publish : function() {
 			return this.changeState('publish');
+		},
+
+		save : function(attributes, options) {
+			/* Don't send validationErrors to the server */
+			this.unset('validationErrors');
+			return Backbone.Model.prototype.save.apply(this, arguments);
 		}
 	});
 

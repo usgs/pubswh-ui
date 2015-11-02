@@ -127,7 +127,9 @@ define([
 				server.respond();
 
 				expect(doneSpy).not.toHaveBeenCalled();
-				expect(failSpy).toHaveBeenCalledWith(['One error']);
+				expect(failSpy).toHaveBeenCalledWith({
+					validationErrors: ['One error']
+				});
 				expect(model.get('validationErrors')).toEqual(['One error']);
 			});
 
@@ -197,7 +199,7 @@ define([
 				server.respond();
 
 				expect(doneSpy).not.toHaveBeenCalled();
-				expect(failSpy).toHaveBeenCalledWith(['One error']);
+				expect(failSpy).toHaveBeenCalledWith({validationErrors : ['One error']});
 				expect(model.get('validationErrors')).toEqual(['One error']);
 			});
 

@@ -56,26 +56,37 @@ define([
 		render : function() {
 			var self = this;
 			BaseView.prototype.render.apply(this, arguments);
+			this.updatePubId(this.model, this.model.get('id'));
 
+			// Set up datepicker
 			this.$('#display-date').datetimepicker({
 				format : 'YYYY-MM-DDTHH:mm:ss [E]T'
 			});
 			this.$('#display-date').on('dp.change', function(ev) {
 				self.model.set('displayToPublicDate', ev.date.format('YYYY-MM-DDTHH:mm:ss'));
 			});
-			$('[data-toggle="tooltip"]').tooltip();
+			$('[data-toggle="tooltip"]').tooltip({
+				trigger : 'hover'
+			});
 
-			/* Sets up the binding between DOM elements and the model */
+			// Sets up the binding between DOM elements and the model //
 			this.stickit();
 
+			// Set the elements for child views and render if needed.
 			this.alertView.setElement(this.$('.alert-container'));
 			this.confirmationDialogView.setElement(this.$('.confirmation-dialog-container')).render();
 
+			// Handle errors from the fetch call
 			this.fetchPromise.fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the publication: ' + jqXhr.statusText);
 			})
 		},
 
+		/*
+		 * @param {Object} options
+		 *     @prop {String} el - jquery selector where the view should be rendered
+		 *     @prop {PublicationModel} model
+		 */
 		initialize : function(options) {
 			var self = this;
 			BaseView.prototype.initialize.apply(this, arguments);
@@ -86,9 +97,17 @@ define([
 			if (this.context.id) {
 				this.fetchPromise = this.model.fetch();
 			}
+			else {
+				this.fetchPromise = $.Deferred().resolve();
+			}
 
-			this.alertView = new AlertView();
-			this.confirmationDialogView = new ConfirmationDialogView();
+			// Create child views
+			this.alertView = new AlertView({
+				el : '.alert-container'
+			});
+			this.confirmationDialogView = new ConfirmationDialogView({
+				el : '.confirmation-dialog-container'
+			});
 		},
 
 		remove : function() {
@@ -98,6 +117,11 @@ define([
 			return this;
 		},
 
+		/*
+		 * Updates the publication view when the publication id is updated.
+		 * @param {PublicationModel} model
+		 * @param {String} newId
+		 */
 		updatePubId : function(model, newId) {
 			if (newId) {
 				this.$('#pub-preview-div').show();
@@ -122,26 +146,28 @@ define([
 						self.alertView.showDangerAlert('Publication not released: validation errors');
 					}
 					else {
-						self.alertView.showDangerAlert(error);
+						self.alertView.showDangerAlert('Publication not released: ' + error);
 					}
 				});
 		},
 
 		savePub : function() {
 			var self = this;
-			var loadingDiv = this.$('.loading-indiciator');
+			var loadingDiv = this.$('.loading-indicator');
 
 			loadingDiv.show();
 
 			return this.model.save({}, {
-				contentType : 'application/json',
-				headers : {
-					'Accept' : 'application/json'
-				},
-				success : function() {
+				contentType: 'application/json',
+				headers: {
+					'Accept': 'application/json'
+				}
+			})
+				.done(function() {
 					self.alertView.showSuccessAlert('The publication was successfully saved');
-				},
-				error : function(model, response) {
+				})
+				.fail(function(jqXhr, textStatus, error) {
+					var response = jqXhr;
 					if (_.has(response, 'responseJSON') &&
 						_.has(response.responseJSON, 'validationErrors')
 						&& (response.responseJSON.validationErrors.length > 0)) {
@@ -149,12 +175,12 @@ define([
 						self.alertView.showDangerAlert('Publication not saved with validation errors')
 					}
 					else {
-						self.alertView.showDangerAlert('Publication not saved.');
+						self.alertView.showDangerAlert('Publication not saved: ' + error);
 					}
-				}
-			}).always(function() {
-				loadingDiv.hide();
-			});
+				})
+				.always(function() {
+					loadingDiv.hide();
+				});
 		},
 
 		publishPub : function() {
@@ -206,7 +232,9 @@ define([
 
 			if (this.model.has('id')) {
 				this.confirmationDialogView.show('Are you sure you want to delete this publication?', callDelete);
-
+			}
+			else {
+				self.returnToSearch();
 			}
 
 		},
