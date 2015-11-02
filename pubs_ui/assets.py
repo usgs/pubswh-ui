@@ -34,7 +34,7 @@ bundles={
     'auth_style' : Bundle(
         'auth/less/auth.less',
         depends=[
-            'less/usgs_header_footer.less'
+            'manager/less/usgs_header_footer.less'
         ],
         filters='less,cssmin',
         output='gen/auth_style.css'
@@ -42,7 +42,7 @@ bundles={
     'manager_style' : Bundle(
         'manager/less/manager_custom.less',
         depends=[
-            'less/usgs_header_footer.less',
+            'manager/less/usgs_header_footer.less',
             'manager/less/search.less',
             'manager/less/publication.less'
         ],
