@@ -10,6 +10,10 @@ define([
 
 	var view = BaseView.extend({
 
+		bindings : {
+			'#pub-type-input' :
+		},
+
 		template : Handlebars.compile(hbTemplate)
 	});
 
