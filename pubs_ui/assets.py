@@ -20,7 +20,7 @@ bundles={
     'usgs_style' : Bundle(
         'manager/less/usgs_header_footer.less',
         filters='less,cssmin',
-        output='usgs_style.css'
+        output='gen/usgs_style.css'
     ),
     'css_base' : Bundle(
         'pubswh/css/normalize.css',
