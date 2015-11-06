@@ -8,9 +8,11 @@ define([
 	'views/BaseView',
 	'views/AlertView',
 	'views/ConfirmationDialogView',
+	'views/BibliodataView',
 	'text!hb_templates/publication.hbs',
 	'backbone.stickit'
-], function(Handlebars, _, bootstrap, datetimepicker, BaseView, AlertView, ConfirmationDialogView, hbTemplate, Stickit) {
+], function(Handlebars, _, bootstrap, datetimepicker, BaseView, AlertView, ConfirmationDialogView,
+			BibliodataView, hbTemplate, Stickit) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -20,7 +22,8 @@ define([
 			'click .release-btn' : 'releasePub',
 			'click .save-btn' : 'savePub',
 			'click .publish-btn' : 'publishPub',
-			'click .delete-btn' : 'deletePub'
+			'click .delete-btn' : 'deletePub',
+			'click .edit-tabs a' : 'showTab'
 		},
 
 		bindings : {
@@ -76,6 +79,10 @@ define([
 			this.alertView.setElement(this.$('.alert-container'));
 			this.confirmationDialogView.setElement(this.$('.confirmation-dialog-container')).render();
 
+			_.each(this.tabs, function(t) {
+				t.view.setElement(t.el).render();
+			});
+
 			// Handle errors from the fetch call
 			this.fetchPromise.fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the publication: ' + jqXhr.statusText);
@@ -108,11 +115,24 @@ define([
 			this.confirmationDialogView = new ConfirmationDialogView({
 				el : '.confirmation-dialog-container'
 			});
+
+
+			this.tabs = {
+				bibliodata : {
+					el: '#bibliodata',
+					view: new BibliodataView({
+						el: '#bibliodata'
+					})
+				}
+			};
 		},
 
 		remove : function() {
 			this.alertView.remove();
 			this.confirmationDialogView.remove();
+			_.each(this.tabViews, function(view) {
+				view.remove();
+			});
 			BaseView.prototype.remove.apply(this, arguments);
 			return this;
 		},
@@ -241,6 +261,11 @@ define([
 
 		returnToSearch : function() {
 			this.router.navigate('search', {trigger: true});
+		},
+
+		showTab : function(ev) {
+			ev.preventDefault();
+			this.$('.edit-tabs').tab('show');
 		}
 	});
 

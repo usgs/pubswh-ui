@@ -1,0 +1,180 @@
+<div id="bibliodata" class="form-horizontal">
+    <div id="pub-type-div" class="form-group">
+        <label class="control-label col-sm-3" for="pub-type-input">Publication Type</label>
+        <div class="col-sm-9">
+            <select id="pub-type-input" class="form-control" placeholder="Select a publication type">
+                <option></option>
+            </select>
+        </div>
+    </div>
+    <div id="pub-subtype-div" class="form-group">
+        <label class="control-label col-sm-3" for="pub-subtype-input">Publication Subtype</label>
+        <div class="col-sm-9">
+            <select id="pub-subtype-input" class="form-control">
+                <option></option>
+            </select>
+        </div>
+    </div>
+    <div id="series-title-tiv"  class="form-group">
+        <label class="control-label col-sm-3" for="series-title-input">Series Title</label>
+		<div class="col-sm-9">
+			<select id="series-title-input" class="form-control">
+				<option></option>
+			</select>
+        </div>
+    </div>
+    <div class="form-group" id="cost-centers-div">
+        <label class="control-label col-sm-3" for="cost-centers-input">Cost Centers</label>
+        <div class="col-sm-9">
+            <select id="cost-centers-input" class="form-control">
+                <option></option>
+				<optgroup label="Active">
+				</optgroup>
+				<optgroup label="Not active">
+				</optgroup>
+            </select>
+        </div>
+    </div>
+    <div class="form-group" id="subseries-div">
+         <label class="control-label col-sm-3" for="subseries-input">Subseries</label>
+         <div class="col-sm-9">
+            <input id="subseries-input" type="text" class="form-control" />
+         </div>
+    </div>
+    <div class="form-group" id="series-number-div">
+         <label class="control-label col-sm-3" for="series-number-input">Series Number</label>
+         <div class="col-sm-9">
+            <input id="series-number-input" type="text" class="form-control" />
+         </div>
+    </div>
+    <div class="form-group" id="chapter-div">
+         <label class="control-label col-sm-3" for="chapter-input">Chapter</label>
+         <div class="col-sm-9">
+            <input id="chapter-input" type="text" class="form-control" />
+         </div>
+    </div>
+    <div class="form-group" id="subchapter-div">
+         <label class="control-label col-sm-3" for="subchapter-input">Subchapter</label>
+         <div class="col-sm-9">
+            <input id="subchapter-input" type="text" class="form-control" />
+         </div>
+    </div>
+    <div class="form-group" id="title-div">
+         <label class="control-label col-sm-3" for="title-input">Title</label>
+         <div class="col-sm-9">
+            <input id="title-input" type="text" class="form-control" />
+         </div>
+    </div>
+    <div class="form-group" id="docAbstract-div">
+        <label class="control-label col-sm-3" for="docAbstract-input">Abstract</label>
+        <div class="col-sm-9">
+            <textarea id="docAbstract-input" class="form-control"></textarea>
+        </div>
+    </div>
+    <div class="form-group" id="usgs-citation-div">
+        <label class="control-label col-sm-3" for="usgs-citation-input">USGS Citation</label>
+        <div class="col-sm-9">
+            <textarea id="usgs-citation-input" class="form-control"></textarea>
+        </div>
+    </div>
+	<div class="form-group" id="collaboration-div">
+         <label class="control-label col-sm-3" for="collaboration-input">Collaboration</label>
+         <div class="col-sm-9">
+            <input id="collaboration-input" type="text" class="form-control" />
+         </div>
+    </div>
+    <div id="larger-work-type-div" class="form-group">
+        <label class="control-label col-sm-3" for="larger-work-type-input">Larger Work Type</label>
+        <div class="col-sm-9">
+            <select id="larger-work-type-input" class="form-control" placeholder="Select a larger work type">
+                <option></option>
+            </select>
+        </div>
+    </div>
+	<div id="larger-work-subtype-div" class="form-group">
+        <label class="control-label col-sm-3" for="larger-work-subtype-input">Larger Work Subtype</label>
+        <div class="col-sm-9">
+            <select id="larger-work-subtype-input" class="form-control">
+				<option></option>
+			</select>
+        </div>
+    </div>
+	<div class="form-group" id="larger-work-title-div">
+         <label class="control-label col-sm-3" for="isbn-input">Larger Work Title</label>
+         <div class="col-sm-9">
+            <input id="larger-work-title-input" type="text" class="form-control" ng-model="pubData.largerWorkTitle" />
+         </div>
+    </div>
+    <div class="form-group" id="language-div">
+         <label class="control-label col-sm-3" for="title-input">Language</label>
+         <div class="col-sm-9">
+            <input id="language-input" type="text" class="form-control"/>
+         </div>
+    </div>
+    <div class="form-group" id="publisher-div">
+         <label class="control-label col-sm-3" for="publisher-input">Publisher</label>
+         <div class="col-sm-9">
+            <input id="publisher-input" type="text" class="form-control" />
+         </div>
+    </div>
+    <div class="form-group" id="publisher-location-div">
+         <label class="control-label col-sm-3" for="publisher-location-input">Publisher Location</label>
+         <div class="col-sm-9">
+            <input id="publisher-location-input" type="text" class="form-control" />
+         </div>
+    </div>
+    <div class="form-group" id="publication-year-div">
+         <label class="control-label col-sm-3" for="isbn-input">Publication Year</label>
+         <div class="col-sm-9">
+            <input id="publication-year-input" type="text" class="form-control"/>
+         </div>
+    </div>
+    <div class="form-group" id="conference-title-div">
+         <label class="control-label col-sm-3" for="isbn-input">Conference Title</label>
+         <div class="col-sm-9">
+            <input id="conference-title-input" type="text" class="form-control" />
+         </div>
+    </div>
+    <div class="form-group" id="conference-date-div">
+         <label class="control-label col-sm-3" for="isbn-input">Conference Date</label>
+         <div class="col-sm-9">
+            <input id="conference-date-input" type="text" class="form-control" />
+         </div>
+    </div>
+    <div class="form-group" id="conference-location-div">
+         <label class="control-label col-sm-3" for="isbn-input">Conference Location</label>
+         <div class="col-sm-9">
+            <input id="conference-location-input" type="text" class="form-control" />
+         </div>
+    </div>
+    <div class="form-group" id="doi-div">
+         <label class="control-label col-sm-3" for="doi-input">DOI</label>
+         <div class="col-sm-9">
+            <input id="doi-input" type="text" class="form-control" />
+         </div>
+    </div>
+    <div class="form-group" id="issn-div">
+         <label class="control-label col-sm-3" for="issn-input">ISSN</label>
+         <div class="col-sm-9">
+            <input id="issn-input" type="text" class="form-control" />
+         </div>
+    </div>
+    <div class="form-group" id="isbn-div">
+         <label class="control-label col-sm-3" for="isbn-input">ISBN</label>
+         <div class="col-sm-9">
+            <input id="isbn-input" type="text" class="form-control" />
+         </div>
+    </div>
+    <div class="form-group" id="tableOfContents-div">
+        <label class="control-label col-sm-3" for="tableOfContents-input">Table of Contents</label>
+        <div class="col-sm-9">
+            <textarea id="tableOfContents-input" class="form-control"></textarea>
+        </div>
+    </div>
+    <div class="form-group" id="update-date-div">
+         <label class="control-label col-sm-3">Last Modified Date</label>
+         <div class="col-sm-9">
+            <input id="update-date-input" type="text" class="form-control" readonly/>
+         </div>
+    </div>
+</div>
