@@ -18,9 +18,9 @@ bundles={
         output='gen/advanced_search.js'
     ),
     'usgs_style' : Bundle(
-        'less/usgs_header_footer.less',
+        'manager/less/usgs_header_footer.less',
         filters='less,cssmin',
-        output='usgs_style.css'
+        output='gen/usgs_style.css'
     ),
     'css_base' : Bundle(
         'pubswh/css/normalize.css',
@@ -34,7 +34,7 @@ bundles={
     'auth_style' : Bundle(
         'auth/less/auth.less',
         depends=[
-            'less/usgs_header_footer.less'
+            'manager/less/usgs_header_footer.less'
         ],
         filters='less,cssmin',
         output='gen/auth_style.css'
@@ -42,7 +42,7 @@ bundles={
     'manager_style' : Bundle(
         'manager/less/manager_custom.less',
         depends=[
-            'less/usgs_header_footer.less',
+            'manager/less/usgs_header_footer.less',
             'manager/less/search.less',
             'manager/less/publication.less'
         ],
