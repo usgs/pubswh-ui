@@ -59,7 +59,7 @@ define([
 				{
 					model : model
 				}
-			);
+			).render();
 		}
 	});
 

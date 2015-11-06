@@ -19,6 +19,9 @@ define([
 
 		template: Handlebars.compile(hbTemplate),
 
+		/*
+		 * @params {String} el - jquery selector where to render the alert
+		 */
 		initialize : function(options) {
 			BaseView.prototype.initialize.apply(this, arguments);
 			this.context.alertKind = '';
@@ -26,9 +29,9 @@ define([
 		},
 
 		showAlert : function(kind, message) {
-			this.context.alertKind = kind;
-			this.context.message = message;
 			if (this.$('.alert').length === 0) {
+				this.context.alertKind = kind;
+				this.context.message = message;
 				this.render();
 			}
 			else {
@@ -40,6 +43,10 @@ define([
 			}
 		},
 
+		/*
+		 * The following four functions make the alert window visible for the indicated alert kind.
+		 * @param {String} message - Message shown in alert window.
+		 */
 		showSuccessAlert : function(message) {
 			this.showAlert(this.ALERT_KINDS.success, message);
 		},

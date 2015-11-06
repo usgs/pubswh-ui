@@ -23,6 +23,10 @@ define([
 			});
 		},
 
+		/*
+		 * @param {String} message - Message to show in confirmation dialog
+		 * @param {Function} actionFnc - Function with no parameters which gets called when the confirmation button is clicked
+		 */
 		show : function(message, actionFnc) {
 			this.actionFnc = actionFnc;
 			this.$('.modal-body').html(message);
