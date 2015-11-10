@@ -6,10 +6,11 @@ define([
 	'select2',
 	'backbone.stickit',
 	'models/PublicationTypeCollection',
+	'models/CostCenterCollection',
 	'views/BaseView',
 	'text!hb_templates/bibliodata.hbs',
 	'module'
-], function(Handlebars, $, select2, stickit, PublicationTypeCollection, BaseView, hbTemplate, module) {
+], function(Handlebars, $, select2, stickit, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate, module) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -24,7 +25,9 @@ define([
 			'select2:select #pub-subtype-input' : 'selectPubSubtype',
 			'select2:unselect #pub-subtype-input' : 'resetPubSubtype',
 			'select2:select #series-title-input' : 'selectSeriesTitle',
-			'select2:unselect #series-title-input' : 'resetSeriesTitle'
+			'select2:unselect #series-title-input' : 'resetSeriesTitle',
+			'select2:select #cost-centers-input' : 'selectCostCenter',
+			'select2:unselect #cost-centers-input' : 'unselectCostCenter'
 		},
 
 		bindings : {
@@ -64,6 +67,16 @@ define([
 			this.$('#pub-type-input').select2({
 				allowClear: true
 			});
+
+			this.pubTypePromise.done(function() {
+				var $select = self.$('#pub-type-input');
+				self.$('#pub-type-input').select2({
+					allowClear: true,
+					data: self.publicationTypeCollection.toJSON()
+				});
+				self.updatePubType();
+			});
+
 			this.$('#pub-subtype-input').select2({
 				allowClear : true,
 				ajax : {
@@ -85,6 +98,7 @@ define([
 					}
 				}
 			});
+			this.updatePubSubtype();
 
 			this.$('#series-title-input').select2({
 				allowClear : true,
@@ -95,7 +109,7 @@ define([
 							mimetype : 'json',
 							publicationsubtypeid : self.model.get('publicationSubtype').id,
 							active : ''
-						}
+						};
 						if (_.has(params, 'term')) {
 							result.text = params.term;
 						}
@@ -134,25 +148,40 @@ define([
 					}
 				}
 			});
-			this.pubTypePromise.done(function() {
-				var $select = self.$('#pub-type-input');
-				var options = self.publicationTypeCollection.map(function(m) {
-					return self.optionTemplate(m.attributes);
+			this.updateSeriesTitle();
+
+			this.costCenterPromise.done(function() {
+				self.$('#cost-centers-input').select2({
+					allowClear : true,
+					data : [{
+						text : 'Active',
+						children : self.activeCostCenters.toJSON()
+					}, {
+						text : 'Not Active',
+						children : self.notActiveCostCenters.toJSON()
+					}]
 				});
-				$select.html(options.join(''));
-				self.updatePubType();
-			});
+				self.updateCostCenters();
+			})
 		},
 
 		initialize : function(options) {
 			BaseView.prototype.initialize.apply(this, arguments);
 
+			this.publicationTypeCollection = new PublicationTypeCollection();
+			this.pubTypePromise = this.publicationTypeCollection.fetch();
+
+			this.activeCostCenters = new CostCenterCollection();
+			this.notActiveCostCenters = new CostCenterCollection();
+			this.costCenterPromise = $.when(
+					this.activeCostCenters.fetch({data : {active : 'y'}}),
+					this.notActiveCostCenters.fetch({data : {active : 'n'}})
+			);
+
 			this.listenTo(this.model, 'change:publicationType', this.updatePubType);
 			this.listenTo(this.model, 'change:publicationSubtype', this.updatePubSubtype);
 			this.listenTo(this.model, 'change:seriesTitle', this.updateSeriesTitle);
-
-			this.publicationTypeCollection = new PublicationTypeCollection();
-			this.pubTypePromise = this.publicationTypeCollection.fetch();
+			this.listenTo(this.model, 'change:costCenters', this.updateCostCenters);
 		},
 
 		selectPubType : function(ev) {
@@ -189,6 +218,24 @@ define([
 
 		resetSeriesTitle : function(ev) {
 			this.model.unset('seriesTitle');
+		},
+
+		selectCostCenter : function(ev) {
+			var costCenters = _.clone(this.model.get('costCenters'));
+			costCenters.push({
+				id : parseInt(ev.params.data.id),
+				text : ev.params.data.text
+			});
+			this.model.set('costCenters', costCenters);
+		},
+
+		unselectCostCenter : function(ev) {
+			var costCenters = _.clone(this.model.get('costCenters'));
+			var ccToRemove = parseInt(ev.params.data.id);
+
+			this.model.set('costCenters', _.reject(costCenters, function(cc) {
+				return cc.id === ccToRemove;
+			}));
 		},
 
 		updatePubType : function() {
@@ -238,6 +285,17 @@ define([
 			}
 			else {
 				$select.val('').trigger('change');
+			}
+		},
+
+		updateCostCenters : function() {
+			var $select = this.$('#cost-centers-input');
+			var costCenters = this.model.get('costCenters');
+			if (_.isEmpty(costCenters)) {
+				$select.val('').trigger('change');
+			}
+			else {
+				$select.val(_.pluck(costCenters, 'id')).trigger('change');
 			}
 		}
 
