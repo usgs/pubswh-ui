@@ -27,7 +27,11 @@ define([
 			'select2:select #series-title-input' : 'selectSeriesTitle',
 			'select2:unselect #series-title-input' : 'resetSeriesTitle',
 			'select2:select #cost-centers-input' : 'selectCostCenter',
-			'select2:unselect #cost-centers-input' : 'unselectCostCenter'
+			'select2:unselect #cost-centers-input' : 'unselectCostCenter',
+			'select2:select #larger-work-type-input' : 'selectLargerWorkType',
+			'select2:unselect #larger-work-type-input' : 'resetLargerWorkType',
+			'select2:select #larger-work-subtype-input' : 'selectLargerWorkSubtype',
+			'select2:unselect #larger-work-subtype-input' : 'resetLargerWorkSubtype'
 		},
 
 		bindings : {
@@ -69,12 +73,17 @@ define([
 			});
 
 			this.pubTypePromise.done(function() {
-				var $select = self.$('#pub-type-input');
 				self.$('#pub-type-input').select2({
 					allowClear: true,
 					data: self.publicationTypeCollection.toJSON()
 				});
 				self.updatePubType();
+
+				self.$('#larger-work-type-input').select2({
+					allowClear : true,
+					data : self.publicationTypeCollection.toJSON()
+				});
+				self.updateLargerWorkType();
 			});
 
 			this.$('#pub-subtype-input').select2({
@@ -162,7 +171,30 @@ define([
 					}]
 				});
 				self.updateCostCenters();
-			})
+			});
+
+			this.$('#larger-work-subtype-input').select2({
+				allowClear : true,
+				ajax : {
+					url : module.config().lookupUrl + 'publicationsubtypes',
+					data : function(params) {
+						var result = {
+							mimetype : 'json',
+							publicationtypeid : self.model.get('largerWorkType').id
+						};
+						if (_.has(params, 'term')) {
+							result.text = params.term;
+						}
+						return result;
+					},
+					processResults : function(data) {
+						return {
+							results : data
+						};
+					}
+				}
+			});
+			this.updateLargerWorkSubtype();
 		},
 
 		initialize : function(options) {
@@ -182,6 +214,8 @@ define([
 			this.listenTo(this.model, 'change:publicationSubtype', this.updatePubSubtype);
 			this.listenTo(this.model, 'change:seriesTitle', this.updateSeriesTitle);
 			this.listenTo(this.model, 'change:costCenters', this.updateCostCenters);
+			this.listenTo(this.model, 'change:largerWorkType', this.updateLargerWorkType);
+			this.listenTo(this.model, 'change:largerWorkSubtype', this.updateLargerWorkSubtype);
 		},
 
 		selectPubType : function(ev) {
@@ -236,6 +270,28 @@ define([
 			this.model.set('costCenters', _.reject(costCenters, function(cc) {
 				return cc.id === ccToRemove;
 			}));
+		},
+
+		selectLargerWorkType : function(ev) {
+			var selected = $(ev.currentTarget).val();
+			var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
+			this.model.set('largerWorkType', {id: selected, text : selectedText});
+			this.model.unset('largerWorkSubtype');
+		},
+
+		resetLargerWorkType : function(ev) {
+			this.model.unset('largerWorkType');
+			this.model.unset('largerWorkSubtype');
+		},
+
+		selectLargerWorkSubtype : function(ev) {
+			var selected = $(ev.currentTarget).val();
+			var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
+			this.model.set('largerWorkSubtype', {id: selected, text : selectedText});
+		},
+
+		resetLargerWorkSubtype : function(ev) {
+			this.model.unset('largerWorkSubtype');
 		},
 
 		updatePubType : function() {
@@ -296,6 +352,39 @@ define([
 			}
 			else {
 				$select.val(_.pluck(costCenters, 'id')).trigger('change');
+			}
+		},
+
+		updateLargerWorkType : function() {
+			var $select = this.$('#larger-work-type-input');
+			var $subtypeSelect = this.$('#larger-work-subtype-input');
+
+			var largerWorkType = this.model.get('largerWorkType');
+			var hasId = _.has(largerWorkType, 'id');
+
+			if (hasId) {
+				$select.val(largerWorkType.id).trigger('change');
+			}
+			else {
+				$select.val('').trigger('change');
+			}
+			$subtypeSelect.prop('disabled', !hasId);
+		},
+
+		updateLargerWorkSubtype : function() {
+			var $select = this.$('#larger-work-subtype-input');
+
+			var largerWorkSubtype = this.model.get('largerWorkSubtype');
+			var hasId = _.has(largerWorkSubtype, 'id');
+
+			if (hasId) {
+				if ($select.find('option[value="' + largerWorkSubtype.id + '"]').length === 0) {
+					$select.append(this.optionTemplate(largerWorkSubtype));
+				}
+				$select.val(largerWorkSubtype.id).trigger('change');
+			}
+			else {
+				$select.val('').trigger('change');
 			}
 		}
 
