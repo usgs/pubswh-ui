@@ -2,16 +2,14 @@
     <div id="pub-type-div" class="form-group">
         <label class="control-label col-sm-3" for="pub-type-input">Publication Type</label>
         <div class="col-sm-9">
-            <select id="pub-type-input" class="form-control" placeholder="Select a publication type">
-                <option></option>
+            <select id="pub-type-input" class="form-control" data-placeholder="Select a publication type">
             </select>
         </div>
     </div>
     <div id="pub-subtype-div" class="form-group">
         <label class="control-label col-sm-3" for="pub-subtype-input">Publication Subtype</label>
         <div class="col-sm-9">
-            <select id="pub-subtype-input" class="form-control">
-                <option></option>
+            <select id="pub-subtype-input" class="form-control" data-placeholder="Select a publication subtype">
             </select>
         </div>
     </div>
@@ -100,9 +98,9 @@
         </div>
     </div>
 	<div class="form-group" id="larger-work-title-div">
-         <label class="control-label col-sm-3" for="isbn-input">Larger Work Title</label>
+         <label class="control-label col-sm-3" for="larger-work-title-input">Larger Work Title</label>
          <div class="col-sm-9">
-            <input id="larger-work-title-input" type="text" class="form-control" ng-model="pubData.largerWorkTitle" />
+            <input id="larger-work-title-input" type="text" class="form-control"/>
          </div>
     </div>
     <div class="form-group" id="language-div">

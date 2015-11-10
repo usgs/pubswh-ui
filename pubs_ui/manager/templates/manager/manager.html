@@ -3,6 +3,7 @@
 {% block title %}Manage USGS Publications{% endblock %}
 
 {% block page_style %}
+	<link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='select2/dist/css/select2.min.css') }}" />
 	{%  assets "manager_style" %}
 		<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
 	{% endassets %}
@@ -22,11 +23,21 @@
 			config: {
 				'init' : {
 					'scriptRoot' : "{{ request.script_root }}"
+				},
+				'models/PublicationTypeCollection' : {
+					lookupUrl : "{{ config.LOOKUP_URL }}"
+				},
+				'models/PublicationSubtypeCollection' : {
+					lookupUrl : "{{ config.LOOKUP_URL }}"
+				},
+				'views/BibliodataView' : {
+					lookupUrl : "{{ config.LOOKUP_URL }}"
 				}
 			},
 			baseUrl: "{{ url_for('manager.static', filename='js') }}",
 			paths: {
 				'jquery' : "{{ url_for('bower.static', filename='jquery/dist/jquery.js') }}",
+				'select2' : "{{ url_for('bower.static', filename='select2/dist/js/select2.full.js') }}",
 				'bootstrap' : "{{ url_for('bower.static', filename='bootstrap/dist/js/bootstrap.js') }}",
 				'text' : "{{ url_for('bower.static', filename='text/text.js') }}",
 				'underscore' : "{{ url_for('bower.static', filename='underscore/underscore.js') }}",
@@ -37,6 +48,7 @@
 				'datetimepicker' : "{{ url_for('bower.static', filename='eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"
 			},
 			shim : {
+				'select2' : ['jquery'],
 				'bootstrap' : ['jquery'],
 				'backbone' : ['jquery', 'underscore'],
 				'backbone.stickit' : ['backbone', 'underscore'],

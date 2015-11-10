@@ -28,6 +28,7 @@
     "Squire.js": "https://github.com/iammerrick/Squire.js.git#0.2.0",
     "backbone.stickit": "~0.9.2",
     "eonasdan-bootstrap-datetimepicker": "~4.17.37",
-    "font-awesome": "fontawesome#~4.4.0"
+    "font-awesome": "fontawesome#~4.4.0",
+    "select2": "~4.0.0"
   }
 }

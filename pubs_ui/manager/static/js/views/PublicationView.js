@@ -121,7 +121,8 @@ define([
 				bibliodata : {
 					el: '#bibliodata',
 					view: new BibliodataView({
-						el: '#bibliodata'
+						el: '#bibliodata',
+						model : this.model
 					})
 				}
 			};
