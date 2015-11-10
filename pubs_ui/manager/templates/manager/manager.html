@@ -38,6 +38,7 @@
 			paths: {
 				'jquery' : "{{ url_for('bower.static', filename='jquery/dist/jquery.js') }}",
 				'select2' : "{{ url_for('bower.static', filename='select2/dist/js/select2.full.js') }}",
+				'tinymce' : "{{  url_for('bower.static', filename='tinymce/tinymce.js') }}",
 				'bootstrap' : "{{ url_for('bower.static', filename='bootstrap/dist/js/bootstrap.js') }}",
 				'text' : "{{ url_for('bower.static', filename='text/text.js') }}",
 				'underscore' : "{{ url_for('bower.static', filename='underscore/underscore.js') }}",
@@ -52,7 +53,14 @@
 				'bootstrap' : ['jquery'],
 				'backbone' : ['jquery', 'underscore'],
 				'backbone.stickit' : ['backbone', 'underscore'],
-				'datetimepicker' : ['jquery', 'moment', 'bootstrap']
+				'datetimepicker' : ['jquery', 'moment', 'bootstrap'],
+				'tinymce': {
+            		exports: 'tinymce',
+					init: function () {
+                		this.tinymce.DOM.events.domLoaded = true;
+                		return this.tinymce;
+            		}
+        		}
 			}
 		};
 	</script>

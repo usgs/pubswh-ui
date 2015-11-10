@@ -29,6 +29,7 @@
     "backbone.stickit": "~0.9.2",
     "eonasdan-bootstrap-datetimepicker": "~4.17.37",
     "font-awesome": "fontawesome#~4.4.0",
-    "select2": "~4.0.0"
+    "select2": "~4.0.0",
+    "tinymce": "~4.2.7"
   }
 }
