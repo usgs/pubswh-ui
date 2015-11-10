@@ -22,7 +22,9 @@ define([
 			'select2:select #pub-type-input' : 'selectPubType',
 			'select2:unselect #pub-type-input' : 'resetPubType',
 			'select2:select #pub-subtype-input' : 'selectPubSubtype',
-			'select2:unselect #pub-subtype-input' : 'resetPubSubtype'
+			'select2:unselect #pub-subtype-input' : 'resetPubSubtype',
+			'select2:select #series-title-input' : 'selectSeriesTitle',
+			'select2:unselect #series-title-input' : 'resetSeriesTitle'
 		},
 
 		bindings : {
@@ -67,15 +69,68 @@ define([
 				ajax : {
 					url : module.config().lookupUrl + 'publicationsubtypes',
 					data : function(params) {
-						return {
+						var result = {
 							mimetype : 'json',
 							publicationtypeid : self.model.get('publicationType').id
+						};
+						if (_.has(params, 'term')) {
+							result.text = params.term;
 						}
+						return result;
 					},
 					processResults : function(data) {
 						return {
 							results : data
 						};
+					}
+				}
+			});
+
+			this.$('#series-title-input').select2({
+				allowClear : true,
+				ajax : {
+					url : module.config().lookupUrl + 'publicationseries',
+					data : function(params) {
+						var result =  {
+							mimetype : 'json',
+							publicationsubtypeid : self.model.get('publicationSubtype').id,
+							active : ''
+						}
+						if (_.has(params, 'term')) {
+							result.text = params.term;
+						}
+						return result;
+					},
+					transport : function(params, success, failure) {
+						var deferred = $.Deferred();
+						params.data.active = 'y';
+						var activeRequest = $.ajax(params);
+						params.data.active = 'n';
+						var notActiveRequest = $.ajax(params);
+
+						$.when(activeRequest, notActiveRequest).done(function(activeResults, notActiveResults) {
+							deferred.resolve([activeResults, notActiveResults]);
+						});
+						deferred.then(success);
+						deferred.fail(failure);
+
+						return deferred;
+					},
+					processResults : function(data) {
+						var results = {
+							results : [{
+								text : 'Active',
+								children : []
+							},{
+								text : 'Not Active',
+								children : []
+							}]
+						};
+						if ((data.length === 2) && (data[0].length === 3) && (data[1].length === 3)) {
+							results.results[0].children = data[0][0].slice(0, 30);
+							results.results[1].children = data[1][0].slice(0, 30);
+						}
+						return results;
 					}
 				}
 			});
@@ -94,6 +149,7 @@ define([
 
 			this.listenTo(this.model, 'change:publicationType', this.updatePubType);
 			this.listenTo(this.model, 'change:publicationSubtype', this.updatePubSubtype);
+			this.listenTo(this.model, 'change:seriesTitle', this.updateSeriesTitle);
 
 			this.publicationTypeCollection = new PublicationTypeCollection();
 			this.pubTypePromise = this.publicationTypeCollection.fetch();
@@ -104,43 +160,81 @@ define([
 			var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
 			this.model.set('publicationType', {id: selected, text : selectedText});
 			this.model.unset('publicationSubtype');
+			this.model.unset('seriesTitle');
 		},
 
 		resetPubType : function(ev) {
 			this.model.unset('publicationType');
 			this.model.unset('publicationSubtype');
+			this.model.unset('seriesTitle');
 		},
 
 		selectPubSubtype : function(ev) {
 			var selected = $(ev.currentTarget).val();
 			var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
-			this.model.set('publicationSubtype', {id: selected});
+			this.model.set('publicationSubtype', {id: selected, text : selectedText});
+			this.model.unset('seriesTitle');
 		},
 
 		resetPubSubtype : function(ev) {
 			this.model.unset('publicationSubtype');
+			this.model.unset('seriesTitle');
+		},
+
+		selectSeriesTitle : function(ev) {
+			var selected = $(ev.currentTarget).val();
+			var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
+			this.model.set('seriesTitle', {id : selected, text : selectedText});
+		},
+
+		resetSeriesTitle : function(ev) {
+			this.model.unset('seriesTitle');
 		},
 
 		updatePubType : function() {
 			var $select = this.$('#pub-type-input');
-			var pubType = this.model.get('publicationType');
+			var $subtypeSelect = this.$('#pub-subtype-input');
 
-			if (_.has(pubType, 'id')) {
+			var pubType = this.model.get('publicationType');
+			var hasId = _.has(pubType, 'id');
+
+			if (hasId) {
 				$select.val(pubType.id).trigger('change');
 			}
 			else {
 				$select.val('').trigger('change');
 			}
+			$subtypeSelect.prop('disabled', !hasId);
 		},
 
 		updatePubSubtype : function() {
-			var pubSubtype = this.model.get('publicationSubtype');
 			var $select = this.$('#pub-subtype-input');
-			if (_.has(pubSubtype, 'id')) {
+			var $seriesTitleSelect = this.$('#series-title-input');
+
+			var pubSubtype = this.model.get('publicationSubtype');
+			var hasId = _.has(pubSubtype, 'id');
+
+			if (hasId) {
 				if ($select.find('option[value="' + pubSubtype.id + '"]').length === 0) {
 					$select.append(this.optionTemplate(pubSubtype));
 				}
 				$select.val(pubSubtype.id).trigger('change');
+			}
+			else {
+				$select.val('').trigger('change');
+			}
+			$seriesTitleSelect.prop('disabled', !hasId);
+		},
+
+		updateSeriesTitle : function() {
+			var $select = this.$('#series-title-input');
+			var seriesTitle = this.model.get('seriesTitle');
+
+			if (_.has(seriesTitle, 'id')) {
+				if ($select.find('option[value="' + seriesTitle.id + '"]').length === 0) {
+					$select.append(this.optionTemplate(seriesTitle));
+				}
+				$select.val(seriesTitle.id).trigger('change');
 			}
 			else {
 				$select.val('').trigger('change');
