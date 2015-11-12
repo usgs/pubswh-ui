@@ -54,7 +54,6 @@ define([
 			'#doi-input' : 'doi',
 			'#issn-input' : 'issn',
 			'#isbn-input' : 'isbn',
-			'#tableOfContents-input' : 'tableOfContents',
 			'#update-date-input' : 'lastModifiedDate'
 		},
 
