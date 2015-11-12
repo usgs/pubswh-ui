@@ -1,7 +1,6 @@
 /*jslint browser: true */
 
 define([
-	'handlebars',
 	'underscore',
 	'bootstrap',
 	'datetimepicker',
@@ -9,9 +8,9 @@ define([
 	'views/AlertView',
 	'views/ConfirmationDialogView',
 	'views/BibliodataView',
-	'text!hb_templates/publication.hbs',
+	'hbs!hb_templates/publication',
 	'backbone.stickit'
-], function(Handlebars, _, bootstrap, datetimepicker, BaseView, AlertView, ConfirmationDialogView,
+], function(_, bootstrap, datetimepicker, BaseView, AlertView, ConfirmationDialogView,
 			BibliodataView, hbTemplate, Stickit) {
 	"use strict";
 
@@ -54,7 +53,7 @@ define([
 			}
 		},
 
-		template : Handlebars.compile(hbTemplate),
+		template : hbTemplate,
 
 		render : function() {
 			var self = this;
@@ -131,8 +130,8 @@ define([
 		remove : function() {
 			this.alertView.remove();
 			this.confirmationDialogView.remove();
-			_.each(this.tabViews, function(view) {
-				view.remove();
+			_.each(this.tabs, function(t) {
+				t.view.remove();
 			});
 			BaseView.prototype.remove.apply(this, arguments);
 			return this;

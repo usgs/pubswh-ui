@@ -5,20 +5,20 @@ define([
 	'jquery',
 	'select2',
 	'tinymce',
+	'module',
 	'backbone.stickit',
 	'models/PublicationTypeCollection',
 	'models/CostCenterCollection',
 	'views/BaseView',
-	'text!hb_templates/bibliodata.hbs',
-	'module'
-], function(Handlebars, $, select2, tinymce, stickit, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate, module) {
+	'hbs!hb_templates/bibliodata',
+], function(Handlebars, $, select2, tinymce, module, stickit, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
 
 		// Because we are using select2 for the menus, we need to use the select2:select and select2:unselect events to update
-		// the model. We can't use the change event because we must trigger this event when programatically updating the view to r
-		// reflect the model value. Also the corresponding option must exist in order for a selection to be shown.
+		// the model. We can't use the change event because we must trigger this event when programatically updating the view to
+		// reflect the model value.
 
 		events : {
 			'select2:select #pub-type-input' : 'selectPubType',
@@ -57,13 +57,20 @@ define([
 			'#update-date-input' : 'lastModifiedDate'
 		},
 
-		template : Handlebars.compile(hbTemplate),
+		template : hbTemplate,
 
 		optionTemplate : Handlebars.compile('<option value={{id}}>{{text}}</option>'),
 
+		/*
+		 * @constructs
+		 * @param {Object} options
+		 *      @prop {PublicationModel} model
+		 *      @prop {String} el - jquery selector where this view is rendered
+		 */
 		initialize : function(options) {
 			BaseView.prototype.initialize.apply(this, arguments);
 
+			// Retrieve lookups for publication types and cost centers
 			this.publicationTypeCollection = new PublicationTypeCollection();
 			this.pubTypePromise = this.publicationTypeCollection.fetch();
 
@@ -74,6 +81,7 @@ define([
 					this.notActiveCostCenters.fetch({data : {active : 'n'}})
 			);
 
+			// Add binding from model to dom for select2's and tinymce elements which are not handled by stickit.
 			this.listenTo(this.model, 'change:publicationType', this.updatePubType);
 			this.listenTo(this.model, 'change:publicationSubtype', this.updatePubSubtype);
 			this.listenTo(this.model, 'change:seriesTitle', this.updateSeriesTitle);
@@ -88,6 +96,10 @@ define([
 			var self = this;
 			BaseView.prototype.render.apply(this, arguments);
 
+			// Sets up the binding between DOM elements and the model //
+			this.stickit();
+
+			// Set up tinymce elements
 			this.updateDocAbstract();
 			tinymce.init({
 				selector : '#docAbstract-input',
@@ -143,13 +155,8 @@ define([
 				toolbar : 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link | code'
 			});
 
-			// Sets up the binding between DOM elements and the model //
-			this.stickit();
-
-			this.$('#pub-type-input').select2({
-				allowClear: true
-			});
-
+			// Set up for the publication type and larger work type select2's. These are set up once the data for the options
+			// have been retrieved.
 			this.pubTypePromise.done(function() {
 				self.$('#pub-type-input').select2({
 					allowClear: true,
@@ -164,6 +171,24 @@ define([
 				self.updateLargerWorkType();
 			});
 
+			// Set up for the cost center select2's. These are set up once the data for the options have been retrieved.
+			this.costCenterPromise.done(function() {
+				self.$('#cost-centers-input').select2({
+					allowClear : true,
+					data : [{
+						text : 'Active',
+						children : self.activeCostCenters.toJSON()
+					}, {
+						text : 'Not Active',
+						children : self.notActiveCostCenters.toJSON()
+					}]
+				});
+				self.updateCostCenters();
+			});
+
+
+			// The remaining select2's dynamically fetch their options using the lookup service, the current text search term
+			// and optionally filtered by a model attribute value.
 			this.$('#pub-subtype-input').select2({
 				allowClear : true,
 				ajax : {
@@ -187,6 +212,9 @@ define([
 			});
 			this.updatePubSubtype();
 
+			// This is a special case where two lookup's are needed to fetch the active and not active values.
+			// To do this, we redefined the transport function to make the two ajax calls, returning a
+			// deferred which is resolved after both calls are done.
 			this.$('#series-title-input').select2({
 				allowClear : true,
 				ajax : {
@@ -209,10 +237,10 @@ define([
 						params.data.active = 'n';
 						var notActiveRequest = $.ajax(params);
 
-						$.when(activeRequest, notActiveRequest).done(function(activeResults, notActiveResults) {
+						$.when(activeRequest, notActiveRequest).always(function(activeResults, notActiveResults) {
 							deferred.resolve([activeResults, notActiveResults]);
 						});
-						deferred.then(success);
+						deferred.done(success);
 						deferred.fail(failure);
 
 						return deferred;
@@ -237,20 +265,6 @@ define([
 			});
 			this.updateSeriesTitle();
 
-			this.costCenterPromise.done(function() {
-				self.$('#cost-centers-input').select2({
-					allowClear : true,
-					data : [{
-						text : 'Active',
-						children : self.activeCostCenters.toJSON()
-					}, {
-						text : 'Not Active',
-						children : self.notActiveCostCenters.toJSON()
-					}]
-				});
-				self.updateCostCenters();
-			});
-
 			this.$('#larger-work-subtype-input').select2({
 				allowClear : true,
 				ajax : {
@@ -273,10 +287,15 @@ define([
 				}
 			});
 			this.updateLargerWorkSubtype();
+
+			return this;
 		},
 
+		/*
+		 * Event handlers for select and reset events for the select2s
+		 */
 		selectPubType : function(ev) {
-			var selected = $(ev.currentTarget).val();
+			var selected = ev.currentTarget.value;
 			var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
 			this.model.set('publicationType', {id: selected, text : selectedText});
 			this.model.unset('publicationSubtype');
@@ -290,7 +309,7 @@ define([
 		},
 
 		selectPubSubtype : function(ev) {
-			var selected = $(ev.currentTarget).val();
+			var selected = ev.currentTarget.value;
 			var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
 			this.model.set('publicationSubtype', {id: selected, text : selectedText});
 			this.model.unset('seriesTitle');
@@ -302,7 +321,7 @@ define([
 		},
 
 		selectSeriesTitle : function(ev) {
-			var selected = $(ev.currentTarget).val();
+			var selected = ev.currentTarget.value;
 			var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
 			this.model.set('seriesTitle', {id : selected, text : selectedText});
 		},
@@ -330,7 +349,7 @@ define([
 		},
 
 		selectLargerWorkType : function(ev) {
-			var selected = $(ev.currentTarget).val();
+			var selected = ev.currentTarget.value;
 			var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
 			this.model.set('largerWorkType', {id: selected, text : selectedText});
 			this.model.unset('largerWorkSubtype');
@@ -342,7 +361,7 @@ define([
 		},
 
 		selectLargerWorkSubtype : function(ev) {
-			var selected = $(ev.currentTarget).val();
+			var selected = ev.currentTarget.value;
 			var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
 			this.model.set('largerWorkSubtype', {id: selected, text : selectedText});
 		},
@@ -351,6 +370,11 @@ define([
 			this.model.unset('largerWorkSubtype');
 		},
 
+		/*
+		 * Model attribute change handlers for inputs handled by select2's and tinymce rather than stickit.
+		 * Note that for select2's where the data is retrieved remotely using the ajax option, when setting
+		 * the value we must also create the corresponding option tags
+		 */
 		updatePubType : function() {
 			var $select = this.$('#pub-type-input');
 			var $subtypeSelect = this.$('#pub-subtype-input');

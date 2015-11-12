@@ -54,6 +54,9 @@
 				'backbone' : ['jquery', 'underscore'],
 				'backbone.stickit' : ['backbone', 'underscore'],
 				'datetimepicker' : ['jquery', 'moment', 'bootstrap'],
+				'handlebars' : {
+					exports: 'Handlebars'
+				},
 				'tinymce': {
             		exports: 'tinymce',
 					init: function () {
@@ -61,7 +64,15 @@
                 		return this.tinymce;
             		}
         		}
-			}
+			},
+			packages : [
+				{
+					name : 'hbs',
+					location: "{{  url_for('bower.static', filename='requirejs-hbs/hbs.js') }}",
+					main : 'hbs'
+				}
+			],
+
 		};
 	</script>
 	<script data-main="init" src="{{ url_for('bower.static', filename='requirejs/require.js') }}"></script>
