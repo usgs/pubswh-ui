@@ -62,9 +62,33 @@ define([
 
 		optionTemplate : Handlebars.compile('<option value={{id}}>{{text}}</option>'),
 
+		initialize : function(options) {
+			BaseView.prototype.initialize.apply(this, arguments);
+
+			this.publicationTypeCollection = new PublicationTypeCollection();
+			this.pubTypePromise = this.publicationTypeCollection.fetch();
+
+			this.activeCostCenters = new CostCenterCollection();
+			this.notActiveCostCenters = new CostCenterCollection();
+			this.costCenterPromise = $.when(
+					this.activeCostCenters.fetch({data : {active : 'y'}}),
+					this.notActiveCostCenters.fetch({data : {active : 'n'}})
+			);
+
+			this.listenTo(this.model, 'change:publicationType', this.updatePubType);
+			this.listenTo(this.model, 'change:publicationSubtype', this.updatePubSubtype);
+			this.listenTo(this.model, 'change:seriesTitle', this.updateSeriesTitle);
+			this.listenTo(this.model, 'change:costCenters', this.updateCostCenters);
+			this.listenTo(this.model, 'change:largerWorkType', this.updateLargerWorkType);
+			this.listenTo(this.model, 'change:largerWorkSubtype', this.updateLargerWorkSubtype);
+			this.listenTo(this.model, 'change:docAbstract', this.updateDocAbstract);
+			this.listenTo(this.model, 'change:tableOfContents', this.updateTableOfContents);
+		},
+
 		render : function() {
 			var self = this;
 			BaseView.prototype.render.apply(this, arguments);
+
 			this.updateDocAbstract();
 			tinymce.init({
 				selector : '#docAbstract-input',
@@ -101,6 +125,23 @@ define([
 						+ "kbd,label[for],legend,noscript,optgroup[label|disabled],option[disabled|label|selected|value],"
 						+ "q[cite],samp,select[disabled|multiple|name|size],small,"
 						+ "textarea[cols|rows|disabled|name|readonly],tt,var,big"
+			});
+
+			this.updateTableOfContents();
+			tinymce.init({
+				selector : '#tableOfContents-input',
+				setup : function(ed) {
+					ed.on('change', function(ev) {
+						self.model.set('tableOfContents', ev.level.content);
+					});
+				},
+				menubar: false,
+				plugins : 'code link paste',
+				formats: {
+						italic: {inline: 'i'}
+					},
+				browser_spellcheck : true,
+				toolbar : 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link | code'
 			});
 
 			// Sets up the binding between DOM elements and the model //
@@ -233,28 +274,6 @@ define([
 				}
 			});
 			this.updateLargerWorkSubtype();
-		},
-
-		initialize : function(options) {
-			BaseView.prototype.initialize.apply(this, arguments);
-
-			this.publicationTypeCollection = new PublicationTypeCollection();
-			this.pubTypePromise = this.publicationTypeCollection.fetch();
-
-			this.activeCostCenters = new CostCenterCollection();
-			this.notActiveCostCenters = new CostCenterCollection();
-			this.costCenterPromise = $.when(
-					this.activeCostCenters.fetch({data : {active : 'y'}}),
-					this.notActiveCostCenters.fetch({data : {active : 'n'}})
-			);
-
-			this.listenTo(this.model, 'change:publicationType', this.updatePubType);
-			this.listenTo(this.model, 'change:publicationSubtype', this.updatePubSubtype);
-			this.listenTo(this.model, 'change:seriesTitle', this.updateSeriesTitle);
-			this.listenTo(this.model, 'change:costCenters', this.updateCostCenters);
-			this.listenTo(this.model, 'change:largerWorkType', this.updateLargerWorkType);
-			this.listenTo(this.model, 'change:largerWorkSubtype', this.updateLargerWorkSubtype);
-			this.listenTo(this.model, 'change:docAbstract', this.updateDocAbstract);
 		},
 
 		selectPubType : function(ev) {
@@ -429,6 +448,10 @@ define([
 
 		updateDocAbstract : function() {
 			this.$('#docAbstract-input').html(this.model.get('docAbstract'));
+		},
+
+		updateTableOfContents : function() {
+			this.$('#tableOfContents-input').html(this.model.get('tableOfContents'));
 		}
 
 	});
