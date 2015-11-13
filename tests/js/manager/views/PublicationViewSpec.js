@@ -14,6 +14,7 @@ define([
 
 		var setElAlertSpy, renderAlertSpy, removeAlertSpy, dangerAlertSpy, successAlertSpy;
 		var setElDialogSpy, renderDialogSpy, removeDialogSpy, showDialogSpy;
+		var setElBibliodataSpy, renderBibliodataSpy, removeBibliodataSpy
 
 		var pubModel;
 		var opDeferred;
@@ -41,6 +42,10 @@ define([
 			removeDialogSpy = jasmine.createSpy('removeDialogSpy');
 			showDialogSpy = jasmine.createSpy('showDialogSpy');
 
+			setElBibliodataSpy = jasmine.createSpy('setElBibliodataSpy');
+			renderBibliodataSpy = jasmine.createSpy('renderBibliodataSpy');
+			removeBibliodataSpy = jasmine.createSpy('removeBibliodataSpy');
+
 			var injector = new Squire();
 			injector.mock('views/AlertView', BaseView.extend({
 				setElement : setElAlertSpy,
@@ -57,12 +62,18 @@ define([
 				remove : removeDialogSpy,
 				show : showDialogSpy
 			}));
+			injector.mock('views/BibliodataView', BaseView.extend({
+				setElement : setElBibliodataSpy.and.returnValue({
+					render : renderBibliodataSpy
+				}),
+				render : renderBibliodataSpy,
+				remove : removeBibliodataSpy
+			}));
 
 			injector.require(['views/PublicationView'], function(view){
 				PublicationView = view;
 				done();
-			})
-
+			});
 		});
 
 		afterEach(function() {
@@ -98,6 +109,8 @@ define([
 				expect(renderAlertSpy).not.toHaveBeenCalled();
 				expect(setElDialogSpy.calls.count()).toBe(2);
 				expect(renderDialogSpy).toHaveBeenCalled();
+				expect(setElBibliodataSpy.calls.count()).toBe(2);
+				expect(renderBibliodataSpy).toHaveBeenCalled();
 			});
 
 			it('Expects a successful fetch will not show an alert', function() {
@@ -138,6 +151,7 @@ define([
 				testView.remove();
 				expect(removeAlertSpy).toHaveBeenCalled();
 				expect(removeDialogSpy).toHaveBeenCalled();
+				expect(removeBibliodataSpy).toHaveBeenCalled();
 			});
 		});
 

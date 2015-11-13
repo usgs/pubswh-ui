@@ -1,16 +1,17 @@
 /*jslint browser: true */
 
 define([
-	'handlebars',
 	'underscore',
 	'bootstrap',
 	'datetimepicker',
 	'views/BaseView',
 	'views/AlertView',
 	'views/ConfirmationDialogView',
-	'text!hb_templates/publication.hbs',
+	'views/BibliodataView',
+	'hbs!hb_templates/publication',
 	'backbone.stickit'
-], function(Handlebars, _, bootstrap, datetimepicker, BaseView, AlertView, ConfirmationDialogView, hbTemplate, Stickit) {
+], function(_, bootstrap, datetimepicker, BaseView, AlertView, ConfirmationDialogView,
+			BibliodataView, hbTemplate, Stickit) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -20,7 +21,8 @@ define([
 			'click .release-btn' : 'releasePub',
 			'click .save-btn' : 'savePub',
 			'click .publish-btn' : 'publishPub',
-			'click .delete-btn' : 'deletePub'
+			'click .delete-btn' : 'deletePub',
+			'click .edit-tabs a' : 'showTab'
 		},
 
 		bindings : {
@@ -51,7 +53,7 @@ define([
 			}
 		},
 
-		template : Handlebars.compile(hbTemplate),
+		template : hbTemplate,
 
 		render : function() {
 			var self = this;
@@ -75,6 +77,10 @@ define([
 			// Set the elements for child views and render if needed.
 			this.alertView.setElement(this.$('.alert-container'));
 			this.confirmationDialogView.setElement(this.$('.confirmation-dialog-container')).render();
+
+			_.each(this.tabs, function(t) {
+				t.view.setElement(t.el).render();
+			});
 
 			// Handle errors from the fetch call
 			this.fetchPromise.fail(function(jqXhr) {
@@ -108,11 +114,24 @@ define([
 			this.confirmationDialogView = new ConfirmationDialogView({
 				el : '.confirmation-dialog-container'
 			});
+
+			this.tabs = {
+				bibliodata : {
+					el: '#bibliodata-pane',
+					view: new BibliodataView({
+						el: '#bibliodata-pane',
+						model : this.model
+					})
+				}
+			};
 		},
 
 		remove : function() {
 			this.alertView.remove();
 			this.confirmationDialogView.remove();
+			_.each(this.tabs, function(t) {
+				t.view.remove();
+			});
 			BaseView.prototype.remove.apply(this, arguments);
 			return this;
 		},
@@ -241,6 +260,11 @@ define([
 
 		returnToSearch : function() {
 			this.router.navigate('search', {trigger: true});
+		},
+
+		showTab : function(ev) {
+			ev.preventDefault();
+			this.$('.edit-tabs').tab('show');
 		}
 	});
 
