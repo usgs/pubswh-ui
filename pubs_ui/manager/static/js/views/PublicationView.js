@@ -115,12 +115,11 @@ define([
 				el : '.confirmation-dialog-container'
 			});
 
-
 			this.tabs = {
 				bibliodata : {
-					el: '#bibliodata',
+					el: '#bibliodata-pane',
 					view: new BibliodataView({
-						el: '#bibliodata',
+						el: '#bibliodata-pane',
 						model : this.model
 					})
 				}

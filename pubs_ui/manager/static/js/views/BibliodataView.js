@@ -160,6 +160,7 @@ define([
 			this.pubTypePromise.done(function() {
 				self.$('#pub-type-input').select2({
 					allowClear: true,
+					theme : 'bootstrap',
 					data: self.publicationTypeCollection.toJSON()
 				});
 				self.updatePubType();
@@ -175,6 +176,7 @@ define([
 			this.costCenterPromise.done(function() {
 				self.$('#cost-centers-input').select2({
 					allowClear : true,
+					theme : 'bootstrap',
 					data : [{
 						text : 'Active',
 						children : self.activeCostCenters.toJSON()
@@ -191,6 +193,7 @@ define([
 			// and optionally filtered by a model attribute value.
 			this.$('#pub-subtype-input').select2({
 				allowClear : true,
+				theme : 'bootstrap',
 				ajax : {
 					url : module.config().lookupUrl + 'publicationsubtypes',
 					data : function(params) {
@@ -217,6 +220,7 @@ define([
 			// deferred which is resolved after both calls are done.
 			this.$('#series-title-input').select2({
 				allowClear : true,
+				theme : 'bootstrap',
 				ajax : {
 					url : module.config().lookupUrl + 'publicationseries',
 					data : function(params) {
@@ -267,6 +271,7 @@ define([
 
 			this.$('#larger-work-subtype-input').select2({
 				allowClear : true,
+				theme : 'bootstrap',
 				ajax : {
 					url : module.config().lookupUrl + 'publicationsubtypes',
 					data : function(params) {

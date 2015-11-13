@@ -31,6 +31,7 @@
     "font-awesome": "fontawesome#~4.4.0",
     "select2": "~4.0.0",
     "tinymce": "~4.2.7",
-    "requirejs-hbs": "~0.1.1"
+    "requirejs-hbs": "~0.1.1",
+    "select2-bootstrap-theme": "~0.1.0-beta.4"
   }
 }
