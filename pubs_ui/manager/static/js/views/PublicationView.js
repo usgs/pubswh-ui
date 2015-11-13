@@ -8,10 +8,11 @@ define([
 	'views/AlertView',
 	'views/ConfirmationDialogView',
 	'views/BibliodataView',
+	'views/LinksView',
 	'hbs!hb_templates/publication',
 	'backbone.stickit'
 ], function(_, bootstrap, datetimepicker, BaseView, AlertView, ConfirmationDialogView,
-			BibliodataView, hbTemplate, Stickit) {
+			BibliodataView, LinksView, hbTemplate, Stickit) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -122,6 +123,13 @@ define([
 						el: '#bibliodata-pane',
 						model : this.model
 					})
+				//},
+			//	links : {
+			//		el : '#links-pane',
+			//		view : new LinksView({
+			//			el : '#links-pane',
+			//			model : this.model
+			//		})
 				}
 			};
 		},

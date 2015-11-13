@@ -37,6 +37,7 @@
 			baseUrl: "{{ url_for('manager.static', filename='js') }}",
 			paths: {
 				'jquery' : "{{ url_for('bower.static', filename='jquery/dist/jquery.js') }}",
+				'jquery-ui' : "{{ url_for('bower.static', filename='jquery-ui/jquery-ui.js') }}",
 				'select2' : "{{ url_for('bower.static', filename='select2/dist/js/select2.full.js') }}",
 				'tinymce' : "{{  url_for('bower.static', filename='tinymce/tinymce.js') }}",
 				'bootstrap' : "{{ url_for('bower.static', filename='bootstrap/dist/js/bootstrap.js') }}",
@@ -51,7 +52,10 @@
 			shim : {
 				'select2' : ['jquery'],
 				'bootstrap' : ['jquery'],
-				'backbone' : ['jquery', 'underscore'],
+				'backbone' : {
+					dep : ['jquery', 'underscore'],
+					exports : 'Backbone'
+				},
 				'backbone.stickit' : ['backbone', 'underscore'],
 				'datetimepicker' : ['jquery', 'moment', 'bootstrap'],
 				'handlebars' : {
