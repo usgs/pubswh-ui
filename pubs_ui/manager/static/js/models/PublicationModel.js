@@ -9,7 +9,7 @@ define([
 	"use strict";
 
 	var model = Backbone.Model.extend({
-		urlRoot : module.config().wsgi_str + '/manager/services/mppublications',
+		urlRoot : module.config().scriptRoot + '/manager/services/mppublications',
 
 		/*
 		Need to remove interactions and text to work around an issue with some properties being returned that shouldn't be.
