@@ -24,6 +24,9 @@
 				'init' : {
 					'scriptRoot' : "{{ request.script_root }}"
 				},
+				'models/PublicationModel' : {
+					wsgi_str : "{{ config.wsgi_str }}"
+				},
 				'models/PublicationTypeCollection' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},

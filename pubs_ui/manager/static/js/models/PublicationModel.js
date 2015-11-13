@@ -3,12 +3,13 @@
 define([
 	'underscore',
 	'jquery',
-	'backbone'
-], function(_, $, Backbone) {
+	'backbone',
+	'module',
+], function(_, $, Backbone, module) {
 	"use strict";
 
 	var model = Backbone.Model.extend({
-		urlRoot : '/manager/services/mppublications',
+		urlRoot : module.config().wsgi_str + '/manager/services/mppublications',
 
 		/*
 		Need to remove interactions and text to work around an issue with some properties being returned that shouldn't be.
