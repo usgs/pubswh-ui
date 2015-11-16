@@ -79,14 +79,14 @@ define([
 			this.alertView.setElement(this.$('.alert-container'));
 			this.confirmationDialogView.setElement(this.$('.confirmation-dialog-container')).render();
 
-			_.each(this.tabs, function(t) {
-				t.view.setElement(t.el).render();
-			});
-
-			// Handle errors from the fetch call
-			this.fetchPromise.fail(function(jqXhr) {
+			// Don't render tabs until the publication has been fetched.
+			this.fetchPromise.done(function() {
+				_.each(self.tabs, function (tab) {
+					tab.view.setElement(tab.el).render();
+				});
+			}).fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the publication: ' + jqXhr.statusText);
-			})
+			});
 		},
 
 		/*
@@ -123,13 +123,13 @@ define([
 						el: '#bibliodata-pane',
 						model : this.model
 					})
-				//},
-			//	links : {
-			//		el : '#links-pane',
-			//		view : new LinksView({
-			//			el : '#links-pane',
-			//			model : this.model
-			//		})
+				},
+				links : {
+					el : '#links-pane',
+					view : new LinksView({
+						el : '#links-pane',
+						collection : this.model.get('links')
+					})
 				}
 			};
 		},
