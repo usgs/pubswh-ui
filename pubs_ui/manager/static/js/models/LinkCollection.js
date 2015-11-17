@@ -49,9 +49,12 @@ define([
 			return this;
 		},
 
+		/*
+		 * In addition to remove the model from the collection, the rank of the remaining models are
+		 * updated as appropriate and the collection is sorted.
+		 */
 		remove : function(model) {
 			var modelRank = model.get('rank');
-
 
 			Backbone.Collection.prototype.remove.apply(this, arguments);
 			this.chain()
