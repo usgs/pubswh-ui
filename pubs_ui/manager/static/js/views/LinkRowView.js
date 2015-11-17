@@ -18,7 +18,7 @@ define([
 			'select2:select .link-file-type': 'selectLinkFileType',
 			'select2:unselect .link-file-type': 'resetLinkFileType',
 			'click .delete-row' : 'deleteRow',
-			'updateOrder .link-row-container' : 'updateLinksOrder'
+			'updateOrder .link-row-container' : 'updateLinksOrder' // This event is generated when the row position in the parent is changed
 		},
 
 		bindings: {
@@ -36,8 +36,8 @@ define([
 		 *     @prop {LinkModel} model
 		 *     @prop {LinkCollection} - collection which contains model.
 		 *     @prop {String} el - jquery selector for element where the view will be appended
-		 *     @prop {Collection of LookupModels} linkTypeCollection
-		 *     @prop {Collection of LookupModels} linkFileTypeCollection
+		 *     @prop {Collection of LookupModels} linkTypeCollection - this should contain data before render is called.
+		 *     @prop {Collection of LookupModels} linkFileTypeCollection - this should contain data before render is called.
 		 */
 		initialize: function (options) {
 			var self = this;
@@ -104,8 +104,19 @@ define([
 			this.model.unset('linkFileType');
 		},
 
-		deleteRow : function() {
+		/*
+		 * Remove the model from the collection
+		 */
+		deleteRow : function(ev) {
 			this.collection.remove(this.model);
+		},
+
+
+		/*
+		 * Update the model's rank in the collection to reflect the new position.
+		 */
+		updateLinksOrder : function(ev, newIndex) {
+			this.collection.updateModelRank(this.model, newIndex + 1);
 		},
 
 		/*
@@ -133,10 +144,6 @@ define([
 			else {
 				$select.val('').trigger('change');
 			}
-		},
-
-		updateLinksOrder : function(ev, newIndex) {
-			this.collection.updateModelRank(this.model, newIndex + 1);
 		}
 	});
 

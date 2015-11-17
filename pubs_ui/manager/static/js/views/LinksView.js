@@ -28,7 +28,7 @@ define([
 			this.linkTypeCollection = new LinkTypeCollection();
 			this.linkFileTypeCollection = new LinkFileTypeCollection();
 
-			this.lookupFetchPromise = $.when(this.linkTypeCollection.fetch(), this.linkFileTypeCollection.fetch());
+			this.lookupFetchPromise = $.when(this.linkTypeCollection.fetch(), this.linkFileTypeCollection.fetch()).promise();
 			this.linkRowViews = this.collection.map(function(m) {
 				return new LinkRowView({
 					model : m,

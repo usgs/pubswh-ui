@@ -18,7 +18,14 @@
     },
     shim : {
         'select2' : ['jquery'],
-        'bootstrap' : ['jquery', 'underscore'],
+        'jquery-ui' : {
+            dep: ['jquery'],
+            init : function() {
+                $.widget.bridge('uibutton', $.ui.button);
+                $.widget.bridge('uitooltip', $.ui.tooltip);
+            }
+        },
+        'bootstrap' : ['jquery', 'jquery-ui'],
         'backbone' : ['jquery', 'underscore'],
         'backbone.stickit' : ['backbone', 'underscore'],
         'datetimepicker' : ['jquery', 'moment', 'bootstrap'],
