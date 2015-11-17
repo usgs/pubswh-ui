@@ -69,7 +69,7 @@ define([
 				self.model.set('displayToPublicDate', ev.date.format('YYYY-MM-DDTHH:mm:ss'));
 			});
 			$('[data-toggle="tooltip"]').tooltip({
-				trigger : 'hover'
+				trigger : 'hover',
 			});
 
 			// Sets up the binding between DOM elements and the model //

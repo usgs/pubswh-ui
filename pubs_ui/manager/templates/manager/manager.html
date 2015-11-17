@@ -61,7 +61,14 @@
 			},
 			shim : {
 				'select2' : ['jquery'],
-				'bootstrap' : ['jquery'],
+				'bootstrap' : ['jquery', 'jquery-ui'], //Need to do this so jquery-ui is loaded first
+				'jquery-ui' : {
+					dep: ['jquery'],
+					init : function() {
+						$.widget.bridge('uibutton', $.ui.button);
+						$.widget.bridge('uitooltip', $.ui.tooltip);
+					}
+				},
 				'backbone' : {
 					dep : ['jquery', 'underscore'],
 					exports : 'Backbone'
