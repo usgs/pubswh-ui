@@ -21,8 +21,7 @@ define([
 		parse : function(response, options) {
 			var links = this.get('links');
 			if (_.has(response, 'links')) {
-				links.set(response.links);
-				links.sort();
+				links.set(_.sortBy(response.links, 'rank'));
 				response.links = links;
 			}
 			/*

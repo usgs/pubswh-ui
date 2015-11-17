@@ -105,9 +105,7 @@ define([
 		},
 
 		deleteRow : function() {
-			var oldRank = this.model.get('rank');
 			this.collection.remove(this.model);
-			this.collection.updateRange(oldRange, this.collection.length);
 		},
 
 		/*

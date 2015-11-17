@@ -1,6 +1,7 @@
 /* jslint browser: true */
 
 define([
+	'underscore',
 	'jquery-ui',
 	'models/LinkModel',
 	'models/LinkTypeCollection',
@@ -8,7 +9,7 @@ define([
 	'views/BaseView',
 	'views/LinkRowView',
 	'hbs!hb_templates/links'
-], function(jqueryUI, LinkModel, LinkTypeCollection, LinkFileTypeCollection, BaseView, LinkRowView, hbTemplate) {
+], function(_, jqueryUI, LinkModel, LinkTypeCollection, LinkFileTypeCollection, BaseView, LinkRowView, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -39,6 +40,7 @@ define([
 			});
 			this.listenTo(this.collection, 'add', this.addLinkRow);
 			this.listenTo(this.collection, 'remove', this.removeLinkRow);
+			this.listenTo(this.collection, 'update', this.updateRowOrder);
 		},
 
 		remove : function() {
@@ -70,10 +72,11 @@ define([
 			return this;
 		},
 
-		renderViewRow : function(rowView) {
-			var $rowDiv;
-			this.$('.grid').append('<div class="link-row-div"></div>');
-			rowView.setElement(this.$('.grid .link-row-div:last-child')).render();
+		renderViewRow : function(rowView, insertRow) {
+			var $grid = this.$('.grid');
+			var divText = '<div class="link-row-div"></div>'
+			$grid.append(divText);
+			rowView.setElement($grid.find('.link-row-div:last-child')).render();
 		},
 
 		addLinkRow : function(model) {
@@ -84,6 +87,7 @@ define([
 				linkTypeCollection : this.linkTypeCollection,
 				linkFileTypeCollection : this.linkFileTypeCollection
 			});
+
 			this.linkRowViews.push(view);
 
 			if (this.lookupFetchPromise.state() === 'resolved' && (this.$('.grid').length > 0)) {
@@ -93,7 +97,13 @@ define([
 
 		removeLinkRow : function(model) {
 			var viewToRemove = _.findWhere(this.linkRowViews, {model : model});
-			viewToRemove.remove();
+
+			if (viewToRemove) {
+				viewToRemove.remove();
+				this.linkRowViews = _.reject(this.linkRowViews, function(view) {
+					return view === viewToRemove;
+				});
+			}
 		},
 
 		addNewLink : function() {
@@ -101,6 +111,19 @@ define([
 				rank : this.collection.length + 1
 			});
 			this.collection.add([newModel]);
+		},
+
+		updateRowOrder : function() {
+			var $grid = this.$('.grid');
+
+			this.linkRowViews = _.chain(this.linkRowViews)
+					.sortBy(function(view) {
+						return view.model.attributes.rank
+					})
+					.each(function(view) {
+						view.$el.appendTo($grid)
+					})
+					.value();
 		}
 	});
 
