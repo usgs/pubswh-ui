@@ -68,9 +68,6 @@ define([
 			this.$('#display-date').on('dp.change', function(ev) {
 				self.model.set('displayToPublicDate', ev.date.format('YYYY-MM-DDTHH:mm:ss'));
 			});
-			$('[data-toggle="tooltip"]').tooltip({
-				trigger : 'hover',
-			});
 
 			// Sets up the binding between DOM elements and the model //
 			this.stickit();
@@ -79,10 +76,17 @@ define([
 			this.alertView.setElement(this.$('.alert-container'));
 			this.confirmationDialogView.setElement(this.$('.confirmation-dialog-container')).render();
 
+			this.$('[data-toggle="tooltip"]').tooltip({
+				trigger : 'hover'
+			});
+
 			// Don't render tabs until the publication has been fetched.
 			this.fetchPromise.done(function() {
 				_.each(self.tabs, function (tab) {
 					tab.view.setElement(tab.el).render();
+					tab.view.$('[data-toggle="tooltip"]').tooltip({
+						trigger : 'hover'
+					});
 				});
 			}).fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the publication: ' + jqXhr.statusText);
