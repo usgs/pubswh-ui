@@ -227,7 +227,7 @@ define([
 			});
 
 			it('Expects that if the save fails without validation errors, the model is not updated and the danger alert is shown', function() {
-				testView.savePub()
+				testView.savePub();
 				expect(dangerAlertSpy).not.toHaveBeenCalled();
 				opDeferred.reject({}, 'error', 'Server error');
 				expect(pubModel.has('validationErrors')).toBe(false);
@@ -261,7 +261,7 @@ define([
 			});
 
 			it('Expects a successful call to save to call the confirmation dialog', function() {
-				testView.publishPub()
+				testView.publishPub();
 				savePubDeferred.resolve();
 				expect(showDialogSpy).toHaveBeenCalled();
 			});
@@ -269,7 +269,7 @@ define([
 			describe('Tests for publishing a pub where the save has already worked', function() {
 				beforeEach(function () {
 					var actionCallback;
-					testView.publishPub()
+					testView.publishPub();
 					savePubDeferred.resolve();
 
 					actionCallback = showDialogSpy.calls.argsFor(0)[1];
