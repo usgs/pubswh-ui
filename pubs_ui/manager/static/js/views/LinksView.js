@@ -87,7 +87,9 @@ define([
 			rowView.setElement($grid.find('.link-row-div:last-child')).render();
 		},
 
-		/* Event handlers */
+		/*
+		 * DOM Event handlers
+		 */
 		addNewLink : function() {
 			var newModel = new LinkModel({
 				rank : this.collection.length + 1
@@ -95,7 +97,9 @@ define([
 			this.collection.add([newModel]);
 		},
 
-
+		/*
+		 * collection event handlers
+		 */
 		addLinkRow : function(model) {
 			var view = new LinkRowView({
 				model : model,
@@ -107,6 +111,8 @@ define([
 
 			this.linkRowViews.push(view);
 
+			// Need to make sure the lookup fetches are complete before rendering the row.
+			// If it isn't, it will be rendered in the promise handler within the render function.
 			if (this.lookupFetchPromise.state() === 'resolved') {
 				this.renderViewRow(view);
 			}
