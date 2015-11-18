@@ -14,7 +14,8 @@ define([
 
 		var setElAlertSpy, renderAlertSpy, removeAlertSpy, dangerAlertSpy, successAlertSpy;
 		var setElDialogSpy, renderDialogSpy, removeDialogSpy, showDialogSpy;
-		var setElBibliodataSpy, renderBibliodataSpy, removeBibliodataSpy
+		var setElBibliodataSpy, renderBibliodataSpy, removeBibliodataSpy;
+		var setElLinksSpy, renderLinksSpy, removeLinksSpy;
 
 		var pubModel;
 		var opDeferred;
@@ -46,6 +47,10 @@ define([
 			renderBibliodataSpy = jasmine.createSpy('renderBibliodataSpy');
 			removeBibliodataSpy = jasmine.createSpy('removeBibliodataSpy');
 
+			setElLinksSpy = jasmine.createSpy('setElBibliodataSpy');
+			renderLinksSpy = jasmine.createSpy('renderBibliodataSpy');
+			removeLinksSpy = jasmine.createSpy('removeBibliodataSpy');
+
 			var injector = new Squire();
 			injector.mock('views/AlertView', BaseView.extend({
 				setElement : setElAlertSpy,
@@ -68,6 +73,13 @@ define([
 				}),
 				render : renderBibliodataSpy,
 				remove : removeBibliodataSpy
+			}));
+			injector.mock('views/LinksView', BaseView.extend({
+				setElement : setElLinksSpy.and.returnValue({
+					render : renderLinksSpy
+				}),
+				render : renderLinksSpy,
+				remove : removeLinksSpy
 			}));
 
 			injector.require(['views/PublicationView'], function(view){
@@ -98,7 +110,7 @@ define([
 		});
 
 		describe('Tests for render', function() {
-			it('Expects the child views to have there els set and rendered except for the alert view', function() {
+			it('Expects the confirmationDialogView to be rendered and the alertView to have it\'s element set', function() {
 				pubModel.set('id', 1234);
 				testView = new PublicationView({
 					model : pubModel,
@@ -109,8 +121,27 @@ define([
 				expect(renderAlertSpy).not.toHaveBeenCalled();
 				expect(setElDialogSpy.calls.count()).toBe(2);
 				expect(renderDialogSpy).toHaveBeenCalled();
+			});
+
+			it('Expects the child tab views to not be rendered until a successful fetch occurs', function() {
+				pubModel.set('id', 1234);
+				testView = new PublicationView({
+					model : pubModel,
+					el : '#test-div'
+				}).render();
+
+				console.log(opDeferred.state());
+				expect(setElBibliodataSpy.calls.count()).toBe(1);
+				expect(renderBibliodataSpy).not.toHaveBeenCalled();
+				expect(setElLinksSpy.calls.count()).toBe(1);
+				expect(renderLinksSpy).not.toHaveBeenCalled();
+
+				opDeferred.resolve();
+
 				expect(setElBibliodataSpy.calls.count()).toBe(2);
 				expect(renderBibliodataSpy).toHaveBeenCalled();
+				expect(setElLinksSpy.calls.count()).toBe(2);
+				expect(renderLinksSpy).toHaveBeenCalled();
 			});
 
 			it('Expects a successful fetch will not show an alert', function() {
@@ -123,7 +154,7 @@ define([
 				expect(dangerAlertSpy).not.toHaveBeenCalled();
 			});
 
-			it('Expects a failed fetch to show an alert', function() {
+			it('Expects a failed fetch to show an alert but not to show the tab views', function() {
 				pubModel.set('id', 1234);
 				testView = new PublicationView({
 					model : pubModel,
@@ -131,6 +162,8 @@ define([
 				}).render();
 				opDeferred.reject({statusText : 'Error text'});
 				expect(dangerAlertSpy).toHaveBeenCalled();
+				expect(renderBibliodataSpy).not.toHaveBeenCalled();
+				expect(renderLinksSpy).not.toHaveBeenCalled();
 			});
 
 			it('Expects a new pub to not show an alert', function() {

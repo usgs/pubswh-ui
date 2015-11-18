@@ -3,6 +3,7 @@
         'sinon' : '/pubs_ui/bower_components/sinon/lib/sinon',
         'squire' : '/pubs_ui/bower_components/Squire.js/src/Squire',
         'jquery' : '/pubs_ui/bower_components/jquery/dist/jquery',
+        'jquery-ui' : '/pubs_ui/bower_components/jquery-ui/jquery-ui',
         'select2' : '/pubs_ui/bower_components/select2/dist/js/select2.full',
         'tinymce' : '/pubs_ui/bower_components/tinymce/tinymce',
         'bootstrap' : '/pubs_ui/bower_components/bootstrap/dist/js/bootstrap',
@@ -17,7 +18,14 @@
     },
     shim : {
         'select2' : ['jquery'],
-        'bootstrap' : ['jquery', 'underscore'],
+        'jquery-ui' : {
+            dep: ['jquery'],
+            init : function() {
+                $.widget.bridge('uibutton', $.ui.button);
+                $.widget.bridge('uitooltip', $.ui.tooltip);
+            }
+        },
+        'bootstrap' : ['jquery', 'jquery-ui'],
         'backbone' : ['jquery', 'underscore'],
         'backbone.stickit' : ['backbone', 'underscore'],
         'datetimepicker' : ['jquery', 'moment', 'bootstrap'],

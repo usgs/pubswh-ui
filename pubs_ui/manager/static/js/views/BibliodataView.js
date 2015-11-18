@@ -206,9 +206,9 @@ define([
 						}
 						return result;
 					},
-					processResults : function(data) {
+					processResults : function(resp) {
 						return {
-							results : data
+							results : resp
 						};
 					}
 				}
@@ -249,7 +249,7 @@ define([
 
 						return deferred;
 					},
-					processResults : function(data) {
+					processResults : function(resp) {
 						var results = {
 							results : [{
 								text : 'Active',
@@ -259,9 +259,9 @@ define([
 								children : []
 							}]
 						};
-						if ((data.length === 2) && (data[0].length === 3) && (data[1].length === 3)) {
-							results.results[0].children = data[0][0].slice(0, 30);
-							results.results[1].children = data[1][0].slice(0, 30);
+						if ((resp.length === 2) && (resp[0].length === 3) && (resp[1].length === 3)) {
+							results.results[0].children = resp[0][0].slice(0, 30);
+							results.results[1].children = resp[1][0].slice(0, 30);
 						}
 						return results;
 					}
@@ -284,9 +284,9 @@ define([
 						}
 						return result;
 					},
-					processResults : function(data) {
+					processResults : function(resp) {
 						return {
-							results : data
+							results : resp
 						};
 					}
 				}

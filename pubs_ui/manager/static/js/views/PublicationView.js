@@ -8,10 +8,11 @@ define([
 	'views/AlertView',
 	'views/ConfirmationDialogView',
 	'views/BibliodataView',
+	'views/LinksView',
 	'hbs!hb_templates/publication',
 	'backbone.stickit'
 ], function(_, bootstrap, datetimepicker, BaseView, AlertView, ConfirmationDialogView,
-			BibliodataView, hbTemplate, Stickit) {
+			BibliodataView, LinksView, hbTemplate, Stickit) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -67,9 +68,6 @@ define([
 			this.$('#display-date').on('dp.change', function(ev) {
 				self.model.set('displayToPublicDate', ev.date.format('YYYY-MM-DDTHH:mm:ss'));
 			});
-			$('[data-toggle="tooltip"]').tooltip({
-				trigger : 'hover'
-			});
 
 			// Sets up the binding between DOM elements and the model //
 			this.stickit();
@@ -78,14 +76,21 @@ define([
 			this.alertView.setElement(this.$('.alert-container'));
 			this.confirmationDialogView.setElement(this.$('.confirmation-dialog-container')).render();
 
-			_.each(this.tabs, function(t) {
-				t.view.setElement(t.el).render();
+			this.$('[data-toggle="tooltip"]').tooltip({
+				trigger : 'hover'
 			});
 
-			// Handle errors from the fetch call
-			this.fetchPromise.fail(function(jqXhr) {
+			// Don't render tabs until the publication has been fetched.
+			this.fetchPromise.done(function() {
+				_.each(self.tabs, function (tab) {
+					tab.view.setElement(tab.el).render();
+					tab.view.$('[data-toggle="tooltip"]').tooltip({
+						trigger : 'hover'
+					});
+				});
+			}).fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the publication: ' + jqXhr.statusText);
-			})
+			});
 		},
 
 		/*
@@ -121,6 +126,13 @@ define([
 					view: new BibliodataView({
 						el: '#bibliodata-pane',
 						model : this.model
+					})
+				},
+				links : {
+					el : '#links-pane',
+					view : new LinksView({
+						el : '#links-pane',
+						collection : this.model.get('links')
 					})
 				}
 			};

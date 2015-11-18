@@ -56,12 +56,11 @@ define([
 				server.respond();
 				expect(doneSpy).toHaveBeenCalled();
 				expect(failSpy).not.toHaveBeenCalled();
-				expect(model.attributes).toEqual({
-					id : validId,
-					title : 'This is a Title',
-					publicationYear : 2015
-				});
-			})
+				expect(model.attributes.id).toEqual(validId);
+				expect(model.attributes.title).toEqual('This is a Title');
+				expect(model.attributes.publicationYear).toEqual(2015);
+
+			});
 
 			it('Expects that a call to fetch with an invalid id will not update the model', function() {
 				model.set('id', invalidId);
@@ -69,7 +68,7 @@ define([
 				server.respond();
 				expect(doneSpy).not.toHaveBeenCalled();
 				expect(failSpy).toHaveBeenCalled();
-				expect(model.attributes).toEqual({id : invalidId});
+				expect(model.attributes.id).toEqual(invalidId);
 			});
 		});
 

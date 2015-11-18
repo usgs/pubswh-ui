@@ -43,6 +43,8 @@ under PubsWarehouse_UI folder.  The contents of the file should looks like so:
  VERIFY_CERT = True or False #Set to False for local development
  #cache settings- see the documentation for flask-cache. For development, a cache type of simple works well with the development server.  redis is used on production
  #CACHE_CONFIG = {'CACHE_TYPE': 'simple'}
+
+ BOWER_TRY_MINIFY = True // Set to false if you would like to debug in the browser into a bower javascript library
  ```
  
 To create the virtualenv you should have python 2.7, virtualenv, pip installed. To install the javascript dependencies you will

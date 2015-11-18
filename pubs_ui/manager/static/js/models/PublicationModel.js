@@ -5,20 +5,31 @@ define([
 	'jquery',
 	'backbone',
 	'module',
-], function(_, $, Backbone, module) {
+	'models/LinkCollection'
+], function(_, $, Backbone, module, LinkCollection) {
 	"use strict";
 
 	var model = Backbone.Model.extend({
 		urlRoot : module.config().scriptRoot + '/manager/services/mppublications',
 
-		/*
-		Need to remove interactions and text to work around an issue with some properties being returned that shouldn't be.
-		When PUBSTWO-1272 has been resolved, this can be removed.
-		 */
-		parse : function(response, options) {
-			return _.omit(response, ['interactions', 'text']);
+		defaults : function() {
+			return {
+				links: new LinkCollection()
+			}
 		},
 
+		parse : function(response, options) {
+			var links = this.get('links');
+			if (_.has(response, 'links')) {
+				links.set(_.sortBy(response.links, 'rank'));
+				response.links = links;
+			}
+			/*
+				Need to remove interactions and text to work around an issue with some properties being returned that shouldn't be.
+				When PUBSTWO-1272 has been resolved, this code can be removed.
+		 	*/
+			return _.omit(response, ['interactions', 'text']);
+		},
 
 		fetch : function(options) {
 			var params = {
