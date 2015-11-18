@@ -1,7 +1,10 @@
-#links-form .grid {
-    padding : 10px;
+#links-form {
+  padding-top: 15px;
+  .grid {
+    .make-sm-column(12);
+    padding: 10px;
     .link-row-container {
-      padding : 10px;
+      padding: 10px;
     }
     .link-text {
       width: 25%;
@@ -9,12 +12,17 @@
     .link-file-size {
       width: 10%;
     }
-    .link-description  {
+    .link-description {
       width: 30%;
     }
     .link-url, .link-help {
       margin-top: 4px;
-      margin-left : 15px;
+      margin-left: 15px;
       width: 94%;
     }
   }
+  .add-link-btn-div {
+    .make-sm-column(12);
+    padding-bottom: 15px;
+  }
+}
