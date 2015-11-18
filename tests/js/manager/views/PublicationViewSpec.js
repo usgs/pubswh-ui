@@ -14,8 +14,8 @@ define([
 
 		var setElAlertSpy, renderAlertSpy, removeAlertSpy, dangerAlertSpy, successAlertSpy;
 		var setElDialogSpy, renderDialogSpy, removeDialogSpy, showDialogSpy;
-		var setElBibliodataSpy, renderBibliodataSpy, removeBibliodataSpy;
-		var setElLinksSpy, renderLinksSpy, removeLinksSpy;
+		var setElBibliodataSpy, renderBibliodataSpy, removeBibliodataSpy, findElBibliodataSpy;
+		var setElLinksSpy, renderLinksSpy, removeLinksSpy, findElLinksSpy;
 
 		var pubModel;
 		var opDeferred;
@@ -46,10 +46,16 @@ define([
 			setElBibliodataSpy = jasmine.createSpy('setElBibliodataSpy');
 			renderBibliodataSpy = jasmine.createSpy('renderBibliodataSpy');
 			removeBibliodataSpy = jasmine.createSpy('removeBibliodataSpy');
+			findElBibliodataSpy = jasmine.createSpy('findElBibliodataSpy').and.returnValue({
+				tooltip : jasmine.createSpy()
+			});
 
 			setElLinksSpy = jasmine.createSpy('setElBibliodataSpy');
 			renderLinksSpy = jasmine.createSpy('renderBibliodataSpy');
 			removeLinksSpy = jasmine.createSpy('removeBibliodataSpy');
+			findElLinksSpy = jasmine.createSpy('findElBibliodataSpy').and.returnValue({
+				tooltip : jasmine.createSpy()
+			});
 
 			var injector = new Squire();
 			injector.mock('views/AlertView', BaseView.extend({
@@ -72,14 +78,16 @@ define([
 					render : renderBibliodataSpy
 				}),
 				render : renderBibliodataSpy,
-				remove : removeBibliodataSpy
+				remove : removeBibliodataSpy,
+				$ : findElBibliodataSpy
 			}));
 			injector.mock('views/LinksView', BaseView.extend({
 				setElement : setElLinksSpy.and.returnValue({
 					render : renderLinksSpy
 				}),
 				render : renderLinksSpy,
-				remove : removeLinksSpy
+				remove : removeLinksSpy,
+				$ : findElLinksSpy
 			}));
 
 			injector.require(['views/PublicationView'], function(view){
@@ -130,7 +138,6 @@ define([
 					el : '#test-div'
 				}).render();
 
-				console.log(opDeferred.state());
 				expect(setElBibliodataSpy.calls.count()).toBe(1);
 				expect(renderBibliodataSpy).not.toHaveBeenCalled();
 				expect(setElLinksSpy.calls.count()).toBe(1);
