@@ -173,6 +173,7 @@ define([
 		savePub : function() {
 			var self = this;
 			var loadingDiv = this.$('.loading-indicator');
+			var isNew = this.model.isNew();
 
 			loadingDiv.show();
 
@@ -184,6 +185,9 @@ define([
 			})
 				.done(function() {
 					self.alertView.showSuccessAlert('The publication was successfully saved');
+					if (isNew) {
+						self.router.navigate('publication/' + self.model.get('id'));
+					}
 				})
 				.fail(function(jqXhr, textStatus, error) {
 					var response = jqXhr;
