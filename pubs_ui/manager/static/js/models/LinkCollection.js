@@ -15,10 +15,10 @@ define([
 		 * @param {LinkModel} modelToUpdate - Assumes modelToUpdate is in the collection
 		 * @param {Number} newRank
 		 * @returns {LinkCollection} - Models are updated and the collection is sorted by rank
+		 *
 		 * Updates the rank attribute of the models in the collection so that modelToUpdate has newRank,
 		 * pushing others up or down as appropriate. The colleciton is then sorted
 		 */
-
 		updateModelRank : function(modelToUpdate, newRank) {
 			var oldRank = modelToUpdate.get('rank');
 			if (oldRank < newRank) {
@@ -50,7 +50,7 @@ define([
 		},
 
 		/*
-		 * In addition to remove the model from the collection, the rank of the remaining models are
+		 * In addition to removing the model from the collection, the rank of the remaining models are
 		 * updated as appropriate and the collection is sorted.
 		 */
 		remove : function(model) {
