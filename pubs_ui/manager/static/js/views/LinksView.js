@@ -20,7 +20,11 @@ define([
 
 		template : hbTemplate,
 
-
+		/*
+		 * @param {Object} options
+		 *     @prop {LinkCollection} collection
+		 *     @prop {String} el - jquery selector where view will be rendered
+		 */
 		initialize : function(options) {
 			BaseView.prototype.initialize.apply(this, arguments);
 
@@ -59,6 +63,7 @@ define([
 				}
 			});
 			this.lookupFetchPromise.done(function() {
+				// Sort the views before rendering them
 				self.linkRowViews = _.chain(self.linkRowViews)
 						.sortBy(function(view) {
 							return view.model.get('rank');
@@ -72,12 +77,24 @@ define([
 			return this;
 		},
 
-		renderViewRow : function(rowView, insertRow) {
+		/*
+		 * Used internally to render the a row by appending to the grid.
+		 */
+		renderViewRow : function(rowView) {
 			var $grid = this.$('.grid');
 			var divText = '<div class="link-row-div"></div>'
 			$grid.append(divText);
 			rowView.setElement($grid.find('.link-row-div:last-child')).render();
 		},
+
+		/* Event handlers */
+		addNewLink : function() {
+			var newModel = new LinkModel({
+				rank : this.collection.length + 1
+			});
+			this.collection.add([newModel]);
+		},
+
 
 		addLinkRow : function(model) {
 			var view = new LinkRowView({
@@ -90,7 +107,7 @@ define([
 
 			this.linkRowViews.push(view);
 
-			if (this.lookupFetchPromise.state() === 'resolved' && (this.$('.grid').length > 0)) {
+			if (this.lookupFetchPromise.state() === 'resolved') {
 				this.renderViewRow(view);
 			}
 		},
@@ -106,17 +123,11 @@ define([
 			}
 		},
 
-		addNewLink : function() {
-			var newModel = new LinkModel({
-				rank : this.collection.length + 1
-			});
-			this.collection.add([newModel]);
-		},
-
 		updateRowOrder : function() {
 			var $grid = this.$('.grid');
 
 			this.linkRowViews = _.chain(this.linkRowViews)
+					// Sort row views and them move them by successively appending them to the grid.
 					.sortBy(function(view) {
 						return view.model.attributes.rank
 					})
