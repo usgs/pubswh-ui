@@ -30,7 +30,7 @@
     "eonasdan-bootstrap-datetimepicker": "~4.17.37",
     "font-awesome": "fontawesome#~4.4.0",
     "select2": "~4.0.0",
-    "tinymce": "~4.2.7",
+    "tinymce": "~4.2.8",
     "requirejs-hbs": "~0.1.1",
     "select2-bootstrap-theme": "~0.1.0-beta.4",
     "jquery-ui": "~1.11.4"
