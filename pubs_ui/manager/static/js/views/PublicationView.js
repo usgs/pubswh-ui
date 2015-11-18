@@ -185,7 +185,9 @@ define([
 			})
 				.done(function() {
 					self.alertView.showSuccessAlert('The publication was successfully saved');
-					self.router.navigate('publication/' + self.model.get('id'));
+					if (isNew) {
+						self.router.navigate('publication/' + self.model.get('id'));
+					}
 				})
 				.fail(function(jqXhr, textStatus, error) {
 					var response = jqXhr;

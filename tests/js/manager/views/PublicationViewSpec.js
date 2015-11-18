@@ -201,6 +201,7 @@ define([
 
 		describe('Tests for saving a pub', function() {
 			beforeEach(function() {
+				pubModel.set('id', 1234);
 				testView = new PublicationView({
 					model : pubModel,
 					el : '#test-div'
