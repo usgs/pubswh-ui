@@ -116,12 +116,10 @@ define([
 				tinymce.init({
 					selector: '#docAbstract-input',
 					setup: function (ed) {
-						console.log('Initialized tinymce for docAbstract');
 						abstractInitDeferred.resolve();
 						clearInterval(interval);
 						ed.on('change', function (ev) {
 							self.model.set('docAbstract', ev.level.content);
-
 						});
 					},
 					menubar: false,
