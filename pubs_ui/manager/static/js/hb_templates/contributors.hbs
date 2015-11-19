@@ -1,0 +1,23 @@
+<div id="contributors-div">
+	<div class="contributor-types-tabs">
+		<ul class="nav nav-tabs">
+			{{#each contributorTypes}}
+				<li role="presentation" {{#if @first}}class="active"{{/if}}>
+					<a href="#type-{{id}}-pane" aria-controls="type-{{id}}-pane" role="tab" data-toggle="tab">
+						{{text}}
+					</a>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+	<div class="tab-content">
+		{{#each contributorTypes}}
+			<div role="tabpanel" class="tab-pane {{#if @first}}active{{/if}}" id="type-{{id}}-pane">
+				<div class="grid"></div>
+				<div class="add-contributor-btn-div">
+					<button type="button" class="btn btn-info">New {{text}}</button>
+				</div>
+			</div>
+		{{/each}}
+	</div>
+</div>
