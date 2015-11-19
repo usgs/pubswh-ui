@@ -97,13 +97,6 @@ define([
 				expect(testView.stickit).toHaveBeenCalled();
 			});
 
-			it('Expects that tinymce is initialized for the docAbstract and tableOfContents inputs', function() {
-				testView.render();
-				expect(tinymce.init.calls.count()).toBe(2);
-				expect(tinymce.init.calls.argsFor(0)[0].selector).toEqual('#docAbstract-input');
-				expect(tinymce.init.calls.argsFor(1)[0].selector).toEqual('#tableOfContents-input');
-			});
-
 			it('Expects that select2\'s that do not preload their selections are initialized', function() {
 				testView.render();
 				expect($.fn.select2.calls.count()).toBe(3);
