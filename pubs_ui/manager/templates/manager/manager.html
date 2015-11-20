@@ -4,6 +4,7 @@
 
 {% block page_style %}
 	<link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='select2/dist/css/select2.min.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='backgrid/lib/backgrid.min.css') }}" />
 	{%  assets "manager_style" %}
 		<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
 	{% endassets %}
@@ -26,6 +27,9 @@
 				},
 				'models/PublicationModel' : {
 					scriptRoot : "{{ request.script_root }}"
+				},
+				'models/ContributorModel' : {
+					scriptRott : "{{ request.script_root }}"
 				},
 				'models/PublicationTypeCollection' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
@@ -56,6 +60,7 @@
 				'text' : "{{ url_for('bower.static', filename='text/text.js') }}",
 				'underscore' : "{{ url_for('bower.static', filename='underscore/underscore.js') }}",
 				'backbone' : "{{ url_for('bower.static', filename='backbone/backbone.js') }}",
+				'backgrid' : "{{ url_for('bower.static', filename='backgrid/lib/backgrid.js') }}",
 				'handlebars' : "{{ url_for('bower.static', filename='handlebars/handlebars.amd.js') }}",
 				'hbs' : "{{  url_for('bower.static', filename='requirejs-hbs/hbs.js') }}",
 				'backbone.stickit' : "{{ url_for('bower.static', filename='backbone.stickit/backbone.stickit.js') }}",
@@ -66,15 +71,19 @@
 				'select2' : ['jquery'],
 				'bootstrap' : ['jquery', 'jquery-ui'], //Need to do this so jquery-ui is loaded first
 				'jquery-ui' : {
-					dep: ['jquery'],
+					deps: ['jquery'],
 					init : function() {
 						$.widget.bridge('uibutton', $.ui.button);
 						$.widget.bridge('uitooltip', $.ui.tooltip);
 					}
 				},
 				'backbone' : {
-					dep : ['jquery', 'underscore'],
+					deps : ['jquery', 'underscore'],
 					exports : 'Backbone'
+				},
+				'backgrid' : {
+					deps: ['jquery', 'underscore', 'backbone'],
+					exports: 'Backgrid'
 				},
 				'backbone.stickit' : ['backbone', 'underscore'],
 				'datetimepicker' : ['jquery', 'moment', 'bootstrap'],

@@ -139,7 +139,8 @@ define([
 				contributors : {
 					el : '#contributors-pane',
 					view : new ContributorsView({
-						el : '#contributors-pane'
+						el : '#contributors-pane',
+						model : this.model
 					})
 				}
 			};

@@ -5,8 +5,9 @@ define([
 	'jquery',
 	'backbone',
 	'module',
-	'models/LinkCollection'
-], function(_, $, Backbone, module, LinkCollection) {
+	'models/LinkCollection',
+	'models/PublicationContributorCollection'
+], function(_, $, Backbone, module, LinkCollection, PublicationContributorCollection) {
 	"use strict";
 
 	var model = Backbone.Model.extend({
@@ -14,16 +15,30 @@ define([
 
 		defaults : function() {
 			return {
-				links: new LinkCollection()
+				links: new LinkCollection(),
+				contributors : new Backbone.Model()
 			}
 		},
 
 		parse : function(response, options) {
 			var links = this.get('links');
+			var contributors = this.get('contributors');
 			if (_.has(response, 'links')) {
 				links.set(_.sortBy(response.links, 'rank'));
 				response.links = links;
 			}
+			if (_.has(response, 'contributors')) {
+				_.each(response.contributors, function(contribs, contribType) {
+					if (contributors.has(contribType)){
+						contributors.get(contribType).set(contribs).sort();
+					}
+					else {
+						contributors.set('contribType', new PublicationContributorCollection(contribs));
+					}
+				});
+				response.contributors = contributors;
+			}
+
 			/*
 				Need to remove interactions and text to work around an issue with some properties being returned that shouldn't be.
 				When PUBSTWO-1272 has been resolved, this code can be removed.
