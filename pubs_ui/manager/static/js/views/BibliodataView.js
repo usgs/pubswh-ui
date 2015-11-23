@@ -99,60 +99,88 @@ define([
 			// Sets up the binding between DOM elements and the model //
 			this.stickit();
 
-			// Set up tinymce elements
+			// Set up tinymce elements. This have to be initialized one at a time. If the setup
+			// callback is not called, the app should try again after removing and adding back in the editor
+			// Then once the first editor is set up, the 2nd can be set up in the same manner.
+			// This is the only way I got the tinymce editor to reliably render
 			this.updateDocAbstract();
-			tinymce.init({
-				selector : '#docAbstract-input',
-				setup : function (ed) {
-          			ed.on('change', function(ev) {
-						self.model.set('docAbstract', ev.level.content);
-          			});
-   				},
-				menubar: false,
-				plugins : 'code link paste',
-				formats: {
-						italic: {inline: 'i'}
-					},
-				browser_spellcheck : true,
-				toolbar : 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link | code',
-				valid_elements : "@[id|class|title|dir<ltr?rtl|lang|xml::lang|onclick|ondblclick|"
-						+ "onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|"
-						+ "onkeydown|onkeyup],a[rel|rev|charset|hreflang|tabindex|accesskey|type|"
-						+ "name|href|target|title|class|onfocus|onblur],strong/b,i/em,strike,u,"
-						+ "#p,-ol[type|compact],-ul[type|compact],-li,br,img[longdesc|usemap|"
-						+ "src|border|alt=|title|hspace|vspace|width|height|align],-sub,-sup,"
-						+ "-blockquote,-table[border=0|cellspacing|cellpadding|width|frame|rules|"
-						+ "height|align|summary|bgcolor|background|bordercolor],-tr[rowspan|width|"
-						+ "height|align|valign|bgcolor|background|bordercolor],tbody,thead,tfoot,"
-						+ "#td[colspan|rowspan|width|height|align|valign|bgcolor|background|bordercolor"
-						+ "|scope],#th[colspan|rowspan|width|height|align|valign|scope],caption,-div,"
-						+ "-span,-code,-pre,address,-h1,-h2,-h3,-h4,-h5,-h6,hr[size|noshade],-font[face"
-						+ "|size|color],dd,dl,dt,cite,abbr,acronym,del[datetime|cite],ins[datetime|cite],"
-						+ "object[classid|width|height|codebase|*],param[name|value|_value],embed[type|width"
-						+ "|height|src|*],script[src|type],map[name],area[shape|coords|href|alt|target],bdo,"
-						+ "button,col[align|char|charoff|span|valign|width],colgroup[align|char|charoff|span|"
-						+ "valign|width],dfn,fieldset,form[action|accept|accept-charset|enctype|method],"
-						+ "input[accept|alt|checked|disabled|maxlength|name|readonly|size|src|type|value],"
-						+ "kbd,label[for],legend,noscript,optgroup[label|disabled],option[disabled|label|selected|value],"
-						+ "q[cite],samp,select[disabled|multiple|name|size],small,"
-						+ "textarea[cols|rows|disabled|name|readonly],tt,var,big"
-			});
-
 			this.updateTableOfContents();
-			tinymce.init({
-				selector : '#tableOfContents-input',
-				setup : function(ed) {
-					ed.on('change', function(ev) {
-						self.model.set('tableOfContents', ev.level.content);
-					});
-				},
-				menubar: false,
-				plugins : 'code link paste',
-				formats: {
+			var isInit = false;
+			var abstractInitDeferred = $.Deferred();
+			var interval = setInterval(function() {
+				if (isInit) {
+					tinymce.execCommand('mceRemoveEditor', true, 'docAbstract-input');
+					tinymce.execCommand('mceAddEditor', true, 'docAbstract-input');
+
+				}
+				tinymce.init({
+					selector: '#docAbstract-input',
+					setup: function (ed) {
+						abstractInitDeferred.resolve();
+						clearInterval(interval);
+						ed.on('change', function (ev) {
+							self.model.set('docAbstract', ev.level.content);
+						});
+					},
+					menubar: false,
+					plugins: 'code link paste',
+					formats: {
 						italic: {inline: 'i'}
 					},
-				browser_spellcheck : true,
-				toolbar : 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link | code'
+					browser_spellcheck: true,
+					toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link | code',
+					valid_elements: "@[id|class|title|dir<ltr?rtl|lang|xml::lang|onclick|ondblclick|"
+					+ "onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|"
+					+ "onkeydown|onkeyup],a[rel|rev|charset|hreflang|tabindex|accesskey|type|"
+					+ "name|href|target|title|class|onfocus|onblur],strong/b,i/em,strike,u,"
+					+ "#p,-ol[type|compact],-ul[type|compact],-li,br,img[longdesc|usemap|"
+					+ "src|border|alt=|title|hspace|vspace|width|height|align],-sub,-sup,"
+					+ "-blockquote,-table[border=0|cellspacing|cellpadding|width|frame|rules|"
+					+ "height|align|summary|bgcolor|background|bordercolor],-tr[rowspan|width|"
+					+ "height|align|valign|bgcolor|background|bordercolor],tbody,thead,tfoot,"
+					+ "#td[colspan|rowspan|width|height|align|valign|bgcolor|background|bordercolor"
+					+ "|scope],#th[colspan|rowspan|width|height|align|valign|scope],caption,-div,"
+					+ "-span,-code,-pre,address,-h1,-h2,-h3,-h4,-h5,-h6,hr[size|noshade],-font[face"
+					+ "|size|color],dd,dl,dt,cite,abbr,acronym,del[datetime|cite],ins[datetime|cite],"
+					+ "object[classid|width|height|codebase|*],param[name|value|_value],embed[type|width"
+					+ "|height|src|*],script[src|type],map[name],area[shape|coords|href|alt|target],bdo,"
+					+ "button,col[align|char|charoff|span|valign|width],colgroup[align|char|charoff|span|"
+					+ "valign|width],dfn,fieldset,form[action|accept|accept-charset|enctype|method],"
+					+ "input[accept|alt|checked|disabled|maxlength|name|readonly|size|src|type|value],"
+					+ "kbd,label[for],legend,noscript,optgroup[label|disabled],option[disabled|label|selected|value],"
+					+ "q[cite],samp,select[disabled|multiple|name|size],small,"
+					+ "textarea[cols|rows|disabled|name|readonly],tt,var,big"
+				});
+
+				isInit = true;
+			}, 1);
+
+			abstractInitDeferred.done(function() {
+				var tocInit = false;
+				var tocInterval;
+				tocInterval = setInterval(function() {
+					if (tocInit) {
+						tinymce.execCommand('mceRemoveEditor', true, 'tableOfContents-input');
+						tinymce.execCommand('mceAddEditor', true, 'tableOfContents-input');
+					}
+					tinymce.init({
+						selector: '#tableOfContents-input',
+						setup: function (ed) {
+							clearInterval(tocInterval);
+							ed.on('change', function (ev) {
+								self.model.set('tableOfContents', ev.level.content);
+							});
+						},
+						menubar: false,
+						plugins: 'code link paste',
+						formats: {
+							italic: {inline: 'i'}
+						},
+						browser_spellcheck: true,
+						toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link | code'
+					});
+					tocInit = true;
+				}, 1);
 			});
 
 			// Set up for the publication type and larger work type select2's. These are set up once the data for the options
