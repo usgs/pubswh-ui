@@ -39,10 +39,11 @@ define([
 					}
 
 					return {
-						el : '#type-' + model.get('id') + '-pane .grid',
+						el : '#type-' + model.get('id') + '-pane',
 						view : new ContributorTabView({
 							collection : contributors.get(typeProp),
-							el : '#type-' + model.get('id') + '-pane .grid'
+							contributorType : model.attributes,
+							el : '#type-' + model.get('id') + '-pane'
 						})
 					};
 				});

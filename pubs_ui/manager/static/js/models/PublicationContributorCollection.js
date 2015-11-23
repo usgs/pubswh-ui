@@ -1,25 +1,13 @@
 /* jslint browser: true */
 
 define([
-	'backbone',
-	'models/ContributorModel'
-], function(Backbone, ContributorModel) {
+	'models/PublicationContributorModel',
+	'models/OrderedCollection'
+], function(PublicationContributorModel, OrderedCollection) {
 	"use strict";
 
-	var model = Backbone.Model.extend({
-
-		comparator : 'rank',
-
-		defaults : function() {
-			return {
-				rank : '',
-				contributor : new ContributorModel()
-			}
-		}
-	});
-
-	var collection = Backbone.Collection.extend({
-		model : model
+	var collection = OrderedCollection.extend({
+		model : PublicationContributorModel
 	});
 
 	return collection;

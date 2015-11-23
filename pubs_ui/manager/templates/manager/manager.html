@@ -5,6 +5,7 @@
 {% block page_style %}
 	<link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='select2/dist/css/select2.min.css') }}" />
 	<link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='backgrid/lib/backgrid.min.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='backgrid-select2-cell/backgrid-select2-cell.min.css') }}" />
 	{%  assets "manager_style" %}
 		<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
 	{% endassets %}
@@ -28,8 +29,8 @@
 				'models/PublicationModel' : {
 					scriptRoot : "{{ request.script_root }}"
 				},
-				'models/ContributorModel' : {
-					scriptRott : "{{ request.script_root }}"
+				'models/PublicationContributorModel' : {
+					scriptRoot : "{{ request.script_root }}"
 				},
 				'models/PublicationTypeCollection' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
@@ -48,6 +49,9 @@
 				},
 				'views/BibliodataView' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
+				},
+				'views/ContributorRowView' : {
+					lookupUrl : "{{ config.LOOKUP_URL }}"
 				}
 			},
 			baseUrl: "{{ url_for('manager.static', filename='js') }}",
@@ -60,7 +64,6 @@
 				'text' : "{{ url_for('bower.static', filename='text/text.js') }}",
 				'underscore' : "{{ url_for('bower.static', filename='underscore/underscore.js') }}",
 				'backbone' : "{{ url_for('bower.static', filename='backbone/backbone.js') }}",
-				'backgrid' : "{{ url_for('bower.static', filename='backgrid/lib/backgrid.js') }}",
 				'handlebars' : "{{ url_for('bower.static', filename='handlebars/handlebars.amd.js') }}",
 				'hbs' : "{{  url_for('bower.static', filename='requirejs-hbs/hbs.js') }}",
 				'backbone.stickit' : "{{ url_for('bower.static', filename='backbone.stickit/backbone.stickit.js') }}",
@@ -84,6 +87,10 @@
 				'backgrid' : {
 					deps: ['jquery', 'underscore', 'backbone'],
 					exports: 'Backgrid'
+				},
+				'backgridExtensions/Select2v4Cell' : {
+					deps : ['jquery', 'underscore', 'backbone', 'backgrid', 'select2'],
+					exports : 'Backgrid.Extension'
 				},
 				'backbone.stickit' : ['backbone', 'underscore'],
 				'datetimepicker' : ['jquery', 'moment', 'bootstrap'],

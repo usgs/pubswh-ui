@@ -7,10 +7,17 @@ define([
 	"use strict";
 
 	var model = Backbone.Model.extend({
-		idAttribute : 'contributorId',
 
-		urlRoot : function() {
-			return module.config().scriptRoot + '/manager/services/contributor/';
+		comparator : 'rank',
+
+		url : function() {
+			return module.config().scriptRoot + '/manager/services/contributor/' + this.get('contributorId');
+		},
+
+		defaults : function() {
+			return {
+				rank : ''
+			}
 		},
 
 		fetch : function(options) {
@@ -23,12 +30,8 @@ define([
 				_.extend(params, options);
 			}
 			return Backbone.Model.prototype.fetch.call(this, params);
-		},
-
-		parse : function(response, options) {
-			return response;
 		}
 	});
 
 	return model;
-})
+});
