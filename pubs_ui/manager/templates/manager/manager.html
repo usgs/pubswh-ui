@@ -51,7 +51,8 @@
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
 				'views/ContributorRowView' : {
-					lookupUrl : "{{ config.LOOKUP_URL }}"
+					lookupUrl : "{{ config.LOOKUP_URL }}",
+					scriptRoot : "{{ request.script_root }}"
 				}
 			},
 			baseUrl: "{{ url_for('manager.static', filename='js') }}",

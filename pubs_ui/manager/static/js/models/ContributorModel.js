@@ -25,9 +25,7 @@ define([
 			return Backbone.Model.prototype.fetch.call(this, params);
 		},
 
-		parse : function(response, options) {
-			return response;
-		}
+
 	});
 
 	return model;

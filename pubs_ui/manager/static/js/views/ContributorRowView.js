@@ -29,12 +29,14 @@ define([
 
 		events : {
 			'select2:select .contributor-type-input' : 'selectType',
-			'select2:select .contributor-name-input' : 'selectName'
+			'select2:select .contributor-name-input' : 'selectName',
+			'click .delete-row' : 'deleteRow',
+			'updateOrder .contributor-row-container' : 'updateOrder'
 		},
 
 		template : hb_template,
 
-		optionTemplate : Handlebars.compile('<option value={{contributorId}}>{{text}}</option>'),
+		optionTemplate : Handlebars.compile('<option value={{contributorId}}>{{#if corporation}}{{organization}}{{else}}{{text}}{{/if}}</option>'),
 
 		/*
 		 * @constructs
@@ -45,9 +47,14 @@ define([
 		initialize : function(options) {
 			BaseView.prototype.initialize.apply(this, arguments);
 
+			this.context.contributorId = this.model.get('contributorId');
+			this.context.scriptRoot = module.config().scriptRoot;
+
 			this.listenTo(this.model, 'change:corporation', this.updateType);
 			this.listenTo(this.model, 'change:text', this.updateName);
+			this.listenTo(this.model, 'change:organization', this.updateName);
 			this.listenTo(this.model, 'sync', this.updateRow);
+			this.listenTo(this.model, 'change:contributorId', this.updateEditLink);
 		},
 
 		render : function() {
@@ -94,12 +101,16 @@ define([
 		},
 
 		selectName : function(ev) {
-			var v = ev.currentTarget.value;
-			var text = ev.currentTarget.selectedOptions[0].innerHTML;
-
-			console.log("In selectName with value " + v + ' text ' + text);
-			this.model.set('contributorId', v);
+			this.model.set('contributorId', ev.currentTarget.value);
 			this.model.fetch();
+		},
+
+		updateOrder : function(ev, newIndex) {
+			this.collection.updateModelRank(this.model, newIndex + 1);
+		},
+
+		deleteRow : function(ev) {
+			this.collection.remove(this.model);
 		},
 
 		updateType : function() {
@@ -116,7 +127,6 @@ define([
 		updateName : function() {
 			var $select = this.$('.contributor-name-input');
 			var id = this.model.get('contributorId');
-			console.log('Update contributor ' + id);
 
 			if (id) {
 				if ($select.find('option[value="' + id + '"]').length === 0) {
@@ -131,6 +141,10 @@ define([
 
 		updateRow : function() {
 			this.updateName();
+		},
+
+		updateEditLink : function() {
+			this.$('.edit-link').attr('href', this.context.scriptRoot + '#contributor/' + this.model.get('contributorId'));
 		}
 	});
 
