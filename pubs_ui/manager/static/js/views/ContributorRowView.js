@@ -31,6 +31,7 @@ define([
 			'select2:select .contributor-type-input' : 'selectType',
 			'select2:select .contributor-name-input' : 'selectName',
 			'click .delete-row' : 'deleteRow',
+			'click .edit-contributor-link' : 'clickEditLink',
 			'updateOrder .contributor-row-container' : 'updateOrder'
 		},
 
@@ -54,7 +55,6 @@ define([
 			this.listenTo(this.model, 'change:text', this.updateName);
 			this.listenTo(this.model, 'change:organization', this.updateName);
 			this.listenTo(this.model, 'sync', this.updateRow);
-			this.listenTo(this.model, 'change:contributorId', this.updateEditLink);
 		},
 
 		render : function() {
@@ -143,8 +143,11 @@ define([
 			this.updateName();
 		},
 
-		updateEditLink : function() {
-			this.$('.edit-link').attr('href', this.context.scriptRoot + '#contributor/' + this.model.get('contributorId'));
+		clickEditLink : function() {
+			var h = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + window.location.pathname + '#contributor/' +
+					(this.model.has('contributorId') ? this.model.get('contributorId') : '');
+			console.log(h);
+			window.open(h, '_blank');
 		}
 	});
 
