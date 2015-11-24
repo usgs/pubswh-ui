@@ -13,7 +13,6 @@ define([
 	var view = BaseView.extend({
 
 		events: {
-			'change .link-type' : 'changeLinkType',
 			'select2:select .link-type': 'selectLinkType',
 			'select2:unselect .link-type': 'resetLinkType',
 			'select2:select .link-file-type': 'selectLinkFileType',
@@ -82,9 +81,7 @@ define([
 		 * Event handlers for select and reset events for the select2's
 		 */
 
-		changeLinkType : function(ev) {
-			console.log('In change Link Type');
-		},
+
 		selectLinkType: function (ev) {
 			var selected = ev.currentTarget.value;
 			var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
@@ -130,7 +127,6 @@ define([
 		 * Model attribute change handlers for select2's
 		 */
 		updateLinkType : function() {
-			console.log('Updating Link Type');
 			var $select = this.$('.link-type');
 			var linkType = this.model.get('type');
 

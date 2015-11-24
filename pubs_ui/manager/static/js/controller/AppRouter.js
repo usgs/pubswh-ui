@@ -5,10 +5,10 @@ define([
 	'backbone',
 	'views/SearchView',
 	'views/PublicationView',
-	'views/ContributorView',
+	'views/EditContributorView',
 	'models/PublicationModel',
 	'models/ContributorModel'
-], function ($, Backbone, SearchView, PublicationView, ContributorView, PublicationModel, ContributorModel) {
+], function ($, Backbone, SearchView, PublicationView, EditContributorView, PublicationModel, ContributorModel) {
 	"use strict";
 
 	var appRouter = Backbone.Router.extend({
@@ -17,8 +17,8 @@ define([
 			'search': 'searchView',
 			'publication' : 'publicationView',
 			'publication/:pubId' : 'publicationView',
-			'contributor' : 'contributorView',
-			'contributor/:contribId' : 'contributorView'
+			'contributor' : 'editContributorView',
+			'contributor/:contribId' : 'editContributorView'
 		},
 
 		applicationContextDiv: '#main-content',
@@ -66,13 +66,13 @@ define([
 			).render();
 		},
 
-		contributorView : function(contribId) {
+		editContributorView : function(contribId) {
 			var model = new ContributorModel();
 			if (contribId) {
 				model.set('contributorId', contribId);
 			}
 
-			this.createView(ContributorView, {
+			this.createView(EditContributorView, {
 				model : model
 			}).render();
 

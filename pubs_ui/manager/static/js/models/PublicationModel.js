@@ -33,7 +33,7 @@ define([
 						contributors.get(contribType).set(contribs).sort();
 					}
 					else {
-						contributors.set('contribType', new PublicationContributorCollection(contribs));
+						contributors.set(contribType, new PublicationContributorCollection(contribs));
 					}
 				});
 				response.contributors = contributors;

@@ -37,7 +37,7 @@ define([
 
 		template : hb_template,
 
-		optionTemplate : Handlebars.compile('<option value={{contributorId}}>{{#if corporation}}{{organization}}{{else}}{{text}}{{/if}}</option>'),
+		optionTemplate : Handlebars.compile('<option value={{contributorId}}>{{text}}</option>'),
 
 		/*
 		 * @constructs
@@ -146,7 +146,6 @@ define([
 		clickEditLink : function() {
 			var h = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + window.location.pathname + '#contributor/' +
 					(this.model.has('contributorId') ? this.model.get('contributorId') : '');
-			console.log(h);
 			window.open(h, '_blank');
 		}
 	});
