@@ -5,6 +5,7 @@
 {% block page_style %}
 	<link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='select2/dist/css/select2.min.css') }}" />
 	<link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='backgrid/src/backgrid.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='backgrid-paginator/backgrid-paginator.css') }}" />
 	{%  assets "manager_style" %}
 		<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
 	{% endassets %}
@@ -57,8 +58,10 @@
 				'text' : "{{ url_for('bower.static', filename='text/text.js') }}",
 				'underscore' : "{{ url_for('bower.static', filename='underscore/underscore.js') }}",
 				'backbone' : "{{ url_for('bower.static', filename='backbone/backbone.js') }}",
+				'backbone.paginator' : "{{ url_for('bower.static', filename='backbone.paginator/lib/backbone.paginator.js') }}",
 				'backgrid' : "{{ url_for('bower.static', filename='backgrid/lib/backgrid.js') }}",
 				'select-all' : "{{ url_for('bower.static', filename='backgrid-select-all/backgrid-select-all.js') }}",
+				'paginator' : "{{ url_for('bower.static', filename='backgrid-paginator/backgrid-paginator.js') }}",
 				'handlebars' : "{{ url_for('bower.static', filename='handlebars/handlebars.amd.js') }}",
 				'hbs' : "{{  url_for('bower.static', filename='requirejs-hbs/hbs.js') }}",
 				'backbone.stickit' : "{{ url_for('bower.static', filename='backbone.stickit/backbone.stickit.js') }}",
@@ -79,14 +82,22 @@
 					dep : ['jquery', 'underscore'],
 					exports : 'Backbone'
 				},
-                'backgrid' : {
+				'backbone.paginator' : {
+					dep : ['underscore','backbone'],
+					exports : 'Pageable'
+				},
+				'backgrid': {
                     deps: ['jquery', 'underscore', 'backbone'],
                     exports: 'Backgrid'
                 },
-                'select-all' : {
-                    deps: ['backgrid', 'backbone'],
-                    exports: 'SelectAll'
+				'select-all' : {
+					deps: ['backgrid', 'backbone'],
+					exports: 'SelectAll'
                 },
+				'paginator' : {
+					deps: ['backbone.paginator'],
+					exports: 'Paginator'
+				},
 				'backbone.stickit' : ['backbone', 'underscore'],
 				'datetimepicker' : ['jquery', 'moment', 'bootstrap'],
 				'handlebars' : {

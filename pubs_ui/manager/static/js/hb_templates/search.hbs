@@ -1,6 +1,10 @@
 <div>
 	<div>
-    {{#if tempAdd}}
+		<div class="alert-error-container">
+			<div class="loading-indicator"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+			<div class="alert-container"></div>
+		</div>
+    {{#if futureFeatures}}
 		<div class="pub-search-container"> <!-- search and list view -->
 			<form class="pub-search-form">
 				{{#if advancedSearch}}
@@ -61,7 +65,7 @@
 		<div class="pub-list-section">
 			<div id="pub-management-div">
 				<a href="#/publication" class="btn btn-default">Create Publication</a>
-                {{#if tempAdd}}
+                {{#if futureFeatures}}
 				<button class="pub-edit-selected btn btn-default">Edit Selected</button>
 				<a href="#/contributor" class="pub-contributor-btn btn btn-default">Manage Contributors</a>
 				<button class="pub-remove-from-list-btn btn btn-default">Remove From List</button>
@@ -87,7 +91,7 @@
 								</ul>
 							</el>
 						{{else}}
-							<span>All publications available - click checkbox to edit</span>
+							<span>All publications available</span>
 						{{/if}}
 					{{/if}}
 				{{/if}}
@@ -96,7 +100,7 @@
 		</div>
 	</div>
 
-    {{#if tempAdd}}
+    {{#if futureFeatures}}
 	<div>
 		<form>
  			<label>List Assignments</label><br/>

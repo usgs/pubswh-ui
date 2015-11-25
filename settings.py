@@ -37,6 +37,8 @@ PREVIEW_ENDPOINT_URL = ''
 LOGIN_PAGE_PATH = ''
 CACHE_CONFIG = {'CACHE_TYPE': 'null'}
 REDIS_CONFIG = ''
+# set to solve problem with backgrid-paginator
+BOWER_TRY_MINIFIED = False
 
 #Config for Flask-Assets
 ASSETS_DEBUG = False # to disable compression of js and css set to True

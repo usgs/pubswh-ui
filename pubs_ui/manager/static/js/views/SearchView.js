@@ -7,9 +7,10 @@ define([
 	'text!hb_templates/search.hbs',
 	'backgrid',
 	'select-all',
+	'paginator',
 	'backbone.stickit',
 	'models/PublicationCollection'
-], function (Handlebars, BaseView, AlertView, hbTemplate, Backgrid, SelectAll, Stickit, PublicationCollection) {
+], function (Handlebars, BaseView, AlertView, hbTemplate, Backgrid, SelectAll, Paginator, Stickit, PublicationCollection) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -28,8 +29,13 @@ define([
 
 			//Don't render grid until the publications have been fetched.
 			this.fetchPromise.done(function() {
+				var $pubList = $(".pub-grid");
 				// Render the grid and attach the root to your HTML document
-				$(".pub-grid").append(self.grid.render().el);
+				$pubList.append(self.grid.render().el);
+
+				// Render the paginator
+				$pubList.after(self.paginator.render().el);
+
 			}).fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
 			});
@@ -43,7 +49,7 @@ define([
 			var self = this;
 			BaseView.prototype.initialize.apply(this, arguments);
 
-			this.context.tempAdd = false;
+			this.context.futureFeatures = false;
 
 			this.publicationList = new PublicationCollection();
 			this.listenTo(this.publicationList, 'backgrid:selected', this.editPublication);
@@ -84,13 +90,6 @@ define([
 				label: "Year",
 				editable: false,
 				cell: "string"
-//					cell: Backgrid.StringCell.extend({ tagName: 'td style="text-align: center"' })
-//					cell: Backgrid.StringCell.extend({
-//						render: function () {
-//							this.$el.css('text-align','center');
-//							return this;
-//						}
-//					})
 			}, {
 				name: "title",
 				label: "  Title",
@@ -102,6 +101,11 @@ define([
 			this.grid = new Backgrid.Grid({
 				columns: columns,
 				collection: this.publicationList
+			});
+
+			// Initialize the paginator
+			this.paginator = new Backgrid.Extension.Paginator({
+			  collection: this.publicationList
 			});
 
 			this.fetchPromise = this.publicationList.fetch();
