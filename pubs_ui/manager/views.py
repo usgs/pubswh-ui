@@ -37,6 +37,7 @@ def services_proxy(op1, op2=None):
     proxy_request = Request(method=request.method,
                             url=url,
                             headers=headers,
+                            params=request.args,
                             data=request.data)
     resp = Session().send(proxy_request.prepare(), verify=VERIFY_CERT)
     # This fixed an an ERR_INVALID_CHUNKED_ENCODING when the app was run on the deployment server.
