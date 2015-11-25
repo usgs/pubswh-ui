@@ -65,6 +65,13 @@ define([
 			});
 		},
 
+		remove : function() {
+			_.each(this.typeTabViews, function(tab) {
+				tab.view.remove();
+			});
+			BaseView.prototype.remove.apply(this, arguments);
+		},
+
 		showTab : function(ev) {
 			ev.preventDefault();
 			this.$('.contributor-types-tabs').tab('show');

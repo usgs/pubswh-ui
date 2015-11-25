@@ -19,10 +19,10 @@ define([
 		template : hb_template,
 
 		/*
-		 * @constructs
+		 * @constructs - view representing a collection of contributors for a contributor type.
 		 * @param {Object} options
-		 *     @prop {Backbone.collection} collection
-		 *     @prop {Object} contributorType
+		 *     @prop {PublicationContributorCollection} collection
+		 *     @prop {Object} contributorType - with id and text properties
 		 *     @prop {String} el - jquery selector where the view will be rendered.
 		 */
 		initialize : function(options) {
@@ -63,6 +63,19 @@ define([
 			this.renderDeferred.resolve();
 		},
 
+		remove : function() {
+			_.each(this.rowViews, function(view) {
+				view.remove();
+			});
+
+			BaseView.prototype.remove.apply(this, arguments);
+			return this;
+		},
+
+		/*
+		 * Local method used to render a contributor row view
+		 * @param {ContributorRowView} rowView
+		 */
 		renderViewRow : function(rowView) {
 			var $grid = this.$('.grid');
 			var divText = '<div class="contributor-row-div"></div>';
@@ -71,6 +84,9 @@ define([
 			rowView.setElement($grid.find('.contributor-row-div:last-child')).render();
 		},
 
+		/*
+		 * DOM event handler to add a new contributor row
+		 */
 		addNewRow : function() {
 			var newModel = new this.collection.model({
 				contributorType : this.contributorType,
@@ -121,15 +137,6 @@ define([
 						view.$el.appendTo($grid)
 					})
 					.value();
-		},
-
-		remove : function() {
-			_.each(this.rows, function(row) {
-				row.view.remove();
-			});
-
-			BaseView.prototype.remove.apply(this, arguments);
-			return this;
 		}
 	});
 

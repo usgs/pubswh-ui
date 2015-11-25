@@ -108,5 +108,23 @@ define([
 				expect(renderContribTabSpy.calls.count()).toBe(2);
 			});
 		});
+
+		describe('Tests for remove', function() {
+
+			beforeEach(function() {
+				testView = new ContributorsView({
+					el : '#test-div',
+					model : contributorsModel
+				});
+
+				testView.contributorTypeCollection = new Backbone.Collection([{id : 1, text : 'Type1'}, {id : 2, text : 'Type2'}]);
+				fetchContribTypeDeferred.resolve();
+			});
+
+			it('Expects that the child views are removed when remove is called', function() {
+				testView.remove();
+				expect(removeContribTabSpy.calls.count()).toBe(2);
+			});
+		})
 	});
 });
