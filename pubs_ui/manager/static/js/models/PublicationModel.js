@@ -13,6 +13,10 @@ define([
 	var model = Backbone.Model.extend({
 		urlRoot : module.config().scriptRoot + '/manager/services/mppublications',
 
+		/*
+		 * The contributors attribute is a backbone model. This model contains attributes whose value
+		 * is a PublicationContributorCollection.
+		 */
 		defaults : function() {
 			return {
 				links: new LinkCollection(),

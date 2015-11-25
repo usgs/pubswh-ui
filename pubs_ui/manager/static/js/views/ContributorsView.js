@@ -22,16 +22,16 @@ define([
 		 * @constructs
 		 * @param {Object} options
 		 *     @prop {String} el - jquery selector where this view is rendered
-		 *     @prop {PublicationModel} model - view deals with the contributors attribute
+		 *     @prop {Backbone.Model} model - assumes that model will represent the contributors attribute in a PublicationModel
 		 */
 		initialize : function(options) {
 			var self = this;
+			var contributors = this.model;
 			var fetchDeferred = $.Deferred();
 			BaseView.prototype.initialize.apply(this, arguments);
 
 			this.contributorTypeCollection = new ContributorTypeCollection();
 			this.contributorTypeCollection.fetch().always(function() {
-				var contributors = self.model.get('contributors');
 				self.typeTabViews = self.contributorTypeCollection.map(function(model) {
 					var typeProp = model.attributes.text.toLowerCase();
 					if (!contributors.has(typeProp)) {
@@ -47,7 +47,7 @@ define([
 						})
 					};
 				});
-				self.model.set('contributors', contributors);
+
 				fetchDeferred.resolve();
 			});
 			this.createTabViewsPromise = fetchDeferred.promise();
