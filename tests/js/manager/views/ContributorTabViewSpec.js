@@ -3,9 +3,10 @@
  define([
 	 'squire',
 	 'jquery',
+	 'underscore',
 	 'models/PublicationContributorCollection',
 	 'models/PublicationContributorModel'
- ], function(Squire, $, PublicationContributorCollection, PublicationContributorModel) {
+ ], function(Squire, $, _, PublicationContributorCollection, PublicationContributorModel) {
 	 "use strict";
 
 	 var ContributorTabView, testView;
@@ -113,7 +114,7 @@
 		 });
 
 		 describe('Tests for addNewRow', function() {
-			beforeEach(function() {
+			 beforeEach(function() {
 				testView = new ContributorTabView({
 					 el: '#test-div',
 					 contributorType: CONTRIB_TYPE,
@@ -133,14 +134,13 @@
 		 });
 
 		 describe('Tests for collection events', function() {
-			beforeEach(function() {
+			 beforeEach(function() {
 				testView = new ContributorTabView({
 					 el: '#test-div',
 					 contributorType: CONTRIB_TYPE,
 					 collection: testCollection
 				 });
 			 });
-
 			 it('Expects that adding a new model to the collection before render has been called, creates a new view but does not render it until the view\'s render is called', function() {
 				 var newModel = new PublicationContributorModel({contributorType : CONTRIB_TYPE, rank : 4});
 				 var childViewCount = setElContribRowViewSpy.calls.count();
@@ -155,7 +155,7 @@
 			 });
 
 			 it('Expects that adding a new model to the collection after render has been called, renders the new view immediately', function() {
-				var newModel = new PublicationContributorModel({contributorType : CONTRIB_TYPE, rank : 4});
+				 var newModel = new PublicationContributorModel({contributorType : CONTRIB_TYPE, rank : 4});
 				 var childViewCount;
 
 				 testView.render();
@@ -167,7 +167,14 @@
 			 });
 
 			 it('Expects that removing a model from the collection removes the corresponding child view', function() {
+				 var modelToRemove = testCollection.at(1);
+				 testCollection.remove(modelToRemove);
 
+				 expect(removeContribRowViewSpy).toHaveBeenCalled();
+				 expect(testView.rowViews.length).toBe(2);
+				 expect(_.findIndex(testView.rowViews, function(view) {
+					 return view.model === modelToRemove;
+				 })).toBe(-1);
 			 });
 		 });
 	 });
