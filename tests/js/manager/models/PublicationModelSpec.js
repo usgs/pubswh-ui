@@ -38,6 +38,11 @@ define([
 					'"links":[{"id":1234, "rank": 1}, {"id":123, "rank":2}]' +
 					'}'
 				]);
+				server.respondWith(model.urlRoot + '/123?mimetype=json', [200, {"Content-Type" : 'application/json'},
+					'{"id" : 123, "title" : "This is a Title", "publicationYear" : 2015,' +
+					'"contributors":{"editors":[],"authors":[]}' +
+					'}'
+				]);
 
 				server.respondWith(model.urlRoot + '/' + invalidId + '?mimetype=json', [404, {}, 'Pub Not Found']);
 			});
@@ -97,6 +102,19 @@ define([
 				expect(doneSpy).not.toHaveBeenCalled();
 				expect(failSpy).toHaveBeenCalled();
 				expect(model.attributes.id).toEqual(invalidId);
+			});
+
+			it('Expects a second call to fetch without links or contributors to clear those collections', function() {
+				model.set('id', validId);
+				model.fetch().done(doneSpy).fail(failSpy);
+				server.respond();
+
+				model.set('id', 123);
+				model.fetch().done(doneSpy).fail(failSpy);
+				server.respond();
+				expect(model.get('contributors').get('editors').length).toBe(0);
+				expect(model.get('contributors').get('authors').length).toBe(0);
+				expect(model.get('links').length).toBe(0);
 			});
 		});
 

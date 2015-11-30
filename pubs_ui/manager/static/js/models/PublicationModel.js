@@ -31,7 +31,16 @@ define([
 				links.set(_.sortBy(response.links, 'rank'));
 				response.links = links;
 			}
+			else {
+				links.reset(null);
+			}
 			if (_.has(response, 'contributors')) {
+				_.each(contributors.keys, function(contribType) {
+					// Clear out collection if response doesn't contain the contribType
+					if (!_.has(response.contributors, contribType)) {
+						contributors.unset(contribType);
+					}
+				});
 				_.each(response.contributors, function(contribs, contribType) {
 					if (contributors.has(contribType)){
 						contributors.get(contribType).set(contribs).sort();
@@ -40,8 +49,12 @@ define([
 						contributors.set(contribType, new PublicationContributorCollection(contribs));
 					}
 				});
-				response.contributors = contributors;
+
 			}
+			else {
+				contributors.clear();
+			}
+			response.contributors = contributors;
 
 			/*
 				Need to remove interactions and text to work around an issue with some properties being returned that shouldn't be.
