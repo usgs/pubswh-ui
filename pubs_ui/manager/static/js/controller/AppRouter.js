@@ -49,6 +49,7 @@ define([
 		searchView: function () {
 			this.createView(SearchView).render();
 		},
+
 		publicationView : function(pubId) {
 			var model = new PublicationModel();
 			if (pubId) {
