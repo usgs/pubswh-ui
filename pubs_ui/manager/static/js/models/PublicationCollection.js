@@ -16,55 +16,32 @@ define([
 
 		// Initial pagination states
 		state: {
-			pageSize: 15
+			firstPage: 0,
+			currentPage: 0,
+			pageSize: 100
 		},
 
-		// You can remap the query parameters from `state` keys from
-		// the default to those your server supports
+		// maps the query parameters accepted by service to `state` keys
+		// to those your server supports
 		queryParams: {
-			totalRecords: recordCount,
+			currentPage: "page_row_start",
+			pageSize: "page_size",
+			totalRecords: "record_count"
 		},
 
-		// get the state from Github's search API result
+		// get the state from web service result
 		parseState: function (resp, queryParams, state, options) {
-		  return {totalRecords: resp.recordCount};
+			return {totalRecords: resp.recordCount};
 		},
 
 		// get the actual records
 		parseRecords: function (resp, options) {
-		//  return resp.records;
-			_.each(resp.records, function(element) {
-				if (element.links) {
-					delete element.links; //work around until I figure out how to handle the LinkCollection on the model
-				}
+			return _.map(resp.records, function(element) {
+				var pubModel = new PublicationModel();
+				return pubModel.parse(element);
 			});
-			return resp.records;
 		}
 
-		//mode: "client",
-
-		//parse : function (resp) {
-		//	_.each(resp.records, function(element) {
-		//		if (element.links) {
-		//			delete element.links;
-		//		}
-		//	});
-		//	return resp.records;
-		//},
-
-		//fetch : function(options) {
-		//	var params = {
-		//		data : {
-		//			mimetype : 'json',
-		//			page_row_start: 0,
-		//			page_size: 100
-		//		}
-		//	};
-		//	if (_.isObject(options)) {
-		//		_.extend(params, options);
-		//	}
-		//	return Backbone.Collection.prototype.fetch.call(this, params);
-		//}
 	});
 
 	return collection;

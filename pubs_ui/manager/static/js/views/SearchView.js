@@ -33,7 +33,7 @@ define([
 			//Don't render grid until the publications have been fetched.
 			this.fetchPromise.done(function() {
 				var $pubList = $(".pub-grid");
-				// Render the grid and attach the root to your HTML document
+				// Render the grid and attach the root to HTML document
 				$pubList.append(self.grid.render().el);
 
 				// Render the paginator
@@ -67,12 +67,12 @@ define([
 				cell: "select-row"
 			//}, {
 			//	name: "id",
-			//	label: "Link", // The name to display in the header
-			//	editable: false, // By default every cell in a column is editable
+			//	label: "Link",
+			//	editable: false,
 			//	cell: "uri",
 			//	formatter: _.extend({}, Backgrid.CellFormatter.prototype, {
 			//		fromRaw: function (rawValue, model) {
-			//			return rawValue ? '<a href="#/publication/' + rawValue + '">hi</a>' : '';
+			//			return rawValue ? '<a href="#/publication/' + rawValue + '">test</a>' : '';
 			//		}
 			//	})
 			}, {
@@ -120,7 +120,7 @@ define([
 
 			// Initialize the paginator
 			this.paginator = new Backgrid.Extension.Paginator({
-			  collection: this.publicationList
+				collection: this.publicationList
 			});
 
 			this.fetchPromise = this.publicationList.fetch({reset: true});
