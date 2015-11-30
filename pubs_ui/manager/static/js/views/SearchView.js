@@ -5,7 +5,7 @@ define([
 	'handlebars',
 	'views/BaseView',
 	'views/AlertView',
-	'text!hb_templates/search.hbs',
+	'hbs!hb_templates/search',
 	'backgrid',
 	'select-all',
 	'paginator',
@@ -19,7 +19,7 @@ define([
 		events : {
 		},
 
-		template: Handlebars.compile(hbTemplate),
+		template: hbTemplate,
 
 		render : function() {
 			var self = this;
