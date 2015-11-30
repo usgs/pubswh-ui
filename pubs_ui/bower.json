@@ -23,6 +23,10 @@
     "text": "requirejs-text#~2.0.14",
     "underscore": "~1.8.3",
     "backbone": "~1.2.3",
+    "backbone.paginator": "~2.0.2",
+    "backgrid": "~0.3.5",
+    "backgrid-select-all": "~0.3.5",
+    "backgrid-paginator": "1730e0231c51d4606945a3d3492213ec37b9dcdc",
     "handlebars": "~4.0.3",
     "sinon": "https://github.com/sinonjs/sinon.git#1.17.0",
     "Squire.js": "https://github.com/iammerrick/Squire.js.git#0.2.0",
@@ -39,6 +43,7 @@
     "underscore": "~1.8.3",
     "backbone": "~1.2.3",
     "jquery": "~2.1.4",
+    "webcomponentsjs": "^0.6.0",
     "select2": "~4.0.0"
   }
 }
