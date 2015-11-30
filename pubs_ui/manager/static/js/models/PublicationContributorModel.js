@@ -30,6 +30,14 @@ define([
 				_.extend(params, options);
 			}
 			return Backbone.Model.prototype.fetch.call(this, params);
+		},
+
+		parse : function(response) {
+			var affiliation = new Object();
+			if (!_.has(response, 'affiliation')) {
+				response.affiliation = affiliation;
+			};
+			return response;
 		}
 	});
 

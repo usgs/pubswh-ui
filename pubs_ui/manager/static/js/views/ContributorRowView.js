@@ -44,6 +44,7 @@ define([
 		 * @param {Object} options
 		 *     @prop {String} el - jquery selector where view will be rendered
 		 *     @prop {PublicationContributorModel} model
+		 *     @prop {PublicationContributorCollection} collection
 		 */
 		initialize : function(options) {
 			BaseView.prototype.initialize.apply(this, arguments);
@@ -53,7 +54,6 @@ define([
 
 			this.listenTo(this.model, 'change:corporation', this.updateType);
 			this.listenTo(this.model, 'change:text', this.updateName);
-			this.listenTo(this.model, 'change:organization', this.updateName);
 			this.listenTo(this.model, 'sync', this.updateRow);
 		},
 
@@ -96,6 +96,9 @@ define([
 			return this;
 		},
 
+		/*
+		 * DOM Event handlers
+		 */
 		selectType : function(ev) {
 			this.model.set('corporation', ev.currentTarget.value === 'corporations');
 		},
@@ -112,6 +115,16 @@ define([
 		deleteRow : function(ev) {
 			this.collection.remove(this.model);
 		},
+
+		clickEditLink : function() {
+			var h = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + window.location.pathname + '#contributor/' +
+					(this.model.has('contributorId') ? this.model.get('contributorId') : '');
+			window.open(h, '_blank');
+		},
+
+		/*
+		 * Model event handlers
+		 */
 
 		updateType : function() {
 			var $select = this.$('.contributor-type-input');
@@ -137,16 +150,6 @@ define([
 			else {
 				$select.val('').trigger('change');
 			}
-		},
-
-		updateRow : function() {
-			this.updateName();
-		},
-
-		clickEditLink : function() {
-			var h = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + window.location.pathname + '#contributor/' +
-					(this.model.has('contributorId') ? this.model.get('contributorId') : '');
-			window.open(h, '_blank');
 		}
 	});
 
