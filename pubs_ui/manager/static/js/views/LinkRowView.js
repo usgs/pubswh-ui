@@ -61,7 +61,6 @@ define([
 			this.$('.link-type').select2({
 				allowClear: true,
 				theme: 'bootstrap',
-				placeholder : 'Link type',
 				data: self.linkTypeCollection.toJSON()
 			});
 			this.updateLinkType();
