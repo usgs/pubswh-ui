@@ -1,6 +1,7 @@
 /*jslint browser: true */
 
 define([
+	'bootstrap',
 	'handlebars',
 	'views/BaseView',
 	'views/AlertView',
@@ -10,7 +11,7 @@ define([
 	'paginator',
 	'backbone.stickit',
 	'models/PublicationCollection'
-], function (Handlebars, BaseView, AlertView, hbTemplate, Backgrid, SelectAll, Paginator, Stickit, PublicationCollection) {
+], function (bootstrap, Handlebars, BaseView, AlertView, hbTemplate, Backgrid, SelectAll, Paginator, Stickit, PublicationCollection) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -23,6 +24,8 @@ define([
 		render : function() {
 			var self = this;
 			BaseView.prototype.render.apply(this, arguments);
+
+			this.$('.loading-indicator').show();
 
 			// Set the elements for child views and render if needed.
 			this.alertView.setElement(this.$('.alert-container'));
@@ -38,6 +41,8 @@ define([
 
 			}).fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
+			}).always(function() {
+				self.$('.loading-indicator').hide();
 			});
 		},
 
@@ -60,6 +65,16 @@ define([
 				name: "",
 				// Backgrid.Extension.SelectRowCell lets you select individual rows
 				cell: "select-row"
+			//}, {
+			//	name: "id",
+			//	label: "Link", // The name to display in the header
+			//	editable: false, // By default every cell in a column is editable
+			//	cell: "uri",
+			//	formatter: _.extend({}, Backgrid.CellFormatter.prototype, {
+			//		fromRaw: function (rawValue, model) {
+			//			return rawValue ? '<a href="#/publication/' + rawValue + '">hi</a>' : '';
+			//		}
+			//	})
 			}, {
 				name: "publicationType",
 				label: "Type", // The name to display in the header
@@ -108,7 +123,7 @@ define([
 			  collection: this.publicationList
 			});
 
-			this.fetchPromise = this.publicationList.fetch();
+			this.fetchPromise = this.publicationList.fetch({reset: true});
 
 			// Create child views
 			this.alertView = new AlertView({

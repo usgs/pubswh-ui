@@ -10,33 +10,61 @@ define([
 	"use strict";
 
 	var collection = Backbone.PageableCollection.extend({
-//		model : PublicationModel,  need to figure out how to handle default links collection for this to work
+		model : PublicationModel,
 
 		url : module.config().scriptRoot + '/manager/services/mppublications',
 
+		// Initial pagination states
 		state: {
-			pageSize: 100
+			pageSize: 15
 		},
 
-		mode: "client",
-
-		parse : function (response) {
-			return response.records;
+		// You can remap the query parameters from `state` keys from
+		// the default to those your server supports
+		queryParams: {
+			totalRecords: recordCount,
 		},
 
-		fetch : function(options) {
-			var params = {
-				data : {
-					mimetype : 'json',
-					page_row_start: 0,
-					page_size: 100
+		// get the state from Github's search API result
+		parseState: function (resp, queryParams, state, options) {
+		  return {totalRecords: resp.recordCount};
+		},
+
+		// get the actual records
+		parseRecords: function (resp, options) {
+		//  return resp.records;
+			_.each(resp.records, function(element) {
+				if (element.links) {
+					delete element.links; //work around until I figure out how to handle the LinkCollection on the model
 				}
-			};
-			if (_.isObject(options)) {
-				_.extend(params, options);
-			}
-			return Backbone.Collection.prototype.fetch.call(this, params);
+			});
+			return resp.records;
 		}
+
+		//mode: "client",
+
+		//parse : function (resp) {
+		//	_.each(resp.records, function(element) {
+		//		if (element.links) {
+		//			delete element.links;
+		//		}
+		//	});
+		//	return resp.records;
+		//},
+
+		//fetch : function(options) {
+		//	var params = {
+		//		data : {
+		//			mimetype : 'json',
+		//			page_row_start: 0,
+		//			page_size: 100
+		//		}
+		//	};
+		//	if (_.isObject(options)) {
+		//		_.extend(params, options);
+		//	}
+		//	return Backbone.Collection.prototype.fetch.call(this, params);
+		//}
 	});
 
 	return collection;
