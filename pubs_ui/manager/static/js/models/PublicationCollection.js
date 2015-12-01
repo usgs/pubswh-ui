@@ -1,20 +1,23 @@
 /* jslint browser: true */
 
 define([
+	'underscore',
 	'jquery',
 	'backbone',
 	'backbone.paginator',
 	'module',
 	'models/PublicationModel'
-], function($, Backbone, Pageable, module, PublicationModel) {
+], function(_, $, Backbone, Pageable, module, PublicationModel) {
 	"use strict";
 
 	var collection = Backbone.PageableCollection.extend({
 		model : PublicationModel,
 
-		url : module.config().scriptRoot + '/manager/services/mppublications',
+		url : function() {
 
-		// Initial pagination states
+			return module.config().scriptRoot + '/manager/services/mppublications?mimetype=json' + ((_.isEmpty(this.filters)) ? '' : '&' + $.param(this.filters))
+		},
+				// Initial pagination states
 		state: {
 			firstPage: 0,
 			currentPage: 0,
@@ -25,8 +28,24 @@ define([
 		// to those your server supports
 		queryParams: {
 			currentPage: "page_row_start",
-			pageSize: "page_size",
-			totalRecords: "record_count"
+			pageSize:  "page_size"
+		},
+
+		initialize : function(models, options) {
+			this.filters = {};
+			Backbone.PageableCollection.prototype.initialize.apply(this, arguments);
+		},
+
+		getFilters : function() {
+			return this.filters;
+		},
+
+		updateFilters : function(filters) {
+			this.filters = filters;
+		},
+
+		fetch : function(options) {
+			return Backbone.PageableCollection.prototype.fetch.apply(this, arguments);
 		},
 
 		// get the state from web service result

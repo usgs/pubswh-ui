@@ -17,32 +17,35 @@ define([
 	var view = BaseView.extend({
 
 		events : {
+				'click .search-btn' : 'filterPubs'
 		},
 
 		template: hbTemplate,
 
 		render : function() {
 			var self = this;
-			BaseView.prototype.render.apply(this, arguments);
+			var $pubList;
+			var $loadingIndicator;
 
-			this.$('.loading-indicator').show();
+			BaseView.prototype.render.apply(this, arguments);
+			$pubList = this.$('.pub-grid');
+			$loadingIndicator = this.$('.loading-indicator');
+
+			$loadingIndicator.show();
 
 			// Set the elements for child views and render if needed.
 			this.alertView.setElement(this.$('.alert-container'));
 
-			//Don't render grid until the publications have been fetched.
-			this.fetchPromise.done(function() {
-				var $pubList = $(".pub-grid");
-				// Render the grid and attach the root to HTML document
-				$pubList.append(self.grid.render().el);
+			// Render the grid and attach the root to HTML document
+			$pubList.append(this.grid.render().el);
 
-				// Render the paginator
-				$pubList.after(self.paginator.render().el);
+			// Render the paginator
+			$pubList.after(this.paginator.render().el);
 
-			}).fail(function(jqXhr) {
+			this.fetchPromise.fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
 			}).always(function() {
-				self.$('.loading-indicator').hide();
+				$loadingIndicator.hide();
 			});
 		},
 
@@ -115,7 +118,8 @@ define([
 			// Initialize a new Grid instance
 			this.grid = new Backgrid.Grid({
 				columns: columns,
-				collection: this.publicationList
+				collection: this.publicationList,
+				class : 'backgrid table-striped'
 			});
 
 			// Initialize the paginator
@@ -139,6 +143,25 @@ define([
 
 		editPublication : function(ev) {
 			this.router.navigate('publication/' + ev.id, {trigger: true});
+		},
+
+		/*
+		 * DOM event handlers
+		 */
+		filterPubs : function() {
+			var self = this;
+			var q = this.$('#search-term-input').val();
+
+			this.$('.loading-indicator').show();
+			this.publicationList.updateFilters({
+				q : this.$('#search-term-input').val()
+			});
+			this.publicationList.getFirstPage()
+					.fail(function(jqXhr) {
+						self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
+					}).always(function() {
+						self.$('.loading-indicator').hide();
+					});
 		}
 
 	});
