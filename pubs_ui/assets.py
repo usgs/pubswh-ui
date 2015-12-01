@@ -46,7 +46,8 @@ bundles={
             'manager/less/search.less',
             'manager/less/publication.less',
             'manager/less/bibliodata.less',
-            'manager/less/links.less'
+            'manager/less/links.less',
+            'manager/less/contributors.less'
         ],
         filters='less,cssmin',
         output='gen/manager_style.css'
