@@ -5,25 +5,58 @@ define([
 	'jquery',
 	'backbone',
 	'module',
-	'models/LinkCollection'
-], function(_, $, Backbone, module, LinkCollection) {
+	'models/LinkCollection',
+	'models/PublicationContributorCollection'
+], function(_, $, Backbone, module, LinkCollection, PublicationContributorCollection) {
 	"use strict";
 
 	var model = Backbone.Model.extend({
 		urlRoot : module.config().scriptRoot + '/manager/services/mppublications',
 
+		/*
+		 * The contributors attribute is a backbone model. This model contains attributes whose value
+		 * is a PublicationContributorCollection.
+		 */
 		defaults : function() {
 			return {
-				links: new LinkCollection()
+				links: new LinkCollection(),
+				contributors : new Backbone.Model()
 			}
 		},
 
 		parse : function(response, options) {
-			var links = this.get('links');
+			var links = (this.has('links')) ? this.get('links') : new LinkCollection();
+			var contributors = (this.has('contributors')) ? this.get('contributors') : new Backbone.Model();
 			if (_.has(response, 'links') && response.links.length) {
 				links.set(_.sortBy(response.links, 'rank'));
-				response.links = links;
 			}
+			else {
+				links.reset(null);
+			}
+			response.links = links;
+
+			if (_.has(response, 'contributors')) {
+				_.each(contributors.keys, function(contribType) {
+					// Clear out collection if response doesn't contain the contribType
+					if (!_.has(response.contributors, contribType)) {
+						contributors.unset(contribType);
+					}
+				});
+				_.each(response.contributors, function(contribs, contribType) {
+					if (contributors.has(contribType)){
+						contributors.get(contribType).set(contribs).sort();
+					}
+					else {
+						contributors.set(contribType, new PublicationContributorCollection(contribs));
+					}
+				});
+
+			}
+			else {
+				contributors.clear();
+			}
+			response.contributors = contributors;
+
 			/*
 				Need to remove interactions and text to work around an issue with some properties being returned that shouldn't be.
 				When PUBSTWO-1272 has been resolved, this code can be removed.

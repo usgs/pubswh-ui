@@ -31,7 +31,17 @@ define([
 				model = new PublicationModel();
 
 				server.respondWith(model.urlRoot + '/' + validId + '?mimetype=json', [200, {"Content-Type" : 'application/json'},
-					'{"id" : 1234, "title" : "This is a Title", "publicationYear" : 2015}'
+					'{"id" : 1234, "title" : "This is a Title", "publicationYear" : 2015,' +
+					'"contributors":{"editors":[{"id":537948,"contributorType":{"id":2},"rank":1,"text":"NOAA-USGS ","contributorId":127923,"corporation":true},' +
+					'{"id":537949,"contributorType":{"id":2},"rank":2,"text":"Akin, Sarah K.","contributorId":55132,"corporation":false}],' +
+					'"authors":[{"id":537943,"contributorType":{"id":1},"rank":1,"text":"Krebs, J.M.","contributorId":6258,"corporation":false}]},' +
+					'"links":[{"id":1234, "rank": 1}, {"id":123, "rank":2}]' +
+					'}'
+				]);
+				server.respondWith(model.urlRoot + '/123?mimetype=json', [200, {"Content-Type" : 'application/json'},
+					'{"id" : 123, "title" : "This is a Title", "publicationYear" : 2015,' +
+					'"contributors":{"editors":[],"authors":[]}' +
+					'}'
 				]);
 
 				server.respondWith(model.urlRoot + '/' + invalidId + '?mimetype=json', [404, {}, 'Pub Not Found']);
@@ -59,7 +69,30 @@ define([
 				expect(model.attributes.id).toEqual(validId);
 				expect(model.attributes.title).toEqual('This is a Title');
 				expect(model.attributes.publicationYear).toEqual(2015);
+			});
 
+			it('Expects that the contributors property is an model with properties that are collections', function() {
+				model.set('id', validId);
+				model.fetch().done(doneSpy).fail(failSpy);
+				server.respond();
+
+				expect(model.attributes.contributors).toBeDefined();
+				expect(model.attributes.contributors.attributes.editors).toBeDefined();
+				expect(model.attributes.contributors.attributes.editors.models.length).toBe(2);
+				expect(model.attributes.contributors.attributes.authors).toBeDefined();
+				expect(model.attributes.contributors.attributes.authors.models.length).toBe(1);
+				expect(model.attributes.contributors.attributes.authors.at(0).get('id')).toEqual(537943);
+			});
+
+			it('Expects that the links property is a collection containing the array of links in the response', function() {
+				model.set('id', validId);
+				model.fetch().done(doneSpy).fail(failSpy);
+				server.respond();
+
+				expect(model.attributes.links).toBeDefined();
+				expect(model.attributes.links.models).toBeDefined();
+				expect(model.attributes.links.models.length).toBe(2);
+				expect(model.attributes.links.toJSON()).toEqual([{id : 1234, rank : 1}, {id : 123, rank : 2}]);
 			});
 
 			it('Expects that a call to fetch with an invalid id will not update the model', function() {
@@ -69,6 +102,19 @@ define([
 				expect(doneSpy).not.toHaveBeenCalled();
 				expect(failSpy).toHaveBeenCalled();
 				expect(model.attributes.id).toEqual(invalidId);
+			});
+
+			it('Expects a second call to fetch without links or contributors to clear those collections', function() {
+				model.set('id', validId);
+				model.fetch().done(doneSpy).fail(failSpy);
+				server.respond();
+
+				model.set('id', 123);
+				model.fetch().done(doneSpy).fail(failSpy);
+				server.respond();
+				expect(model.get('contributors').get('editors').length).toBe(0);
+				expect(model.get('contributors').get('authors').length).toBe(0);
+				expect(model.get('links').length).toBe(0);
 			});
 		});
 

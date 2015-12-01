@@ -65,6 +65,7 @@ define([
 			});
 			this.updateLinkType();
 
+
 			this.$('.link-file-type').select2({
 				allowClear: true,
 				theme: 'bootstrap',
@@ -78,6 +79,8 @@ define([
 		/*
 		 * Event handlers for select and reset events for the select2's
 		 */
+
+
 		selectLinkType: function (ev) {
 			var selected = ev.currentTarget.value;
 			var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;

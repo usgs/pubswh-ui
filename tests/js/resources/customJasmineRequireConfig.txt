@@ -1,3 +1,8 @@
+    config : {
+        'views/ContributorRowView' : {
+			lookupUrl : "test_lookup/"
+		}
+    },
     baseUrl : '/pubs_ui/manager/static/js',
     paths: {
         'sinon' : '/pubs_ui/bower_components/sinon/lib/sinon',

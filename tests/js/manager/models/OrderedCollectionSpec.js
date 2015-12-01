@@ -1,15 +1,15 @@
 /* jslint browser: true */
 
 define([
-	'models/LinkCollection'
-], function(LinkCollection) {
+	'models/OrderedCollection'
+], function(OrderedCollection) {
 	"use strict";
 
-	describe('LinkCollection', function() {
+	describe('OrderedCollection', function() {
 
 		var testCollection;
 		beforeEach(function () {
-			testCollection = new LinkCollection([
+			testCollection = new OrderedCollection([
 				{id: 1, rank: 1},
 				{id: 2, rank: 2},
 				{id: 3, rank: 3},

@@ -16,6 +16,7 @@ define([
 		var setElDialogSpy, renderDialogSpy, removeDialogSpy, showDialogSpy;
 		var setElBibliodataSpy, renderBibliodataSpy, removeBibliodataSpy, findElBibliodataSpy;
 		var setElLinksSpy, renderLinksSpy, removeLinksSpy, findElLinksSpy;
+		var setElContributorsSpy, renderContributorsSpy, removeContributorsSpy, findElContributorsSpy;
 
 		var pubModel;
 		var opDeferred;
@@ -50,12 +51,20 @@ define([
 				tooltip : jasmine.createSpy()
 			});
 
-			setElLinksSpy = jasmine.createSpy('setElBibliodataSpy');
-			renderLinksSpy = jasmine.createSpy('renderBibliodataSpy');
-			removeLinksSpy = jasmine.createSpy('removeBibliodataSpy');
-			findElLinksSpy = jasmine.createSpy('findElBibliodataSpy').and.returnValue({
+			setElLinksSpy = jasmine.createSpy('setElLinksdataSpy');
+			renderLinksSpy = jasmine.createSpy('renderLinksSpy');
+			removeLinksSpy = jasmine.createSpy('removeLinksSpy');
+			findElLinksSpy = jasmine.createSpy('findElLinksSpy').and.returnValue({
 				tooltip : jasmine.createSpy()
 			});
+
+			setElContributorsSpy = jasmine.createSpy('setElContributorsSpy');
+			renderContributorsSpy = jasmine.createSpy('renderContributorsSpy');
+			removeContributorsSpy = jasmine.createSpy('removeContributorsSpy');
+			findElContributorsSpy = jasmine.createSpy('findElContributorsSpy').and.returnValue({
+				tooltip : jasmine.createSpy()
+			});
+
 
 			var injector = new Squire();
 			injector.mock('views/AlertView', BaseView.extend({
@@ -88,6 +97,14 @@ define([
 				render : renderLinksSpy,
 				remove : removeLinksSpy,
 				$ : findElLinksSpy
+			}));
+			injector.mock('views/ContributorsView', BaseView.extend({
+				setElement : setElContributorsSpy.and.returnValue({
+					render : renderContributorsSpy
+				}),
+				render : renderContributorsSpy,
+				remove : removeContributorsSpy,
+				$ : findElContributorsSpy
 			}));
 
 			injector.require(['views/PublicationView'], function(view){
@@ -142,6 +159,8 @@ define([
 				expect(renderBibliodataSpy).not.toHaveBeenCalled();
 				expect(setElLinksSpy.calls.count()).toBe(1);
 				expect(renderLinksSpy).not.toHaveBeenCalled();
+				expect(setElContributorsSpy.calls.count()).toBe(1);
+				expect(renderContributorsSpy).not.toHaveBeenCalled();
 
 				opDeferred.resolve();
 
@@ -149,7 +168,8 @@ define([
 				expect(renderBibliodataSpy).toHaveBeenCalled();
 				expect(setElLinksSpy.calls.count()).toBe(2);
 				expect(renderLinksSpy).toHaveBeenCalled();
-			});
+				expect(setElContributorsSpy.calls.count()).toBe(2);
+				expect(renderContributorsSpy).toHaveBeenCalled();			});
 
 			it('Expects a successful fetch will not show an alert', function() {
 				pubModel.set('id', 1234);
@@ -171,6 +191,7 @@ define([
 				expect(dangerAlertSpy).toHaveBeenCalled();
 				expect(renderBibliodataSpy).not.toHaveBeenCalled();
 				expect(renderLinksSpy).not.toHaveBeenCalled();
+				expect(renderContributorsSpy).not.toHaveBeenCalled();
 			});
 
 			it('Expects a new pub to not show an alert', function() {
@@ -192,6 +213,8 @@ define([
 				expect(removeAlertSpy).toHaveBeenCalled();
 				expect(removeDialogSpy).toHaveBeenCalled();
 				expect(removeBibliodataSpy).toHaveBeenCalled();
+				expect(removeLinksSpy).toHaveBeenCalled();
+				expect(removeContributorsSpy).toHaveBeenCalled();
 			});
 		});
 

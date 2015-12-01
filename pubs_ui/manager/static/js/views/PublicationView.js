@@ -9,10 +9,11 @@ define([
 	'views/ConfirmationDialogView',
 	'views/BibliodataView',
 	'views/LinksView',
+	'views/ContributorsView',
 	'hbs!hb_templates/publication',
 	'backbone.stickit'
 ], function(_, bootstrap, datetimepicker, BaseView, AlertView, ConfirmationDialogView,
-			BibliodataView, LinksView, hbTemplate, Stickit) {
+			BibliodataView, LinksView, ContributorsView, hbTemplate, Stickit) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -133,6 +134,13 @@ define([
 					view : new LinksView({
 						el : '#links-pane',
 						collection : this.model.get('links')
+					})
+				},
+				contributors : {
+					el : '#contributors-pane',
+					view : new ContributorsView({
+						el : '#contributors-pane',
+						model : this.model.get('contributors')
 					})
 				}
 			};

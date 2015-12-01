@@ -32,6 +32,9 @@
 				'models/PublicationCollection' : {
 					scriptRoot : "{{ request.script_root }}"
 				},
+				'models/PublicationContributorModel' : {
+					scriptRoot : "{{ request.script_root }}"
+				},
 				'models/PublicationTypeCollection' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
@@ -44,7 +47,13 @@
 				'models/CostCenterCollection' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
+				'models/ContributorTypeCollection' : {
+					lookupUrl : "{{ config.LOOKUP_URL }}"
+				},
 				'views/BibliodataView' : {
+					lookupUrl : "{{ config.LOOKUP_URL }}"
+				},
+				'views/ContributorRowView' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				}
 			},
@@ -72,18 +81,18 @@
 				'select2' : ['jquery'],
 				'bootstrap' : ['jquery', 'jquery-ui'], //Need to do this so jquery-ui is loaded first
 				'jquery-ui' : {
-					dep: ['jquery'],
+					deps: ['jquery'],
 					init : function() {
 						$.widget.bridge('uibutton', $.ui.button);
 						$.widget.bridge('uitooltip', $.ui.tooltip);
 					}
 				},
 				'backbone' : {
-					dep : ['jquery', 'underscore'],
+					deps : ['jquery', 'underscore'],
 					exports : 'Backbone'
 				},
 				'backbone.paginator' : {
-					dep : ['underscore','backbone'],
+					deps : ['underscore','backbone'],
 					exports : 'Pageable'
 				},
 				'backgrid': {

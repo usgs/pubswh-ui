@@ -1,13 +1,13 @@
 /* jslint browser: true */
 
 define([
-	'models/LinkModel',
+	'models/PublicationContributorModel',
 	'models/OrderedCollection'
-], function(LinkModel, OrderedCollection) {
+], function(PublicationContributorModel, OrderedCollection) {
 	"use strict";
 
 	var collection = OrderedCollection.extend({
-		model : LinkModel,
+		model : PublicationContributorModel
 	});
 
 	return collection;

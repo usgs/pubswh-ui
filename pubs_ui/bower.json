@@ -43,6 +43,7 @@
     "underscore": "~1.8.3",
     "backbone": "~1.2.3",
     "jquery": "~2.1.4",
-    "webcomponentsjs": "^0.6.0"
+    "webcomponentsjs": "^0.6.0",
+    "select2": "~4.0.0"
   }
 }
