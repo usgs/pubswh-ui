@@ -25,15 +25,16 @@ define([
 		},
 
 		parse : function(response, options) {
-			var links = this.get('links');
-			var contributors = this.get('contributors');
+			var links = (this.has('links')) ? this.get('links') : new LinkCollection();
+			var contributors = (this.has('contributors')) ? this.get('contributors') : new Backbone.Model();
 			if (_.has(response, 'links') && response.links.length) {
 				links.set(_.sortBy(response.links, 'rank'));
-				response.links = links;
 			}
 			else {
 				links.reset(null);
 			}
+			response.links = links;
+
 			if (_.has(response, 'contributors')) {
 				_.each(contributors.keys, function(contribType) {
 					// Clear out collection if response doesn't contain the contribType
