@@ -44,7 +44,9 @@ define([
 				});
 				_.each(response.contributors, function(contribs, contribType) {
 					if (contributors.has(contribType)){
-						contributors.get(contribType).set(contribs).sort();
+						var collection = contributors.get(contribType);
+						collection.set(contribs);
+						collection.sort();
 					}
 					else {
 						contributors.set(contribType, new PublicationContributorCollection(contribs));
