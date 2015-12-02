@@ -15,6 +15,10 @@
         'text' : '/pubs_ui/bower_components/text/text',
         'underscore' : '/pubs_ui/bower_components/underscore/underscore',
         'backbone' : '/pubs_ui/bower_components/backbone/backbone',
+        'backbone.paginator' : '/pubs_ui/bower_components/backbone.paginator/lib/backbone.paginator',
+        'backgrid' : '/pubs_ui/bower_components/backgrid/lib/backgrid',
+		'backgrid-select-all' : '/pubs_ui/bower_components/backgrid-select-all/backgrid-select-all',
+		'backgrid-paginator' : '/pubs_ui/bower_components/backgrid-paginator/backgrid-paginator',
         'handlebars' : '/pubs_ui/bower_components/handlebars/handlebars.amd',
         'hbs' : '/pubs_ui/bower_components/requirejs-hbs/hbs',
         'backbone.stickit' : '/pubs_ui/bower_components/backbone.stickit/backbone.stickit',
@@ -31,9 +35,28 @@
             }
         },
         'bootstrap' : ['jquery', 'jquery-ui'],
-        'backbone' : ['jquery', 'underscore'],
+        'backbone' : {
+            deps : ['jquery', 'underscore'],
+            exports : 'Backbone'
+        },
+        'backbone.paginator' : {
+            deps : ['underscore','backbone']
+        },
+        'backgrid': {
+            deps: ['jquery', 'underscore', 'backbone'],
+            exports: 'Backgrid'
+        },
+        'backgrid-select-all' : {
+            deps: ['backgrid', 'backbone']
+        },
+        'backgrid-paginator' : {
+            deps: ['backbone.paginator', 'backgrid'],
+        },
         'backbone.stickit' : ['backbone', 'underscore'],
         'datetimepicker' : ['jquery', 'moment', 'bootstrap'],
+        'handlebars' : {
+            exports: 'Handlebars'
+        },
         'tinymce': {
             exports: 'tinymce',
             init: function () {

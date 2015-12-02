@@ -1,17 +1,13 @@
 /*jslint browser: true */
 
 define([
-	'bootstrap',
-	'handlebars',
 	'views/BaseView',
 	'views/AlertView',
 	'hbs!hb_templates/search',
 	'backgrid',
-	'select-all',
-	'paginator',
-	'backbone.stickit',
-	'models/PublicationCollection'
-], function (bootstrap, Handlebars, BaseView, AlertView, hbTemplate, Backgrid, SelectAll, Paginator, Stickit, PublicationCollection) {
+	'backgrid-select-all',
+	'backgrid-paginator'
+], function (BaseView, AlertView, hbTemplate, Backgrid, SelectAll, Paginator) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -26,7 +22,6 @@ define([
 		render : function() {
 			var self = this;
 			var $pubList;
-			var $loadingIndicator;
 
 			BaseView.prototype.render.apply(this, arguments);
 			$pubList = this.$('.pub-grid');
@@ -42,12 +37,16 @@ define([
 
 			this.fetchPromise.fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
+			}).always(function() {
+				// Make sure indicator is hidden. Need to do this in case the sync signal was sent before the view was rendered
+				self.hideLoadingIndicator();
 			});
 		},
 
 		/*
 		 * @param {Object} options
 		 *     @prop {String} el - jquery selector where the view should be rendered
+		 *     @prop {PublicationCollection} collection
 		 */
 		initialize : function(options) {
 			var self = this;
@@ -55,16 +54,17 @@ define([
 
 			this.context.futureFeatures = false;
 
-			this.publicationList = new PublicationCollection();
-			this.listenTo(this.publicationList, 'backgrid:selected', this.editPublication);
-			this.listenTo(this.publicationList, 'request', this.showLoadingIndicator);
-			this.listenTo(this.publicationList, 'sync', this.hideLoadingIndicator);
+			// Set up collection event handlers and then fetch the collection
+			this.listenTo(this.collection, 'backgrid:selected', this.editPublication);
+			this.listenTo(this.collection, 'request', this.showLoadingIndicator);
+			this.listenTo(this.collection, 'sync', this.hideLoadingIndicator);
 
-			//build grid
+			this.fetchPromise = this.collection.fetch({reset: true});
+
+			// Create backgrid and paginator views
 			var columns = [
 				{
-					// name is a required parameter, but you don't really want one on a select all column
-					name: "",
+					name: "", // name is a required parameter, but you don't really want one on a select all column
 					cell: "select-row"
 				}, {
 					name: "publicationType",
@@ -107,59 +107,59 @@ define([
 			// Initialize a new Grid instance
 			this.grid = new Backgrid.Grid({
 				columns: columns,
-				collection: this.publicationList,
+				collection: this.collection,
 				className : 'backgrid table-striped table-hover table-bordered'
 			});
 
 			// Initialize the paginator
 			this.paginator = new Backgrid.Extension.Paginator({
-				collection: this.publicationList,
+				collection: this.collection
 			});
 
-			this.fetchPromise = this.publicationList.fetch({reset: true});
-
-			// Create child views
+			// Create other child views
 			this.alertView = new AlertView({
 				el: '.alert-container'
 			});
 		},
 
 		remove : function() {
+			this.grid.remove();
+			this.paginator.remove();
 			this.alertView.remove();
 			BaseView.prototype.remove.apply(this, arguments);
 			return this;
 		},
 
+		/*
+		 * DOM event handlers
+		 */
 		editPublication : function(ev) {
 			this.router.navigate('publication/' + ev.id, {trigger: true});
 		},
 
+		filterPubs : function(ev) {
+			var self = this;
+
+			ev.preventDefault();
+			this.collection.updateFilters({
+				q : this.$('#search-term-input').val()
+			});
+			this.collection.getFirstPage()
+					.fail(function(jqXhr) {
+						self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
+					});
+		},
+
+		/* collection event handlers */
 		showLoadingIndicator : function() {
 			console.log('Show loading indicator');
 			this.$('.pubs-loading-indicator').show();
 		},
 
 		hideLoadingIndicator : function() {
-			console.log('hide loading indicator');
+			console.log('Hide loading indicator');
 			this.$('.pubs-loading-indicator').hide();
-		},
-
-		/*
-		 * DOM event handlers
-		 */
-		filterPubs : function(ev) {
-			var self = this;
-
-			ev.preventDefault();
-			this.publicationList.updateFilters({
-				q : this.$('#search-term-input').val()
-			});
-			this.publicationList.getFirstPage()
-					.fail(function(jqXhr) {
-						self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
-					});
 		}
-
 	});
 
 	return view;
