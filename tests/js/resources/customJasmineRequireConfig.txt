@@ -1,16 +1,54 @@
+    config : {
+        'views/ContributorRowView' : {
+			lookupUrl : "test_lookup/"
+		}
+    },
     baseUrl : '/pubs_ui/manager/static/js',
     paths: {
         'sinon' : '/pubs_ui/bower_components/sinon/lib/sinon',
         'squire' : '/pubs_ui/bower_components/Squire.js/src/Squire',
         'jquery' : '/pubs_ui/bower_components/jquery/dist/jquery',
-        'bootstrap' : '/pub_ui/bower_components/bootstrap/dist/js/bootstrap',
+        'jquery-ui' : '/pubs_ui/bower_components/jquery-ui/jquery-ui',
+        'select2' : '/pubs_ui/bower_components/select2/dist/js/select2.full',
+        'tinymce' : '/pubs_ui/bower_components/tinymce/tinymce',
+        'bootstrap' : '/pubs_ui/bower_components/bootstrap/dist/js/bootstrap',
+        'text' : '/pubs_ui/bower_components/text/text',
         'underscore' : '/pubs_ui/bower_components/underscore/underscore',
         'backbone' : '/pubs_ui/bower_components/backbone/backbone',
-        'handlebars' : '/pubs_ui/bower_components/handlebars/handlebars'
+        'handlebars' : '/pubs_ui/bower_components/handlebars/handlebars.amd',
+        'hbs' : '/pubs_ui/bower_components/requirejs-hbs/hbs',
+        'backbone.stickit' : '/pubs_ui/bower_components/backbone.stickit/backbone.stickit',
+        'moment' : '/pubs_ui/bower_components/moment/min/moment.min',
+        'datetimepicker' : '/pubs_ui/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min'
     },
     shim : {
-        'bootstrap' : ['jquery', 'underscore'],
+        'select2' : ['jquery'],
+        'jquery-ui' : {
+            dep: ['jquery'],
+            init : function() {
+                $.widget.bridge('uibutton', $.ui.button);
+                $.widget.bridge('uitooltip', $.ui.tooltip);
+            }
+        },
+        'bootstrap' : ['jquery', 'jquery-ui'],
+        'backbone' : ['jquery', 'underscore'],
+        'backbone.stickit' : ['backbone', 'underscore'],
+        'datetimepicker' : ['jquery', 'moment', 'bootstrap'],
+        'tinymce': {
+            exports: 'tinymce',
+            init: function () {
+                this.tinymce.DOM.events.domLoaded = true;
+                return this.tinymce;
+            }
+        },
         'sinon' : {
             'exports' : 'sinon'
-        }
+        },
+        packages : [
+            {
+                name : 'hbs',
+                location : '/pubs_ui/bower_components/requirejs-hbs/hbs',
+                main : 'hbs'
+            }
+        ]
     }

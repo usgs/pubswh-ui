@@ -1,74 +1,67 @@
-<div class="alert-error-container">
-	<div class="alert-container"></div>
-	<div class="validation-errors"></div>
-</div>
-
 <div>
 	<div id="pubHeader">
 		<div id="sharedPubData" class="form-horizontal" >
 			<div id="pub-id-div" class="form-group">
-				<label class="control-label col-sm-3" >Prod ID</label>
-				<div class="col-sm-6">
-					<input type="text" class="form-control" value="{{model.id}}" readonly/>
-				</div>
+				<label class="control-label" >Prod ID</label>
+				<input type="text" class="form-control" readonly/>
 			</div>
 
 			<div id="pub-index-id-div" class="form-group">
-				<label class="control-label col-sm-3" >Index ID</label>
-				<div class="col-sm-6">
-					<input type="text" class="form-control" value="{{model.indexId}}" readonly />
-				</div>
+				<label class="control-label" >Index ID</label>
+				<input type="text" class="form-control" readonly />
 			</div>
 
 			<div id="ipds-div" class="form-group">
-				<label class="control-label col-sm-3" >IPDS</label>
-				<div class="col-sm-6">
-					<input type="text" id="ipds-input" class="form-control" value="{{model.ipdsId}}" readonly />
-				</div>
+				<label class="control-label" >IPDS</label>
+				<input type="text" id="ipds-input" class="form-control" readonly />
 			</div>
 
 			<div id="pub-display-to-public-div" class="form-group">
-				<label class="control-label col-sm-3" >Display to public date</label>
+				<label class="control-label" >Display to public date</label>
 				<div class="input-group date" id="display-date">
-					<input type="text" class="form-control" value="{{model.displayToPublicDate}}"/>
+					<input type="text" class="form-control" />
 					<span class="input-group-addon">
-						<span class="glyphicon glyphicon-calendar"></span>
+						<i class="fa fa-calendar"></i>
 					</span>
 				</div>
 			</div>
-			{{#if model.id }}
-				<div id="pub-preview-div" class="form-group">
-					<label class="control-label col-sm-3">Publication preview</label>
-					<div class="col-sm-6">
-						<a href="https://pubs.er.usgs.gov/preview/{{ pubData.indexId }}">Preview</a>
-					</div>
-				</div>
-			{{/if}}
+			<div id="pub-preview-div" class="form-group">
+				<label class="control-label">Publication preview</label>
+				<a href="https://pubs.er.usgs.gov/preview/{{ id }}">Preview</a>
+			</div>
+
 		</div>
-		<div class="row actions">
-			<button class="reset-btn btn btn-default col-xs-offset-1 col-xs-2">Reset</button>
-			<button class="release-btn btn btn-default col-xs-2">Release</button>
-			<button class="save-btn btn btn-default col-xs-2">Save Changes</button>
-			<button class="publish-btn btn btn-default col-xs-2">Publish</button>
-			<button class="delete-btn btn btn-default col-xs-2">Delete</button>
+		<div class="alert-error-container">
+
+			<div class="loading-indicator"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+			<div class="alert-container"></div>
+			<div class="validation-errors"></div>
 		</div>
 	</div>
+	<div class="row actions">
+		<button class="reset-btn btn btn-default" data-toggle="tooltip" data-placement="top" title="Reload the publication">Reset</button>
+		<button class="release-btn btn btn-default" data-toggle="tooltip" data-placement="top" title="Release the lock on the publication and return to the search page">Release</button>
+		<button class="save-btn btn btn-default" data-toggle="tooltip" data-placement="top" title="Save the publication">Save Changes</button>
+		<button class="publish-btn btn btn-default" data-toggle="tooltip" data-placement="top" title="Make the publication available to the public">Publish</button>
+		<button class="delete-btn btn btn-default" data-toggle="tooltip" data-placement="top" title="Remove the publication">Delete</button>
+	</div>
+
 	<div class="edit-tabs">
 		<ul class="nav nav-tabs">
-			<li role="presentation" class="active"><a href="#bibliodata" aria-controls="bibliodata" role="tab" data-toggle="tab">Bibliodata</a></li>
-			<li role="presentation"><a href="contributors" aria-controls="contributors" role="tab" data-toggle="tab">Contributors</a></li>
-			<li role="presentation"><a href="links" aria-controls="links" role="tab" data-toggle="tab">Links</a></li>
-			<li role="presentation"><a href="spn" aria-controls="spn" role="tab" data-toggle="tab">SPN</a></li>
-			<li role="presentation"><a href="cataloging" aria-controls="cataloging" role="tab" data-toggle="tab">Cataloging</a></li>
-			<li role="presentation"><a href="geospatial" aria-controls="geospatial" role="tab" data-toggle="tab">Geospatial</a></li>
+			<li role="presentation" class="active"><a href="#bibliodata-pane" aria-controls="bibliodata-pane" role="tab" data-toggle="tab">Bibliodata</a></li>
+			<li role="presentation"><a href="#contributors-pane" aria-controls="contributors-pane" role="tab" data-toggle="tab">Contributors</a></li>
+			<li role="presentation"><a href="#links-pane" aria-controls="links-pane" role="tab" data-toggle="tab">Links</a></li>
+			<li role="presentation"><a href="#spn-pane" aria-controls="spn-pane" role="tab" data-toggle="tab">SPN</a></li>
+			<li role="presentation"><a href="#cataloging-pane" aria-controls="cataloging-pane" role="tab" data-toggle="tab">Cataloging</a></li>
+			<li role="presentation"><a href="#geospatial-pane" aria-controls="geospatial-pane" role="tab" data-toggle="tab">Geospatial</a></li>
 		</ul>
 		<div class="tab-content">
-			<div role="tabpanel" class="tap-pane active" id="bibliodata"></div>
-			<div role="tabpanel" class="tap-pane" id="contributors"></div>
-			<div role="tabpanel" class="tap-pane" id="links"></div>
-			<div role="tabpanel" class="tap-pane" id="spn"></div>
-			<div role="tabpanel" class="tap-pane" id="cataloging"></div>
-			<div role="tabpanel" class="tap-pane" id="geospatial"></div>
+			<div role="tabpanel" class="tab-pane active" id="bibliodata-pane"></div>
+			<div role="tabpanel" class="tab-pane" id="contributors-pane"></div>
+			<div role="tabpanel" class="tab-pane" id="links-pane"></div>
+			<div role="tabpanel" class="tab-pane" id="spn-pane"></div>
+			<div role="tabpanel" class="tab-pane" id="cataloging-pane"></div>
+			<div role="tabpanel" class="tab-pane" id="geospatial-pane"></div>
 		</div>
 	</div>
 </div>

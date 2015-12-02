@@ -3,6 +3,9 @@
 {% block title %}Manage USGS Publications{% endblock %}
 
 {% block page_style %}
+	<link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='select2/dist/css/select2.min.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='backgrid/src/backgrid.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='backgrid-paginator/backgrid-paginator.css') }}" />
 	{%  assets "manager_style" %}
 		<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
 	{% endassets %}
@@ -22,26 +25,109 @@
 			config: {
 				'init' : {
 					'scriptRoot' : "{{ request.script_root }}"
+				},
+				'models/PublicationModel' : {
+					scriptRoot : "{{ request.script_root }}"
+				},
+				'models/PublicationCollection' : {
+					scriptRoot : "{{ request.script_root }}"
+				},
+				'models/PublicationContributorModel' : {
+					scriptRoot : "{{ request.script_root }}"
+				},
+				'models/PublicationTypeCollection' : {
+					lookupUrl : "{{ config.LOOKUP_URL }}"
+				},
+				'models/LinkTypeCollection': {
+					lookupUrl : "{{  config.LOOKUP_URL }}"
+				},
+				'models/LinkFileTypeCollection': {
+					lookupUrl : "{{  config.LOOKUP_URL }}"
+				},
+				'models/CostCenterCollection' : {
+					lookupUrl : "{{ config.LOOKUP_URL }}"
+				},
+				'models/ContributorTypeCollection' : {
+					lookupUrl : "{{ config.LOOKUP_URL }}"
+				},
+				'views/BibliodataView' : {
+					lookupUrl : "{{ config.LOOKUP_URL }}"
+				},
+				'views/ContributorRowView' : {
+					lookupUrl : "{{ config.LOOKUP_URL }}"
 				}
 			},
 			baseUrl: "{{ url_for('manager.static', filename='js') }}",
 			paths: {
 				'jquery' : "{{ url_for('bower.static', filename='jquery/dist/jquery.js') }}",
+				'jquery-ui' : "{{ url_for('bower.static', filename='jquery-ui/jquery-ui.js') }}",
+				'select2' : "{{ url_for('bower.static', filename='select2/dist/js/select2.full.js') }}",
+				'tinymce' : "{{  url_for('bower.static', filename='tinymce/tinymce.js') }}",
 				'bootstrap' : "{{ url_for('bower.static', filename='bootstrap/dist/js/bootstrap.js') }}",
 				'text' : "{{ url_for('bower.static', filename='text/text.js') }}",
 				'underscore' : "{{ url_for('bower.static', filename='underscore/underscore.js') }}",
 				'backbone' : "{{ url_for('bower.static', filename='backbone/backbone.js') }}",
+				'backbone.paginator' : "{{ url_for('bower.static', filename='backbone.paginator/lib/backbone.paginator.js') }}",
+				'backgrid' : "{{ url_for('bower.static', filename='backgrid/lib/backgrid.js') }}",
+				'select-all' : "{{ url_for('bower.static', filename='backgrid-select-all/backgrid-select-all.js') }}",
+				'paginator' : "{{ url_for('bower.static', filename='backgrid-paginator/backgrid-paginator.js') }}",
 				'handlebars' : "{{ url_for('bower.static', filename='handlebars/handlebars.amd.js') }}",
+				'hbs' : "{{  url_for('bower.static', filename='requirejs-hbs/hbs.js') }}",
 				'backbone.stickit' : "{{ url_for('bower.static', filename='backbone.stickit/backbone.stickit.js') }}",
 				'moment' : "{{ url_for('bower.static', filename='moment/min/moment.min.js') }}",
 				'datetimepicker' : "{{ url_for('bower.static', filename='eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"
 			},
 			shim : {
-				'bootstrap' : ['jquery'],
-				'backbone' : ['jquery', 'underscore'],
+				'select2' : ['jquery'],
+				'bootstrap' : ['jquery', 'jquery-ui'], //Need to do this so jquery-ui is loaded first
+				'jquery-ui' : {
+					deps: ['jquery'],
+					init : function() {
+						$.widget.bridge('uibutton', $.ui.button);
+						$.widget.bridge('uitooltip', $.ui.tooltip);
+					}
+				},
+				'backbone' : {
+					deps : ['jquery', 'underscore'],
+					exports : 'Backbone'
+				},
+				'backbone.paginator' : {
+					deps : ['underscore','backbone'],
+					exports : 'Pageable'
+				},
+				'backgrid': {
+                    deps: ['jquery', 'underscore', 'backbone'],
+                    exports: 'Backgrid'
+                },
+				'select-all' : {
+					deps: ['backgrid', 'backbone'],
+					exports: 'SelectAll'
+                },
+				'paginator' : {
+					deps: ['backbone.paginator'],
+					exports: 'Paginator'
+				},
 				'backbone.stickit' : ['backbone', 'underscore'],
-				'datetimepicker' : ['jquery', 'moment', 'bootstrap']
-			}
+				'datetimepicker' : ['jquery', 'moment', 'bootstrap'],
+				'handlebars' : {
+					exports: 'Handlebars'
+				},
+				'tinymce': {
+            		exports: 'tinymce',
+					init: function () {
+                		this.tinymce.DOM.events.domLoaded = true;
+                		return this.tinymce;
+            		}
+        		}
+			},
+			packages : [
+				{
+					name : 'hbs',
+					location: "{{  url_for('bower.static', filename='requirejs-hbs/hbs.js') }}",
+					main : 'hbs'
+				}
+			],
+
 		};
 	</script>
 	<script data-main="init" src="{{ url_for('bower.static', filename='requirejs/require.js') }}"></script>

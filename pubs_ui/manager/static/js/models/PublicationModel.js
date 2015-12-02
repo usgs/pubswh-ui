@@ -3,21 +3,68 @@
 define([
 	'underscore',
 	'jquery',
-	'backbone'
-], function(_, $, Backbone) {
+	'backbone',
+	'module',
+	'models/LinkCollection',
+	'models/PublicationContributorCollection'
+], function(_, $, Backbone, module, LinkCollection, PublicationContributorCollection) {
 	"use strict";
 
 	var model = Backbone.Model.extend({
-		urlRoot : '/manager/services/mppublications/',
+		urlRoot : module.config().scriptRoot + '/manager/services/mppublications',
 
 		/*
-		Need to remove interactions and text to work around an issue with some properties being returned that shouldn't be.
-		When PUBSTWO-1272 has been resolved, this can be removed.
+		 * The contributors attribute is a backbone model. This model contains attributes whose value
+		 * is a PublicationContributorCollection.
 		 */
-		parse : function(response, options) {
-			return _.omit(response, ['interactions', 'text']);
+		defaults : function() {
+			return {
+				links: new LinkCollection(),
+				contributors : new Backbone.Model()
+			}
 		},
 
+		parse : function(response, options) {
+			var links = (this.has('links')) ? this.get('links') : new LinkCollection();
+			var contributors = (this.has('contributors')) ? this.get('contributors') : new Backbone.Model();
+			if (_.has(response, 'links') && response.links.length) {
+				links.set(_.sortBy(response.links, 'rank'));
+			}
+			else {
+				links.reset(null);
+			}
+			response.links = links;
+
+			if (_.has(response, 'contributors')) {
+				_.each(contributors.keys, function(contribType) {
+					// Clear out collection if response doesn't contain the contribType
+					if (!_.has(response.contributors, contribType)) {
+						contributors.unset(contribType);
+					}
+				});
+				_.each(response.contributors, function(contribs, contribType) {
+					if (contributors.has(contribType)){
+						var collection = contributors.get(contribType);
+						collection.set(contribs);
+						collection.sort();
+					}
+					else {
+						contributors.set(contribType, new PublicationContributorCollection(contribs));
+					}
+				});
+
+			}
+			else {
+				contributors.clear();
+			}
+			response.contributors = contributors;
+
+			/*
+				Need to remove interactions and text to work around an issue with some properties being returned that shouldn't be.
+				When PUBSTWO-1272 has been resolved, this code can be removed.
+		 	*/
+			return _.omit(response, ['interactions', 'text']);
+		},
 
 		fetch : function(options) {
 			var params = {
@@ -31,12 +78,19 @@ define([
 			return Backbone.Model.prototype.fetch.call(this, params);
 		},
 
+		/*
+		 * @param {String} op - command that will be added to the url to perform an action on the pub
+		 * @return {Jquery.Promise} - If the model is empty, resolves returning nothing. If not emtpy,
+		 *     resolves with the received response if call succeeds, rejects with the validationErrors
+		 *     array if the response contains validation errors, rejects with an error message if the failed response does
+		 *     not contain validation errors.
+		 */
 		changeState : function(op) {
 			var self = this;
 			var deferred = $.Deferred();
-			if (this.has('id')) {
+			if (!this.isNew()) {
 				$.ajax({
-					url: this.urlRoot + op,
+					url: this.urlRoot +  '/' + op,
 					method : 'POST',
 					headers : {
 						'Accept' : 'application/json'
@@ -53,7 +107,7 @@ define([
 							&& _.isArray(resp.validationErrors)
 							&& (resp.validationErrors.length > 0)) {
 							self.set('validationErrors', resp.validationErrors);
-							deferred.reject(resp.validationErrors);
+							deferred.reject(resp);
 						}
 						else {
 							deferred.reject('Unable to ' + op + ' the publication with error: ' + error);
@@ -67,12 +121,28 @@ define([
 			return deferred.promise();
 		},
 
+		/*
+		 * @return {Jquery.Promise} - resolves with the received response if the release succeeds, rejects with the validationErrors
+		 *     array if the response contains validation errors, rejects with an error message if the failed response does
+		 *     not contain validation errors.
+		 */
 		release : function() {
 			return this.changeState('release');
 		},
 
+		/*
+		 * @return {Jquery.Promise} - resolves with the received response if publish succeeds, rejects with the validationErrors
+		 *     array if the response contains validation errors, rejects with an error message if the failed response does
+		 *     not contain validation errors.
+		 */
 		publish : function() {
 			return this.changeState('publish');
+		},
+
+		save : function(attributes, options) {
+			/* Don't send validationErrors to the server */
+			this.unset('validationErrors');
+			return Backbone.Model.prototype.save.apply(this, arguments);
 		}
 	});
 

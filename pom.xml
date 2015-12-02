@@ -4,8 +4,8 @@
     <groupId>gov.usgs.cida.PubsWarehouse_UI</groupId>
     <artifactId>publications_wh_ui</artifactId>
     <packaging>pom</packaging>
-    <version>1.38-SNAPSHOT</version>
-    <name>Pubications Warehouse UI</name>
+    <version>1.47-SNAPSHOT</version>
+    <name>Publications Warehouse UI</name>
   
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
