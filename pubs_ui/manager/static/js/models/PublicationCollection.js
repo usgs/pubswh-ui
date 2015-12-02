@@ -44,10 +44,6 @@ define([
 			this.filters = filters;
 		},
 
-		fetch : function(options) {
-			return Backbone.PageableCollection.prototype.fetch.apply(this, arguments);
-		},
-
 		// get the state from web service result
 		parseState: function (resp, queryParams, state, options) {
 			return {totalRecords: resp.recordCount};
