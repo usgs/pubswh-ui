@@ -58,8 +58,10 @@
                 {% endif %}
             {% endmacro %}
 
-            {% if pubdata['displayLinks']['Document']|length >= 1 %}
-                <a title ="Main document link, right click to download or save as" href="{{ pubdata['displayLinks']['Document'][0]['url'] }}">{{ thumbnail_image() }}</a>
+            {% if pubdata['seriesTitle']['text'] == "Scientific Investigations Map" and pubdata['displayLinks']['Sheet']|length >= 1 %}
+                <a title ="First sheet link, right click to download or save as" href="{{ (pubdata['displayLinks']['Sheet']|sort(attribute='rank')|first)["url"] }}">{{ thumbnail_image() }}</a>
+            {% elif pubdata['displayLinks']['Document']|length >= 1 %}
+                <a title ="Main document link, right click to download or save as" href="{{ (pubdata['displayLinks']['Document']|sort(attribute='rank')|first)['url'] }}">{{ thumbnail_image() }}</a>
             {% elif pubdata['displayLinks']['Index Page']|length >= 1 %}
                 <a title ="Go to {% if pubdata['displayLinks']['Index Page'][0]['text'] -%}
                                     {{- pubdata['displayLinks']['Index Page'][0]['text'] -}}
