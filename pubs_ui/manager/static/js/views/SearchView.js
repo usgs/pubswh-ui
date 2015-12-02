@@ -17,7 +17,8 @@ define([
 	var view = BaseView.extend({
 
 		events : {
-				'click .search-btn' : 'filterPubs'
+			'click .search-btn' : 'filterPubs',
+			'submit .pub-search-form' : 'filterPubs'
 		},
 
 		template: hbTemplate,
@@ -29,9 +30,6 @@ define([
 
 			BaseView.prototype.render.apply(this, arguments);
 			$pubList = this.$('.pub-grid');
-			$loadingIndicator = this.$('.loading-indicator');
-
-			$loadingIndicator.show();
 
 			// Set the elements for child views and render if needed.
 			this.alertView.setElement(this.$('.alert-container'));
@@ -44,8 +42,6 @@ define([
 
 			this.fetchPromise.fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
-			}).always(function() {
-				$loadingIndicator.hide();
 			});
 		},
 
@@ -61,70 +57,63 @@ define([
 
 			this.publicationList = new PublicationCollection();
 			this.listenTo(this.publicationList, 'backgrid:selected', this.editPublication);
+			this.listenTo(this.publicationList, 'request', this.showLoadingIndicator);
+			this.listenTo(this.publicationList, 'sync', this.hideLoadingIndicator);
 
 			//build grid
-			var columns = [{
-				// name is a required parameter, but you don't really want one on a select all column
-				name: "",
-				// Backgrid.Extension.SelectRowCell lets you select individual rows
-				cell: "select-row"
-			//}, {
-			//	name: "id",
-			//	label: "Link",
-			//	editable: false,
-			//	cell: "uri",
-			//	formatter: _.extend({}, Backgrid.CellFormatter.prototype, {
-			//		fromRaw: function (rawValue, model) {
-			//			return rawValue ? '<a href="#/publication/' + rawValue + '">test</a>' : '';
-			//		}
-			//	})
-			}, {
-				name: "publicationType",
-				label: "Type", // The name to display in the header
-				editable: false, // By default every cell in a column is editable
-				cell: "string",
-				formatter: _.extend({}, Backgrid.StringFormatter.prototype, {
-					fromRaw: function (rawValue, model) {
-						return rawValue ? rawValue.text: '';
-					}
-				})
-			}, {
-				name: "seriesTitle",
-				label: "USGS Series",
-				editable: false,
-				cell: "string",
-				formatter: _.extend({}, Backgrid.StringFormatter.prototype, {
-					fromRaw: function (rawValue, model) {
-						return rawValue ? rawValue.text: '';
-					}
-				})
-			}, {
-				name: "seriesNumber",
-				label: "Report Number",
-				editable: false,
-				cell: "string"
-			}, {
-				name: "publicationYear",
-				label: "Year",
-				editable: false,
-				cell: "string"
-			}, {
-				name: "title",
-				label: "  Title",
-				editable: false,
-				cell: "string"
-			}];
+			var columns = [
+				{
+					// name is a required parameter, but you don't really want one on a select all column
+					name: "",
+					cell: "select-row"
+				}, {
+					name: "publicationType",
+					label: "Type",
+					editable: false,
+					cell: "string",
+					formatter: _.extend({}, Backgrid.StringFormatter.prototype, {
+						fromRaw: function (rawValue, model) {
+							return rawValue ? rawValue.text: '';
+						}
+					})
+				}, {
+					name: "seriesTitle",
+					label: "USGS Series",
+					editable: false,
+					cell: "string",
+					formatter: _.extend({}, Backgrid.StringFormatter.prototype, {
+						fromRaw: function (rawValue, model) {
+							return rawValue ? rawValue.text: '';
+						}
+					})
+				}, {
+					name: "seriesNumber",
+					label: "Report Number",
+					editable: false,
+					cell: "string"
+				}, {
+					name: "publicationYear",
+					label: "Year",
+					editable: false,
+					cell: "string"
+				}, {
+					name: "title",
+					label: "  Title",
+					editable: false,
+					cell: "string"
+				}
+			];
 
 			// Initialize a new Grid instance
 			this.grid = new Backgrid.Grid({
 				columns: columns,
 				collection: this.publicationList,
-				class : 'backgrid table-striped'
+				className : 'backgrid table-striped table-hover table-bordered'
 			});
 
 			// Initialize the paginator
 			this.paginator = new Backgrid.Extension.Paginator({
-				collection: this.publicationList
+				collection: this.publicationList,
 			});
 
 			this.fetchPromise = this.publicationList.fetch({reset: true});
@@ -145,22 +134,29 @@ define([
 			this.router.navigate('publication/' + ev.id, {trigger: true});
 		},
 
+		showLoadingIndicator : function() {
+			console.log('Show loading indicator');
+			this.$('.pubs-loading-indicator').show();
+		},
+
+		hideLoadingIndicator : function() {
+			console.log('hide loading indicator');
+			this.$('.pubs-loading-indicator').hide();
+		},
+
 		/*
 		 * DOM event handlers
 		 */
-		filterPubs : function() {
+		filterPubs : function(ev) {
 			var self = this;
-			var q = this.$('#search-term-input').val();
 
-			this.$('.loading-indicator').show();
+			ev.preventDefault();
 			this.publicationList.updateFilters({
 				q : this.$('#search-term-input').val()
 			});
 			this.publicationList.getFirstPage()
 					.fail(function(jqXhr) {
 						self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
-					}).always(function() {
-						self.$('.loading-indicator').hide();
 					});
 		}
 

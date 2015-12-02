@@ -1,23 +1,42 @@
-.pub-search-container {
-  .make-lg-column(3);
+.publications-container {
+  .alert-container {
+    .make-sm-column(12);
+  }
 
-  .pub-search-form {
-    .make-row();
+  .pub-search-container {
+    .make-lg-column(3);
 
-    .search-link-button {
-      .pull-right();
+    .pub-search-form {
+      .make-row();
+
+      .search-link-button {
+        .pull-right();
+      }
+    }
+
+    .pub-lists-section {
+      .make-row();
     }
   }
 
-  .pub-lists-section {
-    .make-row();
-  }
-}
+  .pub-list-section {
+    .make-lg-column(9);
+    .pub-management-div {
+      padding-bottom: 10px;
+    }
+    .pub-grid-container {
+      position: relative;
 
-.pub-list-section {
-  .make-lg-column(9);
+      .pubs-loading-indicator {
+        position : absolute;
+        top : 150px;
+        left : 500px;
+        text-align : center;
+      }
+    }
 
-  .pub-contributor-btn, .pub-remove-from-list-btn {
-    .pull-right();
+    .pub-contributor-btn, .pub-remove-from-list-btn {
+      .pull-right();
+    }
   }
 }

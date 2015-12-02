@@ -14,8 +14,8 @@ define([
 		model : PublicationModel,
 
 		url : function() {
-
-			return module.config().scriptRoot + '/manager/services/mppublications?mimetype=json' + ((_.isEmpty(this.filters)) ? '' : '&' + $.param(this.filters))
+			return module.config().scriptRoot + '/manager/services/mppublications?mimetype=json' +
+					((_.isEmpty(this.filters)) ? '' : '&' + $.param(this.filters))
 		},
 				// Initial pagination states
 		state: {

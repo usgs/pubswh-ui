@@ -1,8 +1,12 @@
-<div>
+<div class="publications-container">
+	<div class="alert-container"></div>
+
 	<div class="pub-search-container"> <!-- search and list view -->
 		<form class="pub-search-form">
-			<label>Search Criteria</label>
-			<input id="search-term-input" type="text" class="form-control"/><br/>
+			<div class="form-group">
+				<label>Search Criteria</label>
+				<input id="search-term-input" type="text" class="form-control"/>
+			</div>
 			{{#if advancedSearch}}
 				<div class="row advanced-search-section">
 					<label for="search-prodID">ProdID</label>
@@ -31,10 +35,9 @@
 					<br/>
 					<label for="search-year">Year</label>
 					<input id="search-year" type="text" />
-					<br/><br/>
 				</div>
 			{{/if}}
-			<button type="button" class="btn btn-default search-btn">Search</button>
+			<button type="button" class="btn btn-default btn-info search-btn">Search</button>
 			{{#if futureFeatures}}
 				{{#if advancedSearch}}
 					<button class="btn btn-link search-link-button">Regular Search</button>
@@ -57,43 +60,17 @@
 	</div>
 
 	<div class="pub-list-section">
-		<div id="pub-management-div">
+		<div class="pub-management-div">
 			<a href="#/publication" class="btn btn-default">Create Publication</a>
 			{{#if futureFeatures}}
-			<button class="pub-edit-selected btn btn-default">Edit Selected</button>
-			<a href="#/contributor" class="pub-contributor-btn btn btn-default">Manage Contributors</a>
-			<button class="pub-remove-from-list-btn btn btn-default">Remove From List</button>
+				<a href="#/contributor" class="pub-contributor-btn btn btn-default">Manage Contributors</a>
+				<button class="pub-remove-from-list-btn btn btn-default">Remove From List</button>
 			{{/if}}
 		</div>
 		<div class="pub-grid-container">
-			{{#if advancedSearch}}
-			{{else}}
-				{{#if searchTerm}}
-					<span>Publications filtered by "{{searchTerm}}"</span>
-				{{else}}
-					{{#if selectedPubsList}}
-						<el>
-							{{#if searchTerm}}
-								<span>and</span>
-							{{/if}}
-							<span>Publications</span>
-							<span>contained in:</span>
-							<ul>
-								{{#each selectedPubsList}}
-									<li>{{this.text}}</li>
-								{{/each}}
-							</ul>
-						</el>
-					{{else}}
-						<span>All publications available</span>
-					{{/if}}
-				{{/if}}
-			{{/if}}
-			<div class="alert-error-container">
-				<div class="loading-indicator"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
-				<div class="alert-container"></div>
-			</div>
 			<div class="pub-grid backgrid-container"></div>
+			<div class="pubs-loading-indicator"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+
 		</div>
 	</div>
 
