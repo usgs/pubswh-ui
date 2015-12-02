@@ -93,7 +93,10 @@ def restricted_page(index_id):
         record = response.json()
         pubdata = munge_pubdata_for_display(record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
         related_pubs = extract_related_pub_info(pubdata)
-        return render_template("pubswh/preview.html", indexID=index_id, pubdata=pubdata, related_pubs=related_pubs)
+        if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
+            return jsonify(pubdata)
+        else:
+            return render_template("pubswh/preview.html", indexID=index_id, pubdata=pubdata, related_pubs=related_pubs)
     # if the publication has been published (so it is out of manage) redirect to the right URL
     elif response.status_code == 404 and published_status == 200:
         return redirect(url_for('pubswh.publication', index_id=index_id))
