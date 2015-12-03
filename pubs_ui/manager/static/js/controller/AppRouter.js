@@ -7,8 +7,9 @@ define([
 	'views/PublicationView',
 	'views/EditContributorView',
 	'models/PublicationModel',
+	'models/PublicationCollection',
 	'models/ContributorModel'
-], function ($, Backbone, SearchView, PublicationView, EditContributorView, PublicationModel, ContributorModel) {
+], function ($, Backbone, SearchView, PublicationView, EditContributorView, PublicationModel, PublicationCollection, ContributorModel) {
 	"use strict";
 
 	var appRouter = Backbone.Router.extend({
@@ -51,7 +52,12 @@ define([
 		},
 
 		searchView: function () {
-			this.createView(SearchView).render();
+			var collection = new PublicationCollection();
+			this.createView(SearchView,
+				{
+					collection : collection
+				}
+			).render();
 		},
 
 		publicationView : function(pubId) {

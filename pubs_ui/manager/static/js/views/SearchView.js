@@ -1,54 +1,52 @@
 /*jslint browser: true */
 
 define([
-	'bootstrap',
-	'handlebars',
 	'views/BaseView',
 	'views/AlertView',
 	'hbs!hb_templates/search',
 	'backgrid',
-	'select-all',
-	'paginator',
-	'backbone.stickit',
-	'models/PublicationCollection'
-], function (bootstrap, Handlebars, BaseView, AlertView, hbTemplate, Backgrid, SelectAll, Paginator, Stickit, PublicationCollection) {
+	'backgrid-select-all',
+	'backgrid-paginator'
+], function (BaseView, AlertView, hbTemplate, Backgrid, SelectAll, Paginator) {
 	"use strict";
 
 	var view = BaseView.extend({
 
 		events : {
+			'click .search-btn' : 'filterPubs',
+			'submit .pub-search-form' : 'filterPubs'
 		},
 
 		template: hbTemplate,
 
 		render : function() {
 			var self = this;
-			BaseView.prototype.render.apply(this, arguments);
+			var $pubList;
 
-			this.$('.loading-indicator').show();
+			BaseView.prototype.render.apply(this, arguments);
+			$pubList = this.$('.pub-grid');
 
 			// Set the elements for child views and render if needed.
 			this.alertView.setElement(this.$('.alert-container'));
 
-			//Don't render grid until the publications have been fetched.
-			this.fetchPromise.done(function() {
-				var $pubList = $(".pub-grid");
-				// Render the grid and attach the root to HTML document
-				$pubList.append(self.grid.render().el);
+			// Render the grid and attach the root to HTML document
+			$pubList.append(this.grid.render().el);
 
-				// Render the paginator
-				$pubList.after(self.paginator.render().el);
+			// Render the paginator
+			$pubList.after(this.paginator.render().el);
 
-			}).fail(function(jqXhr) {
+			this.fetchPromise.fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
 			}).always(function() {
-				self.$('.loading-indicator').hide();
+				// Make sure indicator is hidden. Need to do this in case the sync signal was sent before the view was rendered
+				self.hideLoadingIndicator();
 			});
 		},
 
 		/*
 		 * @param {Object} options
 		 *     @prop {String} el - jquery selector where the view should be rendered
+		 *     @prop {PublicationCollection} collection
 		 */
 		initialize : function(options) {
 			var self = this;
@@ -56,91 +54,112 @@ define([
 
 			this.context.futureFeatures = false;
 
-			this.publicationList = new PublicationCollection();
-			this.listenTo(this.publicationList, 'backgrid:selected', this.editPublication);
+			// Set up collection event handlers and then fetch the collection
+			this.listenTo(this.collection, 'backgrid:selected', this.editPublication);
+			this.listenTo(this.collection, 'request', this.showLoadingIndicator);
+			this.listenTo(this.collection, 'sync', this.hideLoadingIndicator);
 
-			//build grid
-			var columns = [{
-				// name is a required parameter, but you don't really want one on a select all column
-				name: "",
-				// Backgrid.Extension.SelectRowCell lets you select individual rows
-				cell: "select-row"
-			//}, {
-			//	name: "id",
-			//	label: "Link",
-			//	editable: false,
-			//	cell: "uri",
-			//	formatter: _.extend({}, Backgrid.CellFormatter.prototype, {
-			//		fromRaw: function (rawValue, model) {
-			//			return rawValue ? '<a href="#/publication/' + rawValue + '">test</a>' : '';
-			//		}
-			//	})
-			}, {
-				name: "publicationType",
-				label: "Type", // The name to display in the header
-				editable: false, // By default every cell in a column is editable
-				cell: "string",
-				formatter: _.extend({}, Backgrid.StringFormatter.prototype, {
-					fromRaw: function (rawValue, model) {
-						return rawValue ? rawValue.text: '';
-					}
-				})
-			}, {
-				name: "seriesTitle",
-				label: "USGS Series",
-				editable: false,
-				cell: "string",
-				formatter: _.extend({}, Backgrid.StringFormatter.prototype, {
-					fromRaw: function (rawValue, model) {
-						return rawValue ? rawValue.text: '';
-					}
-				})
-			}, {
-				name: "seriesNumber",
-				label: "Report Number",
-				editable: false,
-				cell: "string"
-			}, {
-				name: "publicationYear",
-				label: "Year",
-				editable: false,
-				cell: "string"
-			}, {
-				name: "title",
-				label: "  Title",
-				editable: false,
-				cell: "string"
-			}];
+			this.fetchPromise = this.collection.fetch({reset: true});
+
+			// Create backgrid and paginator views
+			var columns = [
+				{
+					name: "", // name is a required parameter, but you don't really want one on a select all column
+					cell: "select-row"
+				}, {
+					name: "publicationType",
+					label: "Type",
+					editable: false,
+					cell: "string",
+					formatter: _.extend({}, Backgrid.StringFormatter.prototype, {
+						fromRaw: function (rawValue, model) {
+							return rawValue ? rawValue.text: '';
+						}
+					})
+				}, {
+					name: "seriesTitle",
+					label: "USGS Series",
+					editable: false,
+					cell: "string",
+					formatter: _.extend({}, Backgrid.StringFormatter.prototype, {
+						fromRaw: function (rawValue, model) {
+							return rawValue ? rawValue.text: '';
+						}
+					})
+				}, {
+					name: "seriesNumber",
+					label: "Report Number",
+					editable: false,
+					cell: "string"
+				}, {
+					name: "publicationYear",
+					label: "Year",
+					editable: false,
+					cell: "string"
+				}, {
+					name: "title",
+					label: "  Title",
+					editable: false,
+					cell: "string"
+				}
+			];
 
 			// Initialize a new Grid instance
 			this.grid = new Backgrid.Grid({
 				columns: columns,
-				collection: this.publicationList
+				collection: this.collection,
+				className : 'backgrid table-striped table-hover table-bordered'
 			});
 
 			// Initialize the paginator
 			this.paginator = new Backgrid.Extension.Paginator({
-				collection: this.publicationList
+				collection: this.collection
 			});
 
-			this.fetchPromise = this.publicationList.fetch({reset: true});
-
-			// Create child views
+			// Create other child views
 			this.alertView = new AlertView({
 				el: '.alert-container'
 			});
 		},
 
 		remove : function() {
+			this.grid.remove();
+			this.paginator.remove();
 			this.alertView.remove();
 			BaseView.prototype.remove.apply(this, arguments);
 			return this;
 		},
 
+		/*
+		 * DOM event handlers
+		 */
 		editPublication : function(ev) {
 			this.router.navigate('publication/' + ev.id, {trigger: true});
-		}
+		},
 
+		filterPubs : function(ev) {
+			var self = this;
+
+			ev.preventDefault();
+			this.collection.updateFilters({
+				q : this.$('#search-term-input').val()
+			});
+			this.collection.getFirstPage()
+					.fail(function(jqXhr) {
+						self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
+					});
+		},
+
+		/* collection event handlers */
+		showLoadingIndicator : function() {
+			console.log('Show loading indicator');
+			this.$('.pubs-loading-indicator').show();
+		},
+
+		hideLoadingIndicator : function() {
+			console.log('Hide loading indicator');
+			this.$('.pubs-loading-indicator').hide();
+		}
 	});
 
 	return view;
