@@ -64,13 +64,23 @@ define([
 				format : 'YYYY-MM-DD'
 			});
 			this.$('#published-date-input-div').on('dp.change', function(ev) {
-				self.model.set('publishedDate', ev.date.format('YYYY-MM-DD'));
+				if (ev.date) {
+					self.model.set('publishedDate', ev.date.format('YYYY-MM-DD'));
+				}
+				else {
+					self.model.unset('publishedDate');
+				}
 			});
 			this.$('#revised-date-input-div').datetimepicker({
 				format : 'YYYY-MM-DD'
 			});
 			this.$('#revised-date-input-div').on('dp.change', function(ev) {
-				self.model.set('revisedDate', ev.date.format('YYYY-MM-DD'));
+				if (ev.date) {
+					self.model.set('revisedDate', ev.date.format('YYYY-MM-DD'));
+				}
+				else {
+					self.model.unset('revisedDate');
+				}
 			});
 
 			this.stickit();

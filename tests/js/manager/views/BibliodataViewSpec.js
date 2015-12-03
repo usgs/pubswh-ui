@@ -3,12 +3,10 @@
 define([
 	'squire',
 	'jquery',
-	'select2',
-	'tinymce',
 	'backbone',
 	'models/PublicationModel',
 	'models/LookupModel',
-], function(Squire, $, select2, tinymce, Backbone, PublicationModel, LookupModel, template) {
+], function(Squire, $, Backbone, PublicationModel, LookupModel, template) {
 	"use strict";
 
 	describe('BibliodataView', function() {
@@ -36,6 +34,8 @@ define([
 				}
 			});
 
+			spyOn(window, 'setInterval');// So the tinymce does not get initialized
+
 			var injector = new Squire();
 			injector.mock('jquery', $);
 			injector.mock('models/PublicationTypeCollection', Backbone.Collection.extend({
@@ -48,7 +48,6 @@ define([
 				url : '/test/lookup',
 				fetch : costCenterFetchSpy
 			}));
-			injector.mock('tinymce', tinymce);
 
 			injector.require(['views/BibliodataView'], function(view){
 				BibliodataView = view;
@@ -88,7 +87,6 @@ define([
 					el : '#test-div'
 				});
 				spyOn(testView, 'stickit');
-				spyOn(tinymce, 'init');
 				spyOn($.fn, 'select2').and.callThrough();
 			});
 
@@ -128,7 +126,6 @@ define([
 
 			beforeEach(function() {
 				spyOn(testView, 'stickit');
-				spyOn(tinymce, 'init');
 				spyOn($.fn, 'select2')
 
 				pubModel.set({
@@ -268,7 +265,6 @@ define([
 
 			beforeEach(function() {
 				spyOn(testView, 'stickit');
-				spyOn(tinymce, 'init');
 				spyOn($.fn, 'select2').and.callThrough();
 
 				pubModel.set({

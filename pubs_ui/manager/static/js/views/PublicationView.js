@@ -68,7 +68,12 @@ define([
 				format : 'YYYY-MM-DDTHH:mm:ss [E]T'
 			});
 			this.$('#display-date').on('dp.change', function(ev) {
-				self.model.set('displayToPublicDate', ev.date.format('YYYY-MM-DDTHH:mm:ss'));
+				if (ev.date) {
+					self.model.set('displayToPublicDate', ev.date.format('YYYY-MM-DDTHH:mm:ss'));
+				}
+				else {
+					self.model.unset('displayToPublicDate');
+				}
 			});
 
 			// Sets up the binding between DOM elements and the model //

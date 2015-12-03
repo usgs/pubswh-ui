@@ -1,6 +1,9 @@
 	config : {
 		'views/ContributorRowView' : {
 			lookupUrl : "test_lookup/"
+		},
+		'views/SPNView' : {
+		    lookupUrl : "test_lookup/"
 		}
 	},
 	baseUrl : '/pubs_ui/manager/static/js',
