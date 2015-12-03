@@ -10,10 +10,11 @@ define([
 	'views/BibliodataView',
 	'views/LinksView',
 	'views/ContributorsView',
+	'views/SPNView',
 	'hbs!hb_templates/publication',
 	'backbone.stickit'
 ], function(_, bootstrap, datetimepicker, BaseView, AlertView, ConfirmationDialogView,
-			BibliodataView, LinksView, ContributorsView, hbTemplate, Stickit) {
+			BibliodataView, LinksView, ContributorsView, SPNView, hbTemplate, Stickit) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -92,6 +93,8 @@ define([
 			}).fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the publication: ' + jqXhr.statusText);
 			});
+
+			return this;
 		},
 
 		/*
@@ -141,6 +144,13 @@ define([
 					view : new ContributorsView({
 						el : '#contributors-pane',
 						model : this.model.get('contributors')
+					})
+				},
+				spn : {
+					el : '#spn-pane',
+					view : new SPNView({
+						el : '#spn-pane',
+						model : this.model
 					})
 				}
 			};
