@@ -58,7 +58,7 @@
                 {% endif %}
             {% endmacro %}
 
-            {% if pubdata['seriesTitle']['text'] == "Scientific Investigations Map" and pubdata['displayLinks']['Sheet']|length >= 1 %}
+            {% if pubdata['seriesTitle'] and pubdata['seriesTitle']['text'] == "Scientific Investigations Map" and pubdata['displayLinks']['Sheet']|length >= 1 %}
                 <a title ="First sheet link, right click to download or save as" href="{{ (pubdata['displayLinks']['Sheet']|sort(attribute='rank')|first)["url"] }}">{{ thumbnail_image() }}</a>
             {% elif pubdata['displayLinks']['Document']|length >= 1 %}
                 <a title ="Main document link, right click to download or save as" href="{{ (pubdata['displayLinks']['Document']|sort(attribute='rank')|first)['url'] }}">{{ thumbnail_image() }}</a>
