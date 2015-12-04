@@ -13,20 +13,21 @@ define([
 	var model = Backbone.Model.extend({
 		urlRoot : module.config().scriptRoot + '/manager/services/mppublications',
 
-		/*
-		 * The contributors attribute is a backbone model. This model contains attributes whose value
-		 * is a PublicationContributorCollection.
-		 */
 		defaults : function() {
 			return {
-				links: new LinkCollection(),
-				contributors : new Backbone.Model()
+				links : '',
+				contributors : ''
 			}
 		},
 
+
+		/*
+		 * The contributors attribute is a backbone model. This model contains attributes whose value
+		 * is a PublicationContributorCollection. The links attribute is a LinkCollection.
+		 */
 		parse : function(response, options) {
-			var links = (this.has('links')) ? this.get('links') : new LinkCollection();
-			var contributors = (this.has('contributors')) ? this.get('contributors') : new Backbone.Model();
+			var links = new LinkCollection();
+			var contributors = new Backbone.Model();
 			if (_.has(response, 'links') && response.links.length) {
 				links.set(_.sortBy(response.links, 'rank'));
 			}

@@ -96,11 +96,32 @@ define([
 					label: "Year",
 					editable: false,
 					cell: "string"
+				},{
+					name: 'indexId',
+					label : 'Index ID',
+					editable : false,
+					cell: 'string'
 				}, {
 					name: "title",
-					label: "  Title",
+					label: "Title",
 					editable: false,
 					cell: "string"
+				},{
+					name: 'contributors',
+					label: 'First Author',
+					editable : false,
+					cell: 'string',
+					formatter : {
+						fromRaw : function(rawValue, model) {
+							if (rawValue.has('authors') && (rawValue.get('authors').length === 0)) {
+								return rawValue.get('authors').at(0).get('text');
+							}
+							else {
+								return '';
+							}
+						},
+						toRaw : Backgrid.StringFormatter.toRaw
+					}
 				}
 			];
 
@@ -152,12 +173,10 @@ define([
 
 		/* collection event handlers */
 		showLoadingIndicator : function() {
-			console.log('Show loading indicator');
 			this.$('.pubs-loading-indicator').show();
 		},
 
 		hideLoadingIndicator : function() {
-			console.log('Hide loading indicator');
 			this.$('.pubs-loading-indicator').hide();
 		}
 	});
