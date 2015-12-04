@@ -113,8 +113,8 @@ define([
 					cell: 'string',
 					formatter : {
 						fromRaw : function(rawValue, model) {
-							if (rawValue.has('authors') && (rawValue.get('authors').length === 0)) {
-								return rawValue.get('authors').at(0).get('text');
+							if (_.has(rawValue, 'authors') && (_.isArray(rawValue.authors)) && (rawValue.authors.length > 0)) {
+								return rawValue.authors[0].text;
 							}
 							else {
 								return '';

@@ -11,7 +11,6 @@ define([
 	"use strict";
 
 	var collection = Backbone.PageableCollection.extend({
-		model : PublicationModel,
 
 		url : function() {
 			return module.config().scriptRoot + '/manager/services/mppublications?mimetype=json' +
@@ -53,7 +52,19 @@ define([
 		parseRecords: function (resp, options) {
 			return _.map(resp.records, function(element) {
 				var pubModel = new PublicationModel();
-				return pubModel.parse(element);
+				var response = pubModel.parse(element);
+				// Change the attributes that are collections or models into arrays of objects. The native parse for Backbone.collection
+				// does not handle attributes that are collections or models well and you end up with these attributes to not contain
+				// what is expected.
+				var contributorsResp = {};
+
+				response.links = response.links.toJSON();
+
+				_.each(response.contributors.attributes, function(collection, contribType) {
+					contributorsResp[contribType] = collection.toJSON();
+				});
+				response.contributors = contributorsResp;
+				return response;
 			});
 		}
 
