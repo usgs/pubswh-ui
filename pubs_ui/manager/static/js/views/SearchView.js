@@ -1,14 +1,15 @@
 /*jslint browser: true */
 
 define([
-	'views/BaseView',
-	'views/AlertView',
-	'views/BackgridUrlCell',
-	'hbs!hb_templates/search',
 	'backgrid',
 	'backgrid-select-all',
-	'backgrid-paginator'
-], function (BaseView, AlertView, BackgridUrlCell, hbTemplate, Backgrid, SelectAll, Paginator) {
+	'backgrid-paginator',
+	'views/BackgridUrlCell',
+	'views/BackgridClientSortingBody',
+	'views/BaseView',
+	'views/AlertView',
+	'hbs!hb_templates/search'
+], function (Backgrid, SelectAll, Paginator, BackgridUrlCell, BackgridClientSortingBody, BaseView, AlertView, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -56,11 +57,33 @@ define([
 			this.context.futureFeatures = false;
 
 			// Set up collection event handlers and then fetch the collection
-			this.listenTo(this.collection, 'backgrid:selected', this.editPublication);
+			this.listenTo(this.collection, 'request', this.showLoadingIndicator);
 			this.listenTo(this.collection, 'request', this.showLoadingIndicator);
 			this.listenTo(this.collection, 'sync', this.hideLoadingIndicator);
 
 			this.fetchPromise = this.collection.fetch({reset: true});
+
+			var fromRawLookup = function(rawValue, model) {
+				return (rawValue) ? rawValue.text : '';
+			};
+			var sortValueLookup = function(model, colName) {
+				return fromRawLookup(model.get(colName), model);
+			};
+			var sortValueText = function(model, colName) {
+				return (model.has(colName)) ? model.get(colName) : '';
+			};
+
+			var fromRawFirstAuthor = function(rawValue, model) {
+				if ((rawValue) && _.has(rawValue, 'authors') && (_.isArray(rawValue.authors)) && (rawValue.authors.length > 0)) {
+					return rawValue.authors[0].text;
+				}
+				else {
+					return '';
+				}
+			};
+			var sortValueFirstAuthor = function(model, colName) {
+				return fromRawFirstAuthor(model.get(colName));
+			};
 
 			// Create backgrid and paginator views
 			var columns = [
@@ -68,9 +91,10 @@ define([
 					name: 'id',
 					label : '',
 					editable : false,
+					sortable : false,
 					cell: BackgridUrlCell.extend({
 						router : this.router,
-						toHref : function(rawValue, model) {
+						toFragment : function(rawValue, model) {
 							return 'publication/' + rawValue;
 						},
 						title : 'Click to edit'
@@ -78,70 +102,73 @@ define([
 					formatter : {
 						fromRaw : function(rawValue, model) {
 							return 'Edit'
-						},
-						toRaw : Backgrid.StringFormatter.toRaw
+						}
 					}
 				}, {
 					name: "publicationType",
 					label: "Type",
 					editable: false,
+					sortable : true,
 					cell: "string",
-					formatter: _.extend({}, Backgrid.StringFormatter.prototype, {
-						fromRaw: function (rawValue, model) {
-							return rawValue ? rawValue.text: '';
-						},
-					})
+					formatter : {
+						fromRaw : fromRawLookup
+					},
+
+					sortValue : sortValueLookup
 				}, {
 					name: "seriesTitle",
 					label: "USGS Series",
 					editable: false,
+					sortable : true,
 					cell: "string",
-					formatter: _.extend({}, Backgrid.StringFormatter.prototype, {
-						fromRaw: function (rawValue, model) {
-							return rawValue ? rawValue.text: '';
-						}
-					})
+					formatter: {
+						fromRaw: fromRawLookup
+					},
+					sortValue : sortValueLookup
 				}, {
 					name: "seriesNumber",
 					label: "Report Number",
 					editable: false,
-					cell: "string"
+					sortable : true,
+					cell: "string",
+					sortValue : sortValueText
 				}, {
 					name: "publicationYear",
 					label: "Year",
 					editable: false,
-					cell: "string"
+					sortable : true,
+					cell: "string",
+					sortValue : sortValueText
 				},{
 					name: 'indexId',
 					label : 'Index ID',
 					editable : false,
-					cell: 'string'
+					sortable : true,
+					cell: 'string',
+					sortValue : sortValueText
 				}, {
 					name: "title",
 					label: "Title",
 					editable: false,
-					cell: "string"
+					sortable : true,
+					cell: "string",
+					sortValue : sortValueText
 				},{
 					name: 'contributors',
 					label: 'First Author',
 					editable : false,
+					sortable : true,
 					cell: 'string',
 					formatter : {
-						fromRaw : function(rawValue, model) {
-							if (_.has(rawValue, 'authors') && (_.isArray(rawValue.authors)) && (rawValue.authors.length > 0)) {
-								return rawValue.authors[0].text;
-							}
-							else {
-								return '';
-							}
-						},
-						toRaw : Backgrid.StringFormatter.toRaw
-					}
+						fromRaw : fromRawFirstAuthor
+					},
+					sortValue : sortValueFirstAuthor
 				}
 			];
 
 			// Initialize a new Grid instance
 			this.grid = new Backgrid.Grid({
+				body : BackgridClientSortingBody,
 				columns: columns,
 				collection: this.collection,
 				className : 'backgrid table-striped table-hover table-bordered'
@@ -149,7 +176,8 @@ define([
 
 			// Initialize the paginator
 			this.paginator = new Backgrid.Extension.Paginator({
-				collection: this.collection
+				collection: this.collection,
+				goBackFirstOnSort : false
 			});
 
 			// Create other child views
@@ -169,10 +197,6 @@ define([
 		/*
 		 * DOM event handlers
 		 */
-		editPublication : function(ev) {
-			this.router.navigate('publication/' + ev.id, {trigger: true});
-		},
-
 		filterPubs : function(ev) {
 			var self = this;
 
