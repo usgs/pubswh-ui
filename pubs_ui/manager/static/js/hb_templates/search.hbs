@@ -3,9 +3,11 @@
 
 	<div class="pub-search-container"> <!-- search and list view -->
 		<form class="pub-search-form">
-			<div class="form-group">
-				<label>Search Criteria</label>
+			<div class="form-group has-feedback">
+				<label for="search-term-input">Search Criteria</label>
 				<input id="search-term-input" type="text" class="form-control"/>
+				<span class="form-control-feedback"><i class="fa fa-search"></i></span>
+
 			</div>
 			{{#if advancedSearch}}
 				<div class="row advanced-search-section">
