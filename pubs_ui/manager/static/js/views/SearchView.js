@@ -3,11 +3,12 @@
 define([
 	'views/BaseView',
 	'views/AlertView',
+	'views/BackgridUrlCell',
 	'hbs!hb_templates/search',
 	'backgrid',
 	'backgrid-select-all',
 	'backgrid-paginator'
-], function (BaseView, AlertView, hbTemplate, Backgrid, SelectAll, Paginator) {
+], function (BaseView, AlertView, BackgridUrlCell, hbTemplate, Backgrid, SelectAll, Paginator) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -64,8 +65,22 @@ define([
 			// Create backgrid and paginator views
 			var columns = [
 				{
-					name: "", // name is a required parameter, but you don't really want one on a select all column
-					cell: "select-row"
+					name: 'id',
+					label : '',
+					editable : false,
+					cell: BackgridUrlCell.extend({
+						router : this.router,
+						toHref : function(rawValue, model) {
+							return 'publication/' + rawValue;
+						},
+						title : 'Click to edit'
+					}),
+					formatter : {
+						fromRaw : function(rawValue, model) {
+							return 'Edit'
+						},
+						toRaw : Backgrid.StringFormatter.toRaw
+					}
 				}, {
 					name: "publicationType",
 					label: "Type",
@@ -74,7 +89,7 @@ define([
 					formatter: _.extend({}, Backgrid.StringFormatter.prototype, {
 						fromRaw: function (rawValue, model) {
 							return rawValue ? rawValue.text: '';
-						}
+						},
 					})
 				}, {
 					name: "seriesTitle",
