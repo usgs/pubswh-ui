@@ -16,7 +16,8 @@ define([
 
 		events : {
 			'click .search-btn' : 'filterPubs',
-			'submit .pub-search-form' : 'filterPubs'
+			'submit .pub-search-form' : 'filterPubs',
+			'change .page-size-select' : 'changePageSize'
 		},
 
 		template: hbTemplate,
@@ -35,13 +36,13 @@ define([
 			$pubList.append(this.grid.render().el);
 
 			// Render the paginator
-			$pubList.after(this.paginator.render().el);
+			this.$('.pub-grid-footer').append(this.paginator.render().el);
 
 			this.fetchPromise.fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
 			}).always(function() {
 				// Make sure indicator is hidden. Need to do this in case the sync signal was sent before the view was rendered
-				self.hideLoadingIndicator();
+				self.updatePubsListDisplay();
 			});
 		},
 
@@ -58,8 +59,7 @@ define([
 
 			// Set up collection event handlers and then fetch the collection
 			this.listenTo(this.collection, 'request', this.showLoadingIndicator);
-			this.listenTo(this.collection, 'request', this.showLoadingIndicator);
-			this.listenTo(this.collection, 'sync', this.hideLoadingIndicator);
+			this.listenTo(this.collection, 'sync', this.updatePubsListDisplay);
 
 			this.fetchPromise = this.collection.fetch({reset: true});
 
@@ -210,13 +210,18 @@ define([
 					});
 		},
 
+		changePageSize : function(ev) {
+			this.collection.setPageSize(parseInt(ev.currentTarget.value));
+		},
+
 		/* collection event handlers */
 		showLoadingIndicator : function() {
 			this.$('.pubs-loading-indicator').show();
 		},
 
-		hideLoadingIndicator : function() {
+		updatePubsListDisplay : function() {
 			this.$('.pubs-loading-indicator').hide();
+			this.$('.pubs-count').html(this.collection.state.totalRecords);
 		}
 	});
 
