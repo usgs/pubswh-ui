@@ -1,6 +1,7 @@
 /*jslint browser: true */
 
 define([
+	'module',
 	'backgrid',
 	'backgrid-select-all',
 	'backgrid-paginator',
@@ -9,7 +10,7 @@ define([
 	'views/BaseView',
 	'views/AlertView',
 	'hbs!hb_templates/search'
-], function (Backgrid, SelectAll, Paginator, BackgridUrlCell, BackgridClientSortingBody, BaseView, AlertView, hbTemplate) {
+], function (module, Backgrid, SelectAll, Paginator, BackgridUrlCell, BackgridClientSortingBody, BaseView, AlertView, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -55,7 +56,9 @@ define([
 			var self = this;
 			BaseView.prototype.initialize.apply(this, arguments);
 
-			this.context.futureFeatures = false;
+			this.context.futureFeatures = false; // Using this temporarily to hide parts of the search template
+			// Can get rid of this once the edit contributors page is implemented.
+			this.context.oldMyPubsEndpoint = module.config().oldMyPubsEndpoint;
 
 			// Set up collection event handlers and then fetch the collection
 			this.listenTo(this.collection, 'request', this.showLoadingIndicator);

@@ -64,10 +64,7 @@
 	<div class="pub-list-section">
 		<div class="pub-management-div">
 			<a href="#/publication" class="btn btn-default">Create Publication</a>
-			{{#if futureFeatures}}
-				<a href="#/contributor" class="pub-contributor-btn btn btn-default">Manage Contributors</a>
-				<button class="pub-remove-from-list-btn btn btn-default">Remove From List</button>
-			{{/if}}
+			<a href="{{oldMyPubsEndpoint}}#/Contributor" class="pub-contributor-btn btn btn-default">Manage Contributors</a>
 		</div>
 		<div class="pub-grid-container">
 			<div class="pub-grid backgrid-container"></div>

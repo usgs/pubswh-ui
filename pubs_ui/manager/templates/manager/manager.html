@@ -53,11 +53,15 @@
 				'models/PublishingServiceCenterCollection' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
+				'views/SearchView' : {
+					oldMyPubsEndpoint : "{{ config.OLD_MYPUBS_ENDPOINT }}"
+				},
 				'views/BibliodataView' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
 				'views/ContributorRowView' : {
-					lookupUrl : "{{ config.LOOKUP_URL }}"
+					lookupUrl : "{{ config.LOOKUP_URL }}",
+					oldMyPubsEndpoint : "{{ config.OLD_MYPUBS_ENDPOINT }}"
 				},
 				'views/SPNView' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
