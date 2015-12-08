@@ -247,6 +247,7 @@ define([
 					model : pubModel,
 					el : '#test-div'
 				}).render();
+				testView.context.previewUrl = '/preview/';
 			});
 
 			it('Expects the preview div to be shown if the id is non null and hidden if it is null', function() {
