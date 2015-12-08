@@ -1,7 +1,7 @@
 PubsWarehouse_UI
 ================
 
-To get this application running using the flask local dev server you need to create a local_settings.py file
+To get this application running using the flask local dev server you need to create an instances/config.py file
 under PubsWarehouse_UI folder.  The contents of the file should looks like so:
 
  ```python
