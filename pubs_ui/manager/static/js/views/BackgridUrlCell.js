@@ -5,6 +5,11 @@ define([
 	], function(Backgrid) {
 	"use strict";
 
+	/*
+	 * This implements a cell which contains a link. The title attribute can be set via the title property.
+	 * The link text uses the formatter's fromRaw result. When the link is clicked, the view uses the provided
+	 * router property to navigate to the result of the toFragment property.
+	 */
 	var view = Backgrid.Cell.extend({
 		// The following three properties should be overridden.
 		title : '', // Used as the hover in the cell
