@@ -4,6 +4,7 @@ define([
 	'underscore',
 	'bootstrap',
 	'datetimepicker',
+	'module',
 	'views/BaseView',
 	'views/AlertView',
 	'views/ConfirmationDialogView',
@@ -13,7 +14,7 @@ define([
 	'views/SPNView',
 	'hbs!hb_templates/publication',
 	'backbone.stickit'
-], function(_, bootstrap, datetimepicker, BaseView, AlertView, ConfirmationDialogView,
+], function(_, bootstrap, datetimepicker, module, BaseView, AlertView, ConfirmationDialogView,
 			BibliodataView, LinksView, ContributorsView, SPNView, hbTemplate, Stickit) {
 	"use strict";
 
@@ -112,6 +113,7 @@ define([
 			BaseView.prototype.initialize.apply(this, arguments);
 
 			this.context.id = this.model.get('id');
+			this.context.previewUrl = module.config().previewUrl;
 			this.listenTo(this.model, 'change:id', this.updatePubId);
 
 			if (this.context.id) {
@@ -179,7 +181,7 @@ define([
 		updatePubId : function(model, newId) {
 			if (newId) {
 				this.$('#pub-preview-div').show();
-				this.$('#pub-preview-div a').attr('href', 'https://pubs.er.usgs.gov/preview/' + newId);
+				this.$('#pub-preview-div a').attr('href', this.context.previewUrl + newId);
 			}
 			else {
 				this.$('#pub-preview-div').hide();
