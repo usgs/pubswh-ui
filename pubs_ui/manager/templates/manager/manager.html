@@ -54,7 +54,7 @@
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
 				'views/PublicationView' : {
-					previewUrl : "{{ request.script_root }}{{ url_for('pubswh.restricted_page', index_id='') }}"
+					previewUrl : "{{ url_for('pubswh.restricted_page', index_id='') }}"
 				},
 				'views/BibliodataView' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
