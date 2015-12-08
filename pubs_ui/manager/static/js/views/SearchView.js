@@ -1,20 +1,24 @@
 /*jslint browser: true */
 
 define([
-	'views/BaseView',
-	'views/AlertView',
-	'hbs!hb_templates/search',
+	'module',
 	'backgrid',
 	'backgrid-select-all',
-	'backgrid-paginator'
-], function (BaseView, AlertView, hbTemplate, Backgrid, SelectAll, Paginator) {
+	'backgrid-paginator',
+	'views/BackgridUrlCell',
+	'views/BackgridClientSortingBody',
+	'views/BaseView',
+	'views/AlertView',
+	'hbs!hb_templates/search'
+], function (module, Backgrid, SelectAll, Paginator, BackgridUrlCell, BackgridClientSortingBody, BaseView, AlertView, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
 
 		events : {
 			'click .search-btn' : 'filterPubs',
-			'submit .pub-search-form' : 'filterPubs'
+			'submit .pub-search-form' : 'filterPubs',
+			'change .page-size-select' : 'changePageSize'
 		},
 
 		template: hbTemplate,
@@ -33,13 +37,13 @@ define([
 			$pubList.append(this.grid.render().el);
 
 			// Render the paginator
-			$pubList.after(this.paginator.render().el);
+			this.$('.pub-grid-footer').append(this.paginator.render().el);
 
 			this.fetchPromise.fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
 			}).always(function() {
 				// Make sure indicator is hidden. Need to do this in case the sync signal was sent before the view was rendered
-				self.hideLoadingIndicator();
+				self.updatePubsListDisplay();
 			});
 		},
 
@@ -52,60 +56,122 @@ define([
 			var self = this;
 			BaseView.prototype.initialize.apply(this, arguments);
 
-			this.context.futureFeatures = false;
+			this.context.futureFeatures = false; // Using this temporarily to hide parts of the search template
+			// Can get rid of this once the edit contributors page is implemented.
+			this.context.oldMyPubsEndpoint = module.config().oldMyPubsEndpoint;
 
 			// Set up collection event handlers and then fetch the collection
-			this.listenTo(this.collection, 'backgrid:selected', this.editPublication);
 			this.listenTo(this.collection, 'request', this.showLoadingIndicator);
-			this.listenTo(this.collection, 'sync', this.hideLoadingIndicator);
+			this.listenTo(this.collection, 'sync', this.updatePubsListDisplay);
 
 			this.fetchPromise = this.collection.fetch({reset: true});
+
+			var fromRawLookup = function(rawValue, model) {
+				return (rawValue) ? rawValue.text : '';
+			};
+			var sortValueLookup = function(model, colName) {
+				return fromRawLookup(model.get(colName), model);
+			};
+			var sortValueText = function(model, colName) {
+				return (model.has(colName)) ? model.get(colName) : '';
+			};
+
+			var fromRawFirstAuthor = function(rawValue, model) {
+				if ((rawValue) && _.has(rawValue, 'authors') && (_.isArray(rawValue.authors)) && (rawValue.authors.length > 0)) {
+					return rawValue.authors[0].text;
+				}
+				else {
+					return '';
+				}
+			};
+			var sortValueFirstAuthor = function(model, colName) {
+				return fromRawFirstAuthor(model.get(colName));
+			};
 
 			// Create backgrid and paginator views
 			var columns = [
 				{
-					name: "", // name is a required parameter, but you don't really want one on a select all column
-					cell: "select-row"
+					name: 'id',
+					label : '',
+					editable : false,
+					sortable : false,
+					cell: BackgridUrlCell.extend({
+						router : this.router,
+						toFragment : function(rawValue, model) {
+							return 'publication/' + rawValue;
+						},
+						title : 'Click to edit'
+					}),
+					formatter : {
+						fromRaw : function(rawValue, model) {
+							return 'Edit'
+						}
+					}
 				}, {
 					name: "publicationType",
 					label: "Type",
 					editable: false,
+					sortable : true,
 					cell: "string",
-					formatter: _.extend({}, Backgrid.StringFormatter.prototype, {
-						fromRaw: function (rawValue, model) {
-							return rawValue ? rawValue.text: '';
-						}
-					})
+					formatter : {
+						fromRaw : fromRawLookup
+					},
+
+					sortValue : sortValueLookup
 				}, {
 					name: "seriesTitle",
 					label: "USGS Series",
 					editable: false,
+					sortable : true,
 					cell: "string",
-					formatter: _.extend({}, Backgrid.StringFormatter.prototype, {
-						fromRaw: function (rawValue, model) {
-							return rawValue ? rawValue.text: '';
-						}
-					})
+					formatter: {
+						fromRaw: fromRawLookup
+					},
+					sortValue : sortValueLookup
 				}, {
 					name: "seriesNumber",
 					label: "Report Number",
 					editable: false,
-					cell: "string"
+					sortable : true,
+					cell: "string",
+					sortValue : sortValueText
 				}, {
 					name: "publicationYear",
 					label: "Year",
 					editable: false,
-					cell: "string"
+					sortable : true,
+					cell: "string",
+					sortValue : sortValueText
+				},{
+					name: 'indexId',
+					label : 'Index ID',
+					editable : false,
+					sortable : true,
+					cell: 'string',
+					sortValue : sortValueText
 				}, {
 					name: "title",
-					label: "  Title",
+					label: "Title",
 					editable: false,
-					cell: "string"
+					sortable : true,
+					cell: "string",
+					sortValue : sortValueText
+				},{
+					name: 'contributors',
+					label: 'First Author',
+					editable : false,
+					sortable : true,
+					cell: 'string',
+					formatter : {
+						fromRaw : fromRawFirstAuthor
+					},
+					sortValue : sortValueFirstAuthor
 				}
 			];
 
 			// Initialize a new Grid instance
 			this.grid = new Backgrid.Grid({
+				body : BackgridClientSortingBody,
 				columns: columns,
 				collection: this.collection,
 				className : 'backgrid table-striped table-hover table-bordered'
@@ -113,7 +179,8 @@ define([
 
 			// Initialize the paginator
 			this.paginator = new Backgrid.Extension.Paginator({
-				collection: this.collection
+				collection: this.collection,
+				goBackFirstOnSort : false
 			});
 
 			// Create other child views
@@ -133,10 +200,6 @@ define([
 		/*
 		 * DOM event handlers
 		 */
-		editPublication : function(ev) {
-			this.router.navigate('publication/' + ev.id, {trigger: true});
-		},
-
 		filterPubs : function(ev) {
 			var self = this;
 
@@ -150,15 +213,18 @@ define([
 					});
 		},
 
+		changePageSize : function(ev) {
+			this.collection.setPageSize(parseInt(ev.currentTarget.value));
+		},
+
 		/* collection event handlers */
 		showLoadingIndicator : function() {
-			console.log('Show loading indicator');
 			this.$('.pubs-loading-indicator').show();
 		},
 
-		hideLoadingIndicator : function() {
-			console.log('Hide loading indicator');
+		updatePubsListDisplay : function() {
 			this.$('.pubs-loading-indicator').hide();
+			this.$('.pubs-count').html(this.collection.state.totalRecords);
 		}
 	});
 

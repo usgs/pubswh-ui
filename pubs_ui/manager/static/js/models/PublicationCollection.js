@@ -11,7 +11,6 @@ define([
 	"use strict";
 
 	var collection = Backbone.PageableCollection.extend({
-		model : PublicationModel,
 
 		url : function() {
 			return module.config().scriptRoot + '/manager/services/mppublications?mimetype=json' +
@@ -49,12 +48,11 @@ define([
 			return {totalRecords: resp.recordCount};
 		},
 
-		// get the actual records
+		// get the actual records. We are not using PublicationModel.parse because that returns some properties as models
+		// or collections. The Backbone code does not seem to handle this well as the collections and models get garbled.
+		// This collection will contain properties which are JSON objects.
 		parseRecords: function (resp, options) {
-			return _.map(resp.records, function(element) {
-				var pubModel = new PublicationModel();
-				return pubModel.parse(element);
-			});
+			return resp.records;
 		}
 
 	});

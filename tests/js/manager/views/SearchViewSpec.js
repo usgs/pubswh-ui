@@ -30,6 +30,7 @@ define([
 
 			testCollection = new PublicationCollection();
 			spyOn(testCollection, 'fetch').and.callThrough();
+			spyOn(testCollection, 'setPageSize').and.callThrough();
 
 			injector = new Squire();
 			injector.mock('views/AlertView', BaseView.extend({
@@ -44,7 +45,7 @@ define([
 				// Don't set up the fake server until after dependencies have been loaded
 
 				server = sinon.fakeServer.create();
-				server.respondWith('{"pageSize":"3","pageRowStart":"0","pageNumber":null,"recordCount":140153,"records":' +
+				server.respondWith('{"pageSize":"3","pageRowStart":"0","pageNumber":null,"recordCount":3,"records":' +
 				'[{"id":70004236,"text":"70004236 - noyr - Estimates of In-Place Oil Shale", "lastModifiedDate":"2015-12-02T09:59:51","indexId":"70004236","publicationYear":"2015","publicationType":{"id":4,"text":"Book"},"title":"Estimates of In-Place Oil Shale"},' +
 				'{"id":70004244,"text":"70004244 - noyr - Diversity of the Lunar Maria", "lastModifiedDate":"2012-07-23T14:22:01","indexId":"70004244","publicationYear":"2014","publicationType":{"id":4,"text":"Book"},"title":"Diversity of the Lunar Maria"},' +
 				'{"id":70004243,"text":"70004243 - noyr - Developing Climate Data Records","lastModifiedDate":"2012-03-27T16:31:33","indexId":"70004243","publicationYear":"2014","publicationType":{"id":4,"text":"Book"},"title":"Developing Climate Data Records"}]}');
@@ -100,11 +101,13 @@ define([
 			});
 
 			it('Expects that the loading indicator is shown until the fetch has been resolved', function() {
+				var $loadingIndicator;
 				testView.render();
-				expect(testView.$('.pubs-loading-indicator').is(':visible')).toBe(true);
+				$loadingIndicator = testView.$('.pubs-loading-indicator');
+				expect($loadingIndicator.is(':visible')).toBe(true);
 				server.respond();
-				expect(testView.$('.pubs-loading-indicator').is(':visible')).toBe(false);
-
+				expect($loadingIndicator.is(':visible')).toBe(false);
+				expect(testView.$('.pubs-count').html()).toEqual('3');
 			});
 		});
 
@@ -149,6 +152,12 @@ define([
 				expect(testCollection.updateFilters).toHaveBeenCalledWith({q : 'Search term'});
 				expect(testCollection.getFirstPage).toHaveBeenCalled();
 			});
+
+			it('Expects that when the page size select is changed, the collection\'s page size is updated', function() {
+				testView.render();
+				testView.$('.page-size-select').val('25').trigger('change');
+				expect(testCollection.setPageSize).toHaveBeenCalledWith(25);
+			})
 		});
 
 		describe('Tests for collection event listeners', function() {
@@ -163,7 +172,9 @@ define([
 
 			it('Expects that the loading indicator becomes visible after the fetch start and changes to invisible when the fetch is complete', function() {
 				var $loadingIndicator = testView.$('.pubs-loading-indicator');
+				var $pubsCount = testView.$('.pubs-count');
 				expect($loadingIndicator.is(':visible')).toBe(false);
+				expect($pubsCount.html()).toEqual('3');
 				testCollection.fetch();
 				expect($loadingIndicator.is(':visible')).toBe(true);
 				server.respond();

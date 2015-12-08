@@ -45,6 +45,9 @@ under PubsWarehouse_UI folder.  The contents of the file should looks like so:
  #CACHE_CONFIG = {'CACHE_TYPE': 'simple'}
 
  BOWER_TRY_MINIFIED = True // Set to false if you would like to debug in the browser into a bower javascript library
+ 
+ #The following should be removed when we completely retire the old MyPubs Angular app.
+ OLD_MYPUBS_ENDPOINT = 'endpoint of the old mypubs application'
  ```
  
 To create the virtualenv you should have python 2.7, virtualenv, pip installed. To install the javascript dependencies you will
