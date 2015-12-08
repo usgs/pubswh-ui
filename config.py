@@ -3,7 +3,7 @@ import sys
 from datetime import timedelta
 
 
-DEBUG = True
+DEBUG = False
 
 SECRET_KEY = ''
 VERIFY_CERT = True
@@ -18,11 +18,11 @@ BASE_SEARCH_URL = ''
 BASE_CITATION_URL = ''
 BROWSE_REPLACE = ''
 RECAPTCHA_PUBLIC_KEY = '6LfisP0SAAAAAKcg5-a5bEeV4slFfQZr5_7XfqXf'  # using google's recaptcha API
-RECAPTCHA_PRIVATE_KEY = ''  # see RECAPTCHA_PRIVATE_KEY in local_settings.py
+RECAPTCHA_PRIVATE_KEY = ''  # see RECAPTCHA_PRIVATE_KEY in instance/config.py
 WSGI_STR = ''
 GOOGLE_ANALYTICS_CODE = ''
 JSON_LD_ID_BASE_URL = ''
-GOOGLE_WEBMASTER_TOOLS_CODE = 'ertoifsdbnerngdjnasdw9rsdn'  # random string, set real code in local_settings.py on prod
+GOOGLE_WEBMASTER_TOOLS_CODE = 'ertoifsdbnerngdjnasdw9rsdn'  # random string, set real code in instance/config.py on prod
 ANNOUNCEMENT_BLOCK = ''
 LOGGING_ON = False
 REPLACE_PUBS_WITH_PUBS_TEST = False
@@ -39,10 +39,7 @@ BOWER_TRY_MINIFIED = False
 #Config for Flask-Assets
 ASSETS_DEBUG = False # to disable compression of js and css set to True
 
-if DEBUG:
-    CONTACT_RECIPIENTS = ['ayan@usgs.gov', 'jkreft@usgs.gov']
-else:
-    CONTACT_RECIPIENTS = ['servicedesk@usgs.gov']
+CONTACT_RECIPIENTS = ['servicedesk@usgs.gov']
 
 
 try:
