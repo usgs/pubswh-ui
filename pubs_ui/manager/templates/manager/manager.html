@@ -56,6 +56,9 @@
 				'views/SearchView' : {
 					oldMyPubsEndpoint : "{{ config.OLD_MYPUBS_ENDPOINT }}"
 				},
+				'views/PublicationView' : {
+					previewUrl : "{{ url_for('pubswh.restricted_page', index_id='') }}"
+				},
 				'views/BibliodataView' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
