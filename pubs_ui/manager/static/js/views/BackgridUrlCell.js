@@ -6,16 +6,31 @@ define([
 	"use strict";
 
 	var view = Backgrid.Cell.extend({
-		className : 'backgrid-url-cell',
+		// The following three properties should be overridden.
+		title : '', // Used as the hover in the cell
 
-		title : '',
+		/*
+		 * Should be overridden with an instance of the application's router.
+		 */
+		router : function() {
+			return {};
+		},
+
+		/*
+		 * In most instances, this will need to be overridden.
+		 * @param {Object} - This will be the model's value for the column that this cell was created in.
+		 * @param {Backbone.Model} - The model for this cell. Will be a model within the collection that the grid represents
+		 * @returns String - The fragment that will be passed to the router's navigate function when
+		 * the cell is clicked.
+		 */
+		toFragment : function(rawValue, model) {
+			return rawValue;
+		},
+
+		className : 'backgrid-url-cell',
 
 		events : {
 			'click a' : 'navigate'
-		},
-
-		router : function() {
-			return;
 		},
 
 		initialize : function(options) {
@@ -41,11 +56,8 @@ define([
 			ev.preventDefault();
 			var rawValue = this.model.get(this.column.get('name'));
 			this.router.navigate(this.toFragment(rawValue, this.model), {trigger : true});
-		},
-
-		toFragment : function(rawValue, model) {
-			return rawValue;
 		}
+
 	});
 
 	return view;
