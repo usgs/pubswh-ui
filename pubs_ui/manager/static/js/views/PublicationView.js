@@ -12,10 +12,11 @@ define([
 	'views/LinksView',
 	'views/ContributorsView',
 	'views/SPNView',
+	'views/CatalogingView',
 	'hbs!hb_templates/publication',
 	'backbone.stickit'
 ], function(_, bootstrap, datetimepicker, module, BaseView, AlertView, ConfirmationDialogView,
-			BibliodataView, LinksView, ContributorsView, SPNView, hbTemplate, Stickit) {
+			BibliodataView, LinksView, ContributorsView, SPNView, CatalogingView, hbTemplate, Stickit) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -157,6 +158,13 @@ define([
 					el : '#spn-pane',
 					view : new SPNView({
 						el : '#spn-pane',
+						model : this.model
+					})
+				},
+				cataloging : {
+					el : '#cataloging-pane',
+					view : new CatalogingView({
+						el : '#cataloging-pane',
 						model : this.model
 					})
 				}

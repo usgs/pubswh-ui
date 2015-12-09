@@ -28,7 +28,10 @@ define([
 			'select2:select #superseded-by-input' : 'selectSupersededBy',
 			'select2:unselect #superseded-by-input' : 'resetSupersededBy',
 			'select2:select #psc-input' : 'selectPSC',
-			'select2:unselect #psc-input' : 'resetPSC'
+			'select2:unselect #psc-input' : 'resetPSC',
+			// To set the model value from a datetimepicker, handle the event of the input's div
+			'dp.change #published-date-input-div' : 'changePublishedDate',
+			'dp.change #revised-date-input-div' : 'changeRevisedDate'
 		},
 
 		bindings : {
@@ -63,25 +66,11 @@ define([
 			this.$('#published-date-input-div').datetimepicker({
 				format : 'YYYY-MM-DD'
 			});
-			this.$('#published-date-input-div').on('dp.change', function(ev) {
-				if (ev.date) {
-					self.model.set('publishedDate', ev.date.format('YYYY-MM-DD'));
-				}
-				else {
-					self.model.unset('publishedDate');
-				}
-			});
+
 			this.$('#revised-date-input-div').datetimepicker({
 				format : 'YYYY-MM-DD'
 			});
-			this.$('#revised-date-input-div').on('dp.change', function(ev) {
-				if (ev.date) {
-					self.model.set('revisedDate', ev.date.format('YYYY-MM-DD'));
-				}
-				else {
-					self.model.unset('revisedDate');
-				}
-			});
+
 
 			this.stickit();
 
@@ -187,7 +176,6 @@ define([
 		selectIsPartOf : function(ev) {
 			this._setSelect2(ev, 'isPartOf');
 		},
-
 		resetIsPartOf : function(ev) {
 			this.model.unset('isPartOf');
 		},
@@ -195,7 +183,6 @@ define([
 		selectSupersededBy : function(ev) {
 			this._setSelect2(ev, 'supersededBy');
 		},
-
 		resetSupersededBy : function(ev) {
 			this.model.unset('supersededBy');
 		},
@@ -205,6 +192,24 @@ define([
 		},
 		resetPSC : function(ev) {
 			this.model.unset('publishingServiceCenter');
+		},
+
+		changePublishedDate : function(ev) {
+			if (ev.date) {
+				this.model.set('publishedDate', ev.date.format('YYYY-MM-DD'));
+			}
+			else {
+				this.model.unset('publishedDate');
+			}
+		},
+
+		changeRevisedDate : function(ev) {
+			if (ev.date) {
+				this.model.set('revisedDate', ev.date.format('YYYY-MM-DD'));
+			}
+			else {
+				this.model.unset('revisedDate');
+			}
 		},
 
 		/*
