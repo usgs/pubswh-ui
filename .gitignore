@@ -19,5 +19,6 @@ lettucetests.xml
 /pubs_ui/static/.webassets-cache
 /pubs_ui/bower_components/
 /target
+/instance
 /phantomjsdriver.log
 npm-debug.log

@@ -12,10 +12,11 @@ define([
 	'views/LinksView',
 	'views/ContributorsView',
 	'views/SPNView',
+	'views/CatalogingView',
 	'hbs!hb_templates/publication',
 	'backbone.stickit'
 ], function(_, bootstrap, datetimepicker, module, BaseView, AlertView, ConfirmationDialogView,
-			BibliodataView, LinksView, ContributorsView, SPNView, hbTemplate, Stickit) {
+			BibliodataView, LinksView, ContributorsView, SPNView, CatalogingView, hbTemplate, Stickit) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -26,7 +27,8 @@ define([
 			'click .save-btn' : 'savePub',
 			'click .publish-btn' : 'publishPub',
 			'click .delete-btn' : 'deletePub',
-			'click .edit-tabs a' : 'showTab'
+			'click .edit-tabs a' : 'showTab',
+			'dp.change #display-date' : 'changeDisplayToPublicDate'
 		},
 
 		bindings : {
@@ -67,14 +69,6 @@ define([
 			// Set up datepicker
 			this.$('#display-date').datetimepicker({
 				format : 'YYYY-MM-DDTHH:mm:ss [E]T'
-			});
-			this.$('#display-date').on('dp.change', function(ev) {
-				if (ev.date) {
-					self.model.set('displayToPublicDate', ev.date.format('YYYY-MM-DDTHH:mm:ss'));
-				}
-				else {
-					self.model.unset('displayToPublicDate');
-				}
 			});
 
 			// Sets up the binding between DOM elements and the model //
@@ -157,6 +151,13 @@ define([
 					el : '#spn-pane',
 					view : new SPNView({
 						el : '#spn-pane',
+						model : this.model
+					})
+				},
+				cataloging : {
+					el : '#cataloging-pane',
+					view : new CatalogingView({
+						el : '#cataloging-pane',
 						model : this.model
 					})
 				}
@@ -306,6 +307,15 @@ define([
 		showTab : function(ev) {
 			ev.preventDefault();
 			this.$('.edit-tabs').tab('show');
+		},
+
+		changeDisplayToPublicDate : function(ev) {
+			if (ev.date) {
+				this.model.set('displayToPublicDate', ev.date.format('YYYY-MM-DDTHH:mm:ss'));
+			}
+			else {
+				this.model.unset('displayToPublicDate');
+			}
 		}
 	});
 

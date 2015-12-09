@@ -2,7 +2,7 @@ PubsWarehouse_UI
 ================
 
 To get this application running using the flask local dev server you need to create an instances/config.py file
-under PubsWarehouse_UI folder.  The contents of the file should looks like so:
+under PubsWarehouse_UI folder.  The contents of the file should look like so:
 
  ```python
  SECRET_KEY = 'the_secret_key'
@@ -43,8 +43,6 @@ under PubsWarehouse_UI folder.  The contents of the file should looks like so:
  VERIFY_CERT = True or False #Set to False for local development
  #cache settings- see the documentation for flask-cache. For development, a cache type of simple works well with the development server.  redis is used on production
  #CACHE_CONFIG = {'CACHE_TYPE': 'simple'}
-
- BOWER_TRY_MINIFIED = True // Set to false if you would like to debug in the browser into a bower javascript library
  
  #The following should be removed when we completely retire the old MyPubs Angular app.
  OLD_MYPUBS_ENDPOINT = 'endpoint of the old mypubs application'
