@@ -18,6 +18,7 @@ define([
 		var setElLinksSpy, renderLinksSpy, removeLinksSpy, findElLinksSpy;
 		var setElContributorsSpy, renderContributorsSpy, removeContributorsSpy, findElContributorsSpy;
 		var setElSPNSpy, renderSPNSpy, removeSPNSpy, findElSPNSpy;
+		var setElCatalogingSpy, renderCatalogingSpy, removeCatalogingSpy, findElCatalogingSpy;
 
 		var pubModel;
 		var opDeferred;
@@ -73,6 +74,13 @@ define([
 				tooltip : jasmine.createSpy()
 			});
 
+			setElCatalogingSpy = jasmine.createSpy('setElCatalogingdataSpy');
+			renderCatalogingSpy = jasmine.createSpy('renderCatalogingSpy');
+			removeCatalogingSpy = jasmine.createSpy('removeCatalogingSpy');
+			findElCatalogingSpy = jasmine.createSpy('findElCatalogingSpy').and.returnValue({
+				tooltip : jasmine.createSpy()
+			});
+
 
 			var injector = new Squire();
 			injector.mock('views/AlertView', BaseView.extend({
@@ -121,6 +129,14 @@ define([
 				render : renderSPNSpy,
 				remove : removeSPNSpy,
 				$ : findElSPNSpy
+			}));
+			injector.mock('views/CatalogingView', BaseView.extend({
+				setElement : setElCatalogingSpy.and.returnValue({
+					render : renderCatalogingSpy
+				}),
+				render : renderCatalogingSpy,
+				remove : removeCatalogingSpy,
+				$ : findElCatalogingSpy
 			}));
 
 			injector.require(['views/PublicationView'], function(view){
@@ -179,6 +195,8 @@ define([
 				expect(renderContributorsSpy).not.toHaveBeenCalled();
 				expect(setElSPNSpy.calls.count()).toBe(1);
 				expect(renderSPNSpy).not.toHaveBeenCalled();
+				expect(setElCatalogingSpy.calls.count()).toBe(1);
+				expect(renderCatalogingSpy).not.toHaveBeenCalled();
 
 				opDeferred.resolve();
 
@@ -190,6 +208,8 @@ define([
 				expect(renderContributorsSpy).toHaveBeenCalled();
 				expect(setElSPNSpy.calls.count()).toBe(2);
 				expect(renderSPNSpy).toHaveBeenCalled();
+				expect(setElCatalogingSpy.calls.count()).toBe(2);
+				expect(renderCatalogingSpy).toHaveBeenCalled();
 			});
 
 			it('Expects a successful fetch will not show an alert', function() {
@@ -214,6 +234,7 @@ define([
 				expect(renderLinksSpy).not.toHaveBeenCalled();
 				expect(renderContributorsSpy).not.toHaveBeenCalled();
 				expect(renderSPNSpy).not.toHaveBeenCalled();
+				expect(renderCatalogingSpy).not.toHaveBeenCalled();
 			});
 
 			it('Expects a new pub to not show an alert', function() {
@@ -238,6 +259,7 @@ define([
 				expect(removeLinksSpy).toHaveBeenCalled();
 				expect(removeContributorsSpy).toHaveBeenCalled();
 				expect(removeSPNSpy).toHaveBeenCalled();
+				expect(removeCatalogingSpy).toHaveBeenCalled();
 			});
 		});
 
