@@ -84,8 +84,12 @@ define([
 					collection: testCollection
 				});
 
-				spyOn(testView.grid, 'render').and.callThrough();
-				spyOn(testView.paginator, 'render').and.callThrough();
+				spyOn(testView.grid, 'render').and.returnValue({
+					el : {}
+				});
+				spyOn(testView.paginator, 'render').and.returnValue({
+					el : {}
+				});
 			});
 
 			it('Expects that the alertView\'s element is set but the view is not rendered', function() {
