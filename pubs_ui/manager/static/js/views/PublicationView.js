@@ -4,6 +4,7 @@ define([
 	'underscore',
 	'bootstrap',
 	'datetimepicker',
+	'backbone.stickit',
 	'module',
 	'views/BaseView',
 	'views/AlertView',
@@ -13,10 +14,10 @@ define([
 	'views/ContributorsView',
 	'views/SPNView',
 	'views/CatalogingView',
-	'hbs!hb_templates/publication',
-	'backbone.stickit'
-], function(_, bootstrap, datetimepicker, module, BaseView, AlertView, ConfirmationDialogView,
-			BibliodataView, LinksView, ContributorsView, SPNView, CatalogingView, hbTemplate, Stickit) {
+	'views/GeospatialView',
+	'hbs!hb_templates/publication'
+], function(_, bootstrap, datetimepicker, Stickit, module, BaseView, AlertView, ConfirmationDialogView,
+			BibliodataView, LinksView, ContributorsView, SPNView, CatalogingView, GeospatialView, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -160,7 +161,15 @@ define([
 						el : '#cataloging-pane',
 						model : this.model
 					})
+				},
+				geospatial : {
+					el : '#geospatial-pane',
+					view : new GeospatialView({
+						el : '#geospatial-pane',
+						model : this.model
+					})
 				}
+
 			};
 		},
 
