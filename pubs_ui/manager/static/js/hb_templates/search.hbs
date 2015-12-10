@@ -3,41 +3,7 @@
 
 	<div class="pub-search-container"> <!-- search and list view -->
 		<form class="pub-search-form">
-			<div class="form-group has-feedback">
-				<label for="search-term-input">Search Criteria</label>
-				<input id="search-term-input" type="text" class="form-control"/>
-				<span class="form-control-feedback"><i class="fa fa-search"></i></span>
-			</div>
-			{{#if advancedSearch}}
-				<div class="row advanced-search-section">
-					<label for="search-prodID">ProdID</label>
-					<input id="search-prodID" type="text"/>
-					<br/>
-					<label for="search-indexID">IndexID</label>
-					<input id="search-indexID" type="text" />
-					<br/>
-					<label for="search-IPDS">IPDS Number</label>
-					<input id="search-IPDS" type="text"/>
-					<br/>
-					<label for="search-contributor">Contributor</label>
-					<input id="search-contributor" type="text" />
-					<br/>
-					<label for="search-title">Title</label>
-					<input id="search-title" type="text" />
-					<br/>
-					<label for="search-pubType">Pub Type</label>
-					<input id="search-pubType" type="text" />
-					<br/>
-					<label for="search-pubSubtype">Pub Subtype</label>
-					<input id="search-pubSubtype" type="text" />
-					<br/>
-					<label for="search-series">Series</label>
-					<input id="search-series" type="text" />
-					<br/>
-					<label for="search-year">Year</label>
-					<input id="search-year" type="text" />
-				</div>
-			{{/if}}
+			<div class="search-filter-inputs-container"></div>
 			<button type="button" class="btn btn-default btn-info search-btn">Search</button>
 			{{#if futureFeatures}}
 				{{#if advancedSearch}}
