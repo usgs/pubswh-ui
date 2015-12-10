@@ -65,7 +65,7 @@ define([
 		render : function() {
 			var self = this;
 			BaseView.prototype.render.apply(this, arguments);
-			this.updatePubId(this.model, this.model.get('id'));
+			this.updateIndexId(this.model, this.model.get('indexId'));
 
 			// Set up datepicker
 			this.$('#display-date').datetimepicker({
@@ -107,15 +107,15 @@ define([
 			var self = this;
 			BaseView.prototype.initialize.apply(this, arguments);
 
-			this.context.id = this.model.get('id');
+			this.context.indexId = this.model.get('indexId');
 			this.context.previewUrl = module.config().previewUrl;
-			this.listenTo(this.model, 'change:id', this.updatePubId);
+			this.listenTo(this.model, 'change:indexId', this.updateIndexId);
 
-			if (this.context.id) {
-				this.fetchPromise = this.model.fetch();
+			if (this.model.isNew()) {
+				this.fetchPromise = $.Deferred().resolve();
 			}
 			else {
-				this.fetchPromise = $.Deferred().resolve();
+				this.fetchPromise = this.model.fetch();
 			}
 
 			// Create child views
@@ -188,7 +188,7 @@ define([
 		 * @param {PublicationModel} model
 		 * @param {String} newId
 		 */
-		updatePubId : function(model, newId) {
+		updateIndexId : function(model, newId) {
 			if (newId) {
 				this.$('#pub-preview-div').show();
 				this.$('#pub-preview-div a').attr('href', this.context.previewUrl + newId);
