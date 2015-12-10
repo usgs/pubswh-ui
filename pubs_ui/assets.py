@@ -45,8 +45,12 @@ bundles={
             'manager/less/usgs_header_footer.less',
             'manager/less/search.less',
             'manager/less/publication.less',
+            'manager/less/bibliodata.less',
             'manager/less/links.less',
-            'manager/less/contributors.less'
+            'manager/less/contributors.less',
+            'manager/less/spn.less',
+            'manager/less/cataloging.less',
+            'manager/less/geospatial.less'
         ],
         filters='less,cssmin',
         output='gen/manager_style.css'
