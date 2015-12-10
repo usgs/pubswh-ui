@@ -298,8 +298,9 @@ define([
 				expect($('#pub-preview-div').is(':visible')).toBe(false);
 
 				pubModel.set('id', 1234);
+				pubModel.set('indexId', 'ds1234');
 				expect($('#pub-preview-div').is(':visible')).toBe(true);
-				expect($('#pub-preview-div a').attr('href')).toMatch('1234');
+				expect($('#pub-preview-div a').attr('href')).toMatch('ds1234');
 
 				pubModel.set('id', '');
 			});
