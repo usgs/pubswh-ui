@@ -7,6 +7,18 @@ define([
 ], function($, BaseView, hb_template) {
 	"use strict";
 
+	var SEARCH_CATEGORIES = [
+		{id : 'prodId', text : 'Prod ID', inputType : 'text'},
+		{id : 'indexId', text : 'Index ID', inputType : 'text'},
+		{id : 'ipdsId', text : 'IPDS', inputType : 'text'},
+		{id : 'contributor', text : 'Contributor', inputType : 'text'},
+		{id : 'title', text : 'Title', inputType : 'text'},
+		{id : 'typeName', text : 'Publication Type', inputType : 'select'},
+		{id : 'subtypeName', text : 'Publication Subtype', inputType : 'select'},
+		{id : 'seriesName', text : 'Series Title', inputType : 'select'},
+		{id : 'year', text : 'Year', inputType : 'text'}
+	]
+
 	var view = BaseView.extend({
 
 		template : hb_template,
@@ -27,9 +39,12 @@ define([
 		},
 
 		render : function() {
-			this.context = _.object(_.map(this.model.attributes, function(value, key) {
-				return [key, true];
-			}));
+			this.context.categories = _.map(SEARCH_CATEGORIES, function(category) {
+				var result = _.clone(category);
+				result['disabled'] = this.model.has(result.id);
+				return result;
+			}, this);
+
 			BaseView.prototype.render.apply(this, arguments);
 		},
 
