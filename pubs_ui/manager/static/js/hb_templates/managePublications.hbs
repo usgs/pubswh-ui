@@ -1,8 +1,9 @@
 <div class="publications-container">
 	<div class="alert-container"></div>
 
-	<div class="pub-search-container"> <!-- search and list view -->
-		<form class="pub-search-form"></form>
+	<div class="pub-search-container">
+		<form class="pub-search-form"></form> <!-- search view -->
+		<button type="button" class="btn btn-default btn-info search-btn">Search</button>
 	</div>
 
 	<div class="pub-list-section">
@@ -27,19 +28,4 @@
 			</div>
 		</div>
 	</div>
-
-	{{#if futureFeatures}}
-		<div>
-			<form>
-				<label>List Assignments</label><br/>
-				<select id="lists-input" multiple class="form-control">
-					<option></option>
-					{{#each pubsList}}
-						<option value="{{this.id}}">{{this.text}}</option>
-					{{/each}}
-				</select><br/>
-				<button type="submit" class="btn btn-default" >Add To Lists</button>
-			</form>
-		</div>
-	{{/if}}
 </div>

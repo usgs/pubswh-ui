@@ -16,8 +16,6 @@ define([
 
 		events : {
 			'change #search-term-input' : 'updateQterm',
-			'click .search-btn' : 'filterPubs',
-			'submit .pub-search-form' : 'filterPubs',
 			'click .add-category-btn' : 'addFilterRow',
 //			'click .clear-advanced-search-btn' : 'clearFilterRows'
 		},
@@ -40,16 +38,6 @@ define([
 		/*
 		 * DOM event handlers
 		 */
-		filterPubs : function(ev) {
-			var self = this;
-
-			ev.preventDefault();
-			this.collection.updateFilters(this.model.attributes);
-			this.collection.getFirstPage()
-					.fail(function(jqXhr) {
-						self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
-					});
-		},
 
 		updateQterm : function(ev) {
 			this.model.set('q', ev.currentTarget.value);

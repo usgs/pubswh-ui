@@ -11,7 +11,7 @@ define([
 	'views/BaseView',
 	'views/AlertView',
 	'views/SearchFilterView',
-	'hbs!hb_templates/search'
+	'hbs!hb_templates/managePublications'
 ], function (module, Backbone, Backgrid, SelectAll, Paginator, BackgridUrlCell, BackgridClientSortingBody, BaseView,
 			 AlertView, SearchFilterView, hbTemplate) {
 	"use strict";
@@ -19,7 +19,9 @@ define([
 	var view = BaseView.extend({
 
 		events : {
-			'change .page-size-select' : 'changePageSize'
+			'change .page-size-select' : 'changePageSize',
+			'click .search-btn' : 'filterPubs',
+			'submit .pub-search-form' : 'filterPubs'
 		},
 
 		template: hbTemplate,
@@ -207,6 +209,17 @@ define([
 		/*
 		 * DOM event handlers
 		 */
+		filterPubs : function(ev) {
+			var self = this;
+
+			ev.preventDefault();
+			this.collection.updateFilters(this.searchFilterView.model.attributes);
+			this.collection.getFirstPage()
+					.fail(function(jqXhr) {
+						self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
+					});
+		},
+
 		changePageSize : function(ev) {
 			this.collection.setPageSize(parseInt(ev.currentTarget.value));
 		},
