@@ -2,28 +2,7 @@
 	<div class="alert-container"></div>
 
 	<div class="pub-search-container"> <!-- search and list view -->
-		<form class="pub-search-form">
-			<div class="search-filter-inputs-container"></div>
-			<button type="button" class="btn btn-default btn-info search-btn">Search</button>
-			{{#if futureFeatures}}
-				{{#if advancedSearch}}
-					<button class="btn btn-link search-link-button">Regular Search</button>
-				{{else}}
-					<button class="btn btn-link search-link-button" >Advanced Search</button>
-				{{/if}}
-			{{/if}}
-		</form>
-		{{#if futureFeatures}}
-			{{#if advancedSearch}}
-			{{else}}
-				<div class="pub-lists-section">
-					<label>View Lists</label><br/>
-					<div class="pub-list-grid-container">
-						<div class="pub-list-grid"></div>
-					</div>
-				</div>
-			{{/if}}
-		{{/if}}
+		<form class="pub-search-form"></form>
 	</div>
 
 	<div class="pub-list-section">

@@ -19,8 +19,6 @@ define([
 	var view = BaseView.extend({
 
 		events : {
-			'click .search-btn' : 'filterPubs',
-			'submit .pub-search-form' : 'filterPubs',
 			'change .page-size-select' : 'changePageSize'
 		},
 
@@ -35,7 +33,7 @@ define([
 
 			// Set the elements for child views and render if needed.
 			this.alertView.setElement(this.$('.alert-container'));
-			this.searchFilterView.setElement(this.$('.search-filter-inputs-container')).render();
+			this.searchFilterView.setElement(this.$('.pub-search-form')).render();
 
 			// Render the grid and attach the root to HTML document
 			$pubList.append(this.grid.render().el);
@@ -193,7 +191,7 @@ define([
 			});
 			this.searchFilterView = new SearchFilterView({
 				el : '.search-filter-inputs-container',
-				model : new Backbone.Model()
+				collection : this.collection
 			});
 		},
 
@@ -209,17 +207,6 @@ define([
 		/*
 		 * DOM event handlers
 		 */
-		filterPubs : function(ev) {
-			var self = this;
-
-			ev.preventDefault();
-			this.collection.updateFilters(this.searchFilterView.model.attributes);
-			this.collection.getFirstPage()
-					.fail(function(jqXhr) {
-						self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
-					});
-		},
-
 		changePageSize : function(ev) {
 			this.collection.setPageSize(parseInt(ev.currentTarget.value));
 		},

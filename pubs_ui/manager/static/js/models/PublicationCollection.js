@@ -40,7 +40,9 @@ define([
 		},
 
 		updateFilters : function(filters) {
-			this.filters = filters;
+			this.filters = _.pick(filters, function(value) {
+				return (value);
+			});
 		},
 
 		// get the state from web service result

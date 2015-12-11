@@ -1,9 +1,10 @@
 /* jslint browser : true */
 
 define([
+	'jquery',
 	'views/BaseView',
-	'hbs!hbs_templates/searchFilterRow'
-], function(BaseView, hb_template) {
+	'hbs!hb_templates/searchFilterRow'
+], function($, BaseView, hb_template) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -11,22 +12,49 @@ define([
 		template : hb_template,
 
 		events : {
-			'change .search-category-input' : 'clearValue'
+			'change .search-category-input' : 'changeCategory',
+			'change .value-text-input' : 'changeValue'
 		},
 
-		getFilter : function() {
-			var category = $('.search-category-input').value();
-			var value = $('.category-value-input').value();
-			var result = {};
+		/*
+		 * @constructs
+		 * @param options
+		 *     @prop {SearchFilterModel} model
+		 */
+		initialize : function(options) {
+			BaseView.prototype.initialize.apply(this, arguments);
+			this.listenTo(this.model, 'change', this.disableFilterOption);
+		},
 
-			if ((category) && (value)){
-				result[category] = value;
+		render : function() {
+			this.context = _.object(_.map(this.model.attributes, function(value, key) {
+				return [key, true];
+			}));
+			BaseView.prototype.render.apply(this, arguments);
+		},
+
+		disableFilterOption : function(model, options) {
+			var $option = this.$('.search-category-input option[value="' + options.changedAttribute + '"]');
+			var enabled = _.has(options, 'unset') && options.unset;
+			$option.prop('disabled', !enabled);
+		},
+
+		changeCategory : function(ev) {
+			var $thisEl = $(ev.currentTarget);
+			var oldValue = $thisEl.data('current-value');
+			//
+			this.$('.value-text-input').val();
+
+			this.model.set(ev.currentTarget.value, '', {changedAttribute : ev.currentTarget.value});
+			if (oldValue) {
+				this.model.unset(oldValue, {changedAttribute: oldValue});
 			}
-			return result;
+			$thisEl.data('current-value', ev.currentTarget.value);
 		},
 
-		clearValue : function(ev) {
-			this.$('.category-value-input').val();
+		changeValue : function(ev) {
+			var category = this.$('.search-category-input').data('current-value');
+			this.model.set(category, ev.currentTarget.value);
 		}
 	});
 
