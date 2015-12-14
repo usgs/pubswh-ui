@@ -4,6 +4,9 @@
 		},
 		'views/SPNView' : {
 		    lookupUrl : "test_lookup/"
+		},
+		'utils/DynamicSelect2' : {
+		    lookupUrl : "test_lookup/"
 		}
 	},
 	baseUrl : '/pubs_ui/manager/static/js',

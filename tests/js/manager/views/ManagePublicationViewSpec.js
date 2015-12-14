@@ -4,9 +4,10 @@ define([
 	'squire',
 	'sinon',
 	'jquery',
+	'backbone',
 	'models/PublicationCollection',
 	'views/BaseView',
-], function(Squire, sinon, $, PublicationCollection, BaseView) {
+], function(Squire, sinon, $, Backbone, PublicationCollection, BaseView) {
 	"use strict";
 
 	// Mocking Backgrid is difficult since it's namespaced and encompasses many different methods
@@ -16,10 +17,11 @@ define([
 
 	describe('ManagePublicationsView', function() {
 		var ManagePublicationsView;
-		var testView, testCollection;
+		var testView, testCollection, testFilterModel;
 		var server;
 
 		var setElAlertSpy, renderAlertSpy, removeAlertSpy, dangerAlertSpy;
+		var setElSearchFilterViewSpy, renderSearchFilterViewSpy, removeSearchFilterViewSpy;
 
 		beforeEach(function (done) {
 			var injector;
@@ -30,9 +32,15 @@ define([
 			removeAlertSpy = jasmine.createSpy('removeAlertSpy');
 			dangerAlertSpy = jasmine.createSpy('dangerAlertSpy');
 
+			setElSearchFilterViewSpy = jasmine.createSpy('setElSearchFilterViewSpy');
+			renderSearchFilterViewSpy = jasmine.createSpy('renderSearchFilterViewSpy');
+			removeSearchFilterViewSpy = jasmine.createSpy('removeSearchFilterViewSpy');
+
 			testCollection = new PublicationCollection();
 			spyOn(testCollection, 'fetch').and.callThrough();
 			spyOn(testCollection, 'setPageSize').and.callThrough();
+
+			testFilterModel = new Backbone.Model();
 
 			injector = new Squire();
 			injector.mock('views/AlertView', BaseView.extend({
@@ -40,6 +48,15 @@ define([
 				render: renderAlertSpy,
 				remove: removeAlertSpy,
 				showDangerAlert: dangerAlertSpy
+			}));
+
+			injector.mock('views/SearchFilterView', BaseView.extend({
+				setElement : setElSearchFilterViewSpy.and.returnValue({
+					render : renderSearchFilterViewSpy
+				}),
+				render : renderSearchFilterViewSpy,
+				remove : removeSearchFilterViewSpy,
+				model : testFilterModel
 			}));
 
 			injector.require(['views/ManagePublicationsView'], function(view) {
@@ -75,6 +92,7 @@ define([
 			});
 
 			expect(setElAlertSpy).toHaveBeenCalled();
+			expect(setElSearchFilterViewSpy).toHaveBeenCalled();
 			expect(testView.grid).toBeDefined();
 			expect(testView.paginator).toBeDefined();
 		});
@@ -106,6 +124,12 @@ define([
 				expect(testView.paginator.render).toHaveBeenCalled();
 			});
 
+			it('Expects the search filter view to have been rendered', function() {
+				testView.render();
+				expect(setElSearchFilterViewSpy.calls.count()).toBe(2);
+				expect(renderSearchFilterViewSpy).toHaveBeenCalled();
+			})
+
 			it('Expects that the loading indicator is shown until the fetch has been resolved', function() {
 				var $loadingIndicator;
 				testView.render();
@@ -131,6 +155,7 @@ define([
 			it('Expects the children view to be removed', function() {
 				testView.remove();
 				expect(removeAlertSpy).toHaveBeenCalled();
+				expect(removeSearchFilterViewSpy).toHaveBeenCalled();
 				expect(testView.grid.remove).toHaveBeenCalled();
 				expect(testView.paginator.remove).toHaveBeenCalled();
 			});
@@ -144,8 +169,7 @@ define([
 				});
 			});
 
-			//TODO: Update test to work with the new organization
-			xit('Expects that a call to filterPubs updates the collection\'s filters and then gets the first page of publications', function() {
+			it('Expects that a call to filterPubs updates the collection\'s filters and then gets the first page of publications', function() {
 				var ev = {
 					preventDefault : jasmine.createSpy('preventDefaultSpy')
 				};
@@ -153,10 +177,11 @@ define([
 				spyOn(testCollection, 'getFirstPage').and.callThrough();
 
 				testView.render();
-				testView.$('#search-term-input').val('Search term');
+
+				testFilterModel.set({q : 'Search term', year : '2015'})
 				testView.filterPubs(ev);
 
-				expect(testCollection.updateFilters).toHaveBeenCalledWith({q : 'Search term'});
+				expect(testCollection.updateFilters).toHaveBeenCalledWith(testFilterModel.attributes);
 				expect(testCollection.getFirstPage).toHaveBeenCalled();
 			});
 
