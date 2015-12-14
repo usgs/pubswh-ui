@@ -17,7 +17,7 @@ define([
 		events : {
 			'change #search-term-input' : 'updateQterm',
 			'click .add-category-btn' : 'addFilterRow',
-//			'click .clear-advanced-search-btn' : 'clearFilterRows'
+			'click .clear-advanced-search-btn' : 'clearFilterRows'
 		},
 
 		initialize : function(options) {
@@ -53,6 +53,22 @@ define([
 			$rowContainer.append('<div class="filter-row-container"></div>');
 			this.$('.advanced-search-rows-container').append('<div ');
 			newRow.setElement($rowContainer.find('.filter-row-container:last-child')).render();
+			this.filterRowViews.push(newRow);
+		},
+
+		clearFilterRows : function(ev) {
+			var self = this;
+			ev.preventDefault();
+			_.each(this.filterRowViews, function(view) {
+				view.remove();
+			});
+			this.filterRowViews = [];
+			var filtersToRemove = _.reject(this.model.keys(), function(key) {
+				return key === 'q';
+			});
+			_.each(filtersToRemove, function(key) {
+				self.model.unset(key);
+			});
 		},
 
 		/*
