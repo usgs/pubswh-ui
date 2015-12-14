@@ -11,7 +11,7 @@ define([
 	 *     @prop {String} parentId(optional) - parameter name to be used when retrieving the lookup
 	 *     @prop {Function} getParentId - optional but should be specified if parentId is specified.
 	 *                 Function should return a String that will be used as the parentId value when retrieving the lookup
-	 * @param {Object} defaults - select2Options which will be merged with the ajax option set by this function
+	 * @param {Object} defaults(optional) - select2Options which will be merged with the ajax option set by this function
 	 */
 	var getSelectOptions = function(options, defaults) {
 		var url;
@@ -46,7 +46,7 @@ define([
 			}
 		};
 
-		return _.extend(result, defaults);
+		return _.extend(result, (defaults) ? defaults : {});
 	}
 
 	return {
