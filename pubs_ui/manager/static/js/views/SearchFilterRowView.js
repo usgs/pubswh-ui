@@ -90,6 +90,13 @@ define([
 			this.$('.value-select-input').select2(DEFAULT_SELECT2_OPTIONS);
 		},
 
+		remove : function() {
+			var category = this.$('.search-category-input').data('current-value');
+			this.model.unset(category);
+
+			BaseView.prototype.remove.apply(this, arguments);
+		},
+
 		/*
 		 * Model event handlers
 		 */

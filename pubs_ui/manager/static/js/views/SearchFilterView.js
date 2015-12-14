@@ -3,11 +3,10 @@
 define([
 	'underscore',
 	'backbone',
-	'models/SearchFilterModel',
 	'views/BaseView',
 	'views/SearchFilterRowView',
 	'hbs!hb_templates/searchFilter'
-], function(_, Backbone, SearchFilterModel, BaseView, SearchFilterRowView, hb_template) {
+], function(_, Backbone, BaseView, SearchFilterRowView, hb_template) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -20,9 +19,17 @@ define([
 			'click .clear-advanced-search-btn' : 'clearFilterRows'
 		},
 
+		/*
+		 * @constructs
+		 * @param {Object}
+		 *     @prop {String} el - Jquery selector where view will be rendered
+		 * @return {View} - as part of initialization, a model is created which will contain the current
+		 *     filter key-value pairs. The attributes of this model can be used to call
+		 *     PublicationCollection.updateFilters
+		 */
 		initialize : function(options) {
 			BaseView.prototype.initialize.apply(this, arguments);
-			this.model = new SearchFilterModel();
+			this.model = new Backbone.Model();
 
 			this.listenTo(this.model, 'change:q', this.changeQTerm);
 			this.filterRowViews = [];
@@ -63,12 +70,6 @@ define([
 				view.remove();
 			});
 			this.filterRowViews = [];
-			var filtersToRemove = _.reject(this.model.keys(), function(key) {
-				return key === 'q';
-			});
-			_.each(filtersToRemove, function(key) {
-				self.model.unset(key);
-			});
 		},
 
 		/*
