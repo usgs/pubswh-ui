@@ -2,7 +2,7 @@
 
 define([
 	'underscore',
-	'module',
+	'module'
 ], function(_, module) {
 	"use strict";
 	/*
