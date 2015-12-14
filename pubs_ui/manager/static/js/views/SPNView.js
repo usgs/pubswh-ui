@@ -9,11 +9,12 @@ define([
 	'tinymce',
 	'backbone.stickit',
 	'module',
+	'utils/DynamicSelect2',
 	'models/PublishingServiceCenterCollection',
 	'views/BaseView',
 	'hbs!hb_templates/spn'
 ], function(Handlebars, _, bootstrap, datetimepicker, select2, tinymce, stickit, module,
-			PublishingServiceCenterCollection, BaseView, hb_template) {
+			DynamicSelect2, PublishingServiceCenterCollection, BaseView, hb_template) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -60,6 +61,11 @@ define([
 
 		render : function() {
 			var self = this;
+			var DEFAULT_SELECT2_OPTIONS = {
+				allowClear : true,
+				theme : 'bootstrap'
+			};
+
 			BaseView.prototype.render.apply(this, arguments);
 
 			// Set up datepickers
@@ -105,59 +111,21 @@ define([
 
 			// Set up static select2's once their options have been fetched
 			this.serviceCenterPromise.done(function() {
-				self.$('#psc-input').select2({
-					allowClear : true,
-					theme : 'bootstrap',
+				self.$('#psc-input').select2(_.extend({
 					data : self.serviceCenterCollection.toJSON()
-				});
+				}, DEFAULT_SELECT2_OPTIONS));
 				self.updatePSC();
 			});
 
 			// Initialize dynamic select2's.
-			this.$('#is-part-of-input').select2({
-				allowClear : true,
-				theme: 'bootstrap',
-				ajax : {
-					url : module.config().lookupUrl + 'publications',
-					data : function(params) {
-						var result = {
-							mimetype : 'json'
-						};
-						if (_.has(params, 'term')) {
-							result.text = params.term;
-						}
-						return result;
-					},
-					processResults : function(resp) {
-						return {
-							results : resp
-						};
-					}
-				}
-			});
+			this.$('#is-part-of-input').select2(DynamicSelect2.getSelectOptions({
+				lookupType: 'publications'
+			}, DEFAULT_SELECT2_OPTIONS));
 			this.updateIsPartOf();
 
-			this.$('#superseded-by-input').select2({
-				allowClear : true,
-				theme: 'bootstrap',
-				ajax : {
-					url : module.config().lookupUrl + 'publications',
-					data : function(params) {
-						var result = {
-							mimetype : 'json'
-						};
-						if (_.has(params, 'term')) {
-							result.text = params.term;
-						}
-						return result;
-					},
-					processResults : function(resp) {
-						return {
-							results : resp
-						};
-					}
-				}
-			});
+			this.$('#superseded-by-input').select2(DynamicSelect2.getSelectOptions({
+				lookupType: 'publications'
+			}, DEFAULT_SELECT2_OPTIONS));
 			this.updateSupersededBy();
 
 			return this;
