@@ -47,6 +47,7 @@ define([
 		});
 
 		afterEach(function() {
+			testCell.remove();
 			$('#test-div').remove();
 		});
 

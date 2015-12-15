@@ -59,6 +59,7 @@
 		 });
 
 		 afterEach(function () {
+			 testView.remove();
 			 $('#test-div').remove();
 		 });
 

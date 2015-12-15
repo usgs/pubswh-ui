@@ -74,6 +74,7 @@ define([
 
 		afterEach(function () {
 			server.restore();
+			testView.remove();
 			$('#test-div').remove();
 		});
 
