@@ -38,6 +38,7 @@ define([
 		});
 
 		afterEach(function() {
+			testView.remove();
 			$('#test-div').remove();
 		});
 
@@ -92,6 +93,11 @@ define([
 		});
 
 		describe('Tests for model event handlers', function() {
+			beforeEach(function() {
+				testView = new SearchFilterView({el : '#test-div'});
+				testView.render();
+			});
+
 			it('Expects that updating the q property will update the search term input', function() {
 				var $searchInput = testView.$('#search-term-input');
 

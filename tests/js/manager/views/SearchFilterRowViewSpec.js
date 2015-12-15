@@ -38,6 +38,7 @@ define([
 		});
 
 		afterEach(function () {
+			testView.remove();
 			$('#test-div').remove();
 		});
 
@@ -100,7 +101,6 @@ define([
 
 		describe('Tests for DOM event handlers', function() {
 			beforeEach(function() {
-				testView
 				testView.render();
 			});
 
