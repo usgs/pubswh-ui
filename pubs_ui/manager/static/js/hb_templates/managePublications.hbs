@@ -3,13 +3,15 @@
 
 	<div class="pub-search-container">
 		<form class="pub-search-form"></form> <!-- search view -->
-		<button type="button" class="btn btn-default btn-info search-btn">Search</button>
+		<div class="search-btn-container">
+			<button type="button" class="btn btn-info search-btn">Search</button>
+		</div>
 	</div>
 
 	<div class="pub-list-section">
 		<div class="pub-management-div">
-			<a href="#/publication" class="btn btn-default">Create Publication</a>
-			<a href="{{oldMyPubsEndpoint}}#/Contributor" class="pub-contributor-btn btn btn-default">Manage Contributors</a>
+			<a href="#/publication" class="btn btn-info">Create Publication</a>
+			<a href="{{oldMyPubsEndpoint}}#/Contributor" class="pub-contributor-btn btn btn-info">Manage Contributors</a>
 		</div>
 		<div class="pub-grid-container">
 			<div class="pub-grid backgrid-container"></div>
