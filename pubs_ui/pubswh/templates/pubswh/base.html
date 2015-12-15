@@ -92,7 +92,7 @@
                 	</ul>
                 </li>
                 <li><a href="{{ url_for('pubswh.contact') }}">Contact</a></li>
-                {% if current_user.is_authenticated() %}<li><a href="{{ url_for('auth.logout_page', forward='pubswh.index') }}">Logout</a></li>{% endif %}
+                {% if current_user.is_authenticated %}<li><a href="{{ url_for('auth.logout_page', forward='pubswh.index') }}">Logout</a></li>{% endif %}
             </ul>
             <section id="center">
                 <form style="display: inline;" action="{{ url_for('pubswh.search_results') }}" method="get" name="q">
