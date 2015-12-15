@@ -167,7 +167,7 @@ define([
 				$textInput.val('4567').trigger('change');
 				expect(testModel.get('prodId')).toEqual('4567');
 
-				$categorySelect.val('subtypeName').trigger('select2:select');
+				$categorySelect.val('subtypeName').trigger('change');
 				// Have to add the options to the DOM
 				$selectInput.append('<option id="1">Subtype 1</option><option id="2">Subtype 2</option>');
 				$selectInput.val('Subtype 1').trigger('change');
