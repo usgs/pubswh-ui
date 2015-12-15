@@ -25,7 +25,15 @@ define([
 			'change .value-select-input' : 'changeSelectedValue'
 		},
 
-		search_categories : [
+		/*
+		 * Used to create each category filter. Each element in the array should contain the following properties
+		 *     @prop id {String} - The string to use in the filter when selected
+		 *     @prop text {String} - The string displayed in the select
+		 *     @prop inputType {String, either 'text' or 'select'} - Indicates what the value field input should be
+		 *     @prop select2Init {Function which is passed the view's context} - Called to initialized the select2 field.
+		 *           Only required for inputType's of 'select'
+		 */
+		categories : [
 			{id : 'prodId', text : 'Prod ID', inputType : 'text'},
 			{id : 'indexId', text : 'Index ID', inputType : 'text'},
 			{id : 'ipdsId', text : 'IPDS', inputType : 'text'},
@@ -81,7 +89,7 @@ define([
 		},
 
 		render : function() {
-			this.context.categories = _.map(this.search_categories, function(category) {
+			this.context.categories = _.map(this.categories, function(category) {
 				var result = _.clone(category);
 				result['disabled'] = this.model.has(result.id);
 				return result;
@@ -119,7 +127,7 @@ define([
 
 			var oldValue = $thisEl.data('current-value');
 			var newValue = ev.currentTarget.value;
-			var selectedCategory = _.find(this.search_categories, function(category) {
+			var selectedCategory = _.find(this.categories, function(category) {
 				return category.id === newValue
 			});
 
