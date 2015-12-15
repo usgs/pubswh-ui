@@ -13,7 +13,7 @@ define([
 	// Mocking Backgrid is difficult since it's namespaced and encompasses many different methods
 	// We will have to be satisified with putting spies on the backrid view objects within testView
 
-	jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+	jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
 	describe('ManagePublicationsView', function() {
 		var ManagePublicationsView;
