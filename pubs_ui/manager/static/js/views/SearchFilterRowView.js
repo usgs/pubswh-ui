@@ -59,7 +59,8 @@ define([
 				inputType : 'select',
 				select2Init : function(context) {
 					context.$('.value-select-input').select2(DynamicSelect2.getSelectOptions({
-						lookupType : 'publicationseries'
+						lookupType : 'publicationseries',
+						activeSubgroup : true
 					}, DEFAULT_SELECT2_OPTIONS))
 				}
 			},
@@ -69,7 +70,8 @@ define([
 		/*
 		 * @constructs
 		 * @param options
-		 *     @prop {SearchFilterModel} model
+		 *     @prop {Backbone.Model} model
+		 *     @prop {String} el
 		 */
 		initialize : function(options) {
 			BaseView.prototype.initialize.apply(this, arguments);
@@ -122,7 +124,7 @@ define([
 			});
 
 			// Show/hide the appropriate input div and perform any initialization
-			if (selectedCategory.inputType === 'text') {
+			if ((!selectedCategory) || (selectedCategory.inputType === 'text')) {
 				$textInputDiv.show();
 				$selectInputDiv.hide();
 			}
@@ -135,8 +137,8 @@ define([
 			}
 
 			// Clear input fields
-			$textInputDiv.find('input').val();
-			$select.val();
+			$textInputDiv.find('input').val('');
+			$select.val('');
 
 			// Set model value for the current category and remove the old category if necessary.
 			// Then update the data-current-value attribute.

@@ -229,55 +229,13 @@ define([
 
 			this.updatePubSubtype();
 
-			// This is a special case where two lookup's are needed to fetch the active and not active values.
-			// To do this, we redefined the transport function to make the two ajax calls, returning a
-			// deferred which is resolved after both calls are done.
-			this.$('#series-title-input').select2(_.extend({
-				ajax : {
-					url : module.config().lookupUrl + 'publicationseries',
-					data : function(params) {
-						var result =  {
-							mimetype : 'json',
-							publicationsubtypeid : self.model.get('publicationSubtype').id,
-							active : ''
-						};
-						if (_.has(params, 'term')) {
-							result.text = params.term;
-						}
-						return result;
-					},
-					transport : function(params, success, failure) {
-						var deferred = $.Deferred();
-						params.data.active = 'y';
-						var activeRequest = $.ajax(params);
-						params.data.active = 'n';
-						var notActiveRequest = $.ajax(params);
-
-						$.when(activeRequest, notActiveRequest).always(function(activeResults, notActiveResults) {
-							deferred.resolve([activeResults, notActiveResults]);
-						});
-						deferred.done(success);
-						deferred.fail(failure);
-
-						return deferred;
-					},
-					processResults : function(resp) {
-						var results = {
-							results : [{
-								text : 'Active',
-								children : []
-							},{
-								text : 'Not Active',
-								children : []
-							}]
-						};
-						if ((resp.length === 2) && (resp[0].length === 3) && (resp[1].length === 3)) {
-							results.results[0].children = resp[0][0].slice(0, 30);
-							results.results[1].children = resp[1][0].slice(0, 30);
-						}
-						return results;
-					}
-				}
+			this.$('#series-title-input').select2(DynamicSelect2.getSelectOptions({
+				lookupType : 'publicationseries',
+				parentId : 'publicationsubtypeid',
+				getParentId : function() {
+					return self.model.get('publicationSubtype')
+				},
+				activeSubgroup : true
 			}, DEFAULT_SELECT2_OPTIONS));
 			this.updateSeriesTitle();
 

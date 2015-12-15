@@ -1,14 +1,25 @@
 /* jslint browser: true */
 
 define([
+	'squire',
 	'utils/DynamicSelect2'
-], function(DynamicSelect2) {
+], function(Squire, DynamicSelect2) {
 	"use strict";
 
 	describe('DynamicSelect2', function() {
 
 		describe('Tests for getSelectOptions', function() {
-			var resultOptions;
+			var DynamicSelect2, resultOptions;
+
+			beforeEach(function(done) {
+				var injector = new Squire();
+				spyOn($, 'ajax');
+				injector.mock('jquery', $);
+				injector.require(['utils/DynamicSelect2'], function(module) {
+					DynamicSelect2 = module;
+					done();
+				});
+			});
 
 			it('Expects that if the lookupType is a String in options, it will be used to form the lookup url', function() {
 				resultOptions = DynamicSelect2.getSelectOptions({lookupType : 'nameType'});
@@ -75,6 +86,15 @@ define([
 					parent : 'id2',
 					text : 'cd'
 				});
+			});
+
+			it('Expects that if activeSubgroup is specified that a transport function property is used to make make two ajax calls to retrieve active and inactive', function() {
+				resultOptions = DynamicSelect2.getSelectOptions({lookupType : 'nameType', activeSubgroup : true});
+				expect(resultOptions.ajax.transport).toBeDefined();
+				resultOptions.ajax.transport({data : {}}, jasmine.createSpy('successSpy'), jasmine.createSpy('failureSpy'));
+				expect($.ajax.calls.count()).toBe(2);
+				expect($.ajax.calls.argsFor(0)[0].data.active).toEqual('y');
+				expect($.ajax.calls.argsFor(1)[0].data.active).toEqual('n');
 			});
 
 			it('Expects that if defaults are specified they are added to the returned results', function() {
