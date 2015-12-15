@@ -13,8 +13,7 @@ define([
 	var collection = Backbone.PageableCollection.extend({
 
 		url : function() {
-			return module.config().scriptRoot + '/manager/services/mppublications?mimetype=json' +
-					((_.isEmpty(this.filters)) ? '' : '&' + $.param(this.filters))
+			return module.config().scriptRoot + '/manager/services/mppublications'
 		},
 				// Initial pagination states
 		state: {
@@ -39,8 +38,22 @@ define([
 			return this.filters;
 		},
 
+		fetch : function(options) {
+			var defaultData = _.extend({mimetype: 'json'}, this.filters);
+			if (_.has(options, 'data')) {
+				defaultData = _.extend(defaultData, options.data);
+			}
+
+			var defaultOptions = _.extend({data : defaultData}, options);
+
+			return Backbone.PageableCollection.prototype.fetch.call(this, _.extend({traditional : true}, defaultOptions))
+		},
+
 		updateFilters : function(filters) {
-			this.filters = filters;
+			// Remove values that are null or undefined.
+			this.filters = _.pick(filters, function(value) {
+				return (value);
+			});
 		},
 
 		// get the state from web service result

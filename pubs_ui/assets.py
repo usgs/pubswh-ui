@@ -43,7 +43,7 @@ bundles={
         'manager/less/manager_custom.less',
         depends=[
             'manager/less/usgs_header_footer.less',
-            'manager/less/search.less',
+            'manager/less/manage_publications.less',
             'manager/less/publication.less',
             'manager/less/bibliodata.less',
             'manager/less/links.less',

@@ -33,11 +33,12 @@ def services_proxy(op1, op2=None):
     if request.method == 'POST' or request.method == 'PUT' :
         headers.update(request.headers)
 
-    app.logger.info('Service URL is %s' % url)
+    app.logger.info('Service URL is %s?%s' % (url, request.query_string))
+    # Setting the query_string in the url. If we use params set to request.args, params that are repeated
+    # in the query_string do not get encoded. Instead only the first one does.
     proxy_request = Request(method=request.method,
-                            url=url,
+                            url='%s?%s' %(url, request.query_string),
                             headers=headers,
-                            params=request.args,
                             data=request.data)
     resp = Session().send(proxy_request.prepare(), verify=VERIFY_CERT)
     # This fixed an an ERR_INVALID_CHUNKED_ENCODING when the app was run on the deployment server.
@@ -49,4 +50,4 @@ def services_proxy(op1, op2=None):
 
 @manager.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template('manager/404.html'), 404

@@ -4,9 +4,10 @@ define([
 	'squire',
 	'sinon',
 	'jquery',
+	'backbone',
 	'models/PublicationCollection',
 	'views/BaseView',
-], function(Squire, sinon, $, PublicationCollection, BaseView) {
+], function(Squire, sinon, $, Backbone, PublicationCollection, BaseView) {
 	"use strict";
 
 	// Mocking Backgrid is difficult since it's namespaced and encompasses many different methods
@@ -14,12 +15,13 @@ define([
 
 	jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
-	describe('SearchView', function() {
-		var SearchView;
-		var testView, testCollection;
+	describe('ManagePublicationsView', function() {
+		var ManagePublicationsView;
+		var testView, testCollection, testFilterModel;
 		var server;
 
 		var setElAlertSpy, renderAlertSpy, removeAlertSpy, dangerAlertSpy;
+		var setElSearchFilterViewSpy, renderSearchFilterViewSpy, removeSearchFilterViewSpy;
 
 		beforeEach(function (done) {
 			var injector;
@@ -30,9 +32,15 @@ define([
 			removeAlertSpy = jasmine.createSpy('removeAlertSpy');
 			dangerAlertSpy = jasmine.createSpy('dangerAlertSpy');
 
+			setElSearchFilterViewSpy = jasmine.createSpy('setElSearchFilterViewSpy');
+			renderSearchFilterViewSpy = jasmine.createSpy('renderSearchFilterViewSpy');
+			removeSearchFilterViewSpy = jasmine.createSpy('removeSearchFilterViewSpy');
+
 			testCollection = new PublicationCollection();
 			spyOn(testCollection, 'fetch').and.callThrough();
 			spyOn(testCollection, 'setPageSize').and.callThrough();
+
+			testFilterModel = new Backbone.Model();
 
 			injector = new Squire();
 			injector.mock('views/AlertView', BaseView.extend({
@@ -42,8 +50,17 @@ define([
 				showDangerAlert: dangerAlertSpy
 			}));
 
-			injector.require(['views/SearchView'], function(view) {
-				SearchView = view;
+			injector.mock('views/SearchFilterView', BaseView.extend({
+				setElement : setElSearchFilterViewSpy.and.returnValue({
+					render : renderSearchFilterViewSpy
+				}),
+				render : renderSearchFilterViewSpy,
+				remove : removeSearchFilterViewSpy,
+				model : testFilterModel
+			}));
+
+			injector.require(['views/ManagePublicationsView'], function(view) {
+				ManagePublicationsView = view;
 				// Don't set up the fake server until after dependencies have been loaded
 
 				server = sinon.fakeServer.create();
@@ -61,7 +78,7 @@ define([
 		});
 
 		it('Expects that the collection contents are fetched at initialization', function () {
-			testView = new SearchView({
+			testView = new ManagePublicationsView({
 				el: '#test-div',
 				collection: testCollection
 			});
@@ -69,19 +86,20 @@ define([
 		});
 
 		it('Expects that the child view\'s are created', function() {
-			testView = new SearchView({
+			testView = new ManagePublicationsView({
 				el: '#test-div',
 				collection: testCollection
 			});
 
 			expect(setElAlertSpy).toHaveBeenCalled();
+			expect(setElSearchFilterViewSpy).toHaveBeenCalled();
 			expect(testView.grid).toBeDefined();
 			expect(testView.paginator).toBeDefined();
 		});
 
 		describe('Tests for render', function() {
 			beforeEach(function() {
-				testView = new SearchView({
+				testView = new ManagePublicationsView({
 					el: '#test-div',
 					collection: testCollection
 				});
@@ -106,6 +124,12 @@ define([
 				expect(testView.paginator.render).toHaveBeenCalled();
 			});
 
+			it('Expects the search filter view to have been rendered', function() {
+				testView.render();
+				expect(setElSearchFilterViewSpy.calls.count()).toBe(2);
+				expect(renderSearchFilterViewSpy).toHaveBeenCalled();
+			})
+
 			it('Expects that the loading indicator is shown until the fetch has been resolved', function() {
 				var $loadingIndicator;
 				testView.render();
@@ -119,7 +143,7 @@ define([
 
 		describe('Tests for remove', function() {
 			beforeEach(function() {
-				testView = new SearchView({
+				testView = new ManagePublicationsView({
 					el: '#test-div',
 					collection: testCollection
 				});
@@ -131,6 +155,7 @@ define([
 			it('Expects the children view to be removed', function() {
 				testView.remove();
 				expect(removeAlertSpy).toHaveBeenCalled();
+				expect(removeSearchFilterViewSpy).toHaveBeenCalled();
 				expect(testView.grid.remove).toHaveBeenCalled();
 				expect(testView.paginator.remove).toHaveBeenCalled();
 			});
@@ -138,7 +163,7 @@ define([
 
 		describe('Tests for DOM event handlers', function() {
 			beforeEach(function() {
-				testView = new SearchView({
+				testView = new ManagePublicationsView({
 					el: '#test-div',
 					collection: testCollection
 				});
@@ -152,10 +177,11 @@ define([
 				spyOn(testCollection, 'getFirstPage').and.callThrough();
 
 				testView.render();
-				testView.$('#search-term-input').val('Search term');
+
+				testFilterModel.set({q : 'Search term', year : '2015'})
 				testView.filterPubs(ev);
 
-				expect(testCollection.updateFilters).toHaveBeenCalledWith({q : 'Search term'});
+				expect(testCollection.updateFilters).toHaveBeenCalledWith(testFilterModel.attributes);
 				expect(testCollection.getFirstPage).toHaveBeenCalled();
 			});
 
@@ -168,7 +194,7 @@ define([
 
 		describe('Tests for collection event listeners', function() {
 			beforeEach(function() {
-				testView = new SearchView({
+				testView = new ManagePublicationsView({
 					el: '#test-div',
 					collection: testCollection
 				});

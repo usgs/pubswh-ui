@@ -2,6 +2,7 @@
 
 define([
 	'module',
+	'backbone',
 	'backgrid',
 	'backgrid-select-all',
 	'backgrid-paginator',
@@ -9,16 +10,18 @@ define([
 	'views/BackgridClientSortingBody',
 	'views/BaseView',
 	'views/AlertView',
-	'hbs!hb_templates/search'
-], function (module, Backgrid, SelectAll, Paginator, BackgridUrlCell, BackgridClientSortingBody, BaseView, AlertView, hbTemplate) {
+	'views/SearchFilterView',
+	'hbs!hb_templates/managePublications'
+], function (module, Backbone, Backgrid, SelectAll, Paginator, BackgridUrlCell, BackgridClientSortingBody, BaseView,
+			 AlertView, SearchFilterView, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
 
 		events : {
+			'change .page-size-select' : 'changePageSize',
 			'click .search-btn' : 'filterPubs',
-			'submit .pub-search-form' : 'filterPubs',
-			'change .page-size-select' : 'changePageSize'
+			'submit .pub-search-form' : 'filterPubs'
 		},
 
 		template: hbTemplate,
@@ -32,6 +35,7 @@ define([
 
 			// Set the elements for child views and render if needed.
 			this.alertView.setElement(this.$('.alert-container'));
+			this.searchFilterView.setElement(this.$('.pub-search-form')).render();
 
 			// Render the grid and attach the root to HTML document
 			$pubList.append(this.grid.render().el);
@@ -187,12 +191,17 @@ define([
 			this.alertView = new AlertView({
 				el: '.alert-container'
 			});
+			this.searchFilterView = new SearchFilterView({
+				el : '.search-filter-inputs-container',
+				collection : this.collection
+			});
 		},
 
 		remove : function() {
 			this.grid.remove();
 			this.paginator.remove();
 			this.alertView.remove();
+			this.searchFilterView.remove();
 			BaseView.prototype.remove.apply(this, arguments);
 			return this;
 		},
@@ -204,9 +213,7 @@ define([
 			var self = this;
 
 			ev.preventDefault();
-			this.collection.updateFilters({
-				q : this.$('#search-term-input').val()
-			});
+			this.collection.updateFilters(this.searchFilterView.model.attributes);
 			this.collection.getFirstPage()
 					.fail(function(jqXhr) {
 						self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
