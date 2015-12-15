@@ -7,11 +7,12 @@ define([
 	'tinymce',
 	'module',
 	'backbone.stickit',
+	'utils/DynamicSelect2',
 	'models/PublicationTypeCollection',
 	'models/CostCenterCollection',
 	'views/BaseView',
 	'hbs!hb_templates/bibliodata',
-], function(Handlebars, $, select2, tinymce, module, stickit, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate) {
+], function(Handlebars, $, select2, tinymce, module, stickit, DynamicSelect2, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -94,6 +95,10 @@ define([
 
 		render : function() {
 			var self = this;
+			var DEFAULT_SELECT2_OPTIONS = {
+				allowClear : true,
+				theme : 'bootstrap'
+			};
 			BaseView.prototype.render.apply(this, arguments);
 
 			// Sets up the binding between DOM elements and the model //
@@ -186,25 +191,20 @@ define([
 			// Set up for the publication type and larger work type select2's. These are set up once the data for the options
 			// have been retrieved.
 			this.pubTypePromise.done(function() {
-				self.$('#pub-type-input').select2({
-					allowClear: true,
-					theme : 'bootstrap',
+				self.$('#pub-type-input').select2(_.extend({
 					data: self.publicationTypeCollection.toJSON()
-				});
+				}, DEFAULT_SELECT2_OPTIONS));
 				self.updatePubType();
 
-				self.$('#larger-work-type-input').select2({
-					allowClear : true,
+				self.$('#larger-work-type-input').select2(_.extend({
 					data : self.publicationTypeCollection.toJSON()
-				});
+				}, DEFAULT_SELECT2_OPTIONS));
 				self.updateLargerWorkType();
 			});
 
 			// Set up for the cost center select2's. These are set up once the data for the options have been retrieved.
 			this.costCenterPromise.done(function() {
-				self.$('#cost-centers-input').select2({
-					allowClear : true,
-					theme : 'bootstrap',
+				self.$('#cost-centers-input').select2(_.extend({
 					data : [{
 						text : 'Active',
 						children : self.activeCostCenters.toJSON()
@@ -212,113 +212,40 @@ define([
 						text : 'Not Active',
 						children : self.notActiveCostCenters.toJSON()
 					}]
-				});
+				}, DEFAULT_SELECT2_OPTIONS));
 				self.updateCostCenters();
 			});
 
 
 			// The remaining select2's dynamically fetch their options using the lookup service, the current text search term
 			// and optionally filtered by a model attribute value.
-			this.$('#pub-subtype-input').select2({
-				allowClear : true,
-				theme : 'bootstrap',
-				ajax : {
-					url : module.config().lookupUrl + 'publicationsubtypes',
-					data : function(params) {
-						var result = {
-							mimetype : 'json',
-							publicationtypeid : self.model.get('publicationType').id
-						};
-						if (_.has(params, 'term')) {
-							result.text = params.term;
-						}
-						return result;
-					},
-					processResults : function(resp) {
-						return {
-							results : resp
-						};
-					}
+			this.$('#pub-subtype-input').select2(DynamicSelect2.getSelectOptions({
+				lookupType: 'publicationsubtypes',
+				parentId: 'publicationtypeid',
+				getParentId: function () {
+					return self.model.get('publicationType');
 				}
-			});
+			}, DEFAULT_SELECT2_OPTIONS));
+
 			this.updatePubSubtype();
 
-			// This is a special case where two lookup's are needed to fetch the active and not active values.
-			// To do this, we redefined the transport function to make the two ajax calls, returning a
-			// deferred which is resolved after both calls are done.
-			this.$('#series-title-input').select2({
-				allowClear : true,
-				theme : 'bootstrap',
-				ajax : {
-					url : module.config().lookupUrl + 'publicationseries',
-					data : function(params) {
-						var result =  {
-							mimetype : 'json',
-							publicationsubtypeid : self.model.get('publicationSubtype').id,
-							active : ''
-						};
-						if (_.has(params, 'term')) {
-							result.text = params.term;
-						}
-						return result;
-					},
-					transport : function(params, success, failure) {
-						var deferred = $.Deferred();
-						params.data.active = 'y';
-						var activeRequest = $.ajax(params);
-						params.data.active = 'n';
-						var notActiveRequest = $.ajax(params);
-
-						$.when(activeRequest, notActiveRequest).always(function(activeResults, notActiveResults) {
-							deferred.resolve([activeResults, notActiveResults]);
-						});
-						deferred.done(success);
-						deferred.fail(failure);
-
-						return deferred;
-					},
-					processResults : function(resp) {
-						var results = {
-							results : [{
-								text : 'Active',
-								children : []
-							},{
-								text : 'Not Active',
-								children : []
-							}]
-						};
-						if ((resp.length === 2) && (resp[0].length === 3) && (resp[1].length === 3)) {
-							results.results[0].children = resp[0][0].slice(0, 30);
-							results.results[1].children = resp[1][0].slice(0, 30);
-						}
-						return results;
-					}
-				}
-			});
+			this.$('#series-title-input').select2(DynamicSelect2.getSelectOptions({
+				lookupType : 'publicationseries',
+				parentId : 'publicationsubtypeid',
+				getParentId : function() {
+					return self.model.get('publicationSubtype')
+				},
+				activeSubgroup : true
+			}, DEFAULT_SELECT2_OPTIONS));
 			this.updateSeriesTitle();
 
-			this.$('#larger-work-subtype-input').select2({
-				allowClear : true,
-				theme : 'bootstrap',
-				ajax : {
-					url : module.config().lookupUrl + 'publicationsubtypes',
-					data : function(params) {
-						var result = {
-							mimetype : 'json',
-							publicationtypeid : self.model.get('largerWorkType').id
-						};
-						if (_.has(params, 'term')) {
-							result.text = params.term;
-						}
-						return result;
-					},
-					processResults : function(resp) {
-						return {
-							results : resp
-						};
-					}
+			this.$('#larger-work-subtype-input').select2(DynamicSelect2.getSelectOptions({
+				lookupType: 'publicationsubtypes',
+				parentId: 'publicationtypeid',
+				getParentId: function () {
+					return self.model.get('largerWorkType');
 				}
-			});
+			}, DEFAULT_SELECT2_OPTIONS));
 			this.updateLargerWorkSubtype();
 
 			return this;

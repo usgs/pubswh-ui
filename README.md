@@ -1,7 +1,7 @@
 PubsWarehouse_UI
 ================
 
-To get this application running using the flask local dev server you need to create an instances/config.py file
+To get this application running using the flask local dev server you need to create an instance/config.py file
 under PubsWarehouse_UI folder.  The contents of the file should look like so:
 
  ```python
@@ -49,7 +49,8 @@ under PubsWarehouse_UI folder.  The contents of the file should look like so:
  ```
  
 To create the virtualenv you should have python 2.7, virtualenv, pip installed. To install the javascript dependencies you will
-need bower which can be installed by using `npm install -g bower`.
+need bower which can be installed by using `npm install -g bower`. To compile less files, you will need to install lessc which can 
+be installed by using `npm install -g lessc`.
 
 If you are on a linux environment, you can use run the dev_install.sh script. You should run this every time you pull down 
 code but particularly if requirements.txt or pubs_ui/bower.json have been updated. Otherwise these are the steps you need

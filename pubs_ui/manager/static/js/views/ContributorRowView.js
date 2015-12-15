@@ -7,9 +7,10 @@ define([
 	'select2',
 	'module',
 	'backbone.stickit',
+	'utils/DynamicSelect2',
 	'views/BaseView',
 	'hbs!hb_templates/contributorTabRow'
-], function(Handlebars, $, jqueryUi, select2, module, stickit, BaseView, hb_template) {
+], function(Handlebars, $, jqueryUi, select2, module, stickit, DynamicSelect2, BaseView, hb_template) {
 	"use strict";
 	var view = BaseView.extend({
 
@@ -59,39 +60,22 @@ define([
 
 		render : function() {
 			var self = this;
+			var DEFAULT_SELECT2_OPTIONS = {
+				theme : 'bootstrap'
+			};
 			BaseView.prototype.render.apply(this, arguments);
 
 			this.stickit();
 
 			//Initialize select2's
-			this.$('.contributor-type-input').select2({
-				theme : 'bootstrap'
-			});
+			this.$('.contributor-type-input').select2(DEFAULT_SELECT2_OPTIONS);
 			this.updateType();
 
-			this.$('.contributor-name-input').select2({
-				theme: 'bootstrap',
-				ajax : {
-					url : function() {
-						return module.config().lookupUrl + (self.model.get('corporation') ? 'corporations' : 'people');
-					},
-					data : function(params) {
-						var result = {
-							mimetype : 'json'
-						};
-						if (_.has(params, 'term')) {
-							result.text = params.term;
-						}
-						return result;
-					},
-					processResults : function(resp) {
-						return {
-							results : resp
-						};
-					}
+			this.$('.contributor-name-input').select2(DynamicSelect2.getSelectOptions({
+				lookupType: function () {
+					return (self.model.get('corporation') ? 'corporations' : 'people');
 				}
-
-			});
+			}, DEFAULT_SELECT2_OPTIONS));
 			this.updateName();
 			return this;
 		},

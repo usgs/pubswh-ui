@@ -1,0 +1,33 @@
+<div class="publications-container">
+	<div class="alert-container"></div>
+
+	<div class="pub-search-container">
+		<form class="pub-search-form"></form> <!-- search view -->
+		<div class="search-btn-container">
+			<button type="button" class="btn btn-info search-btn">Search</button>
+		</div>
+	</div>
+
+	<div class="pub-list-section">
+		<div class="pub-management-div">
+			<a href="#/publication" class="btn btn-info">Create Publication</a>
+			<a href="{{oldMyPubsEndpoint}}#/Contributor" class="pub-contributor-btn btn btn-info">Manage Contributors</a>
+		</div>
+		<div class="pub-grid-container">
+			<div class="pub-grid backgrid-container"></div>
+			<div class="pubs-loading-indicator"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		</div>
+		<div class="pub-grid-footer">
+			<div class="pub-grid-info">Total items:&nbsp;<span class="pubs-count">0</span></div>
+			<div class="page-size-container form-group form-inline">
+				<label>Page size:&nbsp;</label>
+				<select class="form-control page-size-select">
+					<option value="15">15</option>
+					<option value="25">25</option>
+					<option value="50">50</option>
+					<option value="100" selected>100</option>
+				</select>
+			</div>
+		</div>
+	</div>
+</div>

@@ -45,9 +45,9 @@ define([
 				collection.fetch();
 				expect(server.requests[0].url).toMatch('f1=Text1');
 
-				collection.updateFilters({f2 : 'Text2', f3 : 'Text3'});
+				collection.updateFilters({f2 : ['Text1', 'Text2'], f3 : 'Text3'});
 				collection.fetch();
-				expect(server.requests[1].url).toMatch('f2=Text2&f3=Text3');
+				expect(server.requests[1].url).toMatch('f2=Text1&f2=Text2&f3=Text3');
 			});
 		});
 

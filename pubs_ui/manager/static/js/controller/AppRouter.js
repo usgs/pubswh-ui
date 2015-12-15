@@ -3,19 +3,19 @@
 define([
 	'jquery',
 	'backbone',
-	'views/SearchView',
+	'views/ManagePublicationsView',
 	'views/PublicationView',
 	'views/EditContributorView',
 	'models/PublicationModel',
 	'models/PublicationCollection',
 	'models/ContributorModel'
-], function ($, Backbone, SearchView, PublicationView, EditContributorView, PublicationModel, PublicationCollection, ContributorModel) {
+], function ($, Backbone, ManagePublicationsView, PublicationView, EditContributorView, PublicationModel, PublicationCollection, ContributorModel) {
 	"use strict";
 
 	var appRouter = Backbone.Router.extend({
 		routes: {
-			'': 'searchView',
-			'search': 'searchView',
+			'': 'managePublicationsView',
+			'search': 'managePublicationsView',
 			'publication' : 'publicationView',
 			'publication/:pubId' : 'publicationView',
 			'contributor' : 'editContributorView',
@@ -51,9 +51,9 @@ define([
 			}
 		},
 
-		searchView: function () {
+		managePublicationsView: function () {
 			var collection = new PublicationCollection();
-			this.createView(SearchView,
+			this.createView(ManagePublicationsView,
 				{
 					collection : collection
 				}
