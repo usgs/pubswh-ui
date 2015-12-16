@@ -22,7 +22,8 @@ define([
 		events : {
 			'change .search-category-input' : 'changeCategory',
 			'change .value-text-input' : 'changeValue',
-			'change .value-select-input' : 'changeSelectedValue'
+			'change .value-select-input' : 'changeSelectedValue',
+			'click .delete-row' : 'remove'
 		},
 
 		/*
@@ -96,7 +97,8 @@ define([
 			}, this);
 
 			BaseView.prototype.render.apply(this, arguments);
-			// Dummy initialization of the select2
+			this.$('.search-category-input').select2(DEFAULT_SELECT2_OPTIONS);
+			// Dummy initialization of the value select2
 			this.$('.value-select-input').select2(DEFAULT_SELECT2_OPTIONS);
 		},
 

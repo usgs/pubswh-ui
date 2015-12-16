@@ -17,11 +17,11 @@ define([
 
 	describe('ManagePublicationsView', function() {
 		var ManagePublicationsView;
-		var testView, testCollection, testFilterModel;
+		var testView, testCollection;
 		var server;
 
 		var setElAlertSpy, renderAlertSpy, removeAlertSpy, dangerAlertSpy;
-		var setElSearchFilterViewSpy, renderSearchFilterViewSpy, removeSearchFilterViewSpy;
+		var setElSearchFilterRowViewSpy, renderSearchFilterRowViewSpy, removeSearchFilterRowViewSpy;
 
 		beforeEach(function (done) {
 			var injector;
@@ -32,15 +32,13 @@ define([
 			removeAlertSpy = jasmine.createSpy('removeAlertSpy');
 			dangerAlertSpy = jasmine.createSpy('dangerAlertSpy');
 
-			setElSearchFilterViewSpy = jasmine.createSpy('setElSearchFilterViewSpy');
-			renderSearchFilterViewSpy = jasmine.createSpy('renderSearchFilterViewSpy');
-			removeSearchFilterViewSpy = jasmine.createSpy('removeSearchFilterViewSpy');
+			setElSearchFilterRowViewSpy = jasmine.createSpy('setElSearchFilterRowViewSpy');
+			renderSearchFilterRowViewSpy = jasmine.createSpy('renderSearchFilterRowViewSpy');
+			removeSearchFilterRowViewSpy = jasmine.createSpy('removeSearchFilterRowViewSpy');
 
 			testCollection = new PublicationCollection();
 			spyOn(testCollection, 'fetch').and.callThrough();
 			spyOn(testCollection, 'setPageSize').and.callThrough();
-
-			testFilterModel = new Backbone.Model();
 
 			injector = new Squire();
 			injector.mock('views/AlertView', BaseView.extend({
@@ -50,13 +48,12 @@ define([
 				showDangerAlert: dangerAlertSpy
 			}));
 
-			injector.mock('views/SearchFilterView', BaseView.extend({
-				setElement : setElSearchFilterViewSpy.and.returnValue({
-					render : renderSearchFilterViewSpy
+			injector.mock('views/SearchFilterRowView', BaseView.extend({
+				setElement : setElSearchFilterRowViewSpy.and.returnValue({
+					render : renderSearchFilterRowViewSpy
 				}),
-				render : renderSearchFilterViewSpy,
-				remove : removeSearchFilterViewSpy,
-				model : testFilterModel
+				render : renderSearchFilterRowViewSpy,
+				remove : removeSearchFilterRowViewSpy
 			}));
 
 			injector.require(['views/ManagePublicationsView'], function(view) {
@@ -68,6 +65,11 @@ define([
 				'[{"id":70004236,"text":"70004236 - noyr - Estimates of In-Place Oil Shale", "lastModifiedDate":"2015-12-02T09:59:51","indexId":"70004236","publicationYear":"2015","publicationType":{"id":4,"text":"Book"},"title":"Estimates of In-Place Oil Shale"},' +
 				'{"id":70004244,"text":"70004244 - noyr - Diversity of the Lunar Maria", "lastModifiedDate":"2012-07-23T14:22:01","indexId":"70004244","publicationYear":"2014","publicationType":{"id":4,"text":"Book"},"title":"Diversity of the Lunar Maria"},' +
 				'{"id":70004243,"text":"70004243 - noyr - Developing Climate Data Records","lastModifiedDate":"2012-03-27T16:31:33","indexId":"70004243","publicationYear":"2014","publicationType":{"id":4,"text":"Book"},"title":"Developing Climate Data Records"}]}');
+
+				testView = new ManagePublicationsView({
+					el: '#test-div',
+					collection: testCollection
+				});
 				done();
 			});
 		});
@@ -78,62 +80,44 @@ define([
 			$('#test-div').remove();
 		});
 
+		it('Expects that a filterModel property is created at initialzation', function() {
+			expect(testView.filterModel).toBeDefined();
+		});
+
 		it('Expects that the collection contents are fetched at initialization', function () {
-			testView = new ManagePublicationsView({
-				el: '#test-div',
-				collection: testCollection
-			});
 			expect(testCollection.fetch).toHaveBeenCalled();
 		});
 
 		it('Expects that the child view\'s are created', function() {
-			testView = new ManagePublicationsView({
-				el: '#test-div',
-				collection: testCollection
-			});
-
 			expect(setElAlertSpy).toHaveBeenCalled();
-			expect(setElSearchFilterViewSpy).toHaveBeenCalled();
 			expect(testView.grid).toBeDefined();
 			expect(testView.paginator).toBeDefined();
 		});
 
 		describe('Tests for render', function() {
 			beforeEach(function() {
-				testView = new ManagePublicationsView({
-					el: '#test-div',
-					collection: testCollection
-				});
-
 				spyOn(testView.grid, 'render').and.returnValue({
 					el : {}
 				});
 				spyOn(testView.paginator, 'render').and.returnValue({
 					el : {}
 				});
+				testView.render();
 			});
 
 			it('Expects that the alertView\'s element is set but the view is not rendered', function() {
-				testView.render();
 				expect(setElAlertSpy.calls.count()).toBe(2);
 				expect(renderAlertSpy).not.toHaveBeenCalled();
 			});
 
 			it('Expects the grid and paginator to have been rendered.', function() {
-				testView.render();
 				expect(testView.grid.render).toHaveBeenCalled();
 				expect(testView.paginator.render).toHaveBeenCalled();
 			});
 
-			it('Expects the search filter view to have been rendered', function() {
-				testView.render();
-				expect(setElSearchFilterViewSpy.calls.count()).toBe(2);
-				expect(renderSearchFilterViewSpy).toHaveBeenCalled();
-			})
-
 			it('Expects that the loading indicator is shown until the fetch has been resolved', function() {
 				var $loadingIndicator;
-				testView.render();
+
 				$loadingIndicator = testView.$('.pubs-loading-indicator');
 				expect($loadingIndicator.is(':visible')).toBe(true);
 				server.respond();
@@ -144,11 +128,10 @@ define([
 
 		describe('Tests for remove', function() {
 			beforeEach(function() {
-				testView = new ManagePublicationsView({
-					el: '#test-div',
-					collection: testCollection
-				});
-
+				testView.render();
+				var $addBtn = testView.$('.add-category-btn');
+				$addBtn.trigger('click');
+				$addBtn.trigger('click');
 				spyOn(testView.grid, 'remove').and.callThrough();
 				spyOn(testView.paginator, 'remove').and.callThrough();
 			});
@@ -156,7 +139,7 @@ define([
 			it('Expects the children view to be removed', function() {
 				testView.remove();
 				expect(removeAlertSpy).toHaveBeenCalled();
-				expect(removeSearchFilterViewSpy).toHaveBeenCalled();
+				expect(removeSearchFilterRowViewSpy.calls.count()).toEqual(2);
 				expect(testView.grid.remove).toHaveBeenCalled();
 				expect(testView.paginator.remove).toHaveBeenCalled();
 			});
@@ -164,41 +147,48 @@ define([
 
 		describe('Tests for DOM event handlers', function() {
 			beforeEach(function() {
-				testView = new ManagePublicationsView({
-					el: '#test-div',
-					collection: testCollection
-				});
-			});
-
-			it('Expects that a call to filterPubs updates the collection\'s filters and then gets the first page of publications', function() {
-				var ev = {
-					preventDefault : jasmine.createSpy('preventDefaultSpy')
-				};
+				testView.render();
+			})
+			it('Expects that a clicking the search button updates the collection\'s filters and then gets the first page of publications', function() {
 				spyOn(testCollection, 'updateFilters');
 				spyOn(testCollection, 'getFirstPage').and.callThrough();
 
-				testView.render();
+				testView.filterModel.set({q : 'Search term', year : '2015'});
+				testView.$('.search-btn').trigger('click');
 
-				testFilterModel.set({q : 'Search term', year : '2015'})
-				testView.filterPubs(ev);
-
-				expect(testCollection.updateFilters).toHaveBeenCalledWith(testFilterModel.attributes);
+				expect(testCollection.updateFilters).toHaveBeenCalledWith(testView.filterModel.attributes);
 				expect(testCollection.getFirstPage).toHaveBeenCalled();
 			});
 
 			it('Expects that when the page size select is changed, the collection\'s page size is updated', function() {
-				testView.render();
 				testView.$('.page-size-select').val('25').trigger('change');
 				expect(testCollection.setPageSize).toHaveBeenCalledWith(25);
-			})
+			});
+
+			it('Expects that changing the search term will update the filterModel\'s q property', function() {
+				var $searchInput = testView.$('#search-term-input')
+				$searchInput.val('Junk test').trigger('change');
+				expect(testView.filterModel.get('q')).toEqual('Junk test');
+
+				$searchInput.val('').trigger('change');
+				expect(testView.filterModel.get('q')).toEqual('');
+			});
+
+			it('Expects that clicking the add category btn creates and renders a SearchFilterRowView', function() {
+				var $addBtn = testView.$('.add-category-btn');
+				$addBtn.trigger('click');
+				expect(setElSearchFilterRowViewSpy.calls.count()).toBe(2);
+				expect(renderSearchFilterRowViewSpy).toHaveBeenCalled();
+
+				$addBtn.trigger('click');
+				expect(setElSearchFilterRowViewSpy.calls.count()).toBe(4);
+				expect(renderSearchFilterRowViewSpy.calls.count()).toBe(2);
+			});
+
 		});
 
 		describe('Tests for collection event listeners', function() {
 			beforeEach(function() {
-				testView = new ManagePublicationsView({
-					el: '#test-div',
-					collection: testCollection
-				});
 				testView.render();
 				server.respond();
 			});
