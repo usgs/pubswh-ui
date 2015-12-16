@@ -1,18 +1,35 @@
 <div class="publications-container">
 	<div class="alert-container"></div>
-
-	<div class="pub-search-container">
-		<form class="pub-search-form"></form> <!-- search view -->
-		<div class="search-btn-container">
-			<button type="button" class="btn btn-info search-btn">Search</button>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#manager-navbar-collapse aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				  </button>
+			</div>
+			<div class="collapse navbar-collapse" id="manager-navbar-collapse">
+				<form class="navbar-form navbar-left pub-search-form" role="search">
+					<div class="form-group has-feedback">
+						<input id="search-term-input" type="text" class="form-control" placeholder="Search criteria"/>
+						<span class="form-control-feedback"><i class="fa fa-search"></i></span>
+					</div>
+					<button type="button" class="btn btn-info search-btn">Search</button>
+					<button type="button" class="btn btn-default add-category-btn">Add search category</button>
+				</form>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#">Create Publication</a></li>
+					<li><a href="#">Manager Contributors</a></li>
+				</ul>
+			</div>
 		</div>
-	</div>
+	</nav>
+
+	<div class="advanced-search-rows-container form-inline"></div>
 
 	<div class="pub-list-section">
-		<div class="pub-management-div">
-			<a href="#/publication" class="btn btn-info">Create Publication</a>
-			<a href="{{oldMyPubsEndpoint}}#/Contributor" class="pub-contributor-btn btn btn-info">Manage Contributors</a>
-		</div>
 		<div class="pub-grid-container">
 			<div class="pub-grid backgrid-container"></div>
 			<div class="pubs-loading-indicator"><i class="fa fa-spinner fa-spin fa-5x"></i></div>

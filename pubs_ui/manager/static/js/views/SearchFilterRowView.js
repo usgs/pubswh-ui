@@ -22,7 +22,8 @@ define([
 		events : {
 			'change .search-category-input' : 'changeCategory',
 			'change .value-text-input' : 'changeValue',
-			'change .value-select-input' : 'changeSelectedValue'
+			'change .value-select-input' : 'changeSelectedValue',
+			'click .delete-row' : 'remove'
 		},
 
 		/*
