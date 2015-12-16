@@ -1,9 +1,9 @@
 <div class="search-filter-row form-inline">
 	<div class="form-group search-category-div">
 		<span class="fa fa-minus-circle delete-row"></span>
-		<select class="search-category-input form-control" placeholder="Select category" style="width: 90%">
-			<option>Select Category</option>
+		<select class="search-category-input form-control" data-placeholder="Select category" style="width: 90%">
 			{{#each categories}}
+				<option></option>
 				<option value="{{id}}" {{#if disabled}}disabled{{/if}}>{{text}}</option>
 			{{/each}}
 		</select>
