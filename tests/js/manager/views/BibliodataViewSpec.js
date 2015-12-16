@@ -14,6 +14,7 @@ define([
 		var pubTypeFetchSpy, costCenterFetchSpy;
 		var pubModel;
 		var BibliodataView, testView;
+		var injector;
 
 		beforeEach(function(done) {
 			$('body').append('<div id="test-div"></div>');
@@ -36,7 +37,7 @@ define([
 
 			spyOn(window, 'setInterval');// So the tinymce does not get initialized
 
-			var injector = new Squire();
+			injector = new Squire();
 			injector.mock('jquery', $);
 			injector.mock('models/PublicationTypeCollection', Backbone.Collection.extend({
 				model: LookupModel,
@@ -56,6 +57,7 @@ define([
 		});
 
 		afterEach(function() {
+			injector.remove();
 			testView.remove();
 			$('#test-div').remove();
 		});

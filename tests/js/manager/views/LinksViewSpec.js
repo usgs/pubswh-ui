@@ -15,9 +15,9 @@ define([
 		var fetchLinkTypeSpy, fetchLinkFileTypeSpy;
 		var setElLinkRowViewSpy, renderLinkRowViewSpy, removeLinkRowViewSpy;
 		var appendToSpy;
+		var injector;
 
 		beforeEach(function(done) {
-			var injector;
 			$('body').append('<div id="test-div"></div>');
 
 			fetchDeferred = $.Deferred();
@@ -64,6 +64,7 @@ define([
 		});
 
 		afterEach(function() {
+			injector.remove();
 			testView.remove();
 			$('#test-div').remove();
 		});

@@ -9,17 +9,18 @@
  ], function(Squire, $, _, PublicationContributorCollection, PublicationContributorModel) {
 	 "use strict";
 
-	 var ContributorTabView, testView;
-	 var testCollection;
-	 var CONTRIB_TYPE = {id : 1, text : 'Type1'};
 
-	 var setElContribRowViewSpy, renderContribRowViewSpy, removeContribRowViewSpy;
-	 var appendToSpy;
 
 	 describe('ContributorTabView', function() {
-		 beforeEach(function (done) {
-			 var injector;
+		 var ContributorTabView, testView;
+		 var testCollection;
+		 var CONTRIB_TYPE = {id : 1, text : 'Type1'};
 
+		 var setElContribRowViewSpy, renderContribRowViewSpy, removeContribRowViewSpy;
+		 var appendToSpy;
+		 var injector;
+
+		 beforeEach(function (done) {
 			 $('body').append('<div id="test-div">');
 
 			 testCollection = new PublicationContributorCollection([{
@@ -59,6 +60,7 @@
 		 });
 
 		 afterEach(function () {
+			 injector.remove();
 			 testView.remove();
 			 $('#test-div').remove();
 		 });

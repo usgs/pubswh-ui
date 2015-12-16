@@ -19,12 +19,12 @@ define([
 		var ManagePublicationsView;
 		var testView, testCollection;
 		var server;
+		var injector;
 
 		var setElAlertSpy, renderAlertSpy, removeAlertSpy, dangerAlertSpy;
 		var setElSearchFilterRowViewSpy, renderSearchFilterRowViewSpy, removeSearchFilterRowViewSpy;
 
 		beforeEach(function (done) {
-			var injector;
 			$('body').append('<div id="test-div"></div>');
 
 			setElAlertSpy = jasmine.createSpy('setElAlertSpy');
@@ -56,6 +56,7 @@ define([
 				remove : removeSearchFilterRowViewSpy
 			}));
 
+
 			injector.require(['views/ManagePublicationsView'], function(view) {
 				ManagePublicationsView = view;
 				// Don't set up the fake server until after dependencies have been loaded
@@ -75,6 +76,7 @@ define([
 		});
 
 		afterEach(function () {
+			injector.remove();
 			server.restore();
 			testView.remove();
 			$('#test-div').remove();

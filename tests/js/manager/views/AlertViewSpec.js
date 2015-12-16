@@ -7,10 +7,11 @@ define([
 	describe('AlertView', function() {
 		var AlertView;
 		var testView;
+		var injector;
 
 		beforeEach(function(done) {
 			$('body').append('<div id="test-div"><div>');
-			var injector = new Squire();
+			injector = new Squire();
 
 			injector.mock('text!hb_templates/alert.hbs',
 				'<div class="alert {{alertKind}}"><div class="alert-message">{{message}}</div></div>'
@@ -26,6 +27,7 @@ define([
 		});
 
 		afterEach(function() {
+			injector.remove();
 			testView.remove();
 			$('#test-div').remove();
 		});

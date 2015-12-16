@@ -10,9 +10,10 @@ define([
 
 		describe('Tests for getSelectOptions', function() {
 			var DynamicSelect2, resultOptions;
+			var injector;
 
 			beforeEach(function(done) {
-				var injector = new Squire();
+				injector = new Squire();
 				spyOn($, 'ajax');
 				injector.mock('jquery', $);
 				injector.require(['utils/DynamicSelect2'], function(module) {
@@ -21,6 +22,9 @@ define([
 				});
 			});
 
+			afterEach(function() {
+				injector.remove();
+			});
 			it('Expects that if the lookupType is a String in options, it will be used to form the lookup url', function() {
 				resultOptions = DynamicSelect2.getSelectOptions({lookupType : 'nameType'});
 

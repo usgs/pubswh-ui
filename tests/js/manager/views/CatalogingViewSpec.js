@@ -10,10 +10,9 @@ define([
 	describe('CatalogingView', function() {
 		var CatalogingView, testView;
 		var testModel;
+		var injector;
 
 		beforeEach(function(done) {
-			var injector;
-
 			$('body').append('<div id="test-div"></div>');
 
 			testModel = new PublicationModel();
@@ -32,6 +31,7 @@ define([
 		});
 
 		afterEach(function() {
+			injector.remove();
 			testView.remove();
 			$('#test-div').remove();
 		});

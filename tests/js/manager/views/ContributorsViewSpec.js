@@ -9,17 +9,19 @@ define([
 ], function(Squire, $, Backbone, BaseView, LookupModel) {
 	"use strict";
 
-	var ContributorsView;
-	var testView;
-
-	var renderBaseViewSpy;
-	var setElContribTabSpy, renderContribTabSpy, removeContribTabSpy, findElContribTabSpy;
-	var fetchContribTypeSpy;
-
-	var contributorsModel;
-	var fetchContribTypeDeferred;
 
 	describe('ContributorsView', function() {
+
+		var ContributorsView;
+		var testView;
+
+		var renderBaseViewSpy;
+		var setElContribTabSpy, renderContribTabSpy, removeContribTabSpy, findElContribTabSpy;
+		var fetchContribTypeSpy;
+
+		var contributorsModel;
+		var fetchContribTypeDeferred;
+		var injector;
 
 		beforeEach(function (done) {
 			$('body').append('<div id="test-div"></div>');
@@ -35,7 +37,7 @@ define([
 
 			fetchContribTypeSpy = jasmine.createSpy('fetchContribTypeSpy').and.returnValue(fetchContribTypeDeferred);
 
-			var injector = new Squire();
+			injector = new Squire();
 
 			injector.mock('views/BaseView', BaseView); // needed to spy on BaseView functions
 			injector.mock('views/ContributorTabView', BaseView.extend({
@@ -59,6 +61,7 @@ define([
 		});
 
 		afterEach(function () {
+			injector.remove();
 			testView.remove();
 			$('#test-div').remove();
 		});
