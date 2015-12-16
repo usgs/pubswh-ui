@@ -12,6 +12,7 @@ define([
 ],
 function(BaseView) {
 	describe('BaseView', function() {
+		var testView;
 		beforeEach(function() {
 			$('body').append('<div id="test-div"></div>');
 			this.$testDiv = $('#test-div');
@@ -24,11 +25,12 @@ function(BaseView) {
 		});
 
 		afterEach(function() {
+			testView.remove();
 			this.$testDiv.remove();
 		});
 
 		it('Expects the template property to be used to render this view if not overridden in options', function() {
-			var testView = new this.TestView({
+			testView = new this.TestView({
 				el : this.$testDiv
 			});
 
@@ -37,7 +39,7 @@ function(BaseView) {
 
 		it('Expects the template passed in via instantiation to override the template property when rendering', function() {
 			var testTemplate = jasmine.createSpy('secondTemplateSpy').and.returnValue('New template content');
-			var testView = new this.TestView({
+			testView = new this.TestView({
 				el : this.$testDiv,
 				template : testTemplate
 			});
@@ -46,7 +48,7 @@ function(BaseView) {
 		});
 
 		it('Expects a call to render to call the template function and render the content', function() {
-			var testView = new this.TestView({
+			testView = new this.TestView({
 				el : this.$testDiv
 			}).render();
 			testView.render();
@@ -55,7 +57,7 @@ function(BaseView) {
 		});
 
 		it('Expects that if the view is instantiated with a context, that context is called by the template function', function() {
-			var testView = new this.TestView({
+			testView = new this.TestView({
 				el : this.$testDiv,
 				template : this.templateSpy,
 				context : {

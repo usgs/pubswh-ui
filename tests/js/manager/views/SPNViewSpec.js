@@ -14,9 +14,9 @@ define([
 		var testModel;
 		var serviceCenterFetchDeferred;
 		var serviceCenterFetchSpy;
+		var injector;
 
 		beforeEach(function(done) {
-			var injector;
 
 			$('body').append('<div id="test-div"></div>');
 
@@ -42,6 +42,8 @@ define([
 		});
 
 		afterEach(function() {
+			injector.remove();
+			testView.remove();
 			$('#test-div').remove();
 		});
 

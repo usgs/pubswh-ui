@@ -10,9 +10,10 @@ define([
 	describe('SearchFilterRowView', function() {
 		var SearchFilterRowView, testView, testModel;
 		var fetchPubTypeSpy, fetchPubTypeDeferred;
+		var injector;
 
 		beforeEach(function (done) {
-			var injector = new Squire();
+			injector = new Squire();
 
 			$('body').append('<div id="test-div"></div>');
 			testModel = new Backbone.Model();
@@ -38,6 +39,8 @@ define([
 		});
 
 		afterEach(function () {
+			injector.remove();
+			testView.remove();
 			$('#test-div').remove();
 		});
 
@@ -100,7 +103,6 @@ define([
 
 		describe('Tests for DOM event handlers', function() {
 			beforeEach(function() {
-				testView
 				testView.render();
 			});
 

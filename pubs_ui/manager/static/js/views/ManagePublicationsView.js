@@ -10,10 +10,10 @@ define([
 	'views/BackgridClientSortingBody',
 	'views/BaseView',
 	'views/AlertView',
-	'views/SearchFilterView',
+	'views/SearchFilterRowView',
 	'hbs!hb_templates/managePublications'
 ], function (module, Backbone, Backgrid, SelectAll, Paginator, BackgridUrlCell, BackgridClientSortingBody, BaseView,
-			 AlertView, SearchFilterView, hbTemplate) {
+			 AlertView, SearchFilterRowView, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -21,35 +21,13 @@ define([
 		events : {
 			'change .page-size-select' : 'changePageSize',
 			'click .search-btn' : 'filterPubs',
-			'submit .pub-search-form' : 'filterPubs'
+			'submit .pub-search-form' : 'filterPubs',
+			'change #search-term-input' : 'updateQterm',
+			'click .add-category-btn' : 'addFilterRow',
+			'click .clear-advanced-search-btn' : 'clearFilterRows'
 		},
 
 		template: hbTemplate,
-
-		render : function() {
-			var self = this;
-			var $pubList;
-
-			BaseView.prototype.render.apply(this, arguments);
-			$pubList = this.$('.pub-grid');
-
-			// Set the elements for child views and render if needed.
-			this.alertView.setElement(this.$('.alert-container'));
-			this.searchFilterView.setElement(this.$('.pub-search-form')).render();
-
-			// Render the grid and attach the root to HTML document
-			$pubList.append(this.grid.render().el);
-
-			// Render the paginator
-			this.$('.pub-grid-footer').append(this.paginator.render().el);
-
-			this.fetchPromise.fail(function(jqXhr) {
-				self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
-			}).always(function() {
-				// Make sure indicator is hidden. Need to do this in case the sync signal was sent before the view was rendered
-				self.updatePubsListDisplay();
-			});
-		},
 
 		/*
 		 * @param {Object} options
@@ -60,7 +38,11 @@ define([
 			var self = this;
 			BaseView.prototype.initialize.apply(this, arguments);
 
-			this.context.futureFeatures = false; // Using this temporarily to hide parts of the search template
+			// Create filter model, listeners, and holder for filter rows.
+			this.filterModel = new Backbone.Model();
+			this.listenTo(this.model, 'change:q', this.changeQterm);
+			this.filterRowViews = [];
+
 			// Can get rid of this once the edit contributors page is implemented.
 			this.context.oldMyPubsEndpoint = module.config().oldMyPubsEndpoint;
 
@@ -191,9 +173,29 @@ define([
 			this.alertView = new AlertView({
 				el: '.alert-container'
 			});
-			this.searchFilterView = new SearchFilterView({
-				el : '.search-filter-inputs-container',
-				collection : this.collection
+		},
+
+		render : function() {
+			var self = this;
+			var $pubList;
+
+			BaseView.prototype.render.apply(this, arguments);
+			$pubList = this.$('.pub-grid');
+
+			// Set the elements for child views and render if needed.
+			this.alertView.setElement(this.$('.alert-container'));
+
+			// Render the grid and attach the root to HTML document
+			$pubList.append(this.grid.render().el);
+
+			// Render the paginator
+			this.$('.pub-grid-footer').append(this.paginator.render().el);
+
+			this.fetchPromise.fail(function(jqXhr) {
+				self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
+			}).always(function() {
+				// Make sure indicator is hidden. Need to do this in case the sync signal was sent before the view was rendered
+				self.updatePubsListDisplay();
 			});
 		},
 
@@ -201,7 +203,10 @@ define([
 			this.grid.remove();
 			this.paginator.remove();
 			this.alertView.remove();
-			this.searchFilterView.remove();
+			_.each(this.filterRowViews, function(view) {
+				view.remove();
+			});
+
 			BaseView.prototype.remove.apply(this, arguments);
 			return this;
 		},
@@ -213,7 +218,7 @@ define([
 			var self = this;
 
 			ev.preventDefault();
-			this.collection.updateFilters(this.searchFilterView.model.attributes);
+			this.collection.updateFilters(this.filterModel.attributes);
 			this.collection.getFirstPage()
 					.fail(function(jqXhr) {
 						self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
@@ -222,6 +227,39 @@ define([
 
 		changePageSize : function(ev) {
 			this.collection.setPageSize(parseInt(ev.currentTarget.value));
+		},
+
+		updateQterm : function(ev) {
+			this.filterModel.set('q', ev.currentTarget.value);
+		},
+
+		addFilterRow : function(ev) {
+			ev.preventDefault();
+			var $rowContainer = this.$('.advanced-search-rows-container');
+			var newRow = new SearchFilterRowView({
+				el : '.filter-row-container',
+				model : this.filterModel
+			});
+			$rowContainer.append('<div class="filter-row-container"></div>');
+			this.$('.advanced-search-rows-container').append('<div ');
+			newRow.setElement($rowContainer.find('.filter-row-container:last-child')).render();
+			this.filterRowViews.push(newRow);
+		},
+
+		clearFilterRows : function(ev) {
+			var self = this;
+			ev.preventDefault();
+			_.each(this.filterRowViews, function(view) {
+				view.remove();
+			});
+			this.filterRowViews = [];
+		},
+
+		/*
+		 * filterModel event handlers
+		 */
+		changeQTerm : function() {
+			this.$('#search-term-input').val(this.filterModel.get('q'));
 		},
 
 		/* collection event handlers */
