@@ -24,6 +24,8 @@ define([
 		var pubModel;
 		var opDeferred;
 
+		var injector;
+
 		beforeEach(function(done) {
 			$('body').append('<div id="test-div"></div>');
 
@@ -90,7 +92,7 @@ define([
 			});
 
 
-			var injector = new Squire();
+			injector = new Squire();
 			injector.mock('views/AlertView', BaseView.extend({
 				setElement : setElAlertSpy,
 				render : renderAlertSpy,
@@ -162,6 +164,7 @@ define([
 		});
 
 		afterEach(function() {
+			injector.remove();
 			testView.remove();
 			$('#test-div').remove();
 		});

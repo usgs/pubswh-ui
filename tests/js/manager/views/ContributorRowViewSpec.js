@@ -9,13 +9,13 @@ define([
 ], function(Squire, sinon, $, PublicationContributorModel, PublicationContributorCollection) {
 	"use strict";
 
-	var ContributorRowView, testView, testModel, testCollection;
 
 	describe('ContributorRowView', function() {
 
-		beforeEach(function(done) {
-			var injector;
+		var ContributorRowView, testView, testModel, testCollection;
+		var injector;
 
+		beforeEach(function(done) {
 			$('body').append('<div id="test-div"></div>');
 
 			testModel = new PublicationContributorModel();
@@ -31,6 +31,7 @@ define([
 		});
 
 		afterEach(function() {
+			injector.remove();
 			testView.remove();
 			$('#test-div').remove();
 		});

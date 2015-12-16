@@ -10,11 +10,12 @@ define([
 ], function(Squire, $, select2,  Backbone, LinkModel, LinkCollection) {
 	"use strict";
 
-	var testModel, testCollection, linkTypeCollection, linkFileTypeCollection;
-	var LinkRowView;
-	var testView;
 
 	describe('LinkRowView', function() {
+		var testModel, testCollection, linkTypeCollection, linkFileTypeCollection;
+		var LinkRowView;
+		var testView;
+		var injector;
 
 		beforeEach(function(done) {
 			$('body').append('<div id="test-div"></div>');
@@ -38,7 +39,7 @@ define([
 			spyOn(testCollection, 'updateModelRank');
 			spyOn(testCollection, 'remove');
 
-			var injector = new Squire();
+			injector = new Squire();
 			injector.mock('jquery', $);
 
 			injector.require(['views/LinkRowView'], function(view) {
@@ -48,6 +49,7 @@ define([
 		});
 
 		afterEach(function() {
+			injector.remove();
 			testView.remove();
 			$('#test-div').remove();
 		});
