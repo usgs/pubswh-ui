@@ -5,9 +5,15 @@ define([
 	'sinon',
 	'jquery',
 	'backbone',
+	'backgrid',
+	'backgrid-paginator',
+	'views/BackgridUrlCell',
+	'views/BackgridClientSortingBody',
 	'models/PublicationCollection',
 	'views/BaseView',
-], function(Squire, sinon, $, Backbone, PublicationCollection, BaseView) {
+	'hbs!hb_templates/managePublications'
+], function(Squire, sinon, $, Backbone, Backgrid, Paginator, BackgridUrlCell, BackgridClientSortingBody,
+			PublicationCollection, BaseView, hbTemplate) {
 	"use strict";
 
 	// Mocking Backgrid is difficult since it's namespaced and encompasses many different methods
@@ -41,6 +47,15 @@ define([
 			spyOn(testCollection, 'setPageSize').and.callThrough();
 
 			injector = new Squire();
+			/* preloading all modules to see if this eliminates the timout issue on Jenkins */
+			injector.mock('backbone', Backbone);
+			injector.mock('backgrid', Backgrid);
+			injector.mock('backgrid-paginator', Paginator);
+			injector.mock('views/BackgridUrlCell', BackgridUrlCell);
+			injector.mock('views/BackgridClientSortingBody', BackgridClientSortingBody);
+			injector.mock('views/BaseView', BaseView);
+			injector.mock('hbs!hb_templates/managePublications', hbTemplate);
+
 			injector.mock('views/AlertView', BaseView.extend({
 				setElement: setElAlertSpy,
 				render: renderAlertSpy,
@@ -150,7 +165,7 @@ define([
 		describe('Tests for DOM event handlers', function() {
 			beforeEach(function() {
 				testView.render();
-			})
+			});
 			it('Expects that a clicking the search button updates the collection\'s filters and then gets the first page of publications', function() {
 				spyOn(testCollection, 'updateFilters');
 				spyOn(testCollection, 'getFirstPage').and.callThrough();

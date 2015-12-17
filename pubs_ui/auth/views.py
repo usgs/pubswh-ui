@@ -2,7 +2,7 @@
 from flask import render_template, request, flash, redirect, url_for, Blueprint
 from flask.ext.wtf import Form
 from flask_login import LoginManager, logout_user, UserMixin, login_user
-from itsdangerous import URLSafeTimedSerializer
+from itsdangerous import URLSafeTimedSerializer, BadSignature
 from requests import post
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
@@ -111,12 +111,13 @@ def load_user(userid):
     # TODO: catch a cookie that is too old and logout the user
     try:
         session_data = login_serializer.loads(token_cookie, max_age=MAX_AGE)
+    except BadSignature:
+        logout_user()
+        flash('your login has expired, please log in again')
+    else:
         # get the token from the session data
         mypubs_token = session_data[1]
         return User.get(userid, mypubs_token)
-    except TypeError:  # this typeerror typically occurs when the token has expired.
-        logout_user()
-        flash('your login has expired, please log in again')
 
 
 @login_manager.token_loader
