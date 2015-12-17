@@ -4,7 +4,6 @@ define([
 	'module',
 	'backbone',
 	'backgrid',
-	'backgrid-select-all',
 	'backgrid-paginator',
 	'views/BackgridUrlCell',
 	'views/BackgridClientSortingBody',
@@ -12,7 +11,7 @@ define([
 	'views/AlertView',
 	'views/SearchFilterRowView',
 	'hbs!hb_templates/managePublications'
-], function (module, Backbone, Backgrid, SelectAll, Paginator, BackgridUrlCell, BackgridClientSortingBody, BaseView,
+], function (module, Backbone, Backgrid, Paginator, BackgridUrlCell, BackgridClientSortingBody, BaseView,
 			 AlertView, SearchFilterRowView, hbTemplate) {
 	"use strict";
 
