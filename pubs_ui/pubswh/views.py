@@ -119,7 +119,7 @@ def webmaster_tools_verification():
 
 
 @pubswh.route('/')
-@cache.cached(timeout=300, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
+@cache.cached(timeout=300, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def index():
     user = current_user.get_id()
 
@@ -185,7 +185,7 @@ def contact_confirmation():
 
 # leads to rendered html for publication page
 @pubswh.route('/publication/<index_id>')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def publication(index_id):
     r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
     if r.status_code == 404:
@@ -271,7 +271,7 @@ def other_resources():
 
 @pubswh.route('/browse/', defaults={'path': ''})
 @pubswh.route('/browse/<path:path>')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def browse(path):
     app.logger.info("path: " + path)
     browsecontent = getbrowsecontent(browse_url + path, browse_replace)
@@ -280,7 +280,7 @@ def browse(path):
 
 # this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
 @pubswh.route('/search', methods=['GET'])
-@cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
+@cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def search_results():
     form = SearchForm(request.args)
 
