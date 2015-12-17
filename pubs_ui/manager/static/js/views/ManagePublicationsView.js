@@ -23,7 +23,8 @@ define([
 			'submit .pub-search-form' : 'filterPubs',
 			'change #search-term-input' : 'updateQterm',
 			'click .add-category-btn' : 'addFilterRow',
-			'click .clear-advanced-search-btn' : 'clearFilterRows'
+			'click .clear-advanced-search-btn' : 'clearFilterRows',
+			'click .create-pub-btn' : 'goToEditPubPage'
 		},
 
 		template: hbTemplate,
@@ -252,6 +253,10 @@ define([
 				view.remove();
 			});
 			this.filterRowViews = [];
+		},
+
+		goToEditPubPage : function (ev) {
+			this.router.navigate('publication', {trigger: true});
 		},
 
 		/*

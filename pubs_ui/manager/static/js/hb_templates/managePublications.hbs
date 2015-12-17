@@ -3,7 +3,7 @@
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#manager-navbar-collapse aria-expanded="false">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#manager-navbar-collapse" aria-expanded="false">
 					<span class="sr-only">Toggle navigation</span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
@@ -12,22 +12,26 @@
 			</div>
 			<div class="collapse navbar-collapse" id="manager-navbar-collapse">
 				<form class="navbar-form navbar-left pub-search-form" role="search">
-					<div class="form-group has-feedback">
-						<input id="search-term-input" type="text" class="form-control" placeholder="Search criteria"/>
-						<span class="form-control-feedback"><i class="fa fa-search"></i></span>
+					<div class="search-form-container ">
+						<div class="form-group has-feedback free-search-div">
+							<input id="search-term-input" type="text" class="form-control" placeholder="Search criteria"/>
+							<span class="form-control-feedback"><i class="fa fa-search"></i></span>
+						</div>
+						<div class="advanced-search-rows-container form-inline"></div>
 					</div>
-					<button type="button" class="btn btn-info search-btn">Search</button>
-					<button type="button" class="btn btn-default add-category-btn">Add search category</button>
+					<div class="form-group search-btn-div">
+						<button type="submit" class="btn btn-info search-btn">Search</button>
+						<button type="button" class="btn btn-default add-category-btn">Add search category</button>
+					</div>
 				</form>
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#">Create Publication</a></li>
-					<li><a href="#">Manager Contributors</a></li>
+
+				<ul class="nav navbar-nav navbar-right pub-nav-btn-div">
+					<li><a class="create-pub-btn" href="#">Create Publication</a></li>
+					<li><a class="manager-contribs-btn" href="{{oldMyPubsEndpoint}}#/Contributor" target="_blank">Manage Contributors</a></li>
 				</ul>
 			</div>
 		</div>
 	</nav>
-
-	<div class="advanced-search-rows-container form-inline"></div>
 
 	<div class="pub-list-section">
 		<div class="pub-grid-container">
