@@ -136,16 +136,12 @@
 					<webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName>
 					<keepServerAlive>true</keepServerAlive>
 					<specRunnerTemplate>REQUIRE_JS</specRunnerTemplate>
-					<jsSrcDir>${project.basedir}/pubs_ui/manager/static/</jsSrcDir>
 					<jsTestSrcDir>${project.basedir}/tests/js</jsTestSrcDir>
 					<customRunnerConfiguration>${project.basedir}/tests/js/resources/customJasmineRequireConfig.txt</customRunnerConfiguration>
 					<srcDirectoryName>js</srcDirectoryName>
 					<preloadSources>
 						<source>/pubs_ui/bower_components/requirejs/require.js</source>
 					</preloadSources>
-					<sourceIncludes>
-						<include>manager/static/js/**/*.js</include>
-					</sourceIncludes>
 				</configuration>
 			</plugin>
 			<plugin>
