@@ -3,26 +3,32 @@
     .make-sm-column(12);
   }
   .navbar {
-    .navbar-form {
-      width: 60%;
-      .form-group {
-        width: 50%;
-        input {
+    .pub-search-form {
+      width: 70%;
+      .search-form-container {
+        width: 60%;
+        display: inline-block;
+        .form-group {
           width: 100%;
+          #search-term-input {
+            width: 100%;
+          }
+        }
+        .advanced-search-rows-container {
+          width: 100%;
+          .search-category-div {
+            width : 40%;
+          }
+          .search-category-value-div {
+            width: 59%;
+            input {
+              width : 100%;
+            }
+          }
         }
       }
-    }
-  }
-
-  .advanced-search-rows-container {
-    margin-bottom: 15px;
-    .search-category-div {
-      width: 20%;
-    }
-    .search-category-value-div {
-      width: 70%;
-      input, .select-input-div {
-        width: 100%;
+      .search-btn-div {
+        width: 39%;
       }
     }
   }
