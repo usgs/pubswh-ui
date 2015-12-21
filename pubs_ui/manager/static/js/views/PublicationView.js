@@ -207,9 +207,9 @@ define([
 			this.model.release()
 				.done(function() {
 					self.returnToSearch();
-				}).fail(function(error) {
-					if (_.isObject(error)) {
-						self.alertView.showDangerAlert('Publication not released: validation errors');
+				}).fail(function(jqXHR, error) {
+					if (jqXHR.status === 401) {
+						self.alertView.showDangerAlert('Publication not released: Unauthorized');
 					}
 					else {
 						self.alertView.showDangerAlert('Publication not released: ' + error);
@@ -238,7 +238,10 @@ define([
 				})
 				.fail(function(jqXhr, textStatus, error) {
 					var response = jqXhr;
-					if (_.has(response, 'responseJSON') &&
+					if (jqXhr.status === 401) {
+						self.alertView.showDangerAlert('Publication not saved: Unauthorized');
+					}
+					else if (_.has(response, 'responseJSON') &&
 						_.has(response.responseJSON, 'validationErrors')
 						&& (response.responseJSON.validationErrors.length > 0)) {
 						self.model.set('validationErrors', response.responseJSON.validationErrors);
@@ -263,9 +266,9 @@ define([
 					.done(function() {
 						self.returnToSearch();
 					})
-					.fail(function(error) {
-						if (_.isObject(error)) {
-							self.alertView.showDangerAlert('Publication not published: validation errors');
+					.fail(function(jqXHR, error) {
+						if (jqXHR.status === 401) {
+							self.alertView.showDangerAlert('Publication not published: Unauthorized');
 						}
 						else {
 							self.alertView.showDangerAlert(error);
@@ -295,8 +298,13 @@ define([
 						self.returnToSearch()
 					})
 					.fail(function(jqxhr) {
-						self.alertView.showDangerAlert('Publication not deleted with error: ' + jqxhr.statusText);
-					})
+						if (jqxhr.status === 401) {
+							self.alertView('Publication not deleted : Unauthorized');
+						}
+						else {
+							self.alertView.showDangerAlert('Publication not deleted with error: ' + jqxhr.statusText);
+						}
+					});
 
 			};
 

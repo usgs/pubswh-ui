@@ -4,7 +4,7 @@ from requests import Request, Session
 from flask import Blueprint, render_template, request
 from flask_login import login_required
 
-from ..auth.views import generate_auth_header
+from ..auth.utils import generate_auth_header
 from .. import app
 
 SERVICES_ENDPOINT = app.config['PUB_URL']
@@ -31,7 +31,8 @@ def services_proxy(op1, op2=None):
         url = url + op2
     headers = generate_auth_header(request)
     if request.method == 'POST' or request.method == 'PUT' :
-        headers.update(request.headers)
+        headers = request.headers
+        #headers.update(request.headers)
 
     app.logger.info('Service URL is %s?%s' % (url, request.query_string))
     # Setting the query_string in the url. If we use params set to request.args, params that are repeated

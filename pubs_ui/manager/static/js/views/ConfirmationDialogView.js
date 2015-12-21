@@ -1,15 +1,14 @@
 /* jslint browser: true */
 
 define([
-	'handlebars',
 	'bootstrap',
 	'views/BaseView',
-	'text!hb_templates/confirmationDialog.hbs'
-], function(Handlebars, bootstrap, BaseView, hbTemplate) {
+	'hbs!hb_templates/confirmationDialog'
+], function(bootstrap, BaseView, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
-		template : Handlebars.compile(hbTemplate),
+		template : hbTemplate,
 
 		events : {
 			'click .confirm-btn' : 'confirmAction',

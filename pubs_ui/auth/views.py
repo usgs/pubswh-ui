@@ -49,6 +49,13 @@ class User(UserMixin):
     def is_anonymous(self):
         return False
 
+    def get_auth_token(self):
+        """
+        Encode a secure token for cookie
+        """
+        data = [str(self.id), self.auth_token]
+        return login_serializer.dumps(data)
+
     @staticmethod
     def get(userid, token):
         """
@@ -165,4 +172,7 @@ def login_page():
             error = 'Username or Password is invalid '+str(mp_response.status_code)
 
     return render_template("auth/login.html", form=form, error=error)
+
+@auth.route('/loginservice', methods=["POST"])
+def login_service():
 
