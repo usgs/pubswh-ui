@@ -1,14 +1,15 @@
-
-from flask import render_template, request, flash, redirect, url_for, Blueprint
-from flask.ext.wtf import Form
-from flask_login import LoginManager, logout_user, UserMixin, login_user
-from itsdangerous import URLSafeTimedSerializer
 from requests import post
+
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
 
+from flask import render_template, request, flash, redirect, url_for, Blueprint
+from flask.ext.login import LoginManager, logout_user, UserMixin, login_user
+from flask.ext.wtf import Form
+
+from . import login_serializer
+from .utils import generate_auth_header, get_url_endpoint, is_safe_url
 from .. import app
-from ..utils import get_url_endpoint, is_safe_url
 
 
 auth = Blueprint('auth', __name__,
@@ -25,11 +26,6 @@ VERIFY_CERT = app.config['VERIFY_CERT']
 class LoginForm(Form):
     username = StringField('AD Username:', validators=[DataRequired()])
     password = PasswordField('AD Password:', validators=[DataRequired()])
-
-# Login_serializer used to encrypt and decrypt the cookie token for the remember
-# me option of flask-login
-login_serializer = URLSafeTimedSerializer(app.secret_key)
-
 
 # Flask-Login Login Manager
 login_manager = LoginManager()
@@ -53,13 +49,6 @@ class User(UserMixin):
     def is_anonymous(self):
         return False
 
-    def get_auth_token(self):
-        """
-        Encode a secure token for cookie
-        """
-        data = [str(self.id), self.auth_token]
-        return login_serializer.dumps(data)
-
     @staticmethod
     def get(userid, token):
         """
@@ -72,28 +61,6 @@ class User(UserMixin):
         if userid:
             return User(userid, token)
         return None
-
-
-def generate_auth_header(request):
-    """
-    This is used to generate the auth header to make requests back to the pubs-services endpoints
-    :param request: the request object to get the cookie
-    :return: A authorization header that can be sent along to the pubs-services endpoint
-    """
-    login_serializer = URLSafeTimedSerializer(app.secret_key)
-    # get the token cookie from the request
-    token_cookie = request.cookies.get('remember_token')
-    # set a max age variable that is the same max age as the cookie can be.
-    max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
-    # decrypt the cookie to get the username and the token
-    session_data = login_serializer.loads(token_cookie, max_age=max_age)
-    # get the token from the session data
-    mypubs_token = session_data[1]
-    # build the auth value to send to the manage server
-    auth_value = 'Bearer  '+mypubs_token
-    # build the Authorization header
-    header = {'Authorization': auth_value}
-    return header
 
 
 @login_manager.user_loader
@@ -177,7 +144,7 @@ def login_page():
         # take the form data and put it into the payload to send to the pubs auth endpoint
         payload = {'username': request.form['username'], 'password': request.form['password']}
         # POST the payload to the pubs auth endpoint
-        pubs_login_url = AUTH_ENDPOINT_URL+'token'
+        pubs_login_url = AUTH_ENDPOINT_URL + 'token'
         mp_response = post(pubs_login_url, data=payload, verify=VERIFY_CERT)
         # if the pubs endpoint login is successful, then proceed with logging in
         if mp_response.status_code == 200:
@@ -185,7 +152,7 @@ def login_page():
             login_user(user, remember=True)
 
             next_page = request.args.get("next")
-            app.logger.info("Next page: "+str(next_page))
+            app.logger.info("Next page: %s" % next_page)
 
             if next_page is not None and is_safe_url(next_page, request.host_url):
                 endpoint = get_url_endpoint(next_page, request.environ['SERVER_NAME'], ('pubswh.index', {}))
