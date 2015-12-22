@@ -13,6 +13,7 @@ define([
 		var testView;
 
 		var setElAlertSpy, renderAlertSpy, removeAlertSpy, dangerAlertSpy, successAlertSpy;
+		var setElLoginDialogSpy, renderLoginDialogSpy, removeLoginDialogSpy, showLoginDialogSpy;
 		var setElDialogSpy, renderDialogSpy, removeDialogSpy, showDialogSpy;
 		var setElBibliodataSpy, renderBibliodataSpy, removeBibliodataSpy, findElBibliodataSpy;
 		var setElLinksSpy, renderLinksSpy, removeLinksSpy, findElLinksSpy;
@@ -43,6 +44,11 @@ define([
 			removeAlertSpy = jasmine.createSpy('removeAlertSpy');
 			dangerAlertSpy = jasmine.createSpy('dangerAlertSpy');
 			successAlertSpy = jasmine.createSpy('successAlertSpy');
+
+			setElLoginDialogSpy = jasmine.createSpy('setElLoginDialogSpy');
+			renderLoginDialogSpy = jasmine.createSpy('renderLoginDialogSpy');
+			removeLoginDialogSpy = jasmine.createSpy('removeLoginDialogSpy');
+			showLoginDialogSpy = jasmine.createSpy('showLoginDialogSpy');
 
 			setElDialogSpy = jasmine.createSpy('setElDialogSpy');
 			renderDialogSpy = jasmine.createSpy('renderDialogSpy');
@@ -99,6 +105,14 @@ define([
 				remove : removeAlertSpy,
 				showDangerAlert : dangerAlertSpy,
 				showSuccessAlert : successAlertSpy
+			}));
+			injector.mock('views/LoginDialogView', BaseView.extend({
+				setElement : setElLoginDialogSpy.and.returnValue({
+					render : renderLoginDialogSpy
+				}),
+				render : renderLoginDialogSpy,
+				remove : removeLoginDialogSpy,
+				show : showLoginDialogSpy
 			}));
 			injector.mock('views/ConfirmationDialogView', BaseView.extend({
 				setElement : setElDialogSpy.and.returnValue({
@@ -187,7 +201,7 @@ define([
 		});
 
 		describe('Tests for render', function() {
-			it('Expects the confirmationDialogView to be rendered and the alertView to have it\'s element set', function() {
+			it('Expects the confirmationDialogView and loginDialogView to be rendered and the alertView to have it\'s element set', function() {
 				pubModel.set('id', 1234);
 				testView = new PublicationView({
 					model : pubModel,
@@ -196,6 +210,8 @@ define([
 
 				expect(setElAlertSpy.calls.count()).toBe(2);
 				expect(renderAlertSpy).not.toHaveBeenCalled();
+				expect(setElLoginDialogSpy.calls.count()).toBe(2);
+				expect(renderLoginDialogSpy).toHaveBeenCalled();
 				expect(setElDialogSpy.calls.count()).toBe(2);
 				expect(renderDialogSpy).toHaveBeenCalled();
 			});
@@ -279,6 +295,7 @@ define([
 				});
 				testView.remove();
 				expect(removeAlertSpy).toHaveBeenCalled();
+				expect(removeLoginDialogSpy).toHaveBeenCalled();
 				expect(removeDialogSpy).toHaveBeenCalled();
 				expect(removeBibliodataSpy).toHaveBeenCalled();
 				expect(removeLinksSpy).toHaveBeenCalled();
@@ -299,12 +316,12 @@ define([
 			});
 
 			it('Expects the preview div to be shown if the id is non null and hidden if it is null', function() {
-				expect($('#pub-preview-div').is(':visible')).toBe(false);
+				expect(testView.$('#pub-preview-div').is(':visible')).toBe(false);
 
 				pubModel.set('id', 1234);
 				pubModel.set('indexId', 'ds1234');
-				expect($('#pub-preview-div').is(':visible')).toBe(true);
-				expect($('#pub-preview-div a').attr('href')).toMatch('ds1234');
+				expect(testView.$('#pub-preview-div').is(':visible')).toBe(true);
+				expect(testView.$('#pub-preview-div a').attr('href')).toMatch('ds1234');
 
 				pubModel.set('id', '');
 			});
@@ -332,6 +349,13 @@ define([
 				expect(dangerAlertSpy).not.toHaveBeenCalled();
 				opDeferred.reject('Error message');
 				expect(dangerAlertSpy).toHaveBeenCalled();
+			});
+
+			it('Expects that if release fails with a status of 401, the loginDialogView is shown', function() {
+				testView.releasePub();
+				expect(showLoginDialogSpy).not.toHaveBeenCalled();
+				opDeferred.reject({status : 401});
+				expect(showLoginDialogSpy).toHaveBeenCalled();
 			});
 		});
 
@@ -369,6 +393,13 @@ define([
 				opDeferred.reject({}, 'error', 'Server error');
 				expect(pubModel.has('validationErrors')).toBe(false);
 				expect(dangerAlertSpy).toHaveBeenCalled();
+			});
+
+			it('Expects that if the save fails with a 401 status, the loginDialog is shown', function() {
+				testView.savePub();
+				expect(showLoginDialogSpy).not.toHaveBeenCalled();
+				opDeferred.reject({status : 401});
+				expect(showLoginDialogSpy).toHaveBeenCalled();
 			});
 		});
 
@@ -427,7 +458,13 @@ define([
 				it('Expects that if publish fails, the danger alert is shown', function() {
 					opDeferred.reject('Has error');
 					expect(dangerAlertSpy).toHaveBeenCalled();
-				})
+				});
+
+				it('Expects a failed call with a status of 401 shows the login dialog', function() {
+					expect(showLoginDialogSpy).not.toHaveBeenCalled();
+					opDeferred.reject({status : 401});
+					expect(showLoginDialogSpy).toHaveBeenCalled();
+				});
 			});
 		});
 
@@ -487,6 +524,19 @@ define([
 				});
 
 				expect(dangerAlertSpy).toHaveBeenCalled();
+			});
+
+			it('Expects a failed delete with a status of 401 shows the login dialog', function() {
+				var actionCallback;
+				pubModel.set('id', 1234);
+				testView.deletePub();
+				actionCallback = showDialogSpy.calls.argsFor(0)[1];
+				// This mocks what would happen if the confirmation dialog is confirmed.
+				actionCallback();
+
+				expect(showLoginDialogSpy).not.toHaveBeenCalled();
+				opDeferred.	reject({status : 401});
+				expect(showLoginDialogSpy).toHaveBeenCalled();
 			});
 		});
 	});
