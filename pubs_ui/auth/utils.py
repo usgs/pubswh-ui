@@ -1,4 +1,4 @@
-from itsdangerous import BadSignature
+from itsdangerous import BadSignature, BadPayload
 from urlparse import urlparse, urljoin
 from urllib import unquote
 
@@ -42,27 +42,28 @@ def is_safe_url(target, host_url):
     test_url = urlparse(urljoin(host_url, target))
     return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
 
+
+def get_cida_auth_token(cookies):
+    '''
+    :param cookies - dictionary of cookies from an http request:
+    :return string - the cida auth token contained with the cookies dictionary:
+    '''
+    token_cookie = cookies.get(app.config['REMEMBER_COOKIE_NAME'], '')
+    try:
+        session_data = login_serializer.loads(token_cookie, max_age=app.config['REMEMBER_COOKIE_DURATION'].total_seconds())
+    except (BadSignature, BadPayload) :
+        token = ''
+    else:
+        token = session_data[1]
+
+    return token
+
+
 def generate_auth_header(request):
-    """
+    '''
     This is used to generate the auth header to make requests back to the pubs-services endpoints
     :param request: the request object to get the cookie
-    :return: A authorization header that can be sent along to the pubs-services endpoint
-    """
-    # get the token cookie from the request
-    token_cookie = request.cookies.get(app.config['REMEMBER_COOKIE_NAME'], '')
-    # set a max age variable that is the same max age as the cookie can be.
-    max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
-    # decrypt the cookie to get the username and the token
-    try:
-        session_data = login_serializer.loads(token_cookie, max_age=max_age)
-    except BadSignature:
-        return dict()
-    else:
-        # get the token from the session data
-        mypubs_token = session_data[1]
-        # build the auth value to send to the manage server
-        auth_value = 'Bearer  '+ mypubs_token
-        # build the Authorization header
-        header = {'Authorization': auth_value}
-        return header
+    :return: A dictionary containing the authorization header that can be sent along to the pubs-services endpoint.
+    '''
+    return {'Authorization' : 'Bearer  ' + get_cida_auth_token(request.cookies)}
 
