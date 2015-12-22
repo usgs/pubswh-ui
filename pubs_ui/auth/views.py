@@ -1,3 +1,4 @@
+from itsdangerous import BadSignature
 from requests import post
 
 from wtforms import StringField, PasswordField
@@ -36,9 +37,9 @@ class User(UserMixin):
     """
     User Class for flask-Login
     """
-    def __init__(self, user_ad_username=None, pubs_auth_token=None):
+    def __init__(self, user_ad_username=None, cida_auth_token=None):
         self.id = user_ad_username
-        self.auth_token = pubs_auth_token
+        self.cida_auth_token = cida_auth_token
 
     def is_authenticated(self):
         return True
@@ -53,11 +54,11 @@ class User(UserMixin):
         """
         Encode a secure token for cookie
         """
-        data = [str(self.id), self.auth_token]
+        data = [str(self.id), self.cida_auth_token]
         return login_serializer.dumps(data)
 
     @staticmethod
-    def get(userid, token):
+    def get(userid, cida_auth_token):
         """
         Static method to search the database and see if userid exists.  If it
         does exist then return a User Object.  If not then return None as
@@ -66,7 +67,7 @@ class User(UserMixin):
         # since we are offloading authentication of the user to the backend, we are assuming that if we have an
         # unexpired token, we have a valid user, so we are just grabbing the token from the cookie and carrying on
         if userid:
-            return User(userid, token)
+            return User(userid, cida_auth_token)
         return None
 
 
@@ -81,16 +82,18 @@ def load_user(userid):
     flask request.
     """
 
-    token_cookie = request.cookies.get('remember_token')
+    token_cookie = request.cookies.get(app.config['REMEMBER_COOKIE_NAME'])
     # TODO: catch a cookie that is too old and logout the user
     try:
         session_data = login_serializer.loads(token_cookie, max_age=MAX_AGE)
-        # get the token from the session data
-        mypubs_token = session_data[1]
-        return User.get(userid, mypubs_token)
-    except TypeError:  # this typeerror typically occurs when the token has expired.
+    except BadSignature:
         logout_user()
-        flash('your login has expired, please log in again')
+        flash('Your login has expired, please log in again.')
+        return None
+    else:
+        # get the token from the session data
+        cida_auth_token = session_data[1]
+        return User.get(userid, cida_auth_token)
 
 
 @login_manager.token_loader
@@ -112,17 +115,18 @@ def load_token(token):
     # server side and not rely on the users cookie to exipre.
 
     # Decrypt the Security Token, data = [ad_user_username, user_ad_token]
-    data = login_serializer.loads(token, max_age=MAX_AGE)
-
-    # generate the user object based on the contents of the cookie, if the cookie isn't expired
-    if data:
-        user = User(data[0], data[1])
-    else:
+    try:
+        data = login_serializer.loads(token, max_age=MAX_AGE)
+    except BadSignature:
         user = None
-    # return the user
-    if user:
-        return user
-    return None
+    else:
+        # generate the user object based on the contents of the cookie, if the cookie isn't expired
+        if data:
+            user = User(data[0], data[1])
+        else:
+            user = None
+
+    return user
 
 @auth.route("/logout/<forward>")
 def logout_page(forward):
@@ -173,6 +177,12 @@ def login_page():
 
     return render_template("auth/login.html", form=form, error=error)
 
-@auth.route('/loginservice', methods=["POST"])
+@auth.route('/loginservice/', methods=["POST"])
 def login_service():
+    resp = post(AUTH_ENDPOINT_URL + 'token', data=request.form, verify=VERIFY_CERT)
+    if resp.status_code == 200:
+        user = User(request.form['username'], resp.json().get('token'))
+        login_user(user, remember=True)
+
+    return (resp.text, resp.status_code, resp.headers.items())
 

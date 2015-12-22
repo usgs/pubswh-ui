@@ -85,7 +85,7 @@ define([
 		 *     array if the response contains validation errors, rejects with an error message if the failed response does
 		 *     not contain validation errors.
 		 */
-		changeState : function(op, options) {
+		changeState : function(op) {
 			var self = this;
 			var deferred = $.Deferred();
 			if (!this.isNew()) {
@@ -99,9 +99,6 @@ define([
 					processData : false,
 					data: '{"id" : ' + this.get('id') + '}',
 					success : function(response, textStatus, jqXHR) {
-						if (_.has(theseOptions, 'success') && _.isFunction(theseOptions.success)) {
-							theseOptions(this, response, options);
-						}
 						deferred.resolve(response)
 					},
 					error : function(jqXHR, textStatus, error) {

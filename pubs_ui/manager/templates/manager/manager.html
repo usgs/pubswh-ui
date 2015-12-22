@@ -71,6 +71,9 @@
 				},
 				'views/SPNView' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
+				},
+				'views/LoginDialogView' : {
+					scriptRoot : "{{ request.script_root }}"
 				}
 			},
 			baseUrl: "{{ url_for('manager.static', filename='js') }}",

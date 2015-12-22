@@ -1,3 +1,4 @@
+from itsdangerous import BadSignature
 from urlparse import urlparse, urljoin
 from urllib import unquote
 
@@ -48,16 +49,20 @@ def generate_auth_header(request):
     :return: A authorization header that can be sent along to the pubs-services endpoint
     """
     # get the token cookie from the request
-    token_cookie = request.cookies.get('remember_token')
+    token_cookie = request.cookies.get(app.config['REMEMBER_COOKIE_NAME'], '')
     # set a max age variable that is the same max age as the cookie can be.
     max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
     # decrypt the cookie to get the username and the token
-    session_data = login_serializer.loads(token_cookie, max_age=max_age)
-    # get the token from the session data
-    mypubs_token = session_data[1]
-    # build the auth value to send to the manage server
-    auth_value = 'Bearer  '+mypubs_token
-    # build the Authorization header
-    header = {'Authorization': auth_value}
-    return header
+    try:
+        session_data = login_serializer.loads(token_cookie, max_age=max_age)
+    except BadSignature:
+        return dict()
+    else:
+        # get the token from the session data
+        mypubs_token = session_data[1]
+        # build the auth value to send to the manage server
+        auth_value = 'Bearer  '+ mypubs_token
+        # build the Authorization header
+        header = {'Authorization': auth_value}
+        return header
 

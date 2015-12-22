@@ -9,6 +9,7 @@ define([
 	'views/BaseView',
 	'views/AlertView',
 	'views/ConfirmationDialogView',
+	'views/LoginDialogView',
 	'views/BibliodataView',
 	'views/LinksView',
 	'views/ContributorsView',
@@ -16,7 +17,7 @@ define([
 	'views/CatalogingView',
 	'views/GeospatialView',
 	'hbs!hb_templates/publication'
-], function(_, bootstrap, datetimepicker, Stickit, module, BaseView, AlertView, ConfirmationDialogView,
+], function(_, bootstrap, datetimepicker, Stickit, module, BaseView, AlertView, ConfirmationDialogView, LoginDialogView,
 			BibliodataView, LinksView, ContributorsView, SPNView, CatalogingView, GeospatialView, hbTemplate) {
 	"use strict";
 
@@ -78,6 +79,7 @@ define([
 			// Set the elements for child views and render if needed.
 			this.alertView.setElement(this.$('.alert-container'));
 			this.confirmationDialogView.setElement(this.$('.confirmation-dialog-container')).render();
+			this.loginDialogView.setElement(this.$('.login-dialog-container')).render();
 
 			this.$('[data-toggle="tooltip"]').tooltip({
 				trigger : 'hover'
@@ -124,6 +126,9 @@ define([
 			});
 			this.confirmationDialogView = new ConfirmationDialogView({
 				el : '.confirmation-dialog-container'
+			});
+			this.loginDialogView = new LoginDialogView({
+				el : '.login-dialog-container'
 			});
 
 			this.tabs = {
@@ -176,6 +181,7 @@ define([
 		remove : function() {
 			this.alertView.remove();
 			this.confirmationDialogView.remove();
+			this.loginDialogView.remove();
 			_.each(this.tabs, function(t) {
 				t.view.remove();
 			});
@@ -209,7 +215,9 @@ define([
 					self.returnToSearch();
 				}).fail(function(jqXHR, error) {
 					if (jqXHR.status === 401) {
-						self.alertView.showDangerAlert('Publication not released: Unauthorized');
+						self.loginDialogView.show(function() {
+							self.alertView.showWarningAlert('Please click Release to release the publication');
+						});
 					}
 					else {
 						self.alertView.showDangerAlert('Publication not released: ' + error);
@@ -239,7 +247,9 @@ define([
 				.fail(function(jqXhr, textStatus, error) {
 					var response = jqXhr;
 					if (jqXhr.status === 401) {
-						self.alertView.showDangerAlert('Publication not saved: Unauthorized');
+						self.loginDialogView.show(function() {
+							self.alertView.showWarningAlert('Please click Save Changes to save the publication');
+						});
 					}
 					else if (_.has(response, 'responseJSON') &&
 						_.has(response.responseJSON, 'validationErrors')
@@ -268,7 +278,9 @@ define([
 					})
 					.fail(function(jqXHR, error) {
 						if (jqXHR.status === 401) {
-							self.alertView.showDangerAlert('Publication not published: Unauthorized');
+							self.loginDialogView.show(function() {
+								self.alertView.showWarningAlert('Please click Publish to publish the publication');
+							});
 						}
 						else {
 							self.alertView.showDangerAlert(error);
@@ -299,7 +311,9 @@ define([
 					})
 					.fail(function(jqxhr) {
 						if (jqxhr.status === 401) {
-							self.alertView('Publication not deleted : Unauthorized');
+							self.loginDialogView.show(function() {
+								self.alertView.showWarningAlert('Please clicke Delete to delete the publication');
+							});
 						}
 						else {
 							self.alertView.showDangerAlert('Publication not deleted with error: ' + jqxhr.statusText);

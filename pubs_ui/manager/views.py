@@ -31,8 +31,7 @@ def services_proxy(op1, op2=None):
         url = url + op2
     headers = generate_auth_header(request)
     if request.method == 'POST' or request.method == 'PUT' :
-        headers = request.headers
-        #headers.update(request.headers)
+        headers.update(request.headers)
 
     app.logger.info('Service URL is %s?%s' % (url, request.query_string))
     # Setting the query_string in the url. If we use params set to request.args, params that are repeated

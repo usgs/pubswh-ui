@@ -2,9 +2,10 @@
 
 define([
 	'bootstrap',
+	'underscore',
 	'views/BaseView',
 	'hbs!hb_templates/confirmationDialog'
-], function(bootstrap, BaseView, hbTemplate) {
+], function(bootstrap, _, BaseView, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
