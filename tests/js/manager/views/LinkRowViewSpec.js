@@ -3,11 +3,16 @@
 define([
 	'squire',
 	'jquery',
+	'jquery-ui',
 	'select2',
+	'module',
 	'backbone',
+	'backbone.stickit',
 	'models/LinkModel',
 	'models/LinkCollection',
-], function(Squire, $, select2,  Backbone, LinkModel, LinkCollection) {
+	'views/BaseView',
+	'hbs!hb_templates/linkRow'
+], function(Squire, $, jqueryUI, select2,  module, Backbone, stickit, LinkModel, LinkCollection, BaseView, hbTemplate) {
 	"use strict";
 
 
@@ -41,6 +46,12 @@ define([
 
 			injector = new Squire();
 			injector.mock('jquery', $);
+			injector.mock('jquery-ui', jqueryUI);
+			injector.mock('select2', select2);
+			injector.mock('module', module);
+			injector.mock('backbone.stickit', stickit);
+			injector.mock('views/BaseView', BaseView);
+			injector.mock('hbs!hb_templates/linkRow', hbTemplate);
 
 			injector.require(['views/LinkRowView'], function(view) {
 				LinkRowView = view;
