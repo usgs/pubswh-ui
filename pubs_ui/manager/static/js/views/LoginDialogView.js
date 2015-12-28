@@ -26,12 +26,14 @@ define([
 			});
 		},
 
+		/*
+		 * Show the login dialog.
+		 * @param {Function} loginFnc (optional) - A parameterless function which will be executed when a user tries to log in.
+		 */
 		show : function(loginFnc) {
 			if (_.isFunction(loginFnc)) {
 				this.loginFnc = loginFnc;
 			}
-			this.$('.login-errors').html('');
-			this.$('input').val('');
 			this.$('.modal').modal('show');
 		},
 
