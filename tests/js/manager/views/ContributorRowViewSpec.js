@@ -29,6 +29,7 @@ define([
 			testCollection = new PublicationContributorCollection();
 
 			injector = new Squire();
+			injector.mock('handlebars', Handlebars);
 			injector.mock('jquery', $); // Needed to spy on select2
 			injector.mock('jquery-ui', jqueryUi);
 			injector.mock('select2', select2);
