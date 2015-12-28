@@ -172,9 +172,7 @@ define([
 				server.respond();
 
 				expect(doneSpy).not.toHaveBeenCalled();
-				expect(failSpy).toHaveBeenCalledWith({
-					validationErrors: ['One error']
-				});
+				expect(failSpy.calls.argsFor(0)[0].responseJSON).toEqual({validationErrors: ['One error']});
 				expect(model.get('validationErrors')).toEqual(['One error']);
 			});
 
@@ -186,7 +184,7 @@ define([
 
 				expect(doneSpy).not.toHaveBeenCalled();
 				expect(failSpy).toHaveBeenCalled();
-				expect(failSpy.calls.argsFor(0)[0]).toMatch('Internal Server Error');
+				expect(failSpy.calls.argsFor(0)[1]).toMatch('Internal Server Error');
 			})
 		});
 
@@ -244,7 +242,7 @@ define([
 				server.respond();
 
 				expect(doneSpy).not.toHaveBeenCalled();
-				expect(failSpy).toHaveBeenCalledWith({validationErrors : ['One error']});
+				expect(failSpy.calls.argsFor(0)[0].responseJSON).toEqual({validationErrors : ['One error']});
 				expect(model.get('validationErrors')).toEqual(['One error']);
 			});
 
@@ -256,7 +254,7 @@ define([
 
 				expect(doneSpy).not.toHaveBeenCalled();
 				expect(failSpy).toHaveBeenCalled();
-				expect(failSpy.calls.argsFor(0)[0]).toMatch('Internal Server Error');
+				expect(failSpy.calls.argsFor(0)[1]).toMatch('Internal Server Error');
 			})
 		});
 	});

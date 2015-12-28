@@ -1,14 +1,16 @@
-
-from flask import render_template, request, flash, redirect, url_for, Blueprint
-from flask.ext.wtf import Form
-from flask_login import LoginManager, logout_user, UserMixin, login_user
-from itsdangerous import URLSafeTimedSerializer
+from itsdangerous import BadSignature, BadPayload
 from requests import post
+
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
 
+from flask import render_template, request, flash, redirect, url_for, Blueprint
+from flask.ext.login import LoginManager, logout_user, UserMixin, login_user
+from flask.ext.wtf import Form
+
+from . import login_serializer
+from .utils import get_cida_auth_token, generate_auth_header, get_url_endpoint, is_safe_url
 from .. import app
-from ..utils import get_url_endpoint, is_safe_url
 
 
 auth = Blueprint('auth', __name__,
@@ -16,7 +18,6 @@ auth = Blueprint('auth', __name__,
                  static_folder='static',
                  static_url_path='/auth/static')
 
-MAX_AGE = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
 AUTH_ENDPOINT_URL = app.config.get('AUTH_ENDPOINT_URL')
 # should requests verify the certificates for ssl connections
 VERIFY_CERT = app.config['VERIFY_CERT']
@@ -25,11 +26,6 @@ VERIFY_CERT = app.config['VERIFY_CERT']
 class LoginForm(Form):
     username = StringField('AD Username:', validators=[DataRequired()])
     password = PasswordField('AD Password:', validators=[DataRequired()])
-
-# Login_serializer used to encrypt and decrypt the cookie token for the remember
-# me option of flask-login
-login_serializer = URLSafeTimedSerializer(app.secret_key)
-
 
 # Flask-Login Login Manager
 login_manager = LoginManager()
@@ -40,9 +36,9 @@ class User(UserMixin):
     """
     User Class for flask-Login
     """
-    def __init__(self, user_ad_username=None, pubs_auth_token=None):
-        self.id = user_ad_username
-        self.auth_token = pubs_auth_token
+    def __init__(self, username=None, cida_auth_token=None):
+        self.id = username
+        self.cida_auth_token = cida_auth_token
 
     def is_authenticated(self):
         return True
@@ -55,68 +51,44 @@ class User(UserMixin):
 
     def get_auth_token(self):
         """
-        Encode a secure token for cookie
+        Encode a secure token for cookie.
+
+        The Token is encrypted using itsdangerous.URLSafeTimedSerializer which
+        allows us to have a max_age on the token itself.  When the cookie is stored
+        on the users computer it also has a exipry date, but could be changed by
+        the user, so this feature allows us to enforce the exipry date of the token
+        server side and not rely on the users cookie to exipre.
         """
-        data = [str(self.id), self.auth_token]
+        data = [str(self.id), self.cida_auth_token]
         return login_serializer.dumps(data)
 
     @staticmethod
-    def get(userid, token):
-        """
-        Static method to search the database and see if userid exists.  If it
-        does exist then return a User Object.  If not then return None as
-        required by Flask-Login.
-        """
-        # since we are offloading authentication of the user to the backend, we are assuming that if we have an
-        # unexpired token, we have a valid user, so we are just grabbing the token from the cookie and carrying on
-        if userid:
-            return User(userid, token)
-        return None
-
-
-def generate_auth_header(request):
-    """
-    This is used to generate the auth header to make requests back to the pubs-services endpoints
-    :param request: the request object to get the cookie
-    :return: A authorization header that can be sent along to the pubs-services endpoint
-    """
-    login_serializer = URLSafeTimedSerializer(app.secret_key)
-    # get the token cookie from the request
-    token_cookie = request.cookies.get('remember_token')
-    # set a max age variable that is the same max age as the cookie can be.
-    max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
-    # decrypt the cookie to get the username and the token
-    session_data = login_serializer.loads(token_cookie, max_age=max_age)
-    # get the token from the session data
-    mypubs_token = session_data[1]
-    # build the auth value to send to the manage server
-    auth_value = 'Bearer  '+mypubs_token
-    # build the Authorization header
-    header = {'Authorization': auth_value}
-    return header
+    def get(username, cida_auth_token):
+        '''
+        :param username: AD username
+        :param cida_auth_token: token returned by CIDA auth service
+        :return User object if userid is valid, otherwise return None:
+        '''
+        if username:
+            user = User(username, cida_auth_token)
+        else:
+            user = None
+        return user
 
 
 @login_manager.user_loader
-def load_user(userid):
+def load_user(username):
     """
     Flask-Login user_loader callback.
-    The user_loader function asks this function to get a User Object or return
-    None based on the userid.
-    The userid was stored in the session environment by Flask-Login.
-    user_loader stores the returned User object in current_user during every
-    flask request.
+    The user_loader function reloads the user object from the user ID stored in the session.
     """
+    cida_auth_token = get_cida_auth_token(request.cookies)
+    if cida_auth_token:
+        user = User.get(username, cida_auth_token)
+    else:
+        user = None
 
-    token_cookie = request.cookies.get('remember_token')
-    # TODO: catch a cookie that is too old and logout the user
-    try:
-        session_data = login_serializer.loads(token_cookie, max_age=MAX_AGE)
-        # get the token from the session data
-        mypubs_token = session_data[1]
-        return User.get(userid, mypubs_token)
-    except TypeError:  # this typeerror typically occurs when the token has expired.
-        logout_user()
-        flash('your login has expired, please log in again')
+    return user
 
 
 @login_manager.token_loader
@@ -130,25 +102,19 @@ def load_token(token):
 
     # The Token itself was generated by User.get_auth_token.  So it is up to
     # us to known the format of the token data itself.
-
-    # The Token was encrypted using itsdangerous.URLSafeTimedSerializer which
-    # allows us to have a max_age on the token itself.  When the cookie is stored
-    # on the users computer it also has a exipry date, but could be changed by
-    # the user, so this feature allows us to enforce the exipry date of the token
-    # server side and not rely on the users cookie to exipre.
-
     # Decrypt the Security Token, data = [ad_user_username, user_ad_token]
-    data = login_serializer.loads(token, max_age=MAX_AGE)
-
-    # generate the user object based on the contents of the cookie, if the cookie isn't expired
-    if data:
-        user = User(data[0], data[1])
-    else:
+    try:
+        data = login_serializer.loads(token, max_age=app.config['REMEMBER_COOKIE_DURATION'].total_seconds())
+    except (BadSignature, BadPayload):
         user = None
-    # return the user
-    if user:
-        return user
-    return None
+    else:
+        # generate the user object based on the contents of the cookie, if the cookie isn't expired
+        if data:
+            user = User(data[0], data[1])
+        else:
+            user = None
+
+    return user
 
 @auth.route("/logout/<forward>")
 def logout_page(forward):
@@ -156,7 +122,7 @@ def logout_page(forward):
     Web Page to Logout User, then Redirect them to Index Page.
     """
     auth_header = generate_auth_header(request)
-    logout_url = AUTH_ENDPOINT_URL+'logout'
+    logout_url = AUTH_ENDPOINT_URL + 'logout'
     response = post(logout_url, headers=auth_header, verify=VERIFY_CERT)
     if response.status_code == 200:
         print 'logout works!'
@@ -177,7 +143,7 @@ def login_page():
         # take the form data and put it into the payload to send to the pubs auth endpoint
         payload = {'username': request.form['username'], 'password': request.form['password']}
         # POST the payload to the pubs auth endpoint
-        pubs_login_url = AUTH_ENDPOINT_URL+'token'
+        pubs_login_url = AUTH_ENDPOINT_URL + 'token'
         mp_response = post(pubs_login_url, data=payload, verify=VERIFY_CERT)
         # if the pubs endpoint login is successful, then proceed with logging in
         if mp_response.status_code == 200:
@@ -185,7 +151,7 @@ def login_page():
             login_user(user, remember=True)
 
             next_page = request.args.get("next")
-            app.logger.info("Next page: "+str(next_page))
+            app.logger.info("Next page: %s" % next_page)
 
             if next_page is not None and is_safe_url(next_page, request.host_url):
                 endpoint = get_url_endpoint(next_page, request.environ['SERVER_NAME'], ('pubswh.index', {}))
@@ -198,4 +164,13 @@ def login_page():
             error = 'Username or Password is invalid '+str(mp_response.status_code)
 
     return render_template("auth/login.html", form=form, error=error)
+
+@auth.route('/loginservice/', methods=["POST"])
+def login_service():
+    resp = post(AUTH_ENDPOINT_URL + 'token', data=request.form, verify=VERIFY_CERT)
+    if resp.status_code == 200:
+        user = User(request.form['username'], resp.json().get('token'))
+        login_user(user, remember=True)
+
+    return (resp.text, resp.status_code, resp.headers.items())
 
