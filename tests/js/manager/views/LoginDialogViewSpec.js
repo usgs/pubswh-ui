@@ -11,6 +11,8 @@ define([
 	'hbs!hb_templates/loginDialog'
 ], function(Squire, sinon, $, _, bootstrap, module, BaseView, hbTemplate) {
 	"use strict";
+	jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
+
 	describe('LoginDialogView', function() {
 		var LoginDialogView, testView;
 		var server;
