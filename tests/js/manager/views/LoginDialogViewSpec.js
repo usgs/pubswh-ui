@@ -4,8 +4,12 @@ define([
 	'squire',
 	'sinon',
 	'jquery',
-	'bootstrap'
-], function(Squire, sinon, $, bootstrap) {
+	'underscore',
+	'bootstrap',
+	'module',
+	'views/BaseView',
+	'hbs!hb_templates/loginDialog'
+], function(Squire, sinon, $, _, bootstrap, module, BaseView, hbTemplate) {
 	"use strict";
 	describe('LoginDialogView', function() {
 		var LoginDialogView, testView;
@@ -17,6 +21,11 @@ define([
 			$('body').append('<div id="test-div"></div>');
 
 			injector.mock('jquery', $);
+			injector.mock('underscore', _);
+			injector.mock('bootstrap', bootstrap);
+			injector.mock('module', module);
+			injector.mock('views/BaseView', BaseView);
+			injector.mock('hbs!hb_templates/loginDialog', hbTemplate);
 			injector.require(['views/LoginDialogView'], function(view) {
 				LoginDialogView = view;
 				testView = new LoginDialogView({
