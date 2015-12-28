@@ -2,11 +2,10 @@
 
 define([
 	'squire',
-	'sinon',
 	'jquery',
 	'models/PublicationContributorModel',
 	'models/PublicationContributorCollection'
-], function(Squire, sinon, $, PublicationContributorModel, PublicationContributorCollection) {
+], function(Squire, $, PublicationContributorModel, PublicationContributorCollection) {
 	"use strict";
 
 

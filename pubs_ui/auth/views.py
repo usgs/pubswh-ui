@@ -172,5 +172,8 @@ def login_service():
         user = User(request.form['username'], resp.json().get('token'))
         login_user(user, remember=True)
 
+    # This fixed an an ERR_INVALID_CHUNKED_ENCODING when the app was run on the deployment server.
+    if 'transfer-encoding' in resp.headers:
+        del resp.headers['transfer-encoding']
     return (resp.text, resp.status_code, resp.headers.items())
 
