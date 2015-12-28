@@ -10,9 +10,10 @@ define([
 	describe('LoginDialogView', function() {
 		var LoginDialogView, testView;
 		var server;
+		var injector;
 
 		beforeEach(function(done) {
-			var injector = new Squire();
+			injector = new Squire();
 			$('body').append('<div id="test-div"></div>');
 
 			injector.mock('jquery', $);
