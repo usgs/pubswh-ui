@@ -26,6 +26,8 @@ define([
 		});
 
 		afterEach(function() {
+			injector.remove();
+			testView.remove();
 			$('#test-div').remove();
 		});
 
