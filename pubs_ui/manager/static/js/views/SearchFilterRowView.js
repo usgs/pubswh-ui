@@ -5,9 +5,10 @@ define([
 	'jquery',
 	'utils/DynamicSelect2',
 	'models/PublicationTypeCollection',
+	'models/PublicationListCollection',
 	'views/BaseView',
 	'hbs!hb_templates/searchFilterRow'
-], function(_, $, DynamicSelect2, PublicationTypeCollection, BaseView, hb_template) {
+], function(_, $, DynamicSelect2, PublicationTypeCollection, PublicationListCollection, BaseView, hb_template) {
 	"use strict";
 
 	var DEFAULT_SELECT2_OPTIONS = {
@@ -73,7 +74,20 @@ define([
 					}, DEFAULT_SELECT2_OPTIONS))
 				}
 			},
-			{id : 'year', text : 'Year', inputType : 'text'}
+			{id : 'year', text : 'Year', inputType : 'text'},
+			{
+				id : 'listId',
+				text : 'Publication Lists',
+				inputType : 'select',
+				sendId : true,
+				select2Init : function(context) {
+					context.pubListFetch.done(function () {
+						context.$('.value-select-input').select2(_.extend({
+							data: context.publicationListCollection.toJSON()
+						}, DEFAULT_SELECT2_OPTIONS))
+					});
+				}
+			}
 		],
 
 		/*
@@ -84,8 +98,12 @@ define([
 		 */
 		initialize : function(options) {
 			BaseView.prototype.initialize.apply(this, arguments);
+
 			this.publicationTypeCollection = new PublicationTypeCollection();
 			this.pubTypeFetch = this.publicationTypeCollection.fetch();
+			this.publicationListCollection = new PublicationListCollection();
+			this.pubListFetch = this.publicationListCollection.fetch();
+
 			this.listenTo(this.model, 'change', this.disableFilterOption);
 		},
 
@@ -165,8 +183,15 @@ define([
 		},
 
 		changeSelectedValue : function(ev) {
-			var category = this.$('.search-category-input').data('current-value');
-			this.model.set(category, _.pluck(ev.currentTarget.selectedOptions, 'innerHTML'));
+			var $categorySelect = this.$('.search-category-input');
+			var category = $categorySelect.data('current-value');
+			var useId = $categorySelect.find('option[value="' + category + '"]').data('sendid');
+			if (useId) {
+				this.model.set(category, _.pluck(ev.currentTarget.selectedOptions, 'value'));
+			}
+			else {
+				this.model.set(category, _.pluck(ev.currentTarget.selectedOptions, 'innerHTML'));
+			}
 		}
 	});
 
