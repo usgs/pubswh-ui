@@ -10,6 +10,7 @@
 define([
 	'squire',
 	'jquery',
+	'module',
 	'backbone',
 	'backgrid',
 	'backgrid-paginator',
@@ -18,7 +19,7 @@ define([
 	'models/PublicationCollection',
 	'views/BaseView',
 	'hbs!hb_templates/managePublications'
-], function(Squire, $, Backbone, Backgrid, Paginator, BackgridUrlCell, BackgridClientSortingBody,
+], function(Squire, $, module, Backbone, Backgrid, Paginator, BackgridUrlCell, BackgridClientSortingBody,
 			PublicationCollection, BaseView, hbTemplate) {
 	"use strict";
 
@@ -53,7 +54,8 @@ define([
 			spyOn(testCollection, 'setPageSize').and.callThrough();
 
 			injector = new Squire();
-			/* preloading all modules to see if this eliminates the timout issue on Jenkins */
+			/* preloading all modules to see if this eliminates the timeout issue on Jenkins */
+			injector.mock('module', module);
 			injector.mock('backbone', Backbone);
 			injector.mock('backgrid', Backgrid);
 			injector.mock('backgrid-paginator', Paginator);
