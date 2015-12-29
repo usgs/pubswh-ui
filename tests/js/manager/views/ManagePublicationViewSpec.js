@@ -202,8 +202,7 @@ define([
 
 		});
 
-		// Disabling this because it causes phantomjs to stop working on the deploymenet server when run via Jenkins
-		xdescribe('Tests for collection event listeners', function() {
+		describe('Tests for collection event listeners', function() {
 			beforeEach(function() {
 				testView.render();
 				fetchDeferred.resolve();
