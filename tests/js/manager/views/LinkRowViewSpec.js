@@ -23,6 +23,7 @@ define([
 		var injector;
 
 		beforeEach(function(done) {
+			jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 			$('body').append('<div id="test-div"></div>');
 
 			linkTypeCollection = new Backbone.Collection([
