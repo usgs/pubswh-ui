@@ -160,6 +160,7 @@ define([
 				$textInputDiv.hide();
 
 				$select.select2('destroy');
+				$select.html('');
 				selectedCategory.select2Init(this);
 				$selectInputDiv.show();
 			}
