@@ -256,6 +256,7 @@ define([
 		},
 
 		goToEditPubPage : function (ev) {
+			ev.preventDefault();
 			this.router.navigate('publication', {trigger: true});
 		},
 
