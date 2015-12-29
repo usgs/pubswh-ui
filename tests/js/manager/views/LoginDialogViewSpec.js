@@ -23,6 +23,7 @@ define([
 		var injector;
 
 		beforeEach(function(done) {
+			jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 			injector = new Squire();
 			$('body').append('<div id="test-div"></div>');
 

@@ -10,6 +10,7 @@
 define([
 	'squire',
 	'jquery',
+	'module',
 	'backbone',
 	'backgrid',
 	'backgrid-paginator',
@@ -18,7 +19,7 @@ define([
 	'models/PublicationCollection',
 	'views/BaseView',
 	'hbs!hb_templates/managePublications'
-], function(Squire, $, Backbone, Backgrid, Paginator, BackgridUrlCell, BackgridClientSortingBody,
+], function(Squire, $, module, Backbone, Backgrid, Paginator, BackgridUrlCell, BackgridClientSortingBody,
 			PublicationCollection, BaseView, hbTemplate) {
 	"use strict";
 
@@ -35,6 +36,8 @@ define([
 		var fetchDeferred;
 
 		beforeEach(function (done) {
+			jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
+
 			$('body').append('<div id="test-div"></div>');
 
 			setElAlertSpy = jasmine.createSpy('setElAlertSpy');
@@ -53,7 +56,8 @@ define([
 			spyOn(testCollection, 'setPageSize').and.callThrough();
 
 			injector = new Squire();
-			/* preloading all modules to see if this eliminates the timout issue on Jenkins */
+			/* preloading all modules to see if this eliminates the timeout issue on Jenkins */
+			injector.mock('module', module);
 			injector.mock('backbone', Backbone);
 			injector.mock('backgrid', Backgrid);
 			injector.mock('backgrid-paginator', Paginator);
@@ -200,8 +204,7 @@ define([
 
 		});
 
-		// Disabling this because it causes phantomjs to stop working on the deploymenet server when run via Jenkins
-		xdescribe('Tests for collection event listeners', function() {
+		describe('Tests for collection event listeners', function() {
 			beforeEach(function() {
 				testView.render();
 				fetchDeferred.resolve();
