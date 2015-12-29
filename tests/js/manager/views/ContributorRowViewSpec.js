@@ -2,11 +2,18 @@
 
 define([
 	'squire',
-	'sinon',
+	'handlebars',
 	'jquery',
+	'jquery-ui',
+	'select2',
+	'module',
+	'backbone.stickit',
+	'utils/DynamicSelect2',
+	'views/BaseView',
+	'hbs!hb_templates/contributorTabRow',
 	'models/PublicationContributorModel',
 	'models/PublicationContributorCollection'
-], function(Squire, sinon, $, PublicationContributorModel, PublicationContributorCollection) {
+], function(Squire, Handlebars, $, jqueryUi, select2, module, stickit, DynamicSelect2, BaseView, hbTemplate, PublicationContributorModel, PublicationContributorCollection) {
 	"use strict";
 
 
@@ -22,7 +29,15 @@ define([
 			testCollection = new PublicationContributorCollection();
 
 			injector = new Squire();
+			injector.mock('handlebars', Handlebars);
 			injector.mock('jquery', $); // Needed to spy on select2
+			injector.mock('jquery-ui', jqueryUi);
+			injector.mock('select2', select2);
+			injector.mock('module', module);
+			injector.mock('backbone.stickit', stickit);
+			injector.mock('utils/DynamicSelect2', DynamicSelect2);
+			injector.mock('views/BaseView', BaseView);
+			injector.mock('hbs!hb_templates/contributorTabRow', hbTemplate);
 
 			injector.require(['views/ContributorRowView'], function(view) {
 				ContributorRowView = view;
