@@ -3,8 +3,9 @@
 define([
 	'squire',
 	'jquery',
+	'select2',
 	'backbone'
-], function(Squire, $, Backbone, BaseView) {
+], function(Squire, $, select2, Backbone) {
 	"use strict";
 
 	describe('SearchFilterRowView', function() {

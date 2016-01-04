@@ -2,8 +2,9 @@
 
 define([
 	'squire',
+	'jquery',
 	'utils/DynamicSelect2'
-], function(Squire, DynamicSelect2) {
+], function(Squire, $, DynamicSelect2) {
 	"use strict";
 
 	describe('DynamicSelect2', function() {
@@ -14,7 +15,6 @@ define([
 
 			beforeEach(function(done) {
 				injector = new Squire();
-				spyOn($, 'ajax');
 				injector.mock('jquery', $);
 				injector.require(['utils/DynamicSelect2'], function(module) {
 					DynamicSelect2 = module;
@@ -93,6 +93,7 @@ define([
 			});
 
 			it('Expects that if activeSubgroup is specified that a transport function property is used to make make two ajax calls to retrieve active and inactive', function() {
+				spyOn($, 'ajax');
 				resultOptions = DynamicSelect2.getSelectOptions({lookupType : 'nameType', activeSubgroup : true});
 				expect(resultOptions.ajax.transport).toBeDefined();
 				resultOptions.ajax.transport({data : {}}, jasmine.createSpy('successSpy'), jasmine.createSpy('failureSpy'));
