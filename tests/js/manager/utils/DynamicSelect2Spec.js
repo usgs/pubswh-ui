@@ -2,8 +2,8 @@
 
 define([
 	'squire',
-	'utils/DynamicSelect2'
-], function(Squire, DynamicSelect2) {
+	'jquery'
+], function(Squire, $) {
 	"use strict";
 
 	describe('DynamicSelect2', function() {
