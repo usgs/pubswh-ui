@@ -14,7 +14,7 @@
 {% block main %}
 	<div id="manage-content-header">
 		<h1>Manage USGS Publications</h1>
-		{% if current_user.is_authenticated() %}<a href="{{ url_for('auth.logout_page', forward='manager.show_app') }}">Logout</a>{% endif %}
+		{% if current_user.is_authenticated %}<a href="{{ url_for('auth.logout_page', forward='manager.show_app') }}">Logout</a>{% endif %}
 	</div>
 {% endblock %}
 
