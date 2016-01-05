@@ -143,6 +143,14 @@ define([
 					cell: "string",
 					sortValue : sortValueText
 				},{
+					name: 'chapter',
+					label : 'Chapter',
+					editable : false,
+					sortable: true,
+					cell: 'string',
+					sortValue : sortValueText
+				},
+				{
 					name: 'contributors',
 					label: 'First Author',
 					editable : false,
@@ -152,6 +160,13 @@ define([
 						fromRaw : fromRawFirstAuthor
 					},
 					sortValue : sortValueFirstAuthor
+				},{
+					name: 'sourceDatabase',
+					label: 'Origin',
+					editable : false,
+					sortable: true,
+					cell: 'string',
+					sortValue : sortValueText
 				}
 			];
 
