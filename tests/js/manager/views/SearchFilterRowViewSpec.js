@@ -3,13 +3,15 @@
 define([
 	'squire',
 	'jquery',
+	'select2',
 	'backbone'
-], function(Squire, $, Backbone, BaseView) {
+], function(Squire, $, select2, Backbone) {
 	"use strict";
 
 	describe('SearchFilterRowView', function() {
 		var SearchFilterRowView, testView, testModel;
 		var fetchPubTypeSpy, fetchPubTypeDeferred;
+		var fetchPubListSpy, fetchPubListDeferred;
 		var injector;
 
 		beforeEach(function (done) {
@@ -20,9 +22,14 @@ define([
 
 			fetchPubTypeDeferred = $.Deferred();
 			fetchPubTypeSpy = jasmine.createSpy('fetchPubTypeSpy').and.returnValue(fetchPubTypeDeferred);
+			fetchPubListDeferred = $.Deferred();
+			fetchPubListSpy = jasmine.createSpy('fetchPubListSpy').and.returnValue(fetchPubListDeferred);
 
 			injector.mock('models/PublicationTypeCollection', Backbone.Collection.extend({
 				fetch: fetchPubTypeSpy
+			}));
+			injector.mock('models/PublicationListCollection', Backbone.Collection.extend({
+				fetch: fetchPubListSpy
 			}));
 			spyOn($.fn, 'select2');
 			injector.mock('jquery', $); // Needed to spy on select2 initialization.
@@ -44,8 +51,9 @@ define([
 			$('#test-div').remove();
 		});
 
-		it('Expect the publication type collection to be fetched at initialization', function () {
+		it('Expect the publication type collection and publication list collection to be fetched at initialization', function () {
 			expect(fetchPubTypeSpy).toHaveBeenCalled();
+			expect(fetchPubListSpy).toHaveBeenCalled();
 		});
 
 		describe('Tests for render', function () {
@@ -64,6 +72,7 @@ define([
 				expect(testView.$('.search-category-input option[value="subtypeName"]').is(':disabled')).toBe(true);
 				expect(testView.$('.search-category-input option[value="seriesName"]').is(':disabled')).toBe(false);
 				expect(testView.$('.search-category-input option[value="year"]').is(':disabled')).toBe(false);
+				expect(testView.$('.search-category-input option[value="listId"]').is(':disabled')).toBe(false);
 			});
 		});
 

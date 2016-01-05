@@ -1,9 +1,16 @@
 /* jslint browser: true */
+/* global describe */
+/* global it */
+/* global beforeEach */
+/* global afterEach */
+/* global spyOn */
+/* global jasmine */
+/* global expect */
 
 define([
 	'squire',
-	'sinon',
 	'jquery',
+	'module',
 	'backbone',
 	'backgrid',
 	'backgrid-paginator',
@@ -12,25 +19,25 @@ define([
 	'models/PublicationCollection',
 	'views/BaseView',
 	'hbs!hb_templates/managePublications'
-], function(Squire, sinon, $, Backbone, Backgrid, Paginator, BackgridUrlCell, BackgridClientSortingBody,
+], function(Squire, $, module, Backbone, Backgrid, Paginator, BackgridUrlCell, BackgridClientSortingBody,
 			PublicationCollection, BaseView, hbTemplate) {
 	"use strict";
 
 	// Mocking Backgrid is difficult since it's namespaced and encompasses many different methods
 	// We will have to be satisified with putting spies on the backrid view objects within testView
 
-	jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-
 	describe('ManagePublicationsView', function() {
 		var ManagePublicationsView;
 		var testView, testCollection;
-		var server;
 		var injector;
 
 		var setElAlertSpy, renderAlertSpy, removeAlertSpy, dangerAlertSpy;
 		var setElSearchFilterRowViewSpy, renderSearchFilterRowViewSpy, removeSearchFilterRowViewSpy;
+		var fetchDeferred;
 
 		beforeEach(function (done) {
+			jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
+
 			$('body').append('<div id="test-div"></div>');
 
 			setElAlertSpy = jasmine.createSpy('setElAlertSpy');
@@ -42,12 +49,15 @@ define([
 			renderSearchFilterRowViewSpy = jasmine.createSpy('renderSearchFilterRowViewSpy');
 			removeSearchFilterRowViewSpy = jasmine.createSpy('removeSearchFilterRowViewSpy');
 
+			fetchDeferred = $.Deferred();
+
 			testCollection = new PublicationCollection();
-			spyOn(testCollection, 'fetch').and.callThrough();
+			spyOn(testCollection, 'fetch').and.returnValue(fetchDeferred);
 			spyOn(testCollection, 'setPageSize').and.callThrough();
 
 			injector = new Squire();
-			/* preloading all modules to see if this eliminates the timout issue on Jenkins */
+			/* preloading all modules to see if this eliminates the timeout issue on Jenkins */
+			injector.mock('module', module);
 			injector.mock('backbone', Backbone);
 			injector.mock('backgrid', Backgrid);
 			injector.mock('backgrid-paginator', Paginator);
@@ -74,14 +84,6 @@ define([
 
 			injector.require(['views/ManagePublicationsView'], function(view) {
 				ManagePublicationsView = view;
-				// Don't set up the fake server until after dependencies have been loaded
-
-				server = sinon.fakeServer.create();
-				server.respondWith('{"pageSize":"3","pageRowStart":"0","pageNumber":null,"recordCount":3,"records":' +
-				'[{"id":70004236,"text":"70004236 - noyr - Estimates of In-Place Oil Shale", "lastModifiedDate":"2015-12-02T09:59:51","indexId":"70004236","publicationYear":"2015","publicationType":{"id":4,"text":"Book"},"title":"Estimates of In-Place Oil Shale"},' +
-				'{"id":70004244,"text":"70004244 - noyr - Diversity of the Lunar Maria", "lastModifiedDate":"2012-07-23T14:22:01","indexId":"70004244","publicationYear":"2014","publicationType":{"id":4,"text":"Book"},"title":"Diversity of the Lunar Maria"},' +
-				'{"id":70004243,"text":"70004243 - noyr - Developing Climate Data Records","lastModifiedDate":"2012-03-27T16:31:33","indexId":"70004243","publicationYear":"2014","publicationType":{"id":4,"text":"Book"},"title":"Developing Climate Data Records"}]}');
-
 				testView = new ManagePublicationsView({
 					el: '#test-div',
 					collection: testCollection
@@ -92,7 +94,6 @@ define([
 
 		afterEach(function () {
 			injector.remove();
-			server.restore();
 			testView.remove();
 			$('#test-div').remove();
 		});
@@ -137,9 +138,8 @@ define([
 
 				$loadingIndicator = testView.$('.pubs-loading-indicator');
 				expect($loadingIndicator.is(':visible')).toBe(true);
-				server.respond();
+				fetchDeferred.resolve();
 				expect($loadingIndicator.is(':visible')).toBe(false);
-				expect(testView.$('.pubs-count').html()).toEqual('3');
 			});
 		});
 
@@ -207,17 +207,16 @@ define([
 		describe('Tests for collection event listeners', function() {
 			beforeEach(function() {
 				testView.render();
-				server.respond();
+				fetchDeferred.resolve();
 			});
 
 			it('Expects that the loading indicator becomes visible after the fetch start and changes to invisible when the fetch is complete', function() {
 				var $loadingIndicator = testView.$('.pubs-loading-indicator');
-				var $pubsCount = testView.$('.pubs-count');
 				expect($loadingIndicator.is(':visible')).toBe(false);
-				expect($pubsCount.html()).toEqual('3');
 				testCollection.fetch();
+				testCollection.trigger('request');
 				expect($loadingIndicator.is(':visible')).toBe(true);
-				server.respond();
+				testCollection.trigger('sync');
 				expect($loadingIndicator.is(':visible')).toBe(false);
 			});
 		});

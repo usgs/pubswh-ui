@@ -2,12 +2,11 @@
 
 define([
 	'underscore',
-	'jquery',
 	'backbone',
 	'backbone.paginator',
 	'module',
 	'models/PublicationModel'
-], function(_, $, Backbone, Pageable, module, PublicationModel) {
+], function(_, Backbone, Pageable, module, PublicationModel) {
 	"use strict";
 
 	var collection = Backbone.PageableCollection.extend({

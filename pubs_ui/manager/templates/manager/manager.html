@@ -38,6 +38,9 @@
 				'models/PublicationContributorModel' : {
 					scriptRoot : "{{ request.script_root }}"
 				},
+				'models/PublicationListCollection' : {
+					scriptRoot : "{{ request.script_root }}"
+				},
 				'models/PublicationTypeCollection' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
@@ -71,6 +74,9 @@
 				},
 				'views/SPNView' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
+				},
+				'views/LoginDialogView' : {
+					scriptRoot : "{{ request.script_root }}"
 				}
 			},
 			baseUrl: "{{ url_for('manager.static', filename='js') }}",

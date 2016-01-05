@@ -4,7 +4,7 @@ from requests import Request, Session
 from flask import Blueprint, render_template, request
 from flask_login import login_required
 
-from ..auth.views import generate_auth_header
+from ..auth.utils import generate_auth_header
 from .. import app
 
 SERVICES_ENDPOINT = app.config['PUB_URL']

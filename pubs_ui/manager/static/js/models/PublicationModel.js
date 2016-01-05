@@ -98,7 +98,7 @@ define([
 					contentType : 'application/json',
 					processData : false,
 					data: '{"id" : ' + this.get('id') + '}',
-					success : function(response) {
+					success : function(response, textStatus, jqXHR) {
 						deferred.resolve(response)
 					},
 					error : function(jqXHR, textStatus, error) {
@@ -107,10 +107,10 @@ define([
 							&& _.isArray(resp.validationErrors)
 							&& (resp.validationErrors.length > 0)) {
 							self.set('validationErrors', resp.validationErrors);
-							deferred.reject(resp);
+							deferred.reject(jqXHR, 'Validation errors');
 						}
 						else {
-							deferred.reject('Unable to ' + op + ' the publication with error: ' + error);
+							deferred.reject(jqXHR, 'Unable to ' + op + ' the publication with error: ' + error);
 						}
 					}
 				});
@@ -126,8 +126,8 @@ define([
 		 *     array if the response contains validation errors, rejects with an error message if the failed response does
 		 *     not contain validation errors.
 		 */
-		release : function() {
-			return this.changeState('release');
+		release : function(options) {
+			return this.changeState('release', options);
 		},
 
 		/*
@@ -135,8 +135,8 @@ define([
 		 *     array if the response contains validation errors, rejects with an error message if the failed response does
 		 *     not contain validation errors.
 		 */
-		publish : function() {
-			return this.changeState('publish');
+		publish : function(options) {
+			return this.changeState('publish', options);
 		},
 
 		save : function(attributes, options) {

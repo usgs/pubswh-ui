@@ -1,10 +1,12 @@
-
+from itsdangerous import BadSignature, BadPayload
 from urlparse import urlparse, urljoin
 from urllib import unquote
 
 from werkzeug.exceptions import NotFound, MethodNotAllowed
 
-from . import app
+from . import login_serializer
+from .. import app
+
 
 def get_url_endpoint(url, server_name, fallback, wsgi_str=None):
     '''
@@ -39,3 +41,29 @@ def is_safe_url(target, host_url):
     ref_url = urlparse(host_url)
     test_url = urlparse(urljoin(host_url, target))
     return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
+
+
+def get_cida_auth_token(cookies):
+    '''
+    :param cookies - dictionary of cookies from an http request:
+    :return string - the cida auth token contained with the cookies dictionary:
+    '''
+    token_cookie = cookies.get(app.config['REMEMBER_COOKIE_NAME'], '')
+    try:
+        session_data = login_serializer.loads(token_cookie, max_age=app.config['REMEMBER_COOKIE_DURATION'].total_seconds())
+    except (BadSignature, BadPayload) :
+        token = ''
+    else:
+        token = session_data[1]
+
+    return token
+
+
+def generate_auth_header(request):
+    '''
+    This is used to generate the auth header to make requests back to the pubs-services endpoints
+    :param request: the request object to get the cookie
+    :return: A dictionary containing the authorization header that can be sent along to the pubs-services endpoint.
+    '''
+    return {'Authorization' : 'Bearer  ' + get_cida_auth_token(request.cookies)}
+

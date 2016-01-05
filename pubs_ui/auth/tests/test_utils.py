@@ -1,8 +1,8 @@
 
 
 from flask.ext.testing import TestCase
-from pubs_ui import app
-from pubs_ui.utils import get_url_endpoint, is_safe_url
+from .. import app
+from ..utils import get_url_endpoint, is_safe_url
 
 class GetUrlEndpointTestCase(TestCase):
     '''
