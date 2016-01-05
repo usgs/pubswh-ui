@@ -3,17 +3,27 @@
 define([
 	'module',
 	'backbone',
+	'underscore',
+	'jquery',
 	'backgrid',
 	'backgrid-paginator',
+	'models/PublicationListCollection',
 	'views/BackgridUrlCell',
 	'views/BackgridClientSortingBody',
 	'views/BaseView',
 	'views/AlertView',
+	'views/WarningDialogView',
 	'views/SearchFilterRowView',
 	'hbs!hb_templates/managePublications'
-], function (module, Backbone, Backgrid, Paginator, BackgridUrlCell, BackgridClientSortingBody, BaseView,
-			 AlertView, SearchFilterRowView, hbTemplate) {
+], function (module, Backbone, _, $, Backgrid, Paginator, PublicationListCollection,
+			 BackgridUrlCell, BackgridClientSortingBody, BaseView,
+			 AlertView, WarningDialogView, SearchFilterRowView, hbTemplate) {
 	"use strict";
+
+	var DEFAULT_SELECT2_OPTIONS = {
+		allowClear : true,
+		theme : 'bootstrap'
+	};
 
 	var view = BaseView.extend({
 
@@ -24,7 +34,8 @@ define([
 			'change #search-term-input' : 'updateQterm',
 			'click .add-category-btn' : 'addFilterRow',
 			'click .clear-advanced-search-btn' : 'clearFilterRows',
-			'click .create-pub-btn' : 'goToEditPubPage'
+			'click .create-pub-btn' : 'goToEditPubPage',
+			'click .add-to-lists-btn' : 'addSelectedPubsToCategory'
 		},
 
 		template: hbTemplate,
@@ -37,6 +48,10 @@ define([
 		initialize : function(options) {
 			var self = this;
 			BaseView.prototype.initialize.apply(this, arguments);
+
+			//Fetch publication lists
+			this.publicationListCollection = new PublicationListCollection();
+			this.pubListFetch = this.publicationListCollection.fetch();
 
 			// Create filter model, listeners, and holder for filter rows.
 			this.filterModel = new Backbone.Model();
@@ -201,6 +216,10 @@ define([
 			this.alertView = new AlertView({
 				el: '.alert-container'
 			});
+
+			this.warningDialogView = new WarningDialogView({
+				el : '.warning-dialog-container'
+			});
 		},
 
 		render : function() {
@@ -212,12 +231,20 @@ define([
 
 			// Set the elements for child views and render if needed.
 			this.alertView.setElement(this.$('.alert-container'));
+			this.warningDialogView.setElement(this.$('.warning-dialog-container')).render();
 
 			// Render the grid and attach the root to HTML document
 			$pubList.append(this.grid.render().el);
 
 			// Render the paginator
 			this.$('.pub-grid-footer').append(this.paginator.render().el);
+
+			// Initialize the publication lists select2
+			this.pubListFetch.then(function() {
+				self.$('#pubs-categories-select').select2(_.extend({
+					data : self.publicationListCollection.toJSON()
+				}, DEFAULT_SELECT2_OPTIONS));
+			});
 
 			this.fetchPromise.fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
@@ -286,6 +313,52 @@ define([
 		goToEditPubPage : function (ev) {
 			ev.preventDefault();
 			this.router.navigate('publication', {trigger: true});
+		},
+
+		addSelectedPubsToCategory : function(ev) {
+			var self = this;
+
+			var selectedPubs = this.collection.filter(function(model) {
+				return (model.has('selected') && model.get('selected'));
+			});
+			var pubsIdData = $.param({
+				publicationId : _.map(selectedPubs, function(model) {
+					return model.get('id');
+				})
+			}, true);
+			var pubsList = this.$('#pubs-categories-select').val();
+			var addDeferreds = [];
+			var serviceUrl = module.config().scriptRoot + '/manager/services/lists/';
+
+			ev.preventDefault();
+
+			if (selectedPubs.length === 0) {
+				this.warningDialogView.show(
+					'Select Publications',
+					'You must select at least one publication to add to the list(s)'
+				);
+			}
+			else if (pubsList.length === 0) {
+				this.warningDialogView.show(
+					'Select Lists',
+					'You must select at least one publication list'
+				);
+			}
+			else {
+				addDeferreds = _.map(pubsList, function (pubListId) {
+					return $.ajax({
+						url: serviceUrl + pubListId + '/pubs?' + pubsIdData,
+						method: 'POST'
+					});
+				});
+				$.when.apply(this, addDeferreds)
+					.done(function() {
+						self.alertView.showSuccessAlert('Selected publications successfully added to the chosen lists');
+					})
+					.fail(function() {
+						self.alertView.showDangerAlert('Error: Unable to add selected publications to the chosen lists');
+					});
+			}
 		},
 
 		/*

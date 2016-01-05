@@ -60,7 +60,8 @@
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
 				'views/ManagePublicationsView' : {
-					oldMyPubsEndpoint : "{{ config.OLD_MYPUBS_ENDPOINT }}"
+					oldMyPubsEndpoint : "{{ config.OLD_MYPUBS_ENDPOINT }}",
+					scriptRoot : "{{ request.script_root }}"
 				},
 				'views/PublicationView' : {
 					previewUrl : "{{ url_for('pubswh.restricted_page', index_id='') }}"
