@@ -50,6 +50,7 @@ define([
 			this.listenTo(this.collection, 'request', this.showLoadingIndicator);
 			this.listenTo(this.collection, 'sync', this.updatePubsListDisplay);
 
+
 			this.fetchPromise = this.collection.fetch({reset: true});
 
 			var fromRawLookup = function(rawValue, model) {
@@ -76,6 +77,19 @@ define([
 
 			// Create backgrid and paginator views
 			var columns = [
+				{
+					name: 'selected',
+					label : '',
+					editable : true,
+					sortable : false,
+					cell : Backgrid.BooleanCell.extend({
+						events : {
+							'change input': function (e) {
+								this.model.set(this.column.get('name'), e.target.checked);
+							}
+						}
+					})
+				},
 				{
 					name: 'id',
 					label : '',
