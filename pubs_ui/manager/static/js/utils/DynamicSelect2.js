@@ -2,8 +2,9 @@
 
 define([
 	'underscore',
+	'jquery',
 	'module'
-], function(_, module) {
+], function(_, $, module) {
 	"use strict";
 	/*
 	 * @param {Object} options

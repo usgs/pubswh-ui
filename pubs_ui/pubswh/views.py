@@ -238,7 +238,7 @@ def lookup(endpoint):
 
 
 @pubswh.route('/documentation/faq')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def faq():
     app.logger.info('The FAQ function is being called')
     feed_url = 'https://my.usgs.gov/confluence//createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=pw_faq&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -246,7 +246,7 @@ def faq():
 
 
 @pubswh.route('/documentation/usgs_series')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def usgs_series():
     app.logger.info('The USGS Series function is being called')
     feed_url = 'https://my.usgs.gov/confluence//createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=USGS+Series+Definitions&labelString=usgs_series&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -254,7 +254,7 @@ def usgs_series():
 
 
 @pubswh.route('/documentation/web_service_documentation')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def web_service_docs():
     app.logger.info('The web_service_docs function is being called')
     feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=pubs_webservice_docs&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -262,7 +262,7 @@ def web_service_docs():
 
 
 @pubswh.route('/documentation/other_resources')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def other_resources():
     app.logger.info('The other_resources function is being called')
     feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=other_resources&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -348,7 +348,7 @@ def site_map():
 
 
 @pubswh.route('/newpubs', methods=['GET'])
-@cache.cached(timeout=60, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated())
+@cache.cached(timeout=60, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def new_pubs():
     num_form = NumSeries()
     sp = SearchPublications(search_url)
