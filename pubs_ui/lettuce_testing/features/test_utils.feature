@@ -29,6 +29,11 @@ Feature: Test all pub_ui utilities
 		When I create_display_links from the pub's response
 		Then I am given a list of links for use in the jinja template
 
+	Scenario: getbrowsercontent functions correctly
+		Given I have a mockup url and body of pubs browse links
+		When I get the links, breadcrumbs, and titles from the url
+		Then I am returned a list for the links, breadcrumbs, and titles
+
     Scenario: manipulate_display_links
         Given I have a index page links that point to USGS and NGMDB and has plates
         When I manipulate the links with create display links
