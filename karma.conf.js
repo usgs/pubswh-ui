@@ -43,10 +43,7 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
-        'pubs_ui/manager/static/js/init.js',
-        'pubs_ui/bower_components/Squire.js/Gruntfile.js',
-        'pubs_ui/bower_components/backbone.paginator/test/*.js',
-        'pubs_ui/bower_components/backbone.paginator/test/**/*.js'
+        'pubs_ui/manager/static/js/init.js'
     ],
 
 
@@ -59,7 +56,7 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['dots'],
+    reporters: ['progress'],
 
 
     // web server port
