@@ -252,6 +252,8 @@ define([
 				// Make sure indicator is hidden. Need to do this in case the sync signal was sent before the view was rendered
 				self.updatePubsListDisplay();
 			});
+
+			return this;
 		},
 
 		remove : function() {
