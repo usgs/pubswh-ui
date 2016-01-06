@@ -10,6 +10,7 @@
 define([
 	'squire',
 	'jquery',
+	'underscore',
 	'module',
 	'backbone',
 	'backgrid',
@@ -19,7 +20,7 @@ define([
 	'models/PublicationCollection',
 	'views/BaseView',
 	'hbs!hb_templates/managePublications'
-], function(Squire, $, module, Backbone, Backgrid, Paginator, BackgridUrlCell, BackgridClientSortingBody,
+], function(Squire, $, _, module, Backbone, Backgrid, Paginator, BackgridUrlCell, BackgridClientSortingBody,
 			PublicationCollection, BaseView, hbTemplate) {
 	"use strict";
 
@@ -31,9 +32,11 @@ define([
 		var testView, testCollection;
 		var injector;
 
-		var setElAlertSpy, renderAlertSpy, removeAlertSpy, dangerAlertSpy;
+		var setElAlertSpy, renderAlertSpy, removeAlertSpy, successAlertSpy, dangerAlertSpy;
+		var setElWarningDialogSpy, renderWarningDialogSpy, removeWarningDialogSpy, showWarningDialogSpy;
 		var setElSearchFilterRowViewSpy, renderSearchFilterRowViewSpy, removeSearchFilterRowViewSpy;
-		var fetchDeferred;
+		var fetchListSpy;
+		var fetchDeferred, fetchListDeferred;
 
 		beforeEach(function (done) {
 			jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
@@ -43,11 +46,20 @@ define([
 			setElAlertSpy = jasmine.createSpy('setElAlertSpy');
 			renderAlertSpy = jasmine.createSpy('renderAlertSpy');
 			removeAlertSpy = jasmine.createSpy('removeAlertSpy');
+			successAlertSpy = jasmine.createSpy('successAlertSpy');
 			dangerAlertSpy = jasmine.createSpy('dangerAlertSpy');
+
+			setElWarningDialogSpy = jasmine.createSpy('setElWarningDialogSpy');
+			renderWarningDialogSpy = jasmine.createSpy('renderWarningDialogSpy');
+			removeWarningDialogSpy = jasmine.createSpy('removeWarningDialogSpy');
+			showWarningDialogSpy = jasmine.createSpy('showWarningDialogSpy');
 
 			setElSearchFilterRowViewSpy = jasmine.createSpy('setElSearchFilterRowViewSpy');
 			renderSearchFilterRowViewSpy = jasmine.createSpy('renderSearchFilterRowViewSpy');
 			removeSearchFilterRowViewSpy = jasmine.createSpy('removeSearchFilterRowViewSpy');
+
+			fetchListDeferred = $.Deferred();
+			fetchListSpy = jasmine.createSpy('fetchListSpy').and.returnValue(fetchListDeferred);
 
 			fetchDeferred = $.Deferred();
 
@@ -59,6 +71,8 @@ define([
 			/* preloading all modules to see if this eliminates the timeout issue on Jenkins */
 			injector.mock('module', module);
 			injector.mock('backbone', Backbone);
+			injector.mock('underscore', _);
+			injector.mock('jquery', $);
 			injector.mock('backgrid', Backgrid);
 			injector.mock('backgrid-paginator', Paginator);
 			injector.mock('views/BackgridUrlCell', BackgridUrlCell);
@@ -66,11 +80,25 @@ define([
 			injector.mock('views/BaseView', BaseView);
 			injector.mock('hbs!hb_templates/managePublications', hbTemplate);
 
+			injector.mock('models/PublicationListCollection', Backbone.Collection.extend({
+				fetch : fetchListSpy
+			}));
+
 			injector.mock('views/AlertView', BaseView.extend({
 				setElement: setElAlertSpy,
 				render: renderAlertSpy,
 				remove: removeAlertSpy,
+				showSuccessAlert : successAlertSpy,
 				showDangerAlert: dangerAlertSpy
+			}));
+
+			injector.mock('views/WarningDialogView', BaseView.extend({
+				setElement : setElWarningDialogSpy.and.returnValue({
+					render : renderWarningDialogSpy
+				}),
+				render : renderWarningDialogSpy,
+				remove : removeWarningDialogSpy,
+				show : showWarningDialogSpy
 			}));
 
 			injector.mock('views/SearchFilterRowView', BaseView.extend({
@@ -80,7 +108,6 @@ define([
 				render : renderSearchFilterRowViewSpy,
 				remove : removeSearchFilterRowViewSpy
 			}));
-
 
 			injector.require(['views/ManagePublicationsView'], function(view) {
 				ManagePublicationsView = view;
@@ -106,8 +133,13 @@ define([
 			expect(testCollection.fetch).toHaveBeenCalled();
 		});
 
+		it('Expects that the publication lists are fetched at initialization', function() {
+			expect(fetchListSpy).toHaveBeenCalled();
+		})
+
 		it('Expects that the child view\'s are created', function() {
 			expect(setElAlertSpy).toHaveBeenCalled();
+			expect(setElWarningDialogSpy).toHaveBeenCalled();
 			expect(testView.grid).toBeDefined();
 			expect(testView.paginator).toBeDefined();
 		});
@@ -120,12 +152,18 @@ define([
 				spyOn(testView.paginator, 'render').and.returnValue({
 					el : {}
 				});
+				spyOn($.fn, 'select2');
 				testView.render();
 			});
 
 			it('Expects that the alertView\'s element is set but the view is not rendered', function() {
 				expect(setElAlertSpy.calls.count()).toBe(2);
 				expect(renderAlertSpy).not.toHaveBeenCalled();
+			});
+
+			it('Expects the warningDialogView to be rendered', function() {
+				expect(setElWarningDialogSpy.calls.count()).toBe(2);
+				expect(renderWarningDialogSpy).toHaveBeenCalled();
 			});
 
 			it('Expects the grid and paginator to have been rendered.', function() {
@@ -140,6 +178,12 @@ define([
 				expect($loadingIndicator.is(':visible')).toBe(true);
 				fetchDeferred.resolve();
 				expect($loadingIndicator.is(':visible')).toBe(false);
+			});
+
+			it('Expects that the publications list category selector is initialized once the list has been fetched', function() {
+				expect($.fn.select2).not.toHaveBeenCalled();
+				fetchListDeferred.resolve();
+				expect($.fn.select2).toHaveBeenCalled();
 			});
 		});
 
@@ -156,6 +200,7 @@ define([
 			it('Expects the children view to be removed', function() {
 				testView.remove();
 				expect(removeAlertSpy).toHaveBeenCalled();
+				expect(removeWarningDialogSpy).toHaveBeenCalled();
 				expect(removeSearchFilterRowViewSpy.calls.count()).toEqual(2);
 				expect(testView.grid.remove).toHaveBeenCalled();
 				expect(testView.paginator.remove).toHaveBeenCalled();
@@ -200,6 +245,39 @@ define([
 				$addBtn.trigger('click');
 				expect(setElSearchFilterRowViewSpy.calls.count()).toBe(4);
 				expect(renderSearchFilterRowViewSpy.calls.count()).toBe(2);
+			});
+
+			it('Expects that clicking on Add to Lists with no lists selected but publications selected shows the warning dialog', function() {
+				testCollection.add([{id : 1, selected : true}, {id : 2}])
+				testView.$('.add-to-lists-btn').trigger('click');
+				expect(showWarningDialogSpy).toHaveBeenCalled();
+			});
+
+			it('Expects that clicking on Add to List with a list selected but no publications selected shows the warning dialog', function() {
+				var $listSelect = testView.$('#pubs-categories-select');
+				$listSelect.html('<option value="1" selected>List 1</option>');
+				testCollection.add([{id : 1}, {id : 2}]);
+
+				testView.$('.add-to-lists-btn').trigger('click');
+				expect(showWarningDialogSpy).toHaveBeenCalled();
+			});
+
+			it('Expects an ajax call for each publication list selected with the ids passed as query parameters', function() {
+				var args0, args1;
+				testView.$('#pubs-categories-select').html('<option value="1" selected>List 1</option><option value="2" selected>List 2</option>');
+				testCollection.add([{id : 1, selected: true}, {id : 2}, {id : 3, selected: true}]);
+
+				spyOn($, 'ajax');
+				testView.$('.add-to-lists-btn').trigger('click');
+				expect($.ajax.calls.count()).toBe(2);
+				args0 = $.ajax.calls.argsFor(0)[0];
+				args1 = $.ajax.calls.argsFor(1)[0];
+
+				expect(args0.url).toContain('lists/1/pubs');
+				expect(args0.url).toContain('publicationId=1&publicationId=3');
+
+				expect(args1.url).toContain('lists/2/pubs');
+				expect(args1.url).toContain('publicationId=1&publicationId=3');
 			});
 
 		});
