@@ -1,6 +1,8 @@
 PubsWarehouse_UI
 ================
 
+[![Build Status](https://travis-ci.org/mbucknell/PubsWarehouse_UI.svg?branch=PUBSTWO-1310)](https://travis-ci.org/mbucknell/PubsWarehouse_UI)
+
 To get this application running using the flask local dev server you need to create an instance/config.py file
 under PubsWarehouse_UI folder.  The contents of the file should look like so:
 

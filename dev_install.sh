@@ -13,9 +13,7 @@ virtualenv --python=python2.7 env
 pip install -r requirements.txt
 
 echo "Install javascript dependencies"
-cd pubs_ui
 bower install
-cd ..
 
 echo "Successfully installed the pubs_ui app. "
 echo "When running scripts in this project set up the python interpreter to use env/bin/python."
