@@ -10,6 +10,6 @@
     "requirejs": "^2.1.22"
   },
   "scripts": {
-    "test": "karma start --single-run --browsers Firefox"
+    "test": "karma start --single-run --browsers Firefox --reporters dots"
   }
 }
