@@ -11,6 +11,8 @@ install:
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+  - mkdir instance
+  - echo "SECRET_KEY = 'key-for-jenkins'" > instance/config.py
 
 script:
   - lettuce --with-xunit pubs_ui/lettuce_testing
