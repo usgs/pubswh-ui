@@ -41,7 +41,6 @@ module.exports = function(config) {
       {pattern: 'tests/js/manager/**/*.js', included: false}
         ],
 
-
     // list of files to exclude
     exclude: [
         'pubs_ui/manager/static/js/init.js',
