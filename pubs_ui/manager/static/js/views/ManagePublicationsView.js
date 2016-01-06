@@ -258,6 +258,7 @@ define([
 			this.grid.remove();
 			this.paginator.remove();
 			this.alertView.remove();
+			this.warningDialogView.remove();
 			_.each(this.filterRowViews, function(view) {
 				view.remove();
 			});
@@ -332,13 +333,13 @@ define([
 
 			ev.preventDefault();
 
-			if (selectedPubs.length === 0) {
+			if (!selectedPubs || selectedPubs.length === 0) {
 				this.warningDialogView.show(
 					'Select Publications',
 					'You must select at least one publication to add to the list(s)'
 				);
 			}
-			else if (pubsList.length === 0) {
+			else if (!pubsList || pubsList.length === 0) {
 				this.warningDialogView.show(
 					'Select Lists',
 					'You must select at least one publication list'
