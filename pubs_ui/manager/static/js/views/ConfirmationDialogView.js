@@ -21,6 +21,7 @@ define([
 			this.$('.modal').modal({
 				show : false
 			});
+			return this;
 		},
 
 		/*
