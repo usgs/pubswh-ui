@@ -238,7 +238,8 @@
                     </ul>
                 </section>
                 <section itemprop="description" id="abstract" >
-                    {% if pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and (pubdata['publishedDate'] or pubdata['contact']) %}
+                    {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and (pubdata['publishedDate'] or pubdata['contact'])) or
+                (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Federal Government Series' and (pubdata['publishedDate'] or pubdata['contact']))  %}
                     <aside class="publicationAsideDesktop">
                 {% include 'pubswh/USGS_series_aside.html' %}
                 </aside>
@@ -274,7 +275,8 @@
                     {{ pubdata['tableOfContents']|safe }}
                 </section>
                 {% endif %}
-                {% if pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and (pubdata['publishedDate'] or pubdata['contact']) %}
+                {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and (pubdata['publishedDate'] or pubdata['contact'])) or
+                (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Federal Government Series' and (pubdata['publishedDate'] or pubdata['contact']))  %}
                 <aside class="publicationAside">
                 	{% include 'pubswh/USGS_series_aside.html' %}
                 </aside>
