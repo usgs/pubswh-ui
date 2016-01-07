@@ -223,7 +223,7 @@ define([
 				lookupType: 'publicationsubtypes',
 				parentId: 'publicationtypeid',
 				getParentId: function () {
-					return self.model.get('publicationType');
+					return self.model.get('publicationType').id;
 				}
 			}, DEFAULT_SELECT2_OPTIONS));
 
@@ -233,7 +233,7 @@ define([
 				lookupType : 'publicationseries',
 				parentId : 'publicationsubtypeid',
 				getParentId : function() {
-					return self.model.get('publicationSubtype')
+					return self.model.get('publicationSubtype').id
 				},
 				activeSubgroup : true
 			}, DEFAULT_SELECT2_OPTIONS));
@@ -243,7 +243,7 @@ define([
 				lookupType: 'publicationsubtypes',
 				parentId: 'publicationtypeid',
 				getParentId: function () {
-					return self.model.get('largerWorkType');
+					return self.model.get('largerWorkType').id;
 				}
 			}, DEFAULT_SELECT2_OPTIONS));
 			this.updateLargerWorkSubtype();
