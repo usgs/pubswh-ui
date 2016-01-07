@@ -214,6 +214,12 @@ define([
 				expect(costCenters).toContain({id : 4, text : 'CC 4'});
 				expect(costCenters).toContain({id : 5, text : 'CC 5'});
 				expect(costCenters).toContain({id : 15, text : 'CC 15'});
+
+				pubModel.unset('costCenters');
+				testView.selectCostCenter(ev);
+				costCenters = pubModel.get('costCenters');
+				expect(costCenters.length).toBe(1);
+				expect(costCenters).toContain({id : 15, text : 'CC 15'});
 			});
 
 			it('Expects that when a cost center is removed, costCenters is updated appropriately', function() {
