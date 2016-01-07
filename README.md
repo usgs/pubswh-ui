@@ -1,6 +1,8 @@
 PubsWarehouse_UI
 ================
 
+[![Build Status](https://travis-ci.org/mbucknell/PubsWarehouse_UI.svg?branch=PUBSTWO-1310)](https://travis-ci.org/mbucknell/PubsWarehouse_UI)
+
 To get this application running using the flask local dev server you need to create an instance/config.py file
 under PubsWarehouse_UI folder.  The contents of the file should look like so:
 
@@ -52,8 +54,8 @@ To create the virtualenv you should have python 2.7, virtualenv, pip installed. 
 need bower which can be installed by using `npm install -g bower`. To compile less files, you will need to install lessc which can 
 be installed by using `npm install -g lessc`.
 
-If you are on a linux environment, you can use run the dev_install.sh script. You should run this every time you pull down 
-code but particularly if requirements.txt or pubs_ui/bower.json have been updated. Otherwise these are the steps you need
+If you are on a linux environment, you can run the dev_install.sh script. You should run this every time you pull down 
+code but particularly if requirements.txt, package.json or bower.json have been updated. Otherwise these are the steps you need
 to take.
 
 1. Create a virtualenv using python 2.7.9 and install the requirements in 'requirements.txt'. This can be done as follows while in the project directory:
@@ -62,8 +64,10 @@ to take.
   3. Run `pip install -r requirements.txt`
 
 2. Install the javascript dependencies. This requires bower. Do the following:
-  1. Change directory to pubs_ui
-  2. Run `bower install`
+  1. Run `bower install`
+
+3. Install the test runner
+  1. Run `npm install`
 
 You can start the app by running `run.py`, which will give you an output like so:
 
@@ -82,8 +86,10 @@ To run the unit tests do the following with your virtualenv activated or using t
 To run the jasmine tests and to produce a code coverage report, run the following:
 `mvn verify`
 
-To run the jasmine tests using a browser, run the following:
-`mvn jasmine:bdd`
+To run the jasmine tests using a browser, run the following: :
+`karma start karma.conf.js` (if karma-cli has been installed)
+`node_modules/karma/bin/karma start karma.conf.js` (if karm-cli has not been installed)
+Then go to localhost:9876 in the browser where you want to run the tests.
 
 
 ## Generating secret keys

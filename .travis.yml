@@ -1,0 +1,20 @@
+language: python
+
+python:
+  - "2.7"
+
+install:
+  - pip install -r requirements.txt
+  - npm install
+  - bower install
+
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - mkdir instance
+  - echo "SECRET_KEY = 'key-for-jenkins'" > instance/config.py
+
+script:
+  - lettuce --with-xunit pubs_ui/lettuce_testing
+  - nosetests pubs_ui
+  - npm test
