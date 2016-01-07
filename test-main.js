@@ -8,8 +8,6 @@ Object.keys(window.__karma__.files).forEach(function(file) {
   	}
 });
 
-window.IS_INITIAL_RUN = true;
-
 require.config({
 	// Karma serves files under /base, which is the basePath from your config file
 	baseUrl: '/base/pubs_ui/manager/static/js',
