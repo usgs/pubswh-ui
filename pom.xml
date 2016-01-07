@@ -118,52 +118,6 @@
           </execution>
         </executions>
       </plugin>
-			<plugin>
-				<groupId>com.github.searls</groupId>
-				<artifactId>jasmine-maven-plugin</artifactId>
-				<version>2.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<phantomjs>
-						<version>1.9.7</version>
-					</phantomjs>
-					<keepServerAlive>true</keepServerAlive>
-					<specRunnerTemplate>REQUIRE_JS</specRunnerTemplate>
-					<jsTestSrcDir>${project.basedir}/tests/js</jsTestSrcDir>
-					<customRunnerConfiguration>${project.basedir}/tests/js/resources/customJasmineRequireConfig.txt</customRunnerConfiguration>
-					<preloadSources>
-						<source>/pubs_ui/bower_components/requirejs/require.js</source>
-					</preloadSources>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.github.timurstrekalov</groupId>
-				<artifactId>saga-maven-plugin</artifactId>
-				<version>1.5.2</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>coverage</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<baseDir>http://localhost:${jasmine.serverPort}</baseDir>
-					<outputDir>${project.build.directory}/coverage</outputDir>
-					<noInstrumentPatterns>
-						<pattern>.*/*Spec\.js</pattern>
-						<pattern>.*/pubs_ui/bower_components/.*/*\.js</pattern>
-						<pattern>.*/webjars/.*/*</pattern>
-						<pattern>.*/classpath/.*/*</pattern>
-					</noInstrumentPatterns>
-				</configuration>
-			</plugin>
     </plugins>
   </build>
 </project>
