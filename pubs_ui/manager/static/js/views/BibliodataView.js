@@ -291,7 +291,13 @@ define([
 		},
 
 		selectCostCenter : function(ev) {
-			var costCenters = _.clone(this.model.get('costCenters'));
+			var costCenters;
+			if (this.model.has('costCenters')) {
+				costCenters = _.clone(this.model.get('costCenters'));
+			}
+			else {
+				costCenters = [];
+			}
 			costCenters.push({
 				id : parseInt(ev.params.data.id),
 				text : ev.params.data.text
