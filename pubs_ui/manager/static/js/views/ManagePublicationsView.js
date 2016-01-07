@@ -135,7 +135,7 @@ define([
 					sortValue : sortValueLookup
 				}, {
 					name: "seriesTitle",
-					label: "USGS Series",
+					label: "Series Name",
 					editable: false,
 					sortable : true,
 					cell: "string",
@@ -195,6 +195,18 @@ define([
 					sortable: true,
 					cell: 'string',
 					sortValue : sortValueText
+				},
+				{
+					name : 'published',
+					label : 'Published',
+					editable : false,
+					sortable : true,
+					cell : 'string',
+					formatter : {
+						fromRaw : function(rawValue, model) {
+							return (rawValue) ? 'Yes' : 'No'
+						}
+					}
 				}
 			];
 
