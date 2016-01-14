@@ -93,6 +93,11 @@ define([
 						trigger : 'hover'
 					});
 				});
+
+				// The tinymce have to be initialize sequentially
+				self.tabs.bibliodata.view.initializeTinyMce().done(function() {
+					self.tabs.spn.view.initializeTinyMce();
+				});
 			}).fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the publication: ' + jqXhr.statusText);
 			});

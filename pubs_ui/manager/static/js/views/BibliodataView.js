@@ -1,8 +1,9 @@
 /* jslint browser: true */
-
+/* global define */
 define([
 	'handlebars',
 	'jquery',
+	'underscore',
 	'select2',
 	'tinymce',
 	'module',
@@ -12,7 +13,7 @@ define([
 	'models/CostCenterCollection',
 	'views/BaseView',
 	'hbs!hb_templates/bibliodata',
-], function(Handlebars, $, select2, tinymce, module, stickit, DynamicSelect2, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate) {
+], function(Handlebars, $, _, select2, tinymce, module, stickit, DynamicSelect2, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -110,8 +111,81 @@ define([
 			// This is the only way I got the tinymce editor to reliably render
 			this.updateDocAbstract();
 			this.updateTableOfContents();
+
+			// Set up for the publication type and larger work type select2's. These are set up once the data for the options
+			// have been retrieved.
+			this.pubTypePromise.done(function() {
+				self.$('#pub-type-input').select2(_.extend({
+					data: self.publicationTypeCollection.toJSON()
+				}, DEFAULT_SELECT2_OPTIONS));
+				self.updatePubType();
+
+				self.$('#larger-work-type-input').select2(_.extend({
+					data : self.publicationTypeCollection.toJSON()
+				}, DEFAULT_SELECT2_OPTIONS));
+				self.updateLargerWorkType();
+			});
+
+			// Set up for the cost center select2's. These are set up once the data for the options have been retrieved.
+			this.costCenterPromise.done(function() {
+				self.$('#cost-centers-input').select2(_.extend({
+					data : [{
+						text : 'Active',
+						children : self.activeCostCenters.toJSON()
+					}, {
+						text : 'Not Active',
+						children : self.notActiveCostCenters.toJSON()
+					}]
+				}, DEFAULT_SELECT2_OPTIONS));
+				self.updateCostCenters();
+			});
+
+
+			// The remaining select2's dynamically fetch their options using the lookup service, the current text search term
+			// and optionally filtered by a model attribute value.
+			this.$('#pub-subtype-input').select2(DynamicSelect2.getSelectOptions({
+				lookupType: 'publicationsubtypes',
+				parentId: 'publicationtypeid',
+				getParentId: function () {
+					return self.model.get('publicationType').id;
+				}
+			}, DEFAULT_SELECT2_OPTIONS));
+
+			this.updatePubSubtype();
+
+			this.$('#series-title-input').select2(DynamicSelect2.getSelectOptions({
+				lookupType : 'publicationseries',
+				parentId : 'publicationsubtypeid',
+				getParentId : function() {
+					return self.model.get('publicationSubtype').id;
+				},
+				activeSubgroup : true
+			}, DEFAULT_SELECT2_OPTIONS));
+			this.updateSeriesTitle();
+
+			this.$('#larger-work-subtype-input').select2(DynamicSelect2.getSelectOptions({
+				lookupType: 'publicationsubtypes',
+				parentId: 'publicationtypeid',
+				getParentId: function () {
+					return self.model.get('largerWorkType').id;
+				}
+			}, DEFAULT_SELECT2_OPTIONS));
+			this.updateLargerWorkSubtype();
+
+			return this;
+		},
+
+		/*
+		 * @returns Jquery.Promise which is resolved once all tinymce editors have been successfully initialized.
+		 */
+		initializeTinyMce : function() {
+			//Set up tinymce element. If the setup
+			// callback is not called, the app should try again after removing and adding back in the editor.
+			// This is the only way I got the tinymce editor to reliably render. Also tinyMCE editors have to be initialized
+			// sequentially so we must wait until the previous initialization is complete.
 			var isInit = false;
 			var abstractInitDeferred = $.Deferred();
+			var tocInitDeferred = $.Deferred();
 			var interval = setInterval(function() {
 				if (isInit) {
 					tinymce.execCommand('mceRemoveEditor', true, 'docAbstract-input');
@@ -171,6 +245,7 @@ define([
 					tinymce.init({
 						selector: '#tableOfContents-input',
 						setup: function (ed) {
+							tocInitDeferred.resolve();
 							clearInterval(tocInterval);
 							ed.on('change', function (ev) {
 								self.model.set('tableOfContents', ev.level.content);
@@ -187,68 +262,7 @@ define([
 					tocInit = true;
 				}, 1);
 			});
-
-			// Set up for the publication type and larger work type select2's. These are set up once the data for the options
-			// have been retrieved.
-			this.pubTypePromise.done(function() {
-				self.$('#pub-type-input').select2(_.extend({
-					data: self.publicationTypeCollection.toJSON()
-				}, DEFAULT_SELECT2_OPTIONS));
-				self.updatePubType();
-
-				self.$('#larger-work-type-input').select2(_.extend({
-					data : self.publicationTypeCollection.toJSON()
-				}, DEFAULT_SELECT2_OPTIONS));
-				self.updateLargerWorkType();
-			});
-
-			// Set up for the cost center select2's. These are set up once the data for the options have been retrieved.
-			this.costCenterPromise.done(function() {
-				self.$('#cost-centers-input').select2(_.extend({
-					data : [{
-						text : 'Active',
-						children : self.activeCostCenters.toJSON()
-					}, {
-						text : 'Not Active',
-						children : self.notActiveCostCenters.toJSON()
-					}]
-				}, DEFAULT_SELECT2_OPTIONS));
-				self.updateCostCenters();
-			});
-
-
-			// The remaining select2's dynamically fetch their options using the lookup service, the current text search term
-			// and optionally filtered by a model attribute value.
-			this.$('#pub-subtype-input').select2(DynamicSelect2.getSelectOptions({
-				lookupType: 'publicationsubtypes',
-				parentId: 'publicationtypeid',
-				getParentId: function () {
-					return self.model.get('publicationType').id;
-				}
-			}, DEFAULT_SELECT2_OPTIONS));
-
-			this.updatePubSubtype();
-
-			this.$('#series-title-input').select2(DynamicSelect2.getSelectOptions({
-				lookupType : 'publicationseries',
-				parentId : 'publicationsubtypeid',
-				getParentId : function() {
-					return self.model.get('publicationSubtype').id
-				},
-				activeSubgroup : true
-			}, DEFAULT_SELECT2_OPTIONS));
-			this.updateSeriesTitle();
-
-			this.$('#larger-work-subtype-input').select2(DynamicSelect2.getSelectOptions({
-				lookupType: 'publicationsubtypes',
-				parentId: 'publicationtypeid',
-				getParentId: function () {
-					return self.model.get('largerWorkType').id;
-				}
-			}, DEFAULT_SELECT2_OPTIONS));
-			this.updateLargerWorkSubtype();
-
-			return this;
+			return tocInitDeferred.promise();
 		},
 
 		/*
