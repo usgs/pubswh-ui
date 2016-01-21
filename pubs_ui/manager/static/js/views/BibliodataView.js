@@ -179,6 +179,7 @@ define([
 		 * @returns Jquery.Promise which is resolved once all tinymce editors have been successfully initialized.
 		 */
 		initializeTinyMce : function() {
+			var self = this;
 			//Set up tinymce element. If the setup
 			// callback is not called, the app should try again after removing and adding back in the editor.
 			// This is the only way I got the tinymce editor to reliably render. Also tinyMCE editors have to be initialized
