@@ -4,7 +4,7 @@
     <groupId>gov.usgs.cida.PubsWarehouse_UI</groupId>
     <artifactId>publications_wh_ui</artifactId>
     <packaging>pom</packaging>
-    <version>1.57-SNAPSHOT</version>
+    <version>1.57</version>
     <name>Publications Warehouse UI</name>
   
     <properties>
@@ -82,7 +82,7 @@
         <connection>scm:git:https://github.com/USGS-CIDA/PubsWarehouse_UI</connection>
         <developerConnection>scm:git:git@github.com:USGS-CIDA/PubsWarehouse_UI.git</developerConnection>
         <url>https://github.com/USGS-CIDA/PubsWarehouse_UI</url>
-    	<tag>HEAD</tag>
+    	<tag>publications_wh_ui-1.57</tag>
   </scm>
 	
     <distributionManagement>
