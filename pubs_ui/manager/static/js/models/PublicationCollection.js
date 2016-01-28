@@ -1,30 +1,31 @@
 /* jslint browser: true */
+/* global define */
 
 define([
 	'underscore',
 	'backbone',
 	'backbone.paginator',
-	'module',
-	'models/PublicationModel'
-], function(_, Backbone, Pageable, module, PublicationModel) {
+	'module'
+], function(_, Backbone, Pageable, module) {
 	"use strict";
 
 	var collection = Backbone.PageableCollection.extend({
 
 		url : function() {
-			return module.config().scriptRoot + '/manager/services/mppublications'
+			return module.config().scriptRoot + '/manager/services/mppublications';
 		},
 				// Initial pagination states
 		state: {
-			firstPage: 0,
-			currentPage: 0,
+			pageRowStart : 0,
+			firstPage : 0,
+			currentPage : 0,
 			pageSize: 100
 		},
 
 		// maps the query parameters accepted by service to `state` keys
 		// to those your server supports
 		queryParams: {
-			currentPage: "page_row_start",
+			currentPage: "page_number",
 			pageSize:  "page_size"
 		},
 
@@ -37,15 +38,21 @@ define([
 			return this.filters;
 		},
 
+
 		fetch : function(options) {
-			var defaultData = _.extend({mimetype: 'json'}, this.filters);
+			// Need to set mimetype to json and need to use page_row_start. There is not an equivalent parameter in
+			// the queryParams so we are setting it here
+			var defaultData = _.extend({
+				mimetype: 'json',
+				page_row_start : this.state.currentPage * this.state.pageSize
+			}, this.filters);
 			if (_.has(options, 'data')) {
 				defaultData = _.extend(defaultData, options.data);
 			}
 
 			var defaultOptions = _.extend({data : defaultData}, options);
 
-			return Backbone.PageableCollection.prototype.fetch.call(this, _.extend({traditional : true}, defaultOptions))
+			return Backbone.PageableCollection.prototype.fetch.call(this, _.extend({traditional : true}, defaultOptions));
 		},
 
 		updateFilters : function(filters) {
@@ -57,7 +64,10 @@ define([
 
 		// get the state from web service result
 		parseState: function (resp, queryParams, state, options) {
-			return {totalRecords: resp.recordCount};
+			return {
+				pageRowStart : resp.pageRowStart,
+				totalRecords: resp.recordCount
+			};
 		},
 
 		// get the actual records. We are not using PublicationModel.parse because that returns some properties as models

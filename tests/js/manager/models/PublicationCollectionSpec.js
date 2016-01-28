@@ -1,4 +1,6 @@
 /* jslint browser: true */
+/* global define */
+/* global describe, beforeEach, afterEach, it, expect */
 
 define([
 	'sinon',
@@ -27,6 +29,9 @@ define([
 				expect(server.requests.length).toBe(1);
 				expect(server.requests[0].url).toMatch('page_row_start=0');
 				expect(server.requests[0].url).toMatch('page_size=100');
+
+				collection.getNextPage();
+				expect(server.requests[1].url).toMatch('page_row_start=100');
 			});
 
 		});
