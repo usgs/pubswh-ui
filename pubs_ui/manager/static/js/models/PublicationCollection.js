@@ -25,7 +25,6 @@ define([
 		// maps the query parameters accepted by service to `state` keys
 		// to those your server supports
 		queryParams: {
-			currentPage: "page_number",
 			pageSize:  "page_size"
 		},
 
