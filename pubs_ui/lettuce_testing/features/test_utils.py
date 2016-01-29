@@ -1,5 +1,5 @@
 import httpretty
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_items_equal
 from lettuce import *
 import json
 from requests import get
@@ -673,8 +673,9 @@ def step_impl(step):
 def step_impl(step):
     """
     :type step lettuce.core.Step
+
     """
-    assert_equal(world.munged_abstract_result, world.munged_abstract_result_expected)
+    assert_items_equal(world.munged_abstract_result, world.munged_abstract_result_expected)
 
 
 @step("I have a mocked base publication record that has a populated interactions data element, a base url, and a mocked legacy endpoint")
