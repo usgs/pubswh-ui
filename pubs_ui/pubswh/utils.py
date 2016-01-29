@@ -733,7 +733,7 @@ def munge_abstract(pubdata):
     """
     if pubdata.get('docAbstract') is not None:
         abstract = deepcopy(pubdata['docAbstract'])
-        soup = BeautifulSoup(abstract, "lxml-xml")
+        soup = BeautifulSoup(abstract, "lxml")
         #find the h1 tag
         if soup.find('h1') is not None:
             possible_header = soup.find('h1').contents[0]
