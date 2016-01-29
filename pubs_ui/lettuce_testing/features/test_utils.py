@@ -675,7 +675,6 @@ def step_impl(step):
     :type step lettuce.core.Step
 
     """
-    print world.munged_abstract_result
     assert_items_equal(world.munged_abstract_result, world.munged_abstract_result_expected)
 
 
