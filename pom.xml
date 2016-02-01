@@ -157,6 +157,7 @@
 						<goals>
 							<goal>npm</goal>
 						</goals>
+						<phase>test</phase>
 						<configuration>
 							<arguments>test</arguments>
 						</configuration>

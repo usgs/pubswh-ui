@@ -5,7 +5,7 @@ python:
 
 install:
   - pip install -r requirements.txt
-  - mvn install -DskipTests=true
+  - mvn compile
 
 before_script:
   - export DISPLAY=:99.0
