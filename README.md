@@ -50,9 +50,19 @@ under PubsWarehouse_UI folder.  The contents of the file should look like so:
  OLD_MYPUBS_ENDPOINT = 'endpoint of the old mypubs application'
  ```
  
-To create the virtualenv you should have python 2.7, virtualenv, pip installed. To install the javascript dependencies you will
-need bower which can be installed by using `npm install -g bower`. To compile less files, you will need to install lessc which can 
-be installed by using `npm install -g lessc`.
+To create the virtualenv you should have python 2.7, virtualenv, pip installed. 
+
+To install npm, bower, lessc, and karma use `mvn test` command. These executables are then available to run as follows:
+`node/node node_modules/karma/bin/karma`
+
+Substitute the command that you want to execute for "karma". Consider creating a helper script for karma, bower, npm, and lessc
+so that you don't have to remember all of this:
+`
+#!/bin/sh
+"node/node" "node_modules/karma/bin/karma" "$@"
+`
+
+You will need to specify the whole path to the less binary (or the script), LESS_BIN, in your instance/config.py. 
 
 If you are on a linux environment, you can run the dev_install.sh script. You should run this every time you pull down 
 code but particularly if requirements.txt, package.json or bower.json have been updated. Otherwise these are the steps you need
@@ -63,11 +73,8 @@ to take.
   2. Activate your virtualenv (depends on whether linux or windows)
   3. Run `pip install -r requirements.txt`
 
-2. Install the javascript dependencies. This requires bower. Do the following:
-  1. Run `bower install`
-
-3. Install the test runner
-  1. Run `npm install`
+2. To install javascript dependencies, lessc, and karma as well as run the jasmine tests use: 
+`mvn test`
 
 You can start the app by running `run.py`, which will give you an output like so:
 
@@ -83,18 +90,15 @@ This app has lettuce tests, python unit tests and jasmine (javascript) tests. To
 To run the unit tests do the following with your virtualenv activated or using the full path name to nosetests:
 `nosetests -w pubs_ui`
 
-To run the jasmine tests and to produce a code coverage report, run the following:
-`mvn verify`
+To run the jasmine tests, run the following:
+`mvn test`
 
 To run the jasmine tests using a browser, run the following: :
-`karma start karma.conf.js` (if karma-cli has been installed)
-`node_modules/karma/bin/karma start karma.conf.js` (if karm-cli has not been installed)
+`node/node node_modules/karma/bin/karma start karma.conf.js` 
 Then go to localhost:9876 in the browser where you want to run the tests.
 
 
 ## Generating secret keys
-
-
 If you want to generate a real secret key, you can do so trivially from the Python console by using `os.urandom()` like so:
 
 ```python
