@@ -27,4 +27,5 @@ lettucetests.xml
 /bower
 /karma
 /npm
+/coverage
 npm-debug.log
