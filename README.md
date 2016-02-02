@@ -48,12 +48,15 @@ under PubsWarehouse_UI folder.  The contents of the file should look like so:
  
  #The following should be removed when we completely retire the old MyPubs Angular app.
  OLD_MYPUBS_ENDPOINT = 'endpoint of the old mypubs application'
+ 
+ #Assuming you use mvn test to install the lessc set LESS_BIN as follows:
+ LESS_BIN = 'PROJECT_DIR/node_modules/less/bin/lessc'
  ```
  
 To create the virtualenv you should have python 2.7, virtualenv, pip installed. 
 
-To install npm, bower, lessc, and karma use `mvn test` command. These executables are then available to run as follows:
-`node/node node_modules/karma/bin/karma`
+To install npm, bower, lessc, and karma  and to install the javascript dependencies use `mvn test` command. These executables are then available to run as follows:
+`node/node node_modules/karma/bin/karma`.
 
 Substitute the command that you want to execute for "karma". Consider creating a helper script for karma, bower, npm, and lessc
 so that you don't have to remember all of this:
