@@ -5,7 +5,7 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    basePath: '../..',
 
 
     // frameworks to use
@@ -15,7 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-        'test-main.js',
+        'tests/js/test-main.js',
       {pattern: 'pubs_ui/bower_components/Squire.js/src/Squire.js', included: false},
       {pattern: 'pubs_ui/bower_components/sinon/lib/sinon.js', included: false},
       {pattern: 'pubs_ui/bower_components/sinon/lib/**/*.js', included: false},
@@ -50,14 +50,23 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      // source files, that you wanna generate coverage for
+      // do not include tests or libraries
+      // (these files will be instrumented by Istanbul)
+      'pubs_ui/manager/static/js/**/*.js': ['coverage']
     },
-
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress'],
 
+    coverageReporter: {
+      reporters : [
+        {type: 'html', dir : 'coverage/'},
+        {type: 'cobertura', dir: 'coverage/'}
+      ]
+    },
 
     // web server port
     port: 9876,
@@ -88,5 +97,5 @@ module.exports = function(config) {
     // Concurrency level
     // how many browser should be started simultaneous
     concurrency: Infinity
-  })
-}
+  });
+};
