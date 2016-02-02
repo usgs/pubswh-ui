@@ -5,10 +5,11 @@
     "karma-chrome-launcher": "^0.2.2",
     "karma-firefox-launcher": "^0.1.7",
     "karma-jasmine": "^0.3.6",
+    "karma-js-coverage": "^0.4.0",
     "karma-requirejs": "^0.2.2"
   },
   "scripts": {
-    "test": "node_modules/karma/bin/karma start --single-run --browsers Firefox --reporters dots"
+    "test": "node/node node_modules/karma/bin/karma start tests/js/karma.conf.js --single-run --browsers Firefox --reporters dots,coverage"
   },
   "dependencies": {
     "less": "^2.6.0",
