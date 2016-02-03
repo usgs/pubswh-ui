@@ -1,169 +1,169 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>gov.usgs.cida.PubsWarehouse_UI</groupId>
-    <artifactId>publications_wh_ui</artifactId>
-    <packaging>pom</packaging>
-    <version>1.54-SNAPSHOT</version>
-    <name>Publications Warehouse UI</name>
-  
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-    
-    <url>https://github.com/USGS-CIDA/PubsWarehouse_UI</url>
-    <inceptionYear>2014</inceptionYear>
-    <organization>
-        <name>Center for Integrated Data Analytics</name>
-        <url>http://cida.usgs.gov</url>
-    </organization>    
-	
-    <developers>
-    	<developer>
-    		<name>Jim Kreft</name>
-    		<email>jkreft@usgs.gov</email>
-    		<id>jkreft</id>
-            <organization>Center for Integrated Data Analytics</organization>
-            <organizationUrl>http://cida.usgs.gov</organizationUrl>
-            <timezone>-6</timezone>
-    	</developer>
-        <developer>
-            <name>Andrew Yan</name>
-            <email>ayan@usgs.gov</email>
-            <id>ayan</id>
-            <organization>Center for Integrated Data Analytics</organization>
-            <organizationUrl>http://cida.usgs.gov</organizationUrl>
-            <timezone>-6</timezone>
-        </developer>
-        <developer>
-            <name>Mary Bucknell</name>
-            <email>mbucknell@usgs.gov </email>
-            <id>mbucknell</id>
-            <organization>Center for Integrated Data Analytics</organization>
-            <organizationUrl>http://cida.usgs.gov</organizationUrl>
-            <timezone>-6</timezone>
-        </developer>        
-    </developers>
-	
-    <licenses>
-        <license>
-            <name>Public Domain</name>
-            <url>http://water.usgs.gov/software/help/notice/</url>
-            <comments>
-                See the url or the 'LICENSE' file for details
-            </comments>
-        </license>
-    </licenses>
-	
-    <repositories>
-        <repository>
-            <id>public-releases</id>
-            <url>http://internal.cida.usgs.gov/maven/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>cida-public-releases</id>
-            <url>http://internal.cida.usgs.gov/maven/content/groups/cida-public/</url>
-        </repository>
-        <repository>
-            <id>cida-python-releases</id>
-            <url>http://internal.cida.usgs.gov/maven/content/repositories/cida-python-releases/</url>
-        </repository>
-        <repository>
-            <id>cida-python-snapshots</id>
-            <url>http://internal.cida.usgs.gov/maven/content/groups/public-snapshots/</url>
-        </repository>
-        <repository>
-            <id>cida-thirdparty</id>
-            <url>http://internal.cida.usgs.gov/maven/content/repositories/cida-thirdparty/</url>
-        </repository>
-    </repositories>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>gov.usgs.cida.PubsWarehouse_UI</groupId>
+	<artifactId>publications_wh_ui</artifactId>
+	<packaging>pom</packaging>
+	<version>1.59-SNAPSHOT</version>
+	<name>Publications Warehouse UI</name>
 
-    <scm>
-        <connection>scm:git:https://github.com/USGS-CIDA/PubsWarehouse_UI</connection>
-        <developerConnection>scm:git:git@github.com:USGS-CIDA/PubsWarehouse_UI.git</developerConnection>
-        <url>https://github.com/USGS-CIDA/PubsWarehouse_UI</url>
-    	<tag>HEAD</tag>
-  </scm>
-	
-    <distributionManagement>
-        <repository>
-            <id>cida-python-releases</id>
-            <name>CIDA Python Releases</name>
-            <url>http://internal.cida.usgs.gov/maven/content/repositories/cida-python-releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>cida-python-snapshots</id>
-            <name>CIDA Python Snapshots</name>
-            <url>http://internal.cida.usgs.gov/maven/content/repositories/cida-python-snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<url>https://github.com/USGS-CIDA/PubsWarehouse_UI</url>
+	<inceptionYear>2014</inceptionYear>
+	<organization>
+		<name>Center for Integrated Data Analytics</name>
+		<url>http://cida.usgs.gov</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<name>Jim Kreft</name>
+			<email>jkreft@usgs.gov</email>
+			<id>jkreft</id>
+			<organization>Center for Integrated Data Analytics</organization>
+			<organizationUrl>http://cida.usgs.gov</organizationUrl>
+			<timezone>-6</timezone>
+		</developer>
+		<developer>
+			<name>Andrew Yan</name>
+			<email>ayan@usgs.gov</email>
+			<id>ayan</id>
+			<organization>Center for Integrated Data Analytics</organization>
+			<organizationUrl>http://cida.usgs.gov</organizationUrl>
+			<timezone>-6</timezone>
+		</developer>
+		<developer>
+			<name>Mary Bucknell</name>
+			<email>mbucknell@usgs.gov</email>
+			<id>mbucknell</id>
+			<organization>Center for Integrated Data Analytics</organization>
+			<organizationUrl>http://cida.usgs.gov</organizationUrl>
+			<timezone>-6</timezone>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>Public Domain</name>
+			<url>http://water.usgs.gov/software/help/notice/</url>
+			<comments>
+				See the url or the 'LICENSE' file for details
+			</comments>
+		</license>
+	</licenses>
+
+	<repositories>
+		<repository>
+			<id>public-releases</id>
+			<url>http://internal.cida.usgs.gov/maven/content/groups/public/</url>
+		</repository>
+		<repository>
+			<id>cida-public-releases</id>
+			<url>http://internal.cida.usgs.gov/maven/content/groups/cida-public/</url>
+		</repository>
+		<repository>
+			<id>cida-python-releases</id>
+			<url>http://internal.cida.usgs.gov/maven/content/repositories/cida-python-releases/</url>
+		</repository>
+		<repository>
+			<id>cida-python-snapshots</id>
+			<url>http://internal.cida.usgs.gov/maven/content/groups/public-snapshots/</url>
+		</repository>
+		<repository>
+			<id>cida-thirdparty</id>
+			<url>http://internal.cida.usgs.gov/maven/content/repositories/cida-thirdparty/</url>
+		</repository>
+	</repositories>
+
+	<scm>
+		<connection>scm:git:https://github.com/USGS-CIDA/PubsWarehouse_UI</connection>
+		<developerConnection>scm:git:git@github.com:USGS-CIDA/PubsWarehouse_UI.git</developerConnection>
+		<url>https://github.com/USGS-CIDA/PubsWarehouse_UI</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>cida-python-releases</id>
+			<name>CIDA Python Releases</name>
+			<url>http://internal.cida.usgs.gov/maven/content/repositories/cida-python-releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>cida-python-snapshots</id>
+			<name>CIDA Python Snapshots</name>
+			<url>http://internal.cida.usgs.gov/maven/content/repositories/cida-python-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.4</version>
-        <executions>
-          <execution>
-            <id>create-distribution</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <descriptors>
-                <descriptor>assembly/zip.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-			<plugin>
-				<groupId>com.github.searls</groupId>
-				<artifactId>jasmine-maven-plugin</artifactId>
-				<version>2.0</version>
+				<configuration>
+					<descriptors>
+						<descriptor>assembly/zip.xml</descriptor>
+					</descriptors>
+				</configuration>
 				<executions>
 					<execution>
+						<id>create-distribution</id>
+						<phase>package</phase>
 						<goals>
-							<goal>test</goal>
+							<goal>single</goal>
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<phantomjs>
-						<version>1.9.7</version>
-					</phantomjs>
-					<keepServerAlive>true</keepServerAlive>
-					<specRunnerTemplate>REQUIRE_JS</specRunnerTemplate>
-					<jsTestSrcDir>${project.basedir}/tests/js</jsTestSrcDir>
-					<customRunnerConfiguration>${project.basedir}/tests/js/resources/customJasmineRequireConfig.txt</customRunnerConfiguration>
-					<preloadSources>
-						<source>/pubs_ui/bower_components/requirejs/require.js</source>
-					</preloadSources>
-				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>com.github.timurstrekalov</groupId>
-				<artifactId>saga-maven-plugin</artifactId>
-				<version>1.5.2</version>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>0.0.27</version>
 				<executions>
 					<execution>
+						<id>install node and npm</id>
 						<goals>
-							<goal>coverage</goal>
+							<goal>install-node-and-npm</goal>
 						</goals>
+						<configuration>
+							<nodeVersion>v4.2.4</nodeVersion>
+							<npmVersion>2.14.12</npmVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>bower install</id>
+						<goals>
+							<goal>bower</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>javascript tests</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<arguments>test</arguments>
+						</configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<baseDir>http://localhost:${jasmine.serverPort}</baseDir>
-					<outputDir>${project.build.directory}/coverage</outputDir>
-					<noInstrumentPatterns>
-						<pattern>.*/*Spec\.js</pattern>
-						<pattern>.*/pubs_ui/bower_components/.*/*\.js</pattern>
-						<pattern>.*/webjars/.*/*</pattern>
-						<pattern>.*/classpath/.*/*</pattern>
-					</noInstrumentPatterns>
-				</configuration>
 			</plugin>
-    </plugins>
-  </build>
+		</plugins>
+	</build>
 </project>

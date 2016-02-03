@@ -1,3 +1,5 @@
+/etc
+/node_modules
 *.pyc
 .idea/
 .settings/
@@ -21,4 +23,9 @@ lettucetests.xml
 /target
 /instance
 /phantomjsdriver.log
+/node
+/bower
+/karma
+/npm
+/coverage
 npm-debug.log

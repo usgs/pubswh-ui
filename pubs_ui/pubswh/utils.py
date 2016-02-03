@@ -261,7 +261,7 @@ def pull_feed(feed_url):
     # Process html to remove unwanted mark-up and fix links
     post = ''
     if len(feed['entries']) > 0:
-        soup = BeautifulSoup(feed['entries'][0].summary)
+        soup = BeautifulSoup(feed['entries'][0].summary, 'lxml')
 
         # Remove edited by paragraph
         soup.p.extract()
@@ -288,7 +288,7 @@ def getbrowsecontent(browseurl, browsereplace):
     :return: html content of links, breadcrumb, and title
     """
     content = requests.get(browseurl, verify=verify_cert)
-    soup = BeautifulSoup(content.text)
+    soup = BeautifulSoup(content.text, 'lxml')
     for a in soup.findAll('a'):
         a['href'] = a['href'].replace("browse", browsereplace)
     browse_content = {'links': soup.find('div', {"id": "pubs-browse-links"}).contents,
@@ -746,7 +746,7 @@ def munge_abstract(pubdata):
     """
     if pubdata.get('docAbstract') is not None:
         abstract = deepcopy(pubdata['docAbstract'])
-        soup = BeautifulSoup(abstract, "html.parser")
+        soup = BeautifulSoup(abstract, "lxml")
         #find the h1 tag
         if soup.find('h1') is not None:
             possible_header = soup.find('h1').contents[0]

@@ -38,11 +38,6 @@ Feature: Test all pub_ui utilities
         Given I have a index page links that point to USGS and NGMDB and has plates
         When I manipulate the links with create display links
         Then I get the rejiggered display links that I expect
-		
-	Scenario: getbrowsercontent behaves correctly
-		Given I point to a real pubs browse url
-		When I get the links, breadcrumbs, and titles from the url
-		Then I am returned a list for the links, breadcrumbs, and titles
 
 	Scenario: jsonify_geojson functions correctly with a geographic extents string from pubs warehouse
         Given we have created a fake pubs record with a geographic extents string

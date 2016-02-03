@@ -1,5 +1,12 @@
 /* jslint browser: true */
-
+/* global define */
+/* global describe */
+/* global beforeEach */
+/* global afterEach */
+/* global it */
+/* global expect */
+/* global spyOn */
+/* global jasmine */
 define([
 	'squire',
 	'jquery',
@@ -21,6 +28,7 @@ define([
 		var setElSPNSpy, renderSPNSpy, removeSPNSpy, findElSPNSpy;
 		var setElCatalogingSpy, renderCatalogingSpy, removeCatalogingSpy, findElCatalogingSpy;
 		var setElGeospatialSpy, renderGeospatialSpy, removeGeospatialSpy, findElGeospatialSpy;
+		var initTinyMceDeferred;
 
 		var pubModel;
 		var opDeferred;
@@ -31,6 +39,7 @@ define([
 			$('body').append('<div id="test-div"></div>');
 
 			opDeferred = $.Deferred();
+			initTinyMceDeferred = $.Deferred();
 
 			pubModel = new PublicationModel();
 			spyOn(pubModel, 'fetch').and.returnValue(opDeferred.promise());
@@ -128,7 +137,8 @@ define([
 				}),
 				render : renderBibliodataSpy,
 				remove : removeBibliodataSpy,
-				$ : findElBibliodataSpy
+				$ : findElBibliodataSpy,
+				initializeTinyMce : jasmine.createSpy('initializeTinyMceBibliodataView').and.returnValue(initTinyMceDeferred.promise())
 			}));
 			injector.mock('views/LinksView', BaseView.extend({
 				setElement : setElLinksSpy.and.returnValue({
@@ -152,7 +162,8 @@ define([
 				}),
 				render : renderSPNSpy,
 				remove : removeSPNSpy,
-				$ : findElSPNSpy
+				$ : findElSPNSpy,
+				initializeTinyMce : jasmine.createSpy('initializeTinyMceSPNView').and.returnValue(initTinyMceDeferred.promise())
 			}));
 			injector.mock('views/CatalogingView', BaseView.extend({
 				setElement : setElCatalogingSpy.and.returnValue({

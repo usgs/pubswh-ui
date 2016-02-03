@@ -1,7 +1,9 @@
 /* jslint browser: true */
+/* global define */
 
 define([
 	'handlebars',
+	'jquery',
 	'underscore',
 	'bootstrap',
 	'datetimepicker',
@@ -13,13 +15,13 @@ define([
 	'models/PublishingServiceCenterCollection',
 	'views/BaseView',
 	'hbs!hb_templates/spn'
-], function(Handlebars, _, bootstrap, datetimepicker, select2, tinymce, stickit, module,
-			DynamicSelect2, PublishingServiceCenterCollection, BaseView, hb_template) {
+], function(Handlebars, $, _, bootstrap, datetimepicker, select2, tinymce, stickit, module,
+			DynamicSelect2, PublishingServiceCenterCollection, BaseView, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
 
-		template : hb_template,
+		template : hbTemplate,
 
 		optionTemplate : Handlebars.compile('<option value={{id}}>{{text}}</option>'),
 
@@ -47,7 +49,6 @@ define([
 		 *     @prop {PublicationModel} model
 		 */
 		initialize : function(options) {
-			var self = this;
 			BaseView.prototype.initialize.apply(this, arguments);
 
 			this.serviceCenterCollection = new PublishingServiceCenterCollection();
@@ -80,34 +81,7 @@ define([
 
 			this.stickit();
 
-			//Set up tinymce element. If the setup
-			// callback is not called, the app should try again after removing and adding back in the editor.
-			// This is the only way I got the tinymce editor to reliably render.
 			this.updateContact();
-			var isInit = false;
-			var interval = setInterval(function() {
-				if (isInit) {
-					tinymce.execCommand('mceRemoveEditor', true, 'contacts-input');
-					tinymce.execCommand('mceAddEditor', true, 'contacts-input');
-				}
-				tinymce.init({
-					selector : '#contacts-input',
-					setup : function(ed) {
-						clearInterval(interval);
-						ed.on('change', function(ev) {
-							self.model.set('contact', ev.level.content);
-						});
-					},
-					menubar: false,
-					plugins : 'code link paste',
-					formats: {
-    						italic: {inline: 'i'}
-  						},
-					browser_spellcheck : true,
-					toolbar : 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link | code'
-				});
-				isInit = true;
-			}, 1);
 
 			// Set up static select2's once their options have been fetched
 			this.serviceCenterPromise.done(function() {
@@ -129,6 +103,44 @@ define([
 			this.updateSupersededBy();
 
 			return this;
+		},
+
+		/*
+		 * @returns Jquery.Promise which is resolved once the tinymce editor has been successfully initialized.
+		 */
+		initializeTinyMce : function() {
+			//Set up tinymce element. If the setup
+			// callback is not called, the app should try again after removing and adding back in the editor.
+			// This is the only way I got the tinymce editor to reliably render.
+			var self = this;
+			var deferred = $.Deferred();
+			var isInit = false;
+			var interval = setInterval(function() {
+				if (isInit) {
+					tinymce.execCommand('mceRemoveEditor', true, 'contacts-input');
+					tinymce.execCommand('mceAddEditor', true, 'contacts-input');
+				}
+				tinymce.init({
+					selector : '#contacts-input',
+					setup : function(ed) {
+						deferred.resolve();
+						clearInterval(interval);
+						ed.on('change', function(ev) {
+							self.model.set('contact', ev.level.content);
+						});
+					},
+					menubar: false,
+					plugins : 'code link paste',
+					formats: {
+    						italic: {inline: 'i'}
+  						},
+					browser_spellcheck : true,
+					toolbar : 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link | code'
+				});
+				isInit = true;
+			}, 1);
+
+			return deferred.promise();
 		},
 
 		/*
