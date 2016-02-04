@@ -408,16 +408,29 @@ def jsonify_geojson(record):
     if geojson is not None:
         try:
             geojson = json.loads(geojson)
-            geojson['properties'] = {'title': record.get('title')}
-            for feature in geojson['features']:
-                feature['id'] = record.get('indexId')+'.base_id'
-                feature['properties'] = {'title': record.get('title'),
-                                         'id': record.get('indexId'),
-                                         'url': json_ld_id_base_url+'publication/'+record.get('indexId'),
-                                         'year': record.get('publicationYear'),
-                                         'info': display_publication_info(record)
-                                         }
-            record['geographicExtents'] = geojson
+            if geojson.get('type') == "FeatureCollection":
+                geojson['properties'] = {'title': record.get('title')}
+                for feature in geojson['features']:
+                    feature['id'] = record.get('indexId')+'.base_id'
+                    feature['properties'] = {'title': record.get('title'),
+                                             'id': record.get('indexId'),
+                                             'url': json_ld_id_base_url+'publication/'+record.get('indexId'),
+                                             'year': record.get('publicationYear'),
+                                             'info': display_publication_info(record)
+                                             }
+                record['geographicExtents'] = geojson
+            elif geojson.get('geometry'):
+                geojson["properties"] = {'title': record.get('title'),
+                                             'id': record.get('indexId'),
+                                             'url': json_ld_id_base_url+'publication/'+record.get('indexId'),
+                                             'year': record.get('publicationYear'),
+                                             'info': display_publication_info(record)
+                                             }
+                feature_collection = {"type": "FeatureCollection",
+                                      "features": [geojson]
+                                      }
+                record['geographicExtents'] = feature_collection
+
         except Exception as e:
             app.logger.info("Prod ID "+str(record['id'])+" geographicExtents json parse error: "+str(e))
             del record['geographicExtents']
