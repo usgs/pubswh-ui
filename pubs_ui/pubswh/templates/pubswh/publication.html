@@ -130,9 +130,9 @@
                         <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }}{% else %}{{ link['type']['text'] }}{% endif -%}">
                             <strong>
                             {%- if link['text'] -%}
-                                {{- link['text'] -}}
+                                {{- link['text']|safe -}}
                             {%- else -%}
-                                {{- link['type']['text'] -}}
+                                {{- link['type']['text']|safe -}}
                             {%- endif -%}
                             </strong>
                             {%- if link["linkFileType"] and link["size"]   %}
