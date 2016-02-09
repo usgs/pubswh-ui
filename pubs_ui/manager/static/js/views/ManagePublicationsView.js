@@ -119,7 +119,7 @@ define([
 					}),
 					formatter : {
 						fromRaw : function(rawValue, model) {
-							return 'Edit'
+							return 'Edit';
 						}
 					}
 				}, {
