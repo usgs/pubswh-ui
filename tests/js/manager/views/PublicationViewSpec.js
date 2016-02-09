@@ -186,7 +186,7 @@ define([
 				PublicationView = view;
 				done();
 			});
-		});
+		}, 10000);
 
 		afterEach(function() {
 			injector.remove();

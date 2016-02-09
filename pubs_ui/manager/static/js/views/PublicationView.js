@@ -312,7 +312,7 @@ define([
 					}
 				})
 					.done(function() {
-						self.returnToSearch()
+						self.returnToSearch();
 					})
 					.fail(function(jqxhr) {
 						if (jqxhr.status === 401) {
