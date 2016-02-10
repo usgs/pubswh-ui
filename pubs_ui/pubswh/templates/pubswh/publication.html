@@ -40,7 +40,7 @@
         <link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/leaflet.css') }}">
        {% endif %}
     {% endblock page_style %}
-
+    {% include 'pubswh/mathjax.html' %}
 
 {% endblock head %}
         {% block main %}
