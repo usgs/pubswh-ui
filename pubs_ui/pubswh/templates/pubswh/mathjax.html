@@ -1,0 +1,16 @@
+            {# The two script tags below allow the the mathjax javascript engine to work on math elements of the page.  This allows for pretty, very accesible (508 compliant) math to appear on the page with little effort.
+            to learn more, check out https://www.mathjax.org/ #}
+            <script type="text/x-mathjax-config">
+              MathJax.Hub.Config({
+                extensions: ["tex2jax.js"],
+                jax: ["input/TeX", "output/SVG"],
+                tex2jax: {
+                  inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                  displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                  processEscapes: true
+                },
+              });
+            </script>
+                    <script type="text/javascript" async
+              src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default">
+            </script>
