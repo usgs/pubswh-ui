@@ -15,6 +15,8 @@ define([
 ], function(Squire, $, BaseView, PublicationModel) {
 	"use strict";
 
+	jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000; // Set to 20 seconds. Seems to need a larger timeout interval when
+	// running on Jenkins.
 	describe('PublicationView', function(){
 		var PublicationView;
 		var testView;
