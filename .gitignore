@@ -1,3 +1,4 @@
+/instance/config.py
 /etc
 /node_modules
 *.pyc
