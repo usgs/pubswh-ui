@@ -102,7 +102,13 @@
             </section>
             
         </nav>
-        {% block main %}{% endblock %}
+        {% if ANNOUNCEMENT_BLOCK|length > 0 %}
+            <span id="announcement"></span>
+            <script>
+                document.getElementById("announcement").innerHTML = '{{ ANNOUNCEMENT_BLOCK|safe }}';
+            </script>
+        {% endif %}
+           {% block main %}{% endblock %}
         <footer>
 
 		<p id="usgsfooterbar">
