@@ -146,7 +146,8 @@ def create_display_links(pubdata):
         'Related Work': [],
         'Spatial Data': [],
         'Thumbnail': [],
-        'Version History': []
+        'Version History': [],
+        'Data Release': []
     }
     links = deepcopy(pubdata.get("links"))
     # sort links into the different link types
