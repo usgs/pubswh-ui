@@ -127,6 +127,7 @@ def create_display_links(pubdata):
         'Companion Files': [],
         'Cover': [],
         'Database': [],
+        'Data Release': [],
         'Digital Object Identifier': [],
         'Document': [],
         'Errata': [],
