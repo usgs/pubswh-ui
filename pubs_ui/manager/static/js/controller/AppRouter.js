@@ -23,22 +23,23 @@ define([
 			'publication/:pubId' : 'publicationView',
 			'contributor' : 'editContributorView',
 			'contributor/:contribId' : 'editContributorView',
-			'seriesTitle' : 'editSeriesTitleView'
+			'seriesTitle' : 'editSeriesTitleView',
+			'seriesTitle/:seriesTitleId' : 'editSeriesTitleView'
 		},
 
 		applicationContextDiv: '#main-content',
 
 		/*
 		 * Create a view a put in in the applicationContextDiv. This view becomes the router's currentView
-		 * @param {Backbone.View} view - The view to create
+		 * @param {Backbone.View} View - The view to create
 		 * @param {Object} opts - options to use when creating the view
 		 */
-		createView: function (view, opts) {
+		createView: function (View, opts) {
 			var newEl = $('<div />');
 
 			this.removeCurrentView();
 			$(this.applicationContextDiv).append(newEl);
-			this.currentView = new view($.extend({
+			this.currentView = new View($.extend({
 				el: newEl,
 				router: this
 			}, opts));
@@ -57,11 +58,9 @@ define([
 
 		managePublicationsView: function () {
 			var collection = new PublicationCollection();
-			this.createView(ManagePublicationsView,
-				{
-					collection : collection
-				}
-			).render();
+			this.createView(ManagePublicationsView, {
+				collection : collection
+			}).render();
 		},
 
 		publicationView : function(pubId) {
@@ -70,11 +69,9 @@ define([
 				model.set('id', pubId);
 			}
 
-			this.createView(PublicationView,
-				{
-					model : model
-				}
-			).render();
+			this.createView(PublicationView, {
+				model : model
+			}).render();
 		},
 
 		editContributorView : function(contribId) {

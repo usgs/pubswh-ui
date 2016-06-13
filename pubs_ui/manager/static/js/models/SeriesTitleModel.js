@@ -11,7 +11,7 @@ define([
 		urlRoot : module.config().scriptRoot + '/manager/services/publicationSeries',
 		
 		defaults : {
-			'active' : 'true'
+			'active' : true
 		}
 
 	});

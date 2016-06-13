@@ -58,6 +58,11 @@ define([
 		},
 		showDangerAlert : function(message) {
 			this.showAlert(this.ALERT_KINDS.danger, message);
+		},
+		closeAlert : function() {
+			if (this.$('.alert').length > 0) {
+				this.$el.html('');
+			}
 		}
 	});
 
