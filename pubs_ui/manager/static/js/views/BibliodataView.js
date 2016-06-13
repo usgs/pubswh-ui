@@ -204,6 +204,7 @@ define([
 					},
 					menubar: false,
 					plugins: 'code link paste',
+					
 					formats: {
 						italic: {inline: 'i'}
 					},
