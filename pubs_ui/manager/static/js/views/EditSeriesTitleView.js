@@ -25,10 +25,11 @@ define([
 			'select2:select #edit-pub-subtype-input' : 'updateEditSeriesTitleSelect',
 			'select2:select #series-title-input' : 'editSelectedSeriesTitle',
 			'select2:select #pub-subtype-input' : 'changePublicationSubType',
-			'click .create-btn' : 'showEditSection',
+			'click .create-btn' : 'editNewSeriesTitle',
 			'click .save-btn' : 'saveSeriesTitle',
 			'click .cancel-btn' : 'resetFields',
-			'click .create-new-btn' : 'editNew'
+			'click .create-new-btn' : 'editNew',
+			'click .delete-ok-btn' : 'deleteSeriesTitle'
 		},
 
 		bindings : {
@@ -104,6 +105,9 @@ define([
 				subtype = this.model.get('publicationSubtype');
 				$select.val(subtype.id).trigger('change');
 			}
+			else {
+				$select.val('').trigger('change');
+			}
 		},
 
 		/*
@@ -119,6 +123,20 @@ define([
 			this.$('.create-or-edit-div').removeClass('show').addClass('hidden');
 		},
 
+		hideEditSection : function() {
+			this.$('#edit-pub-subtype-input').val('').trigger('change');
+			this.$('#series-title-input').val('').trigger('change');
+			this.$('.edit-div').removeClass('show').addClass('hidden');
+			this.$('.create-or-edit-div').removeClass('hidden').addClass('show');
+			this.alertView.closeAlert();
+			this.$('.validation-errors').html('');
+		},
+
+		editNewSeriesTitle : function(ev) {
+			this.$('.delete-btn').prop('disabled', true);
+			this.showEditSection();
+		},
+
 		editSelectedSeriesTitle : function(ev) {
 			var self = this;
 			var seriesId = ev.currentTarget.value;
@@ -131,6 +149,7 @@ define([
 			this.model.set('id', seriesId);
 			this.model.fetch()
 				.done(function() {
+					self.$('.delete-btn').prop('disabled', false);
 					self.showEditSection();
 					self.router.navigate('seriesTitle/' + seriesId);
 				})
@@ -155,6 +174,8 @@ define([
 			this.model.save()
 				.done(function() {
 					self.alertView.showSuccessAlert('Successfully saved the series title');
+					self.$('.delete-btn').prop('disabled', false);
+					self.router.navigate('seriesTitle/' + self.model.get('id'));
 				})
 				.fail(function(jqxhr) {
 					self.alertView.showDangerAlert('Unable to save the series title');
@@ -174,9 +195,28 @@ define([
 		},
 
 		editNew : function(ev) {
-			this.$('.edit-div').removeClass('show').addClass('hidden');
-			this.$('.create-or-edit-div').removeClass('hidden').addClass('show');
+			this.hideEditSection();
+			this.model.clear();
 			this.router.navigate('seriesTitle');
+		},
+
+		deleteSeriesTitle : function(ev) {
+			var self = this;
+			var seriesTitle = this.model.get('text');
+			var $loadingIndicator = this.$('.loading-indicator');
+			$loadingIndicator.show();
+			this.model.destroy({wait : true})
+				.done(function() {
+					self.router.navigate('seriesTitle');
+					self.hideEditSection();
+					self.alertView.showSuccessAlert('Successfully deleted series title ' + seriesTitle + '.');
+				})
+				.fail(function(jqXHR) {
+					self.alertView.showDangerAlert('Unable to delete series title: ' + jqXHR.responseText);
+				})
+				.always(function() {
+					$loadingIndicator.hide();
+				});
 		}
 
 	});
