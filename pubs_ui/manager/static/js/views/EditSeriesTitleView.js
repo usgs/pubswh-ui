@@ -19,16 +19,33 @@ define([
 		theme : 'bootstrap'
 	};
 
+	var ALERT_CONTAINER_SEL = '.alert-container';
+	var LOADING_INDICATOR_SEL = '.loading-indicator';
+	var ERRORS_SEL = '.validation-errors';
+	var CREATE_OR_EDIT_DIV = '.create-or-edit-div';
+	var EDIT_DIV = '.edit-div';
+	var EDIT_PUB_SUBTYPE_INPUT_SEL = '#edit-pub-subtype-input';
+	var EDIT_SERIES_TITLE_INPUT_SEL = '#edit-series-title-input';
+	var PUB_SUBTYPE_INPUT_SEL = '#pub-subtype-input';
+	var DELETE_BUTTON_SEL = '.delete-btn';
+
+	/*
+	 * @construct
+	 * @param {Object} option
+	 * 		@prop {SeriesTitleModel} model
+	 * 		@prop {Jquery element or selector} el
+	 *		@prop {Backbone.Router} router
+	 */
 	var view = BaseView.extend({
 
 		events : {
-			'select2:select #edit-pub-subtype-input' : 'updateEditSeriesTitleSelect',
-			'select2:select #series-title-input' : 'editSelectedSeriesTitle',
-			'select2:select #pub-subtype-input' : 'changePublicationSubType',
-			'click .create-btn' : 'editNewSeriesTitle',
+			'select2:select #edit-pub-subtype-input' : 'enableEditSeriesTitleSelect',
+			'select2:select #edit-series-title-input' : 'showEditSelectedSeriesTitle',
+			'click .create-btn' : 'showCreateNewSeriesTitle',
+			'select2:select #pub-subtype-input' : 'changePublicationSubtype',
 			'click .save-btn' : 'saveSeriesTitle',
 			'click .cancel-btn' : 'resetFields',
-			'click .create-new-btn' : 'editNew',
+			'click .create-new-btn' : 'clearPage',
 			'click .delete-ok-btn' : 'deleteSeriesTitle'
 		},
 
@@ -50,7 +67,7 @@ define([
 
 			// Create child views
 			this.alertView = new AlertView({
-				el : '.alert-container'
+				el : ALERT_CONTAINER_SEL
 			});
 
 			//Retrieve lookup for publication subtype
@@ -66,13 +83,13 @@ define([
 			BaseView.prototype.render.apply(this, arguments);
 			this.stickit();
 
-			this.alertView.setElement(this.$('.alert-container'));
+			this.alertView.setElement(this.$(ALERT_CONTAINER_SEL));
 
-			this.$('#series-title-input').select2(DynamicSelect2.getSelectOptions({
+			this.$(EDIT_SERIES_TITLE_INPUT_SEL).select2(DynamicSelect2.getSelectOptions({
 				lookupType : 'publicationseries',
 				parentId : 'publicationsubtypeid',
 				getParentId : function() {
-					return self.$('#edit-pub-subtype-input').val();
+					return self.$(EDIT_PUB_SUBTYPE_INPUT_SEL).val();
 				},
 				activeSubgroup : true
 			}, DEFAULT_SELECT2_OPTIONS));
@@ -80,8 +97,8 @@ define([
 				var select2Options = _.extend({
 					data : [{id : ''}].concat(self.publicationSubtypeCollection.toJSON())
 				}, DEFAULT_SELECT2_OPTIONS);
-				self.$('#edit-pub-subtype-input').select2(select2Options);
-				self.$('#pub-subtype-input').select2(select2Options);
+				self.$(EDIT_PUB_SUBTYPE_INPUT_SEL).select2(select2Options);
+				self.$(PUB_SUBTYPE_INPUT_SEL).select2(select2Options);
 				self.updatePublicationSubtype();
 			});
 
@@ -99,7 +116,7 @@ define([
 		 */
 
 		updatePublicationSubtype : function() {
-			var $select = this.$('#pub-subtype-input');
+			var $select = this.$(PUB_SUBTYPE_INPUT_SEL);
 			var subtype;
 			if (this.model.has('publicationSubtype')) {
 				subtype = this.model.get('publicationSubtype');
@@ -111,37 +128,36 @@ define([
 		},
 
 		/*
-		 * DOM event handlers
+		 * Helper methods. Used by various DOM event handlers
 		 */
-
-		updateEditSeriesTitleSelect : function(ev){
-			this.$('#series-title-input').prop('disabled', false);
-		},
-
 		showEditSection : function() {
-			this.$('.edit-div').removeClass('hidden').addClass('show');
-			this.$('.create-or-edit-div').removeClass('show').addClass('hidden');
+			this.$(EDIT_DIV).removeClass('hidden').addClass('show');
+			this.$(CREATE_OR_EDIT_DIV).removeClass('show').addClass('hidden');
 		},
 
 		hideEditSection : function() {
-			this.$('#edit-pub-subtype-input').val('').trigger('change');
-			this.$('#series-title-input').val('').trigger('change');
-			this.$('.edit-div').removeClass('show').addClass('hidden');
-			this.$('.create-or-edit-div').removeClass('hidden').addClass('show');
+			this.$(EDIT_PUB_SUBTYPE_INPUT_SEL).val('').trigger('change');
+			this.$(EDIT_SERIES_TITLE_INPUT_SEL).val('').trigger('change');
+
+			this.$(EDIT_DIV).removeClass('show').addClass('hidden');
+			this.$(CREATE_OR_EDIT_DIV).removeClass('hidden').addClass('show');
+
 			this.alertView.closeAlert();
-			this.$('.validation-errors').html('');
+			this.$(ERRORS_SEL).html('');
+		},
+		/*
+		 * DOM event handlers
+		 */
+
+		enableEditSeriesTitleSelect : function(ev){
+			this.$(EDIT_SERIES_TITLE_INPUT_SEL).prop('disabled', false);
 		},
 
-		editNewSeriesTitle : function(ev) {
-			this.$('.delete-btn').prop('disabled', true);
-			this.showEditSection();
-		},
-
-		editSelectedSeriesTitle : function(ev) {
+		showEditSelectedSeriesTitle : function(ev) {
 			var self = this;
 			var seriesId = ev.currentTarget.value;
 			var seriesTitle = ev.currentTarget.selectedOptions[0].innerHTML;
-			var $loadingIndicator = this.$('.loading-indicator');
+			var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
 			
 			$loadingIndicator.show();
 			this.alertView.closeAlert();
@@ -149,7 +165,7 @@ define([
 			this.model.set('id', seriesId);
 			this.model.fetch()
 				.done(function() {
-					self.$('.delete-btn').prop('disabled', false);
+					self.$(DELETE_BUTTON_SEL).prop('disabled', false);
 					self.showEditSection();
 					self.router.navigate('seriesTitle/' + seriesId);
 				})
@@ -161,20 +177,26 @@ define([
 				});
 		},
 
-		changePublicationSubType : function(ev) {
+		showCreateNewSeriesTitle : function(ev) {
+			this.$(DELETE_BUTTON_SEL).prop('disabled', true);
+			this.showEditSection();
+		},
+
+		changePublicationSubtype : function(ev) {
 			this.model.set('publicationSubtype', {id : ev.currentTarget.value});
 		},
 
 		saveSeriesTitle : function(ev) {
 			var self = this;
-			var $loadingIndicator = this.$('.loading-indicator');
-			var $errorDiv = this.$('.validation-errors');
+			var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
+			var $errorDiv = this.$(ERRORS_SEL);
+
 			$loadingIndicator.show();
 			$errorDiv.html('');
 			this.model.save()
 				.done(function() {
 					self.alertView.showSuccessAlert('Successfully saved the series title');
-					self.$('.delete-btn').prop('disabled', false);
+					self.$(DELETE_BUTTON_SEL).prop('disabled', false);
 					self.router.navigate('seriesTitle/' + self.model.get('id'));
 				})
 				.fail(function(jqxhr) {
@@ -188,13 +210,17 @@ define([
 				});
 		},
 		resetFields : function(ev) {
+			var self = this;
+			var modelId = this.model.get('id');
+			this.model.clear();
+			this.model.set('id', modelId);
 			this.model.fetch()
-			.fail(function() {
-				this.alertView.showDangerAlert('Failed to fetch series title');
-			});
+				.fail(function() {
+					self.alertView.showDangerAlert('Failed to fetch series title');
+				});
 		},
 
-		editNew : function(ev) {
+		clearPage : function(ev) {
 			this.hideEditSection();
 			this.model.clear();
 			this.router.navigate('seriesTitle');
@@ -203,7 +229,7 @@ define([
 		deleteSeriesTitle : function(ev) {
 			var self = this;
 			var seriesTitle = this.model.get('text');
-			var $loadingIndicator = this.$('.loading-indicator');
+			var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
 			$loadingIndicator.show();
 			this.model.destroy({wait : true})
 				.done(function() {
