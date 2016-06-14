@@ -1,15 +1,14 @@
 /* jslint browser: true */
 /* global define */
-/* global describe, beforeEach, afterEach, it, expect, jasmine, spyOn */
+/* global describe, beforeEach, afterEach, it, expect, jasmine, spyOn, sinon */
 
 define([
-	'sinon',
 	'jquery',
 	'underscore',
 	'models/SeriesTitleModel',
 	'views/BaseView',
 	'views/EditSeriesTitleView'
-], function(sinon, $, _, SeriesTitleModel, BaseView, EditSeriesTitleView) {
+], function($, _, SeriesTitleModel, BaseView, EditSeriesTitleView) {
 	"use strict";
 
 	describe('views/EditSeriesTitleView', function () {
@@ -149,7 +148,7 @@ define([
 			});
 
 			it('Expects that if the publication subtype is changed, the edit select value is updated', function() {
-				var $select = $testDiv.find('#pub-subtype-input')
+				var $select = $testDiv.find('#pub-subtype-input');
 				testModel.set('publicationSubtype', {id : 2});
 
 				expect($select.val()).toEqual('2');

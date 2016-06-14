@@ -10,15 +10,13 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'requirejs'],
+    frameworks: ['jasmine', 'requirejs', 'sinon'],
 
 
     // list of files / patterns to load in the browser
     files: [
         'tests/js/test-main.js',
       {pattern: 'pubs_ui/bower_components/Squire.js/src/Squire.js', included: false},
-      {pattern: 'pubs_ui/bower_components/sinon/lib/sinon.js', included: false},
-      {pattern: 'pubs_ui/bower_components/sinon/lib/**/*.js', included: false},
       {pattern: 'pubs_ui/bower_components/jquery/dist/jquery.js', included: false},
       {pattern: 'pubs_ui/bower_components/jquery-ui/jquery-ui.js', included: false},
       {pattern: 'pubs_ui/bower_components/select2/dist/js/select2.full.js', included: false},

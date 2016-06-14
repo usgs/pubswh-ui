@@ -24,7 +24,6 @@ require.config({
 	},
 
 	paths: {
-		'sinon': '/base/pubs_ui/bower_components/sinon/lib/sinon',
 		'squire': '/base/pubs_ui/bower_components/Squire.js/src/Squire',
 		'jquery': '/base/pubs_ui/bower_components/jquery/dist/jquery',
 		'jquery-ui': '/base/pubs_ui/bower_components/jquery-ui/jquery-ui',
@@ -85,9 +84,6 @@ require.config({
 				this.tinymce.DOM.events.domLoaded = true;
 				return this.tinymce;
 			}
-		},
-		'sinon': {
-			'exports': 'sinon'
 		},
 		packages: [
 			{

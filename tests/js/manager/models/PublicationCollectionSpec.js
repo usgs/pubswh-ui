@@ -1,11 +1,10 @@
 /* jslint browser: true */
 /* global define */
-/* global describe, beforeEach, afterEach, it, expect */
+/* global describe, beforeEach, afterEach, it, expect, sinon */
 
 define([
-	'sinon',
 	'models/PublicationCollection'
-], function(sinon, PublicationCollection) {
+], function(PublicationCollection) {
 	"use strict";
 
 	describe("PublicationCollection", function() {
