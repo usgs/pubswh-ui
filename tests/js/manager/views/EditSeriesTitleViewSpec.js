@@ -405,7 +405,7 @@ define([
 				});
 
 				it('Expects that successful response hides the edit section, shows a success alert, updates the navigation, and hides the loading indicator', function() {
-					fakeServer.respondWith(/publicationSeries/, [200, {'Content-Type' : 'application/json'}, {}]);
+					fakeServer.respondWith(/publicationSeries/, [200, {'Content-Type' : 'application/json'}, '{}']);
 					fakeServer.respond();
 
 					expect($loadingIndicator.is(':visible')).toBe(false);
