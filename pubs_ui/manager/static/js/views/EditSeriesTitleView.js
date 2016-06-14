@@ -137,7 +137,7 @@ define([
 
 		hideEditSection : function() {
 			this.$(EDIT_PUB_SUBTYPE_INPUT_SEL).val('').trigger('change');
-			this.$(EDIT_SERIES_TITLE_INPUT_SEL).val('').trigger('change');
+			this.$(EDIT_SERIES_TITLE_INPUT_SEL).prop('disabled', true).val('').trigger('change');
 
 			this.$(EDIT_DIV).removeClass('show').addClass('hidden');
 			this.$(CREATE_OR_EDIT_DIV).removeClass('hidden').addClass('show');
