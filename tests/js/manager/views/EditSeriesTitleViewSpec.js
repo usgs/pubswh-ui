@@ -12,7 +12,7 @@ define([
 ], function(sinon, $, _, SeriesTitleModel, BaseView, EditSeriesTitleView) {
 	"use strict";
 
-	fdescribe('views/EditSeriesTitleView', function () {
+	describe('views/EditSeriesTitleView', function () {
 		var testView;
 		var $testDiv;
 		var testModel;
