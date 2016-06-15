@@ -1,4 +1,6 @@
 /* jslint browser: true */
+/* global define */
+/* global describe, beforeEach, afterEach, it, expect */
 define([
 	'squire',
 	'jquery'
@@ -7,10 +9,12 @@ define([
 	describe('AlertView', function() {
 		var AlertView;
 		var testView;
+		var $testDiv;
 		var injector;
 
 		beforeEach(function(done) {
 			$('body').append('<div id="test-div"><div>');
+			$testDiv = $('#test-div');
 			injector = new Squire();
 
 			injector.mock('text!hb_templates/alert.hbs',
@@ -29,7 +33,7 @@ define([
 		afterEach(function() {
 			injector.remove();
 			testView.remove();
-			$('#test-div').remove();
+			$testDiv.remove();
 		});
 
 		it('Expects initialize to set the context variables to null strings', function() {
@@ -40,7 +44,7 @@ define([
 		});
 
 		it('Expects show*Alert to render the appropriate alert', function() {
-			var $alert, $message
+			var $alert, $message;
 			testView.showSuccessAlert('Success alert');
 			$alert = testView.$('.alert');
 			$message = testView.$('.alert-message');
@@ -61,6 +65,17 @@ define([
 			expect($alert.hasClass('alert-warning')).toBe(false);
 			expect($alert.hasClass('alert-danger')).toBe(true);
 			expect($message.html()).toEqual('Danger alert');
+		});
+
+		it('Expects closeAlert to remove the rendered alert if any', function() {
+			testView.showSuccessAlert('Success alert');
+			expect($testDiv.find('.alert').length).not.toBe(0);
+
+			testView.closeAlert();
+			expect($testDiv.find('.alert').length).toBe(0);
+
+			testView.closeAlert();
+			expect($testDiv.find('.alert').length).toBe(0);
 		});
 	});
 });

@@ -35,6 +35,7 @@ define([
 			'click .add-category-btn' : 'addFilterRow',
 			'click .clear-advanced-search-btn' : 'clearFilterRows',
 			'click .create-pub-btn' : 'goToEditPubPage',
+			'click .manager-seriestitle-btn' : 'goToSeriesTitlePage',
 			'click .add-to-lists-btn' : 'addSelectedPubsToCategory'
 		},
 
@@ -328,6 +329,11 @@ define([
 		goToEditPubPage : function (ev) {
 			ev.preventDefault();
 			this.router.navigate('publication', {trigger: true});
+		},
+
+		goToSeriesTitlePage : function(ev) {
+			ev.preventDefault();
+			this.router.navigate('seriesTitle', {trigger: true});
 		},
 
 		addSelectedPubsToCategory : function(ev) {
