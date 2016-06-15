@@ -1,0 +1,87 @@
+<div class="edit-series-container panel panel-default">
+	<div class="panel-heading"><h2 class="panel-title">Edit Series Title</h2></div>
+	<div class="panel-body">
+		<div class="alert-container"></div>
+		<div class="loading-indicator"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		<div class="validation-errors"></div>
+		<div class="create-or-edit-div {{#if id}}hidden{{else}}show{{/if}}">
+			<button class="btn btn-primary create-btn" type="button">Create</button>
+			<span>Or</span>
+			<div class="edit-select-series-div">
+				<div class="form-group">
+					<label>Select publication subtype and then a series title</label>
+					<div>
+						<select id="edit-pub-subtype-input" class="form-control" data-placeholder="Select publication subtype" style="width:100%"></select>
+					</div>
+					<div class="form-group">
+						<select disabled id="edit-series-title-input" class="form-control" data-placeholder="Select series title - enter 1 or more characters" style="width:100%">
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="edit-div form-horizontal {{#if id}}show{{else}}hidden{{/if}}">
+			<div class="form-group">
+				<label class="control-label" for="series-title-text-input">Series Title *</label>
+				<div>
+					<input required id="series-title-text-input" class="form-control" type="text" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="pub-subtype-input">Publication Subtype *</label>
+				<div>
+					<select required id="pub-subtype-input" class="form-control" data-placeholder="Select a publication subtype"
+							style="width: 100%">
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="series-doi-name-input">Series DOI Name</label>
+				<div>
+					<input id="series-doi-name-input" class="form-control" size="40" maxlength="2000" type="text" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="online-issn-input">Online ISSN</label>
+				<div>
+					<input id="online-issn-input" class="form-control" type="text" size="9" maxlength="9"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="print-issn-input">Print ISSN</label>
+				<div>
+					<input id="print-issn-input" class="form-control" type="text" size="9" maxlength="9"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="active-input">Active</label>
+				<div>
+					<input id="active-input" class="form-control" type="checkbox" />
+				</div>
+			</div>
+			<div>
+				<button class="btn btn-primary save-btn" type="button">Save</button>
+				<button class="btn btn-default cancel-btn" type="button">Cancel</button>
+				<button class="btn btn-default create-new-btn" type="button">Edit New Series Title</button>
+				<button class="btn btn-default delete-btn" type="button" data-toggle="modal" data-target="#confirm-modal">Delete</button>
+			</div>
+			<div class="modal fade" id="confirm-modal" tatabindex="-1" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">Confirm</h4>
+						</div>
+						<div class="modal-body">
+							<p>Are you sure you want to delete this series title?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							<button type="button" class="delete-ok-btn btn btn-primary" data-dismiss="modal">OK</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
