@@ -13,11 +13,6 @@ Feature: Test all pub_ui utilities
 		Given I have some fake json pubs metadata
 		When I find fake details with pubdetails
 		Then I am returned an expected result
-		
-	Scenario: pubdetails behaves correctly
-		Given I point to a real pubs url
-		When I find real details with pubdetails
-		Then I am returned an expected result
 
 	Scenario: create_display_links functions correctly
 		Given I have a fake json full of pubs-related links
