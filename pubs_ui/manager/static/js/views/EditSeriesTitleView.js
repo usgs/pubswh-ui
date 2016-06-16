@@ -39,6 +39,7 @@ define([
 	var view = BaseView.extend({
 
 		events : {
+			'click .back-to-search-btn' : 'goToSearchPage',
 			'select2:select #edit-pub-subtype-input' : 'enableEditSeriesTitleSelect',
 			'select2:select #edit-series-title-input' : 'showEditSelectedSeriesTitle',
 			'click .create-btn' : 'showCreateNewSeriesTitle',
@@ -148,6 +149,10 @@ define([
 		/*
 		 * DOM event handlers
 		 */
+
+		goToSearchPage : function() {
+			this.router.navigate('', {trigger : true});
+		},
 
 		enableEditSeriesTitleSelect : function(ev){
 			this.$(EDIT_SERIES_TITLE_INPUT_SEL).prop('disabled', false);
