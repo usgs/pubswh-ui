@@ -106,8 +106,7 @@ def create_display_links(pubdata):
     """
     if pubdata.get('doi') is not None and pubdata.get('publicationSubtype', {}).get('text') != \
             ('USGS Numbered Series' or 'USGS Unnumbered Series'):
-        pubdata['links'].append(
-            {
+        index_link = {
                 "rank": None,
                 "text": "Publisher Index Page (via DOI)",
                 "type": {
@@ -115,7 +114,16 @@ def create_display_links(pubdata):
                         "text": "Index Page"
                 },
                 "url": "http://dx.doi.org/"+pubdata['doi']
-            })
+            }
+        if pubdata.get('chorus'):
+            chorus = deepcopy(pubdata['chorus'])
+            if chorus.get('publiclyAccessibleDate'):
+                index_link['linkHelpText'] = 'Publicly accessible after '+chorus['publiclyAccessibleDate']+\
+                                             ' (public access data via <a href="http://www.chorusaccess.org" ' \
+                                             'title="link to Chorus.org homepage">CHORUS</a>)'
+
+
+        pubdata['links'].append(index_link)
 
     display_links = {
         'Abstract': [],
