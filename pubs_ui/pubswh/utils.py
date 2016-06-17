@@ -114,17 +114,17 @@ def manipulate_doi_information(pubdata):
             },
             "url": "http://dx.doi.org/" + pubdata['doi']
         }
-    if pubdata.get('chorus'):
-        chorus = deepcopy(pubdata['chorus'])
-        if chorus.get('publiclyAccessibleDate'):
-            index_link['linkHelpText'] = 'Publicly accessible after ' + chorus['publiclyAccessibleDate'] + \
-                                         ' (public access data via <a href="http://www.chorusaccess.org" ' \
-                                         'title="link to Chorus.org homepage">CHORUS</a>)'
+        if pubdata.get('chorus'):
+            chorus = deepcopy(pubdata['chorus'])
+            if chorus.get('publiclyAccessibleDate'):
+                index_link['linkHelpText'] = 'Publicly accessible after ' + chorus['publiclyAccessibleDate'] + \
+                                             ' (public access data via <a href="http://www.chorusaccess.org" ' \
+                                             'title="link to Chorus.org homepage">CHORUS</a>)'
 
-    if pubdata.get('links'):
-        pubdata['links'].append(index_link)
-    else:
-        pubdata['links'] = [index_link]
+        if pubdata.get('links'):
+            pubdata['links'].append(index_link)
+        else:
+            pubdata['links'] = [index_link]
     return pubdata
 
 
