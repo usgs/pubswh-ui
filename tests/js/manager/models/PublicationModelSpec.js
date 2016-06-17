@@ -1,9 +1,9 @@
 /* jslint browser: true */
+/* global define, describe, beforeEach, afterEach, jasmine, it, expect, sinon */
 
 define([
-	'sinon',
 	'models/PublicationModel'
-], function(sinon, PublicationModel) {
+], function(PublicationModel) {
 	"use strict";
 
 	describe("PublicationModel", function() {
@@ -185,7 +185,7 @@ define([
 				expect(doneSpy).not.toHaveBeenCalled();
 				expect(failSpy).toHaveBeenCalled();
 				expect(failSpy.calls.argsFor(0)[1]).toMatch('Internal Server Error');
-			})
+			});
 		});
 
 		describe('Tests for publish', function(){
