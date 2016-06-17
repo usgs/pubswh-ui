@@ -97,6 +97,36 @@ def pubdetails(pubdata):
             pubdata['details'].append({detail[1]: pubdata.get(detail[0])})
     return pubdata
 
+def manipulate_doi_information(pubdata):
+    """
+    takes the DOI and adds it to the link structure
+    :param pubdata: original pub data
+    :return: manipulated pub data
+    """
+    if pubdata.get('doi') is not None and pubdata.get('publicationSubtype', {}).get('text') != \
+            ('USGS Numbered Series' or 'USGS Unnumbered Series'):
+        index_link = {
+            "rank": None,
+            "text": "Publisher Index Page (via DOI)",
+            "type": {
+                "id": 15,
+                "text": "Index Page"
+            },
+            "url": "http://dx.doi.org/" + pubdata['doi']
+        }
+    if pubdata.get('chorus'):
+        chorus = deepcopy(pubdata['chorus'])
+        if chorus.get('publiclyAccessibleDate'):
+            index_link['linkHelpText'] = 'Publicly accessible after ' + chorus['publiclyAccessibleDate'] + \
+                                         ' (public access data via <a href="http://www.chorusaccess.org" ' \
+                                         'title="link to Chorus.org homepage">CHORUS</a>)'
+
+    if pubdata.get('links'):
+        pubdata['links'].append(index_link)
+    else:
+        pubdata['links'] = [index_link]
+    return pubdata
+
 
 def create_display_links(pubdata):
     """
@@ -104,26 +134,7 @@ def create_display_links(pubdata):
     :param pubdata:
     :return: pubdata with new displayLinks array
     """
-    if pubdata.get('doi') is not None and pubdata.get('publicationSubtype', {}).get('text') != \
-            ('USGS Numbered Series' or 'USGS Unnumbered Series'):
-        index_link = {
-                "rank": None,
-                "text": "Publisher Index Page (via DOI)",
-                "type": {
-                        "id": 15,
-                        "text": "Index Page"
-                },
-                "url": "http://dx.doi.org/"+pubdata['doi']
-            }
-        if pubdata.get('chorus'):
-            chorus = deepcopy(pubdata['chorus'])
-            if chorus.get('publiclyAccessibleDate'):
-                index_link['linkHelpText'] = 'Publicly accessible after '+chorus['publiclyAccessibleDate']+\
-                                             ' (public access data via <a href="http://www.chorusaccess.org" ' \
-                                             'title="link to Chorus.org homepage">CHORUS</a>)'
 
-
-        pubdata['links'].append(index_link)
 
     display_links = {
         'Abstract': [],
@@ -648,6 +659,7 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     """
     pubdata = pubdetails(pubdata)
     pubdata = add_relationships_graphs(pubdata, supersedes_url, json_ld_id_base_url)
+    pubdata = manipulate_doi_information(pubdata)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
     pubdata = jsonify_geojson(pubdata)
