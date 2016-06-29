@@ -34,7 +34,8 @@ class ManipulateDoiInformationTestCase(unittest.TestCase):
         assert manipulate_doi_information(simple_pubsdata) == expected_pubsdata
 
     def test_will_doi_link_and_chorus_be_generated_from_doi(self):
-        """given a DOI, will an index link be generated?"""
+        """given a DOI, will an index link be generated?
+        """
         chorus_pubsdata = {
             'publicationSubtype': {
                 'text': 'Journal Article'
@@ -71,7 +72,7 @@ class ManipulateDoiInformationTestCase(unittest.TestCase):
         assert manipulate_doi_information(chorus_pubsdata) == expected_chorus_pubsdata
 
     def test_will_missing_link_list_be_generated(self):
-        """given a DOI, will an index link be generated?"""
+        """given a DOI, will an index link be generated even if the links list doesn't exist?"""
         simple_pubsdata = {
             'publicationSubtype': {
                 'text': u'Journal Article'
@@ -84,6 +85,49 @@ class ManipulateDoiInformationTestCase(unittest.TestCase):
             },
             'doi': '10.65165468/asdflasdfnlasdkf',
             'links': [
+                {
+                    "rank": None,
+                    "text": "Publisher Index Page (via DOI)",
+                    "type": {
+                        "id": 15,
+                        "text": "Index Page"
+                    },
+                    "url": "http://dx.doi.org/10.65165468/asdflasdfnlasdkf"
+                }
+            ]
+        }
+        assert manipulate_doi_information(simple_pubsdata) == expected_pubsdata
+
+    def test_will_an_existing_in_the_link_list_be_maintained(self):
+        """given a DOI and a pre-populated links list, will the original link be maintained in the list"""
+        simple_pubsdata = {
+            'publicationSubtype': {
+                'text': u'Journal Article'
+            },
+            'doi': '10.65165468/asdflasdfnlasdkf',
+            'links': [{
+                "id": 294043,
+                "type": {
+                    "id": 24,
+                    "text": "Thumbnail"
+                    },
+                "url": "http://pubs.er.usgs.gov/thumbnails/outside_thumb.jpg"
+                }]
+        }
+        expected_pubsdata = {
+            'publicationSubtype': {
+                'text': 'Journal Article'
+            },
+            'doi': '10.65165468/asdflasdfnlasdkf',
+            'links': [
+                {
+                    "id": 294043,
+                    "type": {
+                        "id": 24,
+                        "text": "Thumbnail"
+                    },
+                    "url": "http://pubs.er.usgs.gov/thumbnails/outside_thumb.jpg"
+                },
                 {
                     "rank": None,
                     "text": "Publisher Index Page (via DOI)",
