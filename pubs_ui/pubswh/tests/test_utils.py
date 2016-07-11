@@ -1,6 +1,6 @@
 from pubs_ui.pubswh.utils import manipulate_doi_information
 import unittest
-from pprint import pprint
+
 
 class ManipulateDoiInformationTestCase(unittest.TestCase):
     """Tests for create_display_links"""
