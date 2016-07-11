@@ -341,7 +341,7 @@ class SearchPublications(object):
         # Only send the params if they contain information
         if params is not None:
             non_null_params = {}
-            for key, val in params.items():
+            for key, val in params.iteritems():
                 if val:
                     non_null_params[key] = val
         search_result_obj = requests.get(url=self.search_url, params=non_null_params, verify=verify_cert)
