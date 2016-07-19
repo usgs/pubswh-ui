@@ -6,6 +6,7 @@ Created on Nov 10, 2014
 
 import arrow
 
+
 def display_publication_info(json_content):
     publication_year = json_content.get('publicationYear', None)
     series_title_value = json_content.get('seriesTitle', None)

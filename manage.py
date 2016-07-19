@@ -1,12 +1,14 @@
-'''
+"""
 Created on Oct 17, 2014
 
 @author: ayan
-'''
+"""
+
 from flask.ext.script import Manager, Command
 from flask.ext.collect import Collect
 from flask.ext.assets import ManageAssets
 import arrow
+
 from pubs_ui import app as application
 
 
@@ -28,8 +30,9 @@ class ReportDeployDate(Command):
     Create a file with the
     deploy date
     """
-    
-    def report_current_utc_time(self):
+
+    @staticmethod
+    def report_current_utc_time():
         utc_time = arrow.utcnow()
         utc_time_str = utc_time.format('MMMM DD, YYYY HH:mm:ss ZZ')
         return utc_time_str
