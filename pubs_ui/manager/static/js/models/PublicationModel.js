@@ -88,6 +88,7 @@ define([
 		changeState : function(op) {
 			var self = this;
 			var deferred = $.Deferred();
+			console.log(this.urlRoot);
 			if (!this.isNew()) {
 				$.ajax({
 					url: this.urlRoot +  '/' + op,
