@@ -124,7 +124,6 @@
 	</div>
 	<div class="form-group" id="publisher-div">
 		<label class="control-label" for="publisher-input">Publisher</label>
-
 		<div>
 			<input id="publisher-input" type="text" class="form-control"/>
 		</div>
@@ -136,12 +135,16 @@
 			<input id="publisher-location-input" type="text" class="form-control"/>
 		</div>
 	</div>
-	<div class="form-inline" id="publication-year-div">
-        <div class="form-group" id="publication-year-fields">
+    <div id="publication-year" class="form-">
+        <div class="form-group" id="publication-year-div">
             <label class="control-label" for="isbn-input">Publication Year</label>
-            <input class="form-control" id="publication-year-input" type="text"/>
-            <label for="isbn-input">No Publication Year</label>
-            <input id="no-year-input" type="checkbox">
+            <div id="text-input-div">
+                <input class="form-control text-input-inline" id="publication-year-input" type="text"/>
+            </div>
+            <label class="control-label" for="isbn-input">No Publication Year</label>
+            <div id="no-year-input-div">
+                <input class="form-control" id="no-year-input" type="checkbox">
+            </div>
         </div>
     </div>
 	<div class="form-group" id="conference-title-div">
