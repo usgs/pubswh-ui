@@ -1,5 +1,11 @@
 <div id="contributors-div">
 	<div class="contributor-types-tabs">
+		<div id="contributors-form" class="form-horizontal">
+			<div id="no-usgs-authors" class="form-group">
+				<label for="no-usgs-authors-input">No USGS Authors</label>
+				<input id="no-usgs-authors-input" type="checkbox">
+			</div>
+		</div>
 		<ul class="nav nav-tabs">
 			{{#each contributorTypes}}
 				<li role="presentation" {{#if @first}}class="active"{{/if}}>
