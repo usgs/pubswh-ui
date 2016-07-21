@@ -144,7 +144,7 @@ def test_links_ouput(step):
 @step(r"I create_display_links from the pub's response")
 def live_display_links(step):
     world.output = len(create_display_links(get(world.live_url).json()))
-    world.expected_output = 23 #check all necessary components are there.
+    world.expected_output = 25 #check all necessary components are there.
 """
 getbrowsecontent scenarios
 """
