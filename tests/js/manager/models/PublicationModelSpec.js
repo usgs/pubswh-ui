@@ -146,6 +146,23 @@ define([
 				expect(server.requests[0].requestBody).toEqual('{"id" : 1234}');
 			});
 
+			it('Expects that a call to release with noYear succeeds.', function() {
+				server.respond([200, {"Content-Type" : 'application/json'},
+					'{"id" : 1456, "title" : "Some Title", "noYear" : true, "validationErrors" : []}'
+				]);
+				model.set('id', 1456);
+				model.publish().done(doneSpy).fail(failSpy);
+				server.respond();
+
+				expect(doneSpy).toHaveBeenCalledWith({
+					id : 1456,
+					title : 'Some Title',
+					noYear : true,
+					validationErrors : []
+				})
+				expect(failSpy).not.toHaveBeenCalled();
+			});
+
 			it('Expects that a call to release with succeeds resolves the promise with the response', function() {
 				server.respond([200, {"Content-Type" : 'application/json'},
 					'{"id" : 1234, "title" : "This is a Title", "publicationYear" : 2015, "validationErrors" : []}'
@@ -214,6 +231,23 @@ define([
 				expect(server.requests[0].url).toEqual(model.urlRoot + '/publish');
 				expect(server.requests[0].method).toEqual('POST');
 				expect(server.requests[0].requestBody).toEqual('{"id" : 1234}');
+			});
+
+			it('Expects that a call to publish with noYear succeeds.', function() {
+				server.respond([200, {"Content-Type" : 'application/json'},
+					'{"id" : 1456, "title" : "Some Title", "noYear" : true, "validationErrors" : []}'
+				]);
+				model.set('id', 1456);
+				model.publish().done(doneSpy).fail(failSpy);
+				server.respond();
+
+				expect(doneSpy).toHaveBeenCalledWith({
+					id : 1456,
+					title : 'Some Title',
+					noYear : true,
+					validationErrors : []
+				})
+				expect(failSpy).not.toHaveBeenCalled();
 			});
 
 			it('Expects that a call to publish with succeeds resolves the promise with the response', function() {
