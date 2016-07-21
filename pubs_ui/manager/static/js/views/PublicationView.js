@@ -244,13 +244,11 @@ define([
 			})
 				.done(function() {
 					self.alertView.showSuccessAlert('The publication was successfully saved');
-					console.log(self.model);
 					if (isNew) {
 						self.router.navigate('publication/' + self.model.get('id'));
 					}
 				})
 				.fail(function(jqXhr, textStatus, error) {
-					console.log('FAILED!!!');
 					var response = jqXhr;
 					if (jqXhr.status === 401) {
 						self.loginDialogView.show(function() {
