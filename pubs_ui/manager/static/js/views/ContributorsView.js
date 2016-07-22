@@ -31,8 +31,6 @@ define([
 		 */
 		initialize : function(options) {
 			var self = this;
-			console.log('In contributors view!');
-			console.log(this.model);
 			var contributors = this.model.get('contributors');
 			var fetchDeferred = $.Deferred();
 			BaseView.prototype.initialize.apply(this, arguments);
