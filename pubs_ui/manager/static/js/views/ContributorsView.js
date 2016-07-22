@@ -27,7 +27,7 @@ define([
 		 * @constructs
 		 * @param {Object} options
 		 *     @prop {String} el - jquery selector where this view is rendered
-		 *     @prop {Backbone.Model} model - assumes that model will represent the contributors attribute in a PublicationModel
+		 *     @prop {Backbone.Model} model - assumes that model be a PublicationModel
 		 */
 		initialize : function(options) {
 			var self = this;
