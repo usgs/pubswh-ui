@@ -2,12 +2,13 @@
 
 define([
 	'bootstrap',
+	'backbone.stickit',
 	'models/ContributorTypeCollection',
 	'models/PublicationContributorCollection',
 	'views/BaseView',
 	'views/ContributorTabView',
 	'hbs!hb_templates/contributors'
-], function(bootstrap, ContributorTypeCollection, PublicationContributorCollection, BaseView, ContributorTabView, hbTemplate) {
+], function(bootstrap, stickit, ContributorTypeCollection, PublicationContributorCollection, BaseView, ContributorTabView, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -16,17 +17,21 @@ define([
 			'click .contributor-types-tabs' : 'showTab'
 		},
 
+		bindings : {
+			'#no-usgs-authors-input' : 'noUsgsAuthors'
+		},
+
 		template : hbTemplate,
 
 		/*
 		 * @constructs
 		 * @param {Object} options
 		 *     @prop {String} el - jquery selector where this view is rendered
-		 *     @prop {Backbone.Model} model - assumes that model will represent the contributors attribute in a PublicationModel
+		 *     @prop {Backbone.Model} model - assumes that model be a PublicationModel
 		 */
 		initialize : function(options) {
 			var self = this;
-			var contributors = this.model;
+			var contributors = this.model.get('contributors');
 			var fetchDeferred = $.Deferred();
 			BaseView.prototype.initialize.apply(this, arguments);
 
@@ -58,7 +63,7 @@ define([
 			this.createTabViewsPromise.done(function() {
 				self.context.contributorTypes = self.contributorTypeCollection.toJSON();
 				BaseView.prototype.render.apply(self, arguments);
-
+				self.stickit();
 				_.each(self.typeTabViews, function(tab) {
 					tab.view.setElement(tab.el).render();
 				});
