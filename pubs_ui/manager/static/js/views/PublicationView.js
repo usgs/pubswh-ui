@@ -155,7 +155,6 @@ define([
 					view : new ContributorsView({
 						el : '#contributors-pane',
 						model : this.model
-						//model : this.model.get('contributors')
 					})
 				},
 				spn : {
