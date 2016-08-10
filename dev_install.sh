@@ -6,7 +6,7 @@ if [ ! -s instance/config.py ]; then
    exit
 fi
 
-if [ "$1" == "--clean" ]; then
+if [ "$1" == "--clean" ] || [ "$2" == "--clean" ]; then
    echo "Cleaning the project"
    mvn clean
 fi
@@ -18,11 +18,11 @@ pip install -r requirements.txt
 
 echo "Successfully installed the pubs_ui app. "
 
-if [ "$2" == "--test" ]; then
+if [ "$2" == "--test" ] || [ "$1" == "--test" ]; then
     echo "Installing javascript dependencies and running all python and javascript tests"
-     mvn test
-    env/bin/lettuce --with-xunit pubs_ui/lettuce_testing
-    env/bin/nosetests -w pubs_ui
+    mvn test
+    lettuce --with-xunit pubs_ui/lettuce_testing
+    nosetests -w pubs_ui
 else
     echo "Installing javascript dependencies "
     mvn compile
