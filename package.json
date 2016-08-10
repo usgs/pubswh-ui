@@ -11,7 +11,7 @@
     "url": "https://github.com/USGS-CIDA/PubsWarehouse_UI"
   },
   "scripts": {
-    "test": "node/node node_modules/karma/bin/karma start tests/js/karma.conf.js --no-single-run --browsers \"\" --reporters progress"
+    "test": "node/node node_modules/karma/bin/karma start tests/js/karma.conf.js --no-single-run --reporters progress"
   },
   "author": "OWI",
   "license": "MIT",
