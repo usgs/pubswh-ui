@@ -97,8 +97,9 @@ To run the jasmine tests, run the following:
 `mvn test`
 
 To run the jasmine tests using a browser, run the following: :
-`node/node node_modules/karma/bin/karma start karma.conf.js` 
-Then go to localhost:9876 in the browser where you want to run the tests.
+`node/npm test`
+Then go to localhost:9876 in the browser where you want to run the tests. This will have to be altered for Windows users.
+This will automatically open the Firefox browser, but any browser can be used to run the tests
 
 
 ## Generating secret keys
