@@ -19,9 +19,10 @@ define([
 	'views/BackgridClientSortingBody',
 	'models/PublicationCollection',
 	'views/BaseView',
-	'hbs!hb_templates/managePublications'
+	'hbs!hb_templates/managePublications',
+	'hbs!hb_templates/publicationListFilter'
 ], function(Squire, $, _, module, Backbone, Backgrid, Paginator, BackgridUrlCell, BackgridClientSortingBody,
-			PublicationCollection, BaseView, hbTemplate) {
+			PublicationCollection, BaseView, hbTemplate, pubListTemplate) {
 	"use strict";
 
 	// Mocking Backgrid is difficult since it's namespaced and encompasses many different methods
@@ -37,6 +38,7 @@ define([
 		var setElSearchFilterRowViewSpy, renderSearchFilterRowViewSpy, removeSearchFilterRowViewSpy;
 		var fetchListSpy;
 		var fetchDeferred, fetchListDeferred;
+		var pubListTemplateSpy;
 
 		beforeEach(function (done) {
 			jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
@@ -61,6 +63,8 @@ define([
 			fetchListDeferred = $.Deferred();
 			fetchListSpy = jasmine.createSpy('fetchListSpy').and.returnValue(fetchListDeferred);
 
+			pubListTemplateSpy = jasmine.createSpy('pubListTemplateSpy').and.callFake(pubListTemplate);
+
 			fetchDeferred = $.Deferred();
 
 			testCollection = new PublicationCollection();
@@ -79,9 +83,13 @@ define([
 			injector.mock('views/BackgridClientSortingBody', BackgridClientSortingBody);
 			injector.mock('views/BaseView', BaseView);
 			injector.mock('hbs!hb_templates/managePublications', hbTemplate);
+			injector.mock('hbs!hb_templates/publicationListFilter', pubListTemplateSpy);
 
 			injector.mock('models/PublicationListCollection', Backbone.Collection.extend({
-				fetch : fetchListSpy
+				fetch : fetchListSpy,
+				toJSON : function() {
+					return [{id : 1, text : 'Pub Cat 1'}, {id : 2, text : 'Pub Cat 2'}];
+				}
 			}));
 
 			injector.mock('views/AlertView', BaseView.extend({
@@ -135,7 +143,7 @@ define([
 
 		it('Expects that the publication lists are fetched at initialization', function() {
 			expect(fetchListSpy).toHaveBeenCalled();
-		})
+		});
 
 		it('Expects that the child view\'s are created', function() {
 			expect(setElAlertSpy).toHaveBeenCalled();
@@ -185,6 +193,14 @@ define([
 				fetchListDeferred.resolve();
 				expect($.fn.select2).toHaveBeenCalled();
 			});
+
+			it('Expects that the publications list filter is rendered after the list has been fetched', function() {
+				expect(pubListTemplateSpy).not.toHaveBeenCalled();
+
+				fetchListDeferred.resolve();
+
+				expect(pubListTemplateSpy).toHaveBeenCalled();
+			});
 		});
 
 		describe('Tests for remove', function() {
@@ -209,6 +225,7 @@ define([
 
 		describe('Tests for DOM event handlers', function() {
 			beforeEach(function() {
+				fetchListDeferred.resolve();
 				testView.render();
 			});
 			it('Expects that a clicking the search button updates the collection\'s filters and then gets the first page of publications', function() {
@@ -222,13 +239,36 @@ define([
 				expect(testCollection.getFirstPage).toHaveBeenCalled();
 			});
 
+			it('Expects that clicking on a publist checkbox updates the collection\'s filters and then gets the first page', function() {
+				var $checkbox1 = testView.$('.pub-filter-list-div input[value="1"]');
+				var $checkbox2 = testView.$('.pub-filter-list-div input[value="2"]');
+				spyOn(testCollection, 'updateFilters');
+				spyOn(testCollection, 'getFirstPage').and.callThrough();
+
+				$checkbox1.prop('checked', true);
+				$checkbox1.trigger('change');
+
+				expect(testCollection.updateFilters).toHaveBeenCalledWith({listId : ['1']});
+				expect(testCollection.getFirstPage).toHaveBeenCalled();
+
+				$checkbox2.prop('checked', true);
+				$checkbox2.trigger('change');
+
+				expect(testCollection.updateFilters.calls.mostRecent().args[0]).toEqual({listId : ['1', '2']});
+
+				$checkbox1.prop('checked', false);
+				$checkbox1.trigger('change');
+
+				expect(testCollection.updateFilters.calls.mostRecent().args[0]).toEqual({listId : ['2']});
+			});
+
 			it('Expects that when the page size select is changed, the collection\'s page size is updated', function() {
 				testView.$('.page-size-select').val('25').trigger('change');
 				expect(testCollection.setPageSize).toHaveBeenCalledWith(25);
 			});
 
 			it('Expects that changing the search term will update the filterModel\'s q property', function() {
-				var $searchInput = testView.$('#search-term-input')
+				var $searchInput = testView.$('#search-term-input');
 				$searchInput.val('Junk test').trigger('change');
 				expect(testView.filterModel.get('q')).toEqual('Junk test');
 
@@ -248,7 +288,7 @@ define([
 			});
 
 			it('Expects that clicking on Add to Lists with no lists selected but publications selected shows the warning dialog', function() {
-				testCollection.add([{id : 1, selected : true}, {id : 2}])
+				testCollection.add([{id : 1, selected : true}, {id : 2}]);
 				testView.$('.add-to-lists-btn').trigger('click');
 				expect(showWarningDialogSpy).toHaveBeenCalled();
 			});
