@@ -74,20 +74,7 @@ define([
 					}, DEFAULT_SELECT2_OPTIONS))
 				}
 			},
-			{id : 'year', text : 'Year', inputType : 'text'},
-			{
-				id : 'listId',
-				text : 'Publication Lists',
-				inputType : 'select',
-				sendId : true,
-				select2Init : function(context) {
-					context.pubListFetch.done(function () {
-						context.$('.value-select-input').select2(_.extend({
-							data: context.publicationListCollection.toJSON()
-						}, DEFAULT_SELECT2_OPTIONS))
-					});
-				}
-			}
+			{id : 'year', text : 'Year', inputType : 'text'}
 		],
 
 		/*

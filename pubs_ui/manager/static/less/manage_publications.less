@@ -33,18 +33,27 @@
     }
   }
 
-  .pub-list-section {
-    .pub-management-div {
-      padding-bottom: 10px;
+  .pub-management-container {
+    .make-row();
+    .pub-filter-container {
+      .make-md-column(4);
+      .make-lg-column(2);
     }
-    .pub-grid-container {
-      position: relative;
+    .pub-list-section {
+      .make-md-column(8);
+      .make-lg-column(10);
+      .pub-grid-container {
+        position: relative;
 
+        .pub-grid {
+          height : 515px;
+        }
+      }
       .pubs-loading-indicator {
-        position : absolute;
-        top : 150px;
-        left : 500px;
-        text-align : center;
+        position: absolute;
+        top: 150px;
+        left: 500px;
+        text-align: center;
       }
     }
 
