@@ -5,10 +5,9 @@ define([
 	'jquery',
 	'utils/DynamicSelect2',
 	'models/PublicationTypeCollection',
-	'models/PublicationListCollection',
 	'views/BaseView',
 	'hbs!hb_templates/searchFilterRow'
-], function(_, $, DynamicSelect2, PublicationTypeCollection, PublicationListCollection, BaseView, hb_template) {
+], function(_, $, DynamicSelect2, PublicationTypeCollection, BaseView, hbTemplate) {
 	"use strict";
 
 	var DEFAULT_SELECT2_OPTIONS = {
@@ -18,7 +17,7 @@ define([
 
 	var view = BaseView.extend({
 
-		template : hb_template,
+		template : hbTemplate,
 
 		events : {
 			'change .search-category-input' : 'changeCategory',
@@ -49,7 +48,7 @@ define([
 					context.pubTypeFetch.done(function() {
 						context.$('.value-select-input').select2(_.extend({
 							data : context.publicationTypeCollection.toJSON()
-						}, DEFAULT_SELECT2_OPTIONS))
+						}, DEFAULT_SELECT2_OPTIONS));
 					});
 				}
 			},
@@ -60,7 +59,7 @@ define([
 				select2Init : function(context) {
 					context.$('.value-select-input').select2(DynamicSelect2.getSelectOptions({
 						lookupType : 'publicationsubtypes'
-					}, DEFAULT_SELECT2_OPTIONS))
+					}, DEFAULT_SELECT2_OPTIONS));
 				}
 			},
 			{
@@ -71,7 +70,7 @@ define([
 					context.$('.value-select-input').select2(DynamicSelect2.getSelectOptions({
 						lookupType : 'publicationseries',
 						activeSubgroup : true
-					}, DEFAULT_SELECT2_OPTIONS))
+					}, DEFAULT_SELECT2_OPTIONS));
 				}
 			},
 			{id : 'year', text : 'Year', inputType : 'text'}
@@ -88,8 +87,6 @@ define([
 
 			this.publicationTypeCollection = new PublicationTypeCollection();
 			this.pubTypeFetch = this.publicationTypeCollection.fetch();
-			this.publicationListCollection = new PublicationListCollection();
-			this.pubListFetch = this.publicationListCollection.fetch();
 
 			this.listenTo(this.model, 'change', this.disableFilterOption);
 		},
@@ -97,7 +94,7 @@ define([
 		render : function() {
 			this.context.categories = _.map(this.categories, function(category) {
 				var result = _.clone(category);
-				result['disabled'] = this.model.has(result.id);
+				result.disabled = this.model.has(result.id);
 				return result;
 			}, this);
 
@@ -135,7 +132,7 @@ define([
 			var oldValue = $thisEl.data('current-value');
 			var newValue = ev.currentTarget.value;
 			var selectedCategory = _.find(this.categories, function(category) {
-				return category.id === newValue
+				return category.id === newValue;
 			});
 
 			// Show/hide the appropriate input div and perform any initialization
@@ -184,4 +181,4 @@ define([
 	});
 
 	return view;
-})
+});
