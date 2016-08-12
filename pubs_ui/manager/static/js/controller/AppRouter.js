@@ -23,7 +23,7 @@ define([
 		routes: {
 			'': 'managePublicationsView',
 			'search' : 'managePublicationsView',
-			'search?*queryString': 'managePublicationsView',
+			//'search?*queryString': 'managePublicationsView',
 			'publication' : 'publicationView',
 			'publication/:pubId' : 'publicationView',
 			'contributor' : 'editContributorView',
@@ -61,10 +61,11 @@ define([
 			}
 		},
 
-		managePublicationsView: function (queryString) {
-			var queryParams = (queryString) ? deserializeQueryString(decodeURIComponent(queryString)) : [];
+		managePublicationsView: function () {
+			//var queryParams = (queryString) ? deserializeQueryString(decodeURIComponent(queryString)) : [];
+			var searchFilters = (sessionStorage.searchFilters) ? JSON.parse(sessionStorage.searchFilters) : {};
 			var collection = new PublicationCollection();
-			var filterModel = new Backbone.Model(queryParams);
+			var filterModel = new Backbone.Model(searchFilters);
 
 			this.createView(ManagePublicationsView, {
 				collection : collection,

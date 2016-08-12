@@ -241,8 +241,6 @@ define([
 		render : function() {
 			var self = this;
 			var $pubList;
-			var searchFilterRows = this.model.omit(['q', 'listId']);
-			var $rowContainer;
 
 			this.context.qTerm = (this.model.has('q') ? this.model.get('q') : '');
 			BaseView.prototype.render.apply(this, arguments);
@@ -309,7 +307,8 @@ define([
 					.fail(function(jqXhr) {
 						self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
 					});
-			this.router.navigate('search?' + $.param(_.pick(this.collection.getFilters(), ['q', 'listId']), true));
+			sessionStorage.searchFilters = JSON.stringify(_.pick(this.collection.getFilters(), ['q', 'listId']));
+			//this.router.navigate('search?' + $.param(_.pick(this.collection.getFilters(), ['q', 'listId']), true));
 		},
 
 		changePageSize : function(ev) {
