@@ -1,4 +1,5 @@
 /* jslint browser : true */
+/* global define */
 
 define([
 	'underscore',
@@ -44,19 +45,24 @@ define([
 				id : 'typeName',
 				text : 'Publication Type',
 				inputType : 'select',
-				select2Init : function(context) {
+				select2Init : function(context, initValue) {
+					var $select = context.$('.value-select-input');
 					context.pubTypeFetch.done(function() {
-						context.$('.value-select-input').select2(_.extend({
+						$select.select2(_.extend({
 							data : context.publicationTypeCollection.toJSON()
 						}, DEFAULT_SELECT2_OPTIONS));
+						if (initValue) {
+							$select.val(initValue);
+						}
 					});
+
 				}
 			},
 			{
 				id : 'subtypeName',
 				text : 'Publication Subtype',
 				inputType : 'select',
-				select2Init : function(context) {
+				select2Init : function(context, initValue) {
 					context.$('.value-select-input').select2(DynamicSelect2.getSelectOptions({
 						lookupType : 'publicationsubtypes'
 					}, DEFAULT_SELECT2_OPTIONS));
@@ -66,7 +72,7 @@ define([
 				id : 'seriesName',
 				text : 'Series Title',
 				inputType : 'select',
-				select2Init : function(context) {
+				select2Init : function(context, initValue) {
 					context.$('.value-select-input').select2(DynamicSelect2.getSelectOptions({
 						lookupType : 'publicationseries',
 						activeSubgroup : true
@@ -81,9 +87,11 @@ define([
 		 * @param options
 		 *     @prop {Backbone.Model} model
 		 *     @prop {String} el
+		 *     @prop {Object} filter (optional) - Should be a two element array of a filter key and valuethat will be used to initialize this row.
 		 */
 		initialize : function(options) {
 			BaseView.prototype.initialize.apply(this, arguments);
+			this.initFilter = options.filter;
 
 			this.publicationTypeCollection = new PublicationTypeCollection();
 			this.pubTypeFetch = this.publicationTypeCollection.fetch();
@@ -92,16 +100,24 @@ define([
 		},
 
 		render : function() {
+			var $searchCategoryInput = this.$('.search-category-input');
 			this.context.categories = _.map(this.categories, function(category) {
 				var result = _.clone(category);
 				result.disabled = this.model.has(result.id);
+				result.selected = (this.initFilter) ? result.id === this.initFilter[0] : false;
 				return result;
 			}, this);
 
 			BaseView.prototype.render.apply(this, arguments);
-			this.$('.search-category-input').select2(DEFAULT_SELECT2_OPTIONS);
+			$searchCategoryInput.select2(DEFAULT_SELECT2_OPTIONS);
 			// Dummy initialization of the value select2
 			this.$('.value-select-input').select2(DEFAULT_SELECT2_OPTIONS);
+
+			if (this.initFilter) {
+				this._setCategoryInput(_.find(this.categories, function(category) {
+					return category.id === this.initFilter[0];
+				}, this), this.initFilter[1]);
+			}
 		},
 
 		remove : function() {
@@ -120,14 +136,35 @@ define([
 			$option.prop('disabled', !enabled);
 		},
 
+		_setCategoryInput : function(selectedCategory, initValue) {
+			var $textInputDiv = this.$('.text-input-div');
+			var $textInput = $textInputDiv.find('input');
+			var $selectInputDiv = this.$('.select-input-div');
+			var $select = $selectInputDiv.find('select');
+			// Show/hide the appropriate input div and perform any initialization
+			if ((!selectedCategory) || (selectedCategory.inputType === 'text')) {
+				$textInputDiv.show();
+				$textInput.val((initValue) ? initValue[0] : '');
+				$selectInputDiv.hide();
+				$selectInputDiv.val('');
+			}
+			else {
+				$textInputDiv.hide();
+				$textInput.val('');
+
+				$select.select2('destroy');
+				$select.html('');
+				selectedCategory.select2Init(this, initValue);
+				$selectInputDiv.show();
+			}
+			this.$('.search-category-input').data('current-value', (_.has(selectedCategory, 'id') ? selectedCategory.id : ''));
+		},
+
 		/*
 		 * DOM event handlers
 		 */
 		changeCategory : function(ev) {
 			var $thisEl = $(ev.currentTarget);
-			var $textInputDiv = this.$('.text-input-div');
-			var $selectInputDiv = this.$('.select-input-div');
-			var $select = $selectInputDiv.find('select');
 
 			var oldValue = $thisEl.data('current-value');
 			var newValue = ev.currentTarget.value;
@@ -135,31 +172,13 @@ define([
 				return category.id === newValue;
 			});
 
-			// Show/hide the appropriate input div and perform any initialization
-			if ((!selectedCategory) || (selectedCategory.inputType === 'text')) {
-				$textInputDiv.show();
-				$selectInputDiv.hide();
-			}
-			else {
-				$textInputDiv.hide();
-
-				$select.select2('destroy');
-				$select.html('');
-				selectedCategory.select2Init(this);
-				$selectInputDiv.show();
-			}
-
-			// Clear input fields
-			$textInputDiv.find('input').val('');
-			$select.val('');
+			this._setCategoryInput(selectedCategory);
 
 			// Set model value for the current category and remove the old category if necessary.
-			// Then update the data-current-value attribute.
 			this.model.set(ev.currentTarget.value, '', {changedAttribute : ev.currentTarget.value});
 			if (oldValue) {
 				this.model.unset(oldValue, {changedAttribute: oldValue});
 			}
-			$thisEl.data('current-value', ev.currentTarget.value);
 		},
 
 		changeValue : function(ev) {

@@ -1,8 +1,11 @@
 /*jslint browser: true */
+/* global define */
 
 define([
 	'jquery',
+	'underscore',
 	'backbone',
+	'utils/deserializeQueryString',
 	'views/ManagePublicationsView',
 	'views/PublicationView',
 	'views/EditContributorView',
@@ -11,14 +14,16 @@ define([
 	'models/PublicationCollection',
 	'models/ContributorModel',
 	'models/SeriesTitleModel'
-], function ($, Backbone, ManagePublicationsView, PublicationView, EditContributorView, EditSeriesTitleView,
+], function ($, _, Backbone, deserializeQueryString,
+			 ManagePublicationsView, PublicationView, EditContributorView, EditSeriesTitleView,
 			 PublicationModel, PublicationCollection, ContributorModel, SeriesTitleModel) {
 	"use strict";
 
 	var appRouter = Backbone.Router.extend({
 		routes: {
 			'': 'managePublicationsView',
-			'search': 'managePublicationsView',
+			'search' : 'managePublicationsView',
+			'search?*queryString': 'managePublicationsView',
 			'publication' : 'publicationView',
 			'publication/:pubId' : 'publicationView',
 			'contributor' : 'editContributorView',
@@ -56,10 +61,14 @@ define([
 			}
 		},
 
-		managePublicationsView: function () {
+		managePublicationsView: function (queryString) {
+			var queryParams = (queryString) ? deserializeQueryString(decodeURIComponent(queryString)) : [];
 			var collection = new PublicationCollection();
+			var filterModel = new Backbone.Model(queryParams);
+
 			this.createView(ManagePublicationsView, {
-				collection : collection
+				collection : collection,
+				model : filterModel
 			}).render();
 		},
 

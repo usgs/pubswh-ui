@@ -33,7 +33,7 @@ define([
 			'change .page-size-select' : 'changePageSize',
 			'click .search-btn' : 'filterPubs',
 			'submit .pub-search-form' : 'filterPubs',
-			'change #search-term-input' : 'updateQterm',
+			'change #search-term-input' : 'changeQterm',
 			'click .add-category-btn' : 'addFilterRow',
 			'click .clear-advanced-search-btn' : 'clearFilterRows',
 			'click .create-pub-btn' : 'goToEditPubPage',
@@ -47,6 +47,7 @@ define([
 		/*
 		 * @param {Object} options
 		 *     @prop {String} el - jquery selector where the view should be rendered
+		 *     @prop {Backbone.Model} model - contains the current search filter parameters
 		 *     @prop {PublicationCollection} collection
 		 */
 		initialize : function(options) {
@@ -57,8 +58,8 @@ define([
 			this.pubListFetch = this.publicationListCollection.fetch();
 
 			// Create filter model, listeners, and holder for filter rows.
-			this.filterModel = new Backbone.Model();
-			this.listenTo(this.model, 'change:q', this.changeQterm);
+			this.listenTo(this.model, 'change:q', this.updateQterm);
+			this.listenTo(this.model, 'change:listId', this.updatePubsListFilter);
 			this.filterRowViews = [];
 
 			// Can get rid of this once the edit contributors page is implemented.
@@ -68,7 +69,7 @@ define([
 			this.listenTo(this.collection, 'request', this.showLoadingIndicator);
 			this.listenTo(this.collection, 'sync', this.updatePubsListDisplay);
 
-
+			this.collection.updateFilters(this.model.attributes);
 			this.fetchPromise = this.collection.fetch({reset: true});
 
 			var fromRawLookup = function(rawValue) {
@@ -240,7 +241,10 @@ define([
 		render : function() {
 			var self = this;
 			var $pubList;
+			var searchFilterRows = this.model.omit(['q', 'listId']);
+			var $rowContainer;
 
+			this.context.qTerm = (this.model.has('q') ? this.model.get('q') : '');
 			BaseView.prototype.render.apply(this, arguments);
 			$pubList = this.$('.pub-grid');
 
@@ -256,11 +260,33 @@ define([
 
 			// Initialize the publication lists select2 and filter
 			this.pubListFetch.then(function() {
-				var pubList = self.publicationListCollection.toJSON();
+				var listFilter = self.model.has('listId') ? self.model.get('listId') : [];
+				var pubList = _.map(self.publicationListCollection.toJSON(), function(pubList) {
+					var result = _.clone(pubList);
+					if (_.contains(listFilter, JSON.stringify(result.id))) {
+						result.checked = true;
+					}
+					return result;
+				});
 				self.$('#pubs-categories-select').select2(_.extend({
 					data : pubList
 				}, DEFAULT_SELECT2_OPTIONS));
 				self.$('.pub-filter-list-div').html(pubListTemplate({pubList : pubList}));
+			});
+
+			// Initialize the search filter rows
+			$rowContainer = this.$('.advanced-search-rows-container');
+
+			_.each(searchFilterRows, function(value, key) {
+				var newRowView =  new SearchFilterRowView({
+					model : self.model,
+					el : '.filter-row-container',
+					filter : [key, value]
+				});
+				$rowContainer.append('<div class="filter-row-container"></div>');
+				self.$('.advanced-search-rows-container').append('<div ');
+				newRowView.setElement($rowContainer.find('.filter-row-container:last-child')).render();
+				self.filterRowViews.push(newRowView);
 			});
 
 			this.fetchPromise.fail(function(jqXhr) {
@@ -293,19 +319,20 @@ define([
 			var self = this;
 
 			ev.preventDefault();
-			this.collection.updateFilters(this.filterModel.attributes);
+			this.collection.updateFilters(this.model.attributes);
 			this.collection.getFirstPage()
 					.fail(function(jqXhr) {
 						self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
 					});
+			this.router.navigate('search?' + $.param(this.collection.getFilters(), true));
 		},
 
 		changePageSize : function(ev) {
 			this.collection.setPageSize(parseInt(ev.currentTarget.value));
 		},
 
-		updateQterm : function(ev) {
-			this.filterModel.set('q', ev.currentTarget.value);
+		changeQterm : function(ev) {
+			this.model.set('q', ev.currentTarget.value);
 		},
 
 		addFilterRow : function(ev) {
@@ -313,7 +340,7 @@ define([
 			var $rowContainer = this.$('.advanced-search-rows-container');
 			var newRow = new SearchFilterRowView({
 				el : '.filter-row-container',
-				model : this.filterModel
+				model : this.model
 			});
 			$rowContainer.append('<div class="filter-row-container"></div>');
 			this.$('.advanced-search-rows-container').append('<div ');
@@ -390,15 +417,22 @@ define([
 			this.$('.pub-filter-list-div input:checked').each(function() {
 				pubsListFilter.push($(this).val());
 			});
-			this.filterModel.set('listId', pubsListFilter);
+			this.model.set('listId', pubsListFilter);
 			this.filterPubs(ev);
 		},
 
 		/*
-		 * filterModel event handlers
+		 * Model event handlers
 		 */
-		changeQTerm : function() {
-			this.$('#search-term-input').val(this.filterModel.get('q'));
+		updateQTerm : function() {
+			this.$('#search-term-input').val(this.model.get('q'));
+		},
+		updatePubsListFilter : function() {
+			var pubsList = this.model.get('listId');
+
+			this.$('.pub-filter-container input[type="checkbox"]').each(function() {
+				$(this).prop('checked', _.contains(pubsList, $(this).val()));
+			});
 		},
 
 		/* collection event handlers */
