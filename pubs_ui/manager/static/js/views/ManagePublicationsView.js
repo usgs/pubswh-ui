@@ -274,21 +274,6 @@ define([
 				self.$('.pub-filter-list-div').html(pubListTemplate({pubList : pubList}));
 			});
 
-			// Initialize the search filter rows
-			$rowContainer = this.$('.advanced-search-rows-container');
-
-			_.each(searchFilterRows, function(value, key) {
-				var newRowView =  new SearchFilterRowView({
-					model : self.model,
-					el : '.filter-row-container',
-					filter : [key, value]
-				});
-				$rowContainer.append('<div class="filter-row-container"></div>');
-				self.$('.advanced-search-rows-container').append('<div ');
-				newRowView.setElement($rowContainer.find('.filter-row-container:last-child')).render();
-				self.filterRowViews.push(newRowView);
-			});
-
 			this.fetchPromise.fail(function(jqXhr) {
 				self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
 			}).always(function() {
@@ -324,7 +309,7 @@ define([
 					.fail(function(jqXhr) {
 						self.alertView.showDangerAlert('Can\'t retrieve the list of publications: ' + jqXhr.statusText);
 					});
-			this.router.navigate('search?' + $.param(this.collection.getFilters(), true));
+			this.router.navigate('search?' + $.param(_.pick(this.collection.getFilters(), ['q', 'listId']), true));
 		},
 
 		changePageSize : function(ev) {
