@@ -1,4 +1,5 @@
 /*jslint browser: true */
+/* global define */
 
 define([
 	'module',
@@ -14,10 +15,11 @@ define([
 	'views/AlertView',
 	'views/WarningDialogView',
 	'views/SearchFilterRowView',
-	'hbs!hb_templates/managePublications'
+	'hbs!hb_templates/managePublications',
+	'hbs!hb_templates/publicationListFilter'
 ], function (module, Backbone, _, $, Backgrid, Paginator, PublicationListCollection,
 			 BackgridUrlCell, BackgridClientSortingBody, BaseView,
-			 AlertView, WarningDialogView, SearchFilterRowView, hbTemplate) {
+			 AlertView, WarningDialogView, SearchFilterRowView, hbTemplate, pubListTemplate) {
 	"use strict";
 
 	var DEFAULT_SELECT2_OPTIONS = {
@@ -36,7 +38,8 @@ define([
 			'click .clear-advanced-search-btn' : 'clearFilterRows',
 			'click .create-pub-btn' : 'goToEditPubPage',
 			'click .manager-seriestitle-btn' : 'goToSeriesTitlePage',
-			'click .add-to-lists-btn' : 'addSelectedPubsToCategory'
+			'click .add-to-lists-btn' : 'addSelectedPubsToCategory',
+			'change .pub-filter-list-div input[type="checkbox"]' : 'changePubsListFilter'
 		},
 
 		template: hbTemplate,
@@ -47,7 +50,6 @@ define([
 		 *     @prop {PublicationCollection} collection
 		 */
 		initialize : function(options) {
-			var self = this;
 			BaseView.prototype.initialize.apply(this, arguments);
 
 			//Fetch publication lists
@@ -69,7 +71,7 @@ define([
 
 			this.fetchPromise = this.collection.fetch({reset: true});
 
-			var fromRawLookup = function(rawValue, model) {
+			var fromRawLookup = function(rawValue) {
 				return (rawValue) ? rawValue.text : '';
 			};
 			var sortValueLookup = function(model, colName) {
@@ -79,7 +81,7 @@ define([
 				return (model.has(colName)) ? model.get(colName) : '';
 			};
 
-			var fromRawFirstAuthor = function(rawValue, model) {
+			var fromRawFirstAuthor = function(rawValue) {
 				if ((rawValue) && _.has(rawValue, 'authors') && (_.isArray(rawValue.authors)) && (rawValue.authors.length > 0)) {
 					return rawValue.authors[0].text;
 				}
@@ -113,13 +115,13 @@ define([
 					sortable : false,
 					cell: BackgridUrlCell.extend({
 						router : this.router,
-						toFragment : function(rawValue, model) {
+						toFragment : function(rawValue) {
 							return 'publication/' + rawValue;
 						},
 						title : 'Click to edit'
 					}),
 					formatter : {
-						fromRaw : function(rawValue, model) {
+						fromRaw : function() {
 							return 'Edit';
 						}
 					}
@@ -204,8 +206,8 @@ define([
 					sortable : true,
 					cell : 'string',
 					formatter : {
-						fromRaw : function(rawValue, model) {
-							return (rawValue) ? 'Yes' : 'No'
+						fromRaw : function(rawValue) {
+							return (rawValue) ? 'Yes' : 'No';
 						}
 					}
 				}
@@ -252,11 +254,13 @@ define([
 			// Render the paginator
 			this.$('.pub-grid-footer').append(this.paginator.render().el);
 
-			// Initialize the publication lists select2
+			// Initialize the publication lists select2 and filter
 			this.pubListFetch.then(function() {
+				var pubList = self.publicationListCollection.toJSON();
 				self.$('#pubs-categories-select').select2(_.extend({
-					data : self.publicationListCollection.toJSON()
+					data : pubList
 				}, DEFAULT_SELECT2_OPTIONS));
+				self.$('.pub-filter-list-div').html(pubListTemplate({pubList : pubList}));
 			});
 
 			this.fetchPromise.fail(function(jqXhr) {
@@ -318,7 +322,6 @@ define([
 		},
 
 		clearFilterRows : function(ev) {
-			var self = this;
 			ev.preventDefault();
 			_.each(this.filterRowViews, function(view) {
 				view.remove();
@@ -380,6 +383,15 @@ define([
 						self.alertView.showDangerAlert('Error: Unable to add selected publications to the chosen lists');
 					});
 			}
+		},
+
+		changePubsListFilter : function(ev) {
+			var pubsListFilter = [];
+			this.$('.pub-filter-list-div input:checked').each(function() {
+				pubsListFilter.push($(this).val());
+			});
+			this.filterModel.set('listId', pubsListFilter);
+			this.filterPubs(ev);
 		},
 
 		/*
