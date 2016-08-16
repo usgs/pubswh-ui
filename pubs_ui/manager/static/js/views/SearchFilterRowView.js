@@ -50,13 +50,14 @@ define([
 				text : 'Publication Type',
 				inputType : 'select',
 				select2Init : function(context) {
+					var $select = context.$('.value-select-input');
 					context.pubTypeFetch.done(function() {
-						context.$('.value-select-input').select2(_.extend({
+						$select.select2(_.extend({
 							data : context.publicationTypeCollection.toJSON()
 						}, DEFAULT_SELECT2_OPTIONS));
 						if (context.model.has('typeName') && (context.model.attributes.typeName)) {
 							var selections = context.model.get('typeName').selections;
-							context.$('.value-select-input').val(_.pluck(selections, 'id')).trigger('change');
+							$select.val(_.pluck(selections, 'id')).trigger('change');
 						}
 					});
 				}

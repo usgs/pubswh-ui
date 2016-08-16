@@ -14,29 +14,30 @@ define([
 		var SearchFilterRowView, testView, testModel;
 		var fetchPubTypeSpy, fetchPubTypeDeferred;
 		var injector;
+		var $testDiv;
 
 		beforeEach(function (done) {
 			injector = new Squire();
 
 			$('body').append('<div id="test-div"></div>');
+			$testDiv = $('#test-div');
 			testModel = new Backbone.Model();
 
 			fetchPubTypeDeferred = $.Deferred();
 			fetchPubTypeSpy = jasmine.createSpy('fetchPubTypeSpy').and.returnValue(fetchPubTypeDeferred);
 
 			injector.mock('models/PublicationTypeCollection', Backbone.Collection.extend({
-				fetch: fetchPubTypeSpy
+				fetch: fetchPubTypeSpy,
+				toJSON : function() {
+					return [{id : 1, text : 'Type1'}, {id : 2, text : 'Type2'}, {id : 3, text : 'Type3'}];
+				}
 			}));
 
-			spyOn($.fn, 'select2');
+			spyOn($.fn, 'select2').and.callThrough();
 			injector.mock('jquery', $); // Needed to spy on select2 initialization.
 
 			injector.require(['views/SearchFilterRowView'], function (view) {
 				SearchFilterRowView = view;
-				testView = new SearchFilterRowView({
-					el: '#test-div',
-					model: testModel
-				});
 				done();
 			});
 
@@ -44,16 +45,28 @@ define([
 
 		afterEach(function () {
 			injector.remove();
-			testView.remove();
-			$('#test-div').remove();
+			if (testView) {
+				testView.remove();
+			}
+			$testDiv.remove();
 		});
 
 		it('Expect the publication type collection  to be fetched at initialization', function () {
+			testView = new SearchFilterRowView({
+					el: '#test-div',
+					model: testModel
+				});
 			expect(fetchPubTypeSpy).toHaveBeenCalled();
 		});
 
+
 		describe('Tests for render', function () {
+
 			it('Expects that if the model has some filter categories set, those category options will be disabled', function () {
+				testView = new SearchFilterRowView({
+					el: '#test-div',
+					model: testModel
+				});
 				testModel.set({
 					prodId: '1234',
 					subtypeName: 'Subtype 1'
@@ -69,10 +82,57 @@ define([
 				expect(testView.$('.search-category-input option[value="seriesName"]').is(':disabled')).toBe(false);
 				expect(testView.$('.search-category-input option[value="year"]').is(':disabled')).toBe(false);
 			});
+
+			it('Expects that if the initialCategory is set to an inputType of text, the select text field is initialized', function() {
+				testView = new SearchFilterRowView({
+					el: '#test-div',
+					model: testModel,
+					initialCategory : 'year'
+				});
+				testModel.set('year', '2015');
+				testView.render();
+
+				expect($testDiv.find('.value-text-input').val()).toEqual('2015');
+			});
+
+			it('Expects that if the initialCategory is typeName, the select2 is initialized after the publicationTypeCollection has been fetched', function() {
+				testView = new SearchFilterRowView({
+					el: '#test-div',
+					model: testModel,
+					initialCategory : 'typeName'
+				});
+				testModel.set('typeName', {
+					useId : false,
+					selections : [{id : 1, text : 'Type1'}, {id : 2, text : 'Type2'}]
+				});
+				testView.render();
+				fetchPubTypeDeferred.resolve();
+
+				expect($testDiv.find('.value-select-input').val()).toEqual(['1', '2']);
+			});
+
+			it('Expects that if the initialCategory is subtypeName, the select2 is initialized', function() {
+				testView = new SearchFilterRowView({
+					el: '#test-div',
+					model: testModel,
+					initialCategory : 'subtypeName'
+				});
+				testModel.set('subtypeName', {
+					useId : false,
+					selections : [{id : 1, text : 'Subtype1'}, {id : 2, text : 'Subtype2'}]
+				});
+				testView.render();
+
+				expect($testDiv.find('.value-select-input').val()).toEqual(['1', '2']);
+			});
 		});
 
 		describe('Tests for remove', function () {
 			it('Expects that if the category has been set for the row that the correpsonding model property is cleared', function () {
+				testView = new SearchFilterRowView({
+					el: '#test-div',
+					model: testModel
+				});
 				testView.render();
 				testView.$('.search-category-input').val('prodId').trigger('change');
 				testView.$('.value-text-input').val('1234').trigger('change');
@@ -86,6 +146,10 @@ define([
 
 		describe('Tests for model event handlers', function () {
 			beforeEach(function () {
+				testView = new SearchFilterRowView({
+					el: '#test-div',
+					model: testModel
+				});
 				testView.render();
 			});
 
@@ -107,6 +171,10 @@ define([
 
 		describe('Tests for DOM event handlers', function() {
 			beforeEach(function() {
+				testView = new SearchFilterRowView({
+					el: '#test-div',
+					model: testModel
+				});
 				testView.render();
 			});
 
@@ -163,7 +231,6 @@ define([
 			it('Expect that if the text or selected value changes the selected category value is updated in the model', function() {
 				var $categorySelect = testView.$('.search-category-input');
 				var $textInput = testView.$('.value-text-input');
-				var $selectInput = testView.$('.value-select-input');
 
 				$categorySelect.val('prodId').trigger('change');
 				$textInput.val('1234').trigger('change');
@@ -171,14 +238,6 @@ define([
 
 				$textInput.val('4567').trigger('change');
 				expect(testModel.get('prodId')).toEqual('4567');
-
-				$categorySelect.val('subtypeName').trigger('change');
-				// Have to add the options to the DOM
-				$selectInput.append('<option id="1">Subtype 1</option><option id="2">Subtype 2</option>');
-				$selectInput.val('Subtype 1').trigger('change');
-				expect(testModel.get('subtypeName')).toEqual(['Subtype 1']);
-				$selectInput.val(['Subtype 1', 'Subtype 2']).trigger('change');
-				expect(testModel.get('subtypeName')).toEqual(['Subtype 1', 'Subtype 2']);
 			});
 		});
 	});
