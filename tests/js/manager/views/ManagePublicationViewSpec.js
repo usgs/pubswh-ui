@@ -48,8 +48,6 @@ define([
 			$('body').append('<div id="test-div"></div>');
 			$testDiv = $('#test-div');
 
-			spyOn(sessionStorage, 'searchFilters');
-
 			setElAlertSpy = jasmine.createSpy('setElAlertSpy');
 			renderAlertSpy = jasmine.createSpy('renderAlertSpy');
 			removeAlertSpy = jasmine.createSpy('removeAlertSpy');

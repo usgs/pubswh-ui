@@ -125,6 +125,21 @@ define([
 
 				expect($testDiv.find('.value-select-input').val()).toEqual(['1', '2']);
 			});
+
+			it('Expects that if the initialCategory is seriesName, the select2 is initialized', function() {
+				testView = new SearchFilterRowView({
+					el: '#test-div',
+					model: testModel,
+					initialCategory : 'seriesName'
+				});
+				testModel.set('seriesName', {
+					useId : false,
+					selections : [{id : 1, text : 'Series1'}, {id : 2, text : 'Series2'}]
+				});
+				testView.render();
+
+				expect($testDiv.find('.value-select-input').val()).toEqual(['1', '2']);
+			});
 		});
 
 		describe('Tests for remove', function () {
