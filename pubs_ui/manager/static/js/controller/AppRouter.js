@@ -3,7 +3,6 @@
 
 define([
 	'jquery',
-	'underscore',
 	'backbone',
 	'views/ManagePublicationsView',
 	'views/PublicationView',
@@ -13,7 +12,7 @@ define([
 	'models/PublicationCollection',
 	'models/ContributorModel',
 	'models/SeriesTitleModel'
-], function ($, _, Backbone,
+], function ($, Backbone,
 			 ManagePublicationsView, PublicationView, EditContributorView, EditSeriesTitleView,
 			 PublicationModel, PublicationCollection, ContributorModel, SeriesTitleModel) {
 	"use strict";
@@ -22,7 +21,6 @@ define([
 		routes: {
 			'': 'managePublicationsView',
 			'search' : 'managePublicationsView',
-			//'search?*queryString': 'managePublicationsView',
 			'publication' : 'publicationView',
 			'publication/:pubId' : 'publicationView',
 			'contributor' : 'editContributorView',
