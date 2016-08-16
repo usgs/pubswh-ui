@@ -5,7 +5,6 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'utils/deserializeQueryString',
 	'views/ManagePublicationsView',
 	'views/PublicationView',
 	'views/EditContributorView',
@@ -14,7 +13,7 @@ define([
 	'models/PublicationCollection',
 	'models/ContributorModel',
 	'models/SeriesTitleModel'
-], function ($, _, Backbone, deserializeQueryString,
+], function ($, _, Backbone,
 			 ManagePublicationsView, PublicationView, EditContributorView, EditSeriesTitleView,
 			 PublicationModel, PublicationCollection, ContributorModel, SeriesTitleModel) {
 	"use strict";
@@ -62,7 +61,6 @@ define([
 		},
 
 		managePublicationsView: function () {
-			//var queryParams = (queryString) ? deserializeQueryString(decodeURIComponent(queryString)) : [];
 			var searchFilters = (sessionStorage.searchFilters) ? JSON.parse(sessionStorage.searchFilters) : {};
 			var collection = new PublicationCollection();
 			var filterModel = new Backbone.Model(searchFilters);
