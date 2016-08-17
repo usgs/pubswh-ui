@@ -18,7 +18,8 @@ define([
 
 		bindings : {
 			'#cost-center-input' : 'costCenter',
-			'#affiliation-input' : 'outsideAffiliation'
+			'#affiliation-input' : 'affiliationName',
+			'#affiliation-active-input' : 'active'
 		},
 
 		initialize : function(options) {
@@ -33,6 +34,7 @@ define([
 
 		saveAffiliation : function() {
 			var isNew = this.model.isNew();
+			console.log(this.model);
 			this.model.save();
 		}
 	});

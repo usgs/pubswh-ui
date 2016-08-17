@@ -2,13 +2,25 @@
 	<button class="save-affiliation-btn btn btn-default" data-toggle="tooltip" data-placement="top" title="Save Author Affiliation">Save Affiliation</button>
 </div>
 
-<div id="affiliation-div">
-	<div id="add-affiliation-form" class="form-inline">
-		<div id="affiliation-form" class="form-group">
-			<label for="cost-center-input">Cost Center</label>
-			<input id="cost-center-input" type="text">
-			<label for="affiliation-input">New Affiliation</label>
-			<input id="affiliation-input" type="text">
+<div id="affiliation" class="form-horizontal">
+	<div class="form-group" id="affiliation-name-div">
+		<label class="control-label" for="affiliation-input">Affiliation Name</label>
+		<div>
+			<input id="affiliation-input" type="text" class="form-control">
+		</div>
+	</div>
+
+	<div class="form-group" id="cost-center-div">
+		<label class="control-label" for="cost-center-input">USGS Cost Center</label>
+		<div>
+			<input id="cost-center-input" type="checkbox">
+		</div>
+	</div>
+
+	<div class="form-group" id="affiliation-active-div">
+		<label class="control-label" for="affiliation-active-input">Active</label>
+		<div>
+			<input id="affiliation-active-input" type="checkbox">
 		</div>
 	</div>
 </div>

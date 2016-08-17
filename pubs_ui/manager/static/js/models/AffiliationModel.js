@@ -8,11 +8,13 @@ define([
 
 	var model = Backbone.Model.extend({
 
-		urlRoot : module.config().scriptRoot + '/manager/services/outsideaffiliation',
-
+		//urlRoot : module.config().scriptRoot + '/manager/services/outsideaffiliation',
+		urlRoot : 'https://cida-eros-pubsdev.er.usgs.gov:8443/pubs-services/outsideaffiliation',
 		defaults : {
+			id : '',
 			costCenter : '',
-			outsideAffiliation : ''
+			active: '',
+			affiliationName : ''
 		},
 
 		save : function(attributes, options) {
