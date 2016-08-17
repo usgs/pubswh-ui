@@ -11,8 +11,7 @@ define([
 
 		template : hbTemplate,
 
-		initialize : function() {
-			var self = this;
+		initialize : function(options) {
 			console.log(this.model);
 			this.render();
 		},
