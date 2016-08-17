@@ -1,4 +1,5 @@
 /*jslint browser: true */
+/* global define */
 
 define([
 	'jquery',
@@ -11,14 +12,15 @@ define([
 	'models/PublicationCollection',
 	'models/ContributorModel',
 	'models/SeriesTitleModel'
-], function ($, Backbone, ManagePublicationsView, PublicationView, EditContributorView, EditSeriesTitleView,
+], function ($, Backbone,
+			 ManagePublicationsView, PublicationView, EditContributorView, EditSeriesTitleView,
 			 PublicationModel, PublicationCollection, ContributorModel, SeriesTitleModel) {
 	"use strict";
 
 	var appRouter = Backbone.Router.extend({
 		routes: {
 			'': 'managePublicationsView',
-			'search': 'managePublicationsView',
+			'search' : 'managePublicationsView',
 			'publication' : 'publicationView',
 			'publication/:pubId' : 'publicationView',
 			'contributor' : 'editContributorView',
@@ -57,9 +59,13 @@ define([
 		},
 
 		managePublicationsView: function () {
+			var searchFilters = (sessionStorage.searchFilters) ? JSON.parse(sessionStorage.searchFilters) : {};
 			var collection = new PublicationCollection();
+			var filterModel = new Backbone.Model(searchFilters);
+
 			this.createView(ManagePublicationsView, {
-				collection : collection
+				collection : collection,
+				model : filterModel
 			}).render();
 		},
 

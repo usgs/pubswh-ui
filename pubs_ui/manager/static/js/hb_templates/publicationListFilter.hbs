@@ -1,5 +1,5 @@
 <ul class="list-unstyled">
 	{{#each pubList}}
-		<li class="checkbox"><label><input title="{{description}}" type="checkbox" value="{{id}}" />{{text}}</label></li>
+		<li class="checkbox"><label><input {{#if checked}}checked {{/if}}title="{{description}}" type="checkbox" value="{{id}}" />{{text}}</label></li>
 	{{/each}}
 </ul>
