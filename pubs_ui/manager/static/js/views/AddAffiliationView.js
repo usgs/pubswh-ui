@@ -12,7 +12,11 @@ define([
 
 		template : hbTemplate,
 
-		bindings: {
+		events : {
+			'click .save-affiliation-btn' : 'saveAffiliation'
+		},
+
+		bindings : {
 			'#cost-center-input' : 'costCenter',
 			'#affiliation-input' : 'outsideAffiliation'
 		},
@@ -25,6 +29,11 @@ define([
 			var self = this;
 			BaseView.prototype.render.apply(self, arguments);
 			this.stickit();
+		},
+
+		saveAffiliation : function() {
+			var isNew = this.model.isNew();
+			this.model.save();
 		}
 	});
 	return view;
