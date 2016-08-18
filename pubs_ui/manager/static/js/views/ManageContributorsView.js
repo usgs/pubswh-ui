@@ -2,12 +2,11 @@
 /* global define */
 
 define([
-	'jquery',
 	'select2',
 	'utils/DynamicSelect2',
 	'views/BaseView',
 	'hbs!hb_templates/manageContributors'
-], function($, $select2, DynamicSelect2, BaseView, hbTemplate) {
+], function($select2, DynamicSelect2, BaseView, hbTemplate) {
 	"use strict";
 
 	var DEFAULT_SELECT2_OPTIONS = {
@@ -18,18 +17,21 @@ define([
 		template: hbTemplate,
 
 		events: {
-			'select2:select .contributor-type-select': 'selectContributorType'
+			'select2:select .contributor-type-select': 'selectContributorType',
+			'click .create-btn' : 'createContributor'
 		},
 
 		render : function() {
 			BaseView.prototype.render.apply(this, arguments);
-			$(this.$('.contributor-type-select')).select2(DEFAULT_SELECT2_OPTIONS);
-			$(this.$('.person-select-div select')).select2(DynamicSelect2.getSelectOptions({
+			this.$('.contributor-type-select').select2(DEFAULT_SELECT2_OPTIONS);
+			this.$('.person-select-div select').select2(DynamicSelect2.getSelectOptions({
 				lookupType : 'people'
 			}, DEFAULT_SELECT2_OPTIONS));
 			$(this.$('.corporation-select-div select')).select2(DynamicSelect2.getSelectOptions({
 				lookupType : 'corporations'
 			}, DEFAULT_SELECT2_OPTIONS));
+
+			return this;
 		},
 
 		/*
