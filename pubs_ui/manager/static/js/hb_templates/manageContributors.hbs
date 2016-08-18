@@ -1,0 +1,31 @@
+<div class="back-to-search-div"><a class="back-to-search-btn" href=#">Back to Search</a></div>
+<div class="edit-contributor-container panel panel-default">
+	<div class="panel-heading"><h2 class="panel-title">Edit Series Title</h2></div>
+	<div class="panel-body">
+		<div class="alert-container"></div>
+		<div class="loading-indicator"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		<div class="validation-errors"></div>
+		<div class="select-contributor-container">
+			<div class="form-group select-contributor-type">
+				<label> Select contributor type to create or edit</label>
+				<select class="form-control contributor-type-select" data-placeholder="Select kind" style="width:100%">
+					<option></option>
+					<option value="person">Person</option>
+					<option value="corporation">Corporation</option>
+				</select>
+			</div>
+			<div class="select-create-or-edit-container form-inline">
+				<button class="btn btn-primary create-btn" type="button">Create</button>
+				<span>Or</span>
+				<div class="select-contributor-container form-group">
+					<div class="person-select-div">
+						<select class="form-control person-select" data-placeholder="Select person" style="width:100%"></select>
+					</div>
+					<div class="corporation-select-div">
+						<select class="form-control" data-placeholder="Select corporation" style="width:100%"></select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -6,14 +6,14 @@ define([
 	'backbone',
 	'views/ManagePublicationsView',
 	'views/PublicationView',
-	'views/EditContributorView',
+	'views/ManageContributorsView',
 	'views/EditSeriesTitleView',
 	'models/PublicationModel',
 	'models/PublicationCollection',
 	'models/ContributorModel',
 	'models/SeriesTitleModel'
 ], function ($, Backbone,
-			 ManagePublicationsView, PublicationView, EditContributorView, EditSeriesTitleView,
+			 ManagePublicationsView, PublicationView, ManageContributorsView, EditSeriesTitleView,
 			 PublicationModel, PublicationCollection, ContributorModel, SeriesTitleModel) {
 	"use strict";
 
@@ -23,8 +23,8 @@ define([
 			'search' : 'managePublicationsView',
 			'publication' : 'publicationView',
 			'publication/:pubId' : 'publicationView',
-			'contributor' : 'editContributorView',
-			'contributor/:contribId' : 'editContributorView',
+			'contributor' : 'manageContributorsView',
+			'contributor/:contribId' : 'managerContributorsView',
 			'seriesTitle' : 'editSeriesTitleView',
 			'seriesTitle/:seriesTitleId' : 'editSeriesTitleView'
 		},
@@ -80,13 +80,13 @@ define([
 			}).render();
 		},
 
-		editContributorView : function(contribId) {
+		manageContributorsView : function(contribId) {
 			var model = new ContributorModel();
 			if (contribId) {
 				model.set('contributorId', contribId);
 			}
 
-			this.createView(EditContributorView, {
+			this.createView(ManageContributorsView, {
 				model : model
 			}).render();
 		},
