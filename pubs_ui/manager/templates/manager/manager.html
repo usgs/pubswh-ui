@@ -65,6 +65,9 @@
 				'models/PublishingServiceCenterCollection' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
+				'models/AffiliationModel' : {
+					scriptRoot : "{{ request.script_root }}"
+				},
 				'views/ManagePublicationsView' : {
 					oldMyPubsEndpoint : "{{ config.OLD_MYPUBS_ENDPOINT }}",
 					scriptRoot : "{{ request.script_root }}"

@@ -8,17 +8,24 @@ define([
 
 	var model = Backbone.Model.extend({
 
-		//urlRoot : module.config().scriptRoot + '/manager/services/outsideaffiliation',
-		urlRoot : 'https://cida-eros-pubsdev.er.usgs.gov:8443/pubs-services/outsideaffiliation',
-		defaults : {
-			id : '',
-			costCenter : '',
-			active: '',
-			affiliationName : ''
+		/*
+		 * @param {Boolean} isCostCenter - boolean indicating whether affiliation belongs to a cost center
+		 */
+		urlRoot : function(isCostCenter) {
+			var targetUrl;
+			var scriptRoot = module.config().scriptRoot;
+			if (isCostCenter) {
+				targetUrl = scriptRoot + '/manager/services/costcenter';
+			}
+			else {
+				targetUrl = scriptRoot + '/manager/services/outsideaffiliation';
+			}
+			return targetUrl;
 		},
 
-		save : function(attributes, options) {
-			return Backbone.Model.prototype.save.apply(this, arguments);
+		save : function(attributes, options, isCostCenter) {
+			this.urlRoot = this.urlRoot(isCostCenter);
+			return Backbone.Model.prototype.save.apply(this, attributes, options);
 		}
 	});
 	return model;

@@ -1,11 +1,12 @@
 /* jslint browser:true */
 
 define([
+	'jquery',
 	'backbone.stickit',
 	'views/BaseView',
 	'models/AffiliationModel',
 	'hbs!hb_templates/manageAffiliations'
-], function(stickit, BaseView, AffiliationModel, hbTemplate) {
+], function($, stickit, BaseView, AffiliationModel, hbTemplate) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -17,8 +18,8 @@ define([
 		},
 
 		bindings : {
-			'#cost-center-input' : 'costCenter',
-			'#affiliation-input' : 'affiliationName',
+			'#usgs-checkbox-input' : 'usgs',
+			'#affiliation-input' : 'text',
 			'#affiliation-active-input' : 'active'
 		},
 
@@ -32,11 +33,16 @@ define([
 			this.stickit();
 		},
 
+		_isCostCenter : function() {
+			var $costCenterInput = $('#cost-center-input');
+			var isChecked = $costCenterInput.is(':checked');
+			return isChecked;
+		},
+
 		saveAffiliation : function() {
-			var isNew = this.model.isNew();
-			console.log(this.model);
-			this.model.save();
+			var isCostCenter = this._isCostCenter();
+			this.model.save({}, {}, isCostCenter);
 		}
 	});
 	return view;
-})
+});

@@ -28,7 +28,8 @@ define([
 			'contributor/:contribId' : 'editContributorView',
 			'seriesTitle' : 'editSeriesTitleView',
 			'seriesTitle/:seriesTitleId' : 'editSeriesTitleView',
-			'affiliation' : 'addAffiliationView'
+			'affiliation' : 'addAffiliationView',
+			'affiliation/:affiliationId' : 'addAffiliationView'
 		},
 
 		applicationContextDiv: '#main-content',
