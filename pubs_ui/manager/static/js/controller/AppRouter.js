@@ -100,8 +100,11 @@ define([
 			}).render();
 		},
 
-		addAffiliationView : function() {
+		addAffiliationView : function(affiliationId) {
 			var model = new AffiliationModel();
+			if (affiliationId) {
+				model.set('id', affiliationId);
+			}
 			this.createView(AddAffiliationView, {
 				model : model
 			}).render();

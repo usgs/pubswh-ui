@@ -24,13 +24,30 @@ define([
 		},
 
 		initialize : function(options) {
-			this.render();
+			var self = this;
+			BaseView.prototype.initialize.apply(this, arguments);
+			if (this.model.isNew()) {
+				this.fetchPromise = $.Deferred().resolve();
+			}
+			else {
+				var fetchOptions = {
+					success: (function() {
+						alert('Success!');
+					}),
+					error: (function() {
+						//alert('Error!');
+						throw '404 Found';
+					})
+				};
+				this.fetchPromise = this.model.fetch(fetchOptions);
+			}
 		},
 
 		render : function() {
 			var self = this;
 			BaseView.prototype.render.apply(self, arguments);
 			this.stickit();
+			console.log(this.fetchPromise);
 		},
 
 		_isCostCenter : function() {
