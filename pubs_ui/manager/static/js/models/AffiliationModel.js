@@ -27,30 +27,10 @@ define([
 			return targetUrl;
 		},
 
-		parse : function(response, options) {
-			console.log('Using AffiliationModel parse method');
-		},
-
-		fetch : function(options) {
+		fetch : function(options, isCostCenter) {
 			var fetchedModel;
-			var params = {
-				data : {
-					mimetype : 'json'
-				}
-			};
-			if (_.isObject(options)) {
-				_.extend(params, options);
-			}
-			try {
-				this.urlRoot = this._constructUrl(false);
-				fetchedModel = Backbone.Model.prototype.fetch.call(this, params);
-			}
-			catch(err) {
-				console.log('Handling the Error');
-				this.urlRoot = this._constructUrl(true);
-				fetchedModel = Backbone.Model.prototype.fetch.call(this, params);
-			}
-			console.log('Using AffiliationModel fetch method');
+			this.urlRoot = this._constructUrl(isCostCenter);
+			fetchedModel = Backbone.Model.prototype.fetch.call(this, params);
 			return fetchedModel;
 		},
 
