@@ -30,7 +30,7 @@ define([
 		fetch : function(options, isCostCenter) {
 			var fetchedModel;
 			this.urlRoot = this._constructUrl(isCostCenter);
-			fetchedModel = Backbone.Model.prototype.fetch.call(this, params);
+			fetchedModel = Backbone.Model.prototype.fetch.call(this, options);
 			return fetchedModel;
 		},
 

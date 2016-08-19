@@ -29,6 +29,7 @@ define([
 		{'id' : 2, 'text' : 'Outside Affiliation'}
 	];
 	var AFFILIATION_TYPE_DATA = {data : AFFILIATION_TYPE_OPTIONS};
+	var LOADING_INDICATOR_SEL = '.loading-indicator';
 
 	var view = BaseView.extend({
 
@@ -38,7 +39,8 @@ define([
 			'click .save-btn' : 'saveAffiliation',
 			'click .create-btn' : 'showCreateNewAffiliation',
 			'click .cancel-btn' : 'resetFields',
-			'select2:select #edit-affiliation-type-input' : 'enableAffiliationSelect'
+			'select2:select #edit-affiliation-type-input' : 'enableAffiliationSelect',
+			'select2:select #edit-affiliation-input' : 'showEditSelectedAffiliation'
 		},
 
 		bindings : {
@@ -48,7 +50,6 @@ define([
 		},
 
 		initialize : function(options) {
-			var self = this;
 			BaseView.prototype.initialize.apply(this, arguments);
 			if (this.model.isNew()) {
 				this.fetchPromise = $.Deferred().resolve();
@@ -79,17 +80,21 @@ define([
 			this.$(CREATE_OR_EDIT_DIV).removeClass('show').addClass('hidden');
 		},
 
-		enableAffiliationSelect : function(ev) {
-			this.$(AFFILIATION_INPUT_SEL).prop('disabled', false);
+		_isCostCenterSelected : function() {
 			var isCostCenter;
 			var affiliationTypeValue = this.$(AFFILIATION_TYPE_INPUT_SEL).val();
-			console.log(affiliationTypeValue);
-			if (affiliationTypeValue == 1) {
+			if (affiliationTypeValue == 1 ) {
 				isCostCenter = true;
 			}
 			else {
 				isCostCenter = false;
 			}
+			return isCostCenter;
+		},
+
+		enableAffiliationSelect : function(ev) {
+			this.$(AFFILIATION_INPUT_SEL).prop('disabled', false);
+			var isCostCenter = this._isCostCenterSelected();
 			this.affiliationCollection = new AffiliationCollection();
 			this.affiliationCollectionPromise = this.affiliationCollection.fetch({}, isCostCenter);
 			var self = this;
@@ -115,6 +120,28 @@ define([
 				.fail(function() {
 					self.alertView.showDangerAlert('Failed to fetch affiliation');
 				});
+		},
+
+		showEditSelectedAffiliation : function(ev) {
+			var self = this;
+			var isCostCenter = this._isCostCenterSelected();
+			var affiliationId = ev.currentTarget.value;
+			var affiliationText = ev.currentTarget.selectedOptions[0].innerHTML;
+
+			var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
+
+			this.model.set('id', affiliationId);
+			var fetchedModel = this.model.fetch({}, isCostCenter);
+			fetchedModel.done(function() {
+				self.showEditSection();
+				self.router.navigate('affiliation/' + affiliationId);
+			})
+			.fail(function() {
+				self.alertView.showDangerAlert('Failed to fetch affiliation ' + affiliationText);
+			})
+			.always(function() {
+				$loadingIndicator.hide();
+			});
 		},
 
 		_isCostCenter : function() {

@@ -3,21 +3,22 @@
 define([
 	'backbone',
 	'models/AffiliationModel',
+	'models/LookupModel',
 	'module'
-], function(Backbone, AffiliationModel, module) {
+], function(Backbone, AffiliationModel, LookupModel, module) {
 	"use strict";
 
 	var collection = Backbone.Collection.extend({
-		model : AffiliationModel,
+		model : LookupModel,
 		url : null,
 		_setUrl : function(isCostCenter) {
 			var targetUrl;
-			var scriptRoot = module.config().scriptRoot;
+			var lookupUrl = module.config().lookupUrl;
 			if (isCostCenter) {
-				targetUrl = scriptRoot + '/manager/services/costcenter';
+				targetUrl = lookupUrl + 'costcenters';
 			}
 			else {
-				targetUrl = scriptRoot + '/manager/services/outsideaffiliation';
+				targetUrl = lookupUrl + 'outsideaffiliations';
 			}
 			this.url = targetUrl;
 			return targetUrl;
