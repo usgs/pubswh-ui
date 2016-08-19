@@ -18,7 +18,7 @@ define([
 				targetUrl = lookupUrl + 'costcenters';
 			}
 			else {
-				targetUrl = lookupUrl + 'outsideaffiliations';
+				targetUrl = lookupUrl + 'outsideaffiliates';
 			}
 			this.url = targetUrl;
 			return targetUrl;

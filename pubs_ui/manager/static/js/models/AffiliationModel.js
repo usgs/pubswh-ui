@@ -15,6 +15,10 @@ define([
 
 		urlRoot : null,
 
+		defaults : {
+			'active' : false
+		},
+
 		_constructUrl : function(isCostCenter) {
 			var targetUrl;
 			var scriptRoot = module.config().scriptRoot;

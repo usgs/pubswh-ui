@@ -23,6 +23,7 @@ define([
 	var CREATE_OR_EDIT_DIV = '.create-or-edit-div';
 	var AFFILIATION_TYPE_INPUT_SEL = '#edit-affiliation-type-input';
 	var AFFILIATION_INPUT_SEL = '#edit-affiliation-input';
+	var AFFILIATION_COST_CENTER_INPUT = '#cost-center-input'
 	var AFFILIATION_TYPE_OPTIONS = [
 		{'id' : ''},
 		{'id' : 1, 'text' : 'Cost Center'},
@@ -135,6 +136,14 @@ define([
 			fetchedModel.done(function() {
 				self.showEditSection();
 				self.router.navigate('affiliation/' + affiliationId);
+				var $costCenterInput = self.$(AFFILIATION_COST_CENTER_INPUT);
+				if (isCostCenter) {
+					$costCenterInput.prop('checked', true);
+				}
+				else {
+					$costCenterInput.prop('checked', false);
+				}
+				self.$('#cost-center-input-div').prop('hidden', true);
 			})
 			.fail(function() {
 				self.alertView.showDangerAlert('Failed to fetch affiliation ' + affiliationText);
