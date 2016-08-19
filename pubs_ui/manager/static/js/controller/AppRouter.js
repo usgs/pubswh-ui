@@ -24,7 +24,7 @@ define([
 			'publication' : 'publicationView',
 			'publication/:pubId' : 'publicationView',
 			'contributor' : 'manageContributorsView',
-			'contributor/:contribId' : 'managerContributorsView',
+			'contributor/:contribId' : 'manageContributorsView',
 			'seriesTitle' : 'editSeriesTitleView',
 			'seriesTitle/:seriesTitleId' : 'editSeriesTitleView'
 		},

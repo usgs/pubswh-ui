@@ -1,4 +1,5 @@
 /* jslint browser: true */
+/* global define */
 
 define([
 	'backbone',
@@ -9,24 +10,38 @@ define([
 	var model = Backbone.Model.extend({
 		idAttribute : 'contributorId',
 
-		urlRoot : function() {
-			return module.config().scriptRoot + '/manager/services/contributor/';
-		},
+		url : module.config().scriptRoot + '/manager/services/',
 
-		fetch : function(options) {
-			var params = {
-				data : {
-					mimetype : 'json'
-				}
-			};
-			if (_.isObject(options)) {
-				_.extend(params, options);
+		sync : function(method, model, options) {
+			var urlEndpoint;
+			switch(method) {
+				case 'create':
+				case 'update':
+					if (model.has('corporation') && model.get('corporation')) {
+						urlEndpoint = 'corporation';
+					}
+					else if (model.has('usgs') && model.get('usgs')) {
+						urlEndpoint = 'usgscontributor';
+					}
+					else {
+						urlEndpoint = 'outsidecontributor';
+					}
+
+					if (method === 'update') {
+						urlEndpoint += '/' + model.get('contributorId');
+					}
+					break;
+
+				case 'read' :
+					urlEndpoint = 'contributor/' + model.get('contributorId');
+					break;
 			}
-			return Backbone.Model.prototype.fetch.call(this, params);
-		},
+			options.url = model.url + urlEndpoint;
+			return Backbone.sync(method, model, options);
+		}
 
 
 	});
 
 	return model;
-})
+});

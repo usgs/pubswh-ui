@@ -22,16 +22,14 @@ define([
 	 * @constructs
 	 * @param {Object} options
 	 * 		@prop {Jquery selector} el
-	 * 		@prop {PersonModel} model
+	 * 		@prop {ContributorModel} model
 	 */
 	var view = BaseView.extend({
 		template : hbTemplate,
 
 		events : {
-			'select2:select .outside-affiliation-select' : 'selectOutsideAffiliation',
-			'select2:unselect .outside-affiliation-select' : 'unselectOutsideAffliliation',
-			'select2:select .usgs-affiliation-select' : 'selectUsgsAffiliation',
-			'select2:unselect .usgs-affiliation-select' : 'unselectUsgsAffiliation'
+			'select2:select .affiliation-select-div select' : 'selectAffiliation',
+			'select2:unselect .affiliation-select-div select' : 'unselectAffiliation',
 		},
 
 		bindings : {
@@ -61,6 +59,7 @@ define([
 
 			// Add binding to dom for select2
 			this.listenTo(this.model, 'change:affiliation', this.updateAffiliation);
+			this.listenTo(this.model, 'change:usgs', this.toggleAffiliationVisibility);
 		},
 
 		render : function() {
@@ -69,8 +68,9 @@ define([
 
 			this.stickit();
 
+			this.toggleAffiliationVisibility();
 			this.outsideAffiliatesPromise.done(function() {
-				this.$('.outside-affliliation-select').select2(_.extend({
+				self.$('.outside-affiliation-select').select2(_.extend({
 					data: [{
 						text: 'Active',
 						children: self.activeOutsideAffiliates.toJSON()
@@ -81,7 +81,7 @@ define([
 				}, DEFAULT_SELECT2_OPTIONS));
 			});
 			this.costCenterPromise.done(function() {
-				this.$('.outside-affliliation-select').select2(_.extend({
+				self.$('.usgs-affiliation-select').select2(_.extend({
 					data: [{
 						text: 'Active',
 						children: self.activeCostCenters.toJSON()
@@ -103,11 +103,47 @@ define([
 		 */
 
 		updateAffiliation : function() {
+			var $select = (this.model.has('usgs') && this.model.get('usgs')) ? this.$('.usgs-affiliation-select') : this.$('.outside-affiliation-select');
+			var newVal = this.model.has('affiliation') ? this.model.get('affiliation').id : '';
+			$select.val(newVal).trigger('change');
+		},
 
+		toggleAffiliationVisibility : function() {
+			var usgs = this.model.has('usgs') && this.model.get('usgs');
+			var $outsideSelectDiv = this.$('.outside-affiliation-div');
+			var $costCenterSelectDiv = this.$('.usgs-affiliation-div');
+
+			if (usgs) {
+				$outsideSelectDiv.hide();
+				$costCenterSelectDiv.show();
+				$costCenterSelectDiv.find('select').val('').trigger('change');
+			}
+			else {
+				$outsideSelectDiv.show();
+				$costCenterSelectDiv.hide();
+				$outsideSelectDiv.find('select').val('').trigger('change');
+			}
+
+							$costCenterSelectDiv.find('select').val('').trigger('change');
+		},
+
+		/*
+		 * DOM event handlers
+		 */
+
+		selectAffiliation : function(ev) {
+			this.model.set('affiliation', {
+				id : ev.currentTarget.value,
+				text : ev.currentTarget.selectedOptions[0].innerHTML
+			});
+		},
+
+		unselectAffiliation : function() {
+			this.model.unset('affiliation');
 		}
 
 
 	});
 
 	return view;
-})
+});
