@@ -54,6 +54,7 @@ define([
 			'click .clear-advanced-search-btn' : 'clearFilterRows',
 			'click .create-pub-btn' : 'goToEditPubPage',
 			'click .manager-seriestitle-btn' : 'goToSeriesTitlePage',
+			'click .manager-contribs-btn' : 'goToContributorPage',
 			'click .add-to-lists-btn' : 'addSelectedPubsToCategory',
 			'change .pub-filter-list-div input[type="checkbox"]' : 'changePubsListFilter'
 		},
@@ -369,6 +370,11 @@ define([
 		goToSeriesTitlePage : function(ev) {
 			ev.preventDefault();
 			this.router.navigate('seriesTitle', {trigger: true});
+		},
+
+		goToContributorPage : function(ev) {
+			ev.preventDefault();
+			this.router.navigate('contributor', {trigger: true});
 		},
 
 		addSelectedPubsToCategory : function(ev) {

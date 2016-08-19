@@ -8,8 +8,9 @@ define([
 	'views/BaseView',
 	'views/AlertView',
 	'views/EditPersonView',
+	'views/EditCorporationView',
 	'hbs!hb_templates/manageContributors'
-], function(_, $select2, DynamicSelect2, BaseView, AlertView, EditPersonView, hbTemplate) {
+], function(_, $select2, DynamicSelect2, BaseView, AlertView, EditPersonView, EditCorporationView, hbTemplate) {
 	"use strict";
 
 	var DEFAULT_SELECT2_OPTIONS = {
@@ -26,6 +27,7 @@ define([
 		template: hbTemplate,
 
 		events: {
+			'click .back-to-search-btn' : 'goToSearchPage',
 			'select2:select .contributor-type-select': 'selectContributorType',
 			'click .create-btn' : 'createContributor',
 			'select2:select .select-contributor-to-update-container select' : 'editContributor',
@@ -80,9 +82,36 @@ define([
 			return this;
 		},
 
+		remove : function() {
+			this.alertView.remove();
+			if (this.editContributorView) {
+				this.editContributorView.remove();
+			}
+			BaseView.prototype.remove.apply(this, arguments);
+		},
+
+		/*
+		 * Helper function to create an edit contributor view.
+		 */
+		_createContributorView : function() {
+			var EditView = (this.model.has('corporation') && this.model.get('corporation')) ? EditCorporationView : EditPersonView;
+			this.$('.select-contributor-container').hide();
+			this.$('.contributor-button-container').show();
+			this.editContributorView = new EditView({
+				el : '.edit-contributor-container',
+				model : this.model
+			});
+			this.editContributorView.render();
+		},
+
 		/*
 		 * DOM event handlers
 		 */
+
+		goToSearchPage : function(ev) {
+			ev.preventDefault();
+			this.router.navigate('', {trigger: true});
+		},
 
 		selectContributorType : function(ev) {
 			var type = ev.currentTarget.value;
@@ -100,24 +129,6 @@ define([
 					$corpSelectDiv.show();
 					break;
 			}
-		},
-
-		/*
-		 * Helper function to create an edit contributor view.
-		 */
-		_createContributorView : function() {
-			this.$('.select-contributor-container').hide();
-			this.$('.contributor-button-container').show();
-			if (this.model.has('corporation') && this.model.get('corporation')) {
-				console.log('Not yet implemented');
-			}
-			else {
-				this.editContributorView = new EditPersonView({
-					el : '.edit-contributor-container',
-					model : this.model
-				});
-			}
-			this.editContributorView.render();
 		},
 
 		createContributor : function() {
@@ -165,7 +176,7 @@ define([
 					self.router.navigate('contributor/' + self.model.get('contributorId'));
 				})
 				.fail(function(jqXHR) {
-					self.alertView.showDangerAlert('Unable to save contributor.')
+					self.alertView.showDangerAlert('Unable to save contributor.');
 					if ((jqXHR.responseJSON) && (jqXHR.responseJSON.validationErrors)) {
 						$errorDiv.html('<pre>' + JSON.stringify(jqXHR.responseJSON.validationErrors) + '</pre>');
 					}
