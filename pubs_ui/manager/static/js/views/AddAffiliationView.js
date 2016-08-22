@@ -31,6 +31,9 @@ define([
 	];
 	var AFFILIATION_TYPE_DATA = {data : AFFILIATION_TYPE_OPTIONS};
 	var LOADING_INDICATOR_SEL = '.loading-indicator';
+	var ERRORS_SEL = '.validation-errors';
+	var DELETE_BUTTON_SEL = '.delete-btn';
+	var ALERT_CONTAINER_SEL = '.affiliation-alert-container';
 
 	var view = BaseView.extend({
 
@@ -52,27 +55,18 @@ define([
 
 		initialize : function(options) {
 			BaseView.prototype.initialize.apply(this, arguments);
-			if (this.model.isNew()) {
-				this.fetchPromise = $.Deferred().resolve();
-			}
-			else {
-				var fetchOptions = {
-					success: (function() {
-						alert('Success!');
-					}),
-					error: (function() {
-						//alert('Error!');
-						throw '404 Found';
-					})
-				};
-				this.fetchPromise = this.model.fetch(fetchOptions);
-			}
+
+			// Create child views
+			this.alertView = new AlertView({
+				el : ALERT_CONTAINER_SEL
+			});
 		},
 
 		render : function() {
 			var self = this;
 			BaseView.prototype.render.apply(self, arguments);
 			this.stickit();
+			this.alertView.setElement(this.$(ALERT_CONTAINER_SEL));
 			self.$(AFFILIATION_TYPE_INPUT_SEL).select2(AFFILIATION_TYPE_DATA);
 		},
 
@@ -111,15 +105,18 @@ define([
 		},
 
 		showCreateNewAffiliation : function(ev) {
+			this.$(DELETE_BUTTON_SEL).prop('disabled', true);
 			this.showEditSection();
 		},
 
 		resetFields : function(ev) {
 			var self = this;
+			var isCostCenter = this._isCostCenter();
 			var modelId = this.model.get('id');
 			this.model.clear();
+			this.$(AFFILIATION_COST_CENTER_INPUT).prop('checked', false);
 			this.model.set('id', modelId);
-			this.model.fetch()
+			this.model.fetch({}, isCostCenter)
 				.fail(function() {
 					self.alertView.showDangerAlert('Failed to fetch affiliation');
 				});
@@ -148,7 +145,7 @@ define([
 				self.$('#cost-center-input-div').prop('hidden', true);
 			})
 			.fail(function() {
-				self.alertView.showDangerAlert('Failed to fetch affiliation ' + affiliationText);
+				self.alertView.showDangerAlert('Failed to fetch affiliation ' + affiliationText + '.');
 			})
 			.always(function() {
 				$loadingIndicator.hide();
@@ -156,14 +153,35 @@ define([
 		},
 
 		_isCostCenter : function() {
-			var $costCenterInput = $('#cost-center-input');
+			var $costCenterInput = $(AFFILIATION_COST_CENTER_INPUT);
 			var isChecked = $costCenterInput.is(':checked');
 			return isChecked;
 		},
 
 		saveAffiliation : function() {
+			var self = this;
+			var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
+			var $errorDiv = this.$(ERRORS_SEL);
+
 			var isCostCenter = this._isCostCenter();
-			this.model.save({}, {}, isCostCenter);
+			$loadingIndicator.show();
+			$errorDiv.html('');
+			this.model.save({}, {}, isCostCenter)
+				.done(function() {
+					self.alertView.showSuccessAlert('Successfully saved the affiliation.');
+					console.log(self.alertView);
+					self.$(DELETE_BUTTON_SEL).prop('disabled', false);
+					self.router.navigate('affiliation/' + self.model.get('id'));
+				})
+				.fail(function(jqxhr) {
+					self.alertView.showDangerAlert('Unable to save the affiliation.');
+					if ((jqxhr.responseJSON) && (jqxhr.responseJSON.validationErrors)) {
+						$errorDiv.html('<pre>' + JSON.stringify(jqxhr.responseJSON.validationErrors) + '</pre>');
+					}
+				})
+				.always(function() {
+					$loadingIndicator.hide();
+				});
 		}
 	});
 	return view;
