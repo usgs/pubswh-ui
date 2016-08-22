@@ -32,7 +32,9 @@ define([
 			'select2:select .contributor-type-select': 'selectContributorType',
 			'click .create-btn' : 'createContributor',
 			'select2:select .select-contributor-to-update-container select' : 'editContributor',
-			'click .save-btn' : 'saveContributor'
+			'click .save-btn' : 'saveContributor',
+			'click .cancel-btn' : 'restoreSavedValues',
+			'click .create-new-btn' : 'resetContributorView'
 		},
 
 		bindings : {
@@ -179,6 +181,7 @@ define([
 				.always(function() {
 					$loadingIndicator.hide();
 				});
+			this.router.navigate('contributor/' + contributorId);
 		},
 
 		saveContributor : function() {
@@ -202,6 +205,20 @@ define([
 				.always(function() {
 					$loadingIndicator.hide();
 				});
+		},
+
+		restoreSavedValues : function() {
+			var self = this;
+			var modelId = this.model.get('contributorId');
+			this.model.clear();
+			this.model.set('contributorId', modelId);
+			this.model.fetch().fail(function() {
+				self.alertView.showDangerAlert('Failed to fetch contributor');
+			});
+		},
+
+		resetContributorView : function() {
+			this.router.navigate('contributor', {trigger : true});
 		}
 
 
