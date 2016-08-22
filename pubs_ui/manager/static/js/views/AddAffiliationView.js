@@ -43,6 +43,7 @@ define([
 			'click .save-btn' : 'saveAffiliation',
 			'click .create-btn' : 'showCreateNewAffiliation',
 			'click .cancel-btn' : 'resetFields',
+			'click .delete-ok-btn' : 'deleteAffiliation',
 			'select2:select #edit-affiliation-type-input' : 'enableAffiliationSelect',
 			'select2:select #edit-affiliation-input' : 'showEditSelectedAffiliation'
 		},
@@ -73,6 +74,18 @@ define([
 		showEditSection : function() {
 			this.$(EDIT_DIV).removeClass('hidden').addClass('show');
 			this.$(CREATE_OR_EDIT_DIV).removeClass('show').addClass('hidden');
+		},
+
+		hideEditSection : function() {
+			// reset initial affiliation select values
+			this.$(AFFILIATION_TYPE_INPUT_SEL).val('').trigger('change');
+			this.$(AFFILIATION_INPUT_SEL).prop('disabled', true).val('').trigger('change');
+			// hide edit fields
+			this.$(EDIT_DIV).removeClass('show').addClass('hidden');
+			this.$(CREATE_OR_EDIT_DIV).removeClass('hidden').addClass('show');
+
+			this.alertView.closeAlert();
+			this.$(ERRORS_SEL).html('');
 		},
 
 		_isCostCenterSelected : function() {
@@ -158,7 +171,27 @@ define([
 			return isChecked;
 		},
 
-		saveAffiliation : function() {
+		deleteAffiliation : function(ev) {
+			var self = this;
+			var isCostCenter = this._isCostCenter();
+			var affiliationName = this.model.get('text');
+			var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
+			$loadingIndicator.show();
+			this.model.destroy({wait : true})
+				.done(function() {
+					self.router.navigate('affiliation');
+					self.hideEditSection();
+					self.alertView.showSuccessAlert('Successfully deleted affiliation: ' + affiliationName + '.');
+				})
+				.fail(function(jqxhr) {
+					self.alertView.showDangerAlert('Unable to delete affiliation: ' + jqxhr.responseText);
+				})
+				.always(function() {
+					$loadingIndicator.hide();
+				});
+		},
+
+		saveAffiliation : function(ev) {
 			var self = this;
 			var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
 			var $errorDiv = this.$(ERRORS_SEL);
@@ -169,7 +202,6 @@ define([
 			this.model.save({}, {}, isCostCenter)
 				.done(function() {
 					self.alertView.showSuccessAlert('Successfully saved the affiliation.');
-					console.log(self.alertView);
 					self.$(DELETE_BUTTON_SEL).prop('disabled', false);
 					self.router.navigate('affiliation/' + self.model.get('id'));
 				})
