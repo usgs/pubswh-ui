@@ -37,8 +37,9 @@ define([
 				observe : 'validationErrors',
 				updateMethod : 'html',
 				onGet : function(value) {
-					if (value && _.isArray(value) && value.length > 0)
+					if (value && _.isArray(value) && value.length > 0) {
 						return '<pre>' + JSON.stringify(value) + '</pre>';
+					}
 					else {
 						return '';
 					}

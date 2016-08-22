@@ -38,6 +38,12 @@ define([
 			}
 			options.url = model.url + urlEndpoint;
 			return Backbone.sync(method, model, options);
+		},
+
+		save : function(attributes, options) {
+			/* Don't send validationErrors to the server */
+			this.unset('validationErrors');
+			return Backbone.Model.prototype.save.apply(this, arguments);
 		}
 
 
