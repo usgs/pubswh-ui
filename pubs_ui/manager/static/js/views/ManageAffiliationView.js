@@ -48,7 +48,6 @@ define([
 		},
 
 		bindings : {
-			'#usgs-checkbox-input' : 'usgs',
 			'#affiliation-input' : 'text',
 			'#affiliation-active-input' : 'active'
 		},
@@ -67,7 +66,7 @@ define([
 			BaseView.prototype.render.apply(self, arguments);
 			this.stickit();
 			this.alertView.setElement(this.$(ALERT_CONTAINER_SEL));
-			self.$(AFFILIATION_TYPE_INPUT_SEL).select2(AFFILIATION_TYPE_DATA);
+			self.$(AFFILIATION_TYPE_INPUT_SEL).select2(AFFILIATION_TYPE_DATA, DEFAULT_SELECT2_OPTIONS);
 		},
 
 		_isCostCenterSelected : function() {
