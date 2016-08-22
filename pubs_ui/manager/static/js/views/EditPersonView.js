@@ -123,8 +123,6 @@ define([
 				$costCenterSelectDiv.hide();
 				$outsideSelectDiv.find('select').val('').trigger('change');
 			}
-
-							$costCenterSelectDiv.find('select').val('').trigger('change');
 		},
 
 		/*
