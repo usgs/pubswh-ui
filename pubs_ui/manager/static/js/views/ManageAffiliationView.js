@@ -72,16 +72,38 @@ define([
 			self.$(AFFILIATION_TYPE_INPUT_SEL).select2(AFFILIATION_TYPE_DATA);
 		},
 
+		_isCostCenterSelected : function() {
+			var isCostCenter;
+			var affiliationTypeValue = this.$(AFFILIATION_TYPE_INPUT_SEL).val();
+			if (affiliationTypeValue == 1 ) {
+				isCostCenter = true;
+			}
+			else {
+				isCostCenter = false;
+			}
+			return isCostCenter;
+		},
+
+		_costCenterInputControl : function(context) {
+			var isNewModel = context.model.isNew();
+			if (!isNewModel) {
+				context.$('#cost-center-input-div').prop('hidden', true);
+			}
+			else {
+				context.$('#cost-center-input-div').prop('hidden', false);
+			}
+		},
+
+		_isCostCenter : function() {
+			var $costCenterInput = $(AFFILIATION_COST_CENTER_INPUT);
+			var isChecked = $costCenterInput.is(':checked');
+			return isChecked;
+		},
 		showEditSection : function() {
 			this.$(EDIT_DIV).removeClass('hidden').addClass('show');
 			this.$(CREATE_OR_EDIT_DIV).removeClass('show').addClass('hidden');
 			this.$(AFFILIATION_COST_CENTER_INPUT).prop('checked', false);
-			if (!this.model.isNew()) {
-				this.$('#cost-center-input-div').prop('hidden', true);
-			}
-			else {
-				this.$('#cost-center-input-div').prop('hidden', false);
-			}
+			this._costCenterInputControl(this);
 		},
 
 		hideEditSection : function() {
@@ -94,18 +116,6 @@ define([
 
 			this.alertView.closeAlert();
 			this.$(ERRORS_SEL).html('');
-		},
-
-		_isCostCenterSelected : function() {
-			var isCostCenter;
-			var affiliationTypeValue = this.$(AFFILIATION_TYPE_INPUT_SEL).val();
-			if (affiliationTypeValue == 1 ) {
-				isCostCenter = true;
-			}
-			else {
-				isCostCenter = false;
-			}
-			return isCostCenter;
 		},
 
 		enableAffiliationSelect : function(ev) {
@@ -170,12 +180,7 @@ define([
 				else {
 					$costCenterInput.prop('checked', false);
 				}
-				if (!self.model.isNew()) {
-					self.$('#cost-center-input-div').prop('hidden', true);
-				}
-				else {
-					self.$('#cost-center-input-div').prop('hidden', false);
-				}
+				self._costCenterInputControl(self);
 			})
 			.fail(function() {
 				self.alertView.showDangerAlert('Failed to fetch affiliation ' + affiliationText + '.');
@@ -183,12 +188,6 @@ define([
 			.always(function() {
 				$loadingIndicator.hide();
 			});
-		},
-
-		_isCostCenter : function() {
-			var $costCenterInput = $(AFFILIATION_COST_CENTER_INPUT);
-			var isChecked = $costCenterInput.is(':checked');
-			return isChecked;
 		},
 
 		deleteAffiliation : function(ev) {
