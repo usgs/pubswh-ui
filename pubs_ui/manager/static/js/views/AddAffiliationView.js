@@ -44,6 +44,7 @@ define([
 			'click .create-btn' : 'showCreateNewAffiliation',
 			'click .cancel-btn' : 'resetFields',
 			'click .delete-ok-btn' : 'deleteAffiliation',
+			'click .create-new-btn' : 'clearPage',
 			'select2:select #edit-affiliation-type-input' : 'enableAffiliationSelect',
 			'select2:select #edit-affiliation-input' : 'showEditSelectedAffiliation'
 		},
@@ -120,6 +121,12 @@ define([
 		showCreateNewAffiliation : function(ev) {
 			this.$(DELETE_BUTTON_SEL).prop('disabled', true);
 			this.showEditSection();
+		},
+
+		clearPage : function(ev) {
+			this.hideEditSection();
+			this.model.clear();
+			this.router.navigate('affiliation');
 		},
 
 		resetFields : function(ev) {
