@@ -2,17 +2,15 @@
 
 define([
 	'jquery',
-	'underscore',
 	'backbone.stickit',
 	'bootstrap',
 	'utils/DynamicSelect2',
 	'views/BaseView',
 	'views/AlertView',
 	'models/AffiliationModel',
-	'models/AffiliationCollection',
 	'hbs!hb_templates/manageAffiliations'
-], function($, _, stickit, bootstrap, DynamicSelect2, BaseView, AlertView,
-			AffiliationModel, AffiliationCollection, hbTemplate) {
+], function($, stickit, bootstrap, DynamicSelect2, BaseView, AlertView,
+			AffiliationModel, hbTemplate) {
 	"use strict";
 
 	var DEFAULT_SELECT2_OPTIONS = {
