@@ -43,8 +43,8 @@ define([
 			'click .cancel-btn' : 'resetFields',
 			'click .delete-ok-btn' : 'deleteAffiliation',
 			'click .create-new-btn' : 'clearPage',
-			'select2:select #edit-affiliation-type-input' : 'enableAffiliationSelect',
-			'select2:select #edit-affiliation-input' : 'showEditSelectedAffiliation'
+			'change #edit-affiliation-type-input' : 'enableAffiliationSelect',
+			'change #edit-affiliation-input' : 'showEditSelectedAffiliation'
 		},
 
 		bindings : {

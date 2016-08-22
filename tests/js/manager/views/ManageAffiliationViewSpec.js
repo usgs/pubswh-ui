@@ -11,7 +11,7 @@ define([
 ], function($, AffiliationModel, DynamicSelect2, BaseView, ManageAffiliationView) {
 	"use strict";
 
-	describe('views/ManageAffiliationView', function() {
+	fdescribe('views/ManageAffiliationView', function() {
 		var testView;
 		var $testDiv;
 		var testModel;
@@ -30,7 +30,7 @@ define([
 
 		beforeEach(function() {
 			$('body').append('<div id="test-div"></div>')
-			$testDiv = $('test-div');
+			$testDiv = $('#test-div');
 
 			fakeServer = sinon.fakeServer.create();
 
@@ -62,7 +62,7 @@ define([
 			expect(testView.alertView).toBeDefined();
 		});
 
-		fdescribe('Tests for render', function() {
+		describe('Tests for render', function() {
 
 			beforeEach(function() {
 				spyOn($.fn, 'select2').and.callThrough();
@@ -89,7 +89,7 @@ define([
 					{id: 1, text: 'Cost Center'},
 					{id: 2, text: 'Outside Affiliation'}]
 				};
-				expect(affiliationTypeSelect.select2).toHaveBeenCalledWith(expectedData);
+				expect(affiliationTypeSelect.select2).toHaveBeenCalledWith(expectedData, {theme : 'bootstrap'});
 			});
 
 			it('Expects that the affiliation select2 field is disabled upon load', function() {
@@ -97,19 +97,34 @@ define([
 				expect($testDiv.find('#edit-affiliation-input').is(':disabled')).toBe(true);
 			});
 
-			it('Expects that the cost center lookup service is called if the Cost Center type is selected', function() {
+			it('Expects that the initial selection div is visible and the edit div is hidden', function() {
 				testView.render();
-				var affiliationTypeSelect = $testDiv.find('.edit-affiliation-type-input');
-				affiliationTypeSelect.val(1).trigger('select2:select');
+				expect($('.create-or-edit-div').hasClass('show')).toBe(true);
+				expect($('.edit-div').hasClass('hidden')).toBe(true);
+			});
+		});
+
+		describe('Tests for DOM event handlers', function() {
+
+			beforeEach(function() {
+				spyOn(DynamicSelect2, 'getSelectOptions').and.callThrough();
+				testView.render();
+			});
+
+			it('Expects that if an affiliation type is selected, the affiliation edit select will be enabled', function() {
+				$testDiv.find('#edit-affiliation-type-input').val('1').trigger('change');
 				expect($testDiv.find('#edit-affiliation-input').is(':disabled')).toBe(false);
 			});
 
-			it('Expects that the outsideaffiliates lookup service is called if the Outside Affiliation type is selected', function() {
-				testView.render();
-				var affiliationTypeSelect = $testDiv.find('.edit-affiliation-type-input');
-				affiliationTypeSelect.val(2).trigger('select2:select');
-				expect($testDiv.find('#edit-affiliation-input').is(':disabled')).toBe(false);
+			it('Expects that the cost center lookup is used if the Cost Center type is selected', function() {
+				$testDiv.find('#edit-affiliation-type-input').val('1').trigger('change');
+				expect(DynamicSelect2.getSelectOptions).toHaveBeenCalledWith({lookupType : 'costcenters', activeSubgroup : true});
 			});
-		});
+
+			it('Expects that the outside affiliates lookup is used if Outside Affiliates type is selected', function() {
+				$testDiv.find('#edit-affiliation-type-input').val('2').trigger('change');
+				expect(DynamicSelect2.getSelectOptions).toHaveBeenCalledWith({lookupType : 'outsideaffiliates', activeSubgroup : true});
+			});
+		})
 	});
 });

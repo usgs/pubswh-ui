@@ -133,7 +133,7 @@ define([
 			});
 
 			it('Expects that the alert view is also removed', function() {
-				spyOn(testView.alertView, 'remove')
+				spyOn(testView.alertView, 'remove');
 				testView.remove();
 
 				expect(testView.alertView.remove).toHaveBeenCalled();
