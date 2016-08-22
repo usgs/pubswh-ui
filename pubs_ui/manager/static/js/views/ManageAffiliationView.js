@@ -75,6 +75,13 @@ define([
 		showEditSection : function() {
 			this.$(EDIT_DIV).removeClass('hidden').addClass('show');
 			this.$(CREATE_OR_EDIT_DIV).removeClass('show').addClass('hidden');
+			this.$(AFFILIATION_COST_CENTER_INPUT).prop('checked', false);
+			if (!this.model.isNew()) {
+				this.$('#cost-center-input-div').prop('hidden', true);
+			}
+			else {
+				this.$('#cost-center-input-div').prop('hidden', false);
+			}
 		},
 
 		hideEditSection : function() {
@@ -119,6 +126,7 @@ define([
 		},
 
 		showCreateNewAffiliation : function(ev) {
+			this.model.clear();
 			this.$(DELETE_BUTTON_SEL).prop('disabled', true);
 			this.showEditSection();
 		},
@@ -162,7 +170,12 @@ define([
 				else {
 					$costCenterInput.prop('checked', false);
 				}
-				self.$('#cost-center-input-div').prop('hidden', true);
+				if (!self.model.isNew()) {
+					self.$('#cost-center-input-div').prop('hidden', true);
+				}
+				else {
+					self.$('#cost-center-input-div').prop('hidden', false);
+				}
 			})
 			.fail(function() {
 				self.alertView.showDangerAlert('Failed to fetch affiliation ' + affiliationText + '.');
@@ -180,10 +193,11 @@ define([
 
 		deleteAffiliation : function(ev) {
 			var self = this;
-			var isCostCenter = this._isCostCenter();
 			var affiliationName = this.model.get('text');
 			var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
 			$loadingIndicator.show();
+			// do not need to determine if affiliation is a cost center
+			// a fetch needs to occur before a delete happens, so the cost center determination is done then
 			this.model.destroy({wait : true})
 				.done(function() {
 					self.router.navigate('affiliation');
@@ -206,9 +220,10 @@ define([
 			var isCostCenter = this._isCostCenter();
 			$loadingIndicator.show();
 			$errorDiv.html('');
+			var affiliationName = this.model.get('text');
 			this.model.save({}, {}, isCostCenter)
 				.done(function() {
-					self.alertView.showSuccessAlert('Successfully saved the affiliation.');
+					self.alertView.showSuccessAlert('Successfully saved the affiliation: ' + affiliationName + '.');
 					self.$(DELETE_BUTTON_SEL).prop('disabled', false);
 					self.router.navigate('affiliation/' + self.model.get('id'));
 				})
