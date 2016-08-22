@@ -7,14 +7,14 @@ define([
 	'views/PublicationView',
 	'views/EditContributorView',
 	'views/EditSeriesTitleView',
-	'views/AddAffiliationView',
+	'views/ManageAffiliationView',
 	'models/PublicationModel',
 	'models/PublicationCollection',
 	'models/ContributorModel',
 	'models/SeriesTitleModel',
 	'models/AffiliationModel'
 ], function ($, Backbone, ManagePublicationsView, PublicationView, EditContributorView, EditSeriesTitleView,
-			 AddAffiliationView, PublicationModel, PublicationCollection, ContributorModel, SeriesTitleModel,
+			 ManageAffiliationView, PublicationModel, PublicationCollection, ContributorModel, SeriesTitleModel,
 			 AffiliationModel) {
 	"use strict";
 
@@ -28,8 +28,8 @@ define([
 			'contributor/:contribId' : 'editContributorView',
 			'seriesTitle' : 'editSeriesTitleView',
 			'seriesTitle/:seriesTitleId' : 'editSeriesTitleView',
-			'affiliation' : 'addAffiliationView',
-			'affiliation/:affiliationId' : 'addAffiliationView'
+			'affiliation' : 'manageAffiliationView',
+			'affiliation/:affiliationId' : 'manageAffiliationView'
 		},
 
 		applicationContextDiv: '#main-content',
@@ -100,12 +100,12 @@ define([
 			}).render();
 		},
 
-		addAffiliationView : function(affiliationId) {
+		manageAffiliationView : function(affiliationId) {
 			var model = new AffiliationModel();
 			if (affiliationId) {
 				model.set('id', affiliationId);
 			}
-			this.createView(AddAffiliationView, {
+			this.createView(ManageAffiliationView, {
 				model : model
 			}).render();
 		}
