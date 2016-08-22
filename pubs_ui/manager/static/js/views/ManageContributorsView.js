@@ -6,12 +6,13 @@ define([
 	'select2',
 	'backbone.stickit',
 	'utils/DynamicSelect2',
+	'utils/jqueryUtils',
 	'views/BaseView',
 	'views/AlertView',
 	'views/EditPersonView',
 	'views/EditCorporationView',
 	'hbs!hb_templates/manageContributors'
-], function(_, $select2, stickit, DynamicSelect2, BaseView, AlertView, EditPersonView, EditCorporationView, hbTemplate) {
+], function(_, $select2, stickit, DynamicSelect2, $utils, BaseView, AlertView, EditPersonView, EditCorporationView, hbTemplate) {
 	"use strict";
 
 	var DEFAULT_SELECT2_OPTIONS = {
@@ -118,7 +119,7 @@ define([
 			this.$('.select-contributor-container').hide();
 			this.$('.contributor-button-container').show();
 			this.editContributorView = new EditView({
-				el : '.edit-contributor-container',
+				el : $utils.createDivInContainer(this.$('.edit-contributor-container')),
 				model : this.model
 			});
 			this.editContributorView.render();
@@ -172,7 +173,7 @@ define([
 			this.model.fetch()
 				.done(function() {
 					self._createContributorView();
-					self.navigate('contributor/' + contributorId);
+					self.router.navigate('contributor/' + contributorId);
 				})
 				.fail(function(jqXHR) {
 					self.alertView.showDangerAlert('Unable to fetch contributor. ' +
@@ -218,7 +219,14 @@ define([
 		},
 
 		resetContributorView : function() {
-			this.router.navigate('contributor', {trigger : true});
+			this.editContributorView.remove();
+			this.model.clear();
+			this.alertView.closeAlert();
+			this.$('select').val('').trigger('change');
+			this.$('.select-contributor-container').show();
+			this.$('.contributor-button-container').hide();
+
+			this.router.navigate('contributor');
 		}
 
 
