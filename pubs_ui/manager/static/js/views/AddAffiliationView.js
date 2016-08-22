@@ -96,16 +96,18 @@ define([
 		enableAffiliationSelect : function(ev) {
 			this.$(AFFILIATION_INPUT_SEL).prop('disabled', false);
 			var isCostCenter = this._isCostCenterSelected();
-			this.affiliationCollection = new AffiliationCollection();
-			this.affiliationCollectionPromise = this.affiliationCollection.fetch({}, isCostCenter);
-			var self = this;
-			this.affiliationCollectionPromise.done(function() {
-				var affiliationData = self.affiliationCollection.toJSON();
-				var affiliationOptions = _.extend({
-					data : [{id : ''}].concat(affiliationData)
-				});
-				self.$(AFFILIATION_INPUT_SEL).select2(affiliationOptions);
+			var lookupType;
+			if (isCostCenter) {
+				lookupType = 'costcenters';
+			}
+			else {
+				lookupType = 'outsideaffiliates';
+			}
+			var affiliationOptions = DynamicSelect2.getSelectOptions({
+				lookupType : lookupType,
+				activeSubgroup : true
 			});
+			this.$(AFFILIATION_INPUT_SEL).select2(affiliationOptions, DEFAULT_SELECT2_OPTIONS);
 		},
 
 		showCreateNewAffiliation : function(ev) {
