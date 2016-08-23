@@ -21,7 +21,6 @@ define([
 	var CREATE_OR_EDIT_DIV = '.create-or-edit-div';
 	var AFFILIATION_TYPE_INPUT_SEL = '#edit-affiliation-type-input';
 	var AFFILIATION_INPUT_SEL = '#edit-affiliation-input';
-	var AFFILIATION_COST_CENTER_INPUT = '#cost-center-input'
 	var AFFILIATION_TYPE_OPTIONS = [
 		{'id' : ''},
 		{'id' : 1, 'text' : 'Cost Center'},
@@ -32,6 +31,7 @@ define([
 	var ERRORS_SEL = '.validation-errors';
 	var DELETE_BUTTON_SEL = '.delete-btn';
 	var ALERT_CONTAINER_SEL = '.affiliation-alert-container';
+	var CREATE_NEW_AFFILIATION = '.create-btn';
 
 	var view = BaseView.extend({
 
@@ -59,6 +59,8 @@ define([
 			this.alertView = new AlertView({
 				el : ALERT_CONTAINER_SEL
 			});
+			// Cost Center identification attribute
+			this.affiliationIsCostCenter = null;
 		},
 
 		render : function() {
@@ -75,32 +77,18 @@ define([
 			if (affiliationTypeValue == 1 ) {
 				isCostCenter = true;
 			}
-			else {
+			else if (affiliationTypeValue == 2 ) {
 				isCostCenter = false;
+			}
+			else {
+				isCostCenter = null;
 			}
 			return isCostCenter;
 		},
 
-		_costCenterInputControl : function(context) {
-			var isNewModel = context.model.isNew();
-			if (!isNewModel) {
-				context.$('#cost-center-input-div').prop('hidden', true);
-			}
-			else {
-				context.$('#cost-center-input-div').prop('hidden', false);
-			}
-		},
-
-		_isCostCenter : function() {
-			var $costCenterInput = $(AFFILIATION_COST_CENTER_INPUT);
-			var isChecked = $costCenterInput.is(':checked');
-			return isChecked;
-		},
 		showEditSection : function() {
 			this.$(EDIT_DIV).removeClass('hidden').addClass('show');
 			this.$(CREATE_OR_EDIT_DIV).removeClass('show').addClass('hidden');
-			this.$(AFFILIATION_COST_CENTER_INPUT).prop('checked', false);
-			this._costCenterInputControl(this);
 		},
 
 		hideEditSection : function() {
@@ -117,9 +105,10 @@ define([
 
 		enableAffiliationSelect : function(ev) {
 			this.$(AFFILIATION_INPUT_SEL).prop('disabled', false);
-			var isCostCenter = this._isCostCenterSelected();
+			this.$(CREATE_NEW_AFFILIATION).prop('disabled', false);
+			this.affiliationIsCostCenter = this._isCostCenterSelected();
 			var lookupType;
-			if (isCostCenter) {
+			if (this.affiliationIsCostCenter) {
 				lookupType = 'costcenters';
 			}
 			else {
@@ -142,16 +131,16 @@ define([
 			this.hideEditSection();
 			this.model.clear();
 			this.router.navigate('affiliation');
+			this.render();
 		},
 
 		resetFields : function(ev) {
 			var self = this;
-			var isCostCenter = this._isCostCenter();
+			this.affiliationIsCostCenter = this._isCostCenterSelected();
 			var modelId = this.model.get('id');
 			this.model.clear();
-			this.$(AFFILIATION_COST_CENTER_INPUT).prop('checked', false);
 			this.model.set('id', modelId);
-			this.model.fetch({}, isCostCenter)
+			this.model.fetch({}, this.affiliationIsCostCenter)
 				.fail(function() {
 					self.alertView.showDangerAlert('Failed to fetch affiliation');
 				});
@@ -170,14 +159,6 @@ define([
 			fetchedModel.done(function() {
 				self.showEditSection();
 				self.router.navigate('affiliation/' + affiliationId);
-				var $costCenterInput = self.$(AFFILIATION_COST_CENTER_INPUT);
-				if (isCostCenter) {
-					$costCenterInput.prop('checked', true);
-				}
-				else {
-					$costCenterInput.prop('checked', false);
-				}
-				self._costCenterInputControl(self);
 			})
 			.fail(function() {
 				self.alertView.showDangerAlert('Failed to fetch affiliation ' + affiliationText + '.');
@@ -213,11 +194,10 @@ define([
 			var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
 			var $errorDiv = this.$(ERRORS_SEL);
 
-			var isCostCenter = this._isCostCenter();
 			$loadingIndicator.show();
 			$errorDiv.html('');
 			var affiliationName = this.model.get('text');
-			this.model.save({}, {}, isCostCenter)
+			this.model.save({}, {}, this.affiliationIsCostCenter)
 				.done(function() {
 					self.alertView.showSuccessAlert('Successfully saved the affiliation: ' + affiliationName + '.');
 					self.$(DELETE_BUTTON_SEL).prop('disabled', false);

@@ -6,7 +6,7 @@
 		<div class="loading-indicator"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
 		<div class="validation-errors"></div>
 		<div class="create-or-edit-div {{#if id}}hidden{{else}}show{{/if}}">
-			<button class="btn btn-primary create-btn" type="button">Create</button>
+			<button disabled class="btn btn-primary create-btn" type="button">Create</button>
 			<span>Or</span>
 			<div class="edit-select-series-div">
 				<div class="form-group">
@@ -32,12 +32,6 @@
 				<label class="control-label" for="affiliation-active-input">Active</label>
 				<div>
 					<input id="affiliation-active-input" type="checkbox" />
-				</div>
-			</div>
-			<div class="form-group" id="cost-center-input-div">
-				<label class="control-label" for="cost-center-input">Cost Center</label>
-				<div>
-					<input id="cost-center-input" type="checkbox" />
 				</div>
 			</div>
 			<div>
