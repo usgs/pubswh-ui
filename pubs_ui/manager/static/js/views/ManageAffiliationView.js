@@ -5,13 +5,12 @@ define([
 	'underscore',
 	'backbone.stickit',
 	'bootstrap',
-	'utils/DynamicSelect2',
 	'views/BaseView',
 	'views/AlertView',
 	'models/AffiliationModel',
 	'models/CostCenterCollection',
 	'hbs!hb_templates/manageAffiliations'
-], function($, _, stickit, bootstrap, DynamicSelect2, BaseView, AlertView,
+], function($, _, stickit, bootstrap, BaseView, AlertView,
 			AffiliationModel, CostCenterCollection, hbTemplate) {
 	"use strict";
 
@@ -69,7 +68,6 @@ define([
 				this.activeCostCenters.fetch({data : {active : 'y'}}),
 				this.inactiveCostCenters.fetch({data : {active : 'n'}})
 			);
-			this.costCenterData = null;
 		},
 
 		render : function() {
@@ -129,7 +127,6 @@ define([
 							children : self.inactiveCostCenters.toJSON()
 						}]
 					}, DEFAULT_SELECT2_OPTIONS));
-					console.log(self.inactiveCostCenters.toJSON());
 				});
 			}
 			else {
@@ -146,7 +143,7 @@ define([
 		clearPage : function(ev) {
 			this.hideEditSection();
 			this.model.clear();
-			this.router.navigate('affiliation');
+			this.router.navigate('affiliation', {trigger : true});
 			this.render();
 		},
 

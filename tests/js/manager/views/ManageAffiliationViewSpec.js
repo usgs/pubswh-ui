@@ -3,12 +3,12 @@
 /* global describe, beforeEach, afterEach, it, expect, jasmine, spyOn, sinon */
 
 define([
+	'squire',
 	'jquery',
 	'models/AffiliationModel',
-	'utils/DynamicSelect2',
 	'views/BaseView',
 	'views/ManageAffiliationView'
-], function($, AffiliationModel, DynamicSelect2, BaseView, ManageAffiliationView) {
+], function(Squire, $, AffiliationModel, BaseView, ManageAffiliationView) {
 	"use strict";
 
 	fdescribe('views/ManageAffiliationView', function() {
@@ -116,7 +116,6 @@ define([
 		describe('Tests for DOM event handlers', function() {
 
 			beforeEach(function() {
-				spyOn(DynamicSelect2, 'getSelectOptions').and.callThrough();
 				testView.render();
 			});
 
@@ -158,7 +157,6 @@ define([
 
 				it('Expects that the affiliation submission form is shown when an affiliation is selected', function () {
 					var $editDiv = $testDiv.find('.edit-div');
-					console.log($editDiv);
 					expect($editDiv.hasClass('show')).toBe(true);
 				});
 			});
