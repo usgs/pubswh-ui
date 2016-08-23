@@ -1,4 +1,5 @@
 /* jslint browser: true */
+/* global define */
 
 define([
 	'underscore',
@@ -31,7 +32,7 @@ define([
 				data : function(params) {
 					var result = {
 						mimetype : 'json'
-					}
+					};
 					if (options.parentId) {
 						result[options.parentId] = options.getParentId();
 					}
@@ -81,21 +82,21 @@ define([
 					results.results[1].children = resp[1][0].slice(0, 30);
 				}
 				return results;
-			}
+			};
 		}
 
 		else {
 			result.ajax.processResults = function(resp) {
 				return {
 					results : resp
-				}
-			}
+				};
+			};
 		}
 
 		return _.extend(result, (defaults) ? defaults : {});
-	}
+	};
 
 	return {
 		getSelectOptions : getSelectOptions
-	}
-})
+	};
+});
