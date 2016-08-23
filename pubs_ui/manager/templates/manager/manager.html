@@ -44,6 +44,9 @@
 				'models/SeriesTitleModel' : {
 					scriptRoot : "{{ request.script_root }}"
 				},
+				'models/ContributorModel' : {
+					scriptRoot : "{{ request.script_root }}"
+				},
 				'models/PublicationTypeCollection' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
@@ -51,10 +54,10 @@
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
 				'models/LinkTypeCollection': {
-					lookupUrl : "{{  config.LOOKUP_URL }}"
+					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
 				'models/LinkFileTypeCollection': {
-					lookupUrl : "{{  config.LOOKUP_URL }}"
+					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
 				'models/CostCenterCollection' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
@@ -63,6 +66,9 @@
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
 				'models/PublishingServiceCenterCollection' : {
+					lookupUrl : "{{ config.LOOKUP_URL }}"
+				},
+				'models/OutsideAffiliationLookupCollection' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
 				},
 				'views/ManagePublicationsView' : {
