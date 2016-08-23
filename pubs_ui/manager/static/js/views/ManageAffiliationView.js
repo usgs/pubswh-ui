@@ -2,15 +2,17 @@
 
 define([
 	'jquery',
+	'underscore',
 	'backbone.stickit',
 	'bootstrap',
 	'utils/DynamicSelect2',
 	'views/BaseView',
 	'views/AlertView',
 	'models/AffiliationModel',
+	'models/CostCenterCollection',
 	'hbs!hb_templates/manageAffiliations'
-], function($, stickit, bootstrap, DynamicSelect2, BaseView, AlertView,
-			AffiliationModel, hbTemplate) {
+], function($, _, stickit, bootstrap, DynamicSelect2, BaseView, AlertView,
+			AffiliationModel, CostCenterCollection, hbTemplate) {
 	"use strict";
 
 	var DEFAULT_SELECT2_OPTIONS = {
@@ -61,6 +63,13 @@ define([
 			});
 			// Cost Center identification attribute
 			this.affiliationIsCostCenter = null;
+			this.activeCostCenters = new CostCenterCollection();
+			this.inactiveCostCenters = new CostCenterCollection();
+			this.costCenterPromise = $.when(
+				this.activeCostCenters.fetch({data : {active : 'y'}}),
+				this.inactiveCostCenters.fetch({data : {active : 'n'}})
+			);
+			this.costCenterData = null;
 		},
 
 		render : function() {
@@ -104,21 +113,28 @@ define([
 		},
 
 		enableAffiliationSelect : function(ev) {
+			var self = this;
 			this.$(AFFILIATION_INPUT_SEL).prop('disabled', false);
 			this.$(CREATE_NEW_AFFILIATION).prop('disabled', false);
 			this.affiliationIsCostCenter = this._isCostCenterSelected();
-			var lookupType;
+			var selectOptions;
 			if (this.affiliationIsCostCenter) {
-				lookupType = 'costcenters';
+				this.costCenterPromise.done(function() {
+					self.$(AFFILIATION_INPUT_SEL).select2(_.extend({
+						data : [{
+							text : 'Active',
+							children : self.activeCostCenters.toJSON()
+						}, {
+							text : 'Not Active',
+							children : self.inactiveCostCenters.toJSON()
+						}]
+					}, DEFAULT_SELECT2_OPTIONS));
+					console.log(self.inactiveCostCenters.toJSON());
+				});
 			}
 			else {
-				lookupType = 'outsideaffiliates';
+				selectOptions = this.outsideAffiliationData;
 			}
-			var affiliationOptions = DynamicSelect2.getSelectOptions({
-				lookupType : lookupType,
-				activeSubgroup : true
-			});
-			this.$(AFFILIATION_INPUT_SEL).select2(affiliationOptions, DEFAULT_SELECT2_OPTIONS);
 		},
 
 		showCreateNewAffiliation : function(ev) {

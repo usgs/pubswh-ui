@@ -19,9 +19,9 @@ define([
 		var fakeServer;
 
 		var COST_CENTER_RESP = [200, {"Content-type" : "application/json"},
-			'[{"id":10,"text":"California Water Science Center"},' +
-			'{"id":11,"text":"Wisconsin Water Science Center"},' +
-			'{"id":12,"text":"National Earthquake Information Center"}]'];
+			'[{"id":10,"text":"California Water Science Center","active":true},' +
+			'{"id":11,"text":"Wisconsin Water Science Center","active":true},' +
+			'{"id":12,"text":"National Earthquake Information Center","active":true}]'];
 
 		var OUTSIDE_RESP = [200, {"Content-type" : "application/json"},
 			'[{"id":40,"text":"Super Secret Police"},' +
@@ -106,6 +106,11 @@ define([
 				expect($('.create-or-edit-div').hasClass('show')).toBe(true);
 				expect($('.edit-div').hasClass('hidden')).toBe(true);
 			});
+
+			it('Expects that the affiliationIsCostCenter is set to null initially', function() {
+				testView.render();
+				expect(testView.affiliationIsCostCenter).toBe(null);
+			});
 		});
 
 		describe('Tests for DOM event handlers', function() {
@@ -120,37 +125,66 @@ define([
 				expect($testDiv.find('#edit-affiliation-input').is(':disabled')).toBe(false);
 			});
 
-			it('Expects that the cost center lookup is used if the Cost Center type is selected', function() {
+			it('Expects that the cost center lookup is true used if the Cost Center type is selected', function() {
 				$testDiv.find('#edit-affiliation-type-input').val('1').trigger('select2:select');
 				expect(DynamicSelect2.getSelectOptions).toHaveBeenCalledWith({lookupType : 'costcenters', activeSubgroup : true});
+			});
+
+			it('Expects that affiliationIsCostCenter is true if a user selects the cost center type', function() {
+				$testDiv.find('#edit-affiliation-type-input').val('1').trigger('select2:select');
+				expect(testView.affiliationIsCostCenter).toBe(true);
+			});
+
+			it('Expects that affiliationIsCostCenter is false if a user selects the outside affiliation type', function() {
+				$testDiv.find('#edit-affiliation-type-input').val('2').trigger('select2:select');
+				expect(testView.affiliationIsCostCenter).toBe(false);
 			});
 
 			it('Expects that the outside affiliates lookup is used if Outside Affiliates type is selected', function() {
 				$testDiv.find('#edit-affiliation-type-input').val('2').trigger('select2:select');
 				expect(DynamicSelect2.getSelectOptions).toHaveBeenCalledWith({lookupType : 'outsideaffiliates', activeSubgroup : true});
 			});
+
+			describe('Tests for editing an affiliation', function() {
+
+				beforeEach(function() {
+					$testDiv.find('#edit-affiliation-type-input').val('2').trigger('select2:select');
+					fakeServer.respondsWith('/costcenters/', COST_CENTER_RESP);
+					fakeServer.respond();
+					var $affiliationInput = $testDiv.find('#edit-affiliation-input');
+					$affiliationInput.html('<option value="10">California Water Science Center</option>');
+					$affiliationInput.val('10').trigger('select2:select');
+				});
+
+				it('Expects that the affiliation submission form is shown when an affiliation is selected', function () {
+					var $editDiv = $testDiv.find('.edit-div');
+					console.log($editDiv);
+					expect($editDiv.hasClass('show')).toBe(true);
+				});
+			});
 		});
 
-		describe('Tests for editing an existing affiliation', function() {
+		xdescribe('Tests for editing an existing affiliation', function() {
 
 			beforeEach(function() {
 				testView.render();
-				//fakeServer.respondWith("GET", "/costcenters/", COST_CENTER_RESP);
-				//fakeServer.respondWith("GET", "/outsideaffiliates/", OUTSIDE_RESP);
-				//fakeServer.respond();
 			});
 
-			it('Expects that Cost Center input is selected and hidden if editing a Cost Center affiliation', function() {
-				//akeServer.respondWith("GET", "/costcenters/", COST_CENTER_RESP);
+			xit('Expects that Cost Center input is selected and hidden if editing a Cost Center affiliation', function() {
 				$testDiv.find('#edit-affiliation-type-input').val('1').trigger('select2:select');
-				//fakeServer.respond();
-				//console.log(fakeServer.requests);
+				$testDiv.find('#edit-affiliation-input').select2('open');
+				fakeServer.respondWith(/costcenters/, COST_CENTER_RESP);
+				fakeServer.respond();
+				console.log(fakeServer.requests);
 				//$testDiv.find('#edit-affiliation-input').val('10').trigger('select2:select');
 			});
 
-			it('Expects that Cost Center input is not selected and hidden if editing an Outside affiliation', function() {
+			it('Expects the edit form to ')
+
+			xit('Expects that Cost Center input is not selected and hidden if editing an Outside affiliation', function() {
 				$testDiv.find('#edit-affiliation-type-input').val('2').trigger('select2:select');
 			});
+
 		});
 	});
 });
