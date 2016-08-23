@@ -13,7 +13,7 @@ define([
 	"use strict";
 
 	describe('views/EditPersonView', function() {
-		var EditPersonView, testView
+		var EditPersonView, testView;
 		var $testDiv;
 		var testModel;
 
@@ -62,8 +62,8 @@ define([
 				fetch : outsideAffFetchSpy
 			}));
 
-			injector.require(['views/EditPersonView'], function(view){
-				EditPersonView = view;
+			injector.require(['views/EditPersonView'], function(View){
+				EditPersonView = View;
 				testView = new EditPersonView({
 					el : $testDiv,
 					model : testModel
@@ -75,7 +75,7 @@ define([
 		afterEach(function() {
 			injector.remove();
 			testView.remove();
-			$('#test-div').remove();
+			$testDiv.remove();
 		});
 
 		it('Expects the active and not active cost centers to be fetched', function() {

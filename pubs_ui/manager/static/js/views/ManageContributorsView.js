@@ -4,7 +4,6 @@
 define([
 	'underscore',
 	'select2',
-	'backbone.stickit',
 	'utils/DynamicSelect2',
 	'utils/jqueryUtils',
 	'views/BaseView',
@@ -12,7 +11,7 @@ define([
 	'views/EditPersonView',
 	'views/EditCorporationView',
 	'hbs!hb_templates/manageContributors'
-], function(_, $select2, stickit, DynamicSelect2, $utils, BaseView, AlertView, EditPersonView, EditCorporationView, hbTemplate) {
+], function(_, $select2, DynamicSelect2, $utils, BaseView, AlertView, EditPersonView, EditCorporationView, hbTemplate) {
 	"use strict";
 
 	var DEFAULT_SELECT2_OPTIONS = {
@@ -24,6 +23,7 @@ define([
 	 * @param {Object} options
 	 * 		@prop {Jquery selector} el
 	 * 		@prop {ContributorModel} model
+	 * 		@prop {Backbone.Router} router
 	 */
 	var view = BaseView.extend({
 		template: hbTemplate,
@@ -36,21 +36,6 @@ define([
 			'click .save-btn' : 'saveContributor',
 			'click .cancel-btn' : 'restoreSavedValues',
 			'click .create-new-btn' : 'resetContributorView'
-		},
-
-		bindings : {
-			'.validation-errors': {
-				observe: 'validationErrors',
-				updateMethod: 'html',
-				onGet: function (value) {
-					if (value && _.isArray(value) && value.length > 0) {
-						return '<pre>' + JSON.stringify(value) + '</pre>';
-					}
-					else {
-						return '';
-					}
-				}
-			}
 		},
 
 		initialize : function(options) {
@@ -67,8 +52,6 @@ define([
 			var self = this;
 			var $loadingIndicator;
 			BaseView.prototype.render.apply(this, arguments);
-
-			this.stickit();
 
 			// If fetching an existing contributor, create edit view once the contributor has been fetched.
 			if (_.has(this, 'initialFetchPromise')) {
@@ -211,11 +194,14 @@ define([
 		restoreSavedValues : function() {
 			var self = this;
 			var modelId = this.model.get('contributorId');
+
 			this.model.clear();
-			this.model.set('contributorId', modelId);
-			this.model.fetch().fail(function() {
-				self.alertView.showDangerAlert('Failed to fetch contributor');
-			});
+			if (modelId) {
+				this.model.set('contributorId', modelId);
+				this.model.fetch().fail(function () {
+					self.alertView.showDangerAlert('Failed to fetch contributor');
+				});
+			}
 		},
 
 		resetContributorView : function() {
