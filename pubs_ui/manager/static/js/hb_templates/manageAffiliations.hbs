@@ -1,12 +1,12 @@
 <div class="back-to-search-div"><a class="back-to-search-btn" href="#">Back to Search</a></div>
-<div class="edit-contributor-panel panel panel-default">
+<div class="edit-affiliation-panel panel panel-default">
 	<div class="panel-heading"><h2 class="panel-title">Edit Affiliation</h2></div>
 	<div class="panel-body">
 		<div class="alert-container"></div>
 		<div class="loading-indicator"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
 		<div class="validation-errors"></div>
-		<div class="select-contributor-container">
-			<div class="form-group select-contributor-type">
+		<div class="select-affiliation-container">
+			<div class="form-group select-affiliation-type">
 				<label> Select affiliation type to create or edit</label>
 					<select class="form-control" id="edit-affiliation-type-input" data-placeholder="Select affiliation type" style="width:100%">
 				</select>
@@ -14,7 +14,7 @@
 			<div class="select-create-or-edit-container form-inline">
 				<button class="btn btn-primary create-btn" type="button">Create</button>
 				<span>Or</span>
-				<div class="select-contributor-to-update-container form-group">
+				<div class="select-affiliation-to-update-container form-group">
 					<div class="affiliation-select-div">
 						<select id="edit-affiliation-input" class="form-control" data-placeholder="Select affiliation" style="width:100%">
 						</select>
@@ -22,7 +22,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="edit-div {{#if id}}show{{else}}hidden{{/if}}">
+		<div class="edit-div">
 			<div class="form-group">
 				<label class="control-label" for="affiliation-input">Affiliation *</label>
 				<div>

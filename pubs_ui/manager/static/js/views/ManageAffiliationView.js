@@ -22,7 +22,7 @@ define([
 
 	var EDIT_DIV = '.edit-div';
 	var CREATE_OR_EDIT_DIV = '.select-create-or-edit-container';
-	var SELECT_TYPE_DIV = '.select-contributor-type';
+	var SELECT_TYPE_DIV = '.select-affiliation-type';
 	var AFFILIATION_TYPE_INPUT_SEL = '#edit-affiliation-type-input';
 	var AFFILIATION_INPUT_SEL = '#edit-affiliation-input';
 	var AFFILIATION_TYPE_OPTIONS = [
@@ -122,7 +122,7 @@ define([
 
 		enableAffiliationSelect : function(ev) {
 			var self = this;
-			this.$('.select-contributor-type')
+			this.$('.select-affilition-type')
 			this.$(CREATE_EDIT_CONTAINER).show();
 			this.affiliationIsCostCenter = this._isCostCenterSelected();
 			if (this.affiliationIsCostCenter) {

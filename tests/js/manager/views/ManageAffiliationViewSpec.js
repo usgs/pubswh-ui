@@ -1,82 +1,156 @@
 /* jslint browser: true */
 /* global define */
-/* global describe, beforeEach, afterEach, it, expect, jasmine, spyOn, sinon */
+/* global describe, beforeEach, afterEach, it, expect, jasmine, spyOn */
 
 define([
 	'squire',
 	'jquery',
+	'backbone',
+	'underscore',
 	'models/AffiliationModel',
+	'models/LookupModel',
+	'models/CostCenterCollection',
+	'models/OutsideAffiliationLookupCollection',
 	'views/BaseView',
 	'views/ManageAffiliationView'
-], function(Squire, $, AffiliationModel, BaseView, ManageAffiliationView) {
+], function(Squire, $, Backbone, _, AffiliationModel, LookupModel, CostCenterCollection,
+			OutsideAffiliatesCollection, BaseView, ManageAffiliationView) {
 	"use strict";
 
 	fdescribe('views/ManageAffiliationView', function() {
-		var testView;
+		var ManageAffiliationView, testView;
 		var $testDiv;
 		var testModel;
+		var fetchModelDeferred;
+		var saveModelDeferred;
+		var deleteModelDeferred;
 		var testRouter;
-		var fakeServer;
 
-		var COST_CENTER_RESP = [200, {"Content-type" : "application/json"},
-			'[{"id":10,"text":"California Water Science Center","active":true},' +
-			'{"id":11,"text":"Wisconsin Water Science Center","active":true},' +
-			'{"id":12,"text":"National Earthquake Information Center","active":true}]'];
+		var setElementAlertViewSpy, showSuccessAlertSpy, showDangerAlertSpy, closeAlertSpy, removeAlertViewSpy;
 
-		var OUTSIDE_RESP = [200, {"Content-type" : "application/json"},
-			'[{"id":40,"text":"Super Secret Police"},' +
-			'{"id":41,"text":"Pokemon League"},' +
-			'{"id":42,"text":"Tufted Titmouse"}]'];
+		var costCenterFetchSpy, costCenterFetchActiveDeferred, costCenterFetchInactiveDeferred;
+		var outsideAffiliationFetchSpy, outsideAffiliationActiveDeferred, outsideAffiliationInactiveDeferred;
 
-		beforeEach(function() {
+		var injector;
+
+		beforeEach(function(done) {
 			$('body').append('<div id="test-div"></div>')
 			$testDiv = $('#test-div');
-
-			fakeServer = sinon.fakeServer.create();
 
 			spyOn(BaseView.prototype, 'initialize').and.callThrough();
 			spyOn(BaseView.prototype, 'render').and.callThrough();
 
+			costCenterFetchActiveDeferred = $.Deferred();
+			costCenterFetchInactiveDeferred = $.Deferred();
+			costCenterFetchSpy = jasmine.createSpy('costCenterFetchSpy').and.callFake(function(options) {
+				if (options.data.active === 'y') {
+					return costCenterFetchActiveDeferred;
+				}
+				else {
+					return costCenterFetchInactiveDeferred;
+				}
+			});
+
+			outsideAffiliationActiveDeferred = $.Deferred();
+			outsideAffiliationInactiveDeferred = $.Deferred();
+			outsideAffiliationFetchSpy = jasmine.createSpy('outsideAffiliationFetchSpy').and.callFake(function(options) {
+				if (options.data.active === 'y') {
+					return outsideAffiliationActiveDeferred;
+				}
+				else {
+					return outsideAffiliationInactiveDeferred;
+				}
+			});
+
 			testModel = new AffiliationModel();
+			fetchModelDeferred = $.Deferred();
+			saveModelDeferred = $.Deferred();
+			deleteModelDeferred = $.Deferred();
+			spyOn(testModel, 'fetch').and.returnValue(fetchModelDeferred.promise());
+			spyOn(testModel, 'save').and.returnValue(saveModelDeferred.promise());
+			spyOn(testModel, 'destroy').and.returnValue(deleteModelDeferred.promise());
+
+			setElementAlertViewSpy = jasmine.createSpy('setElementAlertViewSpy');
+			showSuccessAlertSpy = jasmine.createSpy('showSuccessAlertSpy');
+			showDangerAlertSpy = jasmine.createSpy('showDangerAlertSpy');
+			closeAlertSpy = jasmine.createSpy('closeAlertSpy');
+			removeAlertViewSpy = jasmine.createSpy('removeAlertViewSpy');
+
 			testRouter = jasmine.createSpyObj('testRouterSpy', ['navigate']);
-			testView = new ManageAffiliationView({
-				el : $testDiv,
-				model : testModel,
-				router : testRouter
+
+			injector = new Squire();
+			injector.mock('jquery', $);
+			injector.mock('views/AlertView', Backbone.View.extend({
+				setElement : setElementAlertViewSpy,
+				showSuccessAlert : showSuccessAlertSpy,
+				showDangerAlert : showDangerAlertSpy,
+				closeAlert : closeAlertSpy,
+				remove : removeAlertViewSpy
+			}));
+			injector.mock('models/CostCenterCollection', Backbone.Collection.extend({
+				model : LookupModel,
+				url : '/test/lookup',
+				fetch : costCenterFetchSpy
+			}));
+			injector.mock('models/OutsideAffiliationLookupCollection', Backbone.Collection.extend({
+				model : LookupModel,
+				url : '/test/lookup',
+				fetch : outsideAffiliationFetchSpy
+			}));
+
+			injector.require(['views/ManageAffiliationView'], function(View) {
+				ManageAffiliationView = View;
+				testView = new ManageAffiliationView({
+					el : $testDiv,
+					model : testModel,
+					router : testRouter
+				});
+				done();
 			});
 		});
 
 		afterEach(function() {
+			injector.remove();
 			if (testView) {
 				testView.remove();
 			}
 			$testDiv.remove();
-			fakeServer.restore();
-		});
-
-		it('Expects BaseView initialize to be called', function() {
-			expect(BaseView.prototype.initialize).toHaveBeenCalled();
 		});
 
 		it('Expects that the alertView has been created', function() {
-			expect(testView.alertView).toBeDefined();
+			expect(setElementAlertViewSpy).toHaveBeenCalled();
+		});
+
+		it('Expects active and inactive cost centers to fetched', function() {
+			expect(costCenterFetchSpy.calls.count()).toBe(2);
+			var activeCostCenters = _.find(costCenterFetchSpy.calls.allArgs(), function(arg) {
+				return arg[0].data.active === 'y';
+			});
+			expect(activeCostCenters).toBeDefined();
+			var inactiveCostCenters = _.find(costCenterFetchSpy.calls.allArgs(), function(arg) {
+				return arg[0].data.active === 'n';
+			});
+			expect(inactiveCostCenters).toBeDefined();
+		});
+
+		it('Expects active and inactive outside affiliates to be fetched', function() {
+			expect(outsideAffiliationFetchSpy.calls.count()).toBe(2);
+			var activeAffiliates = _.find(outsideAffiliationFetchSpy.calls.allArgs(), function(arg) {
+				return arg[0].data.active === 'y';
+			});
+			expect(activeAffiliates).toBeDefined();
+			var inactiveAffiliates = _.find(outsideAffiliationFetchSpy.calls.allArgs(), function(arg) {
+				return arg[0].data.active === 'n';
+			});
+			expect(inactiveAffiliates).toBeDefined();
 		});
 
 		describe('Tests for render', function() {
 
 			beforeEach(function() {
 				spyOn($.fn, 'select2').and.callThrough();
-				fakeServer.respondWith("GET", "/costcenters", COST_CENTER_RESP);
-				fakeServer.respondWith("GET", "/outsideaffiliates", OUTSIDE_RESP);
-			});
-
-			afterEach(function() {
-				fakeServer.restore();
-			});
-
-			it('Expects that BaseView render is called', function() {
-				testView.render();
-				expect(BaseView.prototype.render).toHaveBeenCalled();
+				testView.activeCostCenters.set([{id : 23, text : 'Cost Center 1'}, {id : 24, text : 'Cost Center 2'}]);
+				testView.activeOutsideAffiliates.set([{id : 41, text : 'Super Secret Police'}, {id : 42, text : 'Fellowship of Strangers'}]);
 			});
 
 			it('Expects a drop with affiliation types is populated', function() {
@@ -93,96 +167,149 @@ define([
 					{id: 1, text: 'Cost Center'},
 					{id: 2, text: 'Outside Affiliation'}]
 				};
-				expect(affiliationTypeSelect.select2).toHaveBeenCalledWith(expectedData, {theme : 'bootstrap'});
-			});
-
-			it('Expects that the affiliation select2 field is disabled upon load', function() {
-				testView.render();
-				expect($testDiv.find('#edit-affiliation-input').is(':disabled')).toBe(true);
-			});
-
-			it('Expects that the initial selection div is visible and the edit div is hidden', function() {
-				testView.render();
-				expect($('.create-or-edit-div').hasClass('show')).toBe(true);
-				expect($('.edit-div').hasClass('hidden')).toBe(true);
+				expect(affiliationTypeSelect.select2).toHaveBeenCalledWith(expectedData, {theme : 'bootstrap', allowClear: true});
 			});
 
 			it('Expects that the affiliationIsCostCenter is set to null initially', function() {
 				testView.render();
 				expect(testView.affiliationIsCostCenter).toBe(null);
 			});
-		});
 
-		describe('Tests for DOM event handlers', function() {
+			describe('Test for DOM event handlers', function() {
 
-			beforeEach(function() {
-				testView.render();
+				beforeEach(function() {
+					testView.render();
+				});
+
+				it('Expects that if an affiliation type is selected, the affiliation edit select will be enabled', function() {
+					$testDiv.find('#edit-affiliation-type-input').val('1').trigger('select2:select');
+					expect($testDiv.find('#edit-affiliation-input').is(':disabled')).toBe(false);
+				});
+
+				it('Expects that affiliationIsCostCenter is true if a user selects the cost center type', function() {
+					$testDiv.find('#edit-affiliation-type-input').val('1').trigger('select2:select');
+					expect(testView.affiliationIsCostCenter).toBe(true);
+				});
+
+				it('Expects that affiliationIsCostCenter is false if a user selects the outside affiliation type', function() {
+					$testDiv.find('#edit-affiliation-type-input').val('2').trigger('select2:select');
+					expect(testView.affiliationIsCostCenter).toBe(false);
+				});
+
+				it('Expects the affiliation selector and create button are shown if a cost center is selected', function() {
+					$testDiv.find('#edit-affiliation-type-input').val('1').trigger('select2:select');
+					var $containerCreateEdit = $testDiv.find('.select-create-or-edit-container');
+					expect($containerCreateEdit.is(':visible')).toBe(true);
+				});
+
+				it('Expects the affiliation selector and create buttn are shown if an outside affiliate is selected', function() {
+					$testDiv.find('#edit-affiliation-type-input').val('2').trigger('select2:select');
+					var $containerCreateEdit = $testDiv.find('.select-create-or-edit-container');
+					expect($containerCreateEdit.is(':visible')).toBe(true);
+				});
+
+				it('Expects the cost center values are read if the cost center type is selected', function() {
+					$testDiv.find('#edit-affiliation-type-input').val('1').trigger('select2:select');
+					expect(costCenterFetchSpy).toHaveBeenCalled();
+				});
 			});
 
-			it('Expects that if an affiliation type is selected, the affiliation edit select will be enabled', function() {
-				$testDiv.find('#edit-affiliation-type-input').val('1').trigger('select2:select');
-				expect($testDiv.find('#edit-affiliation-input').is(':disabled')).toBe(false);
-			});
+			describe('Tests for creating a new affiliation', function() {
+				var $saveBtn;
+				var $cancelBtn;
+				var $newAffiliationBtn;
+				var $deleteBtn;
+				var $deleteOkBtn;
 
-			it('Expects that the cost center lookup is true used if the Cost Center type is selected', function() {
-				$testDiv.find('#edit-affiliation-type-input').val('1').trigger('select2:select');
-				expect(DynamicSelect2.getSelectOptions).toHaveBeenCalledWith({lookupType : 'costcenters', activeSubgroup : true});
-			});
+				beforeEach(function() {
+					testView.render();
+					$testDiv.find('.create-btn').trigger('click');
+					$saveBtn = $testDiv.find('.save-btn');
+					$cancelBtn = $testDiv.find('.cancel-btn');
+					$newAffiliationBtn = $testDiv.find('.create-new-btn');
+					$deleteBtn = $testDiv.find('.delete-btn');
+					$deleteOkBtn = $testDiv.find('.delete-ok-btn');
+				});
 
-			it('Expects that affiliationIsCostCenter is true if a user selects the cost center type', function() {
-				$testDiv.find('#edit-affiliation-type-input').val('1').trigger('select2:select');
-				expect(testView.affiliationIsCostCenter).toBe(true);
-			});
+				it('Expects that the delete button is disabled', function() {
+					expect($deleteBtn.is(':disabled')).toEqual(true);
+				});
 
-			it('Expects that affiliationIsCostCenter is false if a user selects the outside affiliation type', function() {
-				$testDiv.find('#edit-affiliation-type-input').val('2').trigger('select2:select');
-				expect(testView.affiliationIsCostCenter).toBe(false);
-			});
+				it('Expects that fields are initially blank', function() {
+					expect($testDiv.find('#affiliation-input').val()).toEqual('');
+					expect($testDiv.find('#affiliation-active-input').is(':checked')).toBe(false);
+				});
 
-			it('Expects that the outside affiliates lookup is used if Outside Affiliates type is selected', function() {
-				$testDiv.find('#edit-affiliation-type-input').val('2').trigger('select2:select');
-				expect(DynamicSelect2.getSelectOptions).toHaveBeenCalledWith({lookupType : 'outsideaffiliates', activeSubgroup : true});
+				it('Expects that a successful save updates the route', function() {
+					$saveBtn.trigger('click');
+					testModel.set('id', 78391);
+					saveModelDeferred.resolve();
+
+					expect(showSuccessAlertSpy).toHaveBeenCalled();
+					expect(testRouter.navigate).toHaveBeenCalledWith('affiliation/78391');
+				});
 			});
 
 			describe('Tests for editing an affiliation', function() {
 
+				var $saveBtn;
+				var $cancelBtn;
+				var $newAffiliationBtn;
+				var $deleteBtn;
+				var $deleteOkBtn;
+
 				beforeEach(function() {
-					$testDiv.find('#edit-affiliation-type-input').val('2').trigger('select2:select');
-					fakeServer.respondsWith('/costcenters/', COST_CENTER_RESP);
-					fakeServer.respond();
-					var $affiliationInput = $testDiv.find('#edit-affiliation-input');
-					$affiliationInput.html('<option value="10">California Water Science Center</option>');
-					$affiliationInput.val('10').trigger('select2:select');
+					testModel.set({
+						text : 'Super Secret Police',
+						id : 41,
+						active : true
+					});
+					testView.render();
+					$testDiv.find('edit-affiliation-input').val('41').trigger('select2:select');
+					$saveBtn = $testDiv.find('.save-btn');
+					$cancelBtn = $testDiv.find('.cancel-btn');
+					$newAffiliationBtn = $testDiv.find('.create-new-btn');
+					$deleteBtn = $testDiv.find('.delete-btn');
+					$deleteOkBtn = $testDiv.find('.delete-ok-btn');
 				});
 
-				it('Expects that the affiliation submission form is shown when an affiliation is selected', function () {
-					var $editDiv = $testDiv.find('.edit-div');
-					expect($editDiv.hasClass('show')).toBe(true);
+				it('Expects that the delete button is enabled', function() {
+					expect($deleteBtn.is(':disabled')).toBe(false);
+				});
+
+				it('Expects that the affiliation and active checkboxes reflect the model', function() {
+					expect($testDiv.find('#affiliation-input').val()).toEqual('Super Secret Police');
+					expect($testDiv.find('#affiliation-active-input').is(':checked')).toEqual(true);
+				});
+
+				it('Expects the model to be updated if a value changes', function() {
+					$testDiv.find('#affiliation-input').val('Super Secret Police 10th Div').trigger('change');
+					$testDiv.find('#affiliation-active-input').attr('checked', false).trigger('change');
+					expect(testModel.get('text')).toEqual('Super Secret Police 10th Div');
+					expect(testModel.get('active')).toBe(false);
+				});
+
+				it('Expects that saving does calls the model save method', function() {
+					$saveBtn.trigger('click');
+					expect(testModel.save).toHaveBeenCalled();
+				});
+
+				it('Expects that clicking the cancel button re-fetches the model', function() {
+					$cancelBtn.trigger('click');
+					expect(testModel.fetch).toHaveBeenCalled();
+				});
+
+				it('Expects that clicking the delete OK button calls the model destroy method', function() {
+					$deleteOkBtn.trigger('click');
+					expect(testModel.destroy).toHaveBeenCalled();
+				});
+
+				it('Expects that the clicking on the edit new affiliation button navigates back to the root affiliation page', function() {
+					$newAffiliationBtn.trigger('click');
+					expect(testRouter.navigate).toHaveBeenCalled();
+					expect(testRouter.navigate.calls.argsFor(0)[0]).toEqual('affiliation');
 				});
 			});
-		});
-
-		xdescribe('Tests for editing an existing affiliation', function() {
-
-			beforeEach(function() {
-				testView.render();
-			});
-
-			xit('Expects that Cost Center input is selected and hidden if editing a Cost Center affiliation', function() {
-				$testDiv.find('#edit-affiliation-type-input').val('1').trigger('select2:select');
-				$testDiv.find('#edit-affiliation-input').select2('open');
-				fakeServer.respondWith(/costcenters/, COST_CENTER_RESP);
-				fakeServer.respond();
-				console.log(fakeServer.requests);
-				//$testDiv.find('#edit-affiliation-input').val('10').trigger('select2:select');
-			});
-
-			it('Expects the edit form to ')
-
-			xit('Expects that Cost Center input is not selected and hidden if editing an Outside affiliation', function() {
-				$testDiv.find('#edit-affiliation-type-input').val('2').trigger('select2:select');
-			});
-
 		});
 	});
 });
