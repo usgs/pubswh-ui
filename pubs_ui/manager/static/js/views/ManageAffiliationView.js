@@ -103,9 +103,9 @@ define([
 		},
 
 		showEditSection : function() {
-			this.$(EDIT_DIV).removeClass('hidden').addClass('show');
-			this.$(CREATE_OR_EDIT_DIV).removeClass('show').addClass('hidden');
-			this.$(SELECT_TYPE_DIV).removeClass('show').addClass('hidden');
+			this.$(EDIT_DIV).show();
+			this.$(CREATE_OR_EDIT_DIV).hide();
+			this.$(SELECT_TYPE_DIV).hide();
 		},
 
 		hideEditSection : function() {
@@ -113,8 +113,8 @@ define([
 			this.$(AFFILIATION_TYPE_INPUT_SEL).val('').trigger('change');
 			this.$(AFFILIATION_INPUT_SEL).prop('disabled', true).val('').trigger('change');
 			// hide edit fields
-			this.$(EDIT_DIV).removeClass('show').addClass('hidden');
-			this.$(CREATE_OR_EDIT_DIV).removeClass('hidden').addClass('show');
+			this.$(EDIT_DIV).hide();
+			this.$(CREATE_OR_EDIT_DIV).show();
 
 			this.alertView.closeAlert();
 			this.$(ERRORS_SEL).html('');
