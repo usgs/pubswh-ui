@@ -122,7 +122,6 @@ define([
 			this.$(AFFILIATION_INPUT_SEL).prop('disabled', false);
 			this.$(CREATE_NEW_AFFILIATION).prop('disabled', false);
 			this.affiliationIsCostCenter = this._isCostCenterSelected();
-			var selectOptions;
 			if (this.affiliationIsCostCenter) {
 				this.costCenterPromise.done(function() {
 					self.$(AFFILIATION_INPUT_SEL).select2(_.extend({
@@ -139,8 +138,14 @@ define([
 			else {
 				this.outsideAffiliatesPromise.done(function() {
 					self.$(AFFILIATION_INPUT_SEL).select2(_.extend({
-						data : []
-					}))
+						data : [{
+							text : 'Active',
+							children : self.activeOutsideAffiliates.toJSON()
+						}, {
+							text : 'Not Active',
+							children : self.inactiveOutsideAffiliates.toJSON()
+						}]
+					}, DEFAULT_SELECT2_OPTIONS));
 				});
 			}
 		},

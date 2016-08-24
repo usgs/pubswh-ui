@@ -12,10 +12,12 @@ define([
 	'models/PublicationModel',
 	'models/PublicationCollection',
 	'models/ContributorModel',
-	'models/SeriesTitleModel'
+	'models/SeriesTitleModel',
+	'models/AffiliationModel'
 ], function ($, Backbone,
 			 ManagePublicationsView, PublicationView, ManageContributorsView, EditSeriesTitleView,
-			 ManageAffiliationView, PublicationModel, PublicationCollection, ContributorModel, SeriesTitleModel) {
+			 ManageAffiliationView, PublicationModel, PublicationCollection, ContributorModel, SeriesTitleModel,
+			 AffiliationModel) {
 	"use strict";
 
 	var appRouter = Backbone.Router.extend({
