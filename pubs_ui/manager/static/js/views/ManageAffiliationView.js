@@ -16,6 +16,7 @@ define([
 	"use strict";
 
 	var DEFAULT_SELECT2_OPTIONS = {
+		allowClear : true,
 		theme : 'bootstrap'
 	};
 
@@ -121,8 +122,6 @@ define([
 
 		enableAffiliationSelect : function(ev) {
 			var self = this;
-			//this.$(AFFILIATION_INPUT_SEL).prop('disabled', false);
-			//this.$(CREATE_NEW_AFFILIATION).prop('disabled', false);
 			this.$('.select-contributor-type')
 			this.$(CREATE_EDIT_CONTAINER).show();
 			this.affiliationIsCostCenter = this._isCostCenterSelected();
@@ -130,6 +129,9 @@ define([
 				this.costCenterPromise.done(function() {
 					self.$(AFFILIATION_INPUT_SEL).select2(_.extend({
 						data : [{
+							children : {id : '',}
+						},
+						{
 							text : 'Active',
 							children : self.activeCostCenters.toJSON()
 						}, {
@@ -143,6 +145,9 @@ define([
 				this.outsideAffiliatesPromise.done(function() {
 					self.$(AFFILIATION_INPUT_SEL).select2(_.extend({
 						data : [{
+							children : {'id' : ''}
+						},
+						{
 							text : 'Active',
 							children : self.activeOutsideAffiliates.toJSON()
 						}, {
@@ -152,6 +157,9 @@ define([
 					}, DEFAULT_SELECT2_OPTIONS));
 				});
 			}
+			$.when(this.costCenterPromise, this.outsideAffiliatesPromise).done(function() {
+				self.$(AFFILIATION_INPUT_SEL).val('').trigger('change');
+			});
 		},
 
 		showCreateNewAffiliation : function(ev) {
