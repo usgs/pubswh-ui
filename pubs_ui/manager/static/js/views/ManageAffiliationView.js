@@ -20,7 +20,8 @@ define([
 	};
 
 	var EDIT_DIV = '.edit-div';
-	var CREATE_OR_EDIT_DIV = '.create-or-edit-div';
+	var CREATE_OR_EDIT_DIV = '.select-create-or-edit-container';
+	var SELECT_TYPE_DIV = '.select-contributor-type';
 	var AFFILIATION_TYPE_INPUT_SEL = '#edit-affiliation-type-input';
 	var AFFILIATION_INPUT_SEL = '#edit-affiliation-input';
 	var AFFILIATION_TYPE_OPTIONS = [
@@ -32,8 +33,8 @@ define([
 	var LOADING_INDICATOR_SEL = '.loading-indicator';
 	var ERRORS_SEL = '.validation-errors';
 	var DELETE_BUTTON_SEL = '.delete-btn';
-	var ALERT_CONTAINER_SEL = '.affiliation-alert-container';
-	var CREATE_NEW_AFFILIATION = '.create-btn';
+	var ALERT_CONTAINER_SEL = '.alert-container';
+	var CREATE_EDIT_CONTAINER = '.select-create-or-edit-container';
 
 	var view = BaseView.extend({
 
@@ -103,6 +104,7 @@ define([
 		showEditSection : function() {
 			this.$(EDIT_DIV).removeClass('hidden').addClass('show');
 			this.$(CREATE_OR_EDIT_DIV).removeClass('show').addClass('hidden');
+			this.$(SELECT_TYPE_DIV).removeClass('show').addClass('hidden');
 		},
 
 		hideEditSection : function() {
@@ -119,8 +121,10 @@ define([
 
 		enableAffiliationSelect : function(ev) {
 			var self = this;
-			this.$(AFFILIATION_INPUT_SEL).prop('disabled', false);
-			this.$(CREATE_NEW_AFFILIATION).prop('disabled', false);
+			//this.$(AFFILIATION_INPUT_SEL).prop('disabled', false);
+			//this.$(CREATE_NEW_AFFILIATION).prop('disabled', false);
+			this.$('.select-contributor-type')
+			this.$(CREATE_EDIT_CONTAINER).show();
 			this.affiliationIsCostCenter = this._isCostCenterSelected();
 			if (this.affiliationIsCostCenter) {
 				this.costCenterPromise.done(function() {
