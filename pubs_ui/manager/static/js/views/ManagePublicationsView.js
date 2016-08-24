@@ -56,7 +56,7 @@ define([
 			'click .manager-seriestitle-btn' : 'goToSeriesTitlePage',
 			'click .manager-contribs-btn' : 'goToContributorPage',
 			'click .add-to-lists-btn' : 'addSelectedPubsToCategory',
-			'change .pub-filter-list-div input[type="checkbox"]' : 'changePubsListFilter'
+			'change .pub-filter-list-div input[type="checkbox"]' : 'changePubsListFilter',
 			'click .manager-affiliation-btn' : 'goToAffiliationManagement',
 		},
 

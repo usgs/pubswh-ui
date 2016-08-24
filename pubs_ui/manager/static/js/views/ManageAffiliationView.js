@@ -9,9 +9,10 @@ define([
 	'views/AlertView',
 	'models/AffiliationModel',
 	'models/CostCenterCollection',
+	'models/OutsideAffiliationLookupCollection',
 	'hbs!hb_templates/manageAffiliations'
 ], function($, _, stickit, bootstrap, BaseView, AlertView,
-			AffiliationModel, CostCenterCollection, hbTemplate) {
+			AffiliationModel, CostCenterCollection, OutsideAffiliationCollection, hbTemplate) {
 	"use strict";
 
 	var DEFAULT_SELECT2_OPTIONS = {
@@ -67,6 +68,12 @@ define([
 			this.costCenterPromise = $.when(
 				this.activeCostCenters.fetch({data : {active : 'y'}}),
 				this.inactiveCostCenters.fetch({data : {active : 'n'}})
+			);
+			this.activeOutsideAffiliates = new OutsideAffiliationCollection();
+			this.inactiveOutsideAffiliates = new OutsideAffiliationCollection();
+			this.outsideAffiliatesPromise = $.when(
+				this.activeOutsideAffiliates.fetch({data : {active : 'y'}}),
+				this.inactiveOutsideAffiliates.fetch({data : {active : 'n'}})
 			);
 		},
 
@@ -130,7 +137,11 @@ define([
 				});
 			}
 			else {
-				selectOptions = this.outsideAffiliationData;
+				this.outsideAffiliatesPromise.done(function() {
+					self.$(AFFILIATION_INPUT_SEL).select2(_.extend({
+						data : []
+					}))
+				});
 			}
 		},
 
