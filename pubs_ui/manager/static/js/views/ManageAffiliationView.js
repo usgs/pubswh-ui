@@ -24,18 +24,15 @@ define([
 	var CREATE_OR_EDIT_DIV = '.select-create-or-edit-container';
 	var SELECT_TYPE_DIV = '.select-affiliation-type';
 	var AFFILIATION_TYPE_INPUT_SEL = '#edit-affiliation-type-input';
-	var AFFILIATION_INPUT_SEL = '#edit-affiliation-input';
-	var AFFILIATION_TYPE_OPTIONS = [
-		{'id' : ''},
-		{'id' : 1, 'text' : 'Cost Center'},
-		{'id' : 2, 'text' : 'Outside Affiliation'}
-	];
-	var AFFILIATION_TYPE_DATA = {data : AFFILIATION_TYPE_OPTIONS};
+	var CC_AFFILIATION_INPUT_SEL = '#cost-center-edit-affiliation-input';
+	var OA_AFFILIATION_INPUT_SEL = '#outside-edit-affiliation-input';
 	var LOADING_INDICATOR_SEL = '.loading-indicator';
 	var ERRORS_SEL = '.validation-errors';
 	var DELETE_BUTTON_SEL = '.delete-btn';
 	var ALERT_CONTAINER_SEL = '.alert-container';
 	var CREATE_EDIT_CONTAINER = '.select-create-or-edit-container';
+	var COST_CENTER_INPUT_DIV = '#cost-center-input-div';
+	var OUTSIDE_AFFILIATION_INPUT_DIV = '#outside-affiliation-input-div';
 
 	var view = BaseView.extend({
 
@@ -48,7 +45,8 @@ define([
 			'click .delete-ok-btn' : 'deleteAffiliation',
 			'click .create-new-btn' : 'clearPage',
 			'select2:select #edit-affiliation-type-input' : 'enableAffiliationSelect',
-			'select2:select #edit-affiliation-input' : 'showEditSelectedAffiliation'
+			'select2:select #cost-center-edit-affiliation-input' : 'showEditSelectedAffiliation',
+			'select2:select #outside-edit-affiliation-input' : 'showEditSelectedAffiliation'
 		},
 
 		bindings : {
@@ -84,7 +82,7 @@ define([
 			BaseView.prototype.render.apply(self, arguments);
 			this.stickit();
 			this.alertView.setElement(this.$(ALERT_CONTAINER_SEL));
-			self.$(AFFILIATION_TYPE_INPUT_SEL).select2(AFFILIATION_TYPE_DATA, DEFAULT_SELECT2_OPTIONS);
+			self.$(AFFILIATION_TYPE_INPUT_SEL).select2({}, DEFAULT_SELECT2_OPTIONS);
 		},
 
 		_isCostCenterSelected : function() {
@@ -109,12 +107,11 @@ define([
 		},
 
 		hideEditSection : function() {
+			this.$(SELECT_TYPE_DIV).show();
 			// reset initial affiliation select values
 			this.$(AFFILIATION_TYPE_INPUT_SEL).val('').trigger('change');
-			this.$(AFFILIATION_INPUT_SEL).prop('disabled', true).val('').trigger('change');
 			// hide edit fields
 			this.$(EDIT_DIV).hide();
-			this.$(CREATE_OR_EDIT_DIV).show();
 
 			this.alertView.closeAlert();
 			this.$(ERRORS_SEL).html('');
@@ -122,12 +119,11 @@ define([
 
 		enableAffiliationSelect : function(ev) {
 			var self = this;
-			this.$('.select-affilition-type')
 			this.$(CREATE_EDIT_CONTAINER).show();
 			this.affiliationIsCostCenter = this._isCostCenterSelected();
 			if (this.affiliationIsCostCenter) {
 				this.costCenterPromise.done(function() {
-					self.$(AFFILIATION_INPUT_SEL).select2(_.extend({
+					self.$(CC_AFFILIATION_INPUT_SEL).select2(_.extend({
 						data : [{
 							text : 'Active',
 							children : self.activeCostCenters.toJSON()
@@ -137,10 +133,16 @@ define([
 						}]
 					}, DEFAULT_SELECT2_OPTIONS));
 				});
+				self.$(CC_AFFILIATION_INPUT_SEL).trigger('change');
+				$.when(this.costCenterPromise).done(function() {
+					self.$(CC_AFFILIATION_INPUT_SEL).val('').trigger('change');
+					self.$(COST_CENTER_INPUT_DIV).show();
+					self.$(OUTSIDE_AFFILIATION_INPUT_DIV).hide();
+				});
 			}
 			else {
 				this.outsideAffiliatesPromise.done(function() {
-					self.$(AFFILIATION_INPUT_SEL).select2(_.extend({
+					self.$(OA_AFFILIATION_INPUT_SEL).select2(_.extend({
 						data : [{
 							text : 'Active',
 							children : self.activeOutsideAffiliates.toJSON()
@@ -150,10 +152,12 @@ define([
 						}]
 					}, DEFAULT_SELECT2_OPTIONS));
 				});
+				$.when(this.outsideAffiliatesPromise).done(function() {
+					self.$(OA_AFFILIATION_INPUT_SEL).val('').trigger('change');
+					self.$(COST_CENTER_INPUT_DIV).hide();
+					self.$(OUTSIDE_AFFILIATION_INPUT_DIV).show();
+				});
 			}
-			$.when(this.costCenterPromise, this.outsideAffiliatesPromise).done(function() {
-				self.$(AFFILIATION_INPUT_SEL).val('').trigger('change');
-			});
 		},
 
 		showCreateNewAffiliation : function(ev) {
@@ -166,7 +170,6 @@ define([
 			this.hideEditSection();
 			this.model.clear();
 			this.router.navigate('affiliation', {trigger : true});
-			this.render();
 		},
 
 		resetFields : function(ev) {
@@ -210,7 +213,7 @@ define([
 			$loadingIndicator.show();
 			// do not need to determine if affiliation is a cost center
 			// a fetch needs to occur before a delete happens, so the cost center determination is done then
-			this.model.destroy({wait : true})
+			this.model.destroy({wait : true}, this.affiliationIsCostCenter)
 				.done(function() {
 					self.router.navigate('affiliation');
 					self.hideEditSection();

@@ -38,6 +38,11 @@ define([
 			return fetchedModel;
 		},
 
+		destroy : function(options, isCostCenter) {
+			this.urlRoot = this._constructUrl(isCostCenter);
+			return Backbone.Model.prototype.destroy.call(this, options);
+		},
+
 		save : function(attributes, options, isCostCenter) {
 			this.urlRoot = this._constructUrl(isCostCenter);
 			return Backbone.Model.prototype.save.apply(this, attributes, options);

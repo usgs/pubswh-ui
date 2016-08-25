@@ -163,11 +163,11 @@ define([
 				var affiliationTypeSelect;
 				testView.render();
 				affiliationTypeSelect = $('.edit-affiliation-type-input');
-				var expectedData = {data : [{id: ''},
-					{id: 1, text: 'Cost Center'},
-					{id: 2, text: 'Outside Affiliation'}]
-				};
-				expect(affiliationTypeSelect.select2).toHaveBeenCalledWith(expectedData, {theme : 'bootstrap', allowClear: true});
+				expect(affiliationTypeSelect.select2).toHaveBeenCalledWith({}, {theme : 'bootstrap', allowClear: true});
+				var selectOptions = $('#edit-affiliation-type-input option');
+				expect(selectOptions.length).toEqual(3);
+				expect(selectOptions[1].outerHTML).toEqual('<option value="1">Cost Center</option>');
+				expect(selectOptions[2].outerHTML).toEqual('<option value="2">Outside Affiliation</option>');
 			});
 
 			it('Expects that the affiliationIsCostCenter is set to null initially', function() {

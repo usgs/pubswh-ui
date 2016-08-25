@@ -8,7 +8,10 @@
 		<div class="select-affiliation-container">
 			<div class="form-group select-affiliation-type">
 				<label> Select affiliation type to create or edit</label>
-					<select class="form-control" id="edit-affiliation-type-input" data-placeholder="Select affiliation type" style="width:100%">
+				<select class="form-control" id="edit-affiliation-type-input" data-placeholder="Select affiliation type" style="width:100%">
+					<option value=""></option>
+					<option value="1">Cost Center</option>
+					<option value="2">Outside Affiliation</option>
 				</select>
 			</div>
 			<div class="select-create-or-edit-container form-inline">
@@ -16,8 +19,14 @@
 				<span>Or</span>
 				<div class="select-affiliation-to-update-container form-group">
 					<div class="affiliation-select-div">
-						<select id="edit-affiliation-input" class="form-control" data-placeholder="Select affiliation" style="width:100%">
-						</select>
+						<div id="cost-center-input-div">
+							<select id="cost-center-edit-affiliation-input" class="form-control" data-placeholder="Select affiliation" style="width:100%">
+							</select>
+						</div>
+						<div id="outside-affiliation-input-div">
+							<select id="outside-edit-affiliation-input" class="form-control" data-placeholder="Select affiliation" style="width:100%">
+							</select>
+						</div>
 					</div>
 				</div>
 			</div>
