@@ -8,13 +8,16 @@ define([
 	'views/PublicationView',
 	'views/ManageContributorsView',
 	'views/EditSeriesTitleView',
+	'views/ManageAffiliationView',
 	'models/PublicationModel',
 	'models/PublicationCollection',
 	'models/ContributorModel',
-	'models/SeriesTitleModel'
+	'models/SeriesTitleModel',
+	'models/AffiliationModel'
 ], function ($, Backbone,
 			 ManagePublicationsView, PublicationView, ManageContributorsView, EditSeriesTitleView,
-			 PublicationModel, PublicationCollection, ContributorModel, SeriesTitleModel) {
+			 ManageAffiliationView, PublicationModel, PublicationCollection, ContributorModel, SeriesTitleModel,
+			 AffiliationModel) {
 	"use strict";
 
 	var appRouter = Backbone.Router.extend({
@@ -26,7 +29,9 @@ define([
 			'contributor' : 'manageContributorsView',
 			'contributor/:contribId' : 'manageContributorsView',
 			'seriesTitle' : 'editSeriesTitleView',
-			'seriesTitle/:seriesTitleId' : 'editSeriesTitleView'
+			'seriesTitle/:seriesTitleId' : 'editSeriesTitleView',
+			'affiliation' : 'manageAffiliationView',
+			'affiliation/:affiliationId' : 'manageAffiliationView'
 		},
 
 		applicationContextDiv: '#main-content',
@@ -97,6 +102,16 @@ define([
 				model.set('id', seriesTitleId);
 			}
 			this.createView(EditSeriesTitleView, {
+				model : model
+			}).render();
+		},
+
+		manageAffiliationView : function(affiliationId) {
+			var model = new AffiliationModel();
+			if (affiliationId) {
+				model.set('id', affiliationId);
+			}
+			this.createView(ManageAffiliationView, {
 				model : model
 			}).render();
 		}
