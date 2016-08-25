@@ -17,7 +17,7 @@ define([
 			OutsideAffiliatesCollection, BaseView, ManageAffiliationView) {
 	"use strict";
 
-	fdescribe('views/ManageAffiliationView', function() {
+	describe('views/ManageAffiliationView', function() {
 		var ManageAffiliationView, testView;
 		var $testDiv;
 		var testModel;
