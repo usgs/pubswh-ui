@@ -129,9 +129,6 @@ define([
 				this.costCenterPromise.done(function() {
 					self.$(AFFILIATION_INPUT_SEL).select2(_.extend({
 						data : [{
-							children : {id : '',}
-						},
-						{
 							text : 'Active',
 							children : self.activeCostCenters.toJSON()
 						}, {
@@ -145,9 +142,6 @@ define([
 				this.outsideAffiliatesPromise.done(function() {
 					self.$(AFFILIATION_INPUT_SEL).select2(_.extend({
 						data : [{
-							children : {'id' : ''}
-						},
-						{
 							text : 'Active',
 							children : self.activeOutsideAffiliates.toJSON()
 						}, {
