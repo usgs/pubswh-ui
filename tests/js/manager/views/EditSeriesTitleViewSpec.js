@@ -190,7 +190,8 @@ define([
 
 					$testDiv.find('#edit-pub-subtype-input').val('2').trigger('select2:select');
 					$seriesTitleSelect.html('<option value="5000">The Best Turtle Research Journal</option>');
-					$seriesTitleSelect.val('5000').trigger('select2:select');
+					$seriesTitleSelect.val('5000');
+					$seriesTitleSelect.trigger('select2:select');
 				});
 
 				it('Expects that the model id is set to 5000 and fetch is called', function() {
