@@ -79,7 +79,8 @@
 					scriptRoot : "{{ request.script_root }}"
 				},
 				'views/PublicationView' : {
-					previewUrl : "{{ url_for('pubswh.restricted_page', index_id='') }}"
+					previewUrl : "{{ url_for('pubswh.restricted_page', index_id='') }}",
+					scriptRoot : '{{  request.script_root }}'
 				},
 				'views/BibliodataView' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
