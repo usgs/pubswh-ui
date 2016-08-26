@@ -1,6 +1,9 @@
 /*jslint browser: true */
+/* global define */
+
 define([
 	'underscore',
+	'jquery',
 	'bootstrap',
 	'datetimepicker',
 	'backbone.stickit',
@@ -16,7 +19,7 @@ define([
 	'views/CatalogingView',
 	'views/GeospatialView',
 	'hbs!hb_templates/publication'
-], function(_, bootstrap, datetimepicker, Stickit, module, BaseView, AlertView, ConfirmationDialogView, LoginDialogView,
+], function(_, $, bootstrap, datetimepicker, Stickit, module, BaseView, AlertView, ConfirmationDialogView, LoginDialogView,
 			BibliodataView, LinksView, ContributorsView, SPNView, CatalogingView, GeospatialView, hbTemplate) {
 	"use strict";
 
@@ -29,7 +32,8 @@ define([
 			'click .publish-btn' : 'publishPub',
 			'click .delete-btn' : 'deletePub',
 			'click .edit-tabs a' : 'showTab',
-			'dp.change #display-date' : 'changeDisplayToPublicDate'
+			'dp.change #display-date' : 'changeDisplayToPublicDate',
+			'click .locked-pub-dialog-container .close-btn' : 'closeLockedDialog'
 		},
 
 		bindings : {
@@ -99,7 +103,16 @@ define([
 					self.tabs.spn.view.initializeTinyMce();
 				});
 			}).fail(function(jqXhr) {
-				self.alertView.showDangerAlert('Can\'t retrieve the publication: ' + jqXhr.statusText);
+				var $modal = self.$('.locked-pub-dialog-container .modal');
+				var message;
+				if (jqXhr.status === 409) {
+					message = (jqXhr.responseJSON.validationErrors.length > 0) ? jqXhr.responseJSON.validationErrors[0].message : 'Unknown error'
+					$modal.find('.modal-body').html(message + '. Click OK to return to the Search page');
+					$modal.modal();
+				}
+				else {
+					self.alertView.showDangerAlert('Can\'t retrieve the publication: ' + jqXhr.statusText);
+				}
 			});
 
 			return this;
@@ -111,7 +124,6 @@ define([
 		 *     @prop {PublicationModel} model
 		 */
 		initialize : function(options) {
-			var self = this;
 			BaseView.prototype.initialize.apply(this, arguments);
 
 			this.context.indexId = this.model.get('indexId');
@@ -257,10 +269,10 @@ define([
 						});
 					}
 					else if (_.has(response, 'responseJSON') &&
-						_.has(response.responseJSON, 'validationErrors')
-						&& (response.responseJSON.validationErrors.length > 0)) {
+						_.has(response.responseJSON, 'validationErrors') &&
+						(response.responseJSON.validationErrors.length > 0)) {
 						self.model.set('validationErrors', response.responseJSON.validationErrors);
-						self.alertView.showDangerAlert('Publication not saved with validation errors')
+						self.alertView.showDangerAlert('Publication not saved with validation errors');
 					}
 					else {
 						self.alertView.showDangerAlert('Publication not saved: ' + error);
@@ -352,6 +364,11 @@ define([
 			else {
 				this.model.unset('displayToPublicDate');
 			}
+		},
+
+		closeLockedDialog : function(ev) {
+			ev.preventDefault();
+			window.location.assign(module.config().scriptRoot + '/manager');
 		}
 	});
 

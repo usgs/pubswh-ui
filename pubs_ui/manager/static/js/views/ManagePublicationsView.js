@@ -331,9 +331,12 @@ define([
 		/*
 		 * DOM event handlers
 		 */
-		filterPubs : function() {
+		filterPubs : function(ev) {
 			var self = this;
 
+			if (ev) {
+				ev.preventDefault();
+			}
 			this.collection.updateFilters(getFilters(this.model));
 			this.collection.getFirstPage()
 					.fail(function(jqXhr) {

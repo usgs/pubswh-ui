@@ -10,9 +10,10 @@
 define([
 	'squire',
 	'jquery',
+	'bootstrap',
 	'views/BaseView',
 	'models/PublicationModel'
-], function(Squire, $, BaseView, PublicationModel) {
+], function(Squire, $, bootstrap, BaseView, PublicationModel) {
 	"use strict";
 
 	jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000; // Set to 20 seconds. Seems to need a larger timeout interval when
@@ -110,6 +111,7 @@ define([
 
 
 			injector = new Squire();
+			injector.mock('jquery', $);
 			injector.mock('views/AlertView', BaseView.extend({
 				setElement : setElAlertSpy,
 				render : renderAlertSpy,
@@ -281,7 +283,7 @@ define([
 					model : pubModel,
 					el : '#test-div'
 				}).render();
-				opDeferred.reject({statusText : 'Error text'});
+				opDeferred.reject({status : 500, statusText : 'Error text'});
 				expect(dangerAlertSpy).toHaveBeenCalled();
 				expect(renderBibliodataSpy).not.toHaveBeenCalled();
 				expect(renderLinksSpy).not.toHaveBeenCalled();
@@ -289,6 +291,18 @@ define([
 				expect(renderSPNSpy).not.toHaveBeenCalled();
 				expect(renderCatalogingSpy).not.toHaveBeenCalled();
 				expect(renderGeospatialSpy).not.toHaveBeenCalled();
+			});
+
+			it('Expects a failed fetch with status 409 to show the locked dialog', function() {
+				pubModel.set('id', 1234);
+				testView = new PublicationView({
+					model : pubModel,
+					el : '#test-div'
+				}).render();
+				spyOn($.fn, 'modal');
+				opDeferred.reject({status : 409, responseJSON : {validationErrors : [{message : 'Locked'}]}});
+				expect($.fn.modal).toHaveBeenCalled();
+				expect($('.locked-pub-dialog-container .modal-body').html()).toContain('Locked');
 			});
 
 			it('Expects a new pub to not show an alert', function() {

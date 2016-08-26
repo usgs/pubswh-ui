@@ -1,4 +1,5 @@
 /*jslint browser: true */
+/* global define */
 
 define([
 	'underscore',
@@ -21,7 +22,7 @@ define([
 			return {
 				links: new LinkCollection(),
 				contributors : new Backbone.Model()
-			}
+			};
 		},
 
 		parse : function(response, options) {
@@ -103,9 +104,9 @@ define([
 					},
 					error : function(jqXHR, textStatus, error) {
 						var resp = jqXHR.responseJSON;
-						if (_.has(resp, 'validationErrors')
-							&& _.isArray(resp.validationErrors)
-							&& (resp.validationErrors.length > 0)) {
+						if (_.has(resp, 'validationErrors') &&
+							_.isArray(resp.validationErrors) &&
+							(resp.validationErrors.length > 0)) {
 							self.set('validationErrors', resp.validationErrors);
 							deferred.reject(jqXHR, 'Validation errors');
 						}
