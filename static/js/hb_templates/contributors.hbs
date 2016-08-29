@@ -1,0 +1,25 @@
+<div id="contributors-div">
+	<div id="no-usgs-authors-form" class="form-inline">
+		<div id="contributors-form" class="form-group">
+			<label for="no-usgs-authors-input">No USGS Authors</label>
+			<input id="no-usgs-authors-input" type="checkbox">
+		</div>
+	</div>
+	<div class="contributor-types-tabs">
+		<ul class="nav nav-tabs">
+			{{#each contributorTypes}}
+				<li role="presentation" {{#if @first}}class="active"{{/if}}>
+					<a href="#type-{{id}}-pane" aria-controls="type-{{id}}-pane" role="tab" data-toggle="tab">
+						{{text}}
+					</a>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+	<div class="tab-content">
+		{{#each contributorTypes}}
+			<div role="tabpanel" class="tab-pane {{#if @first}}active{{/if}}" id="type-{{id}}-pane">
+			</div>
+		{{/each}}
+	</div>
+</div>
