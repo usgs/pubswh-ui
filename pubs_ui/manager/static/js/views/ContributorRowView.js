@@ -108,7 +108,7 @@ define([
 		clickEditLink : function() {
 			var h = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + window.location.pathname + '#contributor' +
 					(this.model.has('contributorId') ? '/' + this.model.get('contributorId') : '');
-						window.open(h, '_blank');
+			window.open(h, '_blank');
 		},
 
 		/*

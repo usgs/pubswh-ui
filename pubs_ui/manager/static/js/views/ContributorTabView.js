@@ -16,7 +16,8 @@ define([
 	var view = BaseView.extend({
 
 		events : {
-			'click .add-btn' : 'addNewRow'
+			'click .add-btn' : 'addNewRow',
+			'click .manage-contrib-btn' : 'openManageContributorWindow'
 		},
 
 		template : hb_template,
@@ -98,6 +99,11 @@ define([
 			});
 
 			this.collection.add(newModel);
+		},
+
+		openManageContributorWindow : function() {
+			var h = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + window.location.pathname + '#contributor';
+			window.open(h, '_blank');
 		},
 
 		/*
