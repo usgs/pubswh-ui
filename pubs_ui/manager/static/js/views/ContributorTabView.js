@@ -1,13 +1,16 @@
 /* jslint browser: true */
+/* global define */
 
 define([
 	'underscore',
+	'jquery',
 	'jquery-ui',
 	'handlebars',
+	'loglevel',
 	'views/BaseView',
 	'views/ContributorRowView',
 	'hbs!hb_templates/contributorTab'
-], function(_, jqueryUi, Handlebars, BaseView, ContributorRowView, hb_template) {
+], function(_, $, jqueryUi, Handlebars, log, BaseView, ContributorRowView, hb_template) {
 	"use strict";
 
 	var view = BaseView.extend({
@@ -26,7 +29,7 @@ define([
 		 *     @prop {String} el - jquery selector where the view will be rendered.
 		 */
 		initialize : function(options) {
-
+			var self = this;
 			BaseView.prototype.initialize.apply(this, arguments);
 			this.contributorType = options.contributorType;
 			this.renderDeferred = $.Deferred();
@@ -49,6 +52,7 @@ define([
 			BaseView.prototype.render.apply(this, arguments);
 			this.$('.grid').sortable({
 				stop : function(event, ui) {
+					log.debug('Updating contributor rank with index ' + ui.item.index());
 					ui.item.find('.contributor-row-container').trigger('updateOrder', ui.item.index());
 				}
 			});
@@ -100,7 +104,6 @@ define([
 		 * collection event handlers
 		 */
 		addRow : function(model) {
-			var self = this;
 			var newView = new ContributorRowView({
 				model: model,
 				el: '.grid',
@@ -131,10 +134,10 @@ define([
 			this.rowViews = _.chain(this.rowViews)
 					// Sort row views and them move them by successively appending them to the grid.
 					.sortBy(function(view) {
-						return view.model.attributes.rank
+						return view.model.attributes.rank;
 					})
 					.each(function(view) {
-						view.$el.appendTo($grid)
+						view.$el.appendTo($grid);
 					})
 					.value();
 		}

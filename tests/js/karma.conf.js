@@ -34,6 +34,7 @@ module.exports = function(config) {
       {pattern: 'pubs_ui/bower_components/backbone.stickit/backbone.stickit.js', included: false},
       {pattern: 'pubs_ui/bower_components/moment/min/moment.min.js', included: false},
       {pattern: 'pubs_ui/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js', included: false},
+      {pattern: 'pubs_ui/bower_components/loglevel/dist/loglevel.min.js', included: false},
       {pattern: 'pubs_ui/manager/static/js/**/*.js', included: false},
       {pattern: 'pubs_ui/manager/static/js/hb_templates/*.hbs', included: false},
       {pattern: 'tests/js/manager/**/*.js', included: false}

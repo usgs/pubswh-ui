@@ -24,7 +24,8 @@
 		var require = {
 			config: {
 				'init' : {
-					'scriptRoot' : "{{ request.script_root }}"
+					'scriptRoot' : "{{ request.script_root }}",
+					'jsDebug' : "{{ config.JS_DEBUG }}"
 				},
 				'utils/DynamicSelect2' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}"
@@ -114,7 +115,8 @@
 				'hbs' : "{{  url_for('bower.static', filename='requirejs-hbs/hbs.js') }}",
 				'backbone.stickit' : "{{ url_for('bower.static', filename='backbone.stickit/backbone.stickit.js') }}",
 				'moment' : "{{ url_for('bower.static', filename='moment/min/moment.min.js') }}",
-				'datetimepicker' : "{{ url_for('bower.static', filename='eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"
+				'datetimepicker' : "{{ url_for('bower.static', filename='eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}",
+				'loglevel' : "{{ url_for('bower.static', filename='loglevel/dist/loglevel.min.js') }}"
 			},
 			shim : {
 				'select2' : ['jquery'],
