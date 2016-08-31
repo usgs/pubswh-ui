@@ -10,6 +10,7 @@ under PubsWarehouse_UI folder.  The contents of the file should look like so:
  SECRET_KEY = 'the_secret_key'
  DEBUG = True #you want debug to be true for development, but not production
  ASSETS_DEBUG = True #Set to False if you want to compress assets.
+ JS_DEBUG = True #default is False. Set to true if you want the level of logging to be at the debug level.
 
  # URL for getting publication information
  PUB_URL = "[server of choice]/pubs-services/"
