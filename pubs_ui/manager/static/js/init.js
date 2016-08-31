@@ -1,16 +1,26 @@
 /* jslint browser: true */
+/* global define */
 
 define([
 	'backbone',
+	'loglevel',
 	'controller/AppRouter',
 	'module'
-], function (Backbone, AppRouter, module) {
+], function (Backbone, log, AppRouter, module) {
 	"use strict";
 
+	var config = module.config();
+
+	if (config.jsDebug) {
+		log.setLevel('debug', false);
+	}
+	else {
+		log.setLevel('warn', false);
+	}
 	var router = new AppRouter();
 
 	Backbone.history.start({
-		root: module.config().scriptRoot + '/manager/'
+		root: config.scriptRoot + '/manager/'
 	});
 
 	return router;

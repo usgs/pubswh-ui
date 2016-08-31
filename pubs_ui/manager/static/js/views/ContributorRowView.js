@@ -1,7 +1,10 @@
 /* jslint browser: true */
+/* global define */
 
 define([
 	'handlebars',
+	'loglevel',
+	'underscore',
 	'jquery',
 	'jquery-ui',
 	'select2',
@@ -10,7 +13,7 @@ define([
 	'utils/DynamicSelect2',
 	'views/BaseView',
 	'hbs!hb_templates/contributorTabRow'
-], function(Handlebars, $, jqueryUi, select2, module, stickit, DynamicSelect2, BaseView, hb_template) {
+], function(Handlebars, log, _, $, jqueryUi, select2, module, stickit, DynamicSelect2, BaseView, hb_template) {
 	"use strict";
 	var view = BaseView.extend({
 
@@ -93,10 +96,12 @@ define([
 		},
 
 		updateOrder : function(ev, newIndex) {
+			log.debug('In updateOrder: contributor ' + this.model.get('text') + ', newRank ' + (newIndex + 1));
 			this.collection.updateModelRank(this.model, newIndex + 1);
 		},
 
 		deleteRow : function(ev) {
+			log.debug('Delete contributor ' + this.model.get('text'));
 			this.collection.remove(this.model);
 		},
 
