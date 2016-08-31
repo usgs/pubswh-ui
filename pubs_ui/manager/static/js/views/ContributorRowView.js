@@ -106,11 +106,9 @@ define([
 		},
 
 		clickEditLink : function() {
-//			var h = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + window.location.pathname + '#contributor/' +
-//					(this.model.has('contributorId') ? this.model.get('contributorId') : '');
-			// For now we are going to use the old MyPubs app
-			var h = module.config().oldMyPubsEndpoint + '#Contributor/' + (this.model.has('contributorId') ? this.model.get('contributorId') : '');
-			window.open(h, '_blank');
+			var h = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + window.location.pathname + '#contributor' +
+					(this.model.has('contributorId') ? '/' + this.model.get('contributorId') : '');
+						window.open(h, '_blank');
 		},
 
 		/*
