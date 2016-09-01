@@ -113,3 +113,11 @@ If you want to generate a real secret key, you can do so trivially from the Pyth
 
 ```
 You can paste the generated string right into your SECRET_KEY global constant
+
+## Platform specific issues
+On Mac OS, I have had trouble with the proxy to the pubs-services raising the following error:
+SSLError: [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:590)
+
+I can solve this by pip install requests[security] but then the lettuce tests fail with:
+raise SSLError(e, request=request)
+    SSLError: ('bad handshake: WantWriteError()',)

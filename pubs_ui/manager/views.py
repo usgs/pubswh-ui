@@ -11,7 +11,6 @@ SERVICES_ENDPOINT = app.config['PUB_URL']
 # should requests verify the certificates for ssl connections
 VERIFY_CERT = app.config['VERIFY_CERT']
 
-
 manager = Blueprint('manager', __name__,
                     template_folder='templates',
                     static_folder='static')
