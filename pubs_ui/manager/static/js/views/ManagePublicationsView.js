@@ -47,6 +47,7 @@ define([
 
 		events : {
 			'change .page-size-select' : 'changePageSize',
+			'click .clear-search-btn' : 'clearSearch',
 			'click .search-btn' : 'filterPubs',
 			'submit .pub-search-form' : 'filterPubs',
 			'change #search-term-input' : 'changeQterm',
@@ -331,6 +332,20 @@ define([
 		/*
 		 * DOM event handlers
 		 */
+
+		clearSearch : function() {
+			this.model.clear({silent : true});
+
+			// No events will be fired so update DOM directly.
+			this.updateQTerm();
+			this.updatePubsListFilter();
+			_.each(this.filterRowViews, function(rowView) {
+				rowView.remove();
+			});
+
+			this.filterPubs();
+		},
+
 		filterPubs : function(ev) {
 			var self = this;
 
@@ -447,10 +462,11 @@ define([
 		 * Model event handlers
 		 */
 		updateQTerm : function() {
-			this.$('#search-term-input').val(this.model.get('q'));
+			var qTerm = this.model.has('q') ? this.model.get('q') : '';
+			this.$('#search-term-input').val(qTerm);
 		},
 		updatePubsListFilter : function() {
-			var pubsList = _.pluck(this.model.get('listId').selections, 'id');
+			var pubsList = this.model.has('listId') ? _.pluck(this.model.get('listId').selections, 'id') : [];
 
 			this.$('.pub-filter-container input[type="checkbox"]').each(function() {
 				$(this).prop('checked', _.contains(pubsList, $(this).val()));
