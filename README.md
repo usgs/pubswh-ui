@@ -61,10 +61,10 @@ To install npm, bower, lessc, and karma  and to install the javascript dependenc
 
 Substitute the command that you want to execute for "karma". Consider creating a helper script for karma, bower, npm, and lessc
 so that you don't have to remember all of this:
-`
+```
 #!/bin/sh
 "node/node" "node_modules/karma/bin/karma" "$@"
-`
+```
 
 You will need to specify the whole path to the less binary (or the script), LESS_BIN, in your instance/config.py. 
 
