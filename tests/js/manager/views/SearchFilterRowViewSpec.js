@@ -13,6 +13,7 @@ define([
 	describe('SearchFilterRowView', function() {
 		var SearchFilterRowView, testView, testModel;
 		var fetchPubTypeSpy, fetchPubTypeDeferred;
+		var costCenterFetchSpy, costCenterFetchActiveDeferred, costCenterFetchNotActiveDeferred
 		var injector;
 		var $testDiv;
 
@@ -26,11 +27,24 @@ define([
 			fetchPubTypeDeferred = $.Deferred();
 			fetchPubTypeSpy = jasmine.createSpy('fetchPubTypeSpy').and.returnValue(fetchPubTypeDeferred);
 
+			costCenterFetchSpy = jasmine.createSpy('costCenterFetchSpy').and.callFake(function(options) {
+				if (options.data.active === 'y') {
+					return costCenterFetchActiveDeferred;
+				}
+				else {
+					return costCenterFetchNotActiveDeferred;
+				}
+			});
+
 			injector.mock('models/PublicationTypeCollection', Backbone.Collection.extend({
 				fetch: fetchPubTypeSpy,
 				toJSON : function() {
 					return [{id : 1, text : 'Type1'}, {id : 2, text : 'Type2'}, {id : 3, text : 'Type3'}];
 				}
+			}));
+			injector.mock('models/CostCenterCollection', Backbone.Collection.extend({
+				url : '/test/lookup',
+				fetch : costCenterFetchSpy
 			}));
 
 			spyOn($.fn, 'select2').and.callThrough();

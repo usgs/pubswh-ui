@@ -188,7 +188,8 @@ define([
 					spyOn(testView.alertView, 'showDangerAlert');
 					spyOn(testView.alertView, 'closeAlert');
 
-					$testDiv.find('#edit-pub-subtype-input').val('2').trigger('select2:select');
+					$testDiv.find('#edit-pub-subtype-input').val('2');
+					$testDiv.find('#edit-pub-subtype-input').trigger('select2:select');
 					$seriesTitleSelect.html('<option value="5000">The Best Turtle Research Journal</option>');
 					$seriesTitleSelect.val('5000');
 					$seriesTitleSelect.trigger('select2:select');
