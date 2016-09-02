@@ -7,9 +7,10 @@ define([
 	'handlebars',
 	'utils/DynamicSelect2',
 	'models/PublicationTypeCollection',
+	'models/CostCenterCollection',
 	'views/BaseView',
 	'hbs!hb_templates/searchFilterRow'
-], function(_, $, Handlebars, DynamicSelect2, PublicationTypeCollection, BaseView, hbTemplate) {
+], function(_, $, Handlebars, DynamicSelect2, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate) {
 	"use strict";
 
 	var DEFAULT_SELECT2_OPTIONS = {
@@ -105,6 +106,29 @@ define([
 					}
 				}
 			},
+			{
+				id : 'contributingOffice',
+				text : 'Cost Center',
+				inputType : 'select',
+				select2Init : function(context) {
+					var $select = context.$('.value-select-input');
+					context.costCenterPromise.done(function() {
+						$select.select2(_.extend({
+							data : [{
+								text : 'Active',
+								children : context.activeCostCenters.toJSON()
+							}, {
+								text : 'Not Active',
+								children : context.notActiveCostCenters.toJSON()
+							}]
+						}, DEFAULT_SELECT2_OPTIONS));
+						if (context.model.has('contributingOffice') && (context.model.attributes.contributingOffice)) {
+							var selections = context.model.get('contributingOffice').selections;
+							$select.val(_.pluck(selections, 'id')).trigger('change');
+						}
+					});
+				}
+			},
 			{id : 'year', text : 'Year', inputType : 'text'}
 		],
 
@@ -124,6 +148,13 @@ define([
 
 			this.publicationTypeCollection = new PublicationTypeCollection();
 			this.pubTypeFetch = this.publicationTypeCollection.fetch();
+
+			this.activeCostCenters = new CostCenterCollection();
+			this.notActiveCostCenters = new CostCenterCollection();
+			this.costCenterPromise = $.when(
+					this.activeCostCenters.fetch({data : {active : 'y'}}),
+					this.notActiveCostCenters.fetch({data : {active : 'n'}})
+			);
 
 			this.listenTo(this.model, 'change', this.disableFilterOption);
 		},
