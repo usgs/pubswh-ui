@@ -77,7 +77,7 @@ define([
 			this.pubListFetch = this.publicationListCollection.fetch();
 
 			// Create filter model, listeners, and holder for filter rows.
-			this.listenTo(this.model, 'change:q', this.updateQterm);
+			this.listenTo(this.model, 'change:q', this.updateQTerm);
 			this.listenTo(this.model, 'change:listId', this.updatePubsListFilter);
 			this.filterRowViews = [];
 
@@ -263,6 +263,7 @@ define([
 
 			this.context.qTerm = (this.model.has('q') ? this.model.get('q') : '');
 			BaseView.prototype.render.apply(this, arguments);
+
 			$pubList = this.$('.pub-grid');
 
 			// Set the elements for child views and render if needed.

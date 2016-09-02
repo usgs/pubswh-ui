@@ -231,7 +231,7 @@ define([
 				expect($testDiv.find('.pub-filter-list-div input:checked').val()).toEqual('2');
 			});
 
-			it('Expects that searchFilterRowViewss will be created for any filter other than q or listId when set in the model', function() {
+			it('Expects that searchFilterRowViews will be created for any filter other than q or listId when set in the model', function() {
 				testModel.set({
 					year : '2015',
 					prodId : '1234'
@@ -277,6 +277,24 @@ define([
 
 				expect(testCollection.updateFilters).toHaveBeenCalledWith(testModel.attributes);
 				expect(testCollection.getFirstPage).toHaveBeenCalled();
+			});
+
+			it('Expects that clicking the clear button clears the model and clears the search form', function() {
+				testModel.set({
+					'q' : 'Water',
+					'listId' : {
+						useId : true,
+						selections : [{id : '2', text : 'Pub Cat 2'}]
+					},
+					year : '2015',
+					prodId : '1234'
+				});
+				$testDiv.find('.clear-search-btn').trigger('click');
+
+				expect(testModel.attributes).toEqual({});
+				expect($testDiv.find('#search-term-input').val()).toEqual('');
+				expect($testDiv.find('.pub-filter-list-div input:checked').length).toEqual(0);
+				expect(testView.filterRowViews.length).toBe(0);
 			});
 
 			it('Expects that clicking on a publist checkbox updates the collection\'s filters and then gets the first page', function() {
@@ -360,6 +378,45 @@ define([
 				expect(args1.url).toContain('publicationId=1&publicationId=3');
 			});
 
+		});
+
+		describe('Tests for model event listeners', function() {
+			beforeEach(function() {
+				testView.render();
+				fetchListDeferred.resolve();
+			});
+
+			it('Expects that if the q term is set, the DOM is updated', function() {
+				testModel.set('q', 'water');
+
+				expect($testDiv.find('#search-term-input').val()).toEqual('water');
+			});
+
+			it('Expects that if the q term is unset, the DOM is cleared', function() {
+				testModel.set('q', 'water');
+				testModel.unset('q');
+
+				expect($testDiv.find('#search-term-input').val()).toEqual('');
+			});
+
+			it('Expects that if listId is updated, the DOM is updated', function() {
+				testModel.set('listId', {
+					useId : true,
+					selections : [{id : '2', text : 'Pub Cat 2'}]
+				});
+
+				expect($testDiv.find('.pub-filter-container input:checked').length).toEqual(1);
+			});
+
+			it('Expects that if listId is unset, the DOM is cleared', function() {
+				testModel.set('listId', {
+					useId : true,
+					selections : [{id : '2', text : 'Pub Cat 2'}]
+				});
+				testModel.unset('listId');
+
+				expect($testDiv.find('.pub-filter-container input:checked').length).toEqual(0);
+			});
 		});
 
 		describe('Tests for collection event listeners', function() {
