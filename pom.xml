@@ -105,7 +105,7 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>portal_ui</directory>
+							<directory>pubs_ui</directory>
 							<includes>
 								<include>bower_components/</include>
 								<include>static/gen/</include>
