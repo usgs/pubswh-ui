@@ -195,6 +195,13 @@ define([
 				expect($loadingIndicator.is(':visible')).toBe(false);
 			});
 
+			it('Expects the clear search button to have the button type', function() {
+				var $clearSearchBtn;
+				testView.render();
+				$clearSearchBtn = testView.$('.clear-search-btn');
+				expect($clearSearchBtn.attr('type')).toEqual('button');
+			});
+
 			it('Expects that the publications list category selector is initialized once the list has been fetched', function() {
 				testView.render();
 

@@ -58,7 +58,7 @@ define([
 			'click .manager-contribs-btn' : 'goToContributorPage',
 			'click .add-to-lists-btn' : 'addSelectedPubsToCategory',
 			'change .pub-filter-list-div input[type="checkbox"]' : 'changePubsListFilter',
-			'click .manager-affiliation-btn' : 'goToAffiliationManagement',
+			'click .manager-affiliation-btn' : 'goToAffiliationManagement'
 		},
 
 		template: hbTemplate,
@@ -336,7 +336,6 @@ define([
 
 		clearSearch : function() {
 			this.model.clear({silent : true});
-
 			// No events will be fired so update DOM directly.
 			this.updateQTerm();
 			this.updatePubsListFilter();
@@ -349,7 +348,6 @@ define([
 
 		filterPubs : function(ev) {
 			var self = this;
-
 			if (ev) {
 				ev.preventDefault();
 			}
