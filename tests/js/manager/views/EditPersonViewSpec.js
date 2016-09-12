@@ -113,6 +113,7 @@ define([
 					family : 'Jones',
 					suffix : 'MD',
 					email : 'mjones@usgs.gov',
+					orcid : 'http://orcid.org/0000-0000-0000-0002',
 					usgs : true
 				});
 				testView.render();
@@ -121,6 +122,7 @@ define([
 				expect($testDiv.find('#last-name').val()).toEqual('Jones');
 				expect($testDiv.find('#suffix').val()).toEqual('MD');
 				expect($testDiv.find('#email').val()).toEqual('mjones@usgs.gov');
+				expect($testDiv.find('#orcid-id').val()).toEqual('http://orcid.org/0000-0000-0000-0002');
 				expect($testDiv.find('#is-usgs').is(':checked')).toEqual(true);
 			});
 
@@ -214,6 +216,7 @@ define([
 					family : 'Jones',
 					suffix : 'MD',
 					email : 'mjones@usgs.gov',
+					orcid : 'http://orcid.org/0000-0000-0000-0002',
 					usgs : true
 				});
 
@@ -221,6 +224,7 @@ define([
 				expect($testDiv.find('#last-name').val()).toEqual('Jones');
 				expect($testDiv.find('#suffix').val()).toEqual('MD');
 				expect($testDiv.find('#email').val()).toEqual('mjones@usgs.gov');
+				expect($testDiv.find('#orcid-id').val()).toEqual('http://orcid.org/0000-0000-0000-0002');
 				expect($testDiv.find('#is-usgs').is(':checked')).toEqual(true);
 			});
 

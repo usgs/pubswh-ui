@@ -37,6 +37,7 @@ define([
 			'#last-name' : 'family',
 			'#suffix' : 'suffix',
 			'#email' : 'email',
+			'#orcid-id' : 'orcid',
 			'#is-usgs' : 'usgs'
 		},
 
