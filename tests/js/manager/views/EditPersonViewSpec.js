@@ -126,54 +126,23 @@ define([
 				expect($testDiv.find('#is-usgs').is(':checked')).toEqual(true);
 			});
 
-			it('Expects that is usgs is set to true, then the cost center select is shown', function() {
-				testModel.set({
-					usgs : true
-				});
-				testView.render();
-
-				expect($testDiv.find('.outside-affiliation-div').is(':visible')).toBe(false);
-				expect($testDiv.find('.usgs-affiliation-div').is(':visible')).toBe(true);
-			});
-
-			it('Expects that is usgs is set to false, then the outside affiliation select is shown', function() {
-				testModel.set({
-					usgs : false
-				});
-				testView.render();
-
-				expect($testDiv.find('.outside-affiliation-div').is(':visible')).toBe(true);
-				expect($testDiv.find('.usgs-affiliation-div').is(':visible')).toBe(false);
-			});
-
-			it('Expects the cost center select to be initialized when both active and not active cost centers have been fetched', function() {
-				testView.render();
-				costCenterFetchActiveDeferred.resolve();
-
-				expect($.fn.select2).not.toHaveBeenCalled();
-
-				costCenterFetchNotActiveDeferred.resolve();
-
-				expect($.fn.select2).toHaveBeenCalled();
-				expect($.fn.select2.calls.first().object.hasClass('usgs-affiliation-select'));
-			});
-
-			it('Expects the outside affiliation select to be initialized when both active and not active outside affiliations have been fetched', function() {
+			it('Expects the all affiliation select to be initialized when all affiliations have been fetched', function() {
 				testView.render();
 				outsideAffFetchActiveDeferred.resolve();
-
 				expect($.fn.select2).not.toHaveBeenCalled();
-
 				outsideAffFetchNotActiveDeferred.resolve();
-
+				expect($.fn.select2).not.toHaveBeenCalled();
+				costCenterFetchActiveDeferred.resolve();
+				expect($.fn.select2).not.toHaveBeenCalled();
+				costCenterFetchNotActiveDeferred.resolve();
 				expect($.fn.select2).toHaveBeenCalled();
-				expect($.fn.select2.calls.first().object.hasClass('outside-affiliation-select'));
+				expect($.fn.select2.calls.first().object.hasClass('all-affiliation-select')).toBe(true);
 			});
 
-			it('Expects the cost center value to be set if usgs is set in the model and the affiliation is defined', function() {
+			it('Expects that if affiliations are set in the model then the affiliation field is defined', function() {
 				testModel.set({
 					usgs : true,
-					affiliation : {id : 2, text : 'CC2'}
+					affiliations : [{id : 2, text : 'CC2'}, {id : 4, text : 'OA4'}]
 				});
 				testView.render();
 				costCenterFetchActiveDeferred.resolve();
@@ -181,21 +150,7 @@ define([
 				outsideAffFetchActiveDeferred.resolve();
 				outsideAffFetchNotActiveDeferred.resolve();
 
-				expect($testDiv.find('.usgs-affiliation-select').val()).toEqual('2');
-			});
-
-			it('Expects the outside affiliation value to be set if usgs is set to false in the model and the affiliation is defined', function() {
-				testModel.set({
-					usgs : false,
-					affiliation : {id : 4, text : 'OA4'}
-				});
-				testView.render();
-				costCenterFetchActiveDeferred.resolve();
-				costCenterFetchNotActiveDeferred.resolve();
-				outsideAffFetchActiveDeferred.resolve();
-				outsideAffFetchNotActiveDeferred.resolve();
-
-				expect($testDiv.find('.outside-affiliation-select').val()).toEqual('4');
+				expect($testDiv.find('.all-affiliation-select').val()).toEqual(['2', '4']);
 			});
 		});
 
@@ -227,43 +182,10 @@ define([
 				expect($testDiv.find('#orcid-id').val()).toEqual('http://orcid.org/0000-0000-0000-0002');
 				expect($testDiv.find('#is-usgs').is(':checked')).toEqual(true);
 			});
-
-			it('Expects that if the usgs input is true, the cost center select will be visible and set to the value in affiliation', function() {
-				var $selectDiv = $('.usgs-affiliation-div');
-				testModel.set({
-					usgs : true,
-					affiliation : {id : 2, text : 'CC2'}
-				});
-
-				expect($selectDiv.is(':visible')).toBe(true);
-				expect($selectDiv.find('select').val()).toEqual('2');
-
-				testModel.unset('affiliation');
-
-				expect($selectDiv.find('select').val()).toEqual(null);
-			});
-
-			it('Expects that if the usgs input is false, the outside affiliation select will be visible and set to the value in affiliation', function() {
-				var $selectDiv = $('.outside-affiliation-div');
-				testModel.set({
-					usgs : true,
-					affiliation : {id : 2, text : 'CC2'}
-				});
-				testModel.set({
-					usgs : false,
-					affiliation : {id : 4, text : 'OA4'}
-				});
-
-				expect($selectDiv.is(':visible')).toBe(true);
-				expect($selectDiv.find('select').val()).toEqual('4');
-
-				testModel.unset('affiliation');
-
-				expect($selectDiv.find('select').val()).toEqual(null);
-			});
 		});
 
 		describe('Tests for DOM event handlers', function() {
+			var ev;
 			beforeEach(function() {
 				costCenterFetchActiveDeferred.resolve();
 				costCenterFetchNotActiveDeferred.resolve();
@@ -271,6 +193,7 @@ define([
 				outsideAffFetchNotActiveDeferred.resolve();
 				testView.activeCostCenters.set([{id : 1, text : 'CC1'}, {id : 2, text : 'CC2'}]);
 				testView.activeOutsideAffiliates.set([{id : 3, text : 'OA3'}, {id : 4, text : 'OA4'}]);
+				testModel.set('affiliations', [{id : 1, text : 'CC1'}]);
 				testView.render();
 			});
 
@@ -294,27 +217,29 @@ define([
 				expect(testModel.get('usgs')).toBe(false);
 			});
 
-			it('Expects that if the usgs select2 is changed, the affiliation is updated', function() {
-				var $usgsSelect = $testDiv.find('.usgs-affiliation-select');
-				testModel.set({usgs : true});
-				$usgsSelect.val('2').trigger('select2:select');
-
-				expect(testModel.get('affiliation')).toEqual({id : '2', text : 'CC2'});
-
-				$usgsSelect.val('').trigger('select2:unselect');
-
-				expect(testModel.has('affiliation')).toBe(false);
+			it('Expects that when an affiliation is selected, it is added to the current affiliations', function() {
+				var affiliations;
+				ev = {
+					params : {
+						data : {id : 2, text : 'CC2'}
+					}
+				};
+				testView.selectAffiliations(ev);
+				affiliations = testModel.get('affiliations');
+				expect(affiliations.length).toBe(2);
+				expect(affiliations).toContain({id : 2, text : 'CC2'});
 			});
 
-			it('Expects that if the outside affiliation select2 is changed, the affiliation is updated', function() {
-				var $outsideSelect = $testDiv.find('.outside-affiliation-select');
-				testModel.set({usgs : true});
-				$outsideSelect.val('4').trigger('select2:select');
-
-				expect(testModel.get('affiliation')).toEqual({id : '4', text : 'OA4'});
-
-				$outsideSelect.val('').trigger('select2:unselect');
-				expect(testModel.has('affiliation')).toBe(false);
+			it('Expects that an affiliation is removed, it is removed from current affiliations', function() {
+				var affiliations;
+				ev = {
+					params : {
+						data : {id : 1, text : 'CC1'}
+					}
+				};
+				testView.unselectAffiliations(ev);
+				affiliations = testModel.get('affiliations');
+				expect(affiliations.length).toBe(0);
 			});
 		});
 	});
