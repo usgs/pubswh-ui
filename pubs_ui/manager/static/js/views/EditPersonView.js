@@ -71,7 +71,7 @@ define([
 			var outsideData;
 			var costCenterData;
 			this.outsideAffiliatesPromise.done(function() {
-				outsideData = _.extend({
+				outsideData = {
 					data: [{
 						text: 'Active -- Outside',
 						children: self.activeOutsideAffiliates.toJSON()
@@ -79,10 +79,10 @@ define([
 						text: 'Inactive -- Outside',
 						children: self.notActiveOutsideAffiliates.toJSON()
 					}]
-				});
+				};
 			});
 			this.costCenterPromise.done(function() {
-				costCenterData = _.extend({
+				costCenterData = {
 					data: [{
 						text: 'Active -- USGS',
 						children: self.activeCostCenters.toJSON()
@@ -90,7 +90,7 @@ define([
 						text: 'Inactive -- USGS',
 						children: self.notActiveCostCenters.toJSON()
 					}]
-				});
+				};
 			});
 			$.when(this.outsideAffiliatesPromise, this.costCenterPromise).done(function() {
 				var costCenterDataArr = costCenterData.data;
