@@ -28,8 +28,8 @@ define([
 		template : hbTemplate,
 
 		events : {
-			'select2:select .affiliation-select-div select' : 'selectAffiliation',
-			'select2:unselect .affiliation-select-div select' : 'unselectAffiliation',
+			'select2:select .affiliation-select-div select' : 'selectAffiliations',
+			'select2:unselect .affiliation-select-div select' : 'unselectAffiliations'
 		},
 
 		bindings : {
@@ -59,8 +59,7 @@ define([
 			);
 
 			// Add binding to dom for select2
-			this.listenTo(this.model, 'change:affiliation', this.updateAffiliation);
-			this.listenTo(this.model, 'change:usgs', this.toggleAffiliationVisibility);
+			this.listenTo(this.model, 'change:affiliation', this.updateAffiliations);
 		},
 
 		render : function() {
@@ -69,31 +68,37 @@ define([
 
 			this.stickit();
 
-			this.toggleAffiliationVisibility();
+			var outsideData;
+			var costCenterData;
 			this.outsideAffiliatesPromise.done(function() {
-				self.$('.outside-affiliation-select').select2(_.extend({
+				outsideData = _.extend({
 					data: [{
-						text: 'Active',
+						text: 'Active -- Outside',
 						children: self.activeOutsideAffiliates.toJSON()
 					}, {
-						text: 'Not Active',
+						text: 'Inactive -- Outside',
 						children: self.notActiveOutsideAffiliates.toJSON()
 					}]
-				}, DEFAULT_SELECT2_OPTIONS));
+				});
 			});
 			this.costCenterPromise.done(function() {
-				self.$('.usgs-affiliation-select').select2(_.extend({
+				costCenterData = _.extend({
 					data: [{
-						text: 'Active',
+						text: 'Active -- USGS',
 						children: self.activeCostCenters.toJSON()
 					}, {
-						text: 'Not Active',
+						text: 'Inactive -- USGS',
 						children: self.notActiveCostCenters.toJSON()
 					}]
-				}, DEFAULT_SELECT2_OPTIONS));
+				});
 			});
 			$.when(this.outsideAffiliatesPromise, this.costCenterPromise).done(function() {
-				self.updateAffiliation();
+				var costCenterDataArr = costCenterData.data;
+				var outsideDataArr = outsideData.data;
+				var allOptions = _.flatten([costCenterDataArr, outsideDataArr]);
+				var allOptionsChoices = {data: allOptions};
+				self.$('.all-affiliation-select').select2(_.extend(allOptionsChoices, DEFAULT_SELECT2_OPTIONS));
+				self.updateAffiliations();
 			});
 
 			return this;
@@ -103,26 +108,14 @@ define([
 		 * Model event handlers
 		 */
 
-		updateAffiliation : function() {
-			var $select = (this.model.has('usgs') && this.model.get('usgs')) ? this.$('.usgs-affiliation-select') : this.$('.outside-affiliation-select');
-			var newVal = this.model.has('affiliation') ? this.model.get('affiliation').id : '';
-			$select.val(newVal).trigger('change');
-		},
-
-		toggleAffiliationVisibility : function() {
-			var usgs = this.model.has('usgs') && this.model.get('usgs');
-			var $outsideSelectDiv = this.$('.outside-affiliation-div');
-			var $costCenterSelectDiv = this.$('.usgs-affiliation-div');
-
-			if (usgs) {
-				$outsideSelectDiv.hide();
-				$costCenterSelectDiv.show();
-				$costCenterSelectDiv.find('select').val('').trigger('change');
+		updateAffiliations : function() {
+			var $allAffiliationsSelect = this.$('.all-affiliation-select');
+			var personAffiliations = this.model.get('affiliations');
+			if (_.isEmpty(personAffiliations)) {
+				$allAffiliationsSelect.val('').trigger('change');
 			}
 			else {
-				$outsideSelectDiv.show();
-				$costCenterSelectDiv.hide();
-				$outsideSelectDiv.find('select').val('').trigger('change');
+				$allAffiliationsSelect.val(_.pluck(personAffiliations, 'id')).trigger('change');
 			}
 		},
 
@@ -130,18 +123,29 @@ define([
 		 * DOM event handlers
 		 */
 
-		selectAffiliation : function(ev) {
-			this.model.set('affiliation', {
-				id : ev.currentTarget.value,
-				text : ev.currentTarget.selectedOptions[0].innerHTML
+		selectAffiliations : function(ev) {
+			var selectedAffiliations;
+			if (this.model.has('affiliations')) {
+				selectedAffiliations = _.clone(this.model.get('affiliations'));
+			}
+			else {
+				selectedAffiliations = [];
+			}
+			selectedAffiliations.push({
+				id : parseInt(ev.params.data.id),
+				text : ev.params.data.text
 			});
+			this.model.set('affiliations', selectedAffiliations);
 		},
 
-		unselectAffiliation : function() {
-			this.model.unset('affiliation');
+		unselectAffiliations : function(ev) {
+			var selectedAffiliations = _.clone(this.model.get('affiliations'));
+			var terminalAffiliation = parseInt(ev.params.data.id);
+			var paredDownAffiliations = _.reject(selectedAffiliations, function(sa) {
+				return sa.id === terminalAffiliation;
+			});
+			this.model.set('affiliations', paredDownAffiliations);
 		}
-
-
 	});
 
 	return view;
