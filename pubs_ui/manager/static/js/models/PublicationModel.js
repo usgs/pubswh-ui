@@ -56,7 +56,10 @@ define([
 
 			}
 			else {
-				contributors.clear();
+				_.mapObject(contributors.attributes, function(contributorCollection) {
+					// each attribute is a collection -- reset that collection
+					contributorCollection.reset();
+				});
 			}
 			response.contributors = contributors;
 
