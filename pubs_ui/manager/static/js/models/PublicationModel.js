@@ -56,7 +56,10 @@ define([
 
 			}
 			else {
-				contributors.clear();
+				_.each(contributors.attributes, function(value, contribType) {
+					var contribTypeCollection = contributors.get(contribType);
+					contribTypeCollection.reset();
+				});
 			}
 			response.contributors = contributors;
 
