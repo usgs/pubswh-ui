@@ -56,9 +56,9 @@ define([
 
 			}
 			else {
-				_.mapObject(contributors.attributes, function(contributorCollection) {
-					// each attribute is a collection -- reset that collection
-					contributorCollection.reset();
+				_.each(contributors.attributes, function(value, contribType) {
+					var contribTypeCollection = contributors.get(contribType);
+					contribTypeCollection.reset();
 				});
 			}
 			response.contributors = contributors;
