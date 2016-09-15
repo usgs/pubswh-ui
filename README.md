@@ -10,6 +10,7 @@ under PubsWarehouse_UI folder.  The contents of the file should look like so:
  SECRET_KEY = 'the_secret_key'
  DEBUG = True #you want debug to be true for development, but not production
  ASSETS_DEBUG = True #Set to False if you want to compress assets.
+ JS_DEBUG = True #default is False. Set to true if you want the level of logging to be at the debug level.
 
  # URL for getting publication information
  PUB_URL = "[server of choice]/pubs-services/"
@@ -60,10 +61,10 @@ To install npm, bower, lessc, and karma  and to install the javascript dependenc
 
 Substitute the command that you want to execute for "karma". Consider creating a helper script for karma, bower, npm, and lessc
 so that you don't have to remember all of this:
-`
+```
 #!/bin/sh
 "node/node" "node_modules/karma/bin/karma" "$@"
-`
+```
 
 You will need to specify the whole path to the less binary (or the script), LESS_BIN, in your instance/config.py. 
 
@@ -97,8 +98,9 @@ To run the jasmine tests, run the following:
 `mvn test`
 
 To run the jasmine tests using a browser, run the following: :
-`node/node node_modules/karma/bin/karma start karma.conf.js` 
-Then go to localhost:9876 in the browser where you want to run the tests.
+`node/npm test`
+Then go to localhost:9876 in the browser where you want to run the tests. This will have to be altered for Windows users.
+This will automatically open the Firefox browser, but any browser can be used to run the tests
 
 
 ## Generating secret keys
@@ -111,3 +113,14 @@ If you want to generate a real secret key, you can do so trivially from the Pyth
 
 ```
 You can paste the generated string right into your SECRET_KEY global constant
+
+## Platform specific issues
+On Mac OS, I have had trouble with the proxy to the pubs-services raising the following error:
+```
+SSLError: [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:590)
+```
+I can solve this by pip install requests[security] but then the lettuce tests fail with:
+```
+raise SSLError(e, request=request)
+    SSLError: ('bad handshake: WantWriteError()',)
+```

@@ -50,6 +50,7 @@ define([
 			'#publisher-input' : 'publisher',
 			'#publisher-location-input' : 'publisherLocation',
 			'#publication-year-input' : 'publicationYear',
+			'#no-year-input' : 'noYear',
 			'#conference-title-input' : 'conferenceTitle',
 			'#conference-date-input' : 'conferenceDate',
 			'#conference-location-input' : 'conferenceLocation',

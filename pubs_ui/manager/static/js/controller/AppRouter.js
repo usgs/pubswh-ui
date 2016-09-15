@@ -1,30 +1,37 @@
 /*jslint browser: true */
+/* global define */
 
 define([
 	'jquery',
 	'backbone',
 	'views/ManagePublicationsView',
 	'views/PublicationView',
-	'views/EditContributorView',
+	'views/ManageContributorsView',
 	'views/EditSeriesTitleView',
+	'views/ManageAffiliationView',
 	'models/PublicationModel',
 	'models/PublicationCollection',
 	'models/ContributorModel',
-	'models/SeriesTitleModel'
-], function ($, Backbone, ManagePublicationsView, PublicationView, EditContributorView, EditSeriesTitleView,
-			 PublicationModel, PublicationCollection, ContributorModel, SeriesTitleModel) {
+	'models/SeriesTitleModel',
+	'models/AffiliationModel'
+], function ($, Backbone,
+			 ManagePublicationsView, PublicationView, ManageContributorsView, EditSeriesTitleView,
+			 ManageAffiliationView, PublicationModel, PublicationCollection, ContributorModel, SeriesTitleModel,
+			 AffiliationModel) {
 	"use strict";
 
 	var appRouter = Backbone.Router.extend({
 		routes: {
 			'': 'managePublicationsView',
-			'search': 'managePublicationsView',
+			'search' : 'managePublicationsView',
 			'publication' : 'publicationView',
 			'publication/:pubId' : 'publicationView',
-			'contributor' : 'editContributorView',
-			'contributor/:contribId' : 'editContributorView',
+			'contributor' : 'manageContributorsView',
+			'contributor/:contribId' : 'manageContributorsView',
 			'seriesTitle' : 'editSeriesTitleView',
-			'seriesTitle/:seriesTitleId' : 'editSeriesTitleView'
+			'seriesTitle/:seriesTitleId' : 'editSeriesTitleView',
+			'affiliation' : 'manageAffiliationView',
+			'affiliation/:affiliationId' : 'manageAffiliationView'
 		},
 
 		applicationContextDiv: '#main-content',
@@ -57,9 +64,13 @@ define([
 		},
 
 		managePublicationsView: function () {
+			var searchFilters = (sessionStorage.searchFilters) ? JSON.parse(sessionStorage.searchFilters) : {};
 			var collection = new PublicationCollection();
+			var filterModel = new Backbone.Model(searchFilters);
+
 			this.createView(ManagePublicationsView, {
-				collection : collection
+				collection : collection,
+				model : filterModel
 			}).render();
 		},
 
@@ -74,13 +85,13 @@ define([
 			}).render();
 		},
 
-		editContributorView : function(contribId) {
+		manageContributorsView : function(contribId) {
 			var model = new ContributorModel();
 			if (contribId) {
 				model.set('contributorId', contribId);
 			}
 
-			this.createView(EditContributorView, {
+			this.createView(ManageContributorsView, {
 				model : model
 			}).render();
 		},
@@ -91,6 +102,16 @@ define([
 				model.set('id', seriesTitleId);
 			}
 			this.createView(EditSeriesTitleView, {
+				model : model
+			}).render();
+		},
+
+		manageAffiliationView : function(affiliationId) {
+			var model = new AffiliationModel();
+			if (affiliationId) {
+				model.set('id', affiliationId);
+			}
+			this.createView(ManageAffiliationView, {
 				model : model
 			}).render();
 		}

@@ -1,7 +1,10 @@
 /* jslint browser: true */
+/* global define */
 
 define([
 	'handlebars',
+	'loglevel',
+	'underscore',
 	'jquery',
 	'jquery-ui',
 	'select2',
@@ -10,20 +13,23 @@ define([
 	'utils/DynamicSelect2',
 	'views/BaseView',
 	'hbs!hb_templates/contributorTabRow'
-], function(Handlebars, $, jqueryUi, select2, module, stickit, DynamicSelect2, BaseView, hb_template) {
+], function(Handlebars, log, _, $, jqueryUi, select2, module, stickit, DynamicSelect2, BaseView, hb_template) {
 	"use strict";
 	var view = BaseView.extend({
 
 		bindings : {
 			'.affiliation-input' : {
-				observe : 'affiliation',
+				observe : 'affiliations',
 				onGet : function(value, options) {
-					if (value && _.has(value, 'text')) {
-						return value.text;
+					var displayText;
+					if (value && value.length > 0) {
+						var stagingText = _.pluck(value, 'text');
+						displayText = stagingText.join(', ');
 					}
 					else {
-						return '';
+						displayText = '';
 					}
+					return displayText;
 				}
 			}
 		},
@@ -93,18 +99,18 @@ define([
 		},
 
 		updateOrder : function(ev, newIndex) {
+			log.debug('In updateOrder: contributor ' + this.model.get('text') + ', newRank ' + (newIndex + 1));
 			this.collection.updateModelRank(this.model, newIndex + 1);
 		},
 
 		deleteRow : function(ev) {
+			log.debug('Delete contributor ' + this.model.get('text'));
 			this.collection.remove(this.model);
 		},
 
 		clickEditLink : function() {
-//			var h = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + window.location.pathname + '#contributor/' +
-//					(this.model.has('contributorId') ? this.model.get('contributorId') : '');
-			// For now we are going to use the old MyPubs app
-			var h = module.config().oldMyPubsEndpoint + '#Contributor/' + (this.model.has('contributorId') ? this.model.get('contributorId') : '');
+			var h = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + window.location.pathname + '#contributor' +
+					(this.model.has('contributorId') ? '/' + this.model.get('contributorId') : '');
 			window.open(h, '_blank');
 		},
 

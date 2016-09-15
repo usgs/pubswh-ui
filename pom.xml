@@ -4,7 +4,7 @@
 	<groupId>gov.usgs.cida.PubsWarehouse_UI</groupId>
 	<artifactId>publications_wh_ui</artifactId>
 	<packaging>pom</packaging>
-	<version>1.72-SNAPSHOT</version>
+	<version>1.79-SNAPSHOT</version>
 	<name>Publications Warehouse UI</name>
 
 	<properties>
@@ -82,7 +82,7 @@
 		<connection>scm:git:https://github.com/USGS-CIDA/PubsWarehouse_UI</connection>
 		<developerConnection>scm:git:git@github.com:USGS-CIDA/PubsWarehouse_UI.git</developerConnection>
 		<url>https://github.com/USGS-CIDA/PubsWarehouse_UI</url>
-		<tag>HEAD</tag>
+		<tag>publications_wh_ui-1.74</tag>
 	</scm>
 
 	<distributionManagement>
@@ -100,9 +100,35 @@
 	<build>
 		<plugins>
 			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>pubs_ui</directory>
+							<includes>
+								<include>bower_components/</include>
+								<include>static/gen/</include>
+								<include>static/.webassets-cache/</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+						<fileset>
+							<directory>${project.basedir}</directory>
+							<includes>
+								<include>env/</include>
+								<include>node/</include>
+								<include>node_modules/</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.4</version>
+				<version>2.6</version>
 				<configuration>
 					<descriptors>
 						<descriptor>assembly/zip.xml</descriptor>
@@ -121,7 +147,7 @@
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
-				<version>0.0.27</version>
+				<version>1.0</version>
 				<executions>
 					<execution>
 						<id>install node and npm</id>
@@ -129,8 +155,8 @@
 							<goal>install-node-and-npm</goal>
 						</goals>
 						<configuration>
-							<nodeVersion>v4.2.4</nodeVersion>
-							<npmVersion>2.14.12</npmVersion>
+							<nodeVersion>v4.4.7</nodeVersion>
+							<npmVersion>2.15.8</npmVersion>
 						</configuration>
 					</execution>
 					<execution>
@@ -154,11 +180,11 @@
 					<execution>
 						<id>javascript tests</id>
 						<goals>
-							<goal>npm</goal>
+							<goal>karma</goal>
 						</goals>
 						<phase>test</phase>
 						<configuration>
-							<arguments>test</arguments>
+							<karmaConfPath>tests/js/karma.conf.js</karmaConfPath>
 						</configuration>
 					</execution>
 				</executions>

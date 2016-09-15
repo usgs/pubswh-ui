@@ -34,6 +34,7 @@ module.exports = function(config) {
       {pattern: 'pubs_ui/bower_components/backbone.stickit/backbone.stickit.js', included: false},
       {pattern: 'pubs_ui/bower_components/moment/min/moment.min.js', included: false},
       {pattern: 'pubs_ui/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js', included: false},
+      {pattern: 'pubs_ui/bower_components/loglevel/dist/loglevel.min.js', included: false},
       {pattern: 'pubs_ui/manager/static/js/**/*.js', included: false},
       {pattern: 'pubs_ui/manager/static/js/hb_templates/*.hbs', included: false},
       {pattern: 'tests/js/manager/**/*.js', included: false}
@@ -57,7 +58,7 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['dots', 'coverage'],
 
     coverageReporter: {
       reporters : [
@@ -85,12 +86,12 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: [],
+    browsers: ['Firefox'],
 
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false,
+    singleRun: true,
 
     // Concurrency level
     // how many browser should be started simultaneous

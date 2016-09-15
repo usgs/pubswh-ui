@@ -41,7 +41,8 @@ require.config({
 		'hbs': '/base/pubs_ui/bower_components/requirejs-hbs/hbs',
 		'backbone.stickit': '/base/pubs_ui/bower_components/backbone.stickit/backbone.stickit',
 		'moment': '/base/pubs_ui/bower_components/moment/min/moment.min',
-		'datetimepicker': '/base/pubs_ui/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min'
+		'datetimepicker': '/base/pubs_ui/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min',
+		'loglevel' : '/base/pubs_ui/bower_components/loglevel/dist/loglevel.min'
 	},
 	shim: {
 		'jquery': {

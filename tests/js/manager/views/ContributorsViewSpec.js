@@ -19,6 +19,7 @@ define([
 		var setElContribTabSpy, renderContribTabSpy, removeContribTabSpy, findElContribTabSpy;
 		var fetchContribTypeSpy;
 
+		var publicationModel;
 		var contributorsModel;
 		var fetchContribTypeDeferred;
 		var injector;
@@ -26,7 +27,9 @@ define([
 		beforeEach(function (done) {
 			$('body').append('<div id="test-div"></div>');
 
+			publicationModel = new Backbone.Model(); // this is the model passed to the contributors view
 			contributorsModel = new Backbone.Model();
+			publicationModel.set("contributors", contributorsModel);
 
 			fetchContribTypeDeferred = $.Deferred();
 
@@ -78,7 +81,7 @@ define([
 		it('Expects that a child tab view and a model property are created for each contributor type after the successful fetch', function() {
 			testView = new ContributorsView({
 				el: '#test-div',
-				model: contributorsModel
+				model: publicationModel
 			});
 			expect(testView.typeTabViews).not.toBeDefined();
 
@@ -94,7 +97,7 @@ define([
 			beforeEach(function() {
 				testView = new ContributorsView({
 					el : '#test-div',
-					model : contributorsModel
+					model : publicationModel
 				});
 			});
 
@@ -118,7 +121,7 @@ define([
 			beforeEach(function() {
 				testView = new ContributorsView({
 					el : '#test-div',
-					model : contributorsModel
+					model : publicationModel
 				});
 
 				testView.contributorTypeCollection = new Backbone.Collection([{id : 1, text : 'Type1'}, {id : 2, text : 'Type2'}]);

@@ -4,6 +4,7 @@ from datetime import timedelta
 
 
 DEBUG = False
+JS_DEBUG = False
 
 SECRET_KEY = ''
 VERIFY_CERT = True

@@ -51,7 +51,9 @@ bundles={
             'manager/less/spn.less',
             'manager/less/cataloging.less',
             'manager/less/geospatial.less',
-            'manager/less/editSeriesTitle.less'
+            'manager/less/editSeriesTitle.less',
+            'manager/less/manageContributors.less',
+            'manager/less/manageAffiliations.less'
         ],
         filters='less,cssmin',
         output='gen/manager_style.css'

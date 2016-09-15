@@ -12,10 +12,15 @@
 			</div>
 			<div class="collapse navbar-collapse" id="manager-navbar-collapse">
 				<form class="navbar-form navbar-left pub-search-form" role="search">
-					<div class="search-form-container ">
+					<div class="search-form-container">
 						<div class="form-group has-feedback free-search-div">
-							<input id="search-term-input" type="text" class="form-control" placeholder="Search criteria"/>
-							<span class="form-control-feedback"><i class="fa fa-search"></i></span>
+							<div class="input-group">
+								<span class="input-group-btn">
+									<button title="Clear search" class="btn btn-default clear-search-btn" type="button"><i class="fa fa-times"></i></button>
+								</span>
+								<input id="search-term-input" type="text" class="form-control" placeholder="Search criteria" value="{{qTerm}}"/>
+								<span class="form-control-feedback"><i class="fa fa-search"></i></span>
+							</div>
 						</div>
 						<div class="advanced-search-rows-container form-inline"></div>
 					</div>
@@ -27,28 +32,41 @@
 
 				<ul class="nav navbar-nav navbar-right pub-nav-btn-div">
 					<li><a class="create-pub-btn" href="#">Create Publication</a></li>
-					<li><a class="manager-contribs-btn" href="{{oldMyPubsEndpoint}}#/Contributor" target="_blank">Manage Contributors</a></li>
-					<li><a class="manager-seriestitle-btn" href="#">Manage Series Titles</a></li>
+					<li><a class="manage-dropdown dropdown-toggle" data-toggle="dropdown" href="#">Manage <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a class="manager-contribs-btn" href="#" target="">Contributors</a></li>
+							<li><a class="manager-seriestitle-btn" href="#">Series Titles</a></li>
+							<li><a class="manager-affiliation-btn" href="#">Affiliations</a></li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 		</div>
 	</nav>
 
-	<div class="pub-list-section">
-		<div class="pub-grid-container">
-			<div class="pub-grid backgrid-container"></div>
-			<div class="pubs-loading-indicator"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+	<div class="pub-management-container">
+		<div class="pub-filter-container">
+			<div class="panel panel-default">
+				<div class="panel-heading">Publication List Filter</div>
+				<div class="panel-body pub-filter-list-div"></div>
+			</div>
 		</div>
-		<div class="pub-grid-footer">
-			<div class="pub-grid-info">Total items:&nbsp;<span class="pubs-count">0</span></div>
-			<div class="page-size-container form-group form-inline">
-				<label>Page size:&nbsp;</label>
-				<select class="form-control page-size-select">
-					<option value="15">15</option>
-					<option value="25">25</option>
-					<option value="50">50</option>
-					<option value="100" selected>100</option>
-				</select>
+		<div class="pub-list-section">
+			<div class="pub-grid-container">
+				<div class="pub-grid backgrid-container"></div>
+				<div class="pubs-loading-indicator"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+			</div>
+			<div class="pub-grid-footer">
+				<div class="pub-grid-info">Total items:&nbsp;<span class="pubs-count">0</span></div>
+				<div class="page-size-container form-group form-inline">
+					<label>Page size:&nbsp;</label>
+					<select class="form-control page-size-select">
+						<option value="15">15</option>
+						<option value="25">25</option>
+						<option value="50">50</option>
+						<option value="100" selected>100</option>
+					</select>
+				</div>
 			</div>
 		</div>
 	</div>
