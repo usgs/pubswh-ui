@@ -97,6 +97,7 @@ def pubdetails(pubdata):
             pubdata['details'].append({detail[1]: pubdata.get(detail[0])})
     return pubdata
 
+
 def manipulate_doi_information(pubdata):
     """
     takes the DOI and adds it to the link structure
@@ -134,7 +135,6 @@ def create_display_links(pubdata):
     :param pubdata:
     :return: pubdata with new displayLinks array
     """
-
 
     display_links = {
         'Abstract': [],
@@ -338,7 +338,12 @@ class SearchPublications(object):
         :return: query results (or None) and response status code.
         :rtype: tuple
         """
-        search_result_obj = requests.get(url=self.search_url, params=params, verify=verify_cert)
+        # Only send the params if they contain information
+        if params is not None:
+            non_null_params = {k: v for (k, v) in params.iteritems() if v}
+            search_result_obj = requests.get(url=self.search_url, params=non_null_params, verify=verify_cert)
+        else:
+            search_result_obj = requests.get(url=self.search_url, verify=verify_cert)
         try:
             search_result_json = search_result_obj.json()
             for record in search_result_json['records']:
@@ -641,7 +646,8 @@ def make_chapter_data_for_display(pubdata):
     """
     if len(pubdata.get('interactions')) > 0:
         # natural sort the indexIDs so that chapter 2 comes after chapter one and before chapter three
-        pubdata['interactions'] = natsort.natsorted(pubdata['interactions'], key=lambda x: x['subject']['indexId'], alg=natsort.ns.IGNORECASE)
+        pubdata['interactions'] = natsort.natsorted(pubdata['interactions'], key=lambda x: x['subject']['indexId'],
+                                                    alg=natsort.ns.IGNORECASE)
         # determine wheter to display the publication subparts chunk of the template
         for interaction in pubdata['interactions']:
             if interaction['predicate'] == "IS_PART_OF" and interaction['subject']['indexId'] != pubdata['indexId']:
@@ -758,6 +764,7 @@ def extract_related_pub_info(pubdata):
         raise Exception('Failed to parse supersede information.')
     return relations
 
+
 def munge_abstract(pubdata):
     """
     Take an abstract, and if there is an h1 tag in there, take it out and put the contents in the abstract_label object,
@@ -768,7 +775,7 @@ def munge_abstract(pubdata):
     if pubdata.get('docAbstract') is not None:
         abstract = deepcopy(pubdata['docAbstract'])
         soup = BeautifulSoup(abstract, "lxml")
-        #find the h1 tag
+        # find the h1 tag
         if soup.find('h1') is not None:
             possible_header = soup.find('h1').contents[0]
             soup.h1.extract()
@@ -783,5 +790,3 @@ def munge_abstract(pubdata):
     pubdata['abstractHeader'] = abstract_header
 
     return pubdata
-
-

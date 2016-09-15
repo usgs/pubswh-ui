@@ -190,39 +190,9 @@
                         {{- linkdisplaylists('Document','Document','Documents') -}}
                         {{- linkdisplaylists('Plate', 'Plate','Plates')  -}}
                         {{- linkdisplaylists('Sheet', 'Sheet','Sheets')  -}}
-                        {{- linkdisplaylists('Table', 'Table','Tables')  -}}
-                        {{- linkdisplaylists('Figure', 'Figure','Figures')  -}}
-                        {{- linkdisplaylists('Abstract','Abstract','Abstracts') -}}
-                        {{- linkdisplaylists('Additional Report Piece','Additional Report Piece','Additional Report Pieces') -}}
-                        {{- linkdisplaylists('Appendix', 'Appendix', 'Appendixes') -}}
-                        {{- linkdisplaylists('Application Site','Application Site','Application Sites') -}}
-                        {{- linkdisplaylists('Authors Website','Authors Website','Authors Website') -}}
                         {{- linkdisplaylists('Chapter','Chapter','Chapters') -}}
-                        {{- linkdisplaylists('Companion Files','Companion File','Companion Files') -}}
-                        {{- linkdisplaylists('Cover','Cover','Covers') -}}
-                        {{- linkdisplaylists('Dataset', 'Dataset','Datasets')  -}}
-                        {{- linkdisplaylists('Data Release', 'Data Release','Data Releases')  -}}
-                        {{- linkdisplaylists('Database','Database','Databases') -}}
-                        {{- linkdisplaylists('Errata','Errata','Errata') -}}
-                        {{- linkdisplaylists('Illustration','Illustration','Illustrations') -}}
-                        {{- linkdisplaylists('Image','Image','Images') -}}
-                        {{- linkdisplaylists('Metadata','Metadata','Metadata') -}}
-                        {{- linkdisplaylists('Project Site','Project Site','Project Sites') -}}
-                        {{- linkdisplaylists('Raw Data', 'Raw Data', 'Raw Data') -}}
-                        {{- linkdisplaylists('Read Me','Read Me','Read Me') -}}
-                        {{- linkdisplaylists('Referenced Work','Referenced Work','Referenced Work') -}}
-                        {{- linkdisplaylists('Related Work','Related Work','Related Works') -}}
-                        {{- linkdisplaylists('Spatial Data','Spatial Data','Spatial Data') -}}
-                        {{- linkdisplaylists('Version History','Version History','Version History') -}}
-                        {{- related_links() -}}
-                        {% if pubdata['pubHasNoLinks'] == True %}
-                        	<li>The Publications Warehouse does not have links to digital versions of this publication at this time</li>
-                        {% endif %}
-                        {% if pubdata['offers'] %}
-                        	<li itemprop = "offers" itemscope itemtype="http://schema.org/Offer">Paper version: <link itemprop="availability" href="http://schema.org/InStock">In stock and available from the <a itemprop="url" href="{{ pubdata['offers']['schema:offers']['schema:url'] }}"><strong>USGS Store</strong></a></li>
-                        {% endif %}
                         {% if pubdata['interactions'] %}
-                            {% if pubdata['hasSubParts'] == True %}
+                            {% if pubdata['hasSubParts'] %}
                             <li>Chapters:</li>
                             {% endif %}
                             {% for interaction in pubdata['interactions'] %}
@@ -237,6 +207,37 @@
                                 <li itemprop="isPartOf" itemscope itemtype="http://schema.org/ScholarlyArticle" itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}">Larger Work: {% if pubdata['chapter'] %}This publication is Chapter {{ pubdata['chapter'] }}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %} in {% endif %}<a href="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}"><span itemprop="name">{{ pubdata['isPartOf']['title']|safe }}</span></a></li>
                             {% endif %}
                         {% endif %}
+                        {{- linkdisplaylists('Table', 'Table','Tables')  -}}
+                        {{- linkdisplaylists('Figure', 'Figure','Figures')  -}}
+                        {{- linkdisplaylists('Abstract','Abstract','Abstracts') -}}
+                        {{- linkdisplaylists('Additional Report Piece','Additional Report Piece','Additional Report Pieces') -}}
+                        {{- linkdisplaylists('Appendix', 'Appendix', 'Appendixes') -}}
+                        {{- linkdisplaylists('Related Work','Related Work','Related Works') -}}
+                        {{- linkdisplaylists('Application Site','Application Site','Application Sites') -}}
+                        {{- linkdisplaylists('Authors Website','Authors Website','Authors Website') -}}
+                        {{- linkdisplaylists('Companion Files','Companion File','Companion Files') -}}
+                        {{- linkdisplaylists('Cover','Cover','Covers') -}}
+                        {{- linkdisplaylists('Dataset', 'Dataset','Datasets')  -}}
+                        {{- linkdisplaylists('Data Release', 'Data Release','Data Releases')  -}}
+                        {{- linkdisplaylists('Database','Database','Databases') -}}
+                        {{- linkdisplaylists('Errata','Errata','Errata') -}}
+                        {{- linkdisplaylists('Illustration','Illustration','Illustrations') -}}
+                        {{- linkdisplaylists('Image','Image','Images') -}}
+                        {{- linkdisplaylists('Metadata','Metadata','Metadata') -}}
+                        {{- linkdisplaylists('Project Site','Project Site','Project Sites') -}}
+                        {{- linkdisplaylists('Raw Data', 'Raw Data', 'Raw Data') -}}
+                        {{- linkdisplaylists('Read Me','Read Me','Read Me') -}}
+                        {{- linkdisplaylists('Referenced Work','Referenced Work','Referenced Work') -}}
+                        {{- linkdisplaylists('Spatial Data','Spatial Data','Spatial Data') -}}
+                        {{- linkdisplaylists('Version History','Version History','Version History') -}}
+                        {{- related_links() -}}
+                        {% if pubdata['pubHasNoLinks'] == True %}
+                        	<li>The Publications Warehouse does not have links to digital versions of this publication at this time</li>
+                        {% endif %}
+                        {% if pubdata['offers'] %}
+                        	<li itemprop = "offers" itemscope itemtype="http://schema.org/Offer">Paper version: <link itemprop="availability" href="http://schema.org/InStock">In stock and available from the <a itemprop="url" href="{{ pubdata['offers']['schema:offers']['schema:url'] }}"><strong>USGS Store</strong></a></li>
+                        {% endif %}
+
                         <li>Download citation as:  <a href="{{ request.base_url }}?mimetype=ris">RIS</a></li>
                     </ul>
                 </section>
@@ -259,7 +260,7 @@
                 <section>
                     <h4>Suggested Citation</h4>
                     <p id="suggested_citation">{{ pubdata['usgsCitation']|safe }}</p>
-                    <p>ISSN: {{  pubdata['seriesTitle']["onlineIssn"] }} (online)</p>
+                    {% if pubdata.get('seriesTitle') %}<p>ISSN: {{  pubdata['seriesTitle']["onlineIssn"] }} (online)</p>{% endif %}
                     {% if pubdata['onlineOnly'] == 'N' %}<p>ISSN: {{  pubdata['seriesTitle']["printIssn"] }} (print)</p>{% endif %}
 
                 </section>
