@@ -24,7 +24,9 @@ define([
 					var displayText;
 					if (value && value.length > 0) {
 						var stagingText = _.map(value, function(affiliationObject) {
-							return affiliationObject.text;
+							if (_.has(affiliationObject, 'text')) {
+								return affiliationObject.text;
+							}
 						});
 						displayText = stagingText.join(', ');
 						return displayText;
