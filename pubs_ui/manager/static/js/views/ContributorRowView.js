@@ -19,13 +19,19 @@ define([
 
 		bindings : {
 			'.affiliation-input' : {
-				observe : 'affiliation',
+				observe : 'affiliations',
 				onGet : function(value, options) {
-					if (value && _.has(value, 'text')) {
-						return value.text;
+					var displayText;
+					if (value && value.length > 0) {
+						var stagingText = _.map(value, function(affiliationObject) {
+							return affiliationObject.text;
+						});
+						displayText = stagingText.join(', ');
+						return displayText;
 					}
 					else {
-						return '';
+						displayText = '';
+						return displayText;
 					}
 				}
 			}
