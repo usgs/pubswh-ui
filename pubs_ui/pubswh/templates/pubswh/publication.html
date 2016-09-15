@@ -192,7 +192,7 @@
                         {{- linkdisplaylists('Sheet', 'Sheet','Sheets')  -}}
                         {{- linkdisplaylists('Chapter','Chapter','Chapters') -}}
                         {% if pubdata['interactions'] %}
-                            {% if pubdata['hasSubParts'] == True %}
+                            {% if pubdata['hasSubParts'] %}
                             <li>Chapters:</li>
                             {% endif %}
                             {% for interaction in pubdata['interactions'] %}

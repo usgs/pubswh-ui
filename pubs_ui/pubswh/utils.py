@@ -340,11 +340,10 @@ class SearchPublications(object):
         """
         # Only send the params if they contain information
         if params is not None:
-            non_null_params = {}
-            for key, val in params.iteritems():
-                if val:
-                    non_null_params[key] = val
-        search_result_obj = requests.get(url=self.search_url, params=non_null_params, verify=verify_cert)
+            non_null_params = {k: v for (k, v) in params.iteritems() if v}
+            search_result_obj = requests.get(url=self.search_url, params=non_null_params, verify=verify_cert)
+        else:
+            search_result_obj = requests.get(url=self.search_url, verify=verify_cert)
         try:
             search_result_json = search_result_obj.json()
             for record in search_result_json['records']:
