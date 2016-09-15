@@ -23,18 +23,13 @@ define([
 				onGet : function(value, options) {
 					var displayText;
 					if (value && value.length > 0) {
-						var stagingText = _.map(value, function(affiliationObject) {
-							if (_.has(affiliationObject, 'text')) {
-								return affiliationObject.text;
-							}
-						});
+						var stagingText = _.pluck(value, 'text');
 						displayText = stagingText.join(', ');
-						return displayText;
 					}
 					else {
 						displayText = '';
-						return displayText;
 					}
+					return displayText;
 				}
 			}
 		},
