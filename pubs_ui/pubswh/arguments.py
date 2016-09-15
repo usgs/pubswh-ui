@@ -36,5 +36,7 @@ search_args = {
                 "orderBy": fields.Str(multiple=False),
                 "page": fields.Str(multiple=False),
                 "g": fields.Str(multiple=False),
-                "advanced": fields.Bool(multiple=False)
+                "advanced": fields.Bool(multiple=False),
+                "orcid": fields.Str(multiple=True)
+
                }

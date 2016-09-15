@@ -54,6 +54,7 @@ class SearchForm(Form):
     year = StringField("Year Published")
     startYear = StringField("Published starting in")
     endYear = StringField("Published in or before")
+    orcid = StringField("ORCID as a URL")
 
     #Grabs the list of Contributing Office names and IDs from the lookup url. Then puts them into the selectfield list
     contributorList = get_field_list('costcenters')
