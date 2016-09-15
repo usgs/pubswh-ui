@@ -59,10 +59,7 @@ define([
 					collection : testCollection
 				});
 				testModel.set({
-					affiliation: {
-						id: 1,
-						text: 'Affiliation 1'
-					},
+					affiliations: [{id: 1, text: 'Affiliation 1'}, {id: 2, text: 'Affiliation 2'}],
 					rank : 1,
 					contributorId: 10,
 					text: 'Contributor 10',
@@ -94,7 +91,7 @@ define([
 
 			it('Expects affliation to be set to the value in the model', function() {
 				testView.render();
-				expect(testView.$('.affiliation-input').val()).toEqual('Affiliation 1');
+				expect(testView.$('.affiliation-input').val()).toEqual('Affiliation 1, Affiliation 2');
 			});
 		});
 
@@ -106,10 +103,7 @@ define([
 					collection : testCollection
 				});
 				testModel.set({
-					affiliation: {
-						id: 1,
-						text: 'Affiliation 1'
-					},
+					affiliations: [{id: 1, text: 'Affiliation 1'}, {id: 2, text: 'Affiliation 2'}],
 					rank : 1,
 					contributorId: 10,
 					text: 'Contributor 10',
@@ -174,10 +168,7 @@ define([
 					collection : testCollection
 				});
 				testModel.set({
-					affiliation: {
-						id: 1,
-						text: 'Affiliation 1'
-					},
+					affiliations: [{id: 1, text: 'Affiliation 1'}, {id: 2, text: 'Affiliation 2'}],
 					rank : 1,
 					contributorId: 10,
 					text: 'Contributor 10',
