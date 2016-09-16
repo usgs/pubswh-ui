@@ -332,6 +332,8 @@ def make_json(step):
 def test_geojson_output(step):
     assert_equal(world.output, world.expected_output)
 
+# remove the test so we don't call the legacy API every time
+
 """
 pub relationship scenarios
 """
