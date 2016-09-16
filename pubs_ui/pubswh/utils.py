@@ -566,7 +566,8 @@ def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):
     pub_type = 'rdac:Work'
     
     # obtain data from legacy api (down to just store data now)
-    pre_super = legacy_api_info(index_id, supersedes_service_url)
+    #pre_super = legacy_api_info(index_id, supersedes_service_url)
+    pre_super = {"offers":None}
     #get interactions from the new endpoint to build json-LD object
     interactions = return_pubdata.get('interactions')
 
