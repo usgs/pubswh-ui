@@ -269,13 +269,49 @@ def other_resources():
     return render_template('pubswh/other_resources.html', other_resources=pull_feed(feed_url))
 
 
-@pubswh.route('/browse/', defaults={'path': ''})
-@pubswh.route('/browse/<path:path>')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
-def browse(path):
-    app.logger.info("path: " + path)
-    browsecontent = getbrowsecontent(browse_url + path, browse_replace)
-    return render_template('pubswh/browse.html', browsecontent=browsecontent)
+#@pubswh.route('/browse/', defaults={'path': ''})
+#@pubswh.route('/browse/<path:path>')
+#@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+#def browse_old(path):
+#    app.logger.info("path: " + path)
+#    browsecontent = getbrowsecontent(browse_url + path, browse_replace)
+#    return render_template('pubswh/browse.html', browsecontent=browsecontent)
+
+@pubswh.route('/browse/')
+def browse_types():
+    types = get("https://pubs.er.usgs.gov/pubs-services/lookup/publicationtypes").json()
+    return render_template('pubswh/browse_types.html', types=types)
+
+@pubswh.route('/browse/<pub_type>/')
+def browse_subtypes(pub_type):
+    pub_types = get("https://pubs.er.usgs.gov/pubs-services/lookup/publicationtypes", params={'text': pub_type}).json()
+    pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
+    if pub_type.lower() in pub_types_dict.keys():
+        pub_subtypes = get(pub_url + "/lookup/publicationtype/" + str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/").json()
+        return render_template('pubswh/browse_subtypes.html', pub_type=pub_type, subtypes=pub_subtypes)
+    else:
+        abort(404)
+
+@pubswh.route('/browse/<pub_type>/<pub_subtype>/')
+def browse_subtype(pub_type, pub_subtype):
+    pub_types = get("https://pubs.er.usgs.gov/pubs-services/lookup/publicationtypes", params={'text': pub_type}).json()
+    pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
+    if pub_type.lower() in pub_types_dict.keys():
+        pub_subtypes = get(pub_url + "/lookup/publicationtype/" + str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/").json()
+        pub_subtypes_dict = {publication_subtype['text'].lower(): publication_subtype['id'] for publication_subtype in pub_subtypes}
+        if pub_subtype.lower() in pub_subtypes_dict.keys():
+            # TODO: put in series or just render the data
+            return render_template('pubswh/browse_subtype.html', pub_type=pub_type, pub_subtype=pub_subtype)
+        else:
+            abort(404)
+    else:
+        abort(404)
+
+
+
+
+
+
 
 
 # this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
