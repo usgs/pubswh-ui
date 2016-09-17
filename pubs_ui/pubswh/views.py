@@ -7,6 +7,7 @@ import sys
 import arrow
 import redis
 from requests import get
+import tablib
 
 from flask import render_template, abort, request, Response, jsonify, url_for, redirect, Blueprint
 from flask.ext.cache import Cache
@@ -279,39 +280,73 @@ def other_resources():
 
 @pubswh.route('/browse/')
 def browse_types():
-    types = get("https://pubs.er.usgs.gov/pubs-services/lookup/publicationtypes").json()
+    types = get(pub_url+"/lookup/publicationtypes").json()
     return render_template('pubswh/browse_types.html', types=types)
 
 @pubswh.route('/browse/<pub_type>/')
 def browse_subtypes(pub_type):
-    pub_types = get("https://pubs.er.usgs.gov/pubs-services/lookup/publicationtypes", params={'text': pub_type}).json()
+    pub_types = get(pub_url+"/lookup/publicationtypes", params={'text': pub_type}).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
     if pub_type.lower() in pub_types_dict.keys():
-        pub_subtypes = get(pub_url + "/lookup/publicationtype/" + str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/").json()
+        pub_subtypes = get(pub_url + "/lookup/publicationtype/" + str(pub_types_dict[pub_type.lower()]) +
+                           "/publicationsubtypes/").json()
         return render_template('pubswh/browse_subtypes.html', pub_type=pub_type, subtypes=pub_subtypes)
     else:
         abort(404)
 
+
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/')
 def browse_subtype(pub_type, pub_subtype):
-    pub_types = get("https://pubs.er.usgs.gov/pubs-services/lookup/publicationtypes", params={'text': pub_type}).json()
+    pub_types = get(pub_url+"/lookup/publicationtypes", params={'text': pub_type}).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
     if pub_type.lower() in pub_types_dict.keys():
-        pub_subtypes = get(pub_url + "/lookup/publicationtype/" + str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/").json()
-        pub_subtypes_dict = {publication_subtype['text'].lower(): publication_subtype['id'] for publication_subtype in pub_subtypes}
+        pub_subtypes = get(pub_url + "/lookup/publicationtype/" +
+                           str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/").json()
+        pub_subtypes_dict = {publication_subtype['text'].lower(): publication_subtype['id']
+                             for publication_subtype in pub_subtypes}
         if pub_subtype.lower() in pub_subtypes_dict.keys():
-            # TODO: put in series or just render the data
-            return render_template('pubswh/browse_subtype.html', pub_type=pub_type, pub_subtype=pub_subtype)
+            # TODO: just render the data if there are not series
+            series_data = get(pub_url+"/lookup/publicationtype/"+
+                              str(pub_types_dict[pub_type.lower()])+"/publicationsubtype/"+
+                              str(pub_subtypes_dict[pub_subtype.lower()])+"/publicationseries").json()
+            return render_template('pubswh/browse_subtype.html',
+                                   pub_type=pub_type, pub_subtype=pub_subtype, series_titles=series_data)
         else:
             abort(404)
     else:
         abort(404)
 
-
-
-
-
-
+@pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>')
+def browse_series(pub_type, pub_subtype, pub_series_name):
+    pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}).json()
+    pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
+    if pub_type.lower() in pub_types_dict.keys():
+        pub_subtypes = get(pub_url + "/lookup/publicationtype/" +
+                           str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/").json()
+        pub_subtypes_dict = {publication_subtype['text'].lower(): publication_subtype['id']
+                             for publication_subtype in pub_subtypes}
+        if pub_subtype.lower() in pub_subtypes_dict.keys():
+            series_data = get(pub_url + "/lookup/publicationtype/" +
+                              str(pub_types_dict[pub_type.lower()]) + "/publicationsubtype/" +
+                              str(pub_subtypes_dict[pub_subtype.lower()]) + "/publicationseries").json()
+            pub_series_dict = {publication_series['text'].lower(): publication_series['id']
+                                 for publication_series in series_data}
+            if pub_series_name.lower() in pub_series_dict.keys():
+                pubs = get(pub_url+"publication/", params={"mimeType": "tsv", "subtypeName": pub_subtype,
+                                                           "seriesName": pub_series_name, "typeName": pub_type}).content
+                pubs_data = tablib.Dataset().load(pubs)
+                pubs_data_dict = pubs_data.dict
+                for row in pubs_data_dict: #you can iterate over this dict becasue it is actually an ordered dict
+                    row['indexId'] = row['URL'].split("/")[-1]
+                return render_template('pubswh/browse_series.html',
+                                       pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
+                                       pubs_data=pubs_data_dict)
+            else:
+                abort(404)
+        else:
+            abort(404)
+    else:
+        abort(404)
 
 
 # this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976

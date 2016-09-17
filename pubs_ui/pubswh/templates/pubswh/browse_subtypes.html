@@ -8,11 +8,14 @@
 <main class="container-fluid">
 	<div class="space">
 	    <p class="breadcrumb">
-	       {#  {% for crumb in browsecontent['breadcrumbs']  %}{{ crumb|safe }}{% endfor %}</p>  #}
+	       {# TODO: add breadcrumbs #}
+            {#  {% for crumb in browsecontent['breadcrumbs']  %}{{ crumb|safe }}{% endfor %}</p>  #}
 	    <h1>Browse the USGS Publication Warehouse</h1>
 	    <h2>Publication subtypes for the publication type {{ pub_type }}</h2>
 	    <div class="fix">
-		   {% for subtype in subtypes %}<a href="{{ url_for("pubswh.browse_subtype", pub_type=pub_type, pub_subtype=subtype['text']) }}" #}>{{ subtype['text'] }}</a> </br>{% endfor %}
+		   <ul>
+               {% for subtype in subtypes %}<li class="pubs-browse-list-theme"> <a title="See a list of series or publications for this publication subtype" href="{{ url_for("pubswh.browse_subtype", pub_type=pub_type, pub_subtype=subtype['text']) }}" #}>{{ subtype['text'] }}</a> </li>{% endfor %}
+           </ul>
 	    </div>
     </div>
 </main>
