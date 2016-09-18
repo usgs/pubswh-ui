@@ -7,9 +7,10 @@
 {% block main %}
 <main class="container-fluid">
 	<div class="space">
-	    <p class="breadcrumb">
-	       {# TODO: add breadcrumbs #}
-            {#  {% for crumb in browsecontent['breadcrumbs']  %}{{ crumb|safe }}{% endfor %}</p>  #}
+	    <p class="breadcrumb"> <a href="{{ url_for('pubswh.index') }}" title="Pubs Warehouse Home">Pubs Warehouse Home</a>
+            <span> > </span><a href="{{ url_for('pubswh.browse_types') }}" title="Browse USGS Publications">Browse</a>
+            {% if pub_type %}<span> > </span><a href="{{ url_for("pubswh.browse_subtypes", pub_type=pub_type) }}">{{ pub_type }}</a>{% endif %}
+        </p>
 	    <h1>Browse the USGS Publication Warehouse</h1>
 	    <h2>Publication subtypes for the publication type {{ pub_type }}</h2>
 	    <div class="fix">
