@@ -1,3 +1,4 @@
+from sys import getsizeof
 from datetime import date, timedelta
 from dateutil import parser as dateparser
 import json
@@ -287,16 +288,33 @@ def browse_types():
 def browse_subtypes(pub_type):
     pub_types = get(pub_url+"/lookup/publicationtypes", params={'text': pub_type}).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
+    just_list_pubs = ['book', 'book chapter', 'pamphlet', 'patent', 'speech', 'thesis', 'videorecording', 'conference paper']
     if pub_type.lower() in pub_types_dict.keys():
-        pub_subtypes = get(pub_url + "/lookup/publicationtype/" + str(pub_types_dict[pub_type.lower()]) +
-                           "/publicationsubtypes/").json()
-        return render_template('pubswh/browse_subtypes.html', pub_type=pub_type, subtypes=pub_subtypes)
+        if pub_type.lower() in just_list_pubs:
+            pubs = get(pub_url + "publication/", params={"mimeType": "tsv", "typeName": pub_type})
+            if pubs.text:
+                pubs_data = tablib.Dataset().load(pubs.content)
+                pubs_data_dict = pubs_data.dict
+                for row in pubs_data_dict:  # you can iterate over this dict becasue it is actually an ordered dict
+                    row['indexId'] = row['URL'].split("/")[-1]
+                return render_template('pubswh/browse_series.html',
+                                       pub_type=pub_type, pub_subtype=None, series_title=None,
+                                       pubs_data=pubs_data_dict)
+            else:
+                # TODO: put in actual content here
+                return "nopubs!"
+        else:
+            pub_subtypes = get(pub_url + "/lookup/publicationtype/" + str(pub_types_dict[pub_type.lower()]) +
+                               "/publicationsubtypes/").json()
+            return render_template('pubswh/browse_subtypes.html', pub_type=pub_type, subtypes=pub_subtypes)
     else:
         abort(404)
 
 
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/')
 def browse_subtype(pub_type, pub_subtype):
+    subtype_has_no_series = ['usgs data release', 'website', 'database-nonspatial', 'database-spatial', 'letter',
+                             'newspaper article', 'review' ]
     pub_types = get(pub_url+"/lookup/publicationtypes", params={'text': pub_type}).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
     if pub_type.lower() in pub_types_dict.keys():
@@ -305,12 +323,28 @@ def browse_subtype(pub_type, pub_subtype):
         pub_subtypes_dict = {publication_subtype['text'].lower(): publication_subtype['id']
                              for publication_subtype in pub_subtypes}
         if pub_subtype.lower() in pub_subtypes_dict.keys():
-            # TODO: just render the data if there are not series
-            series_data = get(pub_url+"/lookup/publicationtype/"+
-                              str(pub_types_dict[pub_type.lower()])+"/publicationsubtype/"+
-                              str(pub_subtypes_dict[pub_subtype.lower()])+"/publicationseries").json()
-            return render_template('pubswh/browse_subtype.html',
-                                   pub_type=pub_type, pub_subtype=pub_subtype, series_titles=series_data)
+            if pub_subtype.lower() in subtype_has_no_series:
+                pubs = get(pub_url + "publication/", params={"mimeType": "tsv", "typeName": pub_type,
+                                                             "subtypeName": pub_subtype})
+                if pubs.text:
+                    pubs_data = tablib.Dataset().load(pubs.content)
+                    pubs_data_dict = pubs_data.dict
+                    for row in pubs_data_dict:  # you can iterate over this dict because it is actually an ordered dict
+                        row['indexId'] = row['URL'].split("/")[-1]
+                    return render_template('pubswh/browse_series.html',
+                                           pub_type=pub_type, pub_subtype=None, series_title=None,
+                                           pubs_data=pubs_data_dict)
+                else:
+                    # TODO: put in actual content here
+                    return "nopubs!"
+
+
+            else:
+                series_data = get(pub_url+"/lookup/publicationtype/"+
+                                  str(pub_types_dict[pub_type.lower()])+"/publicationsubtype/"+
+                                  str(pub_subtypes_dict[pub_subtype.lower()])+"/publicationseries").json()
+                return render_template('pubswh/browse_subtype.html',
+                                       pub_type=pub_type, pub_subtype=pub_subtype, series_titles=series_data)
         else:
             abort(404)
     else:
@@ -333,14 +367,19 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
                                  for publication_series in series_data}
             if pub_series_name.lower() in pub_series_dict.keys():
                 pubs = get(pub_url+"publication/", params={"mimeType": "tsv", "subtypeName": pub_subtype,
-                                                           "seriesName": pub_series_name, "typeName": pub_type}).content
-                pubs_data = tablib.Dataset().load(pubs)
-                pubs_data_dict = pubs_data.dict
-                for row in pubs_data_dict: #you can iterate over this dict becasue it is actually an ordered dict
-                    row['indexId'] = row['URL'].split("/")[-1]
-                return render_template('pubswh/browse_series.html',
-                                       pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
-                                       pubs_data=pubs_data_dict)
+                                                           "seriesName": pub_series_name, "typeName": pub_type})
+                if pubs.text:
+                    pubs_data = tablib.Dataset().load(pubs.content)
+                    pubs_data_dict = pubs_data.dict
+                    for row in pubs_data_dict: #you can iterate over this dict becasue it is actually an ordered dict
+                        row['indexId'] = row['URL'].split("/")[-1]
+                    return render_template('pubswh/browse_series.html',
+                                           pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
+                                           pubs_data=pubs_data_dict)
+                else:
+                    # TODO: put in actual content here
+                    return "nopubs!"
+
             else:
                 abort(404)
         else:
