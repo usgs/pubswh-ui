@@ -7,20 +7,25 @@
 {% block main %}
 <main class="container-fluid">
 	<div class="space">
-	    <p class="breadcrumb"> <a href="{{ url_for('pubswh.index') }}" title="Pubs Warehouse Home">Pubs Warehouse Home</a>
+	    <p class="breadcrumb">
+            <p class="breadcrumb"> <a href="{{ url_for('pubswh.index') }}" title="Pubs Warehouse Home">Pubs Warehouse Home</a>
             <span> > </span><a href="{{ url_for('pubswh.browse_types') }}" title="Browse USGS Publications">Browse</a>
             {% if pub_type %}<span> > </span><a href="{{ url_for("pubswh.browse_subtypes", pub_type=pub_type) }}">{{ pub_type }}</a>{% endif %}
             {% if pub_subtype %}<span> > </span><a href="{{ url_for("pubswh.browse_subtype", pub_type=pub_type, pub_subtype=pub_subtype) }}">{{ pub_subtype }}</a>{% endif %}
+            {% if series_title %}<span> > </span><a href="{{ url_for("pubswh.browse_series", pub_type=pub_type, pub_subtype=pub_subtype, pub_series_name=series_title) }}">{{ series_title }}</a>{% endif %}
         </p>
+
 	    <h1>Browse the USGS Publication Warehouse</h1>
-	    <h2>Series for the publication type {{ pub_type }} and subtype {{ pub_subtype }}</h2>
+	    <h2>Years that the {{ pub_type }} {{ series_title }} may be available</h2>
 	    <div class="fix">
             <ul>
-                {% for series in series_titles %}
-                    <li class="pubs-browse-list-theme">
-                       <a title="see the publications associated with this series" href="{{ url_for("pubswh.browse_series", pub_type=pub_type, pub_subtype=pub_subtype, pub_series_name=series['text']) }}" #}>{{ series['text'] }}</a>
-                    </li>
-                {% endfor %}
+
+                    {% for year in year_range %}
+                        <li class="pubs-browse-list-theme">
+                           <a href="{{ url_for("pubswh.browse_series_year", pub_type=pub_type, pub_subtype=pub_subtype, pub_series_name=series_title, year=year ) }}">{{ year }}</a>
+                        </li>
+                    {% endfor %}
+
             </ul>
 	    </div>
     </div>

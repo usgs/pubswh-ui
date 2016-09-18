@@ -8,12 +8,13 @@
 <main class="container-fluid">
 	<div class="space">
 	    <p class="breadcrumb">
-            <p class="breadcrumb"> <a href="{{ url_for('pubswh.index') }}" title="Pubs Warehouse Home">Pubs Warehouse Home</a>
+            <a href="{{ url_for('pubswh.index') }}" title="Pubs Warehouse Home">Pubs Warehouse Home</a>
             <span> > </span><a href="{{ url_for('pubswh.browse_types') }}" title="Browse USGS Publications">Browse</a>
-            {% if pub_type %}<span> > </span><a href="{{ url_for("pubswh.browse_subtypes", pub_type=pub_type) }}">{{ pub_type }}</a>{% endif %}
-            {% if pub_subtype %}<span> > </span><a href="{{ url_for("pubswh.browse_subtype", pub_type=pub_type, pub_subtype=pub_subtype) }}">{{ pub_subtype }}</a>{% endif %}
-            {% if series_title %}<span> > </span><a href="{{ url_for("pubswh.browse_series", pub_type=pub_type, pub_subtype=pub_subtype, pub_series_name=series_title) }}">{{ series_title }}</a>{% endif %}
-            </p>
+            {% if pub_type %}<span> > </span><a href="{{ url_for("pubswh.browse_subtypes", pub_type=pub_type) }}" title="See subtypes in or a publication list for {{ pub_type }}">{{ pub_type }}</a>{% endif %}
+            {% if pub_subtype %}<span> > </span><a href="{{ url_for("pubswh.browse_subtype", pub_type=pub_type, pub_subtype=pub_subtype) }}" title="See series in or a publication list for {{ pub_subtype }}">{{ pub_subtype }}</a>{% endif %}
+            {% if series_title %}<span> > </span><a href="{{ url_for("pubswh.browse_series", pub_type=pub_type, pub_subtype=pub_subtype, pub_series_name=series_title)  }}" title="See publications in or a year list for {{ series_title }}">{{ series_title }}</a>{% endif %}
+            {% if pub_year %}<span> > </span><a href="{{ url_for("pubswh.browse_series_year", pub_type=pub_type, pub_subtype=pub_subtype, pub_series_name=series_title, year=pub_year ) }}" title="See list of publications in {{ pub_year }}">{{ pub_year }}</a>{% endif %}
+        </p>
 
 	    <h1>Browse the USGS Publication Warehouse</h1>
 	    <h2>Publications int the Series {{ series_title }}</h2>

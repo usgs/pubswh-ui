@@ -344,7 +344,7 @@ def browse_subtype(pub_type, pub_subtype):
     else:
         abort(404)
 
-@pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>')
+@pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>/')
 def browse_series(pub_type, pub_subtype, pub_series_name):
     pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
@@ -360,6 +360,18 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
             pub_series_dict = {publication_series['text'].lower(): publication_series['id']
                                  for publication_series in series_data}
             if pub_series_name.lower() in pub_series_dict.keys():
+                year = int(arrow.utcnow().year)+1
+                generate_years = {'fact sheet': range(1994, year), "open-file report": range(1902, year),
+                                  'scientific investigations report': range(2004, year),
+                                  'professional paper': range(1902, year),
+                                  'water-resources investigations report': range(1972, 2006),
+                                  'water supply paper': range(1896,2002), 'circular': range(1933, year)
+                                  }
+                if pub_series_name.lower() in generate_years.keys():
+                    print "we made it this far..."
+                    return render_template('pubswh/browse_series_years.html',
+                                           pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
+                                           year_range=generate_years[pub_series_name.lower()])
                 pubs = get(pub_url+"publication/", params={"mimeType": "csv", "subtypeName": pub_subtype,
                                                            "seriesName": pub_series_name, "typeName": pub_type})
                 if pubs.text:
@@ -374,6 +386,46 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
                     return render_template('pubswh/browse_pubs_list.html',
                                            pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
                                            pubs_data=None)
+
+            else:
+                abort(404)
+        else:
+            abort(404)
+    else:
+        abort(404)
+
+
+@pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>/<year>/')
+def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
+    pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}).json()
+    pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
+    if pub_type.lower() in pub_types_dict.keys():
+        pub_subtypes = get(pub_url + "/lookup/publicationtype/" +
+                           str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/").json()
+        pub_subtypes_dict = {publication_subtype['text'].lower(): publication_subtype['id']
+                             for publication_subtype in pub_subtypes}
+        if pub_subtype.lower() in pub_subtypes_dict.keys():
+            series_data = get(pub_url + "/lookup/publicationtype/" +
+                              str(pub_types_dict[pub_type.lower()]) + "/publicationsubtype/" +
+                              str(pub_subtypes_dict[pub_subtype.lower()]) + "/publicationseries").json()
+            pub_series_dict = {publication_series['text'].lower(): publication_series['id']
+                               for publication_series in series_data}
+            if pub_series_name.lower() in pub_series_dict.keys():
+                pubs = get(pub_url + "publication/", params={"mimeType": "csv", "subtypeName": pub_subtype,
+                                                             "seriesName": pub_series_name, "typeName": pub_type,
+                                                             "year": year})
+                if pubs.text:
+                    pubs_data = tablib.Dataset().load(pubs.content)
+                    pubs_data_dict = pubs_data.dict
+                    for row in pubs_data_dict:  # you can iterate over this dict becasue it is actually an ordered dict
+                        row['indexId'] = row['URL'].split("/")[-1]
+                    return render_template('pubswh/browse_pubs_list.html',
+                                           pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
+                                           pubs_data=pubs_data_dict, pub_year=year)
+                else:
+                    return render_template('pubswh/browse_pubs_list.html',
+                                           pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
+                                           pubs_data=None, pub_year=year)
 
             else:
                 abort(404)
