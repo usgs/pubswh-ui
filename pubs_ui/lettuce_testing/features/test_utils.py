@@ -3,7 +3,7 @@ from nose.tools import assert_equal, assert_items_equal
 from lettuce import *
 import json
 from requests import get
-from pubs_ui.pubswh.utils import (pull_feed, pubdetails, getbrowsecontent, create_display_links,
+from pubs_ui.pubswh.utils import (pull_feed, pubdetails, create_display_links,
                            jsonify_geojson, add_relationships_graphs, SearchPublications,
                            make_contributor_list, legacy_api_info, sort_list_of_dicts,
                            extract_related_pub_info, munge_abstract)
@@ -145,31 +145,6 @@ def test_links_ouput(step):
 def live_display_links(step):
     world.output = len(create_display_links(get(world.live_url).json()))
     world.expected_output = 25 #check all necessary components are there.
-"""
-getbrowsecontent scenarios
-"""
-
-@step(r"I have a mockup url and body of pubs browse links")
-def mockup_browse(step):
-    body = r'<div id="pubs-browse-links"><ul><li><a href="browse/usgs-publications" alt="Official USGS Publications">Official USGS Publications</a></li><li><a href="browse/journals/all/" alt="Scientific Journal Articles by USGS Authors">ScientificJournal Articles by USGS Authors</a></li><li><a href="browse/other-pubs/all/" alt="Other US Government Publications">Other US Government Publications</a></li><li><a href="browse/state-local/all/" alt="State, Local, and other government publications">State, Local, and other government publications</a></li><li><a href="browse/books-reports-conference/all/" alt="Books, Reports, Conference Proceedings and other publications">Books, Reports, Conference Proceedings and other publications</a></li></ul></div><div id="pubs-browse-breadcrumbs"><a href="browse">Browse USGS Pubs Warehouse</a></div><div id="pubs-browse-header">Please select a category of interest</div>'
-    world.url = "http://test_url/test/browse"
-    httpretty.enable()
-    httpretty.register_uri(httpretty.GET, world.url, body = body)
-    world.expected_output = '{\'breadcrumbs\': [<a href="browse">Browse USGS Pubs Warehouse</a>], \'links\': [<ul><li><a alt="Official USGS Publications" href="browse/usgs-publications">Official USGS Publications</a></li><li><a alt="Scientific Journal Articles by USGS Authors" href="browse/journals/all/">ScientificJournal Articles by USGS Authors</a></li><li><a alt="Other US Government Publications" href="browse/other-pubs/all/">Other US Government Publications</a></li><li><a alt="State, Local, and other government publications" href="browse/state-local/all/">State, Local, and other government publications</a></li><li><a alt="Books, Reports, Conference Proceedings and other publications" href="browse/books-reports-conference/all/">Books, Reports, Conference Proceedings and other publications</a></li></ul>], \'header\': [u\'Please select a category of interest\']}'
-@step(r"I get the links, breadcrumbs, and titles from the url")
-def browse_content(step):
-    world.output = str(getbrowsecontent(world.url, "browse"))
-    httpretty.disable()
-    httpretty.reset()
-
-@step(r"I am returned a list for the links, breadcrumbs, and titles")
-def test_content(step):
-    assert_equal(world.output, world.expected_output)
-
-@step(r"I point to a real pubs browse url")
-def make_url(step):
-    world.url = "http://cida-eros-pubsprod.er.usgs.gov:8080/pubs2_ui/browse"
-    world.expected_output = '{\'breadcrumbs\': [u\'\\n\', <a href="browse">Browse USGS Pubs Warehouse</a>, u\'\\n\'], \'links\': [u\'\\n\', <ul>\\n<li><a alt="Official USGS Publications" href="browse/usgs-publications">Official USGS Publications</a></li>\\n<li><a alt="Scientific Journal Articles by USGS Authors" href="browse/journals/all/">Scientific Journal Articles by USGS Authors</a></li>\\n<li><a alt="Other US Government Publications" href="browse/other-pubs/all/">Other US Government Publications</a></li>\\n<li><a alt="State, Local, and other government publications" href="browse/state-local/all/">State, Local, and other government publications</a></li>\\n<li><a alt="Books, Reports, Conference Proceedings and other publications" href="browse/books-reports-conference/all/">Books, Reports, Conference Proceedings and other publications</a></li>\\n</ul>, u\'\\n\'], \'header\': [u\'Please select a category of interest\']}'
 
 """
 manipulate links scenarios
