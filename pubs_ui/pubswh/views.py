@@ -272,11 +272,13 @@ def other_resources():
 
 
 @pubswh.route('/browse/')
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def browse_types():
     types = get(pub_url+"/lookup/publicationtypes").json()
     return render_template('pubswh/browse_types.html', types=types)
 
 @pubswh.route('/browse/<pub_type>/')
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def browse_subtypes(pub_type):
     pub_types = get(pub_url+"/lookup/publicationtypes", params={'text': pub_type}).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
@@ -305,6 +307,7 @@ def browse_subtypes(pub_type):
 
 
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/')
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def browse_subtype(pub_type, pub_subtype):
     subtype_has_no_series = ['usgs data release', 'website', 'database-nonspatial', 'database-spatial', 'letter',
                              'newspaper article', 'review', 'other report', 'organization series', 'usgs unnumbered series' ]
@@ -345,6 +348,7 @@ def browse_subtype(pub_type, pub_subtype):
         abort(404)
 
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>/')
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def browse_series(pub_type, pub_subtype, pub_series_name):
     pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
@@ -396,6 +400,7 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
 
 
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>/<year>/')
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
     pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
