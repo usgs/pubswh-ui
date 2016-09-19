@@ -22,7 +22,7 @@ from .. import app, mail
 from .arguments import search_args
 from .canned_text import EMAIL_RESPONSE
 from .forms import ContactForm, SearchForm, NumSeries
-from .utils import (pull_feed, create_display_links, getbrowsecontent,
+from .utils import (pull_feed, create_display_links,
                    SearchPublications, change_to_pubs_test,
                    munge_pubdata_for_display, extract_related_pub_info, jsonify_geojson)
 
