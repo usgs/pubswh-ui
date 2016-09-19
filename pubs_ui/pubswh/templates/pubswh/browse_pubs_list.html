@@ -23,7 +23,16 @@
                 {% if pubs_data %}
                     {% for publication in pubs_data %}
                         <li class="pubs-browse-list-theme">
-                           <a href="{{ url_for("pubswh.publication", index_id=publication['indexId'] ) }}">{{ publication['Title'] |safe}}</a>
+                           <a href="{{ url_for("pubswh.publication", index_id=publication['indexId'] ) }}">{{ publication['Author(s)'] }}, {{ publication['Title'] |safe}}, {{ publication['Year Published'] }},
+                               {{ publication['Series title'] }}
+                               {% if publication['Series number'] %}
+                                   {{ publication['Series number'] }} {{ publication['Chapter'] }}
+                               {% endif %}
+                               {% if publication['Volume'] %}
+                               ({{ publication['Volume'] }}) -
+                               {{ publication['Issue']  }}
+                                {% endif %}
+                           </a>
                         </li>
                     {% endfor %}
                 {% else %}
