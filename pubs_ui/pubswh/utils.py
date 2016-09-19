@@ -301,22 +301,6 @@ def pull_feed(feed_url):
     return post
 
 
-def getbrowsecontent(browseurl, browsereplace):
-    """
-    Gets the content of the legacy browse interface so that it can be used without extension.
-    :param browseurl: url of legacy browse interface
-    :return: html content of links, breadcrumb, and title
-    """
-    content = requests.get(browseurl, verify=verify_cert)
-    soup = BeautifulSoup(content.text, 'lxml')
-    for a in soup.findAll('a'):
-        a['href'] = a['href'].replace("browse", browsereplace)
-    browse_content = {'links': soup.find('div', {"id": "pubs-browse-links"}).contents,
-                      'breadcrumbs': soup.find('div', {"id": "pubs-browse-breadcrumbs"}).contents,
-                      'header': soup.find('div', {"id": "pubs-browse-header"}).contents}
-    return browse_content
-
-
 class SearchPublications(object):
     
     """
