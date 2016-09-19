@@ -24,11 +24,6 @@ Feature: Test all pub_ui utilities
 		When I create_display_links from the pub's response
 		Then I am given a list of links for use in the jinja template
 
-	Scenario: getbrowsercontent functions correctly
-		Given I have a mockup url and body of pubs browse links
-		When I get the links, breadcrumbs, and titles from the url
-		Then I am returned a list for the links, breadcrumbs, and titles
-
     Scenario: manipulate_display_links
         Given I have a index page links that point to USGS and NGMDB and has plates
         When I manipulate the links with create display links
@@ -43,22 +38,6 @@ Feature: Test all pub_ui utilities
         Given we have created a fake pubs record with an invalid geographic extents string
         When I try to make a record with parseable json and catch an error
         Then I see the record has geographicExtents dropped
-
-# Commenting these out b/c the legacy endpoint is totally broken
-#	Scenario: add_relationships_graphs functions correctly with a store item
-#	  	Given I have a mockup pubs legacy url that has a store item
-#	  	When I make a dict object with the store offer information
-#	  	Then I see that the store information has been listed correctly
-#
-#  	Scenario: add_relationships_graphs functions add offers if they are there
-#		Given I have a mocked base publication record, a base url, and a mocked legacy endpoint
-#        When I pass those store variables to add_relationships_graphs
-#		Then The offers portion of the pub record should contain what I expect
-#
-#    Scenario: add_relationships_graphs adds relationships from new endpoint
-#        Given I have a mocked base publication record that has a populated interactions data element, a base url, and a mocked legacy endpoint
-#        When I pass those interactions variables to add_relationships_graphs
-#        Then the relationships data element of the pubs record should contain what I expect
 
 	Scenario: make_contributor_list functions correctly
 		Given we have imitated the authors data we would see from pubs

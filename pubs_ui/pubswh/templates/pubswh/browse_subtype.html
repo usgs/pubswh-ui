@@ -1,0 +1,29 @@
+{% extends 'pubswh/base.html' %}
+{% block head %}
+    <title>Browse the USGS Publications Warehouse</title>
+    <meta name="description" content="Browse all of the USGS publications warehouse by following a link tree">
+{% endblock %}
+
+{% block main %}
+<main class="container-fluid">
+	<div class="space">
+	    <p class="breadcrumb"> <a href="{{ url_for('pubswh.index') }}" title="Pubs Warehouse Home">Pubs Warehouse Home</a>
+            <span> > </span><a href="{{ url_for('pubswh.browse_types') }}" title="Browse USGS Publications">Browse</a>
+            {% if pub_type %}<span> > </span><a href="{{ url_for("pubswh.browse_subtypes", pub_type=pub_type) }}">{{ pub_type }}</a>{% endif %}
+            {% if pub_subtype %}<span> > </span><a href="{{ url_for("pubswh.browse_subtype", pub_type=pub_type, pub_subtype=pub_subtype) }}">{{ pub_subtype }}</a>{% endif %}
+        </p>
+	    <h1>Browse the USGS Publication Warehouse</h1>
+	    <h2>Series for the publication type {{ pub_type }} and subtype {{ pub_subtype }}</h2>
+	    <div class="fix">
+            <ul>
+                {% for series in series_titles %}
+                    <li class="pubs-browse-list-theme">
+                       <a title="see the publications associated with this series" href="{{ url_for("pubswh.browse_series", pub_type=pub_type, pub_subtype=pub_subtype, pub_series_name=series['text']) }}" #}>{{ series['text'] }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+	    </div>
+    </div>
+</main>
+{% endblock %}
+{% block url %}<a href="{{ request.full_path }}">http://pubs.er.usgs.gov{{ request.path }}</a>{% endblock %}
