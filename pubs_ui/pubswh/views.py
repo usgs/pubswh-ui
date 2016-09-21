@@ -24,7 +24,7 @@ from .canned_text import EMAIL_RESPONSE
 from .forms import ContactForm, SearchForm, NumSeries
 from .utils import (pull_feed, create_display_links,
                    SearchPublications, change_to_pubs_test,
-                   munge_pubdata_for_display, extract_related_pub_info, jsonify_geojson)
+                   munge_pubdata_for_display, extract_related_pub_info, jsonify_geojson, generate_sb_data)
 
 
 # set UTF-8 to be default throughout app
@@ -197,6 +197,9 @@ def publication(index_id):
     related_pubs = extract_related_pub_info(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
+    if 'mimetype' in request.args and request.args.get("mimetype") == 'sbjson':
+        sbdata = generate_sb_data(pubdata)
+        return jsonify(sbdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'ris':
         content =  render_template('pubswh/ris_single.ris', result=pubdata)
         return Response(content, mimetype="application/x-research-info-systems",

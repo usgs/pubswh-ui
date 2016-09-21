@@ -392,6 +392,7 @@ def concatenate_contributor_names(contributors):
         if contributor['corporation'] is False:
             # list to set up join
             contributor_name_list = []
+            contributor_dict = {"type": "person"}
             # add parts of name to the list if they exist and aren't empty strings
             if contributor.get("given") is not None and len(contributor.get("given")) > 0:
                 contributor_name_list.append(contributor['given'])
@@ -399,7 +400,12 @@ def concatenate_contributor_names(contributors):
                 contributor_name_list.append(contributor['family'])
             if contributor.get("suffix") is not None and len(contributor.get("suffix")) > 0:
                 contributor_name_list.append(contributor['suffix'])
-            contributor_dict = {"type": 'person', "text": " ".join(contributor_name_list)}
+            contributor_dict["text"] = " ".join(contributor_name_list)
+            if contributor.get("orcid"):
+                contributor_dict["orcid"] = contributor['orcid']
+            if contributor.get("email"):
+                contributor_dict["email"] = contributor["email"]
+
         # corporate authors- the other side of the boolean
         else:
             contributor_dict = {"type": 'corporation', "text": contributor.get('organization')}
@@ -775,3 +781,66 @@ def munge_abstract(pubdata):
     pubdata['abstractHeader'] = abstract_header
 
     return pubdata
+
+def generate_sb_data(pubdata):
+    sbdata= {"title": pubdata['title'],
+             "id": pubdata['scienceBaseUri'],
+             "identifiers": [
+                 {
+                    "type": "local-index",
+                    "scheme": "unknown",
+                    "key": pubdata['indexId']
+                    },
+                    {
+                    "type": "local-pk",
+                    "scheme": "unknown",
+                    "key": pubdata['id']
+                    }
+             ],
+             "body": pubdata.get('docAbstract'),
+             "citation": pubdata.get('usgsCitation'),
+             "contacts": [],
+             "facets": []
+             }
+
+    if pubdata.get('doi'):
+        doi_object = {
+            "type": "doi",
+            "scheme": "http://www.loc.gov/standards/mods/mods-outline-3-5.html#identifier",
+            "key": "doi:"+pubdata['doi']
+        }
+        sbdata['identifiers'].append(doi_object)
+    if pubdata.get('seriesTitle'):
+        series_object = {
+            "type": "series",
+            "scheme": "unknown",
+            "key": pubdata['seriesTitle'].get('text')
+        }
+        sbdata['identifiers'].append(series_object)
+    if pubdata.get('contributors', None).get('authors'):
+        if pubdata.get('authorsListTyped'):
+            for author in pubdata['authorsListTyped']:
+                contact = {}
+                contact['type'] = "Author"
+                contact['name'] = author.get('text')
+                contact['email'] = author.get('email')
+                if author['type'] == 'person':
+                    contact['contactType'] = "person"
+                else:
+                    contact['contactType'] = "organization"
+                sbdata['contacts'].append(contact)
+        if pubdata.get('contributors', None).get('editors'):
+            if pubdata.get('editorsListTyped'):
+                for editor in pubdata['authorsListTyped']:
+                    contact = {}
+                    contact['type'] = "Editor"
+                    contact['name'] = editor.get('text')
+                    contact['email'] = editor.get('email')
+                    if editor['type'] == 'person':
+                        contact['contactType'] = "person"
+                    else:
+                        contact['contactType'] = "organization"
+                    sbdata['contacts'].append(contact)
+
+
+    return sbdata
