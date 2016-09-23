@@ -930,5 +930,15 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
                         "hidden": False
                         }
                 sbdata["webLinks"].append(document_link)
+        if linktype == "Data Release" and len(linklist) >= 1:
+            for link in linklist:
+                document_link = {
+                        "type": "webLink",
+                        "uri": link['url'],
+                        "rel": "related",
+                        "title": link['text'] if link.get('text') else "USGS Data Release",
+                        "hidden": False
+                        }
+                sbdata["webLinks"].append(document_link)
 
     return sbdata
