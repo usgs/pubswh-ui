@@ -459,7 +459,6 @@ def search_results():
             and search_kwargs.get('page') is not None:
         search_kwargs['page_number'] = search_kwargs['page']
 
-
     sp = SearchPublications(search_url)
     search_results_response, resp_status_code = sp.get_pubs_search_results(
         params=search_kwargs)  # go out to the pubs API and get the search results
