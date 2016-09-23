@@ -9,7 +9,6 @@ from pubs_ui import app
 import json
 from urlparse import urljoin
 from copy import deepcopy
-from itsdangerous import URLSafeTimedSerializer
 import arrow
 import natsort
 from ..custom_filters import display_publication_info
@@ -392,6 +391,7 @@ def concatenate_contributor_names(contributors):
         if contributor['corporation'] is False:
             # list to set up join
             contributor_name_list = []
+            contributor_dict = {"type": "person"}
             # add parts of name to the list if they exist and aren't empty strings
             if contributor.get("given") is not None and len(contributor.get("given")) > 0:
                 contributor_name_list.append(contributor['given'])
@@ -399,7 +399,12 @@ def concatenate_contributor_names(contributors):
                 contributor_name_list.append(contributor['family'])
             if contributor.get("suffix") is not None and len(contributor.get("suffix")) > 0:
                 contributor_name_list.append(contributor['suffix'])
-            contributor_dict = {"type": 'person', "text": " ".join(contributor_name_list)}
+            contributor_dict["text"] = " ".join(contributor_name_list)
+            if contributor.get("orcid"):
+                contributor_dict["orcid"] = contributor['orcid']
+            if contributor.get("email"):
+                contributor_dict["email"] = contributor["email"]
+
         # corporate authors- the other side of the boolean
         else:
             contributor_dict = {"type": 'corporation', "text": contributor.get('organization')}
@@ -775,3 +780,174 @@ def munge_abstract(pubdata):
     pubdata['abstractHeader'] = abstract_header
 
     return pubdata
+
+def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url):
+    """
+    This function transforms data from the Publications Warehouse data model to the the ScienceBase data model so that
+    Publications Warehouse data can be pushed to ScienceBase
+    :param pubrecord: the publication record that is coming out of the publication warehouse web service
+    :param replace_pubs_with_pubs_test: Needed for munging pubs data we have to do to support pubs-test horribleness
+    :param supersedes_url: needed for munging pubs data function- supports supersedes
+    :param json_ld_id_base_url: needed for generating json-ld in munge pubdata
+    :return: sciencebase data that follows the sciencebase data model:
+    https://my.usgs.gov/confluence/display/sciencebase/ScienceBase+Item+Core+Model
+    """
+    pubdata = munge_pubdata_for_display(pubrecord, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+    sbdata= {"title": pubdata['title'],
+             "id": pubdata.get('scienceBaseUri'),
+             "identifiers": [
+                 {
+                    "type": "local-index",
+                    "scheme": "unknown",
+                    "key": pubdata['indexId']
+                    },
+                    {
+                    "type": "local-pk",
+                    "scheme": "unknown",
+                    "key": pubdata['id']
+                    }
+             ],
+             "body": pubdata.get('docAbstract'),
+             "citation": pubdata.get('usgsCitation'),
+             "contacts": [],
+             "facets": [],
+             "dates": [],
+             "tags": [],
+             "browseCategories": [
+                 "Publication"
+             ],
+             "browseTypes": [
+                 "Citation"
+             ],
+             'webLinks': [
+                 {
+                     "type": "webLink",
+                     "uri": "http://pubs.er.usgs.gov/publication/"+pubdata['indexId'],
+                     "rel": "related",
+                     "title": "Publications Warehouse Index Page",
+                     "hidden": False
+                 }
+             ],
+             "parentId": "4f4e4771e4b07f02db47e1e4"
+             }
+
+    if pubdata.get('doi'):
+        doi_object = {
+            "type": "doi",
+            "scheme": "http://www.loc.gov/standards/mods/mods-outline-3-5.html#identifier",
+            "key": "doi:"+pubdata['doi']
+        }
+        sbdata['identifiers'].append(doi_object)
+    if pubdata.get('seriesTitle'):
+        series_object = {
+            "type": "series",
+            "scheme": "unknown",
+            "key": pubdata['seriesTitle'].get('text')
+        }
+        sbdata['identifiers'].append(series_object)
+        title_tag = {
+            "type": "Publication",
+            "scheme": "USGS Publications Warehouse",
+            "name": pubdata['seriesTitle'].get('text')
+        }
+        sbdata['tags'].append(title_tag)
+    if pubdata.get('publicationYear'):
+        publication_year = {
+            "type": "Publication",
+            "dateString": pubdata['publicationYear'],
+            "label": "Publication Date"
+        }
+        sbdata['dates'].append(publication_year)
+    if pubdata.get('contributors', {}).get('authors'):
+        if pubdata.get('authorsListTyped'):
+            for author in pubdata['authorsListTyped']:
+                contact = {}
+                contact['type'] = "Author"
+                contact['name'] = author.get('text')
+                contact['email'] = author.get('email')
+                if author['type'] == 'person':
+                    contact['contactType'] = "person"
+                else:
+                    contact['contactType'] = "organization"
+                sbdata['contacts'].append(contact)
+        if pubdata.get('contributors', {}).get('editors'):
+            if pubdata.get('editorsListTyped'):
+                for editor in pubdata['authorsListTyped']:
+                    contact = {}
+                    contact['type'] = "Editor"
+                    contact['name'] = editor.get('text')
+                    contact['email'] = editor.get('email')
+                    if editor['type'] == 'person':
+                        contact['contactType'] = "person"
+                    else:
+                        contact['contactType'] = "organization"
+                    sbdata['contacts'].append(contact)
+    if pubdata.get('publisher'):
+        sbdata['contacts'].append({"name": pubdata['publisher'], "type": "Publisher"})
+    citation_facet = {
+                        "citationType": pubdata.get('publicationType', {}).get('text'),
+                        "journal": pubdata.get('seriesTitle', {}).get('text'),
+                        "edition": pubdata.get('edition'),
+                        "tableOfContents": pubdata.get('tableOfContents'),
+                        "conference": pubdata.get('conferenceTitle'),
+                        "language": pubdata.get('language'),
+                        "note": "",
+                        "parts": [
+
+                        ],
+                        "className": "gov.sciencebase.catalog.item.facet.CitationFacet"
+    }
+
+
+    if pubdata.get('volume'):
+        volume = {
+                     "type": "volume",
+                     "value": pubdata.get('volume')
+                 }
+        citation_facet['parts'].append(volume)
+
+    if pubdata.get('issue'):
+        issue = {
+            "type": "issue",
+            "value": pubdata.get('issue')
+        }
+        citation_facet['parts'].append(issue)
+    if pubdata.get('publisherLocation'):
+        location = {
+            "type": "Publication Place",
+            "value": pubdata.get('publisherLocation')
+        }
+        citation_facet['parts'].append(location)
+    sbdata['facets'].append(citation_facet)
+    for (linktype, linklist) in pubdata['displayLinks'].items():
+        if linktype == "Thumbnail" and len(linklist) == 1:
+            thumbnail_link = {
+                        "type": "browseImage",
+                        "uri": linklist[0]['url'],
+                        "rel": "related",
+                        "title": "Thumbnail",
+                        "hidden": False
+                        }
+            sbdata["webLinks"].append(thumbnail_link)
+        if linktype == "Document" and len(linklist) >= 1:
+            for link in linklist:
+                document_link = {
+                        "type": "pdf",
+                        "uri": link['url'],
+                        "rel": "related",
+                        "title": link['text'] if link.get('text') else "Document",
+                        "hidden": False
+                        }
+                sbdata["webLinks"].append(document_link)
+        if linktype == "Data Release" and len(linklist) >= 1:
+            for link in linklist:
+                document_link = {
+                        "type": "webLink",
+                        "uri": link['url'],
+                        "rel": "related",
+                        "title": link['text'] if link.get('text') else "USGS Data Release",
+                        "hidden": False
+                        }
+                sbdata["webLinks"].append(document_link)
+
+    return sbdata

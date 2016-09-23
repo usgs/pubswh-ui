@@ -24,7 +24,7 @@ from .canned_text import EMAIL_RESPONSE
 from .forms import ContactForm, SearchForm, NumSeries
 from .utils import (pull_feed, create_display_links,
                    SearchPublications, change_to_pubs_test,
-                   munge_pubdata_for_display, extract_related_pub_info, jsonify_geojson)
+                   munge_pubdata_for_display, extract_related_pub_info, jsonify_geojson, generate_sb_data)
 
 
 # set UTF-8 to be default throughout app
@@ -193,6 +193,9 @@ def publication(index_id):
     if r.status_code == 404:
         return render_template('pubswh/404.html'), 404
     pubreturn = r.json()
+    if 'mimetype' in request.args and request.args.get("mimetype") == 'sbjson':
+        sbdata = generate_sb_data(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+        return jsonify(sbdata)
     pubdata = munge_pubdata_for_display(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
     related_pubs = extract_related_pub_info(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
@@ -456,7 +459,6 @@ def search_results():
             and search_kwargs.get('page') is not None:
         search_kwargs['page_number'] = search_kwargs['page']
 
-
     sp = SearchPublications(search_url)
     search_results_response, resp_status_code = sp.get_pubs_search_results(
         params=search_kwargs)  # go out to the pubs API and get the search results
@@ -484,6 +486,20 @@ def search_results():
         content = render_template('pubswh/ris_output.ris', search_result_records=search_result_records)
         return Response(content, mimetype="application/x-research-info-systems",
                                headers={"Content-Disposition":"attachment;filename=PubsWarehouseResults.ris"})
+    if 'mimetype' in request.args and request.args.get("mimetype") == 'sbjson':
+        sciencebase_records = []
+        for record in search_result_records:
+            sb_record = generate_sb_data(record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+            sciencebase_records.append(sb_record)
+        sb_response = {
+            "pageSize": search_results_response['pageSize'],
+            "pageRowStart": search_results_response['pageRowStart'],
+            "pageNumber": search_results_response['pageNumber'],
+            "recordCount": search_results_response['recordCount'],
+            "records": sciencebase_records,
+        }
+        return jsonify(sb_response)
+
     if request.args.get('map') == 'True':
         for record in search_result_records:
             record = jsonify_geojson(record)
