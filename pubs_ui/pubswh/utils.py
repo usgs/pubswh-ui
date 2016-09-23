@@ -9,7 +9,6 @@ from pubs_ui import app
 import json
 from urlparse import urljoin
 from copy import deepcopy
-from itsdangerous import URLSafeTimedSerializer
 import arrow
 import natsort
 from ..custom_filters import display_publication_info
@@ -783,6 +782,16 @@ def munge_abstract(pubdata):
     return pubdata
 
 def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url):
+    """
+    This function transforms data from the Publications Warehouse data model to the the ScienceBase data model so that
+    Publications Warehouse data can be pushed to ScienceBase
+    :param pubrecord: the publication record that is coming out of the publication warehouse web service
+    :param replace_pubs_with_pubs_test: Needed for munging pubs data we have to do to support pubs-test horribleness
+    :param supersedes_url: needed for munging pubs data function- supports supersedes
+    :param json_ld_id_base_url: needed for generating json-ld in munge pubdata
+    :return: sciencebase data that follows the sciencebase data model:
+    https://my.usgs.gov/confluence/display/sciencebase/ScienceBase+Item+Core+Model
+    """
     pubdata = munge_pubdata_for_display(pubrecord, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
     sbdata= {"title": pubdata['title'],
              "id": pubdata.get('scienceBaseUri'),
