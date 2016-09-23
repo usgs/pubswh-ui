@@ -782,7 +782,8 @@ def munge_abstract(pubdata):
 
     return pubdata
 
-def generate_sb_data(pubdata):
+def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url):
+    pubdata = munge_pubdata_for_display(pubrecord, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
     sbdata= {"title": pubdata['title'],
              "id": pubdata.get('scienceBaseUri'),
              "identifiers": [
