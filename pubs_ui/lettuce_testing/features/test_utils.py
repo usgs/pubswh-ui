@@ -585,7 +585,6 @@ def search_pubs(step):
 
 @step(r'I am given the appropriate responses')
 def check_responses(step):
-    assert_equal.__self__.maxDiff = None
     httpretty.disable()
     httpretty.reset()
 
