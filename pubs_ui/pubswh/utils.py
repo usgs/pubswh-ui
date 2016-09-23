@@ -909,13 +909,25 @@ def generate_sb_data(pubdata):
         }
         citation_facet['parts'].append(location)
     sbdata['facets'].append(citation_facet)
-    if pubdata.get('displayLinks', {}).get('Thumbnail',[])[0]:
-        thumbnail_link = {
-                    "type": "browseImage",
-                    "uri": pubdata['displayLinks']['Thumbnail'][0]['url'],
-                    "rel": "related",
-                    "title": "Thumbnail",
-                    "hidden": False
-                    }
-        sbdata["webLinks"].append(thumbnail_link)
+    for (linktype, linklist) in pubdata['displayLinks'].items():
+        if linktype == "Thumbnail" and len(linklist) == 1:
+            thumbnail_link = {
+                        "type": "browseImage",
+                        "uri": linklist[0]['url'],
+                        "rel": "related",
+                        "title": "Thumbnail",
+                        "hidden": False
+                        }
+            sbdata["webLinks"].append(thumbnail_link)
+        if linktype == "Document" and len(linklist) >= 1:
+            for link in linklist:
+                document_link = {
+                        "type": "pdf",
+                        "uri": link['url'],
+                        "rel": "related",
+                        "title": link['text'] if link.get('text') else "Document",
+                        "hidden": False
+                        }
+                sbdata["webLinks"].append(document_link)
+
     return sbdata
