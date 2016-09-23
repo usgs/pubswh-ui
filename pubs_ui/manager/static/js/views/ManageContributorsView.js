@@ -78,7 +78,7 @@ define([
 			this.$('.contributor-type-select').select2(DEFAULT_SELECT2_OPTIONS);
 			this.$('.person-select-div select').select2(DynamicSelect2.getSelectOptions({
 				lookupType : 'people'
-			}, DEFAULT_SELECT2_OPTIONS));
+			}, _.extend({minimumInputLength : 2}, DEFAULT_SELECT2_OPTIONS)));
 			this.$('.corporation-select-div select').select2(DynamicSelect2.getSelectOptions({
 				lookupType : 'corporations'
 			}, DEFAULT_SELECT2_OPTIONS));

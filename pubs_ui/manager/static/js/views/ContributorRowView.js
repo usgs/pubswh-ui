@@ -81,7 +81,7 @@ define([
 				lookupType: function () {
 					return (self.model.get('corporation') ? 'corporations' : 'people');
 				}
-			}, DEFAULT_SELECT2_OPTIONS));
+			}, _.extend({minimumInputLength: 2}, DEFAULT_SELECT2_OPTIONS)));
 			this.updateName();
 			return this;
 		},
