@@ -784,7 +784,7 @@ def munge_abstract(pubdata):
 
 def generate_sb_data(pubdata):
     sbdata= {"title": pubdata['title'],
-             "id": pubdata['scienceBaseUri'],
+             "id": pubdata.get('scienceBaseUri'),
              "identifiers": [
                  {
                     "type": "local-index",
@@ -800,7 +800,25 @@ def generate_sb_data(pubdata):
              "body": pubdata.get('docAbstract'),
              "citation": pubdata.get('usgsCitation'),
              "contacts": [],
-             "facets": []
+             "facets": [],
+             "dates": [],
+             "tags": [],
+             "browseCategories": [
+                 "Publication"
+             ],
+             "browseTypes": [
+                 "Citation"
+             ],
+             'webLinks': [
+                 {
+                     "type": "webLink",
+                     "uri": "http://pubs.er.usgs.gov/publication/"+pubdata['indexId'],
+                     "rel": "related",
+                     "title": "Publications Warehouse Index Page",
+                     "hidden": False
+                 }
+             ],
+             "parentId": "4f4e4771e4b07f02db47e1e4"
              }
 
     if pubdata.get('doi'):
@@ -817,7 +835,20 @@ def generate_sb_data(pubdata):
             "key": pubdata['seriesTitle'].get('text')
         }
         sbdata['identifiers'].append(series_object)
-    if pubdata.get('contributors', None).get('authors'):
+        title_tag = {
+            "type": "Publication",
+            "scheme": "USGS Publications Warehouse",
+            "name": pubdata['seriesTitle'].get('text')
+        }
+        sbdata['tags'].append(title_tag)
+    if pubdata.get('publicationYear'):
+        publication_year = {
+            "type": "Publication",
+            "dateString": pubdata['publicationYear'],
+            "label": "Publication Date"
+        }
+        sbdata['dates'].append(publication_year)
+    if pubdata.get('contributors', {}).get('authors'):
         if pubdata.get('authorsListTyped'):
             for author in pubdata['authorsListTyped']:
                 contact = {}
@@ -829,7 +860,7 @@ def generate_sb_data(pubdata):
                 else:
                     contact['contactType'] = "organization"
                 sbdata['contacts'].append(contact)
-        if pubdata.get('contributors', None).get('editors'):
+        if pubdata.get('contributors', {}).get('editors'):
             if pubdata.get('editorsListTyped'):
                 for editor in pubdata['authorsListTyped']:
                     contact = {}
@@ -841,6 +872,50 @@ def generate_sb_data(pubdata):
                     else:
                         contact['contactType'] = "organization"
                     sbdata['contacts'].append(contact)
+    if pubdata.get('publisher'):
+        sbdata['contacts'].append({"name": pubdata['publisher'], "type": "Publisher"})
+    citation_facet = {
+                        "citationType": pubdata.get('publicationType', {}).get('text'),
+                        "journal": pubdata.get('seriesTitle', {}).get('text'),
+                        "edition": pubdata.get('edition'),
+                        "tableOfContents": pubdata.get('tableOfContents'),
+                        "conference": pubdata.get('conferenceTitle'),
+                        "language": pubdata.get('language'),
+                        "note": "",
+                        "parts": [
+
+                        ],
+                        "className": "gov.sciencebase.catalog.item.facet.CitationFacet"
+    }
 
 
+    if pubdata.get('volume'):
+        volume = {
+                     "type": "volume",
+                     "value": pubdata.get('volume')
+                 }
+        citation_facet['parts'].append(volume)
+
+    if pubdata.get('issue'):
+        issue = {
+            "type": "issue",
+            "value": pubdata.get('issue')
+        }
+        citation_facet['parts'].append(issue)
+    if pubdata.get('publisherLocation'):
+        location = {
+            "type": "Publication Place",
+            "value": pubdata.get('publisherLocation')
+        }
+        citation_facet['parts'].append(location)
+    sbdata['facets'].append(citation_facet)
+    if pubdata.get('displayLinks', {}).get('Thumbnail',[])[0]:
+        thumbnail_link = {
+                    "type": "browseImage",
+                    "uri": pubdata['displayLinks']['Thumbnail'][0]['url'],
+                    "rel": "related",
+                    "title": "Thumbnail",
+                    "hidden": False
+                    }
+        sbdata["webLinks"].append(thumbnail_link)
     return sbdata
