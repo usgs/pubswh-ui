@@ -4,9 +4,9 @@ Created on Oct 17, 2014
 @author: ayan
 """
 
-from flask.ext.script import Manager, Command
-from flask.ext.collect import Collect
-from flask.ext.assets import ManageAssets
+from flask_script import Manager, Command
+from flask_collect import Collect
+from flask_assets import ManageAssets
 import arrow
 
 from pubs_ui import app as application

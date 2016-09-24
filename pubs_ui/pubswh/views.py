@@ -1,4 +1,3 @@
-from sys import getsizeof
 from datetime import date, timedelta
 from dateutil import parser as dateparser
 import json
@@ -11,8 +10,8 @@ from requests import get
 import tablib
 
 from flask import render_template, abort, request, Response, jsonify, url_for, redirect, Blueprint
-from flask.ext.cache import Cache
-from flask.ext.paginate import Pagination
+from flask_cache import Cache
+from flask_paginate import Pagination
 from flask_login import login_required, current_user
 from flask_mail import Message
 from webargs.flaskparser import FlaskParser
@@ -23,8 +22,8 @@ from .arguments import search_args
 from .canned_text import EMAIL_RESPONSE
 from .forms import ContactForm, SearchForm, NumSeries
 from .utils import (pull_feed, create_display_links,
-                   SearchPublications, change_to_pubs_test,
-                   munge_pubdata_for_display, extract_related_pub_info, jsonify_geojson, generate_sb_data)
+                    SearchPublications, change_to_pubs_test,
+                    munge_pubdata_for_display, extract_related_pub_info, jsonify_geojson, generate_sb_data)
 
 
 # set UTF-8 to be default throughout app

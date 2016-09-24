@@ -884,41 +884,6 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
                     sbdata['contacts'].append(contact)
     if pubdata.get('publisher'):
         sbdata['contacts'].append({"name": pubdata['publisher'], "type": "Publisher"})
-    citation_facet = {
-                        "citationType": pubdata.get('publicationType', {}).get('text'),
-                        "journal": pubdata.get('seriesTitle', {}).get('text'),
-                        "edition": pubdata.get('edition'),
-                        "tableOfContents": pubdata.get('tableOfContents'),
-                        "conference": pubdata.get('conferenceTitle'),
-                        "language": pubdata.get('language'),
-                        "note": "",
-                        "parts": [
-
-                        ],
-                        "className": "gov.sciencebase.catalog.item.facet.CitationFacet"
-    }
-
-
-    if pubdata.get('volume'):
-        volume = {
-                     "type": "volume",
-                     "value": pubdata.get('volume')
-                 }
-        citation_facet['parts'].append(volume)
-
-    if pubdata.get('issue'):
-        issue = {
-            "type": "issue",
-            "value": pubdata.get('issue')
-        }
-        citation_facet['parts'].append(issue)
-    if pubdata.get('publisherLocation'):
-        location = {
-            "type": "Publication Place",
-            "value": pubdata.get('publisherLocation')
-        }
-        citation_facet['parts'].append(location)
-    sbdata['facets'].append(citation_facet)
     for (linktype, linklist) in pubdata['displayLinks'].items():
         if linktype == "Thumbnail" and len(linklist) == 1:
             thumbnail_link = {
@@ -949,5 +914,40 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
                         "hidden": False
                         }
                 sbdata["webLinks"].append(document_link)
+        # Set the citation facet
+        citation_facet = {
+            "citationType": pubdata.get('publicationType', {}).get('text'),
+            "journal": pubdata.get('seriesTitle', {}).get('text'),
+            "edition": pubdata.get('edition'),
+            "tableOfContents": pubdata.get('tableOfContents'),
+            "conference": pubdata.get('conferenceTitle'),
+            "language": pubdata.get('language'),
+            "note": "",
+            "parts": [
+
+            ],
+            "className": "gov.sciencebase.catalog.item.facet.CitationFacet"
+        }
+
+        if pubdata.get('volume'):
+            volume = {
+                "type": "volume",
+                "value": pubdata.get('volume')
+            }
+            citation_facet['parts'].append(volume)
+
+        if pubdata.get('issue'):
+            issue = {
+                "type": "issue",
+                "value": pubdata.get('issue')
+            }
+            citation_facet['parts'].append(issue)
+        if pubdata.get('publisherLocation'):
+            location = {
+                "type": "Publication Place",
+                "value": pubdata.get('publisherLocation')
+            }
+            citation_facet['parts'].append(location)
+        sbdata['facets'].append(citation_facet)
 
     return sbdata
