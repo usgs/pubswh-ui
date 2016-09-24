@@ -1,7 +1,7 @@
 from pubs_ui.pubswh.utils import manipulate_doi_information, generate_sb_data
 from pubs_ui import app
 import unittest
-
+unittest.TestCase.maxDiff = None
 
 class ManipulateDoiInformationTestCase(unittest.TestCase):
     """Tests for create_display_links"""
@@ -212,5 +212,5 @@ class GenerateScienceBaseData(unittest.TestCase):
                          'tableOfContents': None}],
              "parentId": app.config['SCIENCEBASE_PARENT_UUID']
              }
-        assert generate_sb_data(simple_pubsdata, self.__class__.replace_pubs_with_pubs_test,
-                                self.__class__.supersedes_url, self.__class__.json_ld_id_base_url) == expected_sbdata
+        self.assertEqual(generate_sb_data(simple_pubsdata, self.__class__.replace_pubs_with_pubs_test,
+                                self.__class__.supersedes_url, self.__class__.json_ld_id_base_url), expected_sbdata)

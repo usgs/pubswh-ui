@@ -62,6 +62,7 @@ cache = Cache(app, config=cache_config)
 
 cache.init_app(app)
 
+
 def make_cache_key(*args, **kwargs):
     path = request.path
     args = str(hash(frozenset(request.args.items())))
@@ -71,7 +72,6 @@ def make_cache_key(*args, **kwargs):
 @pubswh.errorhandler(404)
 def page_not_found(e):
     return render_template('pubswh/404.html'), 404
-
 
 
 @pubswh.route("/preview/<index_id>")
@@ -109,6 +109,7 @@ def restricted_page(index_id):
 def robots():
     return render_template('pubswh/robots.txt', robots_welcome=robots_welcome)
 
+
 @pubswh.route('/opensearch.xml')
 def open_search():
     return render_template('pubswh/opensearch.xml')
@@ -143,6 +144,7 @@ def index():
     return render_template('pubswh/home.html',
                            recent_publications=pubs_records,
                            form=form)
+
 
 # contact form
 @pubswh.route('/contact', methods=['GET', 'POST'])
@@ -210,6 +212,7 @@ def publication(index_id):
                                related_pubs=related_pubs
                                )
 
+
 #clears the cache for a specific page
 @pubswh.route('/clear_cache/', defaults={'path': ''})
 @pubswh.route('/clear_cache/<path:path>')
@@ -224,10 +227,12 @@ def clear_cache(path):
         cache.clear()
         return "no redis cache, full cache cleared"
 
+
 @pubswh.route('/clear_full_cache/')
 def clear_full_cache():
     cache.clear()
     return 'cache cleared'
+
 
 # leads to json for selected endpoints
 @pubswh.route('/lookup/<endpoint>')
@@ -278,6 +283,7 @@ def other_resources():
 def browse_types():
     types = get(pub_url+"/lookup/publicationtypes").json()
     return render_template('pubswh/browse_types.html', types=types)
+
 
 @pubswh.route('/browse/<pub_type>/')
 @cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
@@ -348,6 +354,7 @@ def browse_subtype(pub_type, pub_subtype):
             abort(404)
     else:
         abort(404)
+
 
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>/')
 @cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)

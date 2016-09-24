@@ -914,40 +914,40 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
                         "hidden": False
                         }
                 sbdata["webLinks"].append(document_link)
-        # Set the citation facet
-        citation_facet = {
-            "citationType": pubdata.get('publicationType', {}).get('text'),
-            "journal": pubdata.get('seriesTitle', {}).get('text'),
-            "edition": pubdata.get('edition'),
-            "tableOfContents": pubdata.get('tableOfContents'),
-            "conference": pubdata.get('conferenceTitle'),
-            "language": pubdata.get('language'),
-            "note": "",
-            "parts": [
+    # Set the citation facet
+    citation_facet = {
+        "citationType": pubdata.get('publicationType', {}).get('text'),
+        "journal": pubdata.get('seriesTitle', {}).get('text'),
+        "edition": pubdata.get('edition'),
+        "tableOfContents": pubdata.get('tableOfContents'),
+        "conference": pubdata.get('conferenceTitle'),
+        "language": pubdata.get('language'),
+        "note": "",
+        "parts": [
 
-            ],
-            "className": "gov.sciencebase.catalog.item.facet.CitationFacet"
+        ],
+        "className": "gov.sciencebase.catalog.item.facet.CitationFacet"
+    }
+
+    if pubdata.get('volume'):
+        volume = {
+            "type": "volume",
+            "value": pubdata.get('volume')
         }
+        citation_facet['parts'].append(volume)
 
-        if pubdata.get('volume'):
-            volume = {
-                "type": "volume",
-                "value": pubdata.get('volume')
-            }
-            citation_facet['parts'].append(volume)
-
-        if pubdata.get('issue'):
-            issue = {
-                "type": "issue",
-                "value": pubdata.get('issue')
-            }
-            citation_facet['parts'].append(issue)
-        if pubdata.get('publisherLocation'):
-            location = {
-                "type": "Publication Place",
-                "value": pubdata.get('publisherLocation')
-            }
-            citation_facet['parts'].append(location)
-        sbdata['facets'].append(citation_facet)
+    if pubdata.get('issue'):
+        issue = {
+            "type": "issue",
+            "value": pubdata.get('issue')
+        }
+        citation_facet['parts'].append(issue)
+    if pubdata.get('publisherLocation'):
+        location = {
+            "type": "Publication Place",
+            "value": pubdata.get('publisherLocation')
+        }
+        citation_facet['parts'].append(location)
+    sbdata['facets'].append(citation_facet)
 
     return sbdata
