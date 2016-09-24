@@ -46,6 +46,8 @@ under PubsWarehouse_UI folder.  The contents of the file should look like so:
  VERIFY_CERT = True or False #Set to False for local development
  #cache settings- see the documentation for flask-cache. For development, a cache type of simple works well with the development server.  redis is used on production
  #CACHE_CONFIG = {'CACHE_TYPE': 'simple'}
+ #set to the sciecebase folder id for the core publications warehouse SB folder
+ SCIENCEBASE_PARENT_UUID = ''
  
  #The following should be removed when we completely retire the old MyPubs Angular app.
  OLD_MYPUBS_ENDPOINT = 'endpoint of the old mypubs application'

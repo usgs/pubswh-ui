@@ -793,7 +793,7 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
     https://my.usgs.gov/confluence/display/sciencebase/ScienceBase+Item+Core+Model
     """
     pubdata = munge_pubdata_for_display(pubrecord, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
-    sbdata= {"title": pubdata['title'],
+    sbdata= {"title": pubdata.get('title'),
              "id": pubdata.get('scienceBaseUri'),
              "identifiers": [
                  {
@@ -828,7 +828,7 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
                      "hidden": False
                  }
              ],
-             "parentId": "4f4e4771e4b07f02db47e1e4"
+             "parentId": app.config['SCIENCEBASE_PARENT_UUID']
              }
 
     if pubdata.get('doi'):

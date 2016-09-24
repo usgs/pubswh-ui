@@ -35,6 +35,7 @@ PREVIEW_ENDPOINT_URL = ''
 LOGIN_PAGE_PATH = ''
 CACHE_CONFIG = {'CACHE_TYPE': 'null'}
 REDIS_CONFIG = ''
+SCIENCEBASE_PARENT_UUID = '' #set to the sciecebase folder id for the core publications warehouse SB folder
 # set to solve problem with backgrid-paginator
 BOWER_TRY_MINIFIED = False
 
