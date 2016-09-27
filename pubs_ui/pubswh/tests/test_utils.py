@@ -1,6 +1,7 @@
-from pubs_ui.pubswh.utils import manipulate_doi_information
+from pubs_ui.pubswh.utils import manipulate_doi_information, generate_sb_data
+from pubs_ui import app
 import unittest
-
+unittest.TestCase.maxDiff = None
 
 class ManipulateDoiInformationTestCase(unittest.TestCase):
     """Tests for create_display_links"""
@@ -140,3 +141,76 @@ class ManipulateDoiInformationTestCase(unittest.TestCase):
             ]
         }
         assert manipulate_doi_information(simple_pubsdata) == expected_pubsdata
+
+
+class GenerateScienceBaseData(unittest.TestCase):
+    """Tests for generate_sb_data"""
+
+    replace_pubs_with_pubs_test = False
+    supersedes_url = "https://pubs.er.usgs.gov/service/citation/json/extras?"
+    json_ld_id_base_url = "https://pubs.er.usgs.gov"
+
+    def test_will_a_basic_sb_record_be_generated_from_a_basic_pubs_record(self):
+        """given a basic pubs record, will a decent sciencebase record be generated?"""
+        simple_pubsdata = {
+            "indexId": "sir20165122",
+            "id": 70176077,
+            "lastModifiedDate": "2016-09-23T15:22:41",
+            "title": "Environmental conditions in the Namskaket Marsh Area, Orleans, Massachusetts",
+            "docAbstract": "There is fog and rain and tides and sometomes sun and the tide keeps rising",
+            "publicationType": {
+                "id": 18,
+                "text": "Report"
+            },
+            "usgsCitation": "A carefully formatted citation with lots of extraneous em and en dashes",
+            "scienceBaseUri": "567922a9e4b0da412f4fb509",
+            'links': [],
+            'interactions': []
+        }
+        expected_sbdata = {"title": "Environmental conditions in the Namskaket Marsh Area, Orleans, Massachusetts",
+             "id": "567922a9e4b0da412f4fb509",
+             "identifiers": [
+                 {
+                    "type": "local-index",
+                    "scheme": "unknown",
+                    "key": "sir20165122"
+                    },
+                    {
+                    "type": "local-pk",
+                    "scheme": "unknown",
+                    "key": 70176077
+                    }
+             ],
+             "body":  "There is fog and rain and tides and sometomes sun and the tide keeps rising",
+             "citation": "A carefully formatted citation with lots of extraneous em and en dashes",
+             "contacts": [],
+             "dates": [],
+             "tags": [],
+             "browseCategories": [
+                 "Publication"
+             ],
+             "browseTypes": [
+                 "Citation"
+             ],
+             'webLinks': [
+                 {
+                     "type": "webLink",
+                     "uri": "http://pubs.er.usgs.gov/publication/sir20165122",
+                     "rel": "related",
+                     "title": "Publications Warehouse Index Page",
+                     "hidden": False
+                 }
+             ],
+             'facets': [{'citationType': 'Report',
+                         'className': 'gov.sciencebase.catalog.item.facet.CitationFacet',
+                         'conference': None,
+                         'edition': None,
+                         'journal': None,
+                         'language': None,
+                         'note': '',
+                         'parts': [],
+                         'tableOfContents': None}],
+             "parentId": app.config['SCIENCEBASE_PARENT_UUID']
+             }
+        self.assertEqual(generate_sb_data(simple_pubsdata, self.__class__.replace_pubs_with_pubs_test,
+                                self.__class__.supersedes_url, self.__class__.json_ld_id_base_url), expected_sbdata)

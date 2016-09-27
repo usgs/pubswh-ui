@@ -5,8 +5,8 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
 
 from flask import render_template, request, flash, redirect, url_for, Blueprint
-from flask.ext.login import LoginManager, logout_user, UserMixin, login_user
-from flask.ext.wtf import Form
+from flask_login import LoginManager, logout_user, UserMixin, login_user
+from flask_wtf import Form
 
 from . import login_serializer
 from .utils import get_cida_auth_token, generate_auth_header, get_url_endpoint, is_safe_url

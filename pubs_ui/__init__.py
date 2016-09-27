@@ -1,7 +1,7 @@
 import logging
 from flask import Flask, request
-from flask.ext.bower import Bower
-from flask.ext.images import Images
+from flask_bower import Bower
+from flask_images import Images
 from flask_mail import Mail
 
 from custom_filters import display_publication_info, date_format

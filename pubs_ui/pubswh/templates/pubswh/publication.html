@@ -126,6 +126,13 @@
                     <a href="https://twitter.com/share" class="twitter-share-button" data-text="USGS Pub" data-via="USGS_Pubs" data-dnt="true">Tweet</a>
                     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                 </section>
+                <section>
+                    {% if pubdata['noUsgsAuthors'] %}
+                        <p>This publication was funded by extramural grants, and has no U.S. Geological Survey(USGS) affiliated authors or editors.
+                        Hence, it was not required to conform to the USGS Fundamental Science Practices as described in the
+                            <a title="Link to USGS Manual" href="https://www.usgs.gov/usgs-manual/">USGS Manual</a>.</p>
+                    {% endif %}
+                </section>
                 
                 <section id="suggested">
                     {% macro linkdisplay(link) -%}

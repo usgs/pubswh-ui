@@ -1,6 +1,6 @@
 __author__ = 'jameskreft'
 
-from flask.ext.wtf import Form, RecaptchaField
+from flask_wtf import Form, RecaptchaField
 from wtforms import StringField, TextAreaField, SubmitField, validators, BooleanField, HiddenField, PasswordField, SelectField
 from wtforms.fields.html5 import SearchField, DateField
 from pubs_ui import app
