@@ -923,9 +923,7 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
         "conference": pubdata.get('conferenceTitle'),
         "language": pubdata.get('language'),
         "note": "",
-        "parts": [
-
-        ],
+        "parts": [],
         "className": "gov.sciencebase.catalog.item.facet.CitationFacet"
     }
 
