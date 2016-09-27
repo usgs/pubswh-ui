@@ -187,11 +187,11 @@ def contact_confirmation():
 
 
 # leads to rendered html for publication page
-@pubswh.route('/publication/<index_id>/')
+@pubswh.route('/publication/<index_id>')
 @cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def publication(index_id):
     r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
-    if r.status_code in [404, 406]: # a 406 pretty much always means that it is some sort of other weird malformed URL.
+    if r.status_code in [404, 406]:  # a 406 pretty much always means that it is some sort of other weird malformed URL.
         return render_template('pubswh/404.html'), 404
     pubreturn = r.json()
     if 'mimetype' in request.args and request.args.get("mimetype") == 'sbjson':
