@@ -584,7 +584,7 @@ def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):
         return_pubdata['relationships']['@graph'].append({
             '@id': pub_url,
             '@type': pub_type,
-            'dc:title': return_pubdata['title'],
+            'dc:title': return_pubdata.get('title'),
             'dc:date': str(return_pubdata.get('publicationYear'))
         }
         )
@@ -848,7 +848,7 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
         title_tag = {
             "type": "Publication",
             "scheme": "USGS Publications Warehouse",
-            "name": pubdata['seriesTitle'].get('text')
+            "name": pubdata['seriesTitle']['text'][:79] if pubdata['seriesTitle'].get('text') else None
         }
         sbdata['tags'].append(title_tag)
     if pubdata.get('publicationYear'):
