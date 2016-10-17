@@ -173,7 +173,8 @@ def contact():
                           # goes to the pubs support group...
                           recipients=contact_recipients,
                           # will go to servicedesk@usgs.gov if application has DEBUG = False
-                          body=message_content)
+                          body=message_content
+                          )
             mail.send(msg)
             return redirect(url_for(
                 'pubswh.contact_confirmation'))  # redirect to a conf page after successful validation and message sending
