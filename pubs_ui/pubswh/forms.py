@@ -42,6 +42,7 @@ def get_field_list(lookup_name, parameters=None):
 class ContactForm(Form):
     name = StringField("Name")
     email = StringField("Email", [validators.Email()]) # email validator also makes this a required field... a blank email is considered invalid
+    originating_page = StringField("Orginating Page")
     message = TextAreaField("Message")
     recaptcha = RecaptchaField()
     submit = SubmitField("Send")
