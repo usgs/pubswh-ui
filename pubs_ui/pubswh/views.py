@@ -160,8 +160,12 @@ def contact():
                 sender_str = '({email})'.format(email=human_email)
             subject_line = 'Pubs Warehouse User Comments'  # this is want Remedy filters on to determine if an email
             # goes to the pubs support group
+            originating_page = contact_form.originating_page.data
             message_body = contact_form.message.data
-            message_content = EMAIL_RESPONSE.format(contact_str=sender_str, message_body=message_body)
+            message_content = EMAIL_RESPONSE.format(contact_str=sender_str,
+                                                    message_body=message_body,
+                                                    originating_page=originating_page
+                                                    )
             msg = Message(subject=subject_line,
                           sender=(human_name, human_email),
                           reply_to=('PUBSV2_NO_REPLY', 'pubsv2_no_reply@usgs.gov'),
@@ -177,6 +181,8 @@ def contact():
             return render_template('pubswh/contact.html',
                                    contact_form=contact_form)  # redisplay the form with errors if validation fails
     elif request.method == 'GET':
+        contact_referrer = request.referrer
+        contact_form.originating_page.data = 'Originating Page: {}'.format(contact_referrer)
         return render_template('pubswh/contact.html', contact_form=contact_form)
 
 
