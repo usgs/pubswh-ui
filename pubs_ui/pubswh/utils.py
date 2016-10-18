@@ -90,7 +90,7 @@ def pubdetails(pubdata):
                 dd = []
                 for det in pubdata.get(detail[0]):
                     dd.append(det.get(detail[1]))
-                dd = ', '.join(dd)
+                dd = ', '.join(filter(None, dd))
                 pubdata['details'].append({detail[2]: dd})
         elif len(detail) == 2 and pubdata.get(detail[0]) is not None and len(pubdata.get(detail[0])) > 0:
             pubdata['details'].append({detail[1]: pubdata.get(detail[0])})
