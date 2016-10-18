@@ -848,7 +848,7 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
         title_tag = {
             "type": "Publication",
             "scheme": "USGS Publications Warehouse",
-            "name": pubdata['seriesTitle']['text'][:79] if pubdata['seriesTitle'].get('text') else None
+            "name": pubdata['seriesTitle']['text'][:78] if pubdata['seriesTitle'].get('text') else None
         }
         sbdata['tags'].append(title_tag)
     if pubdata.get('publicationYear'):
