@@ -6,6 +6,7 @@ Created on Nov 14, 2014
 
 from lettuce import world, step
 from nose.tools import assert_in, assert_equal
+from werkzeug.datastructures import Headers
 from pubs_ui import app, mail
 
 """
@@ -14,6 +15,8 @@ Contact page responds with a contact form
 @step
 def i_have_the_url_to_the_contact_page(step):
     world.contact_url = '/contact'
+    referrer = ('Referer', 'some/url')
+    world.header = Headers([referrer])
 
 @step
 def i_have_set_up_a_client_for_the_contact_page(step):
@@ -22,7 +25,7 @@ def i_have_set_up_a_client_for_the_contact_page(step):
 @step
 def i_access_the_contact_page_through_the_url(step):
     with world.client as c:
-        response = c.get(world.contact_url)
+        response = c.get(world.contact_url, headers=world.header)
     world.response_content = response.get_data()
     
 @step
@@ -30,7 +33,11 @@ def i_should_see_a_contact_form_with_an_email_field(step):
     #email_field_index = world.response_content.find('name="email"')
     world.expected_email_field_index = 'name="email"'
     assert_in(world.expected_email_field_index, world.response_content)
-    
+
+@step
+def i_should_see_the_referrer_on_the_page(step):
+    world.expected_origin_page = 'Originating Page: some/url'
+    assert_in(world.expected_origin_page, world.response_content)
 
 """
 Email field contains a invalid email
@@ -62,6 +69,7 @@ def i_have_filled_out_the_firm_with_at_least_a_message_and_email_and_filled_out_
     world.contact_data = {
                           'name': 'Earl of Lemongrab',
                           'email': 'lemongrab@usgs.gov',
+                          'originating_page': 'some/url',
                           'message': 'They did not understand my lemon styles.',
                           'recaptcha_challenge_field': 'test',
                           'recaptcha_response_field': 'test'
@@ -70,7 +78,10 @@ def i_have_filled_out_the_firm_with_at_least_a_message_and_email_and_filled_out_
 @step
 def i_submit_the_correctly_filled_out_form(step):
     with mail.record_messages() as outbox:
-        post_response = world.test_client.post(world.contact_url, data=world.contact_data, follow_redirects=True)
+        post_response = world.test_client.post(world.contact_url,
+                                               data=world.contact_data,
+                                               follow_redirects=True
+                                               )
     world.outbox = outbox
     world.post_response_content = post_response.get_data()
     
@@ -95,3 +106,7 @@ def the_email_is_sent_to_the_recipients_specified_in_settings_with_correct_headi
     message_subject = world.outbox[0].subject
     expected_subject = 'Pubs Warehouse User Comments'
     assert_equal(message_subject, expected_subject)
+
+    message_body = world.outbox[0].body
+    body_content = 'some/url'
+    assert_in(body_content, message_body)
