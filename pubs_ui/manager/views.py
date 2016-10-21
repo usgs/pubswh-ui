@@ -25,12 +25,15 @@ def show_app(path=None):
 @manager.route('/services/<op1>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @manager.route('/services/<op1>/<op2>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @manager.route('/services/<op1>/<op2>/<op3>', methods=['GET', 'POST', 'PUT', 'DELETE'])
-def services_proxy(op1, op2=None, op3=None):
+@manager.route('/services/<op1>/<op2>/<op3>/<op4>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def services_proxy(op1, op2=None, op3=None, op4=None):
     url = '%s%s/' % (SERVICES_ENDPOINT, op1)
-    if op2 != None:
+    if op2 is not None:
         url = url + op2
-    if op3 != None:
+    if op3 is not None:
         url = url + '/' + op3
+    if op4 is not None:
+        url = url + '/' + op4
     headers = generate_auth_header(request)
     if request.method == 'POST' or request.method == 'PUT' :
         headers.update(request.headers)

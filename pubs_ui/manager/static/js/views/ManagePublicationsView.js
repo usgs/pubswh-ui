@@ -57,7 +57,7 @@ define([
 			'click .manager-seriestitle-btn' : 'goToSeriesTitlePage',
 			'click .manager-contribs-btn' : 'goToContributorPage',
 			'click .add-to-lists-btn' : 'addSelectedPubsToCategory',
-			'click .remove-from-lists-btn' : 'removeSelectedPubsFromCategory',
+			'click .remove-from-list-btn' : 'removeSelectedPubsFromCategory',
 			'change .pub-filter-list-div input[type="checkbox"]' : 'changePubsListFilter',
 			'click .manager-affiliation-btn' : 'goToAffiliationManagement'
 		},
@@ -294,7 +294,6 @@ define([
 				self.$('#pubs-categories-select').select2(_.extend({
 					data : pubList
 				}, DEFAULT_SELECT2_OPTIONS));
-				console.log(pubList);
 				self.$('.pub-filter-list-div').html(pubListTemplate({pubList : pubList}));
 			});
 
@@ -469,16 +468,30 @@ define([
 
 		removeSelectedPubsFromCategory: function(ev) {
 			var self = this;
-
+			var serviceUrl = module.config().scriptRoot + '/manager/services/lists/';
 			var selectedPubs = this.collection.filter(function(model) {
 				return (model.has('selected') && model.get('selected'));
 			});
-
-			var pubsIdData = $.param({
-				publicationId : _.map(selectedPubs, function(model) {
-					return model.get('id');
+			var selectedFilter = _.first(getFilters(this.model).listId);
+			// get publication ids from selectedPubs
+			var selectedPubIds = _.pluck(selectedPubs, 'id');
+			// execute the delete requests
+			var removeDeferreds;
+			removeDeferreds = _.map(selectedPubIds, function(selectedPubId) {
+				var targetUrl = serviceUrl + selectedFilter + '/pubs/' + selectedPubId;
+				console.log(targetUrl);
+				return $.ajax({
+					url: targetUrl,
+					method: 'DELETE'
+				});
+			});
+			$.when.apply(this, removeDeferreds)
+				.done(function() {
+					self.alertView.showSuccessAlert('Selected publications successfully removed from the current list.');
 				})
-			}, true);
+				.fail(function() {
+					self.alertView.showDangerAlert('Error: Unable to remove the selected publications from the current list.');
+				});
 		},
 
 		changePubsListFilter : function() {
