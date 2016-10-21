@@ -290,9 +290,11 @@ define([
 					}
 					return result;
 				});
+				self.pubList = pubList;
 				self.$('#pubs-categories-select').select2(_.extend({
 					data : pubList
 				}, DEFAULT_SELECT2_OPTIONS));
+				console.log(pubList);
 				self.$('.pub-filter-list-div').html(pubListTemplate({pubList : pubList}));
 			});
 
@@ -338,7 +340,14 @@ define([
 		_removePubFromListBtnCtrl : function(selectedListFilters) {
 			var selectedFiltersCount = selectedListFilters.length;
 			var $removePubBtnDiv = this.$('.remove-from-list-btn-div');
+			var $removePubBtn;
+			var selectedFilter;
+			var selectedText;
 			if (selectedFiltersCount === 1) {
+				selectedFilter = _.first(getFilters(this.model).listId);
+				selectedText = _.findWhere(this.pubList, {id : parseInt(selectedFilter)}).text;
+				$removePubBtn = this.$('.remove-from-list-btn');
+				$removePubBtn.html('Remove Selected Publications From "' + selectedText + '" List');
 				$removePubBtnDiv.show();
 			}
 			else {
