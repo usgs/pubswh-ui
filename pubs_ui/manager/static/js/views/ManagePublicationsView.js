@@ -57,6 +57,7 @@ define([
 			'click .manager-seriestitle-btn' : 'goToSeriesTitlePage',
 			'click .manager-contribs-btn' : 'goToContributorPage',
 			'click .add-to-lists-btn' : 'addSelectedPubsToCategory',
+			'click .remove-from-lists-btn' : 'removeSelectedPubsFromCategory',
 			'change .pub-filter-list-div input[type="checkbox"]' : 'changePubsListFilter',
 			'click .manager-affiliation-btn' : 'goToAffiliationManagement'
 		},
@@ -334,6 +335,17 @@ define([
 		 * DOM event handlers
 		 */
 
+		_removePubFromListBtnCtrl : function(selectedListFilters) {
+			var selectedFiltersCount = selectedListFilters.length;
+			var $removePubBtnDiv = this.$('.remove-from-list-btn-div');
+			if (selectedFiltersCount === 1) {
+				$removePubBtnDiv.show();
+			}
+			else {
+				$removePubBtnDiv.hide();
+			}
+		},
+
 		clearSearch : function() {
 			this.model.clear({silent : true});
 			// No events will be fired so update DOM directly.
@@ -446,6 +458,20 @@ define([
 			}
 		},
 
+		removeSelectedPubsFromCategory: function(ev) {
+			var self = this;
+
+			var selectedPubs = this.collection.filter(function(model) {
+				return (model.has('selected') && model.get('selected'));
+			});
+
+			var pubsIdData = $.param({
+				publicationId : _.map(selectedPubs, function(model) {
+					return model.get('id');
+				})
+			}, true);
+		},
+
 		changePubsListFilter : function() {
 			var pubsListFilter = [];
 			this.$('.pub-filter-list-div input:checked').each(function() {
@@ -455,6 +481,7 @@ define([
 			});
 			this.model.set('listId', {useId : true, selections : pubsListFilter});
 			this.filterPubs();
+			this._removePubFromListBtnCtrl(pubsListFilter);
 		},
 
 		/*
