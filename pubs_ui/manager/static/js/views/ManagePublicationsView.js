@@ -290,7 +290,6 @@ define([
 					}
 					return result;
 				});
-				self.pubList = pubList;
 				self.$('#pubs-categories-select').select2(_.extend({
 					data : pubList
 				}, DEFAULT_SELECT2_OPTIONS));
@@ -336,17 +335,14 @@ define([
 		 * DOM event handlers
 		 */
 
-		_removePubFromListBtnCtrl : function() {
-			//var selectedFiltersCount = selectedListFilters.length;
+		updateVisibilityRemoveFromPubListBtn : function() {
 			var selectedFilters = getFilters(this.model).listId;
-
 			var $removePubBtn = this.$('.remove-from-list-btn');
 			var selectedFilter;
 			var selectedText;
 			if (selectedFilters.length === 1) {
 				selectedFilter = _.first(selectedFilters);
 				selectedText = _.findWhere(this.pubList, {id : parseInt(selectedFilter)}).text;
-				$removePubBtn = this.$('.remove-from-list-btn');
 				$removePubBtn.html('Remove Selected Publications From "' + selectedText + '" List');
 				$removePubBtn.show();
 			}
@@ -469,11 +465,11 @@ define([
 
 		removeSelectedPubsFromCategory: function(ev) {
 			var self = this;
-			var serviceUrl = module.config().scriptRoot + '/manager/services/lists/';
+			var selectedFilter = _.first(getFilters(this.model).listId);
+			var serviceUrl = module.config().scriptRoot + '/manager/services/lists/' + selectedFilter;
 			var selectedPubs = this.collection.filter(function(model) {
 				return (model.has('selected') && model.get('selected'));
 			});
-			var selectedFilter = _.first(getFilters(this.model).listId);
 			// get publication ids from selectedPubs
 			var selectedPubIds = _.pluck(selectedPubs, 'id');
 			// execute the delete requests
@@ -486,10 +482,10 @@ define([
 			}
 			else {
 				removeDeferreds = _.map(selectedPubIds, function(selectedPubId) {
-				var targetUrl = serviceUrl + selectedFilter + '/pubs/' + selectedPubId;
-				return $.ajax({
-					url: targetUrl,
-					method: 'DELETE'
+					var targetUrl = serviceUrl + '/pubs/' + selectedPubId;
+					return $.ajax({
+						url: targetUrl,
+						method: 'DELETE'
 					});
 				});
 			}
@@ -511,7 +507,7 @@ define([
 			});
 			this.model.set('listId', {useId : true, selections : pubsListFilter});
 			this.filterPubs();
-			this._removePubFromListBtnCtrl();
+			this.updateVisibilityRemoveFromPubListBtn();
 		},
 
 		/*
