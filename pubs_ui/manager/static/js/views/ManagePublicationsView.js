@@ -478,7 +478,10 @@ define([
 			// execute the delete requests
 			var removeDeferreds = [];
 			if (selectedPubIds.length === 0) {
-				this.warningDialogView.show('You must select at least one publication.');
+				this.warningDialogView.show(
+					'Select Publications',
+					'You must select at least one publication to remove from the current filter list.'
+				);
 			}
 			else {
 				removeDeferreds = _.map(selectedPubIds, function(selectedPubId) {
