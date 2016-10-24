@@ -349,7 +349,6 @@ define([
 				$removePubBtn.show();
 			}
 			else {
-				console.log('Hiding!');
 				$removePubBtn.hide();
 			}
 		},
