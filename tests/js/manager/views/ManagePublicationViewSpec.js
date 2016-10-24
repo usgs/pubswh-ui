@@ -393,7 +393,7 @@ define([
 				expect($removeBtn.is(':visible')).toBe(true);
 			});
 
-			it('Expects the Remove from List Button to be hidden if a if a list is deselected', function() {
+			it('Expects the Remove from List Button to be hidden if a list is deselected', function() {
 				var $removeBtn = $testDiv.find('.remove-from-list-btn');
 				var $checkbox1 = testView.$('.pub-filter-list-div input[value="1"]');
 				$checkbox1.prop('checked', false);
