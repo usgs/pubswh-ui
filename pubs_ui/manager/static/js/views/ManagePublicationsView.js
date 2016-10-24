@@ -338,8 +338,7 @@ define([
 
 		_removePubFromListBtnCtrl : function(selectedListFilters) {
 			var selectedFiltersCount = selectedListFilters.length;
-			var $removePubBtnDiv = this.$('.remove-from-list-btn-div');
-			var $removePubBtn;
+			var $removePubBtn = this.$('.remove-from-list-btn');
 			var selectedFilter;
 			var selectedText;
 			if (selectedFiltersCount === 1) {
@@ -347,10 +346,11 @@ define([
 				selectedText = _.findWhere(this.pubList, {id : parseInt(selectedFilter)}).text;
 				$removePubBtn = this.$('.remove-from-list-btn');
 				$removePubBtn.html('Remove Selected Publications From "' + selectedText + '" List');
-				$removePubBtnDiv.show();
+				$removePubBtn.show();
 			}
 			else {
-				$removePubBtnDiv.hide();
+				console.log('Hiding!');
+				$removePubBtn.hide();
 			}
 		},
 
