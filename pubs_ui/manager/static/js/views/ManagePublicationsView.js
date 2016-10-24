@@ -476,15 +476,19 @@ define([
 			// get publication ids from selectedPubs
 			var selectedPubIds = _.pluck(selectedPubs, 'id');
 			// execute the delete requests
-			var removeDeferreds;
-			removeDeferreds = _.map(selectedPubIds, function(selectedPubId) {
+			var removeDeferreds = [];
+			if (selectedPubIds.length === 0) {
+				this.warningDialogView.show('You must select at least one publication.');
+			}
+			else {
+				removeDeferreds = _.map(selectedPubIds, function(selectedPubId) {
 				var targetUrl = serviceUrl + selectedFilter + '/pubs/' + selectedPubId;
-				console.log(targetUrl);
 				return $.ajax({
 					url: targetUrl,
 					method: 'DELETE'
+					});
 				});
-			});
+			}
 			$.when.apply(this, removeDeferreds)
 				.done(function() {
 					self.alertView.showSuccessAlert('Selected publications successfully removed from the current list.');
