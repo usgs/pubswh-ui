@@ -385,11 +385,6 @@ define([
 				expect(args1.url).toContain('publicationId=1&publicationId=3');
 			});
 
-			xit('Expects the Remove from List Button to be hidden initially', function() {
-				var $removeBtn = $testDiv.find('.remove-from-list-btn');
-				expect($removeBtn.is(':hidden')).toBe(true);
-			});
-
 			it('Expects the Remove from List Button to be shown if a single list is selected', function() {
 				var $removeBtn = $testDiv.find('.remove-from-list-btn');
 				var $checkbox1 = testView.$('.pub-filter-list-div input[value="1"]');
