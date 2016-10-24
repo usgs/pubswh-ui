@@ -336,13 +336,15 @@ define([
 		 * DOM event handlers
 		 */
 
-		_removePubFromListBtnCtrl : function(selectedListFilters) {
-			var selectedFiltersCount = selectedListFilters.length;
+		_removePubFromListBtnCtrl : function() {
+			//var selectedFiltersCount = selectedListFilters.length;
+			var selectedFilters = getFilters(this.model).listId;
+
 			var $removePubBtn = this.$('.remove-from-list-btn');
 			var selectedFilter;
 			var selectedText;
-			if (selectedFiltersCount === 1) {
-				selectedFilter = _.first(getFilters(this.model).listId);
+			if (selectedFilters.length === 1) {
+				selectedFilter = _.first(selectedFilters);
 				selectedText = _.findWhere(this.pubList, {id : parseInt(selectedFilter)}).text;
 				$removePubBtn = this.$('.remove-from-list-btn');
 				$removePubBtn.html('Remove Selected Publications From "' + selectedText + '" List');
@@ -509,7 +511,7 @@ define([
 			});
 			this.model.set('listId', {useId : true, selections : pubsListFilter});
 			this.filterPubs();
-			this._removePubFromListBtnCtrl(pubsListFilter);
+			this._removePubFromListBtnCtrl();
 		},
 
 		/*
