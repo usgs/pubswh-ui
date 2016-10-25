@@ -57,6 +57,7 @@ define([
 			'click .manager-seriestitle-btn' : 'goToSeriesTitlePage',
 			'click .manager-contribs-btn' : 'goToContributorPage',
 			'click .add-to-lists-btn' : 'addSelectedPubsToCategory',
+			'click .remove-from-list-btn' : 'removeSelectedPubsFromCategory',
 			'change .pub-filter-list-div input[type="checkbox"]' : 'changePubsListFilter',
 			'click .manager-affiliation-btn' : 'goToAffiliationManagement'
 		},
@@ -334,6 +335,22 @@ define([
 		 * DOM event handlers
 		 */
 
+		updateVisibilityRemoveFromPubListBtn : function() {
+			var selectedFilters = getFilters(this.model).listId;
+			var $removePubBtn = this.$('.remove-from-list-btn');
+			var selectedFilter;
+			var selectedText;
+			if (selectedFilters.length === 1) {
+				selectedFilter = _.first(selectedFilters);
+				selectedText = this.publicationListCollection.findWhere({id : selectedFilter});
+				$removePubBtn.html('Remove Selected Publications From "' + selectedText + '" List');
+				$removePubBtn.show();
+			}
+			else {
+				$removePubBtn.hide();
+			}
+		},
+
 		clearSearch : function() {
 			this.model.clear({silent : true});
 			// No events will be fired so update DOM directly.
@@ -446,6 +463,41 @@ define([
 			}
 		},
 
+		removeSelectedPubsFromCategory: function(ev) {
+			var self = this;
+			var selectedFilter = _.first(getFilters(this.model).listId);
+			var serviceUrl = module.config().scriptRoot + '/manager/services/lists/' + selectedFilter;
+			var selectedPubs = this.collection.filter(function(model) {
+				return (model.has('selected') && model.get('selected'));
+			});
+			// get publication ids from selectedPubs
+			var selectedPubIds = _.pluck(selectedPubs, 'id');
+			// execute the delete requests
+			var removeDeferreds = [];
+			if (selectedPubIds.length === 0) {
+				this.warningDialogView.show(
+					'Select Publications',
+					'You must select at least one publication to remove from the current filter list.'
+				);
+			}
+			else {
+				removeDeferreds = _.map(selectedPubIds, function(selectedPubId) {
+					var targetUrl = serviceUrl + '/pubs/' + selectedPubId;
+					return $.ajax({
+						url: targetUrl,
+						method: 'DELETE'
+					});
+				});
+			}
+			$.when.apply(this, removeDeferreds)
+				.done(function() {
+					self.alertView.showSuccessAlert('Selected publications successfully removed from the current list.');
+				})
+				.fail(function() {
+					self.alertView.showDangerAlert('Error: Unable to remove the selected publications from the current list.');
+				});
+		},
+
 		changePubsListFilter : function() {
 			var pubsListFilter = [];
 			this.$('.pub-filter-list-div input:checked').each(function() {
@@ -455,6 +507,7 @@ define([
 			});
 			this.model.set('listId', {useId : true, selections : pubsListFilter});
 			this.filterPubs();
+			this.updateVisibilityRemoveFromPubListBtn();
 		},
 
 		/*
