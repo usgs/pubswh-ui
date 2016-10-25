@@ -342,7 +342,7 @@ define([
 			var selectedText;
 			if (selectedFilters.length === 1) {
 				selectedFilter = _.first(selectedFilters);
-				selectedText = _.findWhere(this.publicationListCollection.toJSON(), {id : parseInt(selectedFilter)});
+				selectedText = this.publicationListCollection.findWhere({id : selectedFilter});
 				$removePubBtn.html('Remove Selected Publications From "' + selectedText + '" List');
 				$removePubBtn.show();
 			}

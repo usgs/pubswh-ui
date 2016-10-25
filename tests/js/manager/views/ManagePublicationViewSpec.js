@@ -385,7 +385,7 @@ define([
 				expect(args1.url).toContain('publicationId=1&publicationId=3');
 			});
 
-			fit('Expects the Remove from List Button to be shown if a single list is selected', function() {
+			it('Expects the Remove from List Button to be shown if a single list is selected', function() {
 				var $removeBtn = $testDiv.find('.remove-from-list-btn');
 				var $checkbox1 = testView.$('.pub-filter-list-div input[value="1"]');
 				$checkbox1.prop('checked', true);
@@ -406,7 +406,7 @@ define([
 				expect(showWarningDialogSpy).toHaveBeenCalled();
 			});
 
-			fit('Expects an Ajax call is made for each selected publication when the Remove from List button is clicked', function() {
+			it('Expects an Ajax call is made for each selected publication when the Remove from List button is clicked', function() {
 				var $checkbox1 = testView.$('.pub-filter-list-div input[value="1"]');
 				$checkbox1.prop('checked', true);
 				$checkbox1.trigger('change');
