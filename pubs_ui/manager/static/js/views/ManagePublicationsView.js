@@ -80,6 +80,7 @@ define([
 			// Create filter model, listeners, and holder for filter rows.
 			this.listenTo(this.model, 'change:q', this.updateQTerm);
 			this.listenTo(this.model, 'change:listId', this.updatePubsListFilter);
+			this.listenTo(this.model, 'change:listId', this.updateVisibilityRemoveFromPubListBtn);
 			this.filterRowViews = [];
 
 			// Can get rid of this once the edit contributors page is implemented.
@@ -302,6 +303,9 @@ define([
 				self.updatePubsListDisplay();
 			});
 
+			// check to see if a publication list filter is selected
+			this.updateVisibilityRemoveFromPubListBtn();
+
 			return this;
 		},
 
@@ -334,22 +338,6 @@ define([
 		/*
 		 * DOM event handlers
 		 */
-
-		updateVisibilityRemoveFromPubListBtn : function() {
-			var selectedFilters = getFilters(this.model).listId;
-			var $removePubBtn = this.$('.remove-from-list-btn');
-			var selectedFilter;
-			var selectedText;
-			if (selectedFilters.length === 1) {
-				selectedFilter = _.first(selectedFilters);
-				selectedText = this.publicationListCollection.findWhere({id : selectedFilter});
-				$removePubBtn.html('Remove Selected Publications From "' + selectedText + '" List');
-				$removePubBtn.show();
-			}
-			else {
-				$removePubBtn.hide();
-			}
-		},
 
 		clearSearch : function() {
 			this.model.clear({silent : true});
@@ -507,7 +495,6 @@ define([
 			});
 			this.model.set('listId', {useId : true, selections : pubsListFilter});
 			this.filterPubs();
-			this.updateVisibilityRemoveFromPubListBtn();
 		},
 
 		/*
@@ -523,6 +510,23 @@ define([
 			this.$('.pub-filter-container input[type="checkbox"]').each(function() {
 				$(this).prop('checked', _.contains(pubsList, $(this).val()));
 			});
+		},
+
+		updateVisibilityRemoveFromPubListBtn : function() {
+			// ternary handles initial render when listId doesn't exist
+			var selectedFilters = getFilters(this.model).listId ? getFilters(this.model).listId : [];
+			var $removePubBtn = this.$('.remove-from-list-btn');
+			var selectedFilter;
+			var selectedText;
+			if (selectedFilters.length == 1) {
+				selectedFilter = _.first(selectedFilters);
+				selectedText = this.publicationListCollection.findWhere({id : selectedFilter});
+				$removePubBtn.html('Remove Selected Publications From "' + selectedText + '" List');
+				$removePubBtn.show();
+			}
+			else {
+				$removePubBtn.hide();
+			}
 		},
 
 		/* collection event handlers */

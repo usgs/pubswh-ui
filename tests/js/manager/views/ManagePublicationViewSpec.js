@@ -385,31 +385,12 @@ define([
 				expect(args1.url).toContain('publicationId=1&publicationId=3');
 			});
 
-			it('Expects the Remove from List Button to be shown if a single list is selected', function() {
-				var $removeBtn = $testDiv.find('.remove-from-list-btn');
-				var $checkbox1 = testView.$('.pub-filter-list-div input[value="1"]');
-				$checkbox1.prop('checked', true);
-				$checkbox1.trigger('change');
-				expect($removeBtn.is(':visible')).toBe(true);
-			});
-
-			it('Expects the Remove from List Button to be hidden if a list is deselected', function() {
-				var $removeBtn = $testDiv.find('.remove-from-list-btn');
-				var $checkbox1 = testView.$('.pub-filter-list-div input[value="1"]');
-				$checkbox1.prop('checked', false);
-				$checkbox1.trigger('change');
-				expect($removeBtn.is(':visible')).toBe(false);
-			});
-
 			it('Expects that a warning is raised if the Remove from List button is clicked but no publication is selected', function() {
 				testView.$('.remove-from-list-btn').trigger('click');
 				expect(showWarningDialogSpy).toHaveBeenCalled();
 			});
 
 			it('Expects an Ajax call is made for each selected publication when the Remove from List button is clicked', function() {
-				var $checkbox1 = testView.$('.pub-filter-list-div input[value="1"]');
-				$checkbox1.prop('checked', true);
-				$checkbox1.trigger('change');
 				testCollection.add([{id : 1, selected: true}, {id : 2}, {id : 3, selected: true}]);
 				spyOn($, 'ajax');
 				testView.$('.remove-from-list-btn').trigger('click');
@@ -443,6 +424,14 @@ define([
 				});
 
 				expect($testDiv.find('.pub-filter-container input:checked').length).toEqual(1);
+				expect($testDiv.find('.remove-from-list-btn').is(':visible')).toBe(true);
+			});
+
+			it('Expects that if more than one listId is updated, the remove from list button is hidden', function() {
+				testModel.set('listId', {
+					useId: true,
+					selections : [{id : '1', text : 'Pub Cat 1'}, {id : '2', text : 'Pub Cat 2'}]
+				});
 			});
 
 			it('Expects that if listId is unset, the DOM is cleared', function() {
