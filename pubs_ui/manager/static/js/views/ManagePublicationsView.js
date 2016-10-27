@@ -295,6 +295,7 @@ define([
 					data : pubList
 				}, DEFAULT_SELECT2_OPTIONS));
 				self.$('.pub-filter-list-div').html(pubListTemplate({pubList : pubList}));
+				self.updateVisibilityRemoveFromPubListBtn();
 			});
 
 			this.fetchPromise.fail(function(jqXhr) {
@@ -518,9 +519,9 @@ define([
 			var $removePubBtn = this.$('.remove-from-list-btn');
 			var selectedFilter;
 			var selectedText;
-			if (selectedFilters.length == 1) {
+			if (selectedFilters.length === 1) {
 				selectedFilter = _.first(selectedFilters);
-				selectedText = this.publicationListCollection.findWhere({id : selectedFilter});
+				selectedText = this.publicationListCollection.findWhere({id : parseInt(selectedFilter)}).get('text');
 				$removePubBtn.html('Remove Selected Publications From "' + selectedText + '" List');
 				$removePubBtn.show();
 			}

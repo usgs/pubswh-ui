@@ -94,6 +94,9 @@ define([
 				fetch : fetchListSpy,
 				toJSON : function() {
 					return [{id : 1, text : 'Pub Cat 1'}, {id : 2, text : 'Pub Cat 2'}];
+				},
+				findWhere : function() {
+					return testModel.set({id : 2, text : 'Pub Cat 2'});
 				}
 			}));
 
@@ -425,6 +428,7 @@ define([
 
 				expect($testDiv.find('.pub-filter-container input:checked').length).toEqual(1);
 				expect($testDiv.find('.remove-from-list-btn').is(':visible')).toBe(true);
+				expect($testDiv.find('.remove-from-list-btn').text()).toEqual('Remove Selected Publications From "Pub Cat 2" List');
 			});
 
 			it('Expects that if more than one listId is updated, the remove from list button is hidden', function() {
@@ -432,6 +436,7 @@ define([
 					useId: true,
 					selections : [{id : '1', text : 'Pub Cat 1'}, {id : '2', text : 'Pub Cat 2'}]
 				});
+				expect($testDiv.find('.remove-from-list-btn').is(':visible')).toBe(false);
 			});
 
 			it('Expects that if listId is unset, the DOM is cleared', function() {
