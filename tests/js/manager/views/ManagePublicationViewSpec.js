@@ -96,7 +96,8 @@ define([
 					return [{id : 1, text : 'Pub Cat 1'}, {id : 2, text : 'Pub Cat 2'}];
 				},
 				findWhere : function() {
-					return testModel.set({id : 2, text : 'Pub Cat 2'});
+					var mockModel = new Backbone.Model();
+					return mockModel.set({id : 2, text : 'Pub Cat 2'});
 				}
 			}));
 
