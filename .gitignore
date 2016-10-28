@@ -30,3 +30,6 @@ lettucetests.xml
 /npm
 /coverage
 npm-debug.log
+build/
+dist/
+*.egg-info/
