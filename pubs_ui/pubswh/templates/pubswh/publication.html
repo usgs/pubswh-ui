@@ -136,7 +136,9 @@
                 
                 <section id="suggested">
                     {% macro linkdisplay(link) -%}
-                        <a href="{{ link['url'] }}" target="_blank" title="{% if link['description'] %}{{ link['description'] }}{% else %}{{ link['type']['text'] }}{% endif -%}">
+                        <a href="{{ link['url'] }}" target="_blank"
+						   onclick="GA.trackGAEvent('Downloads', '{{ link["type"]["text"] }}', '{{ link["url"] }}')"
+						   title="{% if link['description'] %}{{ link['description'] }}{% else %}{{ link['type']['text'] }}{% endif -%}">
                             <strong>
                             {%- if link['text'] -%}
                                 {{- link['text']|safe -}}
