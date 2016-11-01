@@ -451,31 +451,20 @@ def jsonify_geojson(record):
     return record
 
 
-def create_store_info(publication_json_resp):
+def create_store_info(publication_resp):
     """
-    Obtains usgs store info for the context publication from an external (legacy)
-    service, and converts that info into an unambiguous form. Note that, 
-    although the service endpoint is parameterized, that's only a convenience
-    for exercising and testing this operation. This function contains 
-    hard-wired assumptions about 
-        - how the context_id is included in the service call;
-        - the structure and semantics of the legacy service's return value.
+    Create context that can be displayed in a Jinja
+    Template for publications with USGS Store data.
 
-    This function will therefore need to be changed if the pubextra service
-    definition changes.
-
-    There are some bits of cruft in this function because it used to be used to used to access supersedes data,
-    which is now in the actual pubs service.
-
-    :param index_id: indexId of context publication
-    :param pubs_service_endpoint: root url for pubs warehouse services
+    :param requests.Response publication_resp: response object for a publication returned from a GET request on
+                                               the /publication service.
     :return: dict containing two items:
         'context_id': the index (prod) ID of the context pub. Included as 
             confirmation only; identical to the 'context_id' param.
         'offers': the object that contains a representations of the USGS store offer for the publication
     """
-    if publication_json_resp.status_code == 200:
-        response_content = publication_json_resp.json()
+    if publication_resp.status_code == 200:
+        response_content = publication_resp.json()
         index_id = response_content.get('indexId')
         try:
             product = response_content['stores'][0]
@@ -505,9 +494,9 @@ def create_store_info(publication_json_resp):
     if product is not None:
         # check if the product is in stock or not
         if product.get('available'):
-            product_availabilty = 'schema:InStock'
+            product_availability = 'schema:InStock'
         else:
-            product_availabilty = 'schema:OutOfStock'
+            product_availability = 'schema:OutOfStock'
         # build the offers object
         offers = {
             "@context":
@@ -515,7 +504,7 @@ def create_store_info(publication_json_resp):
             "@type": "schema:ScholarlyArticle",
             "schema:offers": {
                 "@type": "schema:Offer",
-                "schema:availability": product_availabilty,
+                "schema:availability": product_availability,
                 "schema:price": product.get('price'),
                 "schema:priceCurrency": "USD",
                 "schema:url": product.get('url'),
