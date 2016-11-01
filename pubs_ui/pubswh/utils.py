@@ -451,7 +451,7 @@ def jsonify_geojson(record):
     return record
 
 
-def display_store_info(publication_json_resp):
+def create_store_info(publication_json_resp):
     """
     Obtains usgs store info for the context publication from an external (legacy)
     service, and converts that info into an unambiguous form. Note that, 
@@ -479,7 +479,7 @@ def display_store_info(publication_json_resp):
         index_id = response_content.get('indexId')
         try:
             product = response_content['stores'][0]
-        except (TypeError, KeyError):
+        except (IndexError, KeyError):
             product = None
     else:
         index_id = None
@@ -502,12 +502,12 @@ def display_store_info(publication_json_resp):
     # conventions about framing the predicate from the viewpoint of the subject.
     # 
     # Just think of the @type as saying "This linked pub is ___ the context pub."
-    offers = None
     if product is not None:
         # check if the product is in stock or not
-        product_availabilty = 'schema:OutOfStock'
-        if product.get('availability') == 'Y':
+        if product.get('available'):
             product_availabilty = 'schema:InStock'
+        else:
+            product_availabilty = 'schema:OutOfStock'
         # build the offers object
         offers = {
             "@context":
@@ -525,6 +525,8 @@ def display_store_info(publication_json_resp):
                     "schema:url": "http://store.usgs.gov"}
                 }
             }
+    else:
+        offers = None
     return {'context_item': index_id, 'offers': offers}
 
 
