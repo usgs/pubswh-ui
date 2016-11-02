@@ -214,7 +214,7 @@ def publication(index_id):
     if 'mimetype' in request.args and request.args.get("mimetype") == 'ris':
         content = render_template('pubswh/ris_single.ris', result=pubdata)
         return Response(content, mimetype="application/x-research-info-systems",
-                        headers={"Content-Disposition": "attachment;filename=USGS_PW_"+pubdata['indexId']+".ris"})
+                        headers={"Content-Disposition": "attachment;filename=USGS_PW_" + pubdata['indexId'] + ".ris"})
     else:
         return render_template('pubswh/publication.html',
                                indexID=index_id, 

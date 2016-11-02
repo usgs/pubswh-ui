@@ -463,16 +463,17 @@ def create_store_info(publication_resp):
             confirmation only; identical to the 'context_id' param.
         'offers': the object that contains a representations of the USGS store offer for the publication
     """
+    index_id = None
+    product = None
+    offers = None
+
     if publication_resp.status_code == 200:
         response_content = publication_resp.json()
         index_id = response_content.get('indexId')
         try:
             product = response_content['stores'][0]
         except (IndexError, KeyError):
-            product = None
-    else:
-        index_id = None
-        product = None
+            pass
 
     # REMARKS ABOUT SERVICE RETURNED VALUE ASSUMPTIONS
     #
@@ -493,10 +494,7 @@ def create_store_info(publication_resp):
     # Just think of the @type as saying "This linked pub is ___ the context pub."
     if product is not None:
         # check if the product is in stock or not
-        if product.get('available'):
-            product_availability = 'schema:InStock'
-        else:
-            product_availability = 'schema:OutOfStock'
+        product_availability = 'schema:InStock' if product.get('available') else 'schema:OutOfStock'
         # build the offers object
         offers = {
             "@context":
@@ -514,8 +512,6 @@ def create_store_info(publication_resp):
                     "schema:url": "http://store.usgs.gov"}
                 }
             }
-    else:
-        offers = None
     return {'context_item': index_id, 'offers': offers}
 
 
