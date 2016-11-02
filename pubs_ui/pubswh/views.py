@@ -23,7 +23,8 @@ from .canned_text import EMAIL_RESPONSE
 from .forms import ContactForm, SearchForm, NumSeries
 from .utils import (pull_feed, create_display_links,
                     SearchPublications, change_to_pubs_test,
-                    munge_pubdata_for_display, extract_related_pub_info, jsonify_geojson, generate_sb_data)
+                    munge_pubdata_for_display, extract_related_pub_info,
+                    jsonify_geojson, generate_sb_data, create_store_info)
 
 
 # set UTF-8 to be default throughout app
@@ -205,13 +206,15 @@ def publication(index_id):
         sbdata = generate_sb_data(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
         return jsonify(sbdata)
     pubdata = munge_pubdata_for_display(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+    store_data = create_store_info(r)
+    pubdata.update(store_data)
     related_pubs = extract_related_pub_info(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'ris':
-        content =  render_template('pubswh/ris_single.ris', result=pubdata)
+        content = render_template('pubswh/ris_single.ris', result=pubdata)
         return Response(content, mimetype="application/x-research-info-systems",
-                               headers={"Content-Disposition":"attachment;filename=USGS_PW_"+pubdata['indexId']+".ris"})
+                        headers={"Content-Disposition": "attachment;filename=USGS_PW_" + pubdata['indexId'] + ".ris"})
     else:
         return render_template('pubswh/publication.html',
                                indexID=index_id, 

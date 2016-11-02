@@ -451,38 +451,29 @@ def jsonify_geojson(record):
     return record
 
 
-def legacy_api_info(context_id, legacy_service_url):
+def create_store_info(publication_resp):
     """
-    Obtains usgs store info for the context publication from an external (legacy)
-    service, and converts that info into an unambiguous form. Note that, 
-    although the service endpoint is parameterized, that's only a convenience
-    for exercising and testing this operation. This function contains 
-    hard-wired assumptions about 
-        - how the context_id is included in the service call;
-        - the structure and semantics of the legacy service's return value.
+    Create context that can be displayed in a Jinja
+    Template for publications with USGS Store data.
 
-    This function will therefore need to be changed if the pubextra service
-    definition changes.
-
-    There are some bits of cruft in this function because it used to be used to used to access supersedes data,
-    which is now in the actual pubs service.
-
-    :param context_id: indexId of context publication
-    :param legacy_service_url: url for legacy relationships information service
+    :param requests.Response publication_resp: response object for a publication returned from a GET request on
+                                               the /publication service.
     :return: dict containing two items:
         'context_id': the index (prod) ID of the context pub. Included as 
             confirmation only; identical to the 'context_id' param.
         'offers': the object that contains a representations of the USGS store offer for the publication
     """
-    response = requests.get(legacy_service_url, params={'prod_id': context_id}, verify=verify_cert)
-    if response.status_code == 200:
-        response_content = response.json()
-        try:
-            product = response_content.get('modsCollection', {}).get('mods', [{}])[0].get('product')
-        except TypeError:
-            product = None
-    else:
-        product = None
+    index_id = None
+    product = None
+    offers = None
+
+    if publication_resp.status_code == 200:
+        response_json = publication_resp.json()
+        index_id = response_json.get('indexId')
+        if 'stores' in response_json.keys():
+            stores = response_json['stores']
+            if len(stores) > 0:
+                product = stores[0]
 
     # REMARKS ABOUT SERVICE RETURNED VALUE ASSUMPTIONS
     #
@@ -501,12 +492,9 @@ def legacy_api_info(context_id, legacy_service_url):
     # conventions about framing the predicate from the viewpoint of the subject.
     # 
     # Just think of the @type as saying "This linked pub is ___ the context pub."
-    offers = None
     if product is not None:
         # check if the product is in stock or not
-        product_availabilty = 'schema:OutOfStock'
-        if product[0].get('availability') == 'Y':
-            product_availabilty = 'schema:InStock'
+        product_availability = 'schema:InStock' if product.get('available') else 'schema:OutOfStock'
         # build the offers object
         offers = {
             "@context":
@@ -514,18 +502,17 @@ def legacy_api_info(context_id, legacy_service_url):
             "@type": "schema:ScholarlyArticle",
             "schema:offers": {
                 "@type": "schema:Offer",
-                "schema:availability": product_availabilty,
-                "schema:price": product[0].get('price'),
+                "schema:availability": product_availability,
+                "schema:price": product.get('price'),
                 "schema:priceCurrency": "USD",
-                "schema:url": product[0].get('url'),
+                "schema:url": product.get('url'),
                 "schema:seller": {
                     "@type": "schema:Organization",
                     "schema:name": "USGS Store",
                     "schema:url": "http://store.usgs.gov"}
                 }
             }
-
-    return {'context_item': context_id, 'offers': offers}
+    return {'context_item': index_id, 'offers': offers}
 
 
 def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):

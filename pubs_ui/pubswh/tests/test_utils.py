@@ -1,7 +1,14 @@
-from pubs_ui.pubswh.utils import manipulate_doi_information, generate_sb_data
-from pubs_ui import app
 import unittest
+
+from mock import MagicMock
+from requests import Response
+
+from pubs_ui.pubswh.utils import manipulate_doi_information, generate_sb_data, create_store_info
+from pubs_ui import app
+
+
 unittest.TestCase.maxDiff = None
+
 
 class ManipulateDoiInformationTestCase(unittest.TestCase):
     """Tests for create_display_links"""
@@ -213,4 +220,64 @@ class GenerateScienceBaseData(unittest.TestCase):
              "parentId": app.config['SCIENCEBASE_PARENT_UUID']
              }
         self.assertEqual(generate_sb_data(simple_pubsdata, self.__class__.replace_pubs_with_pubs_test,
-                                self.__class__.supersedes_url, self.__class__.json_ld_id_base_url), expected_sbdata)
+                         self.__class__.supersedes_url, self.__class__.json_ld_id_base_url), expected_sbdata)
+
+
+class CreateStoreInfoTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.resp_with_store = Response()
+        self.resp_with_store = MagicMock(status_code=200)
+        self.resp_with_store.json = MagicMock(return_value={'indexId': 'abc091',
+                                                            'stores': [{'publicationId': 7850,
+                                                                        'store': 'https://fake.store.gov',
+                                                                        'available': True,
+                                                                        'price': 18}
+                                                                       ]
+                                                            }
+                                              )
+        self.resp_pub_not_avail = Response()
+        self.resp_pub_not_avail = MagicMock(status_code=200)
+        self.resp_pub_not_avail.json = MagicMock(return_value={'indexId': 'efg845',
+                                                               'stores': [{'publicationId': 6980,
+                                                                           'store': 'https://fake.store.gov',
+                                                                           'available': False,
+                                                                           'price': 17}
+                                                                          ]
+                                                               }
+                                                 )
+        self.resp_without_store = Response()
+        self.resp_without_store = MagicMock(status_code=200)
+        self.resp_without_store.json = MagicMock(return_value={'indexId': 'xyz735',
+                                                               'stores': []}
+                                                 )
+        self.resp_no_store = Response()
+        self.resp_no_store = MagicMock(status_code=200)
+        self.resp_no_store.json = MagicMock(return_value={'indexId': 'mno426'})
+        self.bad_resp = Response()
+        self.bad_resp = MagicMock(status_code=404)
+
+    def test_store_data_is_created_if_present(self):
+        result = create_store_info(self.resp_with_store)
+        expected = {'offers': {'@context': {'schema': 'http://schema.org/'}, '@type': 'schema:ScholarlyArticle', 'schema:offers': {'schema:seller': {'schema:name': 'USGS Store', '@type': 'schema:Organization', 'schema:url': 'http://store.usgs.gov'}, 'schema:url': None, 'schema:price': 18, 'schema:availability': 'schema:InStock', 'schema:priceCurrency': 'USD', '@type': 'schema:Offer'}}, 'context_item': 'abc091'}
+        self.assertEqual(result, expected)
+
+    def test_store_data_is_listed_as_out_of_stock(self):
+        result = create_store_info(self.resp_pub_not_avail)
+        expected = {'offers': {'@context': {'schema': 'http://schema.org/'}, '@type': 'schema:ScholarlyArticle', 'schema:offers': {'schema:seller': {'schema:name': 'USGS Store', '@type': 'schema:Organization', 'schema:url': 'http://store.usgs.gov'}, 'schema:url': None, 'schema:price': 17, 'schema:availability': 'schema:OutOfStock', 'schema:priceCurrency': 'USD', '@type': 'schema:Offer'}}, 'context_item': 'efg845'}
+        self.assertEqual(result, expected)
+
+    def test_store_data_is_created_if_not_present(self):
+        result = create_store_info(self.resp_without_store)
+        expected = {'context_item': 'xyz735', 'offers': None}
+        self.assertEqual(result, expected)
+
+    def test_store_data_is_created_if_no_store(self):
+        result = create_store_info(self.resp_no_store)
+        expected = {'context_item': 'mno426', 'offers': None}
+        self.assertEqual(result, expected)
+
+    def test_store_data_with_bad_response(self):
+        result = create_store_info(self.bad_resp)
+        expected = {'context_item': None, 'offers': None}
+        self.assertEqual(result, expected)
