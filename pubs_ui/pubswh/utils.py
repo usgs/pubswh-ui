@@ -468,12 +468,12 @@ def create_store_info(publication_resp):
     offers = None
 
     if publication_resp.status_code == 200:
-        response_content = publication_resp.json()
-        index_id = response_content.get('indexId')
-        try:
-            product = response_content['stores'][0]
-        except (IndexError, KeyError):
-            pass
+        response_json = publication_resp.json()
+        index_id = response_json.get('indexId')
+        if 'stores' in response_json.keys():
+            stores = response_json['stores']
+            if len(stores) > 0:
+                product = stores[0]
 
     # REMARKS ABOUT SERVICE RETURNED VALUE ASSUMPTIONS
     #
