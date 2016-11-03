@@ -1,0 +1,32 @@
+{% extends 'metrics/base.html' %}
+
+{% block main %}
+	<h1>Google Analytics Dashboard for Pubs Warehouse - Acquisition</h1>
+	<div id="search-div" class="metric-div">
+		<div id="recent-searches-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		<div id="year-searches-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+	</div>
+	<div id="search-referrals-div" class="metric-div">
+		<div id="recent-search-referrals-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		<div id="year-search-referrals-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+	</div>
+	<div id="search-direct-div" class="metric-div">
+		<div id="recent-search-direct-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		<div id="year-search-direct-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+	</div>
+	<div id="search-social-div" class="metric-div">
+		<div id="recent-search-social-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		<div id="year-search-social-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+	</div>
+	<div id="search-email-div" class="metric-div">
+		<div id="recent-search-email-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		<div id="year-search-email-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+	</div>
+{% endblock %}
+
+{% block page_script %}
+	{{ super() }}
+	{% assets "metrics_publications_aquisition_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+	{% endassets %}
+{% endblock %}

@@ -3,6 +3,11 @@ from flask_assets import Environment, Bundle
 
 from . import app
 
+base_metrics_js = Bundle(
+    'metrics/js/analyticsData.js',
+    'metrics/js/analyticsGraph.js',
+    'metrics/js/dataUtils.js',
+)
 bundles={
     'js_base_libs' : Bundle(
         'pubswh/js/vendor/bootstrap.js',
@@ -17,6 +22,19 @@ bundles={
         filters='rjsmin',
         output='gen/advanced_search.js'
     ),
+    'metrics_publications_js' : Bundle(
+        base_metrics_js,
+        Bundle('metrics/js/pubsGraphController.js'),
+        filters='rjsmin',
+        output='gen/metrics_publications.js'
+    ),
+    'metrics_publications_aquisition_js' : Bundle(
+        base_metrics_js,
+        Bundle('metrics/js/pubsAcquisitionGraphController.js'),
+        filters='rjsmin',
+        output='gen/metrics_publications_acquisition.js'
+    ),
+
     'usgs_style' : Bundle(
         'manager/less/usgs_header_footer.less',
         filters='less,cssmin',
@@ -57,7 +75,15 @@ bundles={
         ],
         filters='less,cssmin',
         output='gen/manager_style.css'
-    )
+    ),
+    'metrics_style' : Bundle(
+        'metrics/less/metrics_custom.less',
+        depends=[
+            'manager/less/usgs_header_footer.less',
+        ],
+        filters='less,cssmin',
+        output='gen/metrics_style.css'
+    ),
 }
 
 assets = Environment(app)

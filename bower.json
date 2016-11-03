@@ -37,7 +37,9 @@
     "requirejs-hbs": "0.1.1",
     "select2-bootstrap-theme": "0.1.0-beta.7",
     "jquery-ui": "1.12.0",
-    "loglevel": "1.4.1"
+    "loglevel": "1.4.1",
+    "moment": "2.15.2",
+    "dygraphs": "1.1.1"
   },
   "resolutions": {
     "underscore": "1.8.3",
