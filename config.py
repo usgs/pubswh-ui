@@ -1,6 +1,5 @@
-
-import sys
 from datetime import timedelta
+import sys
 
 
 DEBUG = False
@@ -43,6 +42,11 @@ BOWER_TRY_MINIFIED = False
 ASSETS_DEBUG = False # to disable compression of js and css set to True
 
 CONTACT_RECIPIENTS = ['servicedesk@usgs.gov']
+
+# Location of file containing the google analytics service account's JSON key.
+GA_KEY_FILE_PATH = ''
+GA_OAUTH2_SCOPE = 'https://www.googleapis.com/auth/analytics.readonly'
+GA_PUBS_VIEW_ID = 'ga:20354817'
 
 
 try:

@@ -1,0 +1,28 @@
+{% extends 'metrics/base.html' %}
+
+{%  block main %}
+	<h1>Google Analytics Dashboard for Pubs Warehouse</h1>
+	<div id="sessions-div" class="metric-div">
+		<div id="recent-sessions-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		<div id="year-sessions-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+	</div>
+	<div id="users-div" class="metric-div">
+		<div id="recent-users-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		<div id="year-users-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+	</div>
+	<div id="pageviews-div" class="metric-div">
+		<div id="recent-pageviews-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		<div id="year-pageviews-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+	</div>
+	<div id="downloadevents-div" class="metric-div">
+		<div id="recent-downloadevents-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		<div id="year-downloadevents-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+	</div>
+{%  endblock %}
+
+{% block page_script %}
+	{{ super() }}
+	{% assets "metrics_publications_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+	{% endassets %}
+{% endblock %}
