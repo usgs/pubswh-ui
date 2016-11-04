@@ -389,15 +389,15 @@ define([
 						active : false,
 						publicationSubtype : {id : 4}
 					});
-
-					$testDiv.find('.delete-ok-btn').trigger('click');
 				});
 
 				it('Expects that the loading indicator is visible', function() {
+					$testDiv.find('.delete-ok-btn').trigger('click');
 					expect($loadingIndicator.is(':visible')).toBe(true);
 				});
 
 				it('Expects that a failed response shows a danger alert and hides the loading indicator', function() {
+					$testDiv.find('.delete-ok-btn').trigger('click');
 					fakeServer.respondWith(/publicationSeries/, [500, {'Content-Type' : 'text'}, 'Internal Server error']);
 					fakeServer.respond();
 
@@ -406,6 +406,7 @@ define([
 				});
 
 				it('Expects that successful response hides the edit section, shows a success alert, updates the navigation, and hides the loading indicator', function() {
+					$testDiv.find('.delete-ok-btn').trigger('click');
 					fakeServer.respondWith(/publicationSeries/, [200, {'Content-Type' : 'application/json'}, '{}']);
 					fakeServer.respond();
 
