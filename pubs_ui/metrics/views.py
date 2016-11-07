@@ -33,26 +33,29 @@ def get_access_token():
 def publications_aquisitions():
     return render_template('metrics/publications_aquisitions.html', ga_access_token=get_access_token())
 
+
 @metrics.route('/publications/')
 @login_required
 def publications():
     return render_template('metrics/publications.html', ga_access_token=get_access_token())
 
+
 @metrics.route('/publication/<pubsid>/')
 def publication(pubsid):
     return render_template('metrics/publication.html', pubsid=pubsid)
 
+
 @metrics.route('/gadata/', methods=['POST'])
 def gadata():
-    VIEW_ID = app.config.get('GA_PUBS_VIEW_ID')
+    view_id = app.config.get('GA_PUBS_VIEW_ID')
     report_requests = request.get_json()
-    [r.update({'viewId' : VIEW_ID}) for r in report_requests]
+    [r.update({'viewId': view_id}) for r in report_requests]
     for n in range(0, 5):
         try:
             report_response = analytics.reports().batchGet(
-                quotaUser=request.remote_addr, # Pass so that the quota to limit 10 queries per second per IP uses the client's IP.
+                quotaUser=request.remote_addr,  # Pass so that the quota to limit 10 queries per second per IP uses the client's IP.
                 body={
-                    'reportRequests' : report_requests
+                    'reportRequests': report_requests
                 }
             ).execute()
             response = jsonify(report_response)
@@ -71,7 +74,6 @@ def gadata():
                 time.sleep((2 ** n) + random.random())
             else:
                 break
-
 
     return response
 
