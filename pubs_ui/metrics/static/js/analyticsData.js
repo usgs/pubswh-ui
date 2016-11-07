@@ -54,7 +54,7 @@ METRICS.analyticsData = (function() {
 		var dateRange = METRICS.dataUtils.getPastYear();
 		var deferred = $.Deferred();
 		$.ajax({
-			url : '/metrics/publication/data/',
+			url : '/metrics/gadata/',
 			method: 'POST',
 			contentType : 'application/json',
 			data : JSON.stringify([

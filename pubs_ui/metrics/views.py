@@ -1,3 +1,5 @@
+import random
+import time
 
 from flask import Blueprint, render_template, request, jsonify, Response
 from flask_login import login_required
@@ -26,7 +28,6 @@ def get_access_token():
     return credentials.get_access_token().access_token
 
 
-
 @metrics.route('/publications/acquisitions/')
 @login_required
 def publications_aquisitions():
@@ -41,24 +42,36 @@ def publications():
 def publication(pubsid):
     return render_template('metrics/publication.html', pubsid=pubsid)
 
-@metrics.route('/publication/data/', methods=['POST'])
-def publication_data():
+@metrics.route('/gadata/', methods=['POST'])
+def gadata():
     VIEW_ID = app.config.get('GA_PUBS_VIEW_ID')
     report_requests = request.get_json()
     [r.update({'viewId' : VIEW_ID}) for r in report_requests]
-    try:
-        response = analytics.reports().batchGet(
-            quotaUser=request.remote_addr,
-            body={
-                'reportRequests' : report_requests
-            }
-        ).execute()
-    except HttpError as error:
-        response = Response(response=error.content,
-                            status=int(error.resp['status']),
-                            mimetype='application/json')
-    else:
-        response = jsonify(response)
+    for n in range(0, 5):
+        try:
+            report_response = analytics.reports().batchGet(
+                quotaUser=request.remote_addr, # Pass so that the quota to limit 10 queries per second per IP uses the client's IP.
+                body={
+                    'reportRequests' : report_requests
+                }
+            ).execute()
+            response = jsonify(report_response)
+
+            break
+        except HttpError as error:
+            response = Response(response=error.content,
+                                status=int(error.resp['status']),
+                                mimetype='application/json')
+            if error.resp.reason in [
+                'userRateLimitExceeded',
+                'rateLimitExceeded'
+                'quotaExceeded']:
+                # Assign a response but try again until succeeds or loop exits
+                response = Response
+                time.sleep((2 ** n) + random.random())
+            else:
+                break
+
 
     return response
 
