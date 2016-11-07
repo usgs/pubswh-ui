@@ -1,0 +1,24 @@
+{% extends 'metrics/base.html' %}
+
+{% block config_initialize_script %}
+	<script>
+		var CONFIG = {
+			PUBSID : '{{ pubsid }}'
+		};
+	</script>
+{% endblock %}
+
+{%  block main %}
+	<h1>Google Analytics Dashboard for Pubs Warehouse</h1>
+	<h2>Analytics for publication page with uri: publication/{{ pubsid }}</h2>
+	<div id="sessions-div" class="metric-div">
+		<div id="year-sessions-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+	</div>
+{%  endblock %}
+
+{% block page_script %}
+	{{ super() }}
+	{% assets "metrics_publication_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+	{% endassets %}
+{% endblock %}

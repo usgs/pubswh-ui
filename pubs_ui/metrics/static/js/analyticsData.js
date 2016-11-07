@@ -3,6 +3,7 @@
 /* global Promise */
 /* global moment */
 /* global CONFIG */
+/* global $ */
 
 var METRICS = METRICS || {};
 METRICS.analyticsData = (function() {
@@ -35,12 +36,11 @@ METRICS.analyticsData = (function() {
 	};
 
 	self.fetchMonthlyPastYear = function(metrics, filters) {
-		var lastMonth = moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
-		var yearAgo = moment(lastMonth).subtract(1, 'years').add(1, 'days').format('YYYY-MM-DD');
+		var dateRange = METRICS.dataUtils.getPastYear();
 		var options = {
 			'ids': CONFIG.VIEW_ID,
-			'start-date': yearAgo,
-			'end-date': lastMonth,
+			'start-date': dateRange[0],
+			'end-date': dateRange[1],
 			'metrics': metrics,
 			'dimensions': 'ga:yearMonth'
 		};
@@ -48,6 +48,44 @@ METRICS.analyticsData = (function() {
 			options.filters = filters;
 		}
 		return self.fetch(options);
+	};
+
+	self.batchFetchMonthlyPastYear = function(metrics, filters) {
+		var dateRange = METRICS.dataUtils.getPastYear();
+		var deferred = $.Deferred();
+		$.ajax({
+			url : '/metrics/publication/data/',
+			method: 'POST',
+			contentType : 'application/json',
+			data : JSON.stringify([
+				{
+					dateRanges : [{
+						startDate : dateRange[0].format('YYYY-MM-DD'),
+						endDate : dateRange[1].format('YYYY-MM-DD')
+					}],
+					dimensions : [{name: 'ga:yearMonth'}],
+					metrics : metrics,
+					dimensionFilterClauses : filters
+				}
+			]),
+			success: function(response) {
+				var rows = response.reports[0].data.rows.map(function (row) {
+					return {date: moment(row.dimensions[0], 'YYYYMM'), graphRow : [row.dimensions[0], row.metrics[0].values[0]]};
+				});
+				deferred.resolve(METRICS.dataUtils.fillMissingValues({
+					startDate : dateRange[0],
+					endDate : dateRange[1],
+					timeUnit : 'month',
+					rows : rows
+				}));
+			},
+			error : function(jqXHR) {
+				deferred.reject(jqXHR);
+			},
+			processData : false
+		});
+
+		return deferred;
 	};
 
 	return self;
