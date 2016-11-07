@@ -184,7 +184,7 @@
 						</goals>
 						<phase>test</phase>
 						<configuration>
-							<karmaConfPath>tests/js/karma.conf.js</karmaConfPath>
+							<karmaConfPath>tests/js/manager/karma.conf.js</karmaConfPath>
 						</configuration>
 					</execution>
 				</executions>
