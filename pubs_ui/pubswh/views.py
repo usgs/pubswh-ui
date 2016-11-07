@@ -9,7 +9,7 @@ import redis
 from requests import get
 import tablib
 
-from flask import render_template, abort, request, Response, jsonify, url_for, redirect, Blueprint
+from flask import render_template, abort, request, Response, jsonify, url_for, redirect, Blueprint, stream_with_context
 from flask_caching import Cache
 from flask_paginate import Pagination
 from flask_login import login_required, current_user
@@ -650,3 +650,15 @@ def unapi():
         pubdata = r.json()
         return render_template('pubswh/'+formats[unapi_format]['template'], pubdata=pubdata, formats=formats,  mimetype='text/xml')
 
+@pubswh.route('/service/rss/')
+def rss():
+    """
+    from http://flask.pocoo.org/snippets/118/
+    This basically makes it so that the many hundreds of RSS Readers that point at the old service RSS field will work
+    by proxying the pubs-services RSS Request to the pubs/service RSS request.  We are doing this rather than mapping at
+    the apache level so that we have a little more flexibility in the future.
+    :return:
+    """
+    url = pub_url+'/publication/rss'
+    req = get(url, stream=True)
+    return Response(stream_with_context(req.iter_content()), content_type=req.headers['content-type'])
