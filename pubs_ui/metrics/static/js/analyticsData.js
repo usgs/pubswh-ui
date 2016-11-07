@@ -50,7 +50,16 @@ METRICS.analyticsData = (function() {
 		return self.fetch(options);
 	};
 
-	self.batchFetchMonthlyPastYear = function(metrics, filters) {
+	/*
+	 * 	@param {Array of Metric} metrics - see https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#metric}
+	 *	@param {DimensionFilterClause} dimensionFilters - see https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#dimensionfilterclause
+	 *	@returns Jquery Promise
+	 *		@resolve - successfully retrieval. Response is {Array of Array} representing the data.
+	 *			First element is a moment, the rest is the data requested via the metrics parameter.
+	 *		@reject - somethings went wrong - returns response. The responseJSON.error.message can be used to determine
+	 *			why the request failed.
+	 */
+	self.batchFetchMonthlyPastYear = function(metrics, dimensionFilters) {
 		var dateRange = METRICS.dataUtils.getPastYear();
 		var deferred = $.Deferred();
 		$.ajax({
@@ -65,7 +74,7 @@ METRICS.analyticsData = (function() {
 					}],
 					dimensions : [{name: 'ga:yearMonth'}],
 					metrics : metrics,
-					dimensionFilterClauses : filters
+					dimensionFilterClauses : dimensionFilters
 				}
 			]),
 			success: function(response) {

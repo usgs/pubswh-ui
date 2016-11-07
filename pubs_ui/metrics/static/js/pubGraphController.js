@@ -8,7 +8,11 @@
 	var yearSessionsDiv = document.getElementById('year-sessions-container');
 
 	var sessionsMetric = {expression : 'ga:sessions'};
-	var pageFilter = {dimensionName : 'ga:pagePath', operator : 'EXACT', expressions : ['/publication/' + CONFIG.PUBSID] };
+	var pageFilter = {
+		dimensionName : 'ga:pagePath',
+		operator : 'EXACT',
+		expressions : ['/publication/' + CONFIG.PUBSID]
+	};
 
 	METRICS.analyticsData.batchFetchMonthlyPastYear([sessionsMetric], {filters: [pageFilter]})
 		.done(function(rows) {
