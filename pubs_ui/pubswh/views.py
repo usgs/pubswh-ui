@@ -650,15 +650,16 @@ def unapi():
         pubdata = r.json()
         return render_template('pubswh/'+formats[unapi_format]['template'], pubdata=pubdata, formats=formats,  mimetype='text/xml')
 
+
 @pubswh.route('/service/rss/')
+@cache.cached(timeout=30, key_prefix=make_cache_key)
 def rss():
     """
-    from http://flask.pocoo.org/snippets/118/
     This basically makes it so that the many hundreds of RSS Readers that point at the old service RSS field will work
     by proxying the pubs-services RSS Request to the pubs/service RSS request.  We are doing this rather than mapping at
     the apache level so that we have a little more flexibility in the future.
     :return:
     """
     url = pub_url+'/publication/rss'
-    req = get(url, stream=True)
-    return Response(stream_with_context(req.iter_content()), content_type=req.headers['content-type'])
+    req = get(url)
+    return Response(req.content, content_type=req.headers['content-type'])
