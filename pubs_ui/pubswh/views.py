@@ -205,10 +205,7 @@ def publication(index_id):
     pubreturn = r.json()
     pub_doi = pubreturn.get('doi')
     pub_altmetric_badges = get_altmetric_badge_img_links(pub_doi, verify=verify_cert)
-    if pub_altmetric_badges is not None:
-        small_badge = pub_altmetric_badges['small']
-    else:
-        small_badge = None
+    small_badge = pub_altmetric_badges['small'] if pub_altmetric_badges is not None else None
     if 'mimetype' in request.args and request.args.get("mimetype") == 'sbjson':
         sbdata = generate_sb_data(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
         return jsonify(sbdata)
