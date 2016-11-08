@@ -10,7 +10,7 @@ fixtures==3.0.0
 Flask==0.11.1
 Flask-Assets==0.11
 Flask-Bower==1.2.1
-Flask-Cache==0.13.1
+Flask-Caching==1.0.1
 Flask-Collect==1.2.2
 Flask-Images==2.1.2
 Flask-Login==0.3.2

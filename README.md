@@ -79,8 +79,9 @@ to take.
   2. Activate your virtualenv (depends on whether linux or windows)
   3. Run `pip install -r requirements.txt`
 
-2. To install javascript dependencies, lessc, and karma as well as run the jasmine tests use: 
-`mvn test`
+2. To install javascript dependencies, lessc, and karma as well as run the jasmine tests, npm must be installed on your machine.
+  1. Run `npm install`
+  2. Run `bower install`
 
 You can start the app by running `run.py`, which will give you an output like so:
 
@@ -97,10 +98,9 @@ To run the unit tests do the following with your virtualenv activated or using t
 `nosetests -w pubs_ui`
 
 To run the jasmine tests, run the following:
-`mvn test`
+Run `node_modules/karma/bin/karma start tests/js/karma.conf.js`
 
-To run the jasmine tests using a browser, run the following: :
-`node/npm test`
+If you leave the above command running you can
 Then go to localhost:9876 in the browser where you want to run the tests. This will have to be altered for Windows users.
 This will automatically open the Firefox browser, but any browser can be used to run the tests
 
