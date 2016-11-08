@@ -24,7 +24,8 @@ from .forms import ContactForm, SearchForm, NumSeries
 from .utils import (pull_feed, create_display_links,
                     SearchPublications, change_to_pubs_test,
                     munge_pubdata_for_display, extract_related_pub_info,
-                    jsonify_geojson, generate_sb_data, create_store_info)
+                    jsonify_geojson, generate_sb_data, create_store_info,
+                    get_altmetric_badge_img_links)
 
 
 # set UTF-8 to be default throughout app
@@ -202,12 +203,20 @@ def publication(index_id):
     if r.status_code in [404, 406]:  # a 406 pretty much always means that it is some sort of other weird malformed URL.
         return render_template('pubswh/404.html'), 404
     pubreturn = r.json()
+    pub_doi = pubreturn.get('doi')
+    pub_altmetric_badges = get_altmetric_badge_img_links(pub_doi, verify=verify_cert)
+    if pub_altmetric_badges is not None:
+        small_badge = pub_altmetric_badges['small']
+    else:
+        small_badge = None
     if 'mimetype' in request.args and request.args.get("mimetype") == 'sbjson':
         sbdata = generate_sb_data(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
         return jsonify(sbdata)
     pubdata = munge_pubdata_for_display(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
     store_data = create_store_info(r)
     pubdata.update(store_data)
+    pubdata['altmetric_badge'] = small_badge
+    print(pubdata)
     related_pubs = extract_related_pub_info(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
