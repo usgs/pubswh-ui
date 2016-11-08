@@ -17,6 +17,7 @@ json_ld_id_base_url = app.config.get('JSON_LD_ID_BASE_URL')
 # should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
 base_search_url = app.config['BASE_SEARCH_URL']
+altmetric_key = app.config['ALTMETRIC_KEY']
 
 
 def pubdetails(pubdata):
@@ -936,3 +937,15 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
     sbdata['facets'].append(citation_facet)
 
     return sbdata
+
+
+def get_altmetric_badge_img_links(publication_doi, altmetric_key=altmetric_key, verify=verify_cert):
+    publication_endpoint = urljoin('https://api.altmetric.com/v1/', 'doi/{}'.format(publication_doi))
+    parameters = {'key': altmetric_key}
+    resp = requests.get(publication_endpoint, params=parameters, verify=verify)
+    if resp.status_code != 404:
+        resp_json = resp.json()
+        altmetric_badge_imgs = resp_json['images']
+    else:
+        altmetric_badge_imgs = None
+    return altmetric_badge_imgs

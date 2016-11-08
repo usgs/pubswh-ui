@@ -48,6 +48,9 @@ GA_KEY_FILE_PATH = ''
 GA_OAUTH2_SCOPE = 'https://www.googleapis.com/auth/analytics.readonly'
 GA_PUBS_VIEW_ID = 'ga:20354817'
 
+# Altmetric API key
+ALTMETRIC_KEY = ''
+
 
 try:
     from deploy_date import *
