@@ -35,3 +35,4 @@ dist/
 *.egg-info/
 /key.json
 .DS_Store
+/static
