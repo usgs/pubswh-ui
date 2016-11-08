@@ -323,7 +323,7 @@
         {% block url %}<a href="{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}">http://pubs.er.usgs.gov{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}</a>
             {% if current_user.is_authenticated %}
                 <small>
-                    <a href="{{ url_for('manager.show_app')}}#publication/{{ result['id'] }}" target="_blank">(edit in Manager)</a>
+                    <a href="{{ url_for('manager.show_app')}}#publication/{{ pubdata['id'] }}" target="_blank">(edit in Manager)</a>
                     <a href="{{ url_for('pubswh.clear_cache', path = request.path[1:], **request.args) }}">clear cache</a>
                 </small>
             {% endif %}
