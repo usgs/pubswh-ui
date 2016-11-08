@@ -216,7 +216,6 @@ def publication(index_id):
     store_data = create_store_info(r)
     pubdata.update(store_data)
     pubdata['altmetric_badge'] = small_badge
-    print(pubdata)
     related_pubs = extract_related_pub_info(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)

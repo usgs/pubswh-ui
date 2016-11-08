@@ -18,6 +18,7 @@ json_ld_id_base_url = app.config.get('JSON_LD_ID_BASE_URL')
 verify_cert = app.config['VERIFY_CERT']
 base_search_url = app.config['BASE_SEARCH_URL']
 altmetric_key = app.config['ALTMETRIC_KEY']
+altmetric_endpoint = app.config['ALTMETRIC_ENDPOINT']
 
 
 def pubdetails(pubdata):
@@ -939,8 +940,9 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
     return sbdata
 
 
-def get_altmetric_badge_img_links(publication_doi, altmetric_key=altmetric_key, verify=verify_cert):
-    publication_endpoint = urljoin('https://api.altmetric.com/v1/', 'doi/{}'.format(publication_doi))
+def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=altmetric_endpoint,
+                                  altmetric_key=altmetric_key, verify=verify_cert):
+    publication_endpoint = urljoin(altmetric_service_endpoint, 'doi/{}'.format(publication_doi))
     parameters = {'key': altmetric_key}
     resp = requests.get(publication_endpoint, params=parameters, verify=verify)
     if resp.status_code != 404:
