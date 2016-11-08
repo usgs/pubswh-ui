@@ -5,7 +5,9 @@ python:
 
 install:
   - pip install -r requirements.txt
-  - mvn compile
+  - nvm 4.x
+  - npm install
+  - bower install
 
 before_script:
   - export DISPLAY=:99.0
@@ -16,4 +18,4 @@ before_script:
 script:
   - lettuce --with-xunit pubs_ui/lettuce_testing
   - nosetests pubs_ui
-  - mvn test
+  - karma start tests/js/karma.conf.js
