@@ -56,8 +56,7 @@ from pubswh.views import pubswh
 app.register_blueprint(auth)
 app.register_blueprint(manager,
                        url_prefix='/manager')
-if (app.config.get('GA_KEY_FILE_PATH')):
-    app.register_blueprint(metrics,
-                           url_prefix='/metrics')
+
+app.register_blueprint(metrics, url_prefix='/metrics')
 app.register_blueprint(pubswh)
 
