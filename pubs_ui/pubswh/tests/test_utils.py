@@ -293,19 +293,22 @@ class GetAltmetricBadgeImgLinksTestCase(unittest.TestCase):
         self.fake_url = '{0}doi/{1}'.format(self.fake_endpoint, self.fake_doi)
         self.fake_altmetric_key = 'IfWeCanHitTheBullsEyeTheRestOfTheDominoesWillFallLikeAHouseOfCards.Checkmate!'
         self.verify_cert = False
-        self.data_200 = {'images': {'small': 'small_url', 'medium': 'medium_url', 'large': 'large_url'}}
+        self.data_200 = {'images': {'small': 'small_url', 'medium': 'medium_url', 'large': 'large_url'},
+                         'details_url': 'https://some_url.fake'
+                         }
 
     @requests_mock.Mocker()
     def test_get_badge_images_from_indexed_doi(self, m):
         m.get(self.fake_url, status_code=200, json=self.data_200)
         result = get_altmetric_badge_img_links(self.fake_doi, self.fake_endpoint,
                                                self.fake_altmetric_key, self.verify_cert)
-        expected = self.data_200['images']
-        self.assertEqual(result, expected)
+        expected = (self.data_200['images'], self.data_200['details_url'])
+        self.assertTupleEqual(result, expected)
 
     @requests_mock.Mocker()
     def test_get_badge_images_from_unindexed_doi(self, m):
         m.get(self.fake_url, status_code=404)
         result = get_altmetric_badge_img_links(self.fake_doi, self.fake_endpoint,
                                                self.fake_altmetric_key, self.verify_cert)
-        self.assertIsNone(result)
+        expected = (None, None)
+        self.assertTupleEqual(result, expected)
