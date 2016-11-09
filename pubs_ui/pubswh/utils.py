@@ -951,13 +951,14 @@ def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=al
     :param str altmetric_service_endpoint: altmetric service endpoint
     :param str altmetric_key: a key so this function can access the badges USGS is paying for
     :param bool verify: boolean specifying whether requests should verify SSL certs
-    :return: image links if they are available
-    :rtype: dict or None
+    :return: badge links if they are available and the link to a page that provides further details about the badge
+    :rtype: tuple
 
     """
     publication_endpoint = urljoin(altmetric_service_endpoint, 'doi/{}'.format(publication_doi))
     parameters = {'key': altmetric_key}
     altmetric_badge_imgs = None
+    altmetric_details = None
     try:
         resp = requests.get(publication_endpoint, params=parameters, verify=verify)
     except requests.ConnectionError:
@@ -965,5 +966,6 @@ def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=al
     else:
         if resp.status_code != 404:
             resp_json = resp.json()
-            altmetric_badge_imgs = resp_json['images']
-    return altmetric_badge_imgs
+            altmetric_badge_imgs = resp_json.get('images')
+            altmetric_details = resp_json.get('details_url')
+    return altmetric_badge_imgs, altmetric_details
