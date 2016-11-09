@@ -943,9 +943,10 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
 def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=altmetric_endpoint,
                                   altmetric_key=altmetric_key, verify=verify_cert):
     """
-    Get the links for small, medium, and altmetric badges. This function
-    will return None if altmetric returns a 404 or an invalid DOI value
-    causes a requests.ConnectionError.
+    Get the links for small, medium, and altmetric badges, and the link
+    that provides further information about the attention score in the badge.
+    This function will return None values if altmetric returns a 404 or an
+    invalid DOI value causes a requests.ConnectionError.
 
     :param str publication_doi: DOI for a publication
     :param str altmetric_service_endpoint: altmetric service endpoint
