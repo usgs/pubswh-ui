@@ -943,21 +943,23 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
 def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=altmetric_endpoint,
                                   altmetric_key=altmetric_key, verify=verify_cert):
     """
-    Get the links for small, medium, and altmetric badges. This function
-    will return None if altmetric returns a 404 or an invalid DOI value
-    causes a requests.ConnectionError.
+    Get the links for small, medium, and altmetric badges, and the link
+    that provides further information about the attention score in the badge.
+    This function will return None values if altmetric returns a 404 or an
+    invalid DOI value causes a requests.ConnectionError.
 
     :param str publication_doi: DOI for a publication
     :param str altmetric_service_endpoint: altmetric service endpoint
     :param str altmetric_key: a key so this function can access the badges USGS is paying for
     :param bool verify: boolean specifying whether requests should verify SSL certs
-    :return: image links if they are available
-    :rtype: dict or None
+    :return: badge links if they are available and the link to a page that provides further details about the badge
+    :rtype: tuple
 
     """
     publication_endpoint = urljoin(altmetric_service_endpoint, 'doi/{}'.format(publication_doi))
     parameters = {'key': altmetric_key}
     altmetric_badge_imgs = None
+    altmetric_details = None
     try:
         resp = requests.get(publication_endpoint, params=parameters, verify=verify)
     except requests.ConnectionError:
@@ -965,5 +967,6 @@ def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=al
     else:
         if resp.status_code != 404:
             resp_json = resp.json()
-            altmetric_badge_imgs = resp_json['images']
-    return altmetric_badge_imgs
+            altmetric_badge_imgs = resp_json.get('images')
+            altmetric_details = resp_json.get('details_url')
+    return altmetric_badge_imgs, altmetric_details
