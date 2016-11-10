@@ -128,13 +128,15 @@
                             <a href="https://twitter.com/share" class="twitter-share-button" data-text="USGS Pub" data-via="USGS_Pubs" data-dnt="true">Tweet</a>
                             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 	                    </div>
-                        <div id="altmetric">
-	                        {% if pubdata['altmetric']['image'] is not none and pubdata['altmetric']['details'] is not none %}
-	                            <a href="{{ pubdata['altmetric']['details'] }}">
-		                            <img src="{{ pubdata['altmetric']['image'] }}" alt="Altmetric Badge">
-	                            </a>
-	                        {%  endif %}
-                        </div>
+                        {% if pubdata['altmetric'] %}
+                            <div id="altmetric">
+                                {% if pubdata['altmetric']['image'] is not none and pubdata['altmetric']['details'] is not none %}
+                                    <a href="{{ pubdata['altmetric']['details'] }}">
+                                        <img src="{{ pubdata['altmetric']['image'] }}" alt="Altmetric Badge">
+                                    </a>
+                                {%  endif %}
+                            </div>
+                        {% endif %}
                     </div>
                 </section>
                 <section>
