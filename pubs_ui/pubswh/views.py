@@ -95,6 +95,11 @@ def restricted_page(index_id):
     if response.status_code == 200:
         record = response.json()
         pubdata = munge_pubdata_for_display(record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+        pub_doi = pubdata.get('doi')
+        pub_altmetric_badges, pub_altmetric_details = get_altmetric_badge_img_links(pub_doi, verify=verify_cert)
+        small_badge = pub_altmetric_badges['small'] if pub_altmetric_badges is not None else None
+        altmetric_links = {'image': small_badge, 'details': pub_altmetric_details}
+        pubdata['altmetric'] = altmetric_links
         related_pubs = extract_related_pub_info(pubdata)
         if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
             return jsonify(pubdata)
