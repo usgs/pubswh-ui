@@ -1,6 +1,8 @@
 from datetime import timedelta
+import os
 import sys
 
+PROJECT_HOME = os.path.dirname(__file__)
 
 DEBUG = False
 JS_DEBUG = False
@@ -40,6 +42,8 @@ BOWER_TRY_MINIFIED = False
 
 #Config for Flask-Assets
 ASSETS_DEBUG = False # to disable compression of js and css set to True
+ASSETS_AUTO_BUILD = False #Local developers will typically set this to True in their instance/config.py.
+LESS_BIN = os.path.join(PROJECT_HOME, 'node_modules', 'less', 'bin', 'lessc')
 
 CONTACT_RECIPIENTS = ['servicedesk@usgs.gov']
 
@@ -48,6 +52,9 @@ GA_KEY_FILE_PATH = ''
 GA_OAUTH2_SCOPE = 'https://www.googleapis.com/auth/analytics.readonly'
 GA_PUBS_VIEW_ID = 'ga:20354817'
 
+# Altmetric API information
+ALTMETRIC_KEY = ''
+ALTMETRIC_ENDPOINT = 'https://api.altmetric.com/v1/'
 
 try:
     from deploy_date import *

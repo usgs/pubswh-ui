@@ -1,9 +1,11 @@
 import unittest
 
 from mock import MagicMock
-from requests import Response
+import requests as r
+import requests_mock
 
-from pubs_ui.pubswh.utils import manipulate_doi_information, generate_sb_data, create_store_info
+from pubs_ui.pubswh.utils import (manipulate_doi_information, generate_sb_data,
+                                  create_store_info, get_altmetric_badge_img_links)
 from pubs_ui import app
 
 
@@ -226,7 +228,7 @@ class GenerateScienceBaseData(unittest.TestCase):
 class CreateStoreInfoTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.resp_with_store = Response()
+        self.resp_with_store = r.Response()
         self.resp_with_store = MagicMock(status_code=200)
         self.resp_with_store.json = MagicMock(return_value={'indexId': 'abc091',
                                                             'stores': [{'publicationId': 7850,
@@ -236,7 +238,7 @@ class CreateStoreInfoTestCase(unittest.TestCase):
                                                                        ]
                                                             }
                                               )
-        self.resp_pub_not_avail = Response()
+        self.resp_pub_not_avail = r.Response()
         self.resp_pub_not_avail = MagicMock(status_code=200)
         self.resp_pub_not_avail.json = MagicMock(return_value={'indexId': 'efg845',
                                                                'stores': [{'publicationId': 6980,
@@ -246,15 +248,15 @@ class CreateStoreInfoTestCase(unittest.TestCase):
                                                                           ]
                                                                }
                                                  )
-        self.resp_without_store = Response()
+        self.resp_without_store = r.Response()
         self.resp_without_store = MagicMock(status_code=200)
         self.resp_without_store.json = MagicMock(return_value={'indexId': 'xyz735',
                                                                'stores': []}
                                                  )
-        self.resp_no_store = Response()
+        self.resp_no_store = r.Response()
         self.resp_no_store = MagicMock(status_code=200)
         self.resp_no_store.json = MagicMock(return_value={'indexId': 'mno426'})
-        self.bad_resp = Response()
+        self.bad_resp = r.Response()
         self.bad_resp = MagicMock(status_code=404)
 
     def test_store_data_is_created_if_present(self):
@@ -281,3 +283,32 @@ class CreateStoreInfoTestCase(unittest.TestCase):
         result = create_store_info(self.bad_resp)
         expected = {'context_item': None, 'offers': None}
         self.assertEqual(result, expected)
+
+
+class GetAltmetricBadgeImgLinksTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.fake_doi = '00.00001/bc.1729'
+        self.fake_endpoint = 'https://fake.api.altmetric.com/v1/'
+        self.fake_url = '{0}doi/{1}'.format(self.fake_endpoint, self.fake_doi)
+        self.fake_altmetric_key = 'IfWeCanHitTheBullsEyeTheRestOfTheDominoesWillFallLikeAHouseOfCards.Checkmate!'
+        self.verify_cert = False
+        self.data_200 = {'images': {'small': 'small_url', 'medium': 'medium_url', 'large': 'large_url'},
+                         'details_url': 'https://some_url.fake'
+                         }
+
+    @requests_mock.Mocker()
+    def test_get_badge_images_from_indexed_doi(self, m):
+        m.get(self.fake_url, status_code=200, json=self.data_200)
+        result = get_altmetric_badge_img_links(self.fake_doi, self.fake_endpoint,
+                                               self.fake_altmetric_key, self.verify_cert)
+        expected = (self.data_200['images'], self.data_200['details_url'])
+        self.assertTupleEqual(result, expected)
+
+    @requests_mock.Mocker()
+    def test_get_badge_images_from_unindexed_doi(self, m):
+        m.get(self.fake_url, status_code=404)
+        result = get_altmetric_badge_img_links(self.fake_doi, self.fake_endpoint,
+                                               self.fake_altmetric_key, self.verify_cert)
+        expected = (None, None)
+        self.assertTupleEqual(result, expected)

@@ -5,15 +5,17 @@ python:
 
 install:
   - pip install -r requirements.txt
-  - mvn compile
+  - nvm 4.x
+  - npm install
+  - bower install
 
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - mkdir instance
-  - echo "SECRET_KEY = 'key-for-jenkins'" > instance/config.py
+  - echo "SECRET_KEY = 'key-for-jenkins';ASSETS_AUTO_BUILD = True" > instance/config.py
 
 script:
   - lettuce --with-xunit pubs_ui/lettuce_testing
   - nosetests pubs_ui
-  - mvn test
+  - karma start tests/js/karma.conf.js
