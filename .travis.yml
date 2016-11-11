@@ -5,9 +5,11 @@ python:
 
 install:
   - pip install -r requirements.txt
+  - pip install coveralls
   - nvm 4.x
   - npm install
   - bower install
+  - gem install coveralls-lcov
 
 before_script:
   - export DISPLAY=:99.0
@@ -17,5 +19,10 @@ before_script:
 
 script:
   - lettuce --with-xunit pubs_ui/lettuce_testing
-  - nosetests pubs_ui
+  - nosetests pubs_ui --with-coverage --cover-package=pubs_ui
   - karma start tests/js/karma.conf.js
+
+after_success:
+  find coverage/ -mindepth 2 -inname '*.info' -exec cp -t coverage/ '{}' +;
+  coveralls-lcov -v -n coverage/lcov.info > coverage.json;
+  coveralls --merge=coverage/coverage.json
