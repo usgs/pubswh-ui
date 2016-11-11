@@ -8,7 +8,7 @@ DEBUG = False
 JS_DEBUG = False
 
 SECRET_KEY = ''
-VERIFY_CERT = True  # verify SSL certs during web service calls by requests
+VERIFY_CERT = True  # verify SSL certs during web service calls by requests, can be a path to a cert bundle
 COLLECT_STATIC_ROOT = 'static/'  # directory where static files should be placed during a build
 MAIL_USERNAME = 'PUBSV2_NO_REPLY'
 PUB_URL = ''  # root pubs services URL

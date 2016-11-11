@@ -18,14 +18,10 @@ under PubsWarehouse_UI folder.  The contents of the file should look like so:
  LOOKUP_URL = "[server of choice]/pubs-services/lookup/"
  # URL for endpoint to get supersede info
  SUPERSEDES_URL = "[server of choice]/service/citation/json/extras?"
- # URL for Browse
- BROWSE_URL = "[server of choice]/browse/"
  # URL for Search
  BASE_SEARCH_URL = "[server of choice]/pubs-services/publication"
  # URL to instert into JSON-LD output- use the local address for local development
  JSON_LD_ID_BASE_URL = 'http://127.0.0.1:5050/'
- # replacement of relative links in the browse interface
- BROWSE_REPLACE = "browse"
  # Code for Google analytics- insert appropriate code for dev or prod. Can be left blank for local development
  GOOGLE_ANALYTICS_CODE = 'GA-CODE-STRING'
  # Code for webmaster tools- needed on prod only
@@ -43,17 +39,20 @@ under PubsWarehouse_UI folder.  The contents of the file should look like so:
  # set the default path for the login page- for local development, it is '/login/'
  LOGIN_PAGE_PATH = '/login/'
  # verify ssl certificate for outside service calls
- VERIFY_CERT = True or False #Set to False for local development
+ VERIFY_CERT = True or False #Set to False for local development; can be a path to a certificate bundle
  #cache settings- see the documentation for flask-cache. For development, a cache type of simple works well with the development server.  redis is used on production
  #CACHE_CONFIG = {'CACHE_TYPE': 'simple'}
  #set to the sciecebase folder id for the core publications warehouse SB folder
  SCIENCEBASE_PARENT_UUID = ''
  
- #The following should be removed when we completely retire the old MyPubs Angular app.
- OLD_MYPUBS_ENDPOINT = 'endpoint of the old mypubs application'
  
  #Assuming you use mvn test to install the lessc set LESS_BIN as follows:
+ ASSETS_DEBUG = False  # to disable compression of js and css set to True
+ ASSETS_AUTO_BUILD = False  # Local developers will typically set this to True in their instance/config.py.
  LESS_BIN = 'PROJECT_DIR/node_modules/less/bin/lessc'
+ 
+ # Altmetric API information
+ ALTMETRIC_KEY = ''
  ```
  
 To create the virtualenv you should have python 2.7, virtualenv, pip installed. 
