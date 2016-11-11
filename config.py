@@ -34,6 +34,8 @@ REDIS_CONFIG = ''
 IMAGE_CACHE = ''  # path to image cache for thumbnails
 SCIENCEBASE_PARENT_UUID = '' #set to the sciecebase folder id for the core publications warehouse SB folder
 
+BOWER_TRY_MINIFIED = False  # set to solve problem with backgrid-paginator
+
 # Config for Flask-Assets
 ASSETS_DEBUG = False  # to disable compression of js and css set to True
 ASSETS_AUTO_BUILD = False  # Local developers will typically set this to True in their instance/config.py.
