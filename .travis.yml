@@ -23,6 +23,6 @@ script:
   - karma start tests/js/karma.conf.js
 
 after_success:
-  find coverage/ -mindepth 2 -inname '*.info' -exec cp -t coverage/ '{}' +;
+  find coverage/ -mindepth 2 -iname '*.info' -exec cp -t coverage/ '{}' +;
   coveralls-lcov -v -n coverage/lcov.info > coverage.json;
   coveralls --merge=coverage/coverage.json
