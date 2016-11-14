@@ -3,11 +3,11 @@ import os
 
 from flask import Flask, request
 from flask_bower import Bower
+from flask_caching import Cache
 from flask_images import Images
 from flask_mail import Mail
 
 from custom_filters import display_publication_info, date_format
-
 
 
 FORMAT = '%(asctime)s %(message)s'
@@ -42,6 +42,9 @@ app.jinja_env.globals.update(GOOGLE_ANALYTICS_CODE=app.config['GOOGLE_ANALYTICS_
 app.jinja_env.globals.update(GOOGLE_WEBMASTER_TOOLS_CODE=app.config['GOOGLE_WEBMASTER_TOOLS_CODE'])
 app.jinja_env.globals.update(LAST_MODIFIED=app.config.get('DEPLOYED'))
 app.jinja_env.globals.update(ANNOUNCEMENT_BLOCK=app.config['ANNOUNCEMENT_BLOCK'])
+
+# Set up the cache
+cache = Cache(app, config=app.config.get('CACHE_CONFIG'))
 
 # Creates the bower blueprint
 bower = Bower(app)

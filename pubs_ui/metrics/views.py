@@ -9,7 +9,7 @@ from googleapiclient.errors import HttpError
 from httplib2 import Http
 from oauth2client.service_account import ServiceAccountCredentials
 
-from .. import app
+from .. import app, cache
 
 
 metrics = Blueprint('metrics', __name__,
@@ -26,6 +26,10 @@ analytics = build('analytics', 'v4', http=http, discoveryServiceUrl=app.config.g
 
 def get_access_token():
     return credentials.get_access_token().access_token
+
+
+def make_cache_key_from_request_data():
+    return request.data
 
 
 @metrics.route('/publications/acquisitions/')
@@ -46,6 +50,7 @@ def publication(pubsid):
 
 
 @metrics.route('/gadata/', methods=['POST'])
+@cache.cached(3600, make_cache_key_from_request_data)
 def gadata():
     view_id = app.config.get('GA_PUBS_VIEW_ID')
     report_requests = request.get_json()
