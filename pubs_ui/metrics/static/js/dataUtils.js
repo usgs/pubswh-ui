@@ -51,7 +51,8 @@ METRICS.dataUtils = (function() {
 		var result = [];
 
 		while (currentDate.isSameOrBefore(options.endDate, options.timeUnit)) {
-			if (currentDate.isSame(options.rows[rowIndex].date, options.timeUnit)) {
+			if (rowIndex < options.rows.length &&
+				currentDate.isSame(options.rows[rowIndex].date, options.timeUnit)) {
 				result.push(options.rows[rowIndex].graphRow);
 				rowIndex = rowIndex + 1;
 			}

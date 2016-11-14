@@ -88,6 +88,17 @@ describe('METRICS/dataUtils', function() {
 			expect(result[4]).toEqual(rows[3].graphRow);
 		});
 
+		it('Expects a set of rows to return a populated array of rows with zero as the data value', function() {
+			var result = METRICS.dataUtils.fillMissingValues({
+				startDate: moment('2002-12', 'YYYY-MM'),
+				endDate: moment('2003-04', 'YYYY-MM'),
+				timeUnit: 'month',
+				rows: []
+			});
+
+			expect(result.length).toBe(5);
+		});
+
 		it('Expects day dimension to work', function() {
 			var rows = [
 					{date: moment('20021231', 'YYYYMMDD'), graphRow: ['20021231', 2]},
