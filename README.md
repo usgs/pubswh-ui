@@ -9,7 +9,6 @@ under PubsWarehouse_UI folder.  The contents of the file should look like so:
  ```python
  SECRET_KEY = 'the_secret_key'
  DEBUG = True #you want debug to be true for development, but not production
- ASSETS_DEBUG = True #Set to False if you want to compress assets.
  JS_DEBUG = True #default is False. Set to true if you want the level of logging to be at the debug level.
 
  # URL for getting publication information
@@ -39,17 +38,15 @@ under PubsWarehouse_UI folder.  The contents of the file should look like so:
  # set the default path for the login page- for local development, it is '/login/'
  LOGIN_PAGE_PATH = '/login/'
  # verify ssl certificate for outside service calls
- VERIFY_CERT = True or False #Set to False for local development; can be a path to a certificate bundle
+ VERIFY_CERT = True or False
  #cache settings- see the documentation for flask-cache. For development, a cache type of simple works well with the development server.  redis is used on production
  #CACHE_CONFIG = {'CACHE_TYPE': 'simple'}
  #set to the sciecebase folder id for the core publications warehouse SB folder
  SCIENCEBASE_PARENT_UUID = ''
  
  
- #Assuming you use mvn test to install the lessc set LESS_BIN as follows:
  ASSETS_DEBUG = False  # to disable compression of js and css set to True
  ASSETS_AUTO_BUILD = False  # Local developers will typically set this to True in their instance/config.py.
- LESS_BIN = 'PROJECT_DIR/node_modules/less/bin/lessc'
  
  # Altmetric API information
  ALTMETRIC_KEY = ''
