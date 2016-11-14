@@ -53,6 +53,9 @@ GA_OAUTH2_SCOPE = 'https://www.googleapis.com/auth/analytics.readonly'
 GA_PUBS_VIEW_ID = 'ga:20354817'
 GA_DISCOVERY_URI = ('https://analyticsreporting.googleapis.com/$discovery/rest')
 
+# Altmetric API information
+ALTMETRIC_KEY = ''
+ALTMETRIC_ENDPOINT = 'https://api.altmetric.com/v1/'
 
 try:
     from deploy_date import *

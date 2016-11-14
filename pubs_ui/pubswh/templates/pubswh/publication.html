@@ -120,14 +120,22 @@
                     </dl>
                 </section>
                 <section>
-                    {% if pubdata['doi'] %}
-                        <h6>DOI:<a itemprop="sameAs" href="http://dx.doi.org/{{ pubdata['doi'] }}"
-								   onclick="GA.trackGAEvent('Downloads', 'DOI', 'http://dx.doi.org/{{ pubdata['doi'] }}')">
-							{{ pubdata['doi'] }}
-						</a></h6>
-                    {% endif %}
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-text="USGS Pub" data-via="USGS_Pubs" data-dnt="true">Tweet</a>
-                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                    <div id="metadata-parent">
+	                    <div id="doi-twitter">
+                            {% if pubdata['doi'] %}
+	                            <h6>DOI:<a itemprop="sameAs" href="http://dx.doi.org/{{ pubdata['doi'] }}" onclick="GA.trackGAEvent('Downloads', 'DOI', 'http://dx.doi.org/{{ pubdata['doi'] }}')">{{ pubdata['doi'] }}</a></h6>
+                            {% endif %}
+                            <a href="https://twitter.com/share" class="twitter-share-button" data-text="USGS Pub" data-via="USGS_Pubs" data-dnt="true">Tweet</a>
+                            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	                    </div>
+                        <div id="altmetric">
+                            {% if pubdata['altmetric']['image'] is not none and pubdata['altmetric']['details'] is not none %}
+                                <a href="{{ pubdata['altmetric']['details'] }}">
+                                    <img src="{{ pubdata['altmetric']['image'] }}" alt="Altmetric Badge">
+                                </a>
+                            {%  endif %}
+                        </div>
+                    </div>
                 </section>
                 <section>
                     {% if pubdata['noUsgsAuthors'] %}
@@ -323,7 +331,7 @@
         {% block url %}<a href="{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}">http://pubs.er.usgs.gov{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}</a>
             {% if current_user.is_authenticated %}
                 <small>
-                    <a href="{{ url_for('manager.show_app')}}#publication/{{ result['id'] }}" target="_blank">(edit in Manager)</a>
+                    <a href="{{ url_for('manager.show_app')}}#publication/{{ pubdata['id'] }}" target="_blank">(edit in Manager)</a>
                     <a href="{{ url_for('pubswh.clear_cache', path = request.path[1:], **request.args) }}">clear cache</a>
                 </small>
             {% endif %}

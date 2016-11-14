@@ -1132,7 +1132,13 @@ footer p{margin:0;}
 #center {
   width:162px;
 }
-
+  #doi-twitter {
+    float: left;
+  }
+  #altmetric {
+    overflow: hidden;
+    float: right;
+  }
 }
 /*media query*/
 @media screen and (min-width: 768px) {
