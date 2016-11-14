@@ -27,6 +27,7 @@ echo "Run all tests"
 env/bin/lettuce --with-xunit pubs_ui/lettuce_testing;
 env/bin/nosetests -w pubs_ui;
 node_modules/karma/bin/karma start tests/js/manager/karma.conf.js
+node_modules/karma/bin/karma start tests/js/metrics/karma.conf.js
 
 if [ ! -s instance/config.py ]; then
    echo "Please create a instance/config.py file before proceeding. See the README.md for what's required"
