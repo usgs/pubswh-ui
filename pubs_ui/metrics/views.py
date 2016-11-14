@@ -18,7 +18,13 @@ def get_access_token():
     keyfile_path = app.config.get('GA_KEY_FILE_PATH')
     ga_auth_scope = app.config.get('GA_OAUTH2_SCOPE')
     # if verification_cert is a str that means it's a cert bundle, use that in an Http object
-    http = Http(ca_certs=verification_cert) if isinstance(verification_cert, str) else None
+    if isinstance(verification_cert, str):
+        http = Http(ca_certs=verification_cert)
+    elif isinstance(verification_cert, bool):
+        # if VERIFY_CERT is False, that means that disable_ssl_certificate_validation should be True and vice versa
+        http = Http(disable_ssl_certificate_validation=(not verification_cert))
+    else:
+        http = None
     credentials = ServiceAccountCredentials.from_json_keyfile_name(keyfile_path, ga_auth_scope)
     access_token = credentials.get_access_token(http=http).access_token
     return access_token
