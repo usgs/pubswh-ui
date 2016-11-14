@@ -5,6 +5,12 @@ var METRICS = METRICS || {};
 
 METRICS.dataUtils = (function() {
 	"use strict";
+
+	var TIME_DIMENSION_FORMAT = {
+		'year' : 'YYYY',
+		'month' : 'YYYYMM',
+		'day' : 'YYYYMMDD'
+	}
 	var self = {};
 
 	self.convertDayToDate = function(dayIndex) {
@@ -15,19 +21,14 @@ METRICS.dataUtils = (function() {
 		return moment(monthIndex, 'YYYYMM').toDate();
 	};
 
-	self.mergeGAData = function(gaDataArray) {
-		var mergedData = gaDataArray[0].rows;
-		gaDataArray.slice(1).forEach(function(data) {
-			data.rows.forEach(function(row, index) {
-				mergedData[index].push(row[1]);
-			});
-		});
-
-		return mergedData;
-	};
-
-	self.getPastYear = function() {
-		var lastMonth = moment().subtract(1, 'months').endOf('month');
+	/*
+	 * @parm {moment} forMoment
+	 * @returns {Array of two moments} - The function returns an array where the first element
+	 * is a year before the last fullMonth before forMoment
+	 * and the second element is the last full month before for Moment
+	 */
+	self.getPastYear = function(forMoment) {
+		var lastMonth = forMoment.subtract(1, 'months').endOf('month');
 		var yearAgo = moment(lastMonth).subtract(1, 'years').add(1, 'days');
 		return [yearAgo, lastMonth];
 	};
@@ -36,10 +37,13 @@ METRICS.dataUtils = (function() {
 	 * @param {Object} - options
 	 * 		@prop {Moment} startDate
 	 * 		@prop {Moment} endDate
-	 * 		@prop {String} timeUnit - year, month, day
-	 *		@prop {Array of data returned from ReportingAPI} rows - Each element is an array.
-	 *			First element is the time dimension which should match timeUnit. Second element is the data value
-	 * @return {Array of Array} - Should be rows with all missing time dimensions filled in with zero.
+	 * 		@prop {String} timeUnit - year, month, day that we are processing
+	 *		@prop {Array of {Object} rows
+	 *			@prop {moment} date
+	 *			@prop {two element array, [time dimension, data]} graphrow
+	 *			First element is a moment . Second element is the data value
+	 * @return {Array of Array} - Should be rows with all missing time dimensions filled in with zero. The times should
+	 * 		go from startDate to endDate
 	 */
 	self.fillMissingValues = function(options) {
 		var rowIndex = 0;
@@ -52,9 +56,9 @@ METRICS.dataUtils = (function() {
 				rowIndex = rowIndex + 1;
 			}
 			else {
-				result.push([currentDate.format('YYYYMM'), 0]);
+				result.push([currentDate.format(TIME_DIMENSION_FORMAT[options.timeUnit]), 0]);
 			}
-			currentDate.add(1, 'months');
+			currentDate.add(1, options.timeUnit + 's');
 		}
 		return result;
 	};

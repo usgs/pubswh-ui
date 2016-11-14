@@ -36,7 +36,7 @@ METRICS.analyticsData = (function() {
 	};
 
 	self.fetchMonthlyPastYear = function(metrics, filters) {
-		var dateRange = METRICS.dataUtils.getPastYear();
+		var dateRange = METRICS.dataUtils.getPastYear(moment());
 		var options = {
 			'ids': CONFIG.VIEW_ID,
 			'start-date': dateRange[0],
@@ -60,7 +60,7 @@ METRICS.analyticsData = (function() {
 	 *			why the request failed.
 	 */
 	self.batchFetchMonthlyPastYear = function(metrics, dimensionFilters) {
-		var dateRange = METRICS.dataUtils.getPastYear();
+		var dateRange = METRICS.dataUtils.getPastYear(moment());
 		var deferred = $.Deferred();
 		$.ajax({
 			url : '/metrics/gadata/',

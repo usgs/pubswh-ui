@@ -24,7 +24,7 @@ module.exports = function(config) {
     // list of files to exclude
     exclude: [
         'pubs_ui/metrics/static/js/pubGraphController.js',
-		'pubs_ui/metrics/static/js/pubsAcquisitionController.js',
+		'pubs_ui/metrics/static/js/pubsAcquisitionGraphController.js',
 		'pubs_ui/metrics/static/js/pubsGraphController.js'
     ],
 
