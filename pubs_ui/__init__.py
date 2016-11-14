@@ -1,5 +1,4 @@
 import logging
-import os
 
 from flask import Flask, request
 from flask_bower import Bower

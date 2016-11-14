@@ -8,44 +8,40 @@ DEBUG = False
 JS_DEBUG = False
 
 SECRET_KEY = ''
-VERIFY_CERT = True
-COLLECT_STATIC_ROOT = 'static/'
-COLLECT_STORAGE = 'flask.ext.collect.storage.file'
+VERIFY_CERT = True  # verify SSL certs during web service calls by requests, can be a path to a cert bundle
+COLLECT_STATIC_ROOT = 'static/'  # directory where static files should be placed during a build
 MAIL_USERNAME = 'PUBSV2_NO_REPLY'
-PUB_URL = ''
+PUB_URL = ''  # root pubs services URL
 LOOKUP_URL = ''
 SUPERSEDES_URL = ''
-BROWSE_URL = ''
-BASE_SEARCH_URL = ''
-BASE_CITATION_URL = ''
-BROWSE_REPLACE = ''
+BASE_SEARCH_URL = ''  # pubs services search endpoint
 RECAPTCHA_PUBLIC_KEY = '6LfisP0SAAAAAKcg5-a5bEeV4slFfQZr5_7XfqXf'  # using google's recaptcha API
 RECAPTCHA_PRIVATE_KEY = ''  # see RECAPTCHA_PRIVATE_KEY in instance/config.py
-WSGI_STR = ''
-GOOGLE_ANALYTICS_CODE = ''
-JSON_LD_ID_BASE_URL = ''
+WSGI_STR = ''  # string that should be appended to routes on OWI virtual machines
+GOOGLE_ANALYTICS_CODE = ''  # Google analytics code (e.g. UA-9302130-2)
+JSON_LD_ID_BASE_URL = ''  # URL to use when constructing JSON reponses that have a `url` attribute
 GOOGLE_WEBMASTER_TOOLS_CODE = 'ertoifsdbnerngdjnasdw9rsdn'  # random string, set real code in instance/config.py on prod
-ANNOUNCEMENT_BLOCK = ''
+ANNOUNCEMENT_BLOCK = ''  # some text for general announcments on the website
 LOGGING_ON = False
-REPLACE_PUBS_WITH_PUBS_TEST = False
+REPLACE_PUBS_WITH_PUBS_TEST = False  # hack to deal with pubs-test URL mapping on QA virtual machines
 ROBOTS_WELCOME = False
-REMEMBER_COOKIE_NAME = 'remember_token'
-REMEMBER_COOKIE_DURATION = timedelta(days=1)
-AUTH_ENDPOINT_URL = ''
-PREVIEW_ENDPOINT_URL = ''
-LOGIN_PAGE_PATH = ''
+REMEMBER_COOKIE_NAME = 'remember_token'  # name of the authentication token
+REMEMBER_COOKIE_DURATION = timedelta(days=1)  # time to remember the authentication token
+AUTH_ENDPOINT_URL = ''  # pubs services authentication endpoint
+PREVIEW_ENDPOINT_URL = ''  # pubs services endpoint for publications currently in the manager app
 CACHE_CONFIG = {'CACHE_TYPE': 'null'}
 REDIS_CONFIG = ''
+IMAGE_CACHE = ''  # path to image cache for thumbnails
 SCIENCEBASE_PARENT_UUID = '' #set to the sciecebase folder id for the core publications warehouse SB folder
-# set to solve problem with backgrid-paginator
-BOWER_TRY_MINIFIED = False
 
-#Config for Flask-Assets
-ASSETS_DEBUG = False # to disable compression of js and css set to True
-ASSETS_AUTO_BUILD = False #Local developers will typically set this to True in their instance/config.py.
+BOWER_TRY_MINIFIED = False  # set to solve problem with backgrid-paginator
+
+# Config for Flask-Assets
+ASSETS_DEBUG = False  # to disable compression of js and css set to True
+ASSETS_AUTO_BUILD = False  # Local developers will typically set this to True in their instance/config.py.
 LESS_BIN = os.path.join(PROJECT_HOME, 'node_modules', 'less', 'bin', 'lessc')
 
-CONTACT_RECIPIENTS = ['servicedesk@usgs.gov']
+CONTACT_RECIPIENTS = ['servicedesk@usgs.gov']  # recipient address
 
 # Location of file containing the google analytics service account's JSON key.
 GA_KEY_FILE_PATH = ''
