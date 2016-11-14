@@ -39,8 +39,8 @@ METRICS.analyticsData = (function() {
 		var dateRange = METRICS.dataUtils.getPastYear(moment());
 		var options = {
 			'ids': CONFIG.VIEW_ID,
-			'start-date': dateRange[0],
-			'end-date': dateRange[1],
+			'start-date': dateRange[0].format('YYYY-MM-DD'),
+			'end-date': dateRange[1].format('YYYY-MM-DD'),
 			'metrics': metrics,
 			'dimensions': 'ga:yearMonth'
 		};
