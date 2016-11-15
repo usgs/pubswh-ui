@@ -3,11 +3,16 @@ language: python
 python:
   - "2.7"
 
+before_install:
+  sudo apt-get install lcov
+
 install:
   - pip install -r requirements.txt
+  - pip install coveralls
   - nvm 4.x
   - npm install
   - bower install
+  - gem install coveralls-lcov
 
 before_script:
   - export DISPLAY=:99.0
@@ -20,3 +25,10 @@ script:
   - nosetests pubs_ui
   - karma start tests/js/manager/karma.conf.js
   - karma start tests/js/metrics/karma.conf.js
+
+after_success:
+  cp coverage/manager/Firefox*/lcov.info coverage/manager.info;
+  cp coverage/metrics/Firefox*/lcov.info coverage/metrics.info;
+  lcov --add-tracefile coverage/manager.info --add-tracefile coverage/metrics.info --output-file coverage/combined.info;
+  coveralls-lcov -v -n coverage/combined.info > coverage/combined.json;
+  coveralls --merge=coverage/combined.json;
