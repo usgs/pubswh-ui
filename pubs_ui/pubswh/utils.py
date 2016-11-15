@@ -956,11 +956,10 @@ def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=al
     :rtype: tuple
 
     """
-    publication_endpoint = urljoin(altmetric_service_endpoint, 'doi/{}'.format(publication_doi))
-    parameters = {'key': altmetric_key}
     altmetric_badge_imgs = None
     altmetric_details = None
     if publication_doi is not None:
+        parameters = {'key': altmetric_key}
         publication_endpoint = urljoin(altmetric_service_endpoint, 'doi/{}'.format(publication_doi))
         try:
             resp = requests.get(publication_endpoint, params=parameters, verify=verify)
