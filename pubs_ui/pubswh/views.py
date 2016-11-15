@@ -10,14 +10,13 @@ from requests import get
 import tablib
 
 from flask import render_template, abort, request, Response, jsonify, url_for, redirect, Blueprint
-from flask_caching import Cache
 from flask_paginate import Pagination
 from flask_login import login_required, current_user
 from flask_mail import Message
 from webargs.flaskparser import FlaskParser
 
 from ..auth.views import generate_auth_header
-from .. import app, mail
+from .. import app, mail, cache
 from .arguments import search_args
 from .canned_text import EMAIL_RESPONSE
 from .forms import ContactForm, SearchForm, NumSeries
@@ -49,16 +48,10 @@ auth_endpoint_url = app.config.get('AUTH_ENDPOINT_URL')
 preview_endpoint_url = app.config.get('PREVIEW_ENDPOINT_URL')
 max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
 cache_config = app.config['CACHE_CONFIG']
-redis_config = app.config['REDIS_CONFIG']
 
 
 # should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
-
-
-cache = Cache(app, config=cache_config)
-
-cache.init_app(app)
 
 
 def make_cache_key(*args, **kwargs):
@@ -236,10 +229,11 @@ def publication(index_id):
 def clear_cache(path):
     if cache_config['CACHE_TYPE'] == 'redis':
         args = str(hash(frozenset(request.args.items())))
-        key = cache_config['CACHE_KEY_PREFIX']+'/'+(path + args).encode('utf-8')
-        r = redis.StrictRedis(host=redis_config['host'], port=redis_config['port'], db=redis_config['db'])
-        r.delete(key)
-        return 'cache cleared '+path + " args: "+ str(request.args)
+        key = cache_config['CACHE_KEY_PREFIX'] + '/' + (path + args).encode('utf-8')
+        # Get the StrictRedis instance from the cache_config and delete the key using that.
+        # The cache.delete(key) doesn't work for some reason but this does
+        cache_config['CACHE_REDIS_HOST'].delete(key)
+        return 'cache cleared ' + path + " args: " + str(request.args)
     else:
         cache.clear()
         return "no redis cache, full cache cleared"

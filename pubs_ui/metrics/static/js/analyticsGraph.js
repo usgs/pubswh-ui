@@ -35,7 +35,19 @@ METRICS.analyticsGraph = (function() {
 					}
 				},
 				labelsKMB : true,
-				labels : labels
+				labels : labels,
+				axes : {
+					y: {
+						axisLabelFormatter: function(y) {
+							if (y % 1 === 0) {
+								return y;
+							}
+							else {
+								return '';
+							}
+						}
+					}
+				}
 			}
 		);
 	};
@@ -66,7 +78,19 @@ METRICS.analyticsGraph = (function() {
 					}
 				},
 				labelsKMB : true,
-				labels : labels
+				labels : labels,
+				axes : {
+					y: {
+						axisLabelFormatter: function(y) {
+							if (y % 1 === 0) {
+								return y;
+							}
+							else {
+								return '';
+							}
+						}
+					}
+				}
 			}
 		);
 	};
