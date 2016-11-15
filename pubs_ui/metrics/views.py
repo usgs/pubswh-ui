@@ -18,23 +18,31 @@ metrics = Blueprint('metrics', __name__,
                     static_url_path='/metrics/static')
 
 verification_cert = app.config.get('VERIFY_CERT', True)
+
+
+def _handle_http_certificates():
+    if isinstance(verification_cert, str):
+        httplib_http = Http(ca_certs=verification_cert)
+    elif isinstance(verification_cert, bool):
+        httplib_http = Http(disable_ssl_certificate_validation=(not verification_cert))
+    else:
+        httplib_http = Http()
+    return httplib_http
+
+
+http = _handle_http_certificates()
+
+
 try:
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
           app.config.get('GA_KEY_FILE_PATH'),
           app.config.get('GA_OAUTH2_SCOPE'))
-    analytics = build('analytics', 'v4', http=credentials.authorize(Http()), discoveryServiceUrl=app.config.get('GA_DISCOVERY_URI'))
+    analytics = build('analytics', 'v4', http=credentials.authorize(http), discoveryServiceUrl=app.config.get('GA_DISCOVERY_URI'))
 except IOError:
     credentials = None
 
-def get_access_token():
-    if isinstance(verification_cert, str):
-        http = Http(ca_certs=verification_cert)
-    elif isinstance(verification_cert, bool):
-        # if VERIFY_CERT is False, that means that disable_ssl_certificate_validation should be True and vice versa
-        http = Http(disable_ssl_certificate_validation=(not verification_cert))
-    else:
-        http = None
 
+def get_access_token():
     return credentials.get_access_token(http).access_token
 
 
