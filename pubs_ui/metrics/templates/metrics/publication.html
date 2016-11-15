@@ -3,7 +3,8 @@
 {% block config_initialize_script %}
 	<script>
 		var CONFIG = {
-			PUBSID : '{{ pubsid }}'
+			PUBSID : '{{ pubsid }}',
+			JSON_LD_ID_BASE_URL : '{{ config.JSON_LD_ID_BASE_URL }}'
 		};
 	</script>
 {% endblock %}
