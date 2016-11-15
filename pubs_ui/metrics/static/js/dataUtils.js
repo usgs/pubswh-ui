@@ -22,7 +22,8 @@ METRICS.dataUtils = (function() {
 	};
 
 	/*
-	 * @parm {moment} forMoment
+	 * @param {moment} forMoment - The function will return a full year range where the end will be the previous
+	 * 		full month before forMoment.
 	 * @returns {Array of two moments} - The function returns an array where the first element
 	 * is a year before the last fullMonth before forMoment
 	 * and the second element is the last full month before for Moment

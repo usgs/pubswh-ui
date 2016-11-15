@@ -230,8 +230,9 @@ def clear_cache(path):
     if cache_config['CACHE_TYPE'] == 'redis':
         args = str(hash(frozenset(request.args.items())))
         key = cache_config['CACHE_KEY_PREFIX'] + '/' + (path + args).encode('utf-8')
-        redis = cache_config['CACHE_REDIS_HOST']
-        redis.delete(key)
+        # Get the StrictRedis instance from the cache_config and delete the key using that.
+        # The cache.delete(key) doesn't work for some reason but this does
+        cache_config['CACHE_REDIS_HOST'].delete(key)
         return 'cache cleared ' + path + " args: " + str(request.args)
     else:
         cache.clear()
