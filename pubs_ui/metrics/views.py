@@ -18,12 +18,13 @@ metrics = Blueprint('metrics', __name__,
                     static_url_path='/metrics/static')
 
 verification_cert = app.config.get('VERIFY_CERT', True)
-
-credentials = ServiceAccountCredentials.from_json_keyfile_name(
-      app.config.get('GA_KEY_FILE_PATH'),
-      app.config.get('GA_OAUTH2_SCOPE'))
-analytics = build('analytics', 'v4', http=credentials.authorize(Http()), discoveryServiceUrl=app.config.get('GA_DISCOVERY_URI'))
-
+try:
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(
+          app.config.get('GA_KEY_FILE_PATH'),
+          app.config.get('GA_OAUTH2_SCOPE'))
+    analytics = build('analytics', 'v4', http=credentials.authorize(Http()), discoveryServiceUrl=app.config.get('GA_DISCOVERY_URI'))
+except IOError:
+    credentials = None
 
 def get_access_token():
     if isinstance(verification_cert, str):
