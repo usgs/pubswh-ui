@@ -22,7 +22,7 @@ before_script:
 
 script:
   - lettuce --with-xunit pubs_ui/lettuce_testing
-  - nosetests pubs_ui
+  - nosetests  --with-coverage --cover-package=pubs_ui
   - karma start tests/js/manager/karma.conf.js
   - karma start tests/js/metrics/karma.conf.js
 
