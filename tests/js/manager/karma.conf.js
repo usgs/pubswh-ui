@@ -5,7 +5,7 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '../..',
+    basePath: '../../..',
 
 
     // frameworks to use
@@ -15,7 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-        'tests/js/test-main.js',
+        'tests/js/manager/test-main.js',
       {pattern: 'pubs_ui/bower_components/Squire.js/src/Squire.js', included: false},
       {pattern: 'pubs_ui/bower_components/jquery/dist/jquery.js', included: false},
       {pattern: 'pubs_ui/bower_components/jquery-ui/jquery-ui.js', included: false},
@@ -62,9 +62,9 @@ module.exports = function(config) {
 
     coverageReporter: {
       reporters : [
-        {type: 'html', dir : 'coverage/'},
-        {type: 'cobertura', dir: 'coverage/'},
-        {type: 'lcovonly', dir: 'coverage/'}
+        {type: 'html', dir : 'coverage/manager/'},
+        {type: 'cobertura', dir: 'coverage/manager/'},
+        {type: 'lcovonly', dir: 'coverage/manager/'}
       ]
     },
 

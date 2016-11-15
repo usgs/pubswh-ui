@@ -10,14 +10,13 @@ from requests import get
 import tablib
 
 from flask import render_template, abort, request, Response, jsonify, url_for, redirect, Blueprint
-from flask_caching import Cache
 from flask_paginate import Pagination
 from flask_login import login_required, current_user
 from flask_mail import Message
 from webargs.flaskparser import FlaskParser
 
 from ..auth.views import generate_auth_header
-from .. import app, mail
+from .. import app, mail, cache
 from .arguments import search_args
 from .canned_text import EMAIL_RESPONSE
 from .forms import ContactForm, SearchForm, NumSeries
@@ -39,10 +38,7 @@ pubswh = Blueprint('pubswh', __name__,
 pub_url = app.config['PUB_URL']
 lookup_url = app.config['LOOKUP_URL']
 supersedes_url = app.config['SUPERSEDES_URL']
-browse_url = app.config['BROWSE_URL']
 search_url = app.config['BASE_SEARCH_URL']
-citation_url = app.config['BASE_CITATION_URL']
-browse_replace = app.config['BROWSE_REPLACE']
 contact_recipients = app.config['CONTACT_RECIPIENTS']
 replace_pubs_with_pubs_test = app.config.get('REPLACE_PUBS_WITH_PUBS_TEST')
 robots_welcome = app.config.get('ROBOTS_WELCOME')
@@ -51,18 +47,11 @@ google_webmaster_tools_code = app.config.get('GOOGLE_WEBMASTER_TOOLS_CODE')
 auth_endpoint_url = app.config.get('AUTH_ENDPOINT_URL')
 preview_endpoint_url = app.config.get('PREVIEW_ENDPOINT_URL')
 max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
-login_page_path = app.config['LOGIN_PAGE_PATH']
 cache_config = app.config['CACHE_CONFIG']
-redis_config = app.config['REDIS_CONFIG']
 
 
 # should requests verify the certificates for ssl connections
 verify_cert = app.config['VERIFY_CERT']
-
-
-cache = Cache(app, config=cache_config)
-
-cache.init_app(app)
 
 
 def make_cache_key(*args, **kwargs):
@@ -240,10 +229,11 @@ def publication(index_id):
 def clear_cache(path):
     if cache_config['CACHE_TYPE'] == 'redis':
         args = str(hash(frozenset(request.args.items())))
-        key = cache_config['CACHE_KEY_PREFIX']+'/'+(path + args).encode('utf-8')
-        r = redis.StrictRedis(host=redis_config['host'], port=redis_config['port'], db=redis_config['db'])
-        r.delete(key)
-        return 'cache cleared '+path + " args: "+ str(request.args)
+        key = cache_config['CACHE_KEY_PREFIX'] + '/' + (path + args).encode('utf-8')
+        # Get the StrictRedis instance from the cache_config and delete the key using that.
+        # The cache.delete(key) doesn't work for some reason but this does
+        cache_config['CACHE_REDIS_HOST'].delete(key)
+        return 'cache cleared ' + path + " args: " + str(request.args)
     else:
         cache.clear()
         return "no redis cache, full cache cleared"

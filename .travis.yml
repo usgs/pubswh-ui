@@ -19,10 +19,11 @@ before_script:
 
 script:
   - lettuce --with-xunit pubs_ui/lettuce_testing
-  - nosetests pubs_ui --with-coverage --cover-package=pubs_ui
-  - karma start tests/js/karma.conf.js
+  - nosetests pubs_ui
+  - karma start tests/js/manager/karma.conf.js
+  - karma start tests/js/metrics/karma.conf.js
 
 after_success:
-  find coverage/ -mindepth 2 -iname '*.info' -exec cp -t coverage/ '{}' +;
+  find coverage/manager/ -mindepth 2 -iname '*.info' -exec cp -t coverage/ '{}' +;
   coveralls-lcov -v -n coverage/lcov.info > coverage/coverage.json;
   coveralls --merge=coverage/coverage.json

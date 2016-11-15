@@ -1,13 +1,12 @@
 import logging
-import os
 
 from flask import Flask, request
 from flask_bower import Bower
+from flask_caching import Cache
 from flask_images import Images
 from flask_mail import Mail
 
 from custom_filters import display_publication_info, date_format
-
 
 
 FORMAT = '%(asctime)s %(message)s'
@@ -43,6 +42,9 @@ app.jinja_env.globals.update(GOOGLE_WEBMASTER_TOOLS_CODE=app.config['GOOGLE_WEBM
 app.jinja_env.globals.update(LAST_MODIFIED=app.config.get('DEPLOYED'))
 app.jinja_env.globals.update(ANNOUNCEMENT_BLOCK=app.config['ANNOUNCEMENT_BLOCK'])
 
+# Set up the cache
+cache = Cache(app, config=app.config.get('CACHE_CONFIG'))
+
 # Creates the bower blueprint
 bower = Bower(app)
 
@@ -50,13 +52,11 @@ import assets
 
 from auth.views import auth
 from manager.views import manager
-from metrics.views import metrics
 from pubswh.views import pubswh
+from metrics.views import metrics
 
 app.register_blueprint(auth)
-app.register_blueprint(manager,
-                       url_prefix='/manager')
-
+app.register_blueprint(manager, url_prefix='/manager')
 app.register_blueprint(metrics, url_prefix='/metrics')
 app.register_blueprint(pubswh)
 

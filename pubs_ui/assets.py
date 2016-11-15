@@ -34,6 +34,12 @@ bundles={
         filters='rjsmin',
         output='gen/metrics_publications_acquisition.js'
     ),
+    'metrics_publication_js': Bundle(
+        base_metrics_js,
+        Bundle('metrics/js/pubGraphController.js'),
+        filters='rjsmin',
+        output='gen/metrics_publication_js'
+    ),
 
     'usgs_style' : Bundle(
         'manager/less/usgs_header_footer.less',

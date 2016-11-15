@@ -1,5 +1,32 @@
 {% extends 'metrics/base.html' %}
 
+{% block config_initialize_script %}
+	<script>
+	// This loads the google EmbedAPI ... gapi namespace
+		(function (w, d, s, g, js, fs) {
+			g = w.gapi || (w.gapi = {});
+			g.analytics = {
+				q: [], ready: function (f) {
+					this.q.push(f);
+				}
+			};
+			js = d.createElement(s);
+			fs = d.getElementsByTagName(s)[0];
+			js.src = 'https://apis.google.com/js/platform.js';
+			fs.parentNode.insertBefore(js, fs);
+			js.onload = function () {
+				g.load('analytics');
+			};
+		}(window, document, 'script'));
+	</script>
+	<script>
+		var CONFIG = {
+			GA_ACCESS_TOKEN : "{{ ga_access_token }}",
+			VIEW_ID : "{{ config.GA_PUBS_VIEW_ID }}",
+		};
+	</script>
+{% endblock %}
+
 {% block main %}
 	<h1>Google Analytics Dashboard for Pubs Warehouse - Acquisition</h1>
 	<div id="search-div" class="metric-div">
