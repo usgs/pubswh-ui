@@ -52,13 +52,14 @@ import assets
 
 from auth.views import auth
 from manager.views import manager
-from metrics.views import metrics
 from pubswh.views import pubswh
 
 app.register_blueprint(auth)
 app.register_blueprint(manager,
                        url_prefix='/manager')
-
-app.register_blueprint(metrics, url_prefix='/metrics')
+if (app.config.get('GA_KEY_FILE_PATH')):
+    from metrics.views import metrics
+    app.register_blueprint(metrics, url_prefix='/metrics')
+#app.register_blueprint(metrics, url_prefix='/metrics')
 app.register_blueprint(pubswh)
 
