@@ -960,13 +960,15 @@ def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=al
     parameters = {'key': altmetric_key}
     altmetric_badge_imgs = None
     altmetric_details = None
-    try:
-        resp = requests.get(publication_endpoint, params=parameters, verify=verify)
-    except requests.ConnectionError:
-        pass
-    else:
-        if resp.status_code != 404:
-            resp_json = resp.json()
-            altmetric_badge_imgs = resp_json.get('images')
-            altmetric_details = resp_json.get('details_url')
+    if publication_doi is not None:
+        publication_endpoint = urljoin(altmetric_service_endpoint, 'doi/{}'.format(publication_doi))
+        try:
+            resp = requests.get(publication_endpoint, params=parameters, verify=verify)
+        except requests.ConnectionError:
+            pass
+        else:
+            if resp.status_code != 404:
+                resp_json = resp.json()
+                altmetric_badge_imgs = resp_json.get('images')
+                altmetric_details = resp_json.get('details_url')
     return altmetric_badge_imgs, altmetric_details
