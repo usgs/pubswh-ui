@@ -59,7 +59,7 @@ def publication(pubsid):
 
 
 @metrics.route('/gadata/', methods=['POST'])
-@cache.cached(3600, make_cache_key_from_request_data)
+@cache.cached(86400, make_cache_key_from_request_data)
 def gadata():
     view_id = app.config.get('GA_PUBS_VIEW_ID')
     report_requests = request.get_json()
