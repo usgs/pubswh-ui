@@ -14,3 +14,5 @@ recursive-include pubs_ui/pubswh/templates *
 
 recursive-include static *
 prune instance
+prune pubs_ui/static/.webassets-cache
+global-exclude .gitignore
