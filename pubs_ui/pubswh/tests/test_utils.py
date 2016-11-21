@@ -261,12 +261,12 @@ class CreateStoreInfoTestCase(unittest.TestCase):
 
     def test_store_data_is_created_if_present(self):
         result = create_store_info(self.resp_with_store)
-        expected = {'offers': {'@context': {'schema': 'http://schema.org/'}, '@type': 'schema:ScholarlyArticle', 'schema:offers': {'schema:seller': {'schema:name': 'USGS Store', '@type': 'schema:Organization', 'schema:url': 'http://store.usgs.gov'}, 'schema:url': None, 'schema:price': 18, 'schema:availability': 'schema:InStock', 'schema:priceCurrency': 'USD', '@type': 'schema:Offer'}}, 'context_item': 'abc091'}
+        expected = {'offers': {'@context': {'schema': 'http://schema.org/'}, '@type': 'schema:ScholarlyArticle', 'schema:offers': {'schema:seller': {'schema:name': 'USGS Store', '@type': 'schema:Organization', 'schema:url': 'http://store.usgs.gov'}, 'schema:url': 'https://fake.store.gov', 'schema:price': 18, 'schema:availability': 'schema:InStock', 'schema:priceCurrency': 'USD', '@type': 'schema:Offer'}}, 'context_item': 'abc091'}
         self.assertEqual(result, expected)
 
     def test_store_data_is_listed_as_out_of_stock(self):
         result = create_store_info(self.resp_pub_not_avail)
-        expected = {'offers': {'@context': {'schema': 'http://schema.org/'}, '@type': 'schema:ScholarlyArticle', 'schema:offers': {'schema:seller': {'schema:name': 'USGS Store', '@type': 'schema:Organization', 'schema:url': 'http://store.usgs.gov'}, 'schema:url': None, 'schema:price': 17, 'schema:availability': 'schema:OutOfStock', 'schema:priceCurrency': 'USD', '@type': 'schema:Offer'}}, 'context_item': 'efg845'}
+        expected = {'offers': {'@context': {'schema': 'http://schema.org/'}, '@type': 'schema:ScholarlyArticle', 'schema:offers': {'schema:seller': {'schema:name': 'USGS Store', '@type': 'schema:Organization', 'schema:url': 'http://store.usgs.gov'}, 'schema:url': 'https://fake.store.gov', 'schema:price': 17, 'schema:availability': 'schema:OutOfStock', 'schema:priceCurrency': 'USD', '@type': 'schema:Offer'}}, 'context_item': 'efg845'}
         self.assertEqual(result, expected)
 
     def test_store_data_is_created_if_not_present(self):

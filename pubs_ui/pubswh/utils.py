@@ -507,7 +507,7 @@ def create_store_info(publication_resp):
                 "schema:availability": product_availability,
                 "schema:price": product.get('price'),
                 "schema:priceCurrency": "USD",
-                "schema:url": product.get('url'),
+                "schema:url": product.get('store'),
                 "schema:seller": {
                     "@type": "schema:Organization",
                     "schema:name": "USGS Store",
