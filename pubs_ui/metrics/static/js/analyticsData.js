@@ -8,6 +8,8 @@
 var METRICS = METRICS || {};
 METRICS.analyticsData = (function() {
 	"use strict";
+
+	var DATE_FORMAT = 'YYYY-MM-DD';
 	var self = {};
 
 	self.fetch = function(query) {
@@ -39,8 +41,8 @@ METRICS.analyticsData = (function() {
 		var dateRange = METRICS.dataUtils.getPastYear(moment());
 		var options = {
 			'ids': CONFIG.VIEW_ID,
-			'start-date': dateRange[0].format('YYYY-MM-DD'),
-			'end-date': dateRange[1].format('YYYY-MM-DD'),
+			'start-date': dateRange[0].format(DATE_FORMAT),
+			'end-date': dateRange[1].format(DATE_FORMAT),
 			'metrics': metrics,
 			'dimensions': 'ga:yearMonth'
 		};
@@ -69,8 +71,8 @@ METRICS.analyticsData = (function() {
 			data : JSON.stringify([
 				{
 					dateRanges : [{
-						startDate : dateRange[0].format('YYYY-MM-DD'),
-						endDate : dateRange[1].format('YYYY-MM-DD')
+						startDate : dateRange[0].format(DATE_FORMAT),
+						endDate : dateRange[1].format(DATE_FORMAT)
 					}],
 					dimensions : [{name: 'ga:yearMonth'}],
 					metrics : metrics,
@@ -85,6 +87,54 @@ METRICS.analyticsData = (function() {
 					startDate : dateRange[0],
 					endDate : dateRange[1],
 					timeUnit : 'month',
+					rows : rows
+				}));
+			},
+			error : function(jqXHR) {
+				deferred.reject(jqXHR);
+			},
+			processData : false
+		});
+
+		return deferred;
+	};
+
+	/*
+	 * 	@param {Array of Metric} metrics - see https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#metric}
+	 *	@param {DimensionFilterClause} dimensionFilters - see https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#dimensionfilterclause
+	 *	@returns Jquery Promise
+	 *		@resolve - successfully retrieval. Response is {Array of Array} representing the data.
+	 *			First element is a moment, the rest is the data requested via the metrics parameter.
+	 *		@reject - somethings went wrong - returns response. The responseJSON.error.message can be used to determine
+	 *			why the request failed.
+	 */
+	self.batchFetchPast30Days = function(metrics, dimensionFilters) {
+		var now = moment();
+		var thirtyDaysAgo = now.clone().subtract(30, 'days');
+		var deferred = $.Deferred();
+		$.ajax({
+			url : CONFIG.JSON_LD_ID_BASE_URL + 'metrics/gadata/',
+			method: 'POST',
+			contentType : 'application/json',
+			data : JSON.stringify([
+				{
+					dateRanges : [{
+						startDate : thirtyDaysAgo.format(DATE_FORMAT),
+						endDate : now.format(DATE_FORMAT)
+					}],
+					dimensions : [{name: 'ga:date'}],
+					metrics : metrics,
+					dimensionFilterClauses : dimensionFilters
+				}
+			]),
+			success: function(response) {
+				var rows = response.reports[0].data.rows.map(function (row) {
+					return {date: moment(row.dimensions[0], 'YYYYMMDD'), graphRow : [row.dimensions[0], row.metrics[0].values[0]]};
+				});
+				deferred.resolve(METRICS.dataUtils.fillMissingValues({
+					startDate : thirtyDaysAgo,
+					endDate : now,
+					timeUnit : 'day',
 					rows : rows
 				}));
 			},

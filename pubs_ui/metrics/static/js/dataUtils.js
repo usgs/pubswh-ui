@@ -29,8 +29,8 @@ METRICS.dataUtils = (function() {
 	 * and the second element is the last full month before for Moment
 	 */
 	self.getPastYear = function(forMoment) {
-		var lastMonth = forMoment.subtract(1, 'months').endOf('month');
-		var yearAgo = moment(lastMonth).subtract(1, 'years').add(1, 'days');
+		var lastMonth = forMoment.clone().subtract(1, 'months').endOf('month');
+		var yearAgo = lastMonth.clone().subtract(1, 'years').add(1, 'days');
 		return [yearAgo, lastMonth];
 	};
 
