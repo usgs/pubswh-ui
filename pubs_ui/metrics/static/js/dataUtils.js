@@ -7,11 +7,6 @@ var METRICS = METRICS || {};
 METRICS.dataUtils = (function() {
 	"use strict";
 
-	var TIME_DIMENSION_FORMAT = {
-		'year' : 'YYYY',
-		'month' : 'YYYYMM',
-		'day' : 'YYYYMMDD'
-	};
 	var self = {};
 
 	self.convertDayToDate = function(dayIndex) {
