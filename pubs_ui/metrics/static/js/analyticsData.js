@@ -4,13 +4,24 @@
 /* global moment */
 /* global CONFIG */
 /* global $ */
+/* global _ */
 
 var METRICS = METRICS || {};
 METRICS.analyticsData = (function() {
 	"use strict";
 
 	var DATE_FORMAT = 'YYYY-MM-DD';
+	var MONTH_DIM_FORMAT = 'YYYYMM';
+	var DAY_DIM_FORMAT = 'YYYYMMDD';
+	var BATCH_FETCH_ENDPOINT = CONFIG.JSON_LD_ID_BASE_URL + 'metrics/gadata/';
+
 	var self = {};
+
+	var transformRow = function(metricNames, dateDimFormat, row) {
+		var result = _.object(metricNames, row.metrics[0].values);
+		result.date = moment(row.dimensions[0], dateDimFormat);
+		return result;
+	};
 
 	self.fetch = function(query) {
 		return new Promise(function(resolve, reject) {
@@ -63,9 +74,12 @@ METRICS.analyticsData = (function() {
 	 */
 	self.batchFetchMonthlyPastYear = function(metrics, dimensionFilters) {
 		var dateRange = METRICS.dataUtils.getPastYear(moment());
+		var metricNames = _.pluck(metrics, 'expression');
+		var transformMonthRow = _.partial(transformRow, metricNames, MONTH_DIM_FORMAT);
+
 		var deferred = $.Deferred();
 		$.ajax({
-			url : CONFIG.JSON_LD_ID_BASE_URL + 'metrics/gadata/',
+			url : BATCH_FETCH_ENDPOINT,
 			method: 'POST',
 			contentType : 'application/json',
 			data : JSON.stringify([
@@ -80,13 +94,16 @@ METRICS.analyticsData = (function() {
 				}
 			]),
 			success: function(response) {
-				var rows = response.reports[0].data.rows.map(function (row) {
-					return {date: moment(row.dimensions[0], 'YYYYMM'), graphRow : [row.dimensions[0], row.metrics[0].values[0]]};
-				});
-				deferred.resolve(METRICS.dataUtils.fillMissingValues({
+				var rows = [];
+
+				if (_.has(response.reports[0].data, 'rows')) {
+					rows = response.reports[0].data.rows.map(transformMonthRow);
+				}
+				deferred.resolve(METRICS.dataUtils.fillMissingDates({
 					startDate : dateRange[0],
 					endDate : dateRange[1],
 					timeUnit : 'month',
+					metricNames : metricNames,
 					rows : rows
 				}));
 			},
@@ -111,9 +128,13 @@ METRICS.analyticsData = (function() {
 	self.batchFetchPast30Days = function(metrics, dimensionFilters) {
 		var now = moment();
 		var thirtyDaysAgo = now.clone().subtract(30, 'days');
+		var metricNames = _.pluck(metrics, 'expression');
+		var transformDayRow = _.partial(transformRow, metricNames, DAY_DIM_FORMAT);
+
 		var deferred = $.Deferred();
+
 		$.ajax({
-			url : CONFIG.JSON_LD_ID_BASE_URL + 'metrics/gadata/',
+			url : BATCH_FETCH_ENDPOINT,
 			method: 'POST',
 			contentType : 'application/json',
 			data : JSON.stringify([
@@ -128,13 +149,16 @@ METRICS.analyticsData = (function() {
 				}
 			]),
 			success: function(response) {
-				var rows = response.reports[0].data.rows.map(function (row) {
-					return {date: moment(row.dimensions[0], 'YYYYMMDD'), graphRow : [row.dimensions[0], row.metrics[0].values[0]]};
-				});
-				deferred.resolve(METRICS.dataUtils.fillMissingValues({
+				var rows = [];
+				if (_.has(response.reports[0].data, 'rows')) {
+					rows = response.reports[0].data.rows.map(transformDayRow);
+				}
+
+				deferred.resolve(METRICS.dataUtils.fillMissingDates({
 					startDate : thirtyDaysAgo,
 					endDate : now,
 					timeUnit : 'day',
+					metricNames: metricNames,
 					rows : rows
 				}));
 			},
