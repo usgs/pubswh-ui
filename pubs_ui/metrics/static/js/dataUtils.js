@@ -46,7 +46,7 @@ METRICS.dataUtils = (function() {
 	 */
 	self.fillMissingDates = function(options) {
 		var rowIndex = 0;
-		var currentDate = options.startDate;
+		var currentDate = options.startDate.clone();
 		var result = [];
 		var zeroMetrics = _.object(options.metricNames, _.map(options.metricNames, function() { return 0;}));
 		var emptyRow;

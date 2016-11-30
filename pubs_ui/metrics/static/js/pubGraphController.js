@@ -2,6 +2,7 @@
 /* global METRICS */
 /* global CONFIG */
 /* global _ */
+/* global $ */
 
 (function() {
 	"use strict";
@@ -15,31 +16,64 @@
 	var recentSessionsDiv = document.getElementById('recent-sessions-container');
 	var yearVisitorsDiv = document.getElementById('year-visitors-container');
 	var recentVisitorsDiv = document.getElementById('recent-visitors-container');
+	var yearDownloadsDiv = document.getElementById('year-downloads-container');
+	var recentDownloadsDiv = document.getElementById('recent-downloads-container');
 
 	var sessionsMetric = {expression : 'ga:sessions'};
 	var visitorsMetric = {expression: 'ga:users'};
+	var downloadsMetric = {expression: 'ga:totalEvents'};
 	var pageFilter = {
 		dimensionName : 'ga:pagePath',
 		operator : 'EXACT',
 		expressions : [pageURI]
 	};
-	var metrics = [sessionsMetric, visitorsMetric];
-	var dimensionFilters = {
-		filters: [pageFilter]
+	var downloadsEventFilter = {
+		dimensionName : 'ga:eventCategory',
+		operator: 'EXACT',
+		expressions: ['Downloads']
 	};
+	var metricsAndDimFilters = [
+		{
+			metrics : [sessionsMetric],
+			dimFilters : [{filters: [pageFilter]}]
+		}, {
+			metrics : [visitorsMetric],
+			dimFilters : [{filters: [pageFilter]}]
+		}, {
+			metrics: [downloadsMetric],
+			dimFilters : [{
+				operator: 'AND',
+				filters: [pageFilter, downloadsEventFilter]
+			}]
+		}
+	];
 
 	var transformToGraphData = function(metricName, row) {
 		return [row.date.toDate(), parseInt(row[metricName])];
 	};
 	var transformToSessionsData = _.partial(transformToGraphData, sessionsMetric.expression);
 	var transformToVisitorsData = _.partial(transformToGraphData, visitorsMetric.expression);
+	var transformToDownloadsData = _.partial(transformToGraphData, downloadsMetric.expression);
 
-	var monthlyDataPromise = METRICS.analyticsData.batchFetchMonthlyPastYear(metrics, dimensionFilters);
+	var linkFileTypes = [];
+	var fetchDownloadFileTypes = $.ajax({
+		url : CONFIG.LOOKUP_URL + 'linktypes',
+		method : 'GET',
+		data: {
+			mimetype: 'json'
+		},
+		success : function(response) {
+			linkFileTypes = _.pluck(response, 'text');
+		}
+	});
+	fetchDownloadFileTypes.always(function() {
+		var monthlyDataPromise = METRICS.analyticsData.batchFetchMonthlyPastYear(metricsAndDimFilters);
 
 	monthlyDataPromise
-		.done(function(rows) {
-			var sessionsData = rows.map(transformToSessionsData);
-			var visitorsData = rows.map(transformToVisitorsData);
+		.done(function(data) {
+			var sessionsData = data[0].map(transformToSessionsData);
+			var visitorsData = data[1].map(transformToVisitorsData);
+			var downloadsData = data[2].map(transformToDownloadsData);
 
 			METRICS.analyticsGraph.createGraph(yearSessionsDiv, sessionsData, {
 				ylabel : 'Sessions',
@@ -51,15 +85,21 @@
 				title : 'Visitors for ' + pageURI,
 				dateFormat : MONTH_FORMAT
 			});
+			METRICS.analyticsGraph.createGraph(yearDownloadsDiv, downloadsData, {
+				ylabel : 'Downloads',
+				title : 'Downloads for ' + pageURI,
+				dateFormat : MONTH_FORMAT
+			});
 		})
 		.fail(function(response) {
 			yearSessionsDiv.innerHTML = response.responseJSON.error.message;
 		})
 		.always(function() {
-			METRICS.analyticsData.batchFetchPast30Days(metrics, dimensionFilters)
-				.done(function (rows) {
-					var sessionsData = _.map(rows, transformToSessionsData);
-					var visitorsData = _.map(rows, transformToVisitorsData);
+			METRICS.analyticsData.batchFetchPast30Days(metricsAndDimFilters)
+				.done(function (data) {
+					var sessionsData = data[0].map(transformToSessionsData);
+					var visitorsData = data[1].map(transformToVisitorsData);
+					var downloadsData = data[2].map(transformToDownloadsData);
 
 					METRICS.analyticsGraph.createGraph(recentSessionsDiv, sessionsData, {
 						ylabel: 'Sessions',
@@ -71,9 +111,15 @@
 						title: 'Visitors for ' + pageURI,
 						dateFormat: DAY_FORMAT
 					});
+					METRICS.analyticsGraph.createGraph(recentDownloadsDiv, downloadsData, {
+						ylabel : 'Downloads',
+						title : 'Downloads for ' + pageURI,
+						dateFormat : DAY_FORMAT
+					});
 				})
 				.fail(function (response) {
 					recentSessionsDiv.innerHTML = response.responseJSON.error.message;
 				});
 		});
+	});
 })();

@@ -4,7 +4,8 @@
 	<script>
 		var CONFIG = {
 			PUBSID : '{{ pubsid }}',
-			JSON_LD_ID_BASE_URL : '{{ config.JSON_LD_ID_BASE_URL }}'
+			JSON_LD_ID_BASE_URL : '{{ config.JSON_LD_ID_BASE_URL }}',
+			LOOKUP_URL : '{{ config.LOOKUP_URL }}'
 		};
 	</script>
 {% endblock %}
@@ -19,6 +20,10 @@
 	<div id="visitors-div" class="metric-div">
 		<div id="recent-visitors-container" class="recent-div"></div>
 		<div id="year-visitors-container" class="year-div"></div>
+	</div>
+	<div id="downloads-div" class="metric-div">
+		<div id="recent-downloads-container" class="recent-div"></div>
+		<div id="year-downloads-container" class="year-div"></div>
 	</div>
 {%  endblock %}
 
