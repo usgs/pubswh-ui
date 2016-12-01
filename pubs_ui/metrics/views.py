@@ -51,13 +51,11 @@ def make_cache_key_from_request_data():
 
 
 @metrics.route('/publications/acquisitions/')
-@login_required
 def publications_aquisitions():
-    return render_template('metrics/publications_aquisitions.html', ga_access_token=get_access_token())
+    return render_template('metrics/publications_acquisitions.html', ga_access_token=get_access_token())
 
 
 @metrics.route('/publications/')
-@login_required
 def publications():
     return render_template('metrics/publications.html', ga_access_token=get_access_token())
 

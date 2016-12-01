@@ -9,14 +9,6 @@ METRICS.dataUtils = (function() {
 
 	var self = {};
 
-	self.convertDayToDate = function(dayIndex) {
-		return moment(dayIndex, 'YYYYMMDD').toDate();
-	};
-
-	self.convertMonthToDate = function(monthIndex) {
-		return moment(monthIndex, 'YYYYMM').toDate();
-	};
-
 	/*
 	 * @param {moment} forMoment - The function will return a full year range where the end will be the previous
 	 * 		full month before forMoment.

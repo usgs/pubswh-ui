@@ -6,24 +6,6 @@
 describe('METRICS/dataUtils', function() {
 	"use strict";
 
-	describe('Tests for convertDayToDate', function() {
-		it('Expects to return the correct date for a day dimension', function() {
-			var result = METRICS.dataUtils.convertDayToDate('20150316');
-
-			expect(result instanceof Date).toBe(true);
-			expect(moment(result).format('YYYY-MM-DD')).toEqual('2015-03-16');
-		});
-	});
-
-	describe('Tests for convertMonthToDate', function() {
-		it('Expects to return the correct date for a month dimension', function() {
-			var result = METRICS.dataUtils.convertMonthToDate('201503');
-
-			expect(result instanceof Date).toBe(true);
-			expect(moment(result).format('YYYY-MM')).toEqual('2015-03');
-		});
-	});
-
 	describe('Tests for getPastYear', function() {
 		it('Expects that the if the passed in date is the first of November the returned array includes the previous November through October', function() {
 			var result = METRICS.dataUtils.getPastYear(moment('2010-11-01', 'YYYY-MM-DD'));
@@ -100,7 +82,7 @@ describe('METRICS/dataUtils', function() {
 				return (row.date.format('YYYYMM') === date) &&
 					(row['ga:onemetric'] === '0') &&
 					(row['ga:twometric'] === '0');
-			}
+			};
 
 			expect(result.length).toBe(5);
 			expect(expectedResult(result[0], '200212')).toBe(true);

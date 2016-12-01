@@ -23,46 +23,6 @@ METRICS.analyticsData = (function() {
 		return result;
 	};
 
-	self.fetch = function(query) {
-		return new Promise(function(resolve, reject) {
-			var data = new gapi.analytics.report.Data({query: query});
-			data.once('success', function(response) {
-				resolve(response);
-			}).once('error', function(response) {
-				reject(response);
-			}).execute();
-		});
-	};
-
-	self.fetchLast30Days = function(metrics, filters) {
-		var options = {
-			'ids': CONFIG.VIEW_ID,
-			'start-date': '30daysAgo',
-			'end-date': 'yesterday',
-			'metrics': metrics,
-			'dimensions': 'ga:date'
-		};
-		if (filters) {
-			options.filters = filters;
-		}
-		return self.fetch(options);
-	};
-
-	self.fetchMonthlyPastYear = function(metrics, filters) {
-		var dateRange = METRICS.dataUtils.getPastYear(moment());
-		var options = {
-			'ids': CONFIG.VIEW_ID,
-			'start-date': dateRange[0].format(DATE_FORMAT),
-			'end-date': dateRange[1].format(DATE_FORMAT),
-			'metrics': metrics,
-			'dimensions': 'ga:yearMonth'
-		};
-		if (filters) {
-			options.filters = filters;
-		}
-		return self.fetch(options);
-	};
-
 	/*
 	 * @param {Array of Object} metricsAndDimFilters - each element in the array will generate a unique request
 	 * 		@prop {Array of Metric} metrics - see https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#metric}
