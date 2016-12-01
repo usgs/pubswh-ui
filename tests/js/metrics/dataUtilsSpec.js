@@ -82,7 +82,7 @@ describe('METRICS/dataUtils', function() {
 				return (row.date.format('YYYYMM') === date) &&
 					(row['ga:onemetric'] === '0') &&
 					(row['ga:twometric'] === '0');
-			}
+			};
 
 			expect(result.length).toBe(5);
 			expect(expectedResult(result[0], '200212')).toBe(true);
