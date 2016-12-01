@@ -15,9 +15,11 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
     	'pubs_ui/bower_components/moment/min/moment.min.js',
+		'pubs_ui/bower_components/underscore/underscore-min.js',
+		'pubs_ui/bower_components/jquery/dist/jquery.js',
+		'tests/js/metrics/resources/config.js',
 		'pubs_ui/metrics/static/js/*.js',
-		'tests/js/metrics/*.js',
-		'tests/js/metrics/resources/config.js'
+		'tests/js/metrics/*.js'
 		],
 
 

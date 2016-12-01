@@ -1,16 +1,12 @@
 /* jslint browser: true */
 /* global moment */
+/* global _ */
 
 var METRICS = METRICS || {};
 
 METRICS.dataUtils = (function() {
 	"use strict";
 
-	var TIME_DIMENSION_FORMAT = {
-		'year' : 'YYYY',
-		'month' : 'YYYYMM',
-		'day' : 'YYYYMMDD'
-	}
 	var self = {};
 
 	self.convertDayToDate = function(dayIndex) {
@@ -29,8 +25,8 @@ METRICS.dataUtils = (function() {
 	 * and the second element is the last full month before for Moment
 	 */
 	self.getPastYear = function(forMoment) {
-		var lastMonth = forMoment.subtract(1, 'months').endOf('month');
-		var yearAgo = moment(lastMonth).subtract(1, 'years').add(1, 'days');
+		var lastMonth = forMoment.clone().subtract(1, 'months').endOf('month');
+		var yearAgo = lastMonth.clone().subtract(1, 'years').add(1, 'days');
 		return [yearAgo, lastMonth];
 	};
 
@@ -39,26 +35,32 @@ METRICS.dataUtils = (function() {
 	 * 		@prop {Moment} startDate
 	 * 		@prop {Moment} endDate
 	 * 		@prop {String} timeUnit - year, month, day that we are processing
+	 * 		@prop {Array of String} metricNames
 	 *		@prop {Array of {Object} rows
 	 *			@prop {moment} date
-	 *			@prop {two element array, [time dimension, data]} graphrow
-	 *			First element is a moment . Second element is the data value
-	 * @return {Array of Array} - Should be rows with all missing time dimensions filled in with zero. The times should
-	 * 		go from startDate to endDate
+	 *			@prop {String} for each element in metricNames, there will be a key with a String value representing
+	 *				the	data for that metric.
+	 * @return {Array of Objects} - Each object should have the same properties as the rows elements. Missing dates
+	 * 		will be included with the metric set to zero.
+	 *
 	 */
-	self.fillMissingValues = function(options) {
+	self.fillMissingDates = function(options) {
 		var rowIndex = 0;
-		var currentDate = options.startDate;
+		var currentDate = options.startDate.clone();
 		var result = [];
+		var zeroMetrics = _.object(options.metricNames, _.map(options.metricNames, function() { return '0';}));
+		var emptyRow;
 
 		while (currentDate.isSameOrBefore(options.endDate, options.timeUnit)) {
 			if (rowIndex < options.rows.length &&
 				currentDate.isSame(options.rows[rowIndex].date, options.timeUnit)) {
-				result.push(options.rows[rowIndex].graphRow);
+				result.push(options.rows[rowIndex]);
 				rowIndex = rowIndex + 1;
 			}
 			else {
-				result.push([currentDate.format(TIME_DIMENSION_FORMAT[options.timeUnit]), 0]);
+				emptyRow = _.clone(zeroMetrics);
+				emptyRow.date = currentDate.clone();
+				result.push(emptyRow);
 			}
 			currentDate.add(1, options.timeUnit + 's');
 		}

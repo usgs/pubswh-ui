@@ -95,11 +95,17 @@ To run the unit tests do the following with your virtualenv activated or using t
 `nosetests -w pubs_ui`
 
 To run the jasmine tests, run the following:
-Run `node_modules/karma/bin/karma start tests/js/karma.conf.js`
 
-If you leave the above command running you can
-Then go to localhost:9876 in the browser where you want to run the tests. This will have to be altered for Windows users.
-This will automatically open the Firefox browser, but any browser can be used to run the tests
+Run `node_modules/karma/bin/karma start tests/js/manager/karma.conf.js`
+
+and
+
+Run `node_modules/karma/bin/karma start tests/js/metrics/karma.conf.js`
+
+Use --no-single-run option to leave the tests running. If you use this option you can
+then go to localhost:9876 in the browser where you want to run the tests. This will have to be altered for Windows users.
+This will automatically open the Firefox browser, but any browser can be used to run the tests This is helpful when writing/debugging tests
+as the tests will automatically be rerun in whatever browser you are running tests in.
 
 
 ## Generating secret keys
