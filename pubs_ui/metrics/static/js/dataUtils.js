@@ -48,7 +48,7 @@ METRICS.dataUtils = (function() {
 		var rowIndex = 0;
 		var currentDate = options.startDate.clone();
 		var result = [];
-		var zeroMetrics = _.object(options.metricNames, _.map(options.metricNames, function() { return 0;}));
+		var zeroMetrics = _.object(options.metricNames, _.map(options.metricNames, function() { return '0';}));
 		var emptyRow;
 
 		while (currentDate.isSameOrBefore(options.endDate, options.timeUnit)) {

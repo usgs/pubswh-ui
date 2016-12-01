@@ -64,16 +64,21 @@ METRICS.analyticsData = (function() {
 	};
 
 	/*
-	 * 	@param {Array of Metric} metrics - see https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#metric}
-	 *	@param {DimensionFilterClause} dimensionFilters - see https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#dimensionfilterclause
-	 *	@returns Jquery Promise
-	 *		@resolve - successfully retrieval. Response is {Array of Array} representing the data.
-	 *			First element is a moment, the rest is the data requested via the metrics parameter.
+	 * @param {Array of Object} metricsAndDimFilters - each element in the array will generate a unique request
+	 * 		@prop {Array of Metric} metrics - see https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#metric}
+	 *		@prop {DimensionFilterClause} dimFilters - see https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#dimensionfilterclause
+	 * @param {moment} fromDate (optional) - data should be returned for the previous year fromDate for 12 full months. If omitted, it will be from today
+	 * @returns Jquery Promise
+	 *		@resolve - successfully retrieval. Response is {Array of Object} representing the data. The length of this
+	 *			array will be the same as metricsAndDimFilters and the returned data will be in the same order.
+	 *			@prop {moment} date,
+	 *			@prop {String} <metricName for each metric in the corresponding metrics property>
 	 *		@reject - somethings went wrong - returns response. The responseJSON.error.message can be used to determine
 	 *			why the request failed.
 	 */
-	self.batchFetchMonthlyPastYear = function(metricsAndDimFilters) {
-		var dateRange = METRICS.dataUtils.getPastYear(moment());
+	self.batchFetchMonthlyPastYear = function(metricsAndDimFilters, fromDate) {
+		var requestedDate = (fromDate) ? fromDate : moment();
+		var dateRange = METRICS.dataUtils.getPastYear(requestedDate);
 
 		var transformToRequest = function(metricAndDimFilter) {
 			return {
@@ -120,23 +125,27 @@ METRICS.analyticsData = (function() {
 	};
 
 	/*
-	 * 	@param {Array of Metric} metrics - see https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#metric}
-	 *	@param {DimensionFilterClause} dimensionFilters - see https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#dimensionfilterclause
-	 *	@returns Jquery Promise
-	 *		@resolve - successfully retrieval. Response is {Array of Array} representing the data.
-	 *			First element is a moment, the rest is the data requested via the metrics parameter.
+	 * @param {Array of Object} metricsAndDimFilters - each element in the array will generate a unique request
+	 * 		@prop {Array of Metric} metrics - see https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#metric}
+	 *		@prop {DimensionFilterClause} dimFilters - see https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#dimensionfilterclause
+	 * @param {moment} fromDate (optional) - data should be returned for the previous year fromDate for 12 full months. If omitted, it will be from today
+	 * @returns Jquery Promise
+	 *		@resolve - successfully retrieval. Response is {Array of Object} representing the data. The length of this
+	 *			array will be the same as metricsAndDimFilters and the returned data will be in the same order.
+	 *			@prop {moment} date,
+	 *			@prop {String} <metricName for each metric in the corresponding metrics property>
 	 *		@reject - somethings went wrong - returns response. The responseJSON.error.message can be used to determine
-	 *			why the request failed.
+	 *			why the request failed.	 *	@returns Jquery Promise
 	 */
-	self.batchFetchPast30Days = function(metricsAndDimFilters) {
-		var now = moment();
-		var thirtyDaysAgo = now.clone().subtract(30, 'days');
+	self.batchFetchPast30Days = function(metricsAndDimFilters, fromDate) {
+		var requestedDate = (fromDate) ? fromDate : moment();
+		var thirtyDaysAgo = requestedDate.clone().subtract(30, 'days');
 
 		var transformToRequest = function(metricAndDimFilter) {
 			return {
 				dateRanges : [{
 					startDate : thirtyDaysAgo.format(DATE_FORMAT),
-					endDate : now.format(DATE_FORMAT)
+					endDate : requestedDate.format(DATE_FORMAT)
 				}],
 				dimensions : [{name: 'ga:date'}],
 				metrics : metricAndDimFilter.metrics,
@@ -159,7 +168,7 @@ METRICS.analyticsData = (function() {
 
 					return METRICS.dataUtils.fillMissingDates({
 						startDate: thirtyDaysAgo,
-						endDate: now,
+						endDate: requestedDate,
 						timeUnit: 'day',
 						metricNames: metricNames,
 						rows: rows.map(transformDayRow)
