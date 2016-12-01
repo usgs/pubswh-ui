@@ -57,7 +57,6 @@ def publications_aquisitions():
 
 
 @metrics.route('/publications/')
-@login_required
 def publications():
     return render_template('metrics/publications.html', ga_access_token=get_access_token())
 
