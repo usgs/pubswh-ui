@@ -55,19 +55,9 @@
 	var transformToVisitorsData = _.partial(transformToGraphData, visitorsMetric.expression);
 	var transformToDownloadsData = _.partial(transformToGraphData, downloadsMetric.expression);
 
-	var linkFileTypes = [];
-	var fetchDownloadFileTypes = $.ajax({
-		url : CONFIG.LOOKUP_URL + 'linktypes',
-		method : 'GET',
-		data: {
-			mimetype: 'json'
-		},
-		success : function(response) {
-			linkFileTypes = _.pluck(response, 'text');
-		}
-	});
-	fetchDownloadFileTypes.always(function() {
-		var monthlyDataPromise = METRICS.analyticsData.batchFetchMonthlyPastYear(metricsAndDimFilters);
+	// When the two calls to GA where made simultaneously, frequently only one of the calls worked.
+	// Therefore, we are waiting until the first call returns before making the second request.
+	var monthlyDataPromise = METRICS.analyticsData.batchFetchMonthlyPastYear(metricsAndDimFilters);
 
 	monthlyDataPromise
 		.done(function(data) {
@@ -77,17 +67,17 @@
 
 			METRICS.analyticsGraph.createGraph(yearSessionsDiv, sessionsData, {
 				ylabel : 'Sessions',
-				title : 'Sessions for ' + pageURI,
+				title : 'Visitors per month',
 				dateFormat : MONTH_FORMAT
 			});
 			METRICS.analyticsGraph.createGraph(yearVisitorsDiv, visitorsData, {
-				ylabel : 'Visitors',
-				title : 'Visitors for ' + pageURI,
+				ylabel : 'Users',
+				title : 'Unique visitors per month',
 				dateFormat : MONTH_FORMAT
 			});
 			METRICS.analyticsGraph.createGraph(yearDownloadsDiv, downloadsData, {
 				ylabel : 'Downloads',
-				title : 'Downloads for ' + pageURI,
+				title : 'Downloads per month',
 				dateFormat : MONTH_FORMAT
 			});
 		})
@@ -103,17 +93,17 @@
 
 					METRICS.analyticsGraph.createGraph(recentSessionsDiv, sessionsData, {
 						ylabel: 'Sessions',
-						title: 'Sessions for ' + pageURI,
+						title: 'Visitors per day',
 						dateFormat: DAY_FORMAT
 					});
 					METRICS.analyticsGraph.createGraph(recentVisitorsDiv, visitorsData, {
-						ylabel: 'Visitors',
-						title: 'Visitors for ' + pageURI,
+						ylabel: 'Users',
+						title: 'Uniquer visitors per day',
 						dateFormat: DAY_FORMAT
 					});
 					METRICS.analyticsGraph.createGraph(recentDownloadsDiv, downloadsData, {
 						ylabel : 'Downloads',
-						title : 'Downloads for ' + pageURI,
+						title : 'Downloads per day',
 						dateFormat : DAY_FORMAT
 					});
 				})
@@ -121,5 +111,4 @@
 					recentSessionsDiv.innerHTML = response.responseJSON.error.message;
 				});
 		});
-	});
 })();

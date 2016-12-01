@@ -14,11 +14,11 @@ METRICS.analyticsGraph = (function() {
 	 * Creates a graph of data
 	 * @param {HTML Element or String} el - Can be an HTML Element for a div or an id for a div
 	 * @param {Array of Array} rows -  where the first element is a moment and the second element is the data to be graphed.
-	 * @param {Object} options - Optional
+	 * @param {Object} options - Optional - all properties are optional.
 	 * 		@prop {String} ylabel - label used for the y data
 	 * 		@prop {String} title - title of the graph
 	 * 		@prop {String} dateFormat - String representing the formatting for the date axis. Will feed the moment
-	 * 		library's format function.
+	 * 			library's format function.
 	 */
 	self.createGraph = function(el, rows, options) {
 		var thisOptions = (options) ? options : {};
