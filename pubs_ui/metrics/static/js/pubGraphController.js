@@ -98,7 +98,7 @@
 					});
 					METRICS.analyticsGraph.createGraph(recentVisitorsDiv, visitorsData, {
 						ylabel: 'Users',
-						title: 'Uniquer visitors per day',
+						title: 'Unique visitors per day',
 						dateFormat: DAY_FORMAT
 					});
 					METRICS.analyticsGraph.createGraph(recentDownloadsDiv, downloadsData, {
