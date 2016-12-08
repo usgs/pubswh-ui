@@ -224,7 +224,7 @@
                                 {% endif %}
                                 {% endfor %}
                             {% if pubdata['isPartOf'] %}
-                                <li itemprop="isPartOf" itemscope itemtype="http://schema.org/ScholarlyArticle" itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}">Larger Work: {% if pubdata['chapter'] %}This publication is Chapter {{ pubdata['chapter'] }}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %} in {% endif %}<a href="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}"><span itemprop="name">{{ pubdata['isPartOf']['title']|safe }}</span></a></li>
+                                <li itemprop="isPartOf" itemscope itemtype="http://schema.org/ScholarlyArticle" itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}">Larger Work: {% if pubdata['chapter'] %}This publication is Chapter {{ pubdata['chapter'] }}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %} of {% endif %}<a href="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}"><span itemprop="name">{{ pubdata['isPartOf']['title']|safe }}</span></a></li>
                             {% endif %}
                         {% endif %}
                         {{- linkdisplaylists('Table', 'Table','Tables')  -}}
@@ -262,11 +262,10 @@
                     </ul>
                 </section>
                 <section itemprop="description" id="abstract" >
-                    {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and (pubdata['publishedDate'] or pubdata['contact'])) or
-                (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Federal Government Series' and (pubdata['publishedDate'] or pubdata['contact']))  %}
-                    <aside class="publicationAsideDesktop">
-                {% include 'pubswh/USGS_series_aside.html' %}
-                </aside>
+                    {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and (pubdata['publishedDate'] or pubdata['contact'])) or  (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Federal Government Series' and (pubdata['publishedDate'] or pubdata['contact'])) or (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Unnumbered Series' and (pubdata['publishedDate'] or pubdata['contact']))    %}
+                        <aside class="publicationAsideDesktop">
+                            {% include 'pubswh/USGS_series_aside.html' %}
+                        </aside>
                     {% endif %}
                     <h4 id="abstract_head">{{ pubdata['abstractHeader'] }}</h4>
                     
