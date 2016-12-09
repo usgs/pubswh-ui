@@ -85,7 +85,7 @@ def restricted_page(index_id):
         record = response.json()
         pubdata = munge_pubdata_for_display(record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
         pub_doi = pubdata.get('doi')
-        pub_altmetric_badges, pub_altmetric_details = get_altmetric_badge_img_links(pub_doi, verify=verify_cert)
+        pub_altmetric_badges, pub_altmetric_details = get_altmetric_badge_img_links(pub_doi, index_id, verify=verify_cert)
         small_badge = pub_altmetric_badges['small'] if pub_altmetric_badges is not None else None
         altmetric_links = {'image': small_badge, 'details': pub_altmetric_details}
         pubdata['altmetric'] = altmetric_links
@@ -198,7 +198,7 @@ def publication(index_id):
         return render_template('pubswh/404.html'), 404
     pubreturn = r.json()
     pub_doi = pubreturn.get('doi')
-    pub_altmetric_badges, pub_altmetric_details = get_altmetric_badge_img_links(pub_doi, verify=verify_cert)
+    pub_altmetric_badges, pub_altmetric_details = get_altmetric_badge_img_links(pub_doi, index_id, verify=verify_cert)
     small_badge = pub_altmetric_badges['small'] if pub_altmetric_badges is not None else None
     if 'mimetype' in request.args and request.args.get("mimetype") == 'sbjson':
         sbdata = generate_sb_data(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)

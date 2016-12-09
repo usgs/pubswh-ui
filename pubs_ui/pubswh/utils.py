@@ -372,7 +372,7 @@ def make_contributor_list(contributors):
     # only grab the string portion of the tuple, put it into its own list.
     contributor_list = []
     for contributor in typed_contributor_list:
-        contributor_list.append(contributor["text"])
+        contributor_list.append(contributor.get("text"))
     return contributor_list
 
 
@@ -437,11 +437,11 @@ def jsonify_geojson(record):
                 record['geographicExtents'] = geojson
             elif geojson.get('geometry'):
                 geojson["properties"] = {'title': record.get('title'),
-                                             'id': record.get('indexId'),
-                                             'url': json_ld_id_base_url+'publication/'+record.get('indexId'),
-                                             'year': record.get('publicationYear'),
-                                             'info': display_publication_info(record)
-                                             }
+                                         'id': record.get('indexId'),
+                                         'url': json_ld_id_base_url+'publication/'+record.get('indexId'),
+                                         'year': record.get('publicationYear'),
+                                         'info': display_publication_info(record)
+                                         }
                 feature_collection = {"type": "FeatureCollection",
                                       "features": [geojson]
                                       }
@@ -481,8 +481,6 @@ def create_store_info(publication_resp):
     #
     # The service returns JSON, which is converted into Python structures.
     #
-    # Note that, despite the structure of the response, the "mods" array will
-    # have at most only one contained element.
     #
     # Concerning the sense of the terminology, the occurrence of 
     # '"@type": "succeeding"' or '"@type": "preceding"' refers to the 
@@ -544,9 +542,9 @@ def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):
     pub_type = 'rdac:Work'
     
     # obtain data from legacy api (down to just store data now)
-    #pre_super = legacy_api_info(index_id, supersedes_service_url)
-    pre_super = {"offers":None}
-    #get interactions from the new endpoint to build json-LD object
+    # pre_super = legacy_api_info(index_id, supersedes_service_url)
+    pre_super = {"offers": None}
+    # get interactions from the new endpoint to build json-LD object
     interactions = return_pubdata.get('interactions')
 
     if interactions is not None:
@@ -580,7 +578,8 @@ def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):
 
         for interaction in interactions:
             # add any linked data for superseding another publication
-            if interaction['predicate'] == "SUPERSEDED_BY" and interaction['object']['indexId'] == return_pubdata['indexId']:
+            if interaction['predicate'] == "SUPERSEDED_BY" and interaction['object']['indexId'] \
+                    == return_pubdata['indexId']:
                 related_pub = {
                     '@id':  urljoin(base_id_url, interaction['subject']['indexId']),
                     '@type': pub_type,
@@ -590,7 +589,8 @@ def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):
                     related_pub['dc:date'] = interaction['subject']['publicationYear']
                 return_pubdata['relationships']['@graph'].append(related_pub)
             # add any linked data for being superseded by another publication
-            if interaction['predicate'] == "SUPERSEDED_BY" and interaction['subject']['indexId'] == return_pubdata['indexId']:
+            if interaction['predicate'] == "SUPERSEDED_BY" and interaction['subject']['indexId'] \
+                    == return_pubdata['indexId']:
                 related_pub = {
                     '@id':  urljoin(base_id_url, interaction['object']['indexId']),
                     '@type': pub_type,
@@ -599,7 +599,6 @@ def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):
                 if interaction['object']['publicationYear']:
                     related_pub['dc:date'] = interaction['object']['publicationYear']
                 return_pubdata['relationships']['@graph'].append(related_pub)
-
 
     # add offer data from the USGS store if it exists
     if pre_super['offers']:
@@ -940,7 +939,7 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
     return sbdata
 
 
-def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=altmetric_endpoint,
+def get_altmetric_badge_img_links(publication_doi, publication_indexid, altmetric_service_endpoint=altmetric_endpoint,
                                   altmetric_key=altmetric_key, verify=verify_cert):
     """
     Get the links for small, medium, and altmetric badges, and the link
@@ -960,9 +959,9 @@ def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=al
     altmetric_details = None
     if publication_doi is not None:
         parameters = {'key': altmetric_key}
-        publication_endpoint = urljoin(altmetric_service_endpoint, 'doi/{}'.format(publication_doi))
+        publication_doi_endpoint = urljoin(altmetric_service_endpoint, 'doi/{}'.format(publication_doi))
         try:
-            resp = requests.get(publication_endpoint, params=parameters, verify=verify)
+            resp = requests.get(publication_doi_endpoint, params=parameters, verify=verify)
         except requests.ConnectionError:
             pass
         else:
@@ -970,4 +969,17 @@ def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=al
                 resp_json = resp.json()
                 altmetric_badge_imgs = resp_json.get('images')
                 altmetric_details = resp_json.get('details_url')
+            if resp.status_code == 404:
+
+                publication_url_endpoint = urljoin(altmetric_service_endpoint, 'uri/{}'.format(
+                    "https://pubs.er.usgs.gov/publication/" + publication_indexid))
+                try:
+                    resp = requests.get(publication_url_endpoint, params=parameters, verify=verify)
+                except requests.ConnectionError:
+                    pass
+                else:
+                    if resp.status_code != 404:
+                        resp_json = resp.json()
+                        altmetric_badge_imgs = resp_json.get('images')
+                        altmetric_details = resp_json.get('details_url')
     return altmetric_badge_imgs, altmetric_details
