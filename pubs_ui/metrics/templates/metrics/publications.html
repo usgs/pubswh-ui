@@ -2,28 +2,8 @@
 
 {% block config_initialize_script %}
 	<script>
-	// This loads the google EmbedAPI ... gapi namespace
-		(function (w, d, s, g, js, fs) {
-			g = w.gapi || (w.gapi = {});
-			g.analytics = {
-				q: [], ready: function (f) {
-					this.q.push(f);
-				}
-			};
-			js = d.createElement(s);
-			fs = d.getElementsByTagName(s)[0];
-			js.src = 'https://apis.google.com/js/platform.js';
-			fs.parentNode.insertBefore(js, fs);
-			js.onload = function () {
-				g.load('analytics');
-			};
-		}(window, document, 'script'));
-	</script>
-
-	<script>
 		var CONFIG = {
-			GA_ACCESS_TOKEN : "{{ ga_access_token }}",
-			VIEW_ID : "{{ config.GA_PUBS_VIEW_ID }}",
+			JSON_LD_ID_BASE_URL : '{{ config.JSON_LD_ID_BASE_URL }}'
 		};
 	</script>
 {% endblock %}
@@ -35,16 +15,16 @@
 		<div id="year-sessions-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
 	</div>
 	<div id="users-div" class="metric-div">
-		<div id="recent-users-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
-		<div id="year-users-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		<div id="recent-users-container" class="recent-div"></div>
+		<div id="year-users-container" class="year-div"></div>
 	</div>
 	<div id="pageviews-div" class="metric-div">
-		<div id="recent-pageviews-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
-		<div id="year-pageviews-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		<div id="recent-pageviews-container" class="recent-div"></div>
+		<div id="year-pageviews-container" class="year-div"></div>
 	</div>
 	<div id="downloadevents-div" class="metric-div">
-		<div id="recent-downloadevents-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
-		<div id="year-downloadevents-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+		<div id="recent-downloadevents-container" class="recent-div"></div>
+		<div id="year-downloadevents-container" class="year-div"></div>
 	</div>
 {%  endblock %}
 

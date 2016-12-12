@@ -39,11 +39,7 @@ try:
           app.config.get('GA_OAUTH2_SCOPE'))
     analytics = build('analytics', 'v4', http=credentials.authorize(http), discoveryServiceUrl=app.config.get('GA_DISCOVERY_URI'))
 except IOError:
-    credentials = None
-
-
-def get_access_token():
-    return credentials.get_access_token(http).access_token
+    analytics = None
 
 
 def make_cache_key_from_request_data():
@@ -51,15 +47,13 @@ def make_cache_key_from_request_data():
 
 
 @metrics.route('/publications/acquisitions/')
-@login_required
 def publications_aquisitions():
-    return render_template('metrics/publications_aquisitions.html', ga_access_token=get_access_token())
+    return render_template('metrics/publications_acquisitions.html')
 
 
 @metrics.route('/publications/')
-@login_required
 def publications():
-    return render_template('metrics/publications.html', ga_access_token=get_access_token())
+    return render_template('metrics/publications.html')
 
 
 @metrics.route('/publication/<pubsid>/')

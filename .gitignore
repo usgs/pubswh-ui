@@ -29,6 +29,7 @@ lettucetests.xml
 /karma
 /npm
 /coverage
+.coverage
 npm-debug.log
 build/
 dist/
