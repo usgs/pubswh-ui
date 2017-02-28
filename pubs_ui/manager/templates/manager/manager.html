@@ -84,7 +84,8 @@
 					scriptRoot : '{{  request.script_root }}'
 				},
 				'views/BibliodataView' : {
-					lookupUrl : "{{ config.LOOKUP_URL }}"
+					lookupUrl : "{{ config.LOOKUP_URL }}",
+					vendorUrl : "{{ url_for('manager.static', filename='vendor') }}"
 				},
 				'views/ContributorRowView' : {
 					lookupUrl : "{{ config.LOOKUP_URL }}",
@@ -116,7 +117,7 @@
 				'backbone.stickit' : "{{ url_for('bower.static', filename='backbone.stickit/backbone.stickit.js') }}",
 				'moment' : "{{ url_for('bower.static', filename='moment/min/moment.min.js') }}",
 				'datetimepicker' : "{{ url_for('bower.static', filename='eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}",
-				'loglevel' : "{{ url_for('bower.static', filename='loglevel/dist/loglevel.min.js') }}"
+				'loglevel' : "{{ url_for('bower.static', filename='loglevel/dist/loglevel.min.js') }}",
 			},
 			shim : {
 				'select2' : ['jquery'],
