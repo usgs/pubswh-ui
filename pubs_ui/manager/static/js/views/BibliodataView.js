@@ -205,11 +205,14 @@ define([
 					},
 					menubar: false,
 					plugins: 'code link paste',
+					external_plugins: {
+						mathslate: module.config().vendorUrl + '/tinymce4-mathslate-master/plugins/mathslate/plugin.js'
+					},
 					formats: {
 						italic: {inline: 'i'}
 					},
 					browser_spellcheck: true,
-					toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link | code',
+					toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link | code | mathslate',
 					valid_elements: "@[id|class|title|dir<ltr?rtl|lang|xml::lang|onclick|ondblclick|"
 					+ "onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|"
 					+ "onkeydown|onkeyup],a[rel|rev|charset|hreflang|tabindex|accesskey|type|"
@@ -255,11 +258,14 @@ define([
 						},
 						menubar: false,
 						plugins: 'code link paste',
+						external_plugins: {
+							mathslate: module.config().vendorUrl + '/tinymce4-mathslate-master/plugins/mathslate/plugin.js'
+						},
 						formats: {
 							italic: {inline: 'i'}
 						},
 						browser_spellcheck: true,
-						toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link | code'
+						toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link | code | mathslate'
 					});
 					tocInit = true;
 				}, 1);
