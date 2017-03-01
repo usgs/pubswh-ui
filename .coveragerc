@@ -1,0 +1,4 @@
+[report]
+omit =
+    pubs_ui/tests/*.py
+    pubs_ui/*/tests/*.py
