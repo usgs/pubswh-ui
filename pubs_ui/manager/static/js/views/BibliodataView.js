@@ -205,9 +205,6 @@ define([
 					},
 					menubar: false,
 					plugins: 'code link paste',
-					external_plugins: {
-						mathslate: module.config().vendorUrl + '/tinymce4-mathslate-master/plugins/mathslate/plugin.js'
-					},
 					formats: {
 						italic: {inline: 'i'}
 					},
@@ -258,9 +255,6 @@ define([
 						},
 						menubar: false,
 						plugins: 'code link paste',
-						external_plugins: {
-							mathslate: module.config().vendorUrl + '/tinymce4-mathslate-master/plugins/mathslate/plugin.js'
-						},
 						formats: {
 							italic: {inline: 'i'}
 						},
