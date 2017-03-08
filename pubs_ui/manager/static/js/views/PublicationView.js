@@ -71,6 +71,7 @@ define([
 			var self = this;
 			BaseView.prototype.render.apply(this, arguments);
 			this.updateIndexId(this.model, this.model.get('indexId'));
+
 			// Set up datepicker
 			this.$('#display-date').datetimepicker({
 				format : 'YYYY-MM-DDTHH:mm:ss [E]T'
@@ -124,6 +125,7 @@ define([
 		 */
 		initialize : function(options) {
 			BaseView.prototype.initialize.apply(this, arguments);
+
 			this.context.indexId = this.model.get('indexId');
 			this.context.previewUrl = module.config().previewUrl;
 			this.listenTo(this.model, 'change:indexId', this.updateIndexId);
@@ -135,6 +137,7 @@ define([
 			else {
 				this.fetchPromise = this.model.fetch();
 			}
+
 			// Create child views
 			this.alertView = new AlertView({
 				el : '.alert-container'
@@ -374,6 +377,7 @@ define([
 		},
 
 		_readOnlyControlIpds: function() {
+			// don't change the ipdsId field before the user is ready
 			this.unstickit(this.model, {'#ipds-div input' : 'ipdsId'})
 			var $ipdsInput = this.$('#ipds-input');
 			if (this.model.get('ipdsId')) {
