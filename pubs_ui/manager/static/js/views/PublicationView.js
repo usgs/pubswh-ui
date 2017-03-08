@@ -69,7 +69,6 @@ define([
 
 		render : function() {
 			var self = this;
-			console.log(this);
 			BaseView.prototype.render.apply(this, arguments);
 			this.updateIndexId(this.model, this.model.get('indexId'));
 			// Set up datepicker
@@ -128,7 +127,7 @@ define([
 			this.context.indexId = this.model.get('indexId');
 			this.context.previewUrl = module.config().previewUrl;
 			this.listenTo(this.model, 'change:indexId', this.updateIndexId);
-			this.listenTo(this.model, 'change:ipdsId', this._readOnlyControlIpds);
+			this.listenTo(this.model, 'change', this._readOnlyControlIpds);
 
 			if (this.model.isNew()) {
 				this.fetchPromise = $.Deferred().resolve();
@@ -246,6 +245,10 @@ define([
 			var loadingDiv = this.$('.loading-indicator');
 			var isNew = this.model.isNew();
 
+			var ipdsIdValue = this.$('#ipds-input').val();
+			if (ipdsIdValue) {
+				this.model.set('ipdsId', ipdsIdValue);
+			}
 			loadingDiv.show();
 
 			return this.model.save({}, {
@@ -371,9 +374,9 @@ define([
 		},
 
 		_readOnlyControlIpds: function() {
+			this.unstickit(this.model, {'#ipds-div input' : 'ipdsId'})
 			var $ipdsInput = this.$('#ipds-input');
 			if (this.model.get('ipdsId')) {
-				console.log('Readonly');
 				$ipdsInput.prop('readonly', true);
 			}
 			else {
