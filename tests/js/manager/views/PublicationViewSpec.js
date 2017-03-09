@@ -334,6 +334,7 @@ define([
 		});
 
 		describe('Tests for IPDS ID Changes', function() {
+
 			beforeEach(function() {
 				testView = new PublicationView({
 					model : pubModel,
@@ -345,8 +346,10 @@ define([
 				expect(testView.$('#ipds-input').is('[readonly]')).toBe(false);
 			});
 
-			it('Expects the IPDS ID field to be readonly when there is an IPDS value set', function() {
+			it('Expects the IPDS ID field to be readonly there is an IPDS value set and synced', function() {
 				pubModel.set('ipdsId', 'IP-098765');
+				pubModel.trigger('sync');
+
 				expect(testView.$('#ipds-input').is('[readonly]')).toBe(true);
 			});
 		});
