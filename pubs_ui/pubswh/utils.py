@@ -115,7 +115,7 @@ def manipulate_doi_information(pubdata):
                 "id": 15,
                 "text": "Index Page"
             },
-            "url": "http://dx.doi.org/" + pubdata['doi']
+            "url": "https://doi.org/" + pubdata['doi']
         }
         if pubdata.get('chorus'):
             chorus = deepcopy(pubdata['chorus'])
