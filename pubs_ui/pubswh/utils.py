@@ -76,8 +76,7 @@ def pubdetails(pubdata):
         ['projection', 'Projection:'],
         ['scale', 'Scale:'],
         ['onlineOnly', 'Online Only (Y/N):'],
-        ['additionalOnlineFiles', 'Additional Online Files (Y/N):'],
-        ['ipdsId', 'IPDS Identifier:']
+        ['additionalOnlineFiles', 'Additional Online Files (Y/N):']
 
     ]
     for detail in detailslist:
