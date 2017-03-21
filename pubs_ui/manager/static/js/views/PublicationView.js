@@ -129,6 +129,7 @@ define([
 			this.context.indexId = this.model.get('indexId');
 			this.context.previewUrl = module.config().previewUrl;
 			this.listenTo(this.model, 'change:indexId', this.updateIndexId);
+			this.listenTo(this.model, 'sync', this._readOnlyControlIpds);
 
 			if (this.model.isNew()) {
 				this.fetchPromise = $.Deferred().resolve();
@@ -369,6 +370,16 @@ define([
 		closeLockedDialog : function(ev) {
 			ev.preventDefault();
 			window.location.assign(module.config().scriptRoot + '/manager');
+		},
+
+		_readOnlyControlIpds: function() {
+			var $ipdsInput = this.$('#ipds-input');
+			if (this.model.get('ipdsId')) {
+				$ipdsInput.prop('readonly', true);
+			}
+			else {
+				$ipdsInput.prop('readonly', false);
+			}
 		}
 	});
 

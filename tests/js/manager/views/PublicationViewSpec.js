@@ -333,6 +333,27 @@ define([
 			});
 		});
 
+		describe('Tests for IPDS ID Changes', function() {
+
+			beforeEach(function() {
+				testView = new PublicationView({
+					model : pubModel,
+					el: '#test-div'
+				}).render();
+			});
+
+			it('Expects the IPDS ID field to be editable when there is no IPDS ID value', function() {
+				expect(testView.$('#ipds-input').is('[readonly]')).toBe(false);
+			});
+
+			it('Expects the IPDS ID field to be readonly there is an IPDS value set and synced', function() {
+				pubModel.set('ipdsId', 'IP-098765');
+				pubModel.trigger('sync');
+
+				expect(testView.$('#ipds-input').is('[readonly]')).toBe(true);
+			});
+		});
+
 		describe('Tests for updating the model id', function() {
 			beforeEach(function() {
 				testView = new PublicationView({
