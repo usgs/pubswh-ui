@@ -630,8 +630,8 @@ def legacy_search(series_code=None, report_number=None, pub_year=None):
 @pubswh.route('/unapi')
 def unapi():
     """
-    this is an unapi format, which appears to be the only way to get a good export to zotero that has all the Zotero fields
-    Documented here: http://unapi.info/specs/
+    this is an unapi format, which appears to be the only way to get a good export to zotero that has all the
+    Zotero fields, Documented here: http://unapi.info/specs/
     :return: rendered template of (at this time) bibontology rdf, which maps directly to Zotero Fields
     """
 
@@ -649,6 +649,19 @@ def unapi():
         if r.status_code == 404:
             return render_template('pubswh/404.html'), 404
         pubdata = r.json()
-        return render_template('pubswh/'+formats[unapi_format]['template'], pubdata=pubdata, formats=formats,  mimetype='text/xml')
+        return render_template('pubswh/'+formats[unapi_format]['template'], pubdata=pubdata, formats=formats,
+                               mimetype='text/xml')
 
 
+@pubswh.route('/service/rss/')
+@cache.cached(timeout=30, key_prefix=make_cache_key)
+def rss():
+    """
+    This basically makes it so that the many hundreds of RSS Readers that point at the old service RSS field will work
+    by proxying the pubs-services RSS Request to the pubs/service RSS request.  We are doing this rather than mapping at
+    the apache level so that we can ignore query params for the moment, and accomodate them if needed in the future.
+    :return: xml rss feed
+    """
+    url = pub_url+'/publication/rss'
+    req = get(url)
+    return Response(req.content, content_type=req.headers['content-type'])
