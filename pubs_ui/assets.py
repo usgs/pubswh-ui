@@ -1,5 +1,4 @@
 
-import os
 
 from flask_assets import Environment, Bundle
 
