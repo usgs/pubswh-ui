@@ -1,11 +1,10 @@
 
 {% if request.args.advanced != 'True' %}
-<script type="text/javascript" src="{{ url_for('pubswh.static', filename = 'js/vendor/leaflet-0.7.3/leaflet.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('pubswh.static', filename='js/vendor/esri-leaflet-basemaps.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('pubswh.static', filename='js/vendor/esri-leaflet-basemaps.js.map') }}"></script>
+<script type="text/javascript" src="{{ url_for('bower.static', filename = 'leaflet/dist/leaflet.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('bower.static', filename='esri-leaflet/dist/esri-leaflet.js') }}"></script>
 {% endif %}
 
-<script type="text/javascript" src="{{ url_for('pubswh.static', filename = 'vendor/mapbox/mapbox.js/v2.1.6/mapbox.standalone.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('bower.static', filename = 'mapbox.js/mapbox.standalone.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('pubswh.static', filename = 'vendor/mapbox/leaflet-pip/leaflet-pip.min.js') }}"></script>
 
 
