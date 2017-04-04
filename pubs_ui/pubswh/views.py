@@ -5,7 +5,6 @@ from operator import itemgetter
 import sys
 
 import arrow
-import redis
 from requests import get
 import tablib
 
@@ -136,10 +135,8 @@ def index():
 
     except TypeError:
         pubs_records = []  # return an empty list recent_pubs_content is None (e.g. the service is down)
-    form = SearchForm(request.args)
     return render_template('pubswh/home.html',
-                           recent_publications=pubs_records,
-                           form=form)
+                           recent_publications=pubs_records)
 
 
 # contact form
@@ -464,17 +461,16 @@ def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
 @pubswh.route('/search', methods=['GET'])
 @cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def search_results():
-    form = SearchForm(request.args)
+    search_kwargs = dict(request.args)
 
-    parser = FlaskParser()
-    search_kwargs = parser.parse(search_args, request)
-    if search_kwargs.get('page_size') is None or search_kwargs.get('page_size') == '':
+    # Default paging parameters if not present or empty
+    if not search_kwargs.get('page_size'):
         search_kwargs['page_size'] = '25'
-    if search_kwargs.get('page') is None or search_kwargs.get('page') == '':
+    if not search_kwargs.get('page'): # Open search API uses page rather than page number which our API uses.
         search_kwargs['page'] = '1'
-    if (search_kwargs.get('page_number') is None or search_kwargs.get('page_number') == '') \
-            and search_kwargs.get('page') is not None:
-        search_kwargs['page_number'] = search_kwargs['page']
+    if not search_kwargs.get('page_number'):
+        search_kwargs['page_number'] = search_kwargs.get('page')
+
 
     sp = SearchPublications(search_url)
     search_results_response, resp_status_code = sp.get_pubs_search_results(
@@ -526,7 +522,7 @@ def search_results():
                            search_result_records=search_result_records,
                            pagination=pagination,
                            search_service_down=search_service_down,
-                           form=form, pub_url=pub_url)
+                           pub_url=pub_url)
 
 
 @pubswh.route('/site-map')

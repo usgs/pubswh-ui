@@ -23,13 +23,7 @@
 	                </section>
 	
 	                <section id="search" class="no-margin">
-                        {% if form.data.advanced == 'True' %}
-                            {% include 'pubswh/advanced_search_form.html' %}
-                            <span class="basic-advanced"><a  href="{{ request.base_url }}">Basic Search</a></span>
-                        {% else %}
-                            {% include 'pubswh/search_form.html' %}
-                            <span class="basic-advanced"><a href="{{ request.url }}?advanced=True">Advanced Search</a></span>
-                        {% endif %}
+						{% include 'pubswh/search_form.html' %}
 	                </section>
                 
 	                <aside id="new_pubs">
@@ -63,7 +57,7 @@
 
 {% block page_footer_script %}
 
-	{% if form.data.advanced == 'True' %}
+	{% if request.args.advanced == 'True' %}
 		{% include "pubswh/advanced_search_form_script.html" %}
 	{% endif %}
     <!-- This basically catches links that were built on the old search parameter url design, which was all in the "fragment" after the hash -->

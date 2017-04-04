@@ -9,13 +9,12 @@
 {% endblock head %}
 
 {% block page_style %}
-{% if request.args.map == 'True' %}
-	<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/mapbox.standalone.css') }}">
-{% endif %}
+	{% if request.args.map == 'True' %}
+		<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/mapbox.standalone.css') }}">
+	{% endif %}
 	<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/pagination.css') }}">
 	<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/leaflet.css') }}">
     <link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'vendor/Leaflet.draw/leaflet.draw.css') }}">
-
 {% endblock page_style %}
 
 {% block main %}
@@ -24,14 +23,9 @@
         <h1 class="search-results">Search Results</h1>
 
         <section id="search">
-            {% if form.data.advanced == 'True' %}
-                {% include 'pubswh/advanced_search_form.html' %}
-                <span class="basic-advanced"><a class="basic-advanced" href="{{ request.base_url }}?q={{ request.args['q'] }}">Basic Search</a></span>
-            {% else %}
-                {% include 'pubswh/search_form.html' %}
-                <span class="basic-advanced"><a href="{{ request.url }}&advanced=True">Advanced Search</a></span>
-            {% endif %}
+			{% include 'pubswh/search_form.html' %}
         </section>
+
         {% macro service_url(mimetype, disp_mimetype) %}
             <a href="{{ pub_url }}publication/?mimeType={{ mimetype }}{% for key, value in request.args.iteritems() %}{% if value|length > 0 and
             (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{{ disp_mimetype }}</a>
@@ -76,7 +70,7 @@
 {% endblock main %}
 {% block page_footer_script %}
 
-	{% if form.data.advanced == 'True' %}
+	{% if request.args.advanced == 'True' %}
 		{% include "pubswh/advanced_search_form_script.html" %}
 	{% endif %}
 	{% if request.args.map == 'True' %}
