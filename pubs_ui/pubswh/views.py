@@ -289,19 +289,19 @@ def other_resources():
 @pubswh.route('/browse/')
 @cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def browse_types():
-    types = get(pub_url+"/lookup/publicationtypes").json()
+    types = get(pub_url+"/lookup/publicationtypes", verify=verify_cert).json()
     return render_template('pubswh/browse_types.html', types=types)
 
 
 @pubswh.route('/browse/<pub_type>/')
 @cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def browse_subtypes(pub_type):
-    pub_types = get(pub_url+"/lookup/publicationtypes", params={'text': pub_type}).json()
+    pub_types = get(pub_url+"/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
     just_list_pubs = ['book', 'book chapter', 'pamphlet', 'patent', 'speech', 'thesis', 'videorecording', 'conference paper']
     if pub_type.lower() in pub_types_dict.keys():
         if pub_type.lower() in just_list_pubs:
-            pubs = get(pub_url + "publication/", params={"mimeType": "tsv", "typeName": pub_type})
+            pubs = get(pub_url + "publication/", params={"mimeType": "tsv", "typeName": pub_type}, verify=verify_cert)
             if pubs.text:
                 pubs_data = tablib.Dataset().load(pubs.content)
                 pubs_data_dict = pubs_data.dict
@@ -316,7 +316,7 @@ def browse_subtypes(pub_type):
                                        pubs_data=None)
         else:
             pub_subtypes = get(pub_url + "/lookup/publicationtype/" + str(pub_types_dict[pub_type.lower()]) +
-                               "/publicationsubtypes/").json()
+                               "/publicationsubtypes/", verify=verify_cert).json()
             return render_template('pubswh/browse_subtypes.html', pub_type=pub_type, subtypes=pub_subtypes)
     else:
         abort(404)
@@ -327,17 +327,17 @@ def browse_subtypes(pub_type):
 def browse_subtype(pub_type, pub_subtype):
     subtype_has_no_series = ['usgs data release', 'website', 'database-nonspatial', 'database-spatial', 'letter',
                              'newspaper article', 'review', 'other report', 'organization series', 'usgs unnumbered series' ]
-    pub_types = get(pub_url+"/lookup/publicationtypes", params={'text': pub_type}).json()
+    pub_types = get(pub_url+"/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
     if pub_type.lower() in pub_types_dict.keys():
         pub_subtypes = get(pub_url + "/lookup/publicationtype/" +
-                           str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/").json()
+                           str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/", verify=verify_cert).json()
         pub_subtypes_dict = {publication_subtype['text'].lower(): publication_subtype['id']
                              for publication_subtype in pub_subtypes}
         if pub_subtype.lower() in pub_subtypes_dict.keys():
             if pub_subtype.lower() in subtype_has_no_series:
                 pubs = get(pub_url + "publication/", params={"mimeType": "tsv", "typeName": pub_type,
-                                                             "subtypeName": pub_subtype})
+                                                             "subtypeName": pub_subtype}, verify=verify_cert)
                 if pubs.text:
                     pubs_data = tablib.Dataset().load(pubs.content)
                     pubs_data_dict = pubs_data.dict
@@ -355,7 +355,7 @@ def browse_subtype(pub_type, pub_subtype):
             else:
                 series_data = get(pub_url+"/lookup/publicationtype/"+
                                   str(pub_types_dict[pub_type.lower()])+"/publicationsubtype/"+
-                                  str(pub_subtypes_dict[pub_subtype.lower()])+"/publicationseries").json()
+                                  str(pub_subtypes_dict[pub_subtype.lower()])+"/publicationseries", verify=verify_cert).json()
                 return render_template('pubswh/browse_subtype.html',
                                        pub_type=pub_type, pub_subtype=pub_subtype, series_titles=series_data)
         else:
@@ -367,17 +367,17 @@ def browse_subtype(pub_type, pub_subtype):
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>/')
 @cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def browse_series(pub_type, pub_subtype, pub_series_name):
-    pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}).json()
+    pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
     if pub_type.lower() in pub_types_dict.keys():
         pub_subtypes = get(pub_url + "/lookup/publicationtype/" +
-                           str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/").json()
+                           str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/", verify=verify_cert).json()
         pub_subtypes_dict = {publication_subtype['text'].lower(): publication_subtype['id']
                              for publication_subtype in pub_subtypes}
         if pub_subtype.lower() in pub_subtypes_dict.keys():
             series_data = get(pub_url + "/lookup/publicationtype/" +
                               str(pub_types_dict[pub_type.lower()]) + "/publicationsubtype/" +
-                              str(pub_subtypes_dict[pub_subtype.lower()]) + "/publicationseries").json()
+                              str(pub_subtypes_dict[pub_subtype.lower()]) + "/publicationseries", verify=verify_cert).json()
             pub_series_dict = {publication_series['text'].lower(): publication_series['id']
                                  for publication_series in series_data}
             if pub_series_name.lower() in pub_series_dict.keys():
@@ -394,7 +394,7 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
                                            pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
                                            year_range=generate_years[pub_series_name.lower()])
                 pubs = get(pub_url+"publication/", params={"mimeType": "csv", "subtypeName": pub_subtype,
-                                                           "seriesName": pub_series_name, "typeName": pub_type})
+                                                           "seriesName": pub_series_name, "typeName": pub_type}, verify=verify_cert)
                 if pubs.text:
                     pubs_data = tablib.Dataset().load(pubs.content)
                     pubs_data_dict = pubs_data.dict
@@ -419,23 +419,23 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>/<year>/')
 @cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
-    pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}).json()
+    pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
     if pub_type.lower() in pub_types_dict.keys():
         pub_subtypes = get(pub_url + "/lookup/publicationtype/" +
-                           str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/").json()
+                           str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/", verify=verify_cert).json()
         pub_subtypes_dict = {publication_subtype['text'].lower(): publication_subtype['id']
                              for publication_subtype in pub_subtypes}
         if pub_subtype.lower() in pub_subtypes_dict.keys():
             series_data = get(pub_url + "/lookup/publicationtype/" +
                               str(pub_types_dict[pub_type.lower()]) + "/publicationsubtype/" +
-                              str(pub_subtypes_dict[pub_subtype.lower()]) + "/publicationseries").json()
+                              str(pub_subtypes_dict[pub_subtype.lower()]) + "/publicationseries", verify=verify_cert).json()
             pub_series_dict = {publication_series['text'].lower(): publication_series['id']
                                for publication_series in series_data}
             if pub_series_name.lower() in pub_series_dict.keys():
                 pubs = get(pub_url + "publication/", params={"mimeType": "csv", "subtypeName": pub_subtype,
                                                              "seriesName": pub_series_name, "typeName": pub_type,
-                                                             "year": year})
+                                                             "year": year}, verify=verify_cert)
                 if pubs.text:
                     pubs_data = tablib.Dataset().load(pubs.content)
                     pubs_data_dict = pubs_data.dict
