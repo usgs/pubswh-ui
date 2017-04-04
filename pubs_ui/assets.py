@@ -1,4 +1,6 @@
 
+import os
+
 from flask_assets import Environment, Bundle
 
 from . import app
@@ -10,7 +12,6 @@ base_metrics_js = Bundle(
 )
 bundles={
     'js_base_libs' : Bundle(
-        'pubswh/js/vendor/bootstrap.js',
         'pubswh/js/plugins.js',
         filters='rjsmin',
         output='gen/base_libs.js'
@@ -49,7 +50,6 @@ bundles={
     'css_base' : Bundle(
         'pubswh/css/normalize.css',
         'pubswh/css/main.css',
-        'pubswh/css/bootstrap.css',
         'pubswh/css/select2.css',
         'pubswh/css/select2-bootstrap.css',
         filters='cssmin',

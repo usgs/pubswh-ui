@@ -39,7 +39,12 @@
     "jquery-ui": "1.12.0",
     "loglevel": "1.4.1",
     "moment": "2.15.2",
-    "dygraphs": "1.1.1"
+    "dygraphs": "1.1.1",
+    "modernizer": "^2.8.2",
+    "leaflet": "^1.0.3",
+    "esri-leaflet": "^2.0.8",
+    "leaflet-draw": "^0.4.9",
+    "mapbox.js": "^2.4.0"
   },
   "resolutions": {
     "underscore": "1.8.3",
