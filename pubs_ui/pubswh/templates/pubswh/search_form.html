@@ -1,6 +1,6 @@
 
-<form action="{{ url_for('pubswh.search_results') }}" method="get">
-	<div class="form-group has-feedback">
+<form id="search-pubs-form" action="{{ url_for('pubswh.search_results') }}" method="get">
+	<div class="form-group">
 		<label for="q-text">Search for Publications</label>
 		<div class="input-group">
 			<span class="input-group-btn">
@@ -10,11 +10,14 @@
 			<span class="form-control-feedback"><i class="fa fa-search"></i></span>
 		</div>
 	</div>
+	<div class="form-horizontal advanced-search-container"></div>
 
-	<button type="submit" class="btn btn-default">Search</button>
-	<select>
+	<button type="submit" class="btn btn-primary">Search</button>
+	<select class="search-category-select">
+		<option>Pick search category</option>
 		<option value="title" data-input-type="text">Title</option>
 		<option value="typeName" data-input-type="select" data-lookup="publicationtypes">Publication Type</option>
 	</select>
+	<button class="add-search-category" disabled type="button" class="btn btn-default">Add search category</button>
 
 </form>

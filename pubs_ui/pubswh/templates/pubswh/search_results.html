@@ -70,9 +70,7 @@
 {% endblock main %}
 {% block page_footer_script %}
 
-	{% if form.data.advanced == 'True' %}
-		{% include "pubswh/advanced_search_form_script.html" %}
-	{% endif %}
+	{% include "pubswh/advanced_search_form_script.html" %}
 	{% if request.args.map == 'True' %}
             {% include 'pubswh/search_results_map_script.html' %}
     {% endif %}

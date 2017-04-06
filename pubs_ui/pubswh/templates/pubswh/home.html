@@ -57,9 +57,7 @@
 
 {% block page_footer_script %}
 
-	{% if request.args.advanced == 'True' %}
-		{% include "pubswh/advanced_search_form_script.html" %}
-	{% endif %}
+	{% include "pubswh/advanced_search_form_script.html" %}
     <!-- This basically catches links that were built on the old search parameter url design, which was all in the "fragment" after the hash -->
     <script type="text/javascript">
     			//grab the contents of the fragment

@@ -3,6 +3,8 @@
 <script type="text/javascript" src="{{ url_for('bower.static', filename = 'leaflet-draw/dist/leaflet.draw.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('pubswh.static', filename = 'vendor/Wicket/wicket.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('pubswh.static', filename = 'vendor/Wicket/wicket-leaflet.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('bower.static', filename='handlebars/handlebars.js') }}"></script>
+
 
  {% assets "js_advanced_search" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
@@ -28,7 +30,9 @@
         	placeholder: "Choose a Contributing Office" ,
         	allowClear: true
     	});
-    	
-    	var map = PUBS_WH.createSearchMap('search-map-div', 'g');
+
+        if ($('#search-map-div').length) {
+			var map = PUBS_WH.createSearchMap('search-map-div', 'g');
+		}
     });
 </script>
