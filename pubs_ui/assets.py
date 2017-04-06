@@ -18,7 +18,7 @@ bundles={
     'js_advanced_search' : Bundle(
         'pubswh/js/searchMap.js',
         'pubswh/js/clearFeatureControl.js',
-        'pubswh/js/searchForm.js',
+        'pubswh/js/advancedSearchForm.js',
         'pubswh/js/searchFormOnReady.js',
         filters='rjsmin',
         output='gen/advanced_search.js'

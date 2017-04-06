@@ -68,7 +68,7 @@ PUBS_WH.advancedSearchForm = function(options) {
 
 					lookupDeferred.resolve();
 				},
-				error : function() {
+				error : function(jqXHR) {
 					console.log('Lookup did not succeed. Select will be empty');
 					lookupDeferred.resolve();
 				}
@@ -97,7 +97,9 @@ PUBS_WH.advancedSearchForm = function(options) {
 	};
 
 	//Initialize row
-	options.initialRows.forEach(self.addRow);
+	if (options.initialRows) {
+		options.initialRows.forEach(self.addRow);
+	}
 
 	return self;
 };
