@@ -37,7 +37,8 @@ describe('PUBS_WH.advancedSearchForm', function() {
 			var row = {
 				name: 'param1',
 				displayName: 'Param 1',
-				inputType: 'text'
+				inputType: 'text',
+				placeholder: 'Enter param'
 			};
 			var $text;
 			advancedSearchForm.addRow(row);
@@ -46,6 +47,7 @@ describe('PUBS_WH.advancedSearchForm', function() {
 			$text = $testDiv.find('input[type="text"]');
 			expect($text.length).toEqual(1);
 			expect($text.attr('name')).toEqual('param1');
+			expect($text.attr('placeholder')).toEqual('Enter param');
 			expect($testDiv.find('label').html()).toContain('Param 1');
 		});
 
@@ -67,7 +69,8 @@ describe('PUBS_WH.advancedSearchForm', function() {
 				name: 'param1',
 				displayName: 'Param 1',
 				inputType: 'select',
-				lookup: 'kind1'
+				lookup: 'kind1',
+				placeholder: 'Param 1'
 			};
 			var $select;
 			fakeServer.respondWith([200, {"Content-Type": "application/json"}, '[{"id": "1", "text": "T1"}, {"id": "2", "text": "T2"}]']);
@@ -81,6 +84,7 @@ describe('PUBS_WH.advancedSearchForm', function() {
 			expect($testDiv.children().length).toEqual(1);
 			$select = $testDiv.find('select');
 			expect($select.length).toBe(1);
+			expect($select.find('option:first-child').html()).toEqual('Param 1');
 			expect($select.find('option[value="T1"]').length).toEqual(1);
 			expect($select.find('option[value="T2"]').length).toEqual(1);
 		});
@@ -122,6 +126,8 @@ describe('PUBS_WH.advancedSearchForm', function() {
 			expect($lastInput.attr('type')).toEqual('text');
 			expect($lastInput.attr('name')).toEqual('param2');
 		});
+
+		//TODO: Add test for delete-row
 	});
 
 	describe("Tests with initialRows", function() {

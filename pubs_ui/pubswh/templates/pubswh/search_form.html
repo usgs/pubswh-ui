@@ -10,14 +10,22 @@
 			<span class="form-control-feedback"><i class="fa fa-search"></i></span>
 		</div>
 	</div>
-	<div class="form-horizontal advanced-search-container"></div>
-
 	<button type="submit" class="btn btn-primary">Search</button>
 	<select class="search-category-select">
 		<option>Pick search category</option>
-		<option value="title" data-input-type="text">Title</option>
-		<option value="typeName" data-input-type="select" data-lookup="publicationtypes">Publication Type</option>
+		<option value="title" data-input-type="text" data-placeholder="enter title">Title</option>
+		<option value="contributingOffice" data-input-type="select" data-lookup="costcenters" data-placeholder="Choose a Contributing Office">Contributing Office</option>
+		<option value="contributor" data-input-type="text" data-placeholder="Name of part of name">Contributor Name</option>
+		<option value="orcid" data-input-type="url" data-placeholder="ORCID as a URL">ORCID</option>
+		<option value="year" data-input-type="text" data-placeholder="e.g. 2014">Year Published</option>
+		<option value="startYear" data-input-type="text" data-placeholder="e.g. 1994">Published starting in</option>
+		<option value="endYear" data-input-type="text" data-placeholder="e.g. 2012">Published in or before</option>
+		<option value="typeName" data-input-type="select" data-lookup="publicationtypes" data-placeholder="Choose a Publication Type">Publication Type</option>
+		<option value="subtypeName" data-input-type="select" data-lookup="publicationsubtypes" data-placeholder="Choose a Publication Subtype">Publication Subtype</option>
+		<option value="seriesName" data-input-type="select" data-lookup="publicationseries" data-placeholder="Choose a Series Name or Journal Title">Series Name</option>
+		<option value="reportNumber" data-input-type="text" data-placeholder="e.g. 2014-3113">Report Number</option>
+		<option value="g" data-input-type="map">Area of Intereset</option>
 	</select>
 	<button class="add-search-category" disabled type="button" class="btn btn-default">Add search category</button>
-
+	<div class="form-horizontal advanced-search-container"></div>
 </form>

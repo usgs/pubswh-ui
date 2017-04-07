@@ -307,19 +307,12 @@ article{padding:0 10px;}
 			cursor:pointer;
 			display:inline;}
 			
-#search-map-label {
-	display:block;
-    margin:0 0 5px 0;
-	font-size:1.2em;
-	font-weight: bold;	
-}
-			
-#search-map-div {
+.search-form-map-div {
 	height: 400px;
 	margin: 0 0 15px 0;
 }
 			
-#search-map-div .leaflet-control label {
+#search-form-map-div .leaflet-control label {
 	font-weight: normal;
 }
 			

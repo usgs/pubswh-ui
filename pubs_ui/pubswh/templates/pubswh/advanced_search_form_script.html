@@ -10,29 +10,4 @@
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
  {% endassets %}
 
-
-
-<script type="text/javascript">    
-    $(document).ready(function() {
-  		$('#typeName').select2({
-        	placeholder: "Choose a Publication Type" ,
-        	allowClear: true
-    	});
-        $('#subtypeName').select2({
-        	placeholder: "Choose a Publication Subtype" ,
-        	allowClear: true
-    	});
-        $('#seriesName').select2({
-        	placeholder: "Choose a Series Name or Journal Title" ,
-        	allowClear: true
-    	});
-        $('#contributingOffice').select2({
-        	placeholder: "Choose a Contributing Office" ,
-        	allowClear: true
-    	});
-
-        if ($('#search-map-div').length) {
-			var map = PUBS_WH.createSearchMap('search-map-div', 'g');
-		}
-    });
 </script>

@@ -15,6 +15,7 @@ var PUBS_WH = PUBS_WH || {};
  * 			@prop {String} displayName - to be used to identify the input
  * 			@prop {String} inputType - can be any valid html5 input type or select
  * 			@prop {String} value - The value for this input.
+ * 			@prop {String} placeholder (optional) - Will be used as placeholder text
  * 			@prop {String} lookup (optional) - Used for select inputType to fill in the options via the lookup web service
  * 	@returns {Object}
  * 		@prop {Function} addRow - takes single object parameter which has the same properties as the objects in initialRows
@@ -30,14 +31,20 @@ PUBS_WH.advancedSearchForm = function(options) {
 		'<span class="fa fa-minus-circle delete-row"></span>' +
 		'<label class="">{{row.displayName}}:</label>' +
 		'</div>' +
+		'{{#if mapId}}' +
+		'<div class="col-sm-12 search-form-map-div" id="{{mapId}}"></div>' +
+		'<input type="hidden" name="{{row.name}}" value="{{row.value}}" />' +
+		'{{else}}' +
 		'<div class="col-sm-8">' +
 		'{{#if isSelect}}<select class="form-control" name="{{row.name}}">' +
+			'<option>{{row.placeholder}}</option>' +
 		'{{#each options}}<option {{#if selected }}selected{{/if}} value="{{text}}">{{text}}</option>{{/each}}' +
 		'</select>' +
 		'{{else}}' +
-		'<input class="form-control" type="{{row.inputType}}" name="{{row.name}}" value="{{row.value}}" />' +
+		'<input class="form-control" type="{{row.inputType}}" name="{{row.name}}" value="{{row.value}}" placeholder="{{row.placeholder}}"/>' +
 		'{{/if}}' +
 		'</div>' +
+		'{{/if}}' +
 		'</div>';
 
 	var rowTemplate = Handlebars.compile(ROW_HTML);
@@ -49,6 +56,7 @@ PUBS_WH.advancedSearchForm = function(options) {
 	 * 		@prop {String} displayName - to be used to identify the input
 	 * 		@prop {String} inputType - can be any valid html5 input type or select
  	 * 		@prop {String} value (optional) - The value for this input.
+	 * 		@prop {String} placeholder (optional) - Will be used as placeholder text
  	 * 		@prop {String} lookup (optional) - Used for select inputType to fill in the options via the lookup web service
 	 */
 	self.addRow = function(row) {
@@ -81,16 +89,23 @@ PUBS_WH.advancedSearchForm = function(options) {
 		lookupDeferred.done(function() {
 			var context = {
 				isSelect : row.inputType === 'select',
+				mapId: (row.inputType === "map") ? 'map-name-' + row.name : '',
 				row : row,
 				options : lookupOptions
 			};
+			var $row;
+
 			options.$container.append(rowTemplate(context));
+			$row = options.$container.children('div:last-child');
 			if (context.isSelect) {
-				options.$container.find('select[name="' + context.row.name + '"]').select2();
+				$row.find('select').select2();
 			}
-			$('.delete-row').click(function() {
+			$row.find('.delete-row').click(function() {
 				$(this).parents('.form-group').remove();
 			});
+			if (context.mapId) {
+				PUBS_WH.createSearchMap(context.mapId, $row.find('input'));
+			}
 		});
 
 

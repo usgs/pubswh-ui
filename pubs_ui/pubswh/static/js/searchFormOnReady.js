@@ -22,6 +22,7 @@ $(document).ready(function() {
 					displayName: $thisOption.html(),
 					inputType: $thisOption.data('input-type'),
 					value: value,
+					placeholder: $thisOption.data('placeholder'),
 					lookup: $thisOption.data('lookup')
 				});
 			}
@@ -44,6 +45,7 @@ $(document).ready(function() {
 			name: $selectedOption.val(),
 			displayName: $selectedOption.html(),
 			inputType: $selectedOption.data('inputType'),
+			placeholder: $selectedOption.data('placeholder'),
 			lookup: $selectedOption.data('lookup')
 		});
 	});
