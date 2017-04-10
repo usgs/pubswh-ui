@@ -31,6 +31,7 @@ $(document).ready(function() {
 
 	advancedSearchForm = PUBS_WH.advancedSearchForm ({
 		$container : $form.find('.advanced-search-container'),
+		$mapContainer: $form.find('.map-search-container'),
 		initialRows : initialSearchRows
 	});
 

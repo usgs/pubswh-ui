@@ -10,6 +10,7 @@ var PUBS_WH = PUBS_WH || {};
  * Initially creates inputs to be be used for the advanced search form.
  * @param {Object} options
  * 		@prop {Jquery element} $container - Where the advanced search rows will be added
+ * 		@prop {Jquery element} $mapContainer - Where the map inputs will be added
  * 		@prop {Array of Objects} initialRows - Each object will contain the following properties
  * 			@prop {String} name - to be used for the name attribute when creating the input
  * 			@prop {String} displayName - to be used to identify the input
@@ -31,23 +32,27 @@ PUBS_WH.advancedSearchForm = function(options) {
 		'<span class="fa fa-minus-circle delete-row"></span>' +
 		'<label class="">{{row.displayName}}:</label>' +
 		'</div>' +
-		'{{#if mapId}}' +
-		'<div class="col-sm-12 search-form-map-div" id="{{mapId}}"></div>' +
-		'<input type="hidden" name="{{row.name}}" value="{{row.value}}" />' +
-		'{{else}}' +
 		'<div class="col-sm-8">' +
 		'{{#if isSelect}}<select class="form-control" name="{{row.name}}">' +
-			'<option>{{row.placeholder}}</option>' +
-		'{{#each options}}<option {{#if selected }}selected{{/if}} value="{{text}}">{{text}}</option>{{/each}}' +
+			'<option value="">{{row.placeholder}}</option>' +
 		'</select>' +
 		'{{else}}' +
 		'<input class="form-control" type="{{row.inputType}}" name="{{row.name}}" value="{{row.value}}" placeholder="{{row.placeholder}}"/>' +
 		'{{/if}}' +
 		'</div>' +
-		'{{/if}}' +
 		'</div>';
 
+	var MAP_HTML =
+		'<div class="form-group">' +
+		'<div class="col-sm-12 search-form-map-div" id="{{mapId}}"></div>' +
+		'<input type="hidden" name="{{row.name}}" value="{{row.value}}" />' +
+		'</div>';
+
+	var OPTION_HTML = '{{#each options}}<option {{#if selected }}selected{{/if}} value="{{text}}">{{text}}</option>{{/each}}';
+
 	var rowTemplate = Handlebars.compile(ROW_HTML);
+	var mapTemplate = Handlebars.compile(MAP_HTML);
+	var optionTemplate = Handlebars.compile(OPTION_HTML);
 
 	/*
 	 * Adds an input to options.$container. Takes the information in row to create the specified input
@@ -61,6 +66,7 @@ PUBS_WH.advancedSearchForm = function(options) {
 	 */
 	self.addRow = function(row) {
 		var lookupDeferred = $.Deferred();
+		var addRowDeferred = $.Deferred();
 		var lookupOptions = [];
 
 		if ((row.inputType === 'select') && row.lookup) {
@@ -82,33 +88,31 @@ PUBS_WH.advancedSearchForm = function(options) {
 				}
 			});
 		}
-		else {
-			lookupDeferred.resolve();
-		}
 
-		lookupDeferred.done(function() {
-			var context = {
-				isSelect : row.inputType === 'select',
-				mapId: (row.inputType === "map") ? 'map-name-' + row.name : '',
-				row : row,
-				options : lookupOptions
-			};
-			var $row;
+		var context = {
+			isSelect : row.inputType === 'select',
+			mapId: (row.inputType === "map") ? 'map-name-' + row.name : '',
+			row : row
+		};
+		var $row;
 
+		if (context.mapId) {
+			options.$mapContainer.append(mapTemplate(context));
+			$row = options.$mapContainer.children('div:last-child');
+			PUBS_WH.createSearchMap(context.mapId, $row.find('input'));
+		} else {
 			options.$container.append(rowTemplate(context));
 			$row = options.$container.children('div:last-child');
-			if (context.isSelect) {
-				$row.find('select').select2();
-			}
-			$row.find('.delete-row').click(function() {
-				$(this).parents('.form-group').remove();
-			});
-			if (context.mapId) {
-				PUBS_WH.createSearchMap(context.mapId, $row.find('input'));
-			}
+		}
+
+
+		$row.find('.delete-row').click(function() {
+			$(this).parents('.form-group').remove();
 		});
-
-
+		lookupDeferred.done(function() {
+			$row.find('select').append(optionTemplate({options: lookupOptions}));
+			$row.find('select').select2();
+		});
 	};
 
 	//Initialize row

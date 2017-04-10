@@ -1,18 +1,19 @@
 /* jslint browser: true */
 /* global $ */
 /* global PUBS_WH */
-/* global describe, beforeEach, afterEach, it, expect, sinon */
+/* global describe, beforeEach, afterEach, it, expect, sinon, spyOn */
 
 describe('PUBS_WH.advancedSearchForm', function() {
 	"use strict";
 
-	var $testDiv;
+	var $testDiv, $mapDiv;
 	var fakeServer;
 	var advancedSearchForm;
 
 	beforeEach(function() {
-		$('body').append('<div id="test-div"></div>');
+		$('body').append('<div id="test-div"></div><div id="map-div"></div>');
 		$testDiv = $('#test-div');
+		$mapDiv = $('#map-div');
 
 		fakeServer = sinon.fakeServer.create();
 	});
@@ -20,17 +21,20 @@ describe('PUBS_WH.advancedSearchForm', function() {
 	afterEach(function() {
 		fakeServer.restore();
 		$testDiv.remove();
+		$mapDiv.remove();
 	});
 
 	describe('Test with no initialRows', function() {
 		beforeEach(function() {
 			advancedSearchForm = PUBS_WH.advancedSearchForm({
-				$container: $testDiv
+				$container: $testDiv,
+				$mapContainer : $mapDiv
 			});
 		});
 
-		it('Expects that the test-div will be empty', function() {
+		it('Expects that the test-div and map-div will be empty', function() {
 			expect($testDiv.html()).toEqual('');
+			expect($mapDiv.html()).toEqual('');
 		});
 
 		it('Expect that calling addRow with a text input adds a text input row', function() {
@@ -64,7 +68,7 @@ describe('PUBS_WH.advancedSearchForm', function() {
 		});
 
 
-		it('Expects that calling addRow with a select inputType and a lookup makes a web service call but does not render the row until it is successful', function() {
+		it('Expects that calling addRow with a select inputType and a lookup makes a web service call but does not add the options until it is successful', function() {
 			var row = {
 				name: 'param1',
 				displayName: 'Param 1',
@@ -76,14 +80,14 @@ describe('PUBS_WH.advancedSearchForm', function() {
 			fakeServer.respondWith([200, {"Content-Type": "application/json"}, '[{"id": "1", "text": "T1"}, {"id": "2", "text": "T2"}]']);
 			advancedSearchForm.addRow(row);
 
-			expect($testDiv.children().length).toEqual(0);
-			expect(fakeServer.requests.length).toEqual(1);
-			expect(fakeServer.requests[0].url).toContain('kind1');
-
-			fakeServer.respond();
 			expect($testDiv.children().length).toEqual(1);
 			$select = $testDiv.find('select');
-			expect($select.length).toBe(1);
+			expect(fakeServer.requests.length).toEqual(1);
+			expect(fakeServer.requests[0].url).toContain('kind1');
+			expect($select.find('option').length).toEqual(1);
+
+			fakeServer.respond();
+			expect($select.find('option').length).toBe(3);
 			expect($select.find('option:first-child').html()).toEqual('Param 1');
 			expect($select.find('option[value="T1"]').length).toEqual(1);
 			expect($select.find('option[value="T2"]').length).toEqual(1);
@@ -103,7 +107,23 @@ describe('PUBS_WH.advancedSearchForm', function() {
 
 			$select=$testDiv.find('select');
 			expect($select.length).toEqual(1);
-			expect($select.find('option[value]').length).toEqual(0);
+			expect($select.find('option').length).toEqual(1);
+		});
+
+		it('Expects that calling addRow with a "map" inputType makes a call to create the search map and creates a hidden input', function() {
+			var row = {
+				name: 'map1',
+				displayName: 'Map 1',
+				inputType: 'map'
+			};
+			var $input;
+			spyOn(PUBS_WH, 'createSearchMap');
+			advancedSearchForm.addRow(row);
+			$input = $mapDiv.find('input:hidden');
+
+			expect($input.length).toEqual(1);
+			expect($input.attr('name')).toEqual('map1');
+			expect(PUBS_WH.createSearchMap).toHaveBeenCalled();
 		});
 
 		it('Expects that clicking on that calling addRow a second time adds the second row to the bottom of the div', function() {
@@ -131,7 +151,7 @@ describe('PUBS_WH.advancedSearchForm', function() {
 	});
 
 	describe("Tests with initialRows", function() {
-		beforeEach(function() {
+		beforeEach(function(done) {
 			var initialRows = [
 				{
 					name: 'param1',
@@ -144,28 +164,43 @@ describe('PUBS_WH.advancedSearchForm', function() {
 					inputType: 'select',
 					lookup: 'kind1',
 					value: 'T2'
+				}, {
+					name: 'map1',
+					displayName: 'Map 1',
+					inputType: 'map',
+					value: 'POLYGON((-91 39,-89 39,-89 37,-91 37,-91 39))'
 				}
 			];
 			fakeServer.respondWith([200, {"Content-Type": "application/json"}, '[{"id": "1", "text": "T1"}, {"id": "2", "text": "T2"}]']);
+			spyOn(PUBS_WH, 'createSearchMap');
 
 			advancedSearchForm = PUBS_WH.advancedSearchForm({
 				$container: $testDiv,
+				$mapContainer: $mapDiv,
 				initialRows: initialRows
 			});
 			fakeServer.respond();
+			setTimeout(done, 1000); // This gives the code time to respond to the fakeServer.
 		});
 
-		it('Expects that two rows are added with the correct input type and initial value', function() {
+		it('Expects that three rows are added with the correct input type and initial value', function() {
 			var $rows = $testDiv.children();
-			var $input1, $input2;
+			var $maprows = $mapDiv.children();
+			var $text, $select, $map;
 
 			expect($rows.length).toEqual(2);
-			$input1 = $rows.eq(0).find('input');
-			$input2 = $rows.eq(1).find('select');
-			expect($input1.attr('name')).toEqual('param1');
-			expect($input1.val()).toEqual('This');
-			expect($input2.attr('name')).toEqual('param2');
-			expect($input2.val()).toEqual('T2');
+			expect($maprows.length).toEqual(1);
+			$text = $rows.find('input[type="text"]');
+			$select = $rows.find('select');
+			$map = $maprows.find('input[type="hidden"]');
+
+			expect($text.attr('name')).toEqual('param1');
+			expect($text.val()).toEqual('This');
+			expect($select.attr('name')).toEqual('param2');
+			expect($select.find('option:selected').val()).toEqual('T2');
+			expect(PUBS_WH.createSearchMap).toHaveBeenCalled();
+			expect($map.attr('name')).toEqual('map1');
+			expect($map.val()).toEqual('POLYGON((-91 39,-89 39,-89 37,-91 37,-91 39))');
 		});
 	});
 
