@@ -30,6 +30,7 @@ describe('PUBS_WH.advancedSearchForm', function() {
 				$container: $testDiv,
 				$mapContainer : $mapDiv
 			});
+			spyOn(PUBS_WH, 'createSearchMap');
 		});
 
 		it('Expects that the test-div and map-div will be empty', function() {
@@ -117,7 +118,6 @@ describe('PUBS_WH.advancedSearchForm', function() {
 				inputType: 'map'
 			};
 			var $input;
-			spyOn(PUBS_WH, 'createSearchMap');
 			advancedSearchForm.addRow(row);
 			$input = $mapDiv.find('input:hidden');
 
@@ -147,7 +147,47 @@ describe('PUBS_WH.advancedSearchForm', function() {
 			expect($lastInput.attr('name')).toEqual('param2');
 		});
 
-		//TODO: Add test for delete-row
+		it('Expects that clicking on a non-map row removes that remove from the DOM', function() {
+			var row = {
+				name: 'param1',
+				displayName: 'Param 1',
+				inputType: 'text'
+			};
+			var $rowToRemove;
+			advancedSearchForm.addRow(row);
+			row = {
+				name: 'param2',
+				displayName: 'Param 2',
+				inputType: 'text'
+			};
+			advancedSearchForm.addRow(row);
+			$rowToRemove = $testDiv.children().has('input[name="param1"]');
+			$rowToRemove.find('.delete-row').click();
+
+			expect($testDiv.find('input[name="param1"]').length).toEqual(0);
+			expect($testDiv.find('input[name="param2"]').length).toEqual(1);
+		});
+
+		it('Expects that clicking on a map row remove the map from the DOM', function() {
+			var row = {
+				name: 'param1',
+				displayName: 'Param 1',
+				inputType: 'text'
+			};
+			var $rowToRemove;
+			advancedSearchForm.addRow(row);
+			row = {
+				name: 'param2',
+				displayName: 'Param 2',
+				inputType: 'map'
+			};
+			advancedSearchForm.addRow(row);
+			$rowToRemove = $mapDiv.children().has('input[name="param2"]');
+			$rowToRemove.find('.delete-row').click();
+
+			expect($testDiv.find('input[name="param1"]').length).toEqual(1);
+			expect($mapDiv.find('input[name="param2"]').length).toEqual(0);
+		});
 	});
 
 	describe("Tests with initialRows", function() {

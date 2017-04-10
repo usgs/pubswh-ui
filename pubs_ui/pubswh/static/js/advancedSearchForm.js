@@ -44,6 +44,10 @@ PUBS_WH.advancedSearchForm = function(options) {
 
 	var MAP_HTML =
 		'<div class="form-group">' +
+		'<div class="col-sm-3">' +
+		'<span class="fa fa-minus-circle delete-row"></span>' +
+		'<label class="">{{row.displayName}}:</label>' +
+		'</div>' +
 		'<div class="col-sm-12 search-form-map-div" id="{{mapId}}"></div>' +
 		'<input type="hidden" name="{{row.name}}" value="{{row.value}}" />' +
 		'</div>';
