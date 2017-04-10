@@ -415,12 +415,14 @@ def concatenate_contributor_names(contributors):
 
 
 def jsonify_geojson(record):
+    #TODO: Refactor this to make more DRY
     """
     turns the stringified geojson into a python dictionary that can be dumped as valid geojson
     :param record:
-    :return record with geojson in geographicExtents:
+    :return geojson dictionary
     """
     geojson = record.get('geographicExtents')
+    result = None
     if geojson is not None:
         try:
             geojson = json.loads(geojson)
@@ -434,7 +436,7 @@ def jsonify_geojson(record):
                                              'year': record.get('publicationYear'),
                                              'info': display_publication_info(record)
                                              }
-                record['geographicExtents'] = geojson
+                result = geojson
             elif geojson.get('geometry'):
                 geojson["properties"] = {'title': record.get('title'),
                                              'id': record.get('indexId'),
@@ -445,12 +447,11 @@ def jsonify_geojson(record):
                 feature_collection = {"type": "FeatureCollection",
                                       "features": [geojson]
                                       }
-                record['geographicExtents'] = feature_collection
+                result = feature_collection
 
         except Exception as e:
             app.logger.info("Prod ID "+str(record['id'])+" geographicExtents json parse error: "+str(e))
-            del record['geographicExtents']
-    return record
+    return result
 
 
 def create_store_info(publication_resp):

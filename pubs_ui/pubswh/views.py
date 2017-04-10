@@ -495,11 +495,13 @@ def search_results():
         pagination = None
         search_service_down = 'The backend services appear to be down with a {0} status.'.format(resp_status_code)
         result_summary = {}
-    if 'mimetype' in request.args and request.args.get("mimetype") == 'ris':
+
+    mimetype = request.args.get('mimetype', '')
+    if mimetype == 'ris':
         content = render_template('pubswh/ris_output.ris', search_result_records=search_result_records)
-        return Response(content, mimetype="application/x-research-info-systems",
+        response = Response(content, mimetype="application/x-research-info-systems",
                                headers={"Content-Disposition":"attachment;filename=PubsWarehouseResults.ris"})
-    if 'mimetype' in request.args and request.args.get("mimetype") == 'sbjson':
+    elif mimetype == 'sbjson':
         sciencebase_records = []
         for record in search_result_records:
             sb_record = generate_sb_data(record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
@@ -511,18 +513,21 @@ def search_results():
             "recordCount": search_results_response['recordCount'],
             "records": sciencebase_records,
         }
-        return jsonify(sb_response)
+        response = jsonify(sb_response)
 
-    if request.args.get('map') == 'True':
-        for record in search_result_records:
-            record = jsonify_geojson(record)
+    else:
+        if request.args.get('map') == 'True':
+            for record in search_result_records:
+                record['geographicExtents'] = jsonify_geojson(record)
 
-    return render_template('pubswh/search_results.html',
-                           result_summary=result_summary,
-                           search_result_records=search_result_records,
-                           pagination=pagination,
-                           search_service_down=search_service_down,
-                           pub_url=pub_url)
+        response = render_template('pubswh/search_results.html',
+                                   result_summary=result_summary,
+                                   search_result_records=search_result_records,
+                                   pagination=pagination,
+                                   search_service_down=search_service_down,
+                                   pub_url=pub_url)
+
+    return response
 
 
 @pubswh.route('/site-map')
@@ -617,7 +622,7 @@ def legacy_search(series_code=None, report_number=None, pub_year=None):
             pub_year = ''.join(['19', pub_year])
         elif int(pub_year) < 30:
             pub_year = ''.join(['20', pub_year])
-        return redirect(url_for('pubswh.search_results', q=series_code+" "+report_number, year=pub_year, advanced=True))
+        return redirect(url_for('pubswh.search_results', q=series_code+" "+report_number, year=pub_year))
 
     return redirect(url_for('pubswh.search_results', q=series_code+" "+report_number))
 
