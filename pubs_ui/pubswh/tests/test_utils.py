@@ -221,8 +221,8 @@ class GenerateScienceBaseData(unittest.TestCase):
                          'tableOfContents': None}],
              "parentId": app.config['SCIENCEBASE_PARENT_UUID']
              }
-        self.assertEqual(generate_sb_data(simple_pubsdata, self.__class__.replace_pubs_with_pubs_test,
-                         self.__class__.supersedes_url, self.__class__.json_ld_id_base_url), expected_sbdata)
+        self.assertEqual(generate_sb_data(simple_pubsdata, self.replace_pubs_with_pubs_test,
+                         self.supersedes_url, self.json_ld_id_base_url), expected_sbdata)
 
 
 class CreateStoreInfoTestCase(unittest.TestCase):

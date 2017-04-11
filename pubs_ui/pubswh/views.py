@@ -518,7 +518,11 @@ def search_results():
     else:
         if request.args.get('map') == 'True':
             for record in search_result_records:
-                record['geographicExtents'] = jsonify_geojson(record)
+                geojson = jsonify_geojson(record)
+                if geojson:
+                    record['geographicExtents'] = geojson
+                else:
+                    del record['geographicExtents']
 
         response = render_template('pubswh/search_results.html',
                                    result_summary=result_summary,

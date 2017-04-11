@@ -648,7 +648,7 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     pubdata = manipulate_doi_information(pubdata)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
-    pubdata = jsonify_geojson(pubdata)
+    pubdata['geographicExtents'] = jsonify_geojson(pubdata)
     pubdata = make_chapter_data_for_display(pubdata)
     pubdata['formattedModifiedDateTime'] = arrow.get(pubdata['lastModifiedDate']).format('MMMM DD, YYYY HH:mm:ss')
     pubdata = munge_abstract(pubdata)

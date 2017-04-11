@@ -264,7 +264,8 @@ def imitation_geojson(step):
 
 @step(r'I make a record with parsable json')
 def make_json(step):
-    world.output = jsonify_geojson(world.body)
+    world.output = world.body
+    world.output['geographicExtents'] = jsonify_geojson(world.body)
     world.expected_output = {'geographicExtents': {u'features': [{u'geometry': {u'coordinates': [[[-72.745833,
                                                                        44.0625],
                                                                       [-72.745833,
@@ -297,15 +298,6 @@ def test_geojson_output(step):
 @step(r'we have created a fake pubs record with an invalid geographic extents string')
 def imitation_bad_geojson(step):
     world.body = {'id': 12345, "geographicExtents": '{ "type": "FeatureCollection",  "features": [ { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [ [ [ -72.745833,44.0625 ], [ -72.745833,44.075 ], [ -72.741667,44.075 ], [ -72.741667,44.0625 ], [ -72.745833,44.0625 ] ] ] } } ] '}
-
-@step(r'I try to make a record with parseable json and catch an error')
-def make_json(step):
-    world.output = jsonify_geojson(world.body)
-    world.expected_output = {'id': 12345}
-
-@step(r'I see the record has geographicExtents dropped')
-def test_geojson_output(step):
-    assert_equal(world.output, world.expected_output)
 
 
 """
