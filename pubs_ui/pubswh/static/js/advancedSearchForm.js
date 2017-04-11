@@ -14,7 +14,7 @@ var PUBS_WH = PUBS_WH || {};
  * 		@prop {Array of Objects} initialRows - Each object will contain the following properties
  * 			@prop {String} name - to be used for the name attribute when creating the input
  * 			@prop {String} displayName - to be used to identify the input
- * 			@prop {String} inputType - can be any valid html5 input type or select
+ * 			@prop {String} inputType - can be any valid html5 input type, select, map, or boolean
  * 			@prop {String} value - The value for this input.
  * 			@prop {String} placeholder (optional) - Will be used as placeholder text
  * 			@prop {String} lookup (optional) - Used for select inputType to fill in the options via the lookup web service
@@ -34,8 +34,19 @@ PUBS_WH.advancedSearchForm = function(options) {
 		'</div>' +
 		'<div class="col-sm-8">' +
 		'{{#if isSelect}}<select class="form-control" name="{{row.name}}">' +
-			'<option value="">{{row.placeholder}}</option>' +
+		'<option value="">{{row.placeholder}}</option>' +
+		'{{#if isBoolean}}' +
+		'<option value="true" {{#if isTrue}}selected{{/if}}>True</option>' +
+		'<option value="false" {{#if isFalse}}selected{{/if}}>False</option>' +
+		'{{/if}}' +
 		'</select>' +
+		'{{else if isDate}}' +
+		'<div class="input-group date">' +
+		'<input type="text" name="{{row.name}}" value="{{row.value}}" class="form-control" />' +
+		'<span class="input-group-addon">' +
+		'<i class="fa fa-calendar"></i>' +
+		'</span>' +
+		'</div>' +
 		'{{else}}' +
 		'<input class="form-control" type="{{row.inputType}}" name="{{row.name}}" value="{{row.value}}" placeholder="{{row.placeholder}}"/>' +
 		'{{/if}}' +
@@ -63,7 +74,7 @@ PUBS_WH.advancedSearchForm = function(options) {
 	 * @param {Object} row
 	 * 		@prop {String} name - to be used for the name attribute when creating the input
 	 * 		@prop {String} displayName - to be used to identify the input
-	 * 		@prop {String} inputType - can be any valid html5 input type or select
+	 * 		@prop {String} inputType - can be any valid html5 input type, select, boolean, or map
  	 * 		@prop {String} value (optional) - The value for this input.
 	 * 		@prop {String} placeholder (optional) - Will be used as placeholder text
  	 * 		@prop {String} lookup (optional) - Used for select inputType to fill in the options via the lookup web service
@@ -94,11 +105,17 @@ PUBS_WH.advancedSearchForm = function(options) {
 		}
 
 		var context = {
-			isSelect : row.inputType === 'select',
+			isSelect : row.inputType === 'select' || row.inputType === 'boolean',
+			isBoolean : row.inputType === 'boolean',
+			isDate : row.inputType === 'date',
 			mapId: (row.inputType === "map") ? 'map-name-' + row.name : '',
 			row : row
 		};
 		var $row;
+
+		// Additional context properties
+		context.isTrue = context.isBoolean ? (row.value === 'true') : false;
+		context.isFalse = context.isBoolean ? (row.value === 'false') : false;
 
 		if (context.mapId) {
 			options.$mapContainer.append(mapTemplate(context));
@@ -107,8 +124,12 @@ PUBS_WH.advancedSearchForm = function(options) {
 		} else {
 			options.$container.append(rowTemplate(context));
 			$row = options.$container.children('div:last-child');
+			if (context.isDate) {
+				$row.find('.date').datetimepicker({
+					format: 'YYYY-MM-DD'
+				});
+			}
 		}
-
 
 		$row.find('.delete-row').click(function() {
 			$(this).parents('.form-group').remove();
