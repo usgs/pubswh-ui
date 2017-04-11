@@ -4,7 +4,7 @@ from lettuce import *
 import json
 from requests import get
 from pubs_ui.pubswh.utils import (pull_feed, pubdetails, create_display_links,
-                           jsonify_geojson, add_relationships_graphs, SearchPublications,
+                           update_geographic_extents, add_relationships_graphs, SearchPublications,
                            make_contributor_list, sort_list_of_dicts,
                            extract_related_pub_info, munge_abstract)
 from pubs_ui import app
@@ -255,7 +255,7 @@ def test_displaylinks_output(step):
     assert_equal(world.expected_displaylinks_output, world.displaylinks_output)
 
 """
-jsonify_geojson scenarios
+update_geographic_extents scenarios
 """
 @step(r'we have created a fake pubs record with a geographic extents string')
 def imitation_geojson(step):
@@ -265,7 +265,7 @@ def imitation_geojson(step):
 @step(r'I make a record with parsable json')
 def make_json(step):
     world.output = world.body
-    world.output['geographicExtents'] = jsonify_geojson(world.body)
+    update_geographic_extents(world.output)
     world.expected_output = {'geographicExtents': {u'features': [{u'geometry': {u'coordinates': [[[-72.745833,
                                                                        44.0625],
                                                                       [-72.745833,
@@ -298,6 +298,16 @@ def test_geojson_output(step):
 @step(r'we have created a fake pubs record with an invalid geographic extents string')
 def imitation_bad_geojson(step):
     world.body = {'id': 12345, "geographicExtents": '{ "type": "FeatureCollection",  "features": [ { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [ [ [ -72.745833,44.0625 ], [ -72.745833,44.075 ], [ -72.741667,44.075 ], [ -72.741667,44.0625 ], [ -72.745833,44.0625 ] ] ] } } ] '}
+
+@step(r'I try to make a record with parseable json and catch an error')
+def make_json(step):
+    world.output = world.body
+    update_geographic_extents(world.output)
+    world.expected_output = {'id': 12345}
+
+@step(r'I see the record has geographicExtents dropped')
+def test_geojson_output(step):
+    assert_equal(world.output, world.expected_output)
 
 
 """

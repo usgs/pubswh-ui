@@ -22,7 +22,7 @@ from .forms import ContactForm, SearchForm, NumSeries
 from .utils import (pull_feed, create_display_links,
                     SearchPublications, change_to_pubs_test,
                     munge_pubdata_for_display, extract_related_pub_info,
-                    jsonify_geojson, generate_sb_data, create_store_info,
+                    update_geographic_extents, generate_sb_data, create_store_info,
                     get_altmetric_badge_img_links)
 
 
@@ -518,11 +518,7 @@ def search_results():
     else:
         if request.args.get('map') == 'True':
             for record in search_result_records:
-                geojson = jsonify_geojson(record)
-                if geojson:
-                    record['geographicExtents'] = geojson
-                else:
-                    del record['geographicExtents']
+                update_geographic_extents(record)
 
         response = render_template('pubswh/search_results.html',
                                    result_summary=result_summary,
