@@ -19,6 +19,8 @@ module.exports = function(config) {
 		'pubs_ui/bower_components/select2/dist/js/select2.js',
 		'pubs_ui/bower_components/handlebars/handlebars.js',
 		'pubs_ui/bower_components/leaflet/dist/leaflet.js',
+		'pubs_ui/bower_components/moment/min/moment.min.js',
+		'pubs_ui/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
 		'tests/js/pubswh/resources/config.js',
 		'pubs_ui/pubswh/static/js/*.js',
 		'tests/js/pubswh/*.js'
@@ -27,7 +29,7 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
-        'pubs_ui/pubswh/static/js/searchFormOnReady.js',
+        'pubs_ui/pubswh/static/js/searchFormOnReady.js'
     ],
 
 

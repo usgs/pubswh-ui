@@ -106,7 +106,7 @@ describe('PUBS_WH.advancedSearchForm', function() {
 			advancedSearchForm.addRow(row);
 			fakeServer.respond();
 
-			$select=$testDiv.find('select');
+			$select = $testDiv.find('select');
 			expect($select.length).toEqual(1);
 			expect($select.find('option').length).toEqual(1);
 		});
@@ -124,6 +124,38 @@ describe('PUBS_WH.advancedSearchForm', function() {
 			expect($input.length).toEqual(1);
 			expect($input.attr('name')).toEqual('map1');
 			expect(PUBS_WH.createSearchMap).toHaveBeenCalled();
+		});
+
+		it('Expects that calling addRow with a "boolean" inputType sets up a select with options for True and False', function() {
+			var row = {
+				name: 'param1',
+				displayName: 'Param 1',
+				inputType: 'boolean'
+			};
+			var $select;
+			advancedSearchForm.addRow(row);
+			$select = $testDiv.find('select');
+
+			expect($select.length).toEqual(1);
+			expect($select.attr('name')).toEqual('param1');
+			expect($select.find('option[value="true"]').length).toEqual(1);
+			expect($select.find('option[value="false"]').length).toEqual(1);
+		});
+
+		it('Expects that calling addRow with a "date" inputType creates a text input which is set up with the datetimepicker', function() {
+			var row = {
+				name: 'date1',
+				displayName: 'Date 1',
+				inputType: 'date'
+			};
+			var $input;
+			spyOn($.fn, 'datetimepicker');
+			advancedSearchForm.addRow(row);
+			$input = $testDiv.find('input[type="text"]');
+
+			expect($input.length).toEqual(1);
+			expect($.fn.datetimepicker).toHaveBeenCalled();
+			expect($input.attr('name')).toEqual('date1');
 		});
 
 		it('Expects that clicking on that calling addRow a second time adds the second row to the bottom of the div', function() {
@@ -209,6 +241,16 @@ describe('PUBS_WH.advancedSearchForm', function() {
 					displayName: 'Map 1',
 					inputType: 'map',
 					value: 'POLYGON((-91 39,-89 39,-89 37,-91 37,-91 39))'
+				}, {
+					name: 'boolean1',
+					displayName: 'Boolean 1',
+					inputType: 'boolean',
+					value: "false"
+				}, {
+					name: 'date1',
+					displayName: 'Date 1',
+					inputType: 'date',
+					value: '2001-01-14'
 				}
 			];
 			fakeServer.respondWith([200, {"Content-Type": "application/json"}, '[{"id": "1", "text": "T1"}, {"id": "2", "text": "T2"}]']);
@@ -226,21 +268,24 @@ describe('PUBS_WH.advancedSearchForm', function() {
 		it('Expects that three rows are added with the correct input type and initial value', function() {
 			var $rows = $testDiv.children();
 			var $maprows = $mapDiv.children();
-			var $text, $select, $map;
+			var $text, $select, $map, $boolean, $date;
 
-			expect($rows.length).toEqual(2);
+			expect($rows.length).toEqual(4);
 			expect($maprows.length).toEqual(1);
-			$text = $rows.find('input[type="text"]');
-			$select = $rows.find('select');
+			$text = $rows.find('input[name="param1"]');
+			$select = $rows.find('select[name="param2"]');
 			$map = $maprows.find('input[type="hidden"]');
+			$boolean = $rows.find('select[name="boolean1"]');
+			$date = $rows.find('input[name="date1"]');
 
-			expect($text.attr('name')).toEqual('param1');
+
 			expect($text.val()).toEqual('This');
-			expect($select.attr('name')).toEqual('param2');
 			expect($select.find('option:selected').val()).toEqual('T2');
 			expect(PUBS_WH.createSearchMap).toHaveBeenCalled();
 			expect($map.attr('name')).toEqual('map1');
 			expect($map.val()).toEqual('POLYGON((-91 39,-89 39,-89 37,-91 37,-91 39))');
+			expect($boolean.find('option:selected').val()).toEqual('false');
+			expect($date.val()).toEqual('2001-01-14');
 		});
 	});
 
