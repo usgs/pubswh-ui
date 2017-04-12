@@ -20,6 +20,7 @@ var PUBS_WH = PUBS_WH || {};
  * 			@prop {String} lookup (optional) - Used for select inputType to fill in the options via the lookup web service
  * 	@returns {Object}
  * 		@prop {Function} addRow - takes single object parameter which has the same properties as the objects in initialRows
+ *		@prop {Function} deleteAllRows - deletes all rows in $container and $mapContainter
  */
 PUBS_WH.advancedSearchForm = function(options) {
 	"use strict";
@@ -140,6 +141,9 @@ PUBS_WH.advancedSearchForm = function(options) {
 		});
 	};
 
+	/*
+	 * Deletes all rows in options.$container and options.$mapContainer
+	 */
 	self.deleteAllRows = function() {
 		options.$container.children().remove();
 		options.$mapContainer.children().remove();
