@@ -63,7 +63,7 @@ $(document).ready(function() {
 		}
 	});
 
-	// Set up advanced search category select and add category button clic handler
+	// Set up advanced search category select and add category button click handler
 	$categorySelect.select2();
 	$categorySelect.change(function() {
 		$addCategoryBtn.prop('disabled',  !$(this).val());
