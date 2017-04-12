@@ -458,7 +458,11 @@ def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
 @pubswh.route('/search', methods=['GET'])
 @cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def search_results():
-    search_kwargs = dict(request.args)
+    search_kwargs = request.args.to_dict()
+
+    # Remove the mimeType so that json will be returned from the web service call
+    if search_kwargs.has_key('mimetype'):
+        del search_kwargs['mimetype']
 
     # Default paging parameters if not present or empty
     if not search_kwargs.get('page_size'):
