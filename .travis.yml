@@ -30,7 +30,7 @@ script:
 after_success:
   cp coverage/manager/Firefox*/lcov.info coverage/manager.info;
   cp coverage/metrics/Firefox*/lcov.info coverage/metrics.info;
-  cp coverage/pubswh/Firefox*/lcov.info coverage/metrics.info;
+  cp coverage/pubswh/Firefox*/lcov.info coverage/pubswh.info;
   lcov --add-tracefile coverage/manager.info --add-tracefile coverage/metrics.info --add-tracefile coverage/pubswh.info --output-file coverage/combined.info;
   coveralls-lcov -v -n coverage/combined.info > coverage/combined.json;
   coveralls --merge=coverage/combined.json;
