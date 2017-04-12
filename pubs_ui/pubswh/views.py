@@ -12,13 +12,11 @@ from flask import render_template, abort, request, Response, jsonify, url_for, r
 from flask_paginate import Pagination
 from flask_login import login_required, current_user
 from flask_mail import Message
-from webargs.flaskparser import FlaskParser
 
 from ..auth.views import generate_auth_header
 from .. import app, mail, cache
-from .arguments import search_args
 from .canned_text import EMAIL_RESPONSE
-from .forms import ContactForm, SearchForm, NumSeries
+from .forms import ContactForm, NumSeries
 from .utils import (pull_feed, create_display_links,
                     SearchPublications, change_to_pubs_test,
                     munge_pubdata_for_display, extract_related_pub_info,
@@ -457,7 +455,6 @@ def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
         abort(404)
 
 
-# this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
 @pubswh.route('/search', methods=['GET'])
 @cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def search_results():
@@ -471,10 +468,9 @@ def search_results():
     if not search_kwargs.get('page_number'):
         search_kwargs['page_number'] = search_kwargs.get('page')
 
-
+    # go out to the pubs API and get the search results
     sp = SearchPublications(search_url)
-    search_results_response, resp_status_code = sp.get_pubs_search_results(
-        params=search_kwargs)  # go out to the pubs API and get the search results
+    search_results_response, resp_status_code = sp.get_pubs_search_results(params=search_kwargs)
     try:
         search_result_records = search_results_response['records']
         record_count = search_results_response['recordCount']
