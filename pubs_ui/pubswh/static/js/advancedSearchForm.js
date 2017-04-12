@@ -28,7 +28,7 @@ PUBS_WH.advancedSearchForm = function(options) {
 
 	var ROW_HTML =
 		'<div class="form-group">' +
-		'<div class="col-sm-3">' +
+		'<div class="col-sm-4">' +
 		'<span class="fa fa-minus-circle delete-row"></span>' +
 		'<label class="">{{row.displayName}}:</label>' +
 		'</div>' +
@@ -138,6 +138,11 @@ PUBS_WH.advancedSearchForm = function(options) {
 			$row.find('select').append(optionTemplate({options: lookupOptions}));
 			$row.find('select').select2();
 		});
+	};
+
+	self.deleteAllRows = function() {
+		options.$container.children().remove();
+		options.$mapContainer.children().remove();
 	};
 
 	//Initialize row

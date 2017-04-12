@@ -31,7 +31,7 @@
             (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{{ disp_mimetype }}</a>
         {% endmacro %}
 
-        <section class = "search-results">
+        <section class="search-results">
             <p>{{ result_summary['record_count'] }} results.</p>
             <p>Alternate formats:
             <a href="{{ json_ld_base_url }}/search?page_size=3000&mimetype=ris{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{% if result_summary['record_count'] <= 3000 %}Download search results as RIS{% else %}RIS file of the first 3000 search results{% endif %}</a>

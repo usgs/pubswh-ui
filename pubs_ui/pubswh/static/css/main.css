@@ -130,10 +130,6 @@ textarea {
    Index styles
    ========================================================================== */
 
-.form-control{
-	width:97% !important;
-}   
-
 #announcement{
     font-size: 150%;
     padding: 15px;
@@ -243,76 +239,19 @@ article{padding:0 10px;}
 
 #welcome h3{margin:5px 0 0 0;}
 
-#search fieldset label {
-	display:block;
-    margin:0 0 5px 0;
-	font-size:1.2em;
+#search-pubs-form {
+	display: inline-block;
 }
-			
-#search button{
-	background:rgb(0,51,102);
-	width:150px;
-	color:#fff;
-	margin-bottom:15px;
+#search-pubs-form .delete-row {
+	color: red;
+	padding: 4px;
 }
-			
-#search fieldset input{width:97%;
-				height:34px;
-				font-size:1.3em;
-				border:1px solid #808080;
-				border-radius:5px;
-				margin:0 0 15px 0;
-				padding:0 0 0 5px;}
-				
-#search fieldset .select2-container {
-	margin: 0 0 15px 0;
-	font-size: 1.3em;
-}
-				
-#advanced{background:none;
-			width:100%;
-			min-height:200px;
-			margin-bottom:0px;}
-			
-#advanced label{margin:0 0 5px 0;
-			font-size:1.2em;
-}
-			
-#advanced select,
-#advanced input{height:34px;
-				background:#fff;
-				border:1px solid #808080;
-				border-radius:5px;
-				font-size:1.3em;
-				color:#808080;
-				outline:none;
-				
-				}
-				
-#advanced select{width:30%;
-				margin:0 5px 0 0;
-				padding:4px 0;
-				}
-
-#advanced input{width:66%;
-				margin:5px 0 0 0;
-				padding: 0 0 0 5px;}
-
-#advanced_options{margin:0 0 15px 0;}
-				
-#advanced_options p{font-weight:bold;
-			font-size:1em;
-			margin:30px 0 0 0;
-			text-indent:0;
-			cursor:pointer;
-			display:inline;}
-			
 .search-form-map-div {
 	height: 400px;
 	margin: 0 0 15px 0;
 }
 			
-#search-form-map-div .leaflet-control label {
+.search-form-map-div .leaflet-control label {
 	font-weight: normal;
 }
 			
@@ -678,7 +617,6 @@ form#contactForm input#submit:hover{
    
 .no-margin{margin-left:0 !important;}   
    
-#search{margin-left:15px;}
 
 #search-results{
 	text-align:left;
