@@ -18,6 +18,8 @@ var PUBS_WH = PUBS_WH || {};
  * 			@prop {String} value - The value for this input.
  * 			@prop {String} placeholder (optional) - Will be used as placeholder text
  * 			@prop {String} lookup (optional) - Used for select inputType to fill in the options via the lookup web service
+ * 		@prop {Function} deleteRowCallback(optional) - Function that takes the name of the input being removed when the delete
+ * 			row button is clicked.	This does not get called when deleteAllRows is called.
  * 	@returns {Object}
  * 		@prop {Function} addRow - takes single object parameter which has the same properties as the objects in initialRows
  *		@prop {Function} deleteAllRows - deletes all rows in $container and $mapContainter
@@ -133,7 +135,11 @@ PUBS_WH.advancedSearchForm = function(options) {
 		}
 
 		$row.find('.delete-row').click(function() {
-			$(this).parents('.form-group').remove();
+			var name = $row.find(':input').attr('name');
+			$row.remove();
+			if (options.deleteCallback) {
+				options.deleteCallback(name);
+			}
 		});
 		lookupDeferred.done(function() {
 			$row.find('select').append(optionTemplate({options: lookupOptions}));

@@ -1,7 +1,7 @@
 /* jslint browser: true */
 /* global $ */
 /* global PUBS_WH */
-/* global describe, beforeEach, afterEach, it, expect, sinon, spyOn */
+/* global describe, beforeEach, afterEach, it, expect, sinon, spyOn, jasmine */
 
 describe('PUBS_WH.advancedSearchForm', function() {
 	"use strict";
@@ -158,7 +158,7 @@ describe('PUBS_WH.advancedSearchForm', function() {
 			expect($input.attr('name')).toEqual('date1');
 		});
 
-		it('Expects that clicking on that calling addRow a second time adds the second row to the bottom of the div', function() {
+		it('Expects that calling addRow a second time adds the second row to the bottom of the div', function() {
 			var row = {
 				name: 'param1',
 				displayName: 'Param 1',
@@ -190,14 +190,15 @@ describe('PUBS_WH.advancedSearchForm', function() {
 			row = {
 				name: 'param2',
 				displayName: 'Param 2',
-				inputType: 'text'
+				inputType: 'boolean'
 			};
 			advancedSearchForm.addRow(row);
+
 			$rowToRemove = $testDiv.children().has('input[name="param1"]');
 			$rowToRemove.find('.delete-row').click();
 
-			expect($testDiv.find('input[name="param1"]').length).toEqual(0);
-			expect($testDiv.find('input[name="param2"]').length).toEqual(1);
+			expect($testDiv.find('[name="param1"]').length).toEqual(0);
+			expect($testDiv.find('[name="param2"]').length).toEqual(1);
 		});
 
 		it('Expects that clicking on a map row remove the map from the DOM', function() {
@@ -219,6 +220,57 @@ describe('PUBS_WH.advancedSearchForm', function() {
 
 			expect($testDiv.find('input[name="param1"]').length).toEqual(1);
 			expect($mapDiv.find('input[name="param2"]').length).toEqual(0);
+		});
+	});
+
+	describe('Tests with optional deleteCallback', function() {
+		var initialRows = [
+			{
+				name: 'param1',
+				displayName: 'Param 1',
+				inputType: 'text',
+				value: 'This'
+			},  {
+				name: 'boolean1',
+				displayName: 'Boolean 1',
+				inputType: 'boolean',
+				value: "false"
+			}, {
+				name: 'map1',
+				displayName: 'Map 1',
+				inputType: 'map',
+				value: 'POLYGON((-91 39,-89 39,-89 37,-91 37,-91 39))'
+			}
+		];
+		var deleteCallbackSpy;
+
+		beforeEach(function() {
+			deleteCallbackSpy  = jasmine.createSpy('deleteCallbackSpy');
+			spyOn(PUBS_WH, 'createSearchMap');
+
+			advancedSearchForm = PUBS_WH.advancedSearchForm({
+				$container: $testDiv,
+				$mapContainer: $mapDiv,
+				initialRows: initialRows,
+				deleteCallback: deleteCallbackSpy
+			});
+		});
+
+		it('Expects that deleteCallback is called with the correct name with a row is deleted', function() {
+			var $rowToRemove = $('body').children().has(':input[name="param1"]');
+			$rowToRemove.find('.delete-row').click();
+
+			expect(deleteCallbackSpy).toHaveBeenCalledWith('param1');
+
+			$rowToRemove = $('body').children().has(':input[name="boolean1"]');
+			$rowToRemove.find('.delete-row').click();
+
+			expect(deleteCallbackSpy).toHaveBeenCalledWith('boolean1');
+
+			$rowToRemove = $('body').children().has(':input[name="map1"]');
+			$rowToRemove.find('.delete-row').click();
+
+			expect(deleteCallbackSpy).toHaveBeenCalledWith('map1');
 		});
 	});
 

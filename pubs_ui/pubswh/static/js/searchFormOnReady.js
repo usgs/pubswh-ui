@@ -20,11 +20,16 @@ $(document).ready(function() {
 	var $advancedSearchDiv = $form.find('.advanced-search-div');
 	var advancedSearchForm;
 
+	var deleteSearchRow = function(name) {
+		$categorySelect.find('option[value="' + name + '"]').prop('disabled', false);
+	};
+
 	// Retrieve information to create the initial search rows from the query parameters and search category list.
 	if (CONFIG.requestArgs !== {}) {
 		$.each(CONFIG.requestArgs, function (name, value) {
 			var $thisOption = $categorySelect.find('option[value="' + name + '"]');
 			if ($thisOption.length) {
+				$thisOption.prop('disabled', true);
 				initialSearchRows.push({
 					name: name,
 					displayName: $thisOption.html(),
@@ -64,13 +69,13 @@ $(document).ready(function() {
 	});
 
 	// Set up advanced search category select and add category button click handler
-	$categorySelect.select2();
 	$categorySelect.change(function() {
 		$addCategoryBtn.prop('disabled',  !$(this).val());
 	});
 
 	$addCategoryBtn.click(function() {
 		var $selectedOption = $categorySelect.find('option:selected');
+		$selectedOption.prop('disabled', true);
 		advancedSearchForm.addRow({
 			name: $selectedOption.val(),
 			displayName: $selectedOption.html(),
@@ -78,6 +83,7 @@ $(document).ready(function() {
 			placeholder: $selectedOption.data('placeholder'),
 			lookup: $selectedOption.data('lookup')
 		});
+		$selectedOption.prop('selected', false);
 	});
 
 	// Add click handler for clear search terms
