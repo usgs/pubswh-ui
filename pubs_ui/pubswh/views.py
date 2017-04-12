@@ -458,7 +458,7 @@ def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
 @pubswh.route('/search', methods=['GET'])
 @cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def search_results():
-    search_kwargs = request.args.to_dict()
+    search_kwargs = request.args.to_dict(flat=False)
 
     # Remove the mimeType so that json will be returned from the web service call
     if search_kwargs.has_key('mimetype'):
@@ -466,9 +466,9 @@ def search_results():
 
     # Default paging parameters if not present or empty
     if not search_kwargs.get('page_size'):
-        search_kwargs['page_size'] = '25'
+        search_kwargs['page_size'] = ['25']
     if not search_kwargs.get('page'): # Open search API uses page rather than page number which our API uses.
-        search_kwargs['page'] = '1'
+        search_kwargs['page'] = ['1']
     if not search_kwargs.get('page_number'):
         search_kwargs['page_number'] = search_kwargs.get('page')
 
@@ -478,8 +478,8 @@ def search_results():
     try:
         search_result_records = search_results_response['records']
         record_count = search_results_response['recordCount']
-        pagination = Pagination(page=int(search_kwargs['page_number']), total=record_count,
-                                per_page=int(search_kwargs['page_size']), record_name='Search Results', bs_version=3)
+        pagination = Pagination(page=int(search_kwargs['page_number'][0]), total=record_count,
+                                per_page=int(search_kwargs['page_size'][0]), record_name='Search Results', bs_version=3)
         search_service_down = None
         start_plus_size = int(search_results_response['pageRowStart']) + int(search_results_response['pageSize'])
         if record_count < start_plus_size:
