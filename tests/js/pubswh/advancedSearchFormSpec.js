@@ -287,6 +287,13 @@ describe('PUBS_WH.advancedSearchForm', function() {
 			expect($boolean.find('option:selected').val()).toEqual('false');
 			expect($date.val()).toEqual('2001-01-14');
 		});
+
+		it('Expects that calling deleteAllRows removes all the rows from the form', function() {
+			advancedSearchForm.deleteAllRows();
+
+			expect($testDiv.children().length).toEqual(0);
+			expect($mapDiv.children().length).toEqual(0);
+		});
 	});
 
 });
