@@ -9,9 +9,6 @@
 {% endblock head %}
 
 {% block page_style %}
-{% if request.args.map == 'True' %}
-	<link rel="stylesheet" href="{{ url_for('bower.static', filename = 'mapbox.js/mapbox.standalone.css') }}">
-{% endif %}
 	<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/pagination.css') }}">
 	<link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet/dist/leaflet.css') }}">
     <link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet-draw/dist/leaflet.draw.css') }}">
@@ -24,20 +21,14 @@
         <h1 class="search-results">Search Results</h1>
 
         <section id="search">
-            {% if form.data.advanced == 'True' %}
-                {% include 'pubswh/advanced_search_form.html' %}
-                <span class="basic-advanced"><a class="basic-advanced" href="{{ request.base_url }}?q={{ request.args['q'] }}">Basic Search</a></span>
-            {% else %}
-                {% include 'pubswh/search_form.html' %}
-                <span class="basic-advanced"><a href="{{ request.url }}&advanced=True">Advanced Search</a></span>
-            {% endif %}
+            {% include 'pubswh/search_form.html' %}
         </section>
         {% macro service_url(mimetype, disp_mimetype) %}
             <a href="{{ pub_url }}publication/?mimeType={{ mimetype }}{% for key, value in request.args.iteritems() %}{% if value|length > 0 and
             (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{{ disp_mimetype }}</a>
         {% endmacro %}
 
-        <section class = "search-results">
+        <section class="search-results">
             <p>{{ result_summary['record_count'] }} results.</p>
             <p>Alternate formats:
             <a href="{{ json_ld_base_url }}/search?page_size=3000&mimetype=ris{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{% if result_summary['record_count'] <= 3000 %}Download search results as RIS{% else %}RIS file of the first 3000 search results{% endif %}</a>
@@ -76,9 +67,8 @@
 {% endblock main %}
 {% block page_footer_script %}
 
-	{% if form.data.advanced == 'True' %}
-		{% include "pubswh/advanced_search_form_script.html" %}
-	{% endif %}
+	{% include "pubswh/search_form_script.html" %}
+
 	{% if request.args.map == 'True' %}
             {% include 'pubswh/search_results_map_script.html' %}
     {% endif %}

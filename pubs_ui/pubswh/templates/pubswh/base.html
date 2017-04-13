@@ -16,12 +16,15 @@
 		{% assets "css_base" %}
 		<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
 		{% endassets %}
-		<link rel="stylesheet" href="{{ url_for('bower.static', filename= 'bootstrap/dist/css/bootstrap.css') }}">
-		<link rel="stylesheet" href="{{ url_for('bower.static', filename= 'font-awesome/css/font-awesome.min.css') }}">
-		<link rel="shortcut icon" href="{{ url_for('pubswh.static', filename='img/favicon.ico') }}">
-		<link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('pubswh.open_search') }}" title="USGS Pubs">
+		<link rel="stylesheet" href="{{ url_for('bower.static', filename='bootstrap/dist/css/bootstrap.min.css') }}"/>
+		<link rel="stylesheet" href="{{ url_for('bower.static', filename='font-awesome/css/font-awesome.min.css') }}"/>
+		<link rel="stylesheet" href="{{ url_for('bower.static', filename='select2/dist/css/select2.min.css') }}"/>
+		<link rel="stylesheet" type="text/css"
+			  href="{{ url_for('bower.static', filename='eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css') }}" />
+		<link rel="shortcut icon" href="{{ url_for('pubswh.static', filename='img/favicon.ico') }}"/>
+		<link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('pubswh.open_search') }}" title="USGS Pubs"/>
 		<link rel="unapi-server" type="application/xml" title="unAPI" href="{{ url_for('pubswh.unapi') }}" />
-		<link rel="alternate" type="application/rss+xml" title="USGS Publications Warehouse RSS Feed" href="https://pubs.er.usgs.gov/pubs-services/publication/rss">
+		<link rel="alternate" type="application/rss+xml" title="USGS Publications Warehouse RSS Feed" href="https://pubs.er.usgs.gov/pubs-services/publication/rss"/>
 
 		<script src="{{ url_for('bower.static', filename = 'modernizer/modernizr.js') }}"></script>
 		<script>
@@ -33,6 +36,11 @@
 				else {
 					e.style.display = 'block';
 				}
+			}
+
+			var CONFIG = {
+				lookupUrl: '{{ config.LOOKUP_URL }}',
+				requestArgs: JSON.parse('{{ request.args.to_dict(True)|tojson }}') <!-- set to False if multi values per key are desired -->
 			}
 		</script>
 	</head>
@@ -156,8 +164,9 @@
 		   </footer>
 		   <script type="application/javascript"
 				   src="https://www2.usgs.gov/scripts/analytics/usgs-analytics.js"></script>
-		   <script type="text/javascript"  src="{{ url_for('bower.static', filename='jquery/dist/jquery.min.js') }}"></script>
-		   <script type="text/javascript"  src="{{ url_for('bower.static', filename='bootstrap/dist/js/bootstrap.js') }}"></script>
+		   <script type="text/javascript" src="{{ url_for('bower.static', filename='jquery/dist/jquery.min.js') }}"></script>
+		   <script type="text/javascript" src="{{ url_for('bower.static', filename='bootstrap/dist/js/bootstrap.js') }}"></script>
+		   <script type="text/javascript" src="{{ url_for('bower.static', filename='select2/dist/js/select2.js') }}"></script>
 		   {% assets "js_base_libs" %}
 			   <script type="text/javascript" src="{{ ASSET_URL }}"></script>
 		   {% endassets %}

@@ -5,7 +5,6 @@ from operator import itemgetter
 import sys
 
 import arrow
-import redis
 from requests import get
 import tablib
 
@@ -13,17 +12,15 @@ from flask import render_template, abort, request, Response, jsonify, url_for, r
 from flask_paginate import Pagination
 from flask_login import login_required, current_user
 from flask_mail import Message
-from webargs.flaskparser import FlaskParser
 
 from ..auth.views import generate_auth_header
 from .. import app, mail, cache
-from .arguments import search_args
 from .canned_text import EMAIL_RESPONSE
-from .forms import ContactForm, SearchForm, NumSeries
+from .forms import ContactForm, NumSeries
 from .utils import (pull_feed, create_display_links,
                     SearchPublications, change_to_pubs_test,
                     munge_pubdata_for_display, extract_related_pub_info,
-                    jsonify_geojson, generate_sb_data, create_store_info,
+                    update_geographic_extents, generate_sb_data, create_store_info,
                     get_altmetric_badge_img_links)
 
 
@@ -136,10 +133,8 @@ def index():
 
     except TypeError:
         pubs_records = []  # return an empty list recent_pubs_content is None (e.g. the service is down)
-    form = SearchForm(request.args)
     return render_template('pubswh/home.html',
-                           recent_publications=pubs_records,
-                           form=form)
+                           recent_publications=pubs_records)
 
 
 # contact form
@@ -460,30 +455,31 @@ def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
         abort(404)
 
 
-# this takes advantage of the webargs package, which allows for multiple parameter entries. e.g. year=1981&year=1976
 @pubswh.route('/search', methods=['GET'])
 @cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def search_results():
-    form = SearchForm(request.args)
+    search_kwargs = request.args.to_dict(flat=False)
 
-    parser = FlaskParser()
-    search_kwargs = parser.parse(search_args, request)
-    if search_kwargs.get('page_size') is None or search_kwargs.get('page_size') == '':
-        search_kwargs['page_size'] = '25'
-    if search_kwargs.get('page') is None or search_kwargs.get('page') == '':
-        search_kwargs['page'] = '1'
-    if (search_kwargs.get('page_number') is None or search_kwargs.get('page_number') == '') \
-            and search_kwargs.get('page') is not None:
-        search_kwargs['page_number'] = search_kwargs['page']
+    # Remove the mimeType so that json will be returned from the web service call
+    if search_kwargs.has_key('mimetype'):
+        del search_kwargs['mimetype']
 
+    # Default paging parameters if not present or empty
+    if not search_kwargs.get('page_size'):
+        search_kwargs['page_size'] = ['25']
+    if not search_kwargs.get('page'): # Open search API uses page rather than page number which our API uses.
+        search_kwargs['page'] = ['1']
+    if not search_kwargs.get('page_number'):
+        search_kwargs['page_number'] = search_kwargs.get('page')
+
+    # go out to the pubs API and get the search results
     sp = SearchPublications(search_url)
-    search_results_response, resp_status_code = sp.get_pubs_search_results(
-        params=search_kwargs)  # go out to the pubs API and get the search results
+    search_results_response, resp_status_code = sp.get_pubs_search_results(params=search_kwargs)
     try:
         search_result_records = search_results_response['records']
         record_count = search_results_response['recordCount']
-        pagination = Pagination(page=int(search_kwargs['page_number']), total=record_count,
-                                per_page=int(search_kwargs['page_size']), record_name='Search Results', bs_version=3)
+        pagination = Pagination(page=int(search_kwargs['page_number'][0]), total=record_count,
+                                per_page=int(search_kwargs['page_size'][0]), record_name='Search Results', bs_version=3)
         search_service_down = None
         start_plus_size = int(search_results_response['pageRowStart']) + int(search_results_response['pageSize'])
         if record_count < start_plus_size:
@@ -499,11 +495,13 @@ def search_results():
         pagination = None
         search_service_down = 'The backend services appear to be down with a {0} status.'.format(resp_status_code)
         result_summary = {}
-    if 'mimetype' in request.args and request.args.get("mimetype") == 'ris':
+
+    mimetype = request.args.get('mimetype', '')
+    if mimetype == 'ris':
         content = render_template('pubswh/ris_output.ris', search_result_records=search_result_records)
-        return Response(content, mimetype="application/x-research-info-systems",
+        response = Response(content, mimetype="application/x-research-info-systems",
                                headers={"Content-Disposition":"attachment;filename=PubsWarehouseResults.ris"})
-    if 'mimetype' in request.args and request.args.get("mimetype") == 'sbjson':
+    elif mimetype == 'sbjson':
         sciencebase_records = []
         for record in search_result_records:
             sb_record = generate_sb_data(record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
@@ -515,18 +513,21 @@ def search_results():
             "recordCount": search_results_response['recordCount'],
             "records": sciencebase_records,
         }
-        return jsonify(sb_response)
+        response = jsonify(sb_response)
 
-    if request.args.get('map') == 'True':
-        for record in search_result_records:
-            record = jsonify_geojson(record)
+    else:
+        if request.args.get('map') == 'True':
+            for record in search_result_records:
+                update_geographic_extents(record)
 
-    return render_template('pubswh/search_results.html',
-                           result_summary=result_summary,
-                           search_result_records=search_result_records,
-                           pagination=pagination,
-                           search_service_down=search_service_down,
-                           form=form, pub_url=pub_url)
+        response = render_template('pubswh/search_results.html',
+                                   result_summary=result_summary,
+                                   search_result_records=search_result_records,
+                                   pagination=pagination,
+                                   search_service_down=search_service_down,
+                                   pub_url=pub_url)
+
+    return response
 
 
 @pubswh.route('/site-map')
@@ -621,7 +622,7 @@ def legacy_search(series_code=None, report_number=None, pub_year=None):
             pub_year = ''.join(['19', pub_year])
         elif int(pub_year) < 30:
             pub_year = ''.join(['20', pub_year])
-        return redirect(url_for('pubswh.search_results', q=series_code+" "+report_number, year=pub_year, advanced=True))
+        return redirect(url_for('pubswh.search_results', q=series_code+" "+report_number, year=pub_year))
 
     return redirect(url_for('pubswh.search_results', q=series_code+" "+report_number))
 

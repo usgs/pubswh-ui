@@ -1,161 +1,165 @@
-
-{% if request.args.advanced != 'True' %}
-<script type="text/javascript" src="{{ url_for('bower.static', filename = 'leaflet/dist/leaflet.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('bower.static', filename='esri-leaflet/dist/esri-leaflet.js') }}"></script>
-{% endif %}
-
-<script type="text/javascript" src="{{ url_for('bower.static', filename = 'mapbox.js/mapbox.standalone.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('pubswh.static', filename = 'vendor/mapbox/leaflet-pip/leaflet-pip.min.js') }}"></script>
+<script type="text/javascript"
+		src="{{ url_for('bower.static', filename = 'mapbox.js/mapbox.standalone.js') }}"></script>
+<script type="text/javascript"
+		src="{{ url_for('pubswh.static', filename = 'vendor/mapbox/leaflet-pip/leaflet-pip.min.js') }}"></script>
 
 
 <script type="application/javascript">
 
-//set a general extent to allow for dynamic zooming to search result extents
-var all_extents = {
-                    "features": [],
-                    "properties": {
-						"title": "all search pub extents"
-                    },
-                    "type": "FeatureCollection"
-                };
+	//set a general extent to allow for dynamic zooming to search result extents
+	var all_extents = {
+		"features": [],
+		"properties": {
+			"title": "all search pub extents"
+		},
+		"type": "FeatureCollection"
+	};
 
-//add esri basemap layers
-var topo = L.esri.basemapLayer('Topographic'),
- oceans = L.esri.basemapLayer('Oceans',{ detectRetina: true}),
-        streets = L.esri.basemapLayer('Streets');
+	//add esri basemap layers
+	var topo = L.esri.basemapLayer('Topographic'),
+		oceans = L.esri.basemapLayer('Oceans', {detectRetina: true}),
+		streets = L.esri.basemapLayer('Streets');
 
-var oceanlabels =  L.esri.basemapLayer('OceansLabels');
-
-
-var baseMaps = {
-                            "Oceans": oceans,
-                            "Topographic": topo,
-                            "Streets": streets
-
-                        };
-
-var overlayMaps = {
-    "Ocean Labels": oceanlabels
-};
-
-//actually create the map
-var extents_map = new L.map('extents_map', {layers:[topo]})
-    .setView([38, -115], 4);
-
-//add the layers control for the map
-L.control.layers(baseMaps, overlayMaps).addTo(extents_map);
-
-//base layers list for leaflet-pip
-var layers = [];
-
-//all publications that have extents
-{# iterate through the publications on the page #}
-{% for result in search_result_records %}
-    {% if result['geographicExtents'] %}
-
-        var pub_json_{{ result['indexId'] }} = {{ result['geographicExtents']|tojson|safe }};
-
-        var pub_{{ result['indexId'] }} = L.mapbox.featureLayer(pub_json_{{ result['indexId'] }})
-            .on('click', handleClick)
-            .on('ready', resetStyles)
-            .addTo(extents_map);
-
-        layers.push({ name: 'pub_{{ result['indexId'] }}', layer: pub_{{ result['indexId'] }} });
-
-        all_extents.features.push(pub_json_{{ result['indexId'] }}.features[0]);
+	var oceanlabels = L.esri.basemapLayer('OceansLabels');
 
 
-    {% endif %}
+	var baseMaps = {
+		"Oceans": oceans,
+		"Topographic": topo,
+		"Streets": streets
 
-{% endfor %}
-//fit the bounds
-extents_map.fitBounds(L.geoJson( all_extents ).getBounds());
+	};
+
+	var overlayMaps = {
+		"Ocean Labels": oceanlabels
+	};
+
+	//actually create the map
+	var extents_map = new L.map('extents_map', {layers: [topo]})
+		.setView([38, -115], 4);
+
+	//add the layers control for the map
+	L.control.layers(baseMaps, overlayMaps).addTo(extents_map);
+
+	//base layers list for leaflet-pip
+	var layers = [];
+
+	//all publications that have extents
+	{# iterate through the publications on the page #}
+	{% for result in search_result_records %}
+		{% if result['geographicExtents'] %}
+
+			var pub_json_{{ result['indexId'] }} = {{ result['geographicExtents']|tojson|safe }};
+
+			var pub_{{ result['indexId'] }} = L.mapbox.featureLayer(pub_json_{{ result['indexId'] }})
+				.on('click', handleClick)
+				.on('ready', resetStyles)
+				.addTo(extents_map);
+
+			layers.push({name: 'pub_{{ result['indexId'] }}', layer: pub_{{ result['indexId'] }}});
+
+			all_extents.features.push(pub_json_{{ result['indexId'] }}.features[0]);
 
 
-// This is the default style of layers when the user isn't interacting
-// with the map
-var quiet = {
-    fillColor: '#222',
-    fillOpacity: 0.2,
-    opacity: 0.4,
-    weight: 1
-};
+		{% endif %}
 
-// The style of a layer that's been filtered to but not the specific
-// shape the user selected
-var medium = {
-    fillColor: '#255',
-    fillOpacity: 1,
-    opacity: 1,
-    weight: 1
-};
+	{% endfor %}
+	//fit the bounds
+	extents_map.fitBounds(L.geoJson(all_extents).getBounds());
 
-// The specific shape selected
-var loud = {
-    fillColor: '#2ff',
-    fillOpacity: 0.8,
-    opacity: 0.2,
-    weight: 1
-};
 
-// When the user resets the map by closing the popup, reset styles
-function resetStyles() {
-    for (var i = 0; i < layers.length; i++) {
-        layers[i].layer.setStyle(quiet);
-    }
-}
+	// This is the default style of layers when the user isn't interacting
+	// with the map
+	var quiet = {
+		fillColor: '#222',
+		fillOpacity: 0.2,
+		opacity: 0.4,
+		weight: 1
+	};
 
-extents_map.on('popupclose', function() {
-    resetStyles();
-});
+	// The style of a layer that's been filtered to but not the specific
+	// shape the user selected
+	var medium = {
+		fillColor: '#255',
+		fillOpacity: 1,
+		opacity: 1,
+		weight: 1
+	};
 
-function handleClick(e) {
+	// The specific shape selected
+	var loud = {
+		fillColor: '#2ff',
+		fillOpacity: 0.8,
+		opacity: 0.2,
+		weight: 1
+	};
 
-    var html = '';
-    // look through each layer in order and see if the clicked point,
-    // e.latlng, overlaps with one of the shapes in it.
-    for (var i = 0; i < layers.length; i++) {
-        var match = leafletPip.pointInLayer(
-            // the clicked point
-            e.latlng,
-            // this layer
-            layers[i].layer,
-            // whether to stop at first match
-            false);
-        // if there's overlap, add some content to the popup: the publication title, links and some information
-        if (match.length) {
-            html += '<p><span class="search-title"><a href="'+match[0].feature.properties.url+'" >  '+  match[0].feature.properties.title+'</a> </span></br><span class="pubinfo">'
-                    +match[0].feature.properties.info+' </span></br> <button class="filter-button" onclick="highlightMatch(this)" data-layer="' + i +
-                '" data-latlng="' + [e.latlng.lat, e.latlng.lng] + '">highlight</button></p>';
-        }
-    }
-    if (html) {
-        extents_map.openPopup(html, e.latlng,{maxWidth: 350, minWidth: 150, maxHeight: 300, offset:[0, -3], autoPan: true, closeButton: true, autoPanPadding: [5, 5]});
+	// When the user resets the map by closing the popup, reset styles
+	function resetStyles() {
+		for (var i = 0; i < layers.length; i++) {
+			layers[i].layer.setStyle(quiet);
+		}
+	}
 
-    }
-}
+	extents_map.on('popupclose', function () {
+		resetStyles();
+	});
 
-// To highlight a layer, we make all other layers quiet and then re-run
-// the point in polygon match on that layer
-function highlightMatch(that) {
-    var layer = layers[that.dataset.layer].layer,
-        latlng = L.latLng(that.dataset.latlng.split(','));
+	function handleClick(e) {
 
-    for (var i = 0; i < layers.length; i++) {
-        if (layers[i].layer == layer) {
-            var match = leafletPip.pointInLayer(latlng, layers[i].layer, true);
-            layers[i].layer.eachLayer(function(shape) {
-                if (match[0] == shape) {
-                    // the one shape that is matched becomes loud and clear
-                    shape.setStyle(loud);
-                } else {
-                    shape.setStyle(medium);
-                }
-            });
-        } else {
-            layers[i].layer.setStyle(quiet);
-        }
-    }
-}
+		var html = '';
+		// look through each layer in order and see if the clicked point,
+		// e.latlng, overlaps with one of the shapes in it.
+		for (var i = 0; i < layers.length; i++) {
+			var match = leafletPip.pointInLayer(
+				// the clicked point
+				e.latlng,
+				// this layer
+				layers[i].layer,
+				// whether to stop at first match
+				false);
+			// if there's overlap, add some content to the popup: the publication title, links and some information
+			if (match.length) {
+				html += '<p><span class="search-title"><a href="' + match[0].feature.properties.url + '" >  ' + match[0].feature.properties.title + '</a> </span></br><span class="pubinfo">'
+					+ match[0].feature.properties.info + ' </span></br> <button class="filter-button" onclick="highlightMatch(this)" data-layer="' + i +
+					'" data-latlng="' + [e.latlng.lat, e.latlng.lng] + '">highlight</button></p>';
+			}
+		}
+		if (html) {
+			extents_map.openPopup(html, e.latlng, {
+				maxWidth: 350,
+				minWidth: 150,
+				maxHeight: 300,
+				offset: [0, -3],
+				autoPan: true,
+				closeButton: true,
+				autoPanPadding: [5, 5]
+			});
+
+		}
+	}
+
+	// To highlight a layer, we make all other layers quiet and then re-run
+	// the point in polygon match on that layer
+	function highlightMatch(that) {
+		var layer = layers[that.dataset.layer].layer,
+			latlng = L.latLng(that.dataset.latlng.split(','));
+
+		for (var i = 0; i < layers.length; i++) {
+			if (layers[i].layer == layer) {
+				var match = leafletPip.pointInLayer(latlng, layers[i].layer, true);
+				layers[i].layer.eachLayer(function (shape) {
+					if (match[0] == shape) {
+						// the one shape that is matched becomes loud and clear
+						shape.setStyle(loud);
+					} else {
+						shape.setStyle(medium);
+					}
+				});
+			} else {
+				layers[i].layer.setStyle(quiet);
+			}
+		}
+	}
 
 </script>
