@@ -9,9 +9,6 @@
 {% endblock head %}
 
 {% block page_style %}
-{% if request.args.map == 'True' %}
-	<link rel="stylesheet" href="{{ url_for('bower.static', filename = 'mapbox.js/mapbox.standalone.css') }}">
-{% endif %}
 	<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/pagination.css') }}">
 	<link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet/dist/leaflet.css') }}">
     <link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet-draw/dist/leaflet.draw.css') }}">
@@ -70,7 +67,7 @@
 {% endblock main %}
 {% block page_footer_script %}
 
-	{% include "pubswh/advanced_search_form_script.html" %}
+	{% include "pubswh/search_form_script.html" %}
 	{% if request.args.map == 'True' %}
             {% include 'pubswh/search_results_map_script.html' %}
     {% endif %}
