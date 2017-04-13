@@ -68,6 +68,7 @@
 {% block page_footer_script %}
 
 	{% include "pubswh/search_form_script.html" %}
+
 	{% if request.args.map == 'True' %}
             {% include 'pubswh/search_results_map_script.html' %}
     {% endif %}
