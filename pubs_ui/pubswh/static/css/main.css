@@ -665,11 +665,15 @@ h1.search-results{
 
 }
 
-.search-title.a:link {
+.search-title a:link {
     color: #1a0dab;
     text-decoration: none;
 }
 
+.search-title a:visited{
+    color: #609;
+    text-decoration: none;
+}
 .pagination-nav{
 	margin-bottom:15px;
 	text-align:center;
