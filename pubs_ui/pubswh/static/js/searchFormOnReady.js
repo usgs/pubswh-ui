@@ -21,6 +21,7 @@ $(document).ready(function() {
 
 	var enableCategory = function(name) {
 		$categorySelect.find('option[value="' + name + '"]').prop('disabled', false);
+		$categorySelect.select2();
 	};
 
 	// Retrieve information to create the initial search rows from the query parameters and search category list.
@@ -68,8 +69,9 @@ $(document).ready(function() {
 		}
 	});
 
-	// Set up advanced search category select and add category button click handler
-	$categorySelect.change(function() {
+	// Set up advanced search category select
+	$categorySelect.select2();
+	$categorySelect.on('change', function() {
 		var $selectedOption = $(this).find('option:selected');
 		$selectedOption.prop('disabled', true);
 		advancedSearchForm.addRow({
@@ -80,6 +82,7 @@ $(document).ready(function() {
 			lookup: $selectedOption.data('lookup')
 		});
 		$selectedOption.prop('selected', false);
+		$(this).select2();
 	});
 
 	// Add click handler for clear search terms
