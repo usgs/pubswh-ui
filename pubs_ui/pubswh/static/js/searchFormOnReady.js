@@ -14,13 +14,12 @@ $(document).ready(function() {
 	var $form = $('#search-pubs-form');
 	var $showHideSearchBtn = $form.find('#show-hide-advanced-search-btn');
 	var $categorySelect = $form.find('.search-category-select');
-	var $addCategoryBtn = $form.find('.add-search-category');
 	var $clearSearchBtn = $form.find('.clear-search-btn');
 	var $qSearch = $form.find('input[name="q"]');
 	var $advancedSearchDiv = $form.find('.advanced-search-div');
 	var advancedSearchForm;
 
-	var deleteSearchRow = function(name) {
+	var enableCategory = function(name) {
 		$categorySelect.find('option[value="' + name + '"]').prop('disabled', false);
 	};
 
@@ -44,7 +43,8 @@ $(document).ready(function() {
 	advancedSearchForm = PUBS_WH.advancedSearchForm ({
 		$container : $form.find('.advanced-search-container'),
 		$mapContainer: $form.find('.map-search-container'),
-		initialRows : initialSearchRows
+		initialRows : initialSearchRows,
+		deleteRowCallback : enableCategory
 	});
 
 	// Show/hide advanced search and add click handler for toggle link
@@ -70,11 +70,7 @@ $(document).ready(function() {
 
 	// Set up advanced search category select and add category button click handler
 	$categorySelect.change(function() {
-		$addCategoryBtn.prop('disabled',  !$(this).val());
-	});
-
-	$addCategoryBtn.click(function() {
-		var $selectedOption = $categorySelect.find('option:selected');
+		var $selectedOption = $(this).find('option:selected');
 		$selectedOption.prop('disabled', true);
 		advancedSearchForm.addRow({
 			name: $selectedOption.val(),

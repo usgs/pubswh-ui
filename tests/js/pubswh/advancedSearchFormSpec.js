@@ -252,11 +252,11 @@ describe('PUBS_WH.advancedSearchForm', function() {
 				$container: $testDiv,
 				$mapContainer: $mapDiv,
 				initialRows: initialRows,
-				deleteCallback: deleteCallbackSpy
+				deleteRowCallback: deleteCallbackSpy
 			});
 		});
 
-		it('Expects that deleteCallback is called with the correct name with a row is deleted', function() {
+		it('Expects that deleteRowCallback is called with the correct name with a row is deleted', function() {
 			var $rowToRemove = $('body').children().has(':input[name="param1"]');
 			$rowToRemove.find('.delete-row').click();
 

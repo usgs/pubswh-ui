@@ -137,8 +137,8 @@ PUBS_WH.advancedSearchForm = function(options) {
 		$row.find('.delete-row').click(function() {
 			var name = $row.find(':input').attr('name');
 			$row.remove();
-			if (options.deleteCallback) {
-				options.deleteCallback(name);
+			if (options.deleteRowCallback) {
+				options.deleteRowCallback(name);
 			}
 		});
 		lookupDeferred.done(function() {
