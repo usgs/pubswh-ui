@@ -31,6 +31,7 @@ echo "Successfully installed the pubs_ui app. "
 echo "Run all tests"
 node_modules/karma/bin/karma start tests/js/manager/karma.conf.js
 node_modules/karma/bin/karma start tests/js/metrics/karma.conf.js
+node_modules/karma/bin/karma start tests/js/pubswh/karma.conf.js
 env/bin/nosetests -w pubs_ui;
 env/bin/lettuce --with-xunit pubs_ui/lettuce_testing;
 

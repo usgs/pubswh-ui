@@ -1,4 +1,5 @@
 
+
 from flask_assets import Environment, Bundle
 
 from . import app
@@ -10,15 +11,15 @@ base_metrics_js = Bundle(
 )
 bundles={
     'js_base_libs' : Bundle(
-        'pubswh/js/vendor/bootstrap.js',
         'pubswh/js/plugins.js',
         filters='rjsmin',
         output='gen/base_libs.js'
     ),
     'js_advanced_search' : Bundle(
-        'pubswh/js/select2.js',
         'pubswh/js/searchMap.js',
         'pubswh/js/clearFeatureControl.js',
+        'pubswh/js/advancedSearchForm.js',
+        'pubswh/js/searchFormOnReady.js',
         filters='rjsmin',
         output='gen/advanced_search.js'
     ),
@@ -49,9 +50,6 @@ bundles={
     'css_base' : Bundle(
         'pubswh/css/normalize.css',
         'pubswh/css/main.css',
-        'pubswh/css/bootstrap.css',
-        'pubswh/css/select2.css',
-        'pubswh/css/select2-bootstrap.css',
         filters='cssmin',
         output='gen/min_base.css'
     ),

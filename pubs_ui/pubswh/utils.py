@@ -414,13 +414,17 @@ def concatenate_contributor_names(contributors):
     return contributor_list
 
 
-def jsonify_geojson(record):
+def update_geographic_extents(record):
+    #TODO: Refactor this to make more DRY
     """
-    turns the stringified geojson into a python dictionary that can be dumped as valid geojson
-    :param record:
-    :return record with geojson in geographicExtents:
+    Takes the string geographicExtents and translates it to a dictionary representing a geojson object. Properties in
+    the geojson object are filled in from other values in the dictionary. If the geographicExtents can not be parsed
+    into a valid geojson, the key is deleted from the dictionary
+    :param record: represents a publication and is modified by this function
+    :type record dict
     """
     geojson = record.get('geographicExtents')
+    result = None
     if geojson is not None:
         try:
             geojson = json.loads(geojson)
@@ -434,7 +438,7 @@ def jsonify_geojson(record):
                                              'year': record.get('publicationYear'),
                                              'info': display_publication_info(record)
                                              }
-                record['geographicExtents'] = geojson
+                result = geojson
             elif geojson.get('geometry'):
                 geojson["properties"] = {'title': record.get('title'),
                                          'id': record.get('indexId'),
@@ -445,12 +449,14 @@ def jsonify_geojson(record):
                 feature_collection = {"type": "FeatureCollection",
                                       "features": [geojson]
                                       }
-                record['geographicExtents'] = feature_collection
+                result = feature_collection
 
         except Exception as e:
             app.logger.info("Prod ID "+str(record['id'])+" geographicExtents json parse error: "+str(e))
-            del record['geographicExtents']
-    return record
+    if result:
+        record['geographicExtents'] = result
+    elif record.has_key('geographicExtents'):
+        del record['geographicExtents']
 
 
 def create_store_info(publication_resp):
@@ -646,7 +652,7 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     pubdata = manipulate_doi_information(pubdata)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
-    pubdata = jsonify_geojson(pubdata)
+    update_geographic_extents(pubdata)
     pubdata = make_chapter_data_for_display(pubdata)
     pubdata['formattedModifiedDateTime'] = arrow.get(pubdata['lastModifiedDate']).format('MMMM DD, YYYY HH:mm:ss')
     pubdata = munge_abstract(pubdata)

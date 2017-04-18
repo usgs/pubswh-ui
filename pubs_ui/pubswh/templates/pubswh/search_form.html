@@ -1,4 +1,82 @@
-<form style="display: inline;" action="{{ url_for('pubswh.search_results') }}" method="get" name="q">
-        <fieldset>{{ form.q.label }}{{ form.q(placeholder="search terms") }}</fieldset>
-    <button type="submit" class="btn">Search</button>
+
+<form id="search-pubs-form" action="{{ url_for('pubswh.search_results') }}" method="get">
+	<div class="form-group has_feedback col-sm-12">
+		<label for="q-text">Search for Publications</label>
+		<div class="input-group">
+			<span class="input-group-btn">
+				<button title="Clear search" class="btn btn-default clear-search-btn" type="button"><i class="fa fa-times"></i></button>
+			</span>
+			<input type="text" id="q-text" name="q" placeholder="Search terms" value="{{ request.args.q }}" class="form-control" />
+			<span class="form-control-feedback"><i class="fa fa-search"></i></span>
+		</div>
+	</div>
+	<div class="advanced-search-div">
+		<div class="form-group col-sm-12">
+			<div>
+				<select class="search-category-select form-control" style="width: 100%;">
+					<option>Advanced search category</option>
+					<option value="title" data-input-type="text" data-placeholder="enter title">Title</option>
+					<option value="contributingOffice" data-input-type="select" data-lookup="costcenters"
+							data-placeholder="Choose a Contributing Office">Contributing Office</option>
+					<option value="contributor" data-input-type="text" data-placeholder="Name of part of name">
+						Contributor Name
+					</option>
+					<option value="orcid" data-input-type="url" data-placeholder="ORCID as a URL">ORCID</option>
+					<option value="year" data-input-type="text" data-placeholder="e.g. 2014">Year Published</option>
+					<option value="startYear" data-input-type="text" data-placeholder="e.g. 1994">Published starting in</option>
+					<option value="endYear" data-input-type="text" data-placeholder="e.g. 2012">Published in or before</option>
+					<option value="typeName" data-input-type="select" data-lookup="publicationtypes"
+							data-placeholder="Choose a Publication Type">
+						Publication Type
+					</option>
+					<option value="subtypeName" data-input-type="select" data-lookup="publicationsubtypes"
+							data-placeholder="Choose a Publication Subtype" >
+						Publication Subtype
+					</option>
+					<option value="seriesName" data-input-type="select" data-lookup="publicationseries"
+							data-placeholder="Choose a Series Name or Journal Title" >
+						Series Name
+					</option>
+					<option value="reportNumber" data-input-type="text" data-placeholder="e.g. 2014-3113">Report Number</option>
+					<option value="doi" data-input-type="boolean">DOI</option>
+					<option value="prodId" data-input-type="text" data-placeholder="Product ID">Prod ID</option>
+					<option value="indexId" data-input-type="text" data-placeholder="Index Id">Index Id</option>
+					<option value="pub_x_days" data-input-type="text" data-placeholder="e.g. 7, for publications in the last 7 days">
+						Published in the last X days
+					</option>
+					<option value="pub_date_low" data-input-type="date"
+							data-placeholder="e.g. 2015-05-15 to get publications published after May 15, 2015">
+						Published After
+					</option>
+					<option value="pub_date_high" data-input-type="date"
+							data-placeholder="eg 2016-01-15 to get publications published before January 1, 2016">
+						Published Before
+					</option>
+					<option value="mod_x_days" data-input-type="text" data-placeholder="e.g. 7, for publications modified in the last 7 days">
+						Modified in the last X days
+					</option>
+					<option value="mod_date_low" data-input-type="date"
+							data-placeholder="e.g. 2015-05-15 to get publications modified after May 15, 2015">
+						Modified After
+					</option>
+					<option value="mod_date_high" data-input-type="date"
+							data-placeholder="eg 2016-01-15 to get publications modified before January 1, 2016">
+						Modified Before
+					</option>
+					<option value="chorus" data-input-type="boolean">CHORUS</option>
+					<option value="linkType" data-input-type="select" data-lookup="linktypes"
+							data-placeholder="Choose a Link Type">
+						Link Type
+					</option>
+					<option value="g" data-input-type="map" >Area of Interest (Map)</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="form-horizontal advanced-search-container col-sm-12"></div>
+	<div class="form-horizontal map-search-container col-sm-12"></div>
+	<div class="col-sm-12">
+		<button type="submit" class="btn btn-primary">Search</button>
+		<a id="show-hide-advanced-search-btn" role="button"></a>
+	</div>
 </form>

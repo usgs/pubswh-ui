@@ -1,14 +1,20 @@
+/* jslint browser: true */
+/* global L */
+/* global $ */
+/* global Wkt */
+
 var PUBS_WH = PUBS_WH || {};
 /*
  * Creates a Leaflet map and controls to draw a search box and to update an input element
  * when a box has been drawn or cleared.
  * 
  * @param mapDivId {String} id of the div where the search map will be created
- * @param geomInputId {String} id of the input element whose value will be updated when
+ * @param $geomInput {Jquery element} - input element whose value will be updated when
  *        a polygon is drawn on the map.
  * @return a Leaflet map object
  */
-PUBS_WH.createSearchMap = function(mapDivId, geomInputId) {
+PUBS_WH.createSearchMap = function(mapDivId, $geomInput) {
+	"use strict";
 	
 	var SHAPE_OPTIONS = {
 			color: '#ff0000',
@@ -27,9 +33,7 @@ PUBS_WH.createSearchMap = function(mapDivId, geomInputId) {
 
 	var searchFeature = new L.FeatureGroup();
 	
-	var $geomInput = $('#' + geomInputId);
-	
-	var map = L.map('search-map-div', {
+	var map = L.map(mapDivId, {
 		layers : [baseLayers.Topographic]
 	});
 	
