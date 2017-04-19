@@ -459,6 +459,7 @@ def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
 @cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def search_results():
     search_kwargs = request.args.to_dict(flat=False)
+    page = search_kwargs.get('page')
 
     # Remove the mimeType so that json will be returned from the web service call
     if search_kwargs.has_key('mimetype'):
@@ -467,7 +468,7 @@ def search_results():
     # Default paging parameters if not present or empty
     if not search_kwargs.get('page_size'):
         search_kwargs['page_size'] = ['25']
-    if not search_kwargs.get('page'): # Open search API uses page rather than page number which our API uses.
+    if not page or (len(page) == 1 and not page[0]):
         search_kwargs['page'] = ['1']
     if not search_kwargs.get('page_number'):
         search_kwargs['page_number'] = search_kwargs.get('page')
