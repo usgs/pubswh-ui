@@ -42,6 +42,7 @@ define([
 			'#series-number-input' : 'seriesNumber',
 			'#chapter-input' : 'chapter',
 			'#subchapter-input' : 'subchapterNumber',
+			'#display-title-input' : 'displayTitle',
 			'#title-input' : 'title',
 			'#usgs-citation-input' : 'usgsCitation',
 			'#collaboration-input' : 'collaboration',
