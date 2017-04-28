@@ -945,7 +945,7 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
     return sbdata
 
 
-def get_altmetric_badge_img_links(publication_doi, publication_indexid, altmetric_service_endpoint=altmetric_endpoint,
+def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=altmetric_endpoint,
                                   altmetric_key=altmetric_key, verify=verify_cert):
     """
     Get the links for small, medium, and altmetric badges, and the link
@@ -965,9 +965,9 @@ def get_altmetric_badge_img_links(publication_doi, publication_indexid, altmetri
     altmetric_details = None
     if publication_doi is not None:
         parameters = {'key': altmetric_key}
-        publication_doi_endpoint = urljoin(altmetric_service_endpoint, 'doi/{}'.format(publication_doi))
+        publication_endpoint = urljoin(altmetric_service_endpoint, 'doi/{}'.format(publication_doi))
         try:
-            resp = requests.get(publication_doi_endpoint, params=parameters, verify=verify)
+            resp = requests.get(publication_endpoint, params=parameters, verify=verify)
         except requests.ConnectionError:
             pass
         else:
@@ -975,17 +975,4 @@ def get_altmetric_badge_img_links(publication_doi, publication_indexid, altmetri
                 resp_json = resp.json()
                 altmetric_badge_imgs = resp_json.get('images')
                 altmetric_details = resp_json.get('details_url')
-            if resp.status_code == 404:
-
-                publication_url_endpoint = urljoin(altmetric_service_endpoint, 'uri/{}'.format(
-                    "https://pubs.er.usgs.gov/publication/" + publication_indexid))
-                try:
-                    resp = requests.get(publication_url_endpoint, params=parameters, verify=verify)
-                except requests.ConnectionError:
-                    pass
-                else:
-                    if resp.status_code != 404:
-                        resp_json = resp.json()
-                        altmetric_badge_imgs = resp_json.get('images')
-                        altmetric_details = resp_json.get('details_url')
     return altmetric_badge_imgs, altmetric_details
