@@ -70,8 +70,14 @@
             {% else %}
                 {{ thumbnail_image() }}
             {% endif %}
+
+                {# Choose publication title information to be displayed #}
                 <hgroup class="publicationTitle">
+                    {% if pubdata['displayTitle'] %}
+                    <h3 itemprop="name">{{ pubdata['displayTitle']|safe }}</h3>
+                    {% else %}
                     <h3 itemprop="name">{{ pubdata['title']|safe }}</h3>
+                    {% endif %}
                     {% if pubdata['seriesTitle'] %}
                     <h4>{{ pubdata['seriesTitle']['text'] }} {{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %}</h4>
                     {% endif %}

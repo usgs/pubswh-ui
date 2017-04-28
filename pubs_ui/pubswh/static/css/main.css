@@ -659,6 +659,10 @@ h1.search-results{
 	font-size:1.2em;
 }
 
+.advanced-search-div {
+	display:none;
+}
+
 .search-title{
 	color:rgb(0,51,102);
 	text-decoration:none;
