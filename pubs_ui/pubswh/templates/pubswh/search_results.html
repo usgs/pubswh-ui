@@ -37,12 +37,13 @@
             <strong>|</strong> <a href="{{ pub_url }}publication/?page_size={{ result_summary['records_per_page'] }}&page_number={{ result_summary['page_number'] }}{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">JSON version of this page of results</a>
             </p>
             <p>Page {{ result_summary['page_number'] }}, results {{ result_summary['record_min'] }} - {{ result_summary['record_max'] }}</p>
-		    <p>{% if request.args.map != 'True' %}<a href="{{ url_for('pubswh.search_results') }}?map=True{% for key, value in request.args.iteritems() %}&{{ key }}={{ value|urlencode }}{% endfor %}">Show results on a map</a>{% elif request.args.map == 'True'  %}<a href="{{ url_for('pubswh.search_results') }}?{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'map') %}{% if not loop.first %}&{% endif %}{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">Hide map</a>{% endif %}
+		    <p>
+				<a class="toggle-results-map-btn" href="#">Show results on a map</a>
 		    </p>
 		</section>
-        {% if request.args.map == 'True' %}
-            {% include 'pubswh/search_results_map.html' %}
-        {% endif %}
+
+		{% include 'pubswh/search_results_map.html' %}
+
         <section id="search-results">
 				{% for result in search_result_records %}
 					<article>
@@ -68,10 +69,7 @@
 {% block page_footer_script %}
 
 	{% include "pubswh/search_form_script.html" %}
-
-	{% if request.args.map == 'True' %}
-            {% include 'pubswh/search_results_map_script.html' %}
-    {% endif %}
+	{% include 'pubswh/search_results_map_script.html' %}
 	
 {% endblock page_footer_script %}
 

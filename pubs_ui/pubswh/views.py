@@ -517,9 +517,8 @@ def search_results():
         response = jsonify(sb_response)
 
     else:
-        if request.args.get('map') == 'True':
-            for record in search_result_records:
-                update_geographic_extents(record)
+        for record in search_result_records:
+            update_geographic_extents(record)
 
         response = render_template('pubswh/search_results.html',
                                    result_summary=result_summary,
