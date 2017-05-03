@@ -2,7 +2,7 @@
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
     <ShortName>USGS Pubs WH</ShortName>
     <LongName>USGS Publications Warehouse Search</LongName>
-    <Description>The Pubs Warehouse provides access to over 130,000 publications written by USGS scientists over the century-plus history of the bureau</Description>
+    <Description>The Pubs Warehouse provides access to over 150,000 publications written by USGS scientists over the century-plus history of the bureau</Description>
     <Image height="16" width="16" type="image/x-icon"
         >http://pubs.er.usgs.gov/favicon.ico</Image>
     <Contact>pubs_tech_group@usgs.gov</Contact>
