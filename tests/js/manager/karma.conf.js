@@ -1,5 +1,12 @@
 // Karma configuration
 // Generated on Wed Dec 30 2015 09:23:08 GMT-0600 (CST)
+var sourcePreprocessors = ['coverage'];
+function isDebug(argument) {
+    return argument === '--debug';
+};
+if (process.argv.some(isDebug)) {
+    sourcePreprocessors = [];
+}
 
 module.exports = function(config) {
   config.set({
@@ -52,7 +59,7 @@ module.exports = function(config) {
       // source files, that you wanna generate coverage for
       // do not include tests or libraries
       // (these files will be instrumented by Istanbul)
-      'pubs_ui/manager/static/js/**/*.js': ['coverage']
+      'pubs_ui/manager/static/js/**/*.js': sourcePreprocessors
     },
 
     // test results reporter to use
