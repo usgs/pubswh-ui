@@ -1,13 +1,12 @@
 
 <script type="text/javascript"
-		src="{{ url_for('bower.static', filename = 'mapbox.js/mapbox.standalone.js') }}"></script>
-<script type="text/javascript"
 		src="{{ url_for('pubswh.static', filename = 'vendor/mapbox/leaflet-pip/leaflet-pip.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('pubswh.static', filename='js/resultsMap.js') }}"></script>
 
 <script type="application/javascript">
 	PUBS_WH.createResultsMap({
 		mapDivId: 'extents-map',
-		publications: {{ search_result_records | tojson | safe }}
+		publications: {{ search_result_records | tojson | safe }},
+		enablePopup: true
 	});
 </script>

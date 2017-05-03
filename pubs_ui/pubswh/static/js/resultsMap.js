@@ -12,6 +12,7 @@ var PUBS_WH = PUBS_WH || {};
  * @param {Object} options
  * 		@prop {String} mapDivId
  * 		@prop {Array of Object} publications
+ * 		@prop {Boolean} enablePopup - publication extent layers should be interactive only when set to true
  * @returns {L.Map} - Returns the map object created.
  */
 PUBS_WH.createResultsMap = function(options) {
@@ -58,7 +59,8 @@ PUBS_WH.createResultsMap = function(options) {
 		})
 		.map(function(pub) {
 			return L.geoJSON(pub.geographicExtents, {
-				style: quiet
+				style: quiet,
+				interactive: options.enablePopup
 			});
 		})
 		.value();
@@ -76,7 +78,7 @@ PUBS_WH.createResultsMap = function(options) {
 	var map = L.map(options.mapDivId, {
 		layers: baseMaps.Topographic,
 		zoom: 4,
-		center: [38, -115]
+		center: [38, -115],
 	});
 
 	var resetStyles = function() {
@@ -125,10 +127,12 @@ PUBS_WH.createResultsMap = function(options) {
 
 	map.addControl(L.control.layers(baseMaps, overlayMaps));
 	map.on('popupclose', resetStyles);
-	pubsExtentLayers.forEach(function(layer) {
+
+	pubsExtentLayers.forEach(function (layer) {
 		map.addLayer(layer);
 		layer.on('click', showExtentInfoPopup);
 	});
+
 	if (pubsExtentLayers.length) {
 		map.fitBounds(L.featureGroup(pubsExtentLayers).getBounds());
 	}

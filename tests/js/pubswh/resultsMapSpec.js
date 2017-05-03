@@ -25,7 +25,8 @@ describe('PUBS_WH.resultsMap', function() {
 	it('Expect no extent layers to be created if an empty publications object is passed in', function() {
 		map = PUBS_WH.createResultsMap({
 			mapDivId: 'test-map-div',
-			publications: []
+			publications: [],
+			enablePopup: true
 		});
 
 		expect(L.geoJSON).not.toHaveBeenCalled();
@@ -45,7 +46,8 @@ describe('PUBS_WH.resultsMap', function() {
 		];
 		map = PUBS_WH.createResultsMap({
 			mapDivId: 'test-map-div',
-			publications: publications
+			publications: publications,
+			enablePopup: true
 		});
 
 		expect(L.geoJSON).not.toHaveBeenCalled();
@@ -107,7 +109,8 @@ describe('PUBS_WH.resultsMap', function() {
 		];
 		map = PUBS_WH.createResultsMap({
 			mapDivId: 'test-map-div',
-			publications: publications
+			publications: publications,
+			enablePopup: true
 		});
 
 		expect(L.geoJSON.calls.count()).toBe(2);
