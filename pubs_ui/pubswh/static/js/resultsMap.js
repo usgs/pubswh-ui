@@ -12,6 +12,7 @@ var PUBS_WH = PUBS_WH || {};
  * @param {Object} options
  * 		@prop {String} mapDivId
  * 		@prop {Array of Object} publications
+ * @returns {L.Map} - Returns the map object created.
  */
 PUBS_WH.createResultsMap = function(options) {
 	"use strict";
@@ -84,7 +85,7 @@ PUBS_WH.createResultsMap = function(options) {
 		});
 	};
 
-	var handleExtentLayerClick = function(evt) {
+	var showExtentInfoPopup = function(evt) {
 		var clickedLayerProps = {layers: []};
 
 		pubsExtentLayers.forEach(function(layer, index) {
@@ -123,11 +124,14 @@ PUBS_WH.createResultsMap = function(options) {
 	};
 
 	map.addControl(L.control.layers(baseMaps, overlayMaps));
-	map.on('click', handleExtentLayerClick);
 	map.on('popupclose', resetStyles);
 	pubsExtentLayers.forEach(function(layer) {
 		map.addLayer(layer);
-		layer.on('click', handleExtentLayerClick);
+		layer.on('click', showExtentInfoPopup);
 	});
-	map.fitBounds(L.featureGroup(pubsExtentLayers).getBounds());
+	if (pubsExtentLayers.length) {
+		map.fitBounds(L.featureGroup(pubsExtentLayers).getBounds());
+	}
+
+	return map;
 };
