@@ -23,18 +23,35 @@
         <section id="search">
             {% include 'pubswh/search_form.html' %}
         </section>
-        {% macro service_url(mimetype, disp_mimetype) %}
-            <a href="{{ pub_url }}publication/?mimeType={{ mimetype }}{% for key, value in request.args.iteritems() %}{% if value|length > 0 and
-            (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{{ disp_mimetype }}</a>
+        {% macro pub_service_url(mimetype, disp_mimetype) %}
+            <a href="{{ config.BASE_SEARCH_URL }}?mimeType={{ mimetype }}&{{ query_request_string }}">
+				{{ disp_mimetype }}
+			</a>
         {% endmacro %}
 
         <section class="search-results">
             <p>{{ result_summary['record_count'] }} results.</p>
             <p>Alternate formats:
-            <a href="{{ json_ld_base_url }}/search?page_size=3000&mimetype=ris{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{% if result_summary['record_count'] <= 3000 %}Download search results as RIS{% else %}RIS file of the first 3000 search results{% endif %}</a>
-            <strong>|</strong> {% if result_summary['record_count'] > 3000 %} Download all results as {% endif %} {{ service_url("csv", "CSV") }} | {{ service_url('tsv', 'TSV') }} | {{ service_url('xlsx', 'Excel') }}
-            <strong>|</strong> <a href="{{ pub_url }}publication/rss/?pub_x_days=60{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">RSS feed based on this search</a>
-            <strong>|</strong> <a href="{{ pub_url }}publication/?page_size={{ result_summary['records_per_page'] }}&page_number={{ result_summary['page_number'] }}{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">JSON version of this page of results</a>
+				<a href="{{ json_ld_base_url }}/search?page_size=3000&mimetype=ris&{{ query_request_string }}">
+					{% if result_summary['record_count'] <= 3000 %}
+						Download search results as RIS
+					{% else %}
+						RIS file of the first 3000 search results
+					{% endif %}
+				</a>
+            	<strong>&nbsp;|&nbsp;</strong>
+				{% if result_summary['record_count'] > 3000 %}
+					Download all results as
+				{% endif %}
+				{{ pub_service_url("csv", "CSV") }} | {{ pub_service_url('tsv', 'TSV') }} | {{ pub_service_url('xlsx', 'Excel') }}
+				<strong>&nbsp;|&nbsp;</strong>
+				<a href="{{ config.BASE_SEARCH_URL }}rss/?pub_x_days=60&{{ query_request_string }}">
+					RSS feed based on this search
+				</a>
+            	<strong>&nbsp;|&nbsp;</strong>
+				<a href="{{ config.BASE_SEARCH_URL }}?page_size={{ result_summary['records_per_page'] }}&page_number={{ result_summary['page_number'] }}&{{ query_request_string }}">
+					JSON version of this page of results
+				</a>
             </p>
             <p>Page {{ result_summary['page_number'] }}, results {{ result_summary['record_min'] }} - {{ result_summary['record_max'] }}</p>
 		    <p>

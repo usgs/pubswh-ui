@@ -28,9 +28,7 @@ $(document).ready(function() {
 		}
 		else {
 			$extentsMapContainer.hide();
-			$(this).html(TOGGLE_BTN_SHOW_TEXT)
+			$(this).html(TOGGLE_BTN_SHOW_TEXT);
 		}
 	});
-
-
 });

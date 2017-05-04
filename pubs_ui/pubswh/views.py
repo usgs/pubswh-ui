@@ -3,6 +3,7 @@ from dateutil import parser as dateparser
 import json
 from operator import itemgetter
 import sys
+import urllib
 
 import arrow
 from requests import get
@@ -460,6 +461,9 @@ def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
 def search_results():
     search_kwargs = request.args.to_dict(flat=False)
     page = search_kwargs.get('page')
+    query_request_args = search_kwargs.copy()
+    if page:
+        del query_request_args['page']
 
     # Remove the mimeType so that json will be returned from the web service call
     if search_kwargs.has_key('mimetype'):
@@ -525,7 +529,7 @@ def search_results():
                                    search_result_records=search_result_records,
                                    pagination=pagination,
                                    search_service_down=search_service_down,
-                                   pub_url=pub_url)
+                                   query_request_string=urllib.urlencode(query_request_args, True))
 
     return response
 
