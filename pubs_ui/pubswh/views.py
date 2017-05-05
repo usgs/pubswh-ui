@@ -635,8 +635,8 @@ def legacy_search(series_code=None, report_number=None, pub_year=None):
 @pubswh.route('/unapi')
 def unapi():
     """
-    this is an unapi format, which appears to be the only way to get a good export to zotero that has all the Zotero fields
-    Documented here: http://unapi.info/specs/
+    this is an unapi format, which appears to be the only way to get a good export to zotero that has all the
+    Zotero fields, Documented here: http://unapi.info/specs/
     :return: rendered template of (at this time) bibontology rdf, which maps directly to Zotero Fields
     """
 
@@ -654,6 +654,5 @@ def unapi():
         if r.status_code == 404:
             return render_template('pubswh/404.html'), 404
         pubdata = r.json()
-        return render_template('pubswh/'+formats[unapi_format]['template'], pubdata=pubdata, formats=formats,  mimetype='text/xml')
-
-
+        return render_template('pubswh/'+formats[unapi_format]['template'], pubdata=pubdata, formats=formats,
+                               mimetype='text/xml')

@@ -37,7 +37,7 @@ class ManipulateDoiInformationTestCase(unittest.TestCase):
                         "id": 15,
                         "text": "Index Page"
                     },
-                    "url": "http://dx.doi.org/10.65165468/asdflasdfnlasdkf"
+                    "url": "https://doi.org/10.65165468/asdflasdfnlasdkf"
                 }
             ]
         }
@@ -77,7 +77,7 @@ class ManipulateDoiInformationTestCase(unittest.TestCase):
                        'rank': None,
                        'text': 'Publisher Index Page (via DOI)',
                        'type': {'id': 15, 'text': 'Index Page'},
-                       'url': 'http://dx.doi.org/10.1002/2012RG000417'}],
+                       'url': 'https://doi.org/10.1002/2012RG000417'}],
             'publicationSubtype': {'text': 'Journal Article'}}
         assert manipulate_doi_information(chorus_pubsdata) == expected_chorus_pubsdata
 
@@ -102,7 +102,7 @@ class ManipulateDoiInformationTestCase(unittest.TestCase):
                         "id": 15,
                         "text": "Index Page"
                     },
-                    "url": "http://dx.doi.org/10.65165468/asdflasdfnlasdkf"
+                    "url": "https://doi.org/10.65165468/asdflasdfnlasdkf"
                 }
             ]
         }
@@ -145,7 +145,7 @@ class ManipulateDoiInformationTestCase(unittest.TestCase):
                         "id": 15,
                         "text": "Index Page"
                     },
-                    "url": "http://dx.doi.org/10.65165468/asdflasdfnlasdkf"
+                    "url": "https://doi.org/10.65165468/asdflasdfnlasdkf"
                 }
             ]
         }
