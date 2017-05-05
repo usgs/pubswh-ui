@@ -1,7 +1,6 @@
 <script type="application/javascript">
 	CONFIG.publications = {{ search_result_records | tojson | safe }}
 </script>
-<script type="text/javascript"
-		src="{{ url_for('pubswh.static', filename = 'vendor/mapbox/leaflet-pip/leaflet-pip.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('pubswh.static', filename = 'vendor/mapbox/leaflet-pip/leaflet-pip.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('pubswh.static', filename='js/resultsMap.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('pubswh.static', filename='js/extentsMapOnReady.js') }}"></script>
