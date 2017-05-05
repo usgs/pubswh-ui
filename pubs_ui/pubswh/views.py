@@ -481,7 +481,7 @@ def search_results():
     sp = SearchPublications(search_url)
     search_results_response, resp_status_code = sp.get_pubs_search_results(params=search_kwargs)
     try:
-        search_result_records = search_results_response['records']
+        search_result_records = search_results_response.get('records', []) if search_results_response else []
         record_count = search_results_response['recordCount']
         pagination = Pagination(page=int(search_kwargs['page_number'][0]), total=record_count,
                                 per_page=int(search_kwargs['page_size'][0]), record_name='Search Results', bs_version=3)
@@ -496,7 +496,7 @@ def search_results():
                           'records_per_page': search_results_response['pageSize'],
                           'record_min': (int(search_results_response['pageRowStart']) + 1), 'record_max': record_max}
     except TypeError:
-        search_result_records = None
+        search_result_records = []
         pagination = None
         search_service_down = 'The backend services appear to be down with a {0} status.'.format(resp_status_code)
         result_summary = {}
