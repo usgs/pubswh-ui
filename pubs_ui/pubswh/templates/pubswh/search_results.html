@@ -1,18 +1,20 @@
 {% extends 'pubswh/base.html' %}
+
 {% block head %}
 	<title>Search Results - USGS Publications Warehouse</title>
 	<meta name="description" content="Search results for USGS Publications Warehouse">
-    {% include 'pubswh/meta.html' %}
-     <meta name="totalResults" content="{{ result_summary['record_count'] }}"/>
-     <meta name="startIndex" content="{{ result_summary['record_min'] }}"/>
-     <meta name="itemsPerPage" content="{{ result_summary['records_per_page'] }}"/>
+
+	{% include 'pubswh/meta.html' %}
+
+	<meta name="totalResults" content="{{ result_summary['record_count'] }}"/>
+	<meta name="startIndex" content="{{ result_summary['record_min'] }}"/>
+	<meta name="itemsPerPage" content="{{ result_summary['records_per_page'] }}"/>
 {% endblock head %}
 
 {% block page_style %}
 	<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/pagination.css') }}">
 	<link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet/dist/leaflet.css') }}">
     <link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet-draw/dist/leaflet.draw.css') }}">
-
 {% endblock page_style %}
 
 {% block main %}
@@ -64,12 +66,27 @@
         <section id="search-results">
 				{% for result in search_result_records %}
 					<article>
-                        <h5  class="search-title"><a href="{{ url_for('pubswh.publication', index_id = result['indexId']) }}">{{ result['title']|safe }}</a></h5>
-                        {% if current_user.is_authenticated %}<small><a href="{{ url_for('manager.show_app')}}#publication/{{ result['id'] }}" target="_blank">(edit in Manager)</a></small>{% endif %}
-                        {% if result['authorsList']|length > 0 %}<h6 class="searchContributors">{{ result['authorsList']|join(', ') }}</h6>{% endif %}
-                        {% if result['editorsList']|length > 0 %}<h6 class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</h6>{% endif %}
+                        <h5  class="search-title">
+							<a href="{{ url_for('pubswh.publication', index_id = result['indexId']) }}">
+								{{ result['title']|safe }}
+							</a>
+						</h5>
+                        {% if current_user.is_authenticated %}
+							<small>
+								<a href="{{ url_for('manager.show_app')}}#publication/{{ result['id'] }}" target="_blank">
+									(edit in Manager)
+								</a></small>
+						{% endif %}
+                        {% if result['authorsList']|length > 0 %}
+							<h6 class="searchContributors">{{ result['authorsList']|join(', ') }}</h6>
+						{% endif %}
+                        {% if result['editorsList']|length > 0 %}
+							<h6 class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</h6>
+						{% endif %}
                         <h6 class="pubinfo">{{ result|display_pub_info }}</h6>
-                        {% if result['docAbstract']  %}<p class="searchAbstract">{{ result['docAbstract'].split(' ')[0:50]|join(' ')|striptags }}...</p>{% endif %}
+                        {% if result['docAbstract']  %}
+							<p class="searchAbstract">{{ result['docAbstract'].split(' ')[0:50]|join(' ')|striptags }}...</p>{
+						% endif %}
 					</article>
 				{% endfor %}
         </section>
@@ -83,11 +100,10 @@
 		{{ search_service_down }}
 	{% endif %}
 {% endblock main %}
-{% block page_footer_script %}
 
+{% block page_footer_script %}
 	{% include "pubswh/search_form_script.html" %}
 	{% include 'pubswh/search_results_map_script.html' %}
-	
 {% endblock page_footer_script %}
 
 {% block url %}<a href="..{{ request.path }}">http://pubs.er.usgs.gov{{ request.path }}</a>{% endblock %}
