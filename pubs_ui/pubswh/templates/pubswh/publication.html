@@ -34,7 +34,6 @@
         <meta name="citation_pdf_url" content="{{ pubdata['displayLinks']['Document'][0]['url'] }}" />
     {% endif %}
 
-
     {% block page_style %}
        {%- if pubdata["geographicExtents"] -%}
         <link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet/dist/leaflet.css') }}">
