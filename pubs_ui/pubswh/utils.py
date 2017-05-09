@@ -428,7 +428,7 @@ def update_geographic_extents(record):
         try:
             geojson = json.loads(record.get('geographicExtents'))
         except ValueError as e:
-            app.logger.info("Prod ID " + str(record.get('id')) + " geographicExtents json parse error: " + str(e))
+            app.logger.info("Prod ID " + str(record.get('id')) + " geographicExtents json parse error: " + repr(e))
 
         else:
             featureId = record.get('indexId') + '.base_id'
