@@ -23,6 +23,8 @@ require.config({
 		}
 	},
 
+	waitSeconds: 20,
+
 	paths: {
 		'squire': '/base/pubs_ui/bower_components/Squire.js/src/Squire',
 		'jquery': '/base/pubs_ui/bower_components/jquery/dist/jquery',
