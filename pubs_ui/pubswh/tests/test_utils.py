@@ -4,9 +4,9 @@ from mock import MagicMock
 import requests as r
 import requests_mock
 
-from pubs_ui.pubswh.utils import (manipulate_doi_information, generate_sb_data,
-                                  create_store_info, get_altmetric_badge_img_links)
-from pubs_ui import app
+from ..utils import manipulate_doi_information, generate_sb_data, update_geographic_extents, \
+                    create_store_info, get_altmetric_badge_img_links
+from ... import app
 
 
 unittest.TestCase.maxDiff = None
@@ -312,3 +312,57 @@ class GetAltmetricBadgeImgLinksTestCase(unittest.TestCase):
                                                self.fake_altmetric_key, self.verify_cert)
         expected = (None, None)
         self.assertTupleEqual(result, expected)
+
+
+class UpdateGeographicExtentsTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.record = {'indexId': '1234', 'title': 'Title 1'}
+
+    def test_record_with_no_geographic_extents(self):
+        update_geographic_extents(self.record)
+        self.assertEqual({'indexId': '1234', 'title': 'Title 1'}, self.record)
+
+    def test_record_with_empty_geographic_extents(self):
+        self.record['geographicExtents'] = ''
+        update_geographic_extents(self.record)
+
+        self.assertFalse(self.record.has_key('geographicExtentns'))
+
+    def test_record_with_geographic_extents_with_invalid_json(self):
+        self.record['geographicExtents'] = 'asdfasdfasdf'
+        update_geographic_extents(self.record)
+        self.assertFalse(self.record.has_key('geographicExtents'))
+
+    def test_record_with_geographic_extents_with_single_feature(self):
+        self.record['geographicExtents'] = '{"type" : "Feature", "geometry": {"type": "Polygon", ' \
+            + '"coordinates": [[ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0] ]]}}'
+        update_geographic_extents(self.record)
+
+        self.assertTrue(self.record.has_key('geographicExtents'))
+        extents = self.record.get('geographicExtents')
+        self.assertEqual(extents.get('type'), 'FeatureCollection')
+        self.assertEqual(extents.get('properties'), {'title': 'Title 1'})
+        features = extents.get('features', [])
+        self.assertEqual(len(features), 1)
+        self.assertEqual(features[0].get('geometry').get('type'), 'Polygon')
+        self.assertEqual(features[0].get('properties').get('title'), 'Title 1')
+        self.assertEqual(features[0].get('properties').get('id'), '1234')
+
+    def test_record_with_geographic_extents_with_feature_collection(self):
+        self.record['geographicExtents'] = '{"type": "FeatureCollection", "features": [' \
+            + '{"type": "Feature",' \
+            +' "geometry": {"type": "Polygon", ' \
+            + '"coordinates": [[ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0] ]]}}]}'
+
+        update_geographic_extents(self.record)
+
+        self.assertTrue(self.record.has_key('geographicExtents'))
+        extents = self.record.get('geographicExtents')
+        self.assertEqual(extents.get('type'), 'FeatureCollection')
+        self.assertEqual(extents.get('properties'), {'title': 'Title 1'})
+        features = extents.get('features', [])
+        self.assertEqual(len(features), 1)
+        self.assertEqual(features[0].get('geometry').get('type'), 'Polygon')
+        self.assertEqual(features[0].get('properties').get('title'), 'Title 1')
+        self.assertEqual(features[0].get('properties').get('id'), '1234')

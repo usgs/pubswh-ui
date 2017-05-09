@@ -1,18 +1,20 @@
 {% extends 'pubswh/base.html' %}
+
 {% block head %}
 	<title>Search Results - USGS Publications Warehouse</title>
 	<meta name="description" content="Search results for USGS Publications Warehouse">
-    {% include 'pubswh/meta.html' %}
-     <meta name="totalResults" content="{{ result_summary['record_count'] }}"/>
-     <meta name="startIndex" content="{{ result_summary['record_min'] }}"/>
-     <meta name="itemsPerPage" content="{{ result_summary['records_per_page'] }}"/>
+
+	{% include 'pubswh/meta.html' %}
+
+	<meta name="totalResults" content="{{ result_summary['record_count'] }}"/>
+	<meta name="startIndex" content="{{ result_summary['record_min'] }}"/>
+	<meta name="itemsPerPage" content="{{ result_summary['records_per_page'] }}"/>
 {% endblock head %}
 
 {% block page_style %}
 	<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/pagination.css') }}">
 	<link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet/dist/leaflet.css') }}">
     <link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet-draw/dist/leaflet.draw.css') }}">
-
 {% endblock page_style %}
 
 {% block main %}
@@ -23,35 +25,61 @@
         <section id="search">
             {% include 'pubswh/search_form.html' %}
         </section>
-        {% macro service_url(mimetype, disp_mimetype) %}
-            <a href="{{ pub_url }}publication/?mimeType={{ mimetype }}{% for key, value in request.args.iteritems() %}{% if value|length > 0 and
-            (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{{ disp_mimetype }}</a>
+        {% macro pub_service_url(mimetype, disp_mimetype) %}
+            <a href="{{ config.BASE_SEARCH_URL }}?mimeType={{ mimetype }}&{{ query_request_string }}">{{ disp_mimetype }}</a>
         {% endmacro %}
 
         <section class="search-results">
             <p>{{ result_summary['record_count'] }} results.</p>
             <p>Alternate formats:
-            <a href="{{ json_ld_base_url }}/search?page_size=3000&mimetype=ris{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page') and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{% if result_summary['record_count'] <= 3000 %}Download search results as RIS{% else %}RIS file of the first 3000 search results{% endif %}</a>
-            <strong>|</strong> {% if result_summary['record_count'] > 3000 %} Download all results as {% endif %} {{ service_url("csv", "CSV") }} | {{ service_url('tsv', 'TSV') }} | {{ service_url('xlsx', 'Excel') }}
-            <strong>|</strong> <a href="{{ pub_url }}publication/rss/?pub_x_days=60{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">RSS feed based on this search</a>
-            <strong>|</strong> <a href="{{ pub_url }}publication/?page_size={{ result_summary['records_per_page'] }}&page_number={{ result_summary['page_number'] }}{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'advanced') and (key  !=  'page')  and (key  !=  'map') %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">JSON version of this page of results</a>
+				<a href="{{ json_ld_base_url }}/search?page_size=3000&mimetype=ris&{{ query_request_string }}">
+					{% if result_summary['record_count'] <= 3000 %}
+						Download search results as RIS
+					{% else %}
+						RIS file of the first 3000 search results
+					{% endif %}
+				</a>
+            	<strong>&nbsp;|&nbsp;</strong>
+				{% if result_summary['record_count'] > 3000 %}
+					Download all results as
+				{% endif %}
+				{{ pub_service_url("csv", "CSV") }} | {{ pub_service_url('tsv', 'TSV') }} | {{ pub_service_url('xlsx', 'Excel') }}
+				<strong>&nbsp;|&nbsp;</strong>
+				<a href="{{ config.BASE_SEARCH_URL }}rss/?pub_x_days=60&{{ query_request_string }}">RSS feed based on this search</a>
+            	<strong>&nbsp;|&nbsp;</strong>
+				<a href="{{ config.BASE_SEARCH_URL }}?page_size={{ result_summary['records_per_page'] }}&page_number={{ result_summary['page_number'] }}&{{ query_request_string }}">
+					JSON version of this page of results
+				</a>
             </p>
             <p>Page {{ result_summary['page_number'] }}, results {{ result_summary['record_min'] }} - {{ result_summary['record_max'] }}</p>
-		    <p>{% if request.args.map != 'True' %}<a href="{{ url_for('pubswh.search_results') }}?map=True{% for key, value in request.args.iteritems() %}&{{ key }}={{ value|urlencode }}{% endfor %}">Show results on a map</a>{% elif request.args.map == 'True'  %}<a href="{{ url_for('pubswh.search_results') }}?{% for key, value in request.args.iteritems() %}{% if value|length > 0 and (key  !=  'map') %}{% if not loop.first %}&{% endif %}{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">Hide map</a>{% endif %}
+		    <p>
+				<a class="toggle-results-map-btn" href="#">Show results on a map</a>
 		    </p>
 		</section>
-        {% if request.args.map == 'True' %}
-            {% include 'pubswh/search_results_map.html' %}
-        {% endif %}
+
+		{% include 'pubswh/search_results_map.html' %}
+
         <section id="search-results">
 				{% for result in search_result_records %}
 					<article>
-                        <h5  class="search-title"><a href="{{ url_for('pubswh.publication', index_id = result['indexId']) }}">{{ result['title']|safe }}</a></h5>
-                        {% if current_user.is_authenticated %}<small><a href="{{ url_for('manager.show_app')}}#publication/{{ result['id'] }}" target="_blank">(edit in Manager)</a></small>{% endif %}
-                        {% if result['authorsList']|length > 0 %}<h6 class="searchContributors">{{ result['authorsList']|join(', ') }}</h6>{% endif %}
-                        {% if result['editorsList']|length > 0 %}<h6 class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</h6>{% endif %}
+                        <h5  class="search-title">
+							<a href="{{ url_for('pubswh.publication', index_id = result['indexId']) }}">
+								{{ result['title']|safe }}
+							</a>
+						</h5>
+                        {% if current_user.is_authenticated %}
+							<small><a href="{{ url_for('manager.show_app')}}#publication/{{ result['id'] }}" target="_blank">(edit in Manager)</a></small>
+						{% endif %}
+                        {% if result['authorsList']|length > 0 %}
+							<h6 class="searchContributors">{{ result['authorsList']|join(', ') }}</h6>
+						{% endif %}
+                        {% if result['editorsList']|length > 0 %}
+							<h6 class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</h6>
+						{% endif %}
                         <h6 class="pubinfo">{{ result|display_pub_info }}</h6>
-                        {% if result['docAbstract']  %}<p class="searchAbstract">{{ result['docAbstract'].split(' ')[0:50]|join(' ')|striptags }}...</p>{% endif %}
+                        {% if result['docAbstract']  %}
+							<p class="searchAbstract">{{ result['docAbstract'].split(' ')[0:50]|join(' ')|striptags }}...</p>
+						{% endif %}
 					</article>
 				{% endfor %}
         </section>
@@ -65,14 +93,10 @@
 		{{ search_service_down }}
 	{% endif %}
 {% endblock main %}
+
 {% block page_footer_script %}
-
 	{% include "pubswh/search_form_script.html" %}
-
-	{% if request.args.map == 'True' %}
-            {% include 'pubswh/search_results_map_script.html' %}
-    {% endif %}
-	
+	{% include 'pubswh/search_results_map_script.html' %}
 {% endblock page_footer_script %}
 
 {% block url %}<a href="..{{ request.path }}">http://pubs.er.usgs.gov{{ request.path }}</a>{% endblock %}

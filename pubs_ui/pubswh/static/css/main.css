@@ -124,6 +124,8 @@ textarea {
 	width:100px;
 	height:35px;
 	border-radius:5px;
+	margin-left: 3px;
+	margin-top: 5px;
 }
 
 /* ==========================================================================
@@ -700,11 +702,11 @@ h1.search-results{
 	text-decoration:underline;
 }
 
-#extents_map_section {
+#extents-map-section {
     margin-left: 15px;
 }
 
-#extents_map {
+#extents-map {
     height: 800px;
     width:90%;
     overflow:hidden;

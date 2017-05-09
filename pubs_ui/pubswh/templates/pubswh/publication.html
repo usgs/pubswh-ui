@@ -34,7 +34,6 @@
         <meta name="citation_pdf_url" content="{{ pubdata['displayLinks']['Document'][0]['url'] }}" />
     {% endif %}
 
-
     {% block page_style %}
        {%- if pubdata["geographicExtents"] -%}
         <link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet/dist/leaflet.css') }}">
@@ -341,45 +340,22 @@
                 </small>
             {% endif %}
         {% endblock %}
+
         {% block modtime %}{{ pubdata['formattedModifiedDateTime'] }}{% endblock %}
+
         {% block page_footer_script %}
-        {%- if pubdata["geographicExtents"] -%}
-        <script type="text/javascript" src="{{ url_for('bower.static', filename='leaflet/dist/leaflet.js') }}"></script>
-        <script type="text/javascript" src="{{ url_for('bower.static', filename='esri-leaflet/dist/esri-leaflet.js') }}"></script>
-        <script type=text/javascript>
-                        //add esri basemap layers
-                        var topo = L.esri.basemapLayer('Topographic'),
-                         oceans = L.esri.basemapLayer('Oceans',{ detectRetina: true}),
-                                streets = L.esri.basemapLayer('Streets');
+        	{%- if pubdata["geographicExtents"] -%}
+				<script type="text/javascript" src="{{ url_for('bower.static', filename='leaflet/dist/leaflet.js') }}"></script>
+				<script type="text/javascript" src="{{ url_for('bower.static', filename='esri-leaflet/dist/esri-leaflet.js') }}"></script>
+				<script type="text/javascript" src="{{ url_for('pubswh.static', filename='js/resultsMap.js') }}"></script>
 
-                        var oceanlabels =  L.esri.basemapLayer('OceansLabels');
-
-                        // create a map
-
-                        map = new L.Map('mymap', {layers:[topo]});
-
-                        var baseMaps = {
-                            "Oceans": oceans,
-                            "Topographic": topo,
-                            "Streets": streets
-
-                        };
-
-                        var overlayMaps = {
-                            "Ocean Labels": oceanlabels
-                        };
-
-                        L.control.layers(baseMaps, overlayMaps).addTo(map);
-
-
-                        // include GeoJSON inside this JavaScript
-                        var pubextent = {{ pubdata["geographicExtents"]|tojson|safe }};
-                        L.geoJson( pubextent ).addTo(map);
-
-
-
-                        map.fitBounds(L.geoJson( pubextent ).getBounds());
-                    </script>
-            {% endif %}
+				<script type="application/javascript">
+					PUBS_WH.createResultsMap({
+						mapDivId: 'mymap',
+						publications: [{{ pubdata | tojson | safe }}],
+						enablePopup: false
+					});
+				</script>
+			{% endif %}
         {% endblock page_footer_script %}
 

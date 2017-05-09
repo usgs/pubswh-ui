@@ -1,5 +1,12 @@
 // Karma configuration
 
+var sourcePreprocessors = ['coverage'];
+function isDebug(argument) {
+    return argument === '--debug';
+};
+if (process.argv.some(isDebug)) {
+    sourcePreprocessors = [];
+}
 module.exports = function(config) {
   config.set({
 
@@ -19,8 +26,11 @@ module.exports = function(config) {
 		'pubs_ui/bower_components/select2/dist/js/select2.js',
 		'pubs_ui/bower_components/handlebars/handlebars.js',
 		'pubs_ui/bower_components/leaflet/dist/leaflet.js',
+		'pubs_ui/bower_components/esri-leaflet/dist/esri-leaflet.js',
 		'pubs_ui/bower_components/moment/min/moment.min.js',
 		'pubs_ui/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+		'pubs_ui/bower_components/underscore/underscore.js',
+		'pubs_ui/pubswh/static/vendor/mapbox/leaflet-pip/leaflet-pip.js',
 		'tests/js/pubswh/resources/config.js',
 		'pubs_ui/pubswh/static/js/*.js',
 		'tests/js/pubswh/*.js'
@@ -29,7 +39,8 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
-        'pubs_ui/pubswh/static/js/searchFormOnReady.js'
+        'pubs_ui/pubswh/static/js/searchFormOnReady.js',
+		'pubs_ui/pubswh/static/js/extentsMapOnReady.js'
     ],
 
 
@@ -39,7 +50,7 @@ module.exports = function(config) {
       // source files, that you wanna generate coverage for
       // do not include tests or libraries
       // (these files will be instrumented by Istanbul)
-      'pubs_ui/pubswh/static/js/*.js': ['coverage']
+      'pubs_ui/pubswh/static/js/*.js': sourcePreprocessors
     },
 
     // test results reporter to use

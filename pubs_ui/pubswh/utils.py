@@ -415,7 +415,6 @@ def concatenate_contributor_names(contributors):
 
 
 def update_geographic_extents(record):
-    #TODO: Refactor this to make more DRY
     """
     Takes the string geographicExtents and translates it to a dictionary representing a geojson object. Properties in
     the geojson object are filled in from other values in the dictionary. If the geographicExtents can not be parsed
@@ -423,40 +422,37 @@ def update_geographic_extents(record):
     :param record: represents a publication and is modified by this function
     :type record dict
     """
-    geojson = record.get('geographicExtents')
     result = None
-    if geojson is not None:
+
+    if record.has_key('geographicExtents'):
         try:
-            geojson = json.loads(geojson)
+            geojson = json.loads(record.get('geographicExtents'))
+        except ValueError as e:
+            app.logger.info("Prod ID " + str(record.get('id')) + " geographicExtents json parse error: " + repr(e))
+
+        else:
+            featureId = record.get('indexId') + '.base_id'
+            properties = {'title': record.get('title'),
+                          'id': record.get('indexId'),
+                          'url': json_ld_id_base_url + 'publication/' + record.get('indexId'),
+                          'year': record.get('publicationYear'),
+                          'info': display_publication_info(record)
+                          }
+
             if geojson.get('type') == "FeatureCollection":
-                geojson['properties'] = {'title': record.get('title')}
-                for feature in geojson['features']:
-                    feature['id'] = record.get('indexId')+'.base_id'
-                    feature['properties'] = {'title': record.get('title'),
-                                             'id': record.get('indexId'),
-                                             'url': json_ld_id_base_url+'publication/'+record.get('indexId'),
-                                             'year': record.get('publicationYear'),
-                                             'info': display_publication_info(record)
-                                             }
                 result = geojson
             elif geojson.get('geometry'):
-                geojson["properties"] = {'title': record.get('title'),
-                                         'id': record.get('indexId'),
-                                         'url': json_ld_id_base_url+'publication/'+record.get('indexId'),
-                                         'year': record.get('publicationYear'),
-                                         'info': display_publication_info(record)
-                                         }
-                feature_collection = {"type": "FeatureCollection",
-                                      "features": [geojson]
-                                      }
-                result = feature_collection
+                result = {'type': 'FeatureCollection',
+                          'features': [geojson]}
+            result['properties'] = {'title': record.get('title')}
 
-        except Exception as e:
-            app.logger.info("Prod ID "+str(record['id'])+" geographicExtents json parse error: "+str(e))
-    if result:
-        record['geographicExtents'] = result
-    elif record.has_key('geographicExtents'):
-        del record['geographicExtents']
+            for feature in result.get('features', []):
+                feature.update({'id': featureId, 'properties': properties})
+
+        if result:
+            record['geographicExtents'] = result
+        elif record.has_key('geographicExtents'):
+            del record['geographicExtents']
 
 
 def create_store_info(publication_resp):

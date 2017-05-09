@@ -3,6 +3,7 @@ from dateutil import parser as dateparser
 import json
 from operator import itemgetter
 import sys
+import urllib
 
 import arrow
 from requests import get
@@ -460,6 +461,9 @@ def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
 def search_results():
     search_kwargs = request.args.to_dict(flat=False)
     page = search_kwargs.get('page')
+    query_request_args = search_kwargs.copy()
+    if page:
+        del query_request_args['page']
 
     # Remove the mimeType so that json will be returned from the web service call
     if search_kwargs.has_key('mimetype'):
@@ -477,7 +481,7 @@ def search_results():
     sp = SearchPublications(search_url)
     search_results_response, resp_status_code = sp.get_pubs_search_results(params=search_kwargs)
     try:
-        search_result_records = search_results_response['records']
+        search_result_records = search_results_response.get('records', []) if search_results_response else []
         record_count = search_results_response['recordCount']
         pagination = Pagination(page=int(search_kwargs['page_number'][0]), total=record_count,
                                 per_page=int(search_kwargs['page_size'][0]), record_name='Search Results', bs_version=3)
@@ -492,7 +496,7 @@ def search_results():
                           'records_per_page': search_results_response['pageSize'],
                           'record_min': (int(search_results_response['pageRowStart']) + 1), 'record_max': record_max}
     except TypeError:
-        search_result_records = None
+        search_result_records = []
         pagination = None
         search_service_down = 'The backend services appear to be down with a {0} status.'.format(resp_status_code)
         result_summary = {}
@@ -517,16 +521,15 @@ def search_results():
         response = jsonify(sb_response)
 
     else:
-        if request.args.get('map') == 'True':
-            for record in search_result_records:
-                update_geographic_extents(record)
+        for record in search_result_records:
+            update_geographic_extents(record)
 
         response = render_template('pubswh/search_results.html',
                                    result_summary=result_summary,
                                    search_result_records=search_result_records,
                                    pagination=pagination,
                                    search_service_down=search_service_down,
-                                   pub_url=pub_url)
+                                   query_request_string=urllib.urlencode(query_request_args, True))
 
     return response
 
