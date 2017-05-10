@@ -15,60 +15,60 @@
 			<div>
 				<select class="search-category-select form-control" style="width: 100%;">
 					<option>Advanced search category</option>
-					<option value="title" data-input-type="text" data-placeholder="enter title">Title</option>
-					<option value="contributingOffice" data-input-type="select" data-lookup="costcenters"
+					<option value="title" data-allow-multi="true" data-input-type="text" data-placeholder="enter title">Title</option>
+					<option value="contributingOffice" data-allow-multi="true" data-input-type="select" data-lookup="costcenters"
 							data-placeholder="Choose a Contributing Office">Contributing Office</option>
-					<option value="contributor" data-input-type="text" data-placeholder="Name of part of name">
+					<option value="contributor" data-allow-multi="true" data-input-type="text" data-placeholder="Name of part of name">
 						Contributor Name
 					</option>
-					<option value="orcid" data-input-type="url" data-placeholder="ORCID as a URL">ORCID</option>
-					<option value="year" data-input-type="text" data-placeholder="e.g. 2014">Year Published</option>
-					<option value="startYear" data-input-type="text" data-placeholder="e.g. 1994">Published starting in</option>
-					<option value="endYear" data-input-type="text" data-placeholder="e.g. 2012">Published in or before</option>
-					<option value="typeName" data-input-type="select" data-lookup="publicationtypes"
+					<option value="orcid" data-allow-multi="true" data-input-type="url" data-placeholder="ORCID as a URL">ORCID</option>
+					<option value="year" data-allow-multi="true"data-input-type="text" data-placeholder="e.g. 2014">Year Published</option>
+					<option value="startYear" data-allow-multi="false" data-input-type="text" data-placeholder="e.g. 1994">Published starting in</option>
+					<option value="endYear" data-allow-multi="false" data-input-type="text" data-placeholder="e.g. 2012">Published in or before</option>
+					<option value="typeName" data-allow-multi="true" data-input-type="select" data-lookup="publicationtypes"
 							data-placeholder="Choose a Publication Type">
 						Publication Type
 					</option>
-					<option value="subtypeName" data-input-type="select" data-lookup="publicationsubtypes"
+					<option value="subtypeName" data-allow-multi="true" data-input-type="select" data-lookup="publicationsubtypes"
 							data-placeholder="Choose a Publication Subtype" >
 						Publication Subtype
 					</option>
-					<option value="seriesName" data-input-type="select" data-lookup="publicationseries"
+					<option value="seriesName" data-allow-multi="true" data-input-type="select" data-lookup="publicationseries"
 							data-placeholder="Choose a Series Name or Journal Title" >
 						Series Name
 					</option>
-					<option value="reportNumber" data-input-type="text" data-placeholder="e.g. 2014-3113">Report Number</option>
-					<option value="doi" data-input-type="boolean">DOI</option>
-					<option value="prodId" data-input-type="text" data-placeholder="Product ID">Prod ID</option>
-					<option value="indexId" data-input-type="text" data-placeholder="Index Id">Index Id</option>
-					<option value="pub_x_days" data-input-type="text" data-placeholder="e.g. 7, for publications in the last 7 days">
+					<option value="reportNumber" data-allow-multi="true" data-input-type="text" data-placeholder="e.g. 2014-3113">Report Number</option>
+					<option value="doi" data-allow-multi="false" data-input-type="boolean">DOI</option>
+					<option value="prodId" data-allow-multi="true" data-input-type="text" data-placeholder="Product ID">Prod ID</option>
+					<option value="indexId" data-allow-multi="true" data-input-type="text" data-placeholder="Index Id">Index Id</option>
+					<option value="pub_x_days" data-allow-multi="false" data-input-type="text" data-placeholder="e.g. 7, for publications in the last 7 days">
 						Published in the last X days
 					</option>
-					<option value="pub_date_low" data-input-type="date"
+					<option value="pub_date_low" data-allow-multi="false" data-input-type="date"
 							data-placeholder="e.g. 2015-05-15 to get publications published after May 15, 2015">
 						Published After
 					</option>
-					<option value="pub_date_high" data-input-type="date"
+					<option value="pub_date_high" data-allow-multi="false" data-input-type="date"
 							data-placeholder="eg 2016-01-15 to get publications published before January 1, 2016">
 						Published Before
 					</option>
-					<option value="mod_x_days" data-input-type="text" data-placeholder="e.g. 7, for publications modified in the last 7 days">
+					<option value="mod_x_days" data-allow-multi="false" data-input-type="text" data-placeholder="e.g. 7, for publications modified in the last 7 days">
 						Modified in the last X days
 					</option>
-					<option value="mod_date_low" data-input-type="date"
+					<option value="mod_date_low" data-allow-multi="false" data-input-type="date"
 							data-placeholder="e.g. 2015-05-15 to get publications modified after May 15, 2015">
 						Modified After
 					</option>
-					<option value="mod_date_high" data-input-type="date"
+					<option value="mod_date_high" data-allow-multi="false" data-input-type="date"
 							data-placeholder="eg 2016-01-15 to get publications modified before January 1, 2016">
 						Modified Before
 					</option>
-					<option value="chorus" data-input-type="boolean">CHORUS</option>
-					<option value="linkType" data-input-type="select" data-lookup="linktypes"
+					<option value="chorus" data-allow-multi="false" data-input-type="boolean">CHORUS</option>
+					<option value="linkType" data-allow-multi="true" data-input-type="select" data-lookup="linktypes"
 							data-placeholder="Choose a Link Type">
 						Link Type
 					</option>
-					<option value="g" data-input-type="map" >Area of Interest (Map)</option>
+					<option value="g" data-allow-multi="false" data-input-type="map" >Area of Interest (Map)</option>
 				</select>
 			</div>
 		</div>

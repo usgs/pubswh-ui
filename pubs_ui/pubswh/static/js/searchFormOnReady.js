@@ -28,15 +28,18 @@ $(document).ready(function() {
 	if (CONFIG.requestArgs !== {}) {
 		$.each(CONFIG.requestArgs, function (name, value) {
 			var $thisOption = $categorySelect.find('option[value="' + name + '"]');
+
+			$thisOption.prop('disabled', !$thisOption.data('allow-multi'));
 			if ($thisOption.length) {
-				$thisOption.prop('disabled', true);
-				initialSearchRows.push({
-					name: name,
-					displayName: $thisOption.html(),
-					inputType: $thisOption.data('input-type'),
-					value: value,
-					placeholder: $thisOption.data('placeholder'),
-					lookup: $thisOption.data('lookup')
+				value.forEach(function(v) {
+					initialSearchRows.push({
+						name: name,
+						displayName: $thisOption.html(),
+						inputType: $thisOption.data('input-type'),
+						value: v,
+						placeholder: $thisOption.data('placeholder'),
+						lookup: $thisOption.data('lookup')
+					});
 				});
 			}
 		});
@@ -45,7 +48,7 @@ $(document).ready(function() {
 		$container : $form.find('.advanced-search-container'),
 		$mapContainer: $form.find('.map-search-container'),
 		initialRows : initialSearchRows,
-		deleteRowCallback : enableCategory
+		deleteRowCallback: enableCategory
 	});
 
 	// Show/hide advanced search and add click handler for toggle link
@@ -61,6 +64,8 @@ $(document).ready(function() {
 		if ($advancedSearchDiv.is(':visible')) {
 			$showHideSearchBtn.html(SHOW_SEARCH);
 			advancedSearchForm.deleteAllRows();
+			$categorySelect.find('option').prop('disabled', false);
+			$categorySelect.select2();
 			$advancedSearchDiv.hide();
 		}
 		else {
@@ -73,7 +78,6 @@ $(document).ready(function() {
 	$categorySelect.select2();
 	$categorySelect.on('change', function() {
 		var $selectedOption = $(this).find('option:selected');
-		$selectedOption.prop('disabled', true);
 		advancedSearchForm.addRow({
 			name: $selectedOption.val(),
 			displayName: $selectedOption.html(),
@@ -82,6 +86,7 @@ $(document).ready(function() {
 			lookup: $selectedOption.data('lookup')
 		});
 		$selectedOption.prop('selected', false);
+		$selectedOption.prop('disabled', !$selectedOption.data('allow-multi'));
 		$(this).select2();
 	});
 
