@@ -323,19 +323,21 @@ class SearchPublications(object):
         :return: query results (or None) and response status code.
         :rtype: tuple
         """
-        # Only send the params if they contain information
-        non_null_params = {k: v for (k, v) in params.iteritems() if v}
-        search_result_obj = requests.get(url=self.search_url, params=non_null_params, verify=verify_cert)
+
+        search_result_obj = requests.get(url=self.search_url, params=params, verify=verify_cert)
         search_result_json = None
-        if search_result_obj.status_code == 200:
+        if search_result_obj.status_code == requests.codes.ok:
             try:
                 search_result_json = search_result_obj.json()
-                for record in search_result_json['records']:
-                    contributor_lists(record)
-            except:
+            except ValueError:
                 pass
-        resp_status_code = search_result_obj.status_code
-        return search_result_json, resp_status_code
+            else:
+                #TODO: Refactor to add the additional dictionary keys where needed. This simplifies this function so that
+                # just returns the json result.
+                for record in search_result_json.get('records', []):
+                    contributor_lists(record)
+
+        return search_result_json, search_result_obj.status_code
 
 
 def contributor_lists(record):
@@ -345,6 +347,9 @@ def contributor_lists(record):
     :return: The pub record with two kinds of additional lists- one with
     concatenated names and another with concatenated names and types
     """
+
+    #TODO: Refactor to make clear this updates record in place and don't return record. Consider whether contributor_types should
+    # be hardcoded or fetched from pub service lookup.
     contributor_types = ['authors', 'editors', 'compilers']
     for contributor_type in contributor_types:
         if record.get('contributors') is not None:
