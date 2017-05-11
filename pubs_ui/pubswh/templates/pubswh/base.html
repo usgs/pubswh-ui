@@ -39,7 +39,7 @@
 
 			var CONFIG = {
 				lookupUrl: '{{ config.LOOKUP_URL }}',
-				requestArgs: JSON.parse('{{ request.args.to_dict(True)|tojson }}') <!-- set to False if multi values per key are desired -->
+				requestArgs: JSON.parse('{{ request.args.to_dict(False)|tojson }}') <!-- set to True if only one value per key is desired -->
 			}
 		</script>
 	</head>

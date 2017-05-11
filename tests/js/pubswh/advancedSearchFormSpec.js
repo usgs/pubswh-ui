@@ -68,7 +68,6 @@ describe('PUBS_WH.advancedSearchForm', function() {
 			expect($testDiv.find('input[type="checkbox"]').length).toEqual(1);
 		});
 
-
 		it('Expects that calling addRow with a select inputType and a lookup makes a web service call but does not add the options until it is successful', function() {
 			var row = {
 				name: 'param1',
@@ -220,6 +219,19 @@ describe('PUBS_WH.advancedSearchForm', function() {
 
 			expect($testDiv.find('input[name="param1"]').length).toEqual(1);
 			expect($mapDiv.find('input[name="param2"]').length).toEqual(0);
+		});
+
+		it('Expects that adding a second row with the same name is allowed', function() {
+			var row = {
+				name: 'param1',
+				displayName: 'Param 1',
+				inputType: 'text'
+			};
+			var $rowToRemove;
+			advancedSearchForm.addRow(row);
+			advancedSearchForm.addRow(row);
+
+			expect($testDiv.find('input[name="param1"]').length).toEqual(2);
 		});
 	});
 
