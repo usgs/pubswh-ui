@@ -1,11 +1,11 @@
 import unittest
 
-from mock import MagicMock
+from mock import MagicMock, patch
 import requests as r
 import requests_mock
 
 from ..utils import manipulate_doi_information, generate_sb_data, update_geographic_extents, \
-                    create_store_info, get_altmetric_badge_img_links
+                    create_store_info, get_altmetric_badge_img_links, SearchPublications
 from ... import app
 
 
@@ -366,3 +366,47 @@ class UpdateGeographicExtentsTestCase(unittest.TestCase):
         self.assertEqual(features[0].get('geometry').get('type'), 'Polygon')
         self.assertEqual(features[0].get('properties').get('title'), 'Title 1')
         self.assertEqual(features[0].get('properties').get('id'), '1234')
+
+
+class SearchPublicationsGetPubsSearchResultsTestCase(unittest.TestCase):
+
+    @requests_mock.Mocker()
+    def test_bad_status_response(self, m):
+        searchPublications = SearchPublications('https://fake.com/search')
+        m.get('https://fake.com/search', text="Server Error", status_code=500)
+        result, status = searchPublications.get_pubs_search_results()
+
+        self.assertIsNone(result)
+        self.assertEqual(status, 500)
+
+    @requests_mock.Mocker()
+    def test_good_status_with_valid_json(self, m):
+        searchPublications = SearchPublications('https://fake.com/search')
+        m.get('https://fake.com/search', json={"a": 1, "b": 2})
+        result, status = searchPublications.get_pubs_search_results()
+
+        self.assertEqual(result, {"a": 1, "b": 2})
+        self.assertEqual(status, 200)
+
+    @requests_mock.Mocker()
+    def test_good_status_with_invalid_json(self, m):
+        searchPublications = SearchPublications('https://fake.com/search')
+        m.get('https://fake.com/search', text="Hello")
+        result, status = searchPublications.get_pubs_search_results()
+
+        self.assertIsNone(result)
+        self.assertEqual(status, 200)
+
+    @patch('requests.get')
+    def test_request_without_params(self, mock_get):
+        searchPublications = SearchPublications('https://fake.com/search')
+        result, status = searchPublications.get_pubs_search_results()
+
+        self.assertIsNone(mock_get.call_args[1]['params'])
+
+    @patch('requests.get')
+    def test_request_with_params(self, mock_get):
+        searchPublications = SearchPublications('https://fake.com/search')
+        result, status = searchPublications.get_pubs_search_results({'param1': 'V1', 'param2': 'V2'})
+
+        self.assertEqual(mock_get.call_args[1]['params'], {'param1': 'V1', 'param2': 'V2'})
