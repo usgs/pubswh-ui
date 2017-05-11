@@ -54,7 +54,7 @@ verify_cert = app.config['VERIFY_CERT']
 
 def make_cache_key(*args, **kwargs):
     path = request.path
-    args = str(hash(frozenset(request.args.items())))
+    args = str(hash(frozenset(request.args.items(True))))
     return (path + args).encode('utf-8')
 
 
