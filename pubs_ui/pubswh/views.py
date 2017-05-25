@@ -684,12 +684,12 @@ def sitemap_list(year):
     :return: a rendered sitemap.xml file
     """
     # there are only a few hundred pubs before 1900, so we will get them all at once
+    params = {"mimeType": "json", "endYear": year, "page_size": 5000}
     if year == 1900:
-        pubs = get(pub_url + "publication/", params={"mimeType": "json", "endYear": year, "page_size": 5000},
-                   verify=verify_cert)
+        params['endYear'] = year
     else:
-        pubs = get(pub_url + "publication/", params={"mimeType": "json", "year": year, "page_size": 5000},
-                   verify=verify_cert)
+        params['year'] = year
+    pubs = get(pub_url + "publication/", params=params, verify=verify_cert)
     records_list = []
     for record in pubs.json()['records']:
         records_list.append({'indexId': record['indexId'], 'modified': record.get('lastModifiedDate')})
