@@ -4,6 +4,7 @@ import json
 from operator import itemgetter
 import sys
 import urllib
+import random
 
 import arrow
 from requests import get
@@ -659,3 +660,52 @@ def unapi():
         pubdata = r.json()
         return render_template('pubswh/'+formats[unapi_format]['template'], pubdata=pubdata, formats=formats,
                                mimetype='text/xml')
+
+@pubswh.route('/sitemap.xml')
+@cache.cached(timeout=4320000, key_prefix=make_cache_key)
+def sitemap_index():
+    """
+    This function makes is used to generate the index sitemap so that there is not one giant sitemap with too many URLs
+    :return: a sitemap index xml file as described at sitemaps.org
+    """
+    year = int(arrow.now().format('YYYY'))
+    year_range = range(1900, year+2)
+    response = Response(response=render_template('pubswh/sitemap_index.xml', years=year_range), mimetype='application/xml')
+    return response
+
+
+@pubswh.route('/sitemap/<year>')
+@cache.cached(timeout=random.randint(80000, 90000), key_prefix=make_cache_key)  # make the cache last a day-ish
+def sitemap_list(year):
+    """
+    This function grabs content from the streaming service and generates a list that can be used to make
+    sitemap.xml data
+    :param year: The year that were are interested in
+    :return: a rendered sitemap.xml file
+    """
+    # there are only a few hundred pubs
+    if year == 1900:
+        pubs = get(pub_url + "publication/", params={"mimeType": "json", "endYear": year, "page_size": 5000},
+                   verify=verify_cert, stream=True)
+    else:
+        pubs = get(pub_url + "publication/", params={"mimeType": "json", "year": year, "page_size": 5000},
+                   verify=verify_cert, stream=True)
+    records_list = []
+    for line in pubs.iter_lines():
+        # filter out keep-alive new lines
+        if line:
+            decoded_line = line.decode('utf-8')
+            try:
+                full_object = decoded_line + u']}'  # complete the first line of the response to get the first record
+                first_record = json.loads(full_object)
+                record = first_record['records'][0]  # grab the first record
+                records_list.append({'indexId': record['indexId'], 'modified': record.get('lastModifiedDate')})
+            except ValueError:
+                try:
+                    record = json.loads(decoded_line[1:])  # strip out the comma
+                    records_list.append({'indexId': record['indexId'], 'modified': record.get('lastModifiedDate')})
+                except ValueError:
+                    pass
+    response = Response(response=render_template('pubswh/sitemap_list.xml', publication_list=records_list),
+                        mimetype='application/xml')
+    return response
