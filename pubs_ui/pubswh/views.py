@@ -683,29 +683,16 @@ def sitemap_list(year):
     :param year: The year that were are interested in
     :return: a rendered sitemap.xml file
     """
-    # there are only a few hundred pubs
+    # there are only a few hundred pubs before 1900, so we will get them all at once
     if year == 1900:
         pubs = get(pub_url + "publication/", params={"mimeType": "json", "endYear": year, "page_size": 5000},
-                   verify=verify_cert, stream=True)
+                   verify=verify_cert)
     else:
         pubs = get(pub_url + "publication/", params={"mimeType": "json", "year": year, "page_size": 5000},
-                   verify=verify_cert, stream=True)
+                   verify=verify_cert)
     records_list = []
-    for line in pubs.iter_lines():
-        # filter out keep-alive new lines
-        if line:
-            decoded_line = line.decode('utf-8')
-            try:
-                full_object = decoded_line + u']}'  # complete the first line of the response to get the first record
-                first_record = json.loads(full_object)
-                record = first_record['records'][0]  # grab the first record
-                records_list.append({'indexId': record['indexId'], 'modified': record.get('lastModifiedDate')})
-            except ValueError:
-                try:
-                    record = json.loads(decoded_line[1:])  # strip out the comma
-                    records_list.append({'indexId': record['indexId'], 'modified': record.get('lastModifiedDate')})
-                except ValueError:
-                    pass
+    for record in pubs.json()['records']:
+        records_list.append({'indexId': record['indexId'], 'modified': record.get('lastModifiedDate')})
     response = Response(response=render_template('pubswh/sitemap_list.xml', publication_list=records_list),
                         mimetype='application/xml')
     return response
