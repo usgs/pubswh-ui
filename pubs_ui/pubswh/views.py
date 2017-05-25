@@ -398,7 +398,7 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
                 if pubs.text:
                     pubs_data = tablib.Dataset().load(pubs.content)
                     pubs_data_dict = pubs_data.dict
-                    for row in pubs_data_dict: #you can iterate over this dict becasue it is actually an ordered dict
+                    for row in pubs_data_dict:  # you can iterate over this dict becasue it is actually an ordered dict
                         row['indexId'] = row['URL'].split("/")[-1]
                     return render_template('pubswh/browse_pubs_list.html',
                                            pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
@@ -634,6 +634,19 @@ def legacy_search(series_code=None, report_number=None, pub_year=None):
 
     return redirect(url_for('pubswh.search_results', q=series_code+" "+report_number))
 
+
+@pubswh.route('/service/rss/')
+@cache.cached(timeout=30, key_prefix=make_cache_key)
+def rss():
+    """
+    This basically makes it so that the many hundreds of RSS Readers that point at the old service RSS field will work
+    by proxying the pubs-services RSS Request to the pubs/service RSS request.  We are doing this rather than mapping at
+    the apache level so that we have a little more flexibility in the future.
+    :return:
+    """
+    url = pub_url+'/publication/rss'
+    req = get(url)
+    return Response(req.content, content_type=req.headers['content-type'])
 
 
 @pubswh.route('/unapi')
