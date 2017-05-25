@@ -284,8 +284,8 @@
                 <section>
                     <h4>Suggested Citation</h4>
                     <p id="suggested_citation">{{ pubdata['usgsCitation']|safe }}</p>
-                    {% if pubdata.get('seriesTitle') %}<p>ISSN: {{  pubdata['seriesTitle']["onlineIssn"] }} (online)</p>{% endif %}
-                    {% if pubdata['onlineOnly'] == 'N' %}<p>ISSN: {{  pubdata['seriesTitle']["printIssn"] }} (print)</p>{% endif %}
+                    {% if pubdata.get('seriesTitle') and pubdata.get('seriesTitle', {}).get("onlineIssn") %}<p>ISSN: {{  pubdata['seriesTitle']["onlineIssn"] }} (online)</p>{% endif %}
+                    {% if pubdata['onlineOnly'] == 'N' and pubdata.get('seriesTitle', {}).get("printIssn")  %}<p>ISSN: {{  pubdata['seriesTitle']["printIssn"] }} (print)</p>{% endif %}
 
                 </section>
                 {% endif %}
