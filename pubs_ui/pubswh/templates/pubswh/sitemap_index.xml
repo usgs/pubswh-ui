@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <sitemap>
+      <loc>https://pubs.er.usgs.gov/pubs-services/publication/rss</loc>
+   </sitemap>
+    {% for year in years %}
+    <sitemap>
+      <loc>https://pubs.er.usgs.gov/sitemap/{{ year }}</loc>
+   </sitemap>
+    {% endfor %}
+</sitemapindex>
