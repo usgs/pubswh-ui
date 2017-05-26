@@ -687,7 +687,7 @@ def sitemap_index():
     return response
 
 
-@pubswh.route('/sitemap/<year>')
+@pubswh.route('/sitemaps/<year>/')
 @cache.cached(timeout=random.randint(80000, 90000), key_prefix=make_cache_key)  # make the cache last a day-ish
 def sitemap_list(year):
     """
