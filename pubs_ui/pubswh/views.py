@@ -23,7 +23,7 @@ from .utils import (pull_feed, create_display_links,
                     SearchPublications, change_to_pubs_test,
                     munge_pubdata_for_display, extract_related_pub_info,
                     update_geographic_extents, generate_sb_data, create_store_info,
-                    get_altmetric_badge_img_links)
+                    get_altmetric_badge_img_links, generate_dublin_core)
 
 
 # set UTF-8 to be default throughout app
@@ -188,7 +188,7 @@ def contact_confirmation():
 
 # leads to rendered html for publication page
 @pubswh.route('/publication/<index_id>')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=1, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def publication(index_id):
     r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
     if r.status_code in [404, 406]:  # a 406 pretty much always means that it is some sort of other weird malformed URL.
@@ -208,6 +208,10 @@ def publication(index_id):
     related_pubs = extract_related_pub_info(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
+    if 'mimetype' in request.args and request.args.get("mimetype") == 'dublincore':
+        content = generate_dublin_core(pubdata)
+        doc = render_template('pubswh/oai_dc.xml', indexID=index_id, content = content )
+        return Response(doc, mimetype="application/xml")
     if 'mimetype' in request.args and request.args.get("mimetype") == 'ris':
         content = render_template('pubswh/ris_single.ris', result=pubdata)
         return Response(content, mimetype="application/x-research-info-systems",
@@ -458,7 +462,7 @@ def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
 
 
 @pubswh.route('/search', methods=['GET'])
-@cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=2, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def search_results():
     search_kwargs = request.args.to_dict(flat=False)
     page = search_kwargs.get('page')
@@ -523,7 +527,13 @@ def search_results():
             "records": sciencebase_records,
         }
         response = jsonify(sb_response)
-
+    elif mimetype == 'dublincore':
+        dublinecore_records = []
+        for record in search_result_records:
+            dublincore_record = generate_dublin_core(record)
+            dublinecore_records.append({"identifier": record['indexId'], "dublincore_record": dublincore_record })
+        content = render_template('pubswh/oai_dc_multiple.xml', search_result_records = dublinecore_records, mimetype='application/xml')
+        response = Response(content, mimetype="application/xml")
     else:
         for record in search_result_records:
             update_geographic_extents(record)

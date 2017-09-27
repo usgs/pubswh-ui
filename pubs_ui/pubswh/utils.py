@@ -2,15 +2,17 @@ __author__ = 'jameskreft'
 
 import requests
 import feedparser
-from bs4 import BeautifulSoup
 import re
-from operator import itemgetter
-from pubs_ui import app
 import json
-from urlparse import urljoin
-from copy import deepcopy
 import arrow
 import natsort
+from urlparse import urljoin
+from copy import deepcopy
+from operator import itemgetter
+from pubs_ui import app
+from bs4 import BeautifulSoup
+from dcxml import simpledc
+
 from ..custom_filters import display_publication_info
 
 json_ld_id_base_url = app.config.get('JSON_LD_ID_BASE_URL')
@@ -772,6 +774,25 @@ def munge_abstract(pubdata):
     pubdata['abstractHeader'] = abstract_header
 
     return pubdata
+
+def generate_dublin_core(pubrecord):
+    """
+    This function turns a publication record into a simple dublin core XML record
+    :param pubrecord:
+    :return: dublin core XML record
+    """
+    data = {
+            "contributors": pubrecord.get('authorsList')[1:],
+            "creators": [pubrecord.get('authorsList')[0]],
+            "dates": [pubrecord.get('publicationYear')],
+            "descriptions": [pubrecord.get('docAbstract')],
+            "formats": ['application/pdf'],
+            "identifiers": [pubrecord.get('doi')],
+            "languages": ['en'],
+            "publishers": [pubrecord.get('publisher')],
+            "titles": [pubrecord.get('title')],
+            }
+    return '\n'.join(simpledc.tostring(data).splitlines()[1:])
 
 def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url):
     """
