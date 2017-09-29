@@ -23,9 +23,9 @@ before_script:
 script:
   - lettuce --with-xunit pubs_ui/lettuce_testing
   - nosetests  --with-coverage --cover-package=pubs_ui
-  - karma start tests/js/manager/karma.conf.js
-  - karma start tests/js/metrics/karma.conf.js
-  - karma start tests/js/pubswh/karma.conf.js
+  - ./node_modules/.bin/karma start tests/js/manager/karma.conf.js
+  - ./node_modules/.bin/karma start tests/js/metrics/karma.conf.js
+  - ./node_modules/.bin/karma start tests/js/pubswh/karma.conf.js
 
 after_success:
   cp coverage/manager/Firefox*/lcov.info coverage/manager.info;
