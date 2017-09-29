@@ -188,7 +188,7 @@ def contact_confirmation():
 
 # leads to rendered html for publication page
 @pubswh.route('/publication/<index_id>')
-@cache.cached(timeout=1, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def publication(index_id):
     r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
     if r.status_code in [404, 406]:  # a 406 pretty much always means that it is some sort of other weird malformed URL.
@@ -462,7 +462,7 @@ def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
 
 
 @pubswh.route('/search', methods=['GET'])
-@cache.cached(timeout=2, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def search_results():
     search_kwargs = request.args.to_dict(flat=False)
     page = search_kwargs.get('page')
