@@ -5,12 +5,13 @@ python:
 
 before_install:
   sudo apt-get install lcov
+  nvm install 6.10.2
 
 install:
   - pip install -r requirements.txt
   - pip install coveralls
   - npm install
-  - bower install
+  - node_modules/bower/bin/bower install
   - gem install coveralls-lcov
 
 before_script:
