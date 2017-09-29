@@ -9,7 +9,7 @@ before_install:
 install:
   - pip install -r requirements.txt
   - pip install coveralls
-  - nvm 7.x
+  - nvm 6.x
   - npm install
   - bower install
   - gem install coveralls-lcov
