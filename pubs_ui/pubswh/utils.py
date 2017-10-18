@@ -1,18 +1,17 @@
-__author__ = 'jameskreft'
+import json
+from urlparse import urljoin
+from copy import deepcopy
 
 import requests
 import feedparser
 import re
-import json
 import arrow
 import natsort
-from urlparse import urljoin
-from copy import deepcopy
 from operator import itemgetter
-from pubs_ui import app
 from bs4 import BeautifulSoup
 from dcxml import simpledc
 
+from pubs_ui import app
 from ..custom_filters import display_publication_info
 
 json_ld_id_base_url = app.config.get('JSON_LD_ID_BASE_URL')
