@@ -5,7 +5,7 @@ python:
 
 before_install:
   - sudo apt-get install lcov
-  - nvm install 6.10.2
+  - nvm install 6.11.4
 
 install:
   - pip install -r requirements.txt
