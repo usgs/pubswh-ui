@@ -21,7 +21,6 @@ before_script:
   - echo "SECRET_KEY = 'key-for-jenkins';ASSETS_AUTO_BUILD = True" > instance/config.py
 
 script:
-  - lettuce --with-xunit pubs_ui/lettuce_testing
   - nosetests  --with-coverage --cover-package=pubs_ui
   - node_modules/karma/bin/karma start tests/js/manager/karma.conf.js
   - node_modules/karma/bin/karma start tests/js/metrics/karma.conf.js
