@@ -6,7 +6,7 @@
    </sitemap>
     {% for year in years %}
     <sitemap>
-      <loc>https://pubs.er.usgs.gov/sitemap/{{ year }}</loc>
+      <loc>https://pubs.er.usgs.gov/sitemaps/{{ year }}</loc>
    </sitemap>
     {% endfor %}
 </sitemapindex>

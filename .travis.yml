@@ -4,14 +4,14 @@ python:
   - "2.7"
 
 before_install:
-  sudo apt-get install lcov
+  - sudo apt-get install lcov
+  - nvm install 6.11.4
 
 install:
   - pip install -r requirements.txt
   - pip install coveralls
-  - nvm 6.x
   - npm install
-  - bower install
+  - node_modules/bower/bin/bower install
   - gem install coveralls-lcov
 
 before_script:
@@ -21,11 +21,10 @@ before_script:
   - echo "SECRET_KEY = 'key-for-jenkins';ASSETS_AUTO_BUILD = True" > instance/config.py
 
 script:
-  - lettuce --with-xunit pubs_ui/lettuce_testing
   - nosetests  --with-coverage --cover-package=pubs_ui
-  - karma start tests/js/manager/karma.conf.js
-  - karma start tests/js/metrics/karma.conf.js
-  - karma start tests/js/pubswh/karma.conf.js
+  - node_modules/karma/bin/karma start tests/js/manager/karma.conf.js
+  - node_modules/karma/bin/karma start tests/js/metrics/karma.conf.js
+  - node_modules/karma/bin/karma start tests/js/pubswh/karma.conf.js
 
 after_success:
   cp coverage/manager/Firefox*/lcov.info coverage/manager.info;

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd" xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ListRecords>
+{%- for result in search_result_records -%}
+<record>
+<header>
+<identifier>https://pubs.er.usgs.gov/publication/{{ result['identifier'] }}</identifier>
+</header>
+<metadata>
+{{ result["dublincore_record"]| safe }}
+</metadata>
+</record>
+{% endfor %}
+</ListRecords>
+</OAI-PMH>

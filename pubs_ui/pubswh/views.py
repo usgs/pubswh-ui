@@ -23,7 +23,7 @@ from .utils import (pull_feed, create_display_links,
                     SearchPublications, change_to_pubs_test,
                     munge_pubdata_for_display, extract_related_pub_info,
                     update_geographic_extents, generate_sb_data, create_store_info,
-                    get_altmetric_badge_img_links)
+                    get_altmetric_badge_img_links, generate_dublin_core)
 
 
 # set UTF-8 to be default throughout app
@@ -208,6 +208,10 @@ def publication(index_id):
     related_pubs = extract_related_pub_info(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
+    if 'mimetype' in request.args and request.args.get("mimetype") == 'dublincore':
+        content = generate_dublin_core(pubdata)
+        doc = render_template('pubswh/oai_dc.xml', indexID=index_id, content = content )
+        return Response(doc, mimetype="application/xml")
     if 'mimetype' in request.args and request.args.get("mimetype") == 'ris':
         content = render_template('pubswh/ris_single.ris', result=pubdata)
         return Response(content, mimetype="application/x-research-info-systems",
@@ -523,7 +527,13 @@ def search_results():
             "records": sciencebase_records,
         }
         response = jsonify(sb_response)
-
+    elif mimetype == 'dublincore':
+        dublinecore_records = []
+        for record in search_result_records:
+            dublincore_record = generate_dublin_core(record)
+            dublinecore_records.append({"identifier": record['indexId'], "dublincore_record": dublincore_record })
+        content = render_template('pubswh/oai_dc_multiple.xml', search_result_records = dublinecore_records, mimetype='application/xml')
+        response = Response(content, mimetype="application/xml")
     else:
         for record in search_result_records:
             update_geographic_extents(record)
@@ -687,7 +697,7 @@ def sitemap_index():
     return response
 
 
-@pubswh.route('/sitemap/<year>')
+@pubswh.route('/sitemaps/<year>/')
 @cache.cached(timeout=random.randint(80000, 90000), key_prefix=make_cache_key)  # make the cache last a day-ish
 def sitemap_list(year):
     """
