@@ -15,6 +15,15 @@ class ContactForm(Form):
     submit = SubmitField("Send")
 
 
+class PublicAccessContactForm(Form):
+    name = StringField("Name")
+    email = StringField("Email", [validators.Email()]) # email validator also makes this a required field... a blank email is considered invalid
+    originating_page = StringField("Orginating Page")
+    message = TextAreaField("Message", default="I would like to request the full-text public access version of the following publication" )
+    recaptcha = RecaptchaField()
+    submit = SubmitField("Send")
+
+
 class NumSeries(Form):
     num_series = BooleanField('Only USGS Numbered Series')
     date_range = DateField('Include publications back to date:   ')

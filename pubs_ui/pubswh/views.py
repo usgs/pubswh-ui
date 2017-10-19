@@ -18,7 +18,7 @@ from flask_mail import Message
 from ..auth.views import generate_auth_header
 from .. import app, mail, cache
 from .canned_text import EMAIL_RESPONSE
-from .forms import ContactForm, NumSeries
+from .forms import ContactForm, NumSeries, PublicAccessContactForm
 from .utils import (pull_feed, create_display_links,
                     SearchPublications, change_to_pubs_test,
                     munge_pubdata_for_display, extract_related_pub_info,
@@ -137,6 +137,54 @@ def index():
         pubs_records = []  # return an empty list recent_pubs_content is None (e.g. the service is down)
     return render_template('pubswh/home.html',
                            recent_publications=pubs_records)
+
+# contact form
+@pubswh.route('/public_access_contact', methods=['GET', 'POST'])
+def pub_access_contact():
+    contact_form = PublicAccessContactForm()
+    if request.method == 'POST':
+        if contact_form.validate_on_submit():
+            human_name = contact_form.name.data
+            human_email = contact_form.email.data
+            if human_name:
+                sender_str = '({name}, {email})'.format(name=human_name, email=human_email)
+            else:
+                sender_str = '({email})'.format(email=human_email)
+            subject_line = 'Pubs Warehouse Public Access request Comments'  # this is want Remedy filters on to determine if an email
+            # goes to the pubs support group
+            originating_page = contact_form.originating_page.data
+            message_body = contact_form.message.data
+            message_content = EMAIL_RESPONSE.format(contact_str=sender_str,
+                                                    message_body=message_body,
+                                                    originating_page=originating_page
+                                                    )
+            msg = Message(subject=subject_line,
+                          sender=(human_name, human_email),
+                          reply_to=('IPDS_NO_REPLY', 'gs_help_ipds@usgs.gov'),
+                          # this is not what Remedy filters on to determine if a message
+                          # goes to the pubs support group...
+                          recipients=contact_recipients,
+                          # will go to servicedesk@usgs.gov if application has DEBUG = False
+                          body=message_content
+                          )
+            mail.send(msg)
+            return redirect(url_for(
+                'pubswh.contact_confirmation'))  # redirect to a conf page after successful validation and message sending
+        else:
+            return render_template('pubswh/pub_access_contact.html',
+                                   contact_form=contact_form)  # redisplay the form with errors if validation fails
+    elif request.method == 'GET':
+        contact_referrer = request.referrer
+        contact_form.originating_page.data = 'Originating Page: {}'.format(contact_referrer)
+        title = request.args.get('title')
+        contact_form.message.data = 'I would like to request the full-text public access version of the following publication: {}'.format(title)
+        return render_template('pubswh/pub_access_contact.html', contact_form=contact_form)
+
+
+@pubswh.route('/public_access_contact_confirm')
+def pub_access_contact_confirmation():
+    confirmation_message = 'Thank you for contacting the USGS Publications Warehouse Public Access support team.'
+    return render_template('pubswh/pub_access_contact_confirm.html', confirm_message=confirmation_message)
 
 
 # contact form

@@ -1,4 +1,4 @@
-arrow==0.8.0
+arrow==0.10.0
 beautifulsoup4==4.5.1
 blinker==1.4
 click==6.6
@@ -41,14 +41,14 @@ Pillow==3.3.0
 pillowcase==2.0.0
 pyasn1==0.1.9
 pyasn1-modules==0.0.8
-python-dateutil==2.5.3
+python-dateutil==2.6.1
 python-mimeparse==1.5.2
 python-subunit==1.2.0
 redis==2.10.5
 requests==2.11.1
 requests-mock==1.1.0
 rsa==3.4.2
-six==1.10.0
+six==1.11.0
 sure==1.4.0
 tablib==0.11.2
 testtools==2.2.0

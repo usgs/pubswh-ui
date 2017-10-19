@@ -1,0 +1,38 @@
+{% extends 'pubswh/base.html' %}
+{% block head %}
+    <title>Contact Us- USGS Publications Warehouse</title>
+    <meta name="description" content="Contact Form for the USGS Publications Warehouse">
+    {% include 'pubswh/meta.html' %}
+{% endblock %}
+
+{% block main %}
+<main class="container-fluid">
+	    <h1>Contact us!</h1>
+	      <h2>Contact the Publications Warehouse Team</h2>
+	  <form id="contactForm" action="{{ url_for('pubswh.contact') }}" method=post>
+	    {{ contact_form.hidden_tag() }}
+		
+		{% for name_error in contact_form.name.errors %}
+			{{ name_error }}
+		{% endfor %}
+	    {{ contact_form.name(placeholder="Name") }}
+		
+		{% for email_error in contact_form.email.errors %}
+			{{ email_error }}
+		{% endfor %}
+	    {{ contact_form.email(placeholder="Email") }}
+
+	    {{ contact_form.originating_page(placeholder="Originating Page") }}
+	
+	    {{ contact_form.message(value="I would like to request the full text version of this publication") }}
+	    
+	    {% for captcha_error in contact_form.recaptcha.errors %}
+	    	{{ captcha_error }}
+	    {% endfor %}
+	    {{ contact_form.recaptcha }}
+
+	    {{ contact_form.submit }}
+	  </form>
+</main>
+{% endblock %}
+{% block url %}<a href="{{ url_for('pubswh.pub_access_contact') }}">http://pubs.er.usgs.gov{{ url_for('pubswh.pub_access_contact') }}</a>{% endblock %}

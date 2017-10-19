@@ -11,8 +11,10 @@ from operator import itemgetter
 from bs4 import BeautifulSoup
 from dcxml import simpledc
 
-from pubs_ui import app
+from pubs_ui import app, cache
 from ..custom_filters import display_publication_info
+
+from pprint import pprint
 
 json_ld_id_base_url = app.config.get('JSON_LD_ID_BASE_URL')
 # should requests verify the certificates for ssl connections
@@ -656,6 +658,7 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     pubdata['formattedModifiedDateTime'] = arrow.get(pubdata['lastModifiedDate']).format('MMMM DD, YYYY HH:mm:ss')
     pubdata = munge_abstract(pubdata)
     pubdata = has_excel(pubdata)
+    pubdata = public_access(pubdata)
     # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov.
     # Flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI
     # The Apache rewrite changes this to pubs-test.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI, where there is
@@ -961,6 +964,62 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
     sbdata['facets'].append(citation_facet)
 
     return sbdata
+
+
+def public_access(pubdata):
+    """
+    runs through a few different checks to see if the publication is publically accessable
+    :param pubdata:
+    :return: pubdata
+    """
+    pubdata['crossrefResponse'] = get_crossref_data(pubdata.get('doi'))
+    current_date_time = arrow.utcnow()
+    one_year_ago = current_date_time.shift(years=-1)
+    october_1_2016 = arrow.get('2016-10-01T00:00:00')
+    online_date = None
+    if pubdata.get('doi'):
+        crossref_data = munge_crossref_data(pubdata['doi'])
+        online_date = crossref_data.get('published_online_date')
+    if online_date and one_year_ago > online_date and online_date > october_1_2016:
+        pubdata['publicAccess'] = True
+    return(pubdata)
+
+
+def munge_crossref_data(doi):
+    crossref_data = {}
+    resp_json = get_crossref_data(doi)
+    if resp_json.get('status') == 'ok':
+        published_online = resp_json['message'].get('published-online')
+        if published_online:
+            online_date_parts =  published_online.get('date-parts', [None])[0]
+            if len(online_date_parts) >= 3:
+                online_date = arrow.get(online_date_parts[0], online_date_parts[1], online_date_parts[2])
+            elif len(online_date_parts) == 2:
+                online_date = arrow.get(online_date_parts[0], online_date_parts[1])
+            else:
+                online_date = None
+            crossref_data['published_online_date'] = online_date
+    return crossref_data
+
+
+@cache.memoize(timeout=2592000)
+def get_crossref_data(doi, verify=verify_cert):
+    """
+    All this runction does is pull data from the crossref API for a specific URL
+    :param doi: the DOI of the pub you are interested in
+    :param verify: sets the verification for the calls
+    :return: data from crossref API about that DOI
+    """
+    parameters = {'mailto': 'pubs_tech_group@usgs.gov'}
+    crossref_data = None
+    try:
+        resp = requests.get('https://api.crossref.org/works/'+doi, params=parameters, verify=verify)
+    except requests.ConnectionError:
+        pass
+    else:
+        if resp.status_code == 200:
+            crossref_data = resp.json()
+    return crossref_data
 
 
 def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=altmetric_endpoint,
