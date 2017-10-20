@@ -777,6 +777,7 @@ def munge_abstract(pubdata):
 
     return pubdata
 
+
 def generate_dublin_core(pubrecord):
     """
     This function turns a publication record into a simple dublin core XML record
@@ -795,6 +796,7 @@ def generate_dublin_core(pubrecord):
             "titles": [pubrecord.get('title')],
             }
     return '\n'.join(simpledc.tostring(data).splitlines()[1:])
+
 
 def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url):
     """
@@ -991,7 +993,7 @@ def munge_crossref_data(doi):
     if resp_json.get('status') == 'ok':
         published_online = resp_json['message'].get('published-online')
         if published_online:
-            online_date_parts =  published_online.get('date-parts', [None])[0]
+            online_date_parts = published_online.get('date-parts', [None])[0]
             if len(online_date_parts) >= 3:
                 online_date = arrow.get(online_date_parts[0], online_date_parts[1], online_date_parts[2])
             elif len(online_date_parts) == 2:
@@ -1005,7 +1007,7 @@ def munge_crossref_data(doi):
 @cache.memoize(timeout=2592000)
 def get_crossref_data(doi, verify=verify_cert):
     """
-    All this runction does is pull data from the crossref API for a specific URL
+    All this function does is pull data from the crossref API for a specific URL and put it in the cache
     :param doi: the DOI of the pub you are interested in
     :param verify: sets the verification for the calls
     :return: data from crossref API about that DOI
