@@ -267,8 +267,8 @@
                         {% if pubdata['offers'] %}
                         	<li itemprop = "offers" itemscope itemtype="http://schema.org/Offer">Paper version: <link itemprop="availability" href="http://schema.org/InStock">In stock and available from the <a itemprop="url" href="{{ pubdata['offers']['schema:offers']['schema:url'] }}"><strong>USGS Store</strong></a></li>
                         {% endif %}
-                        {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Journal Article' and pubdata['publicAccess'] %}
-                            <li>The full text of this publication can be requested by filling out the form <a href="{{ url_for('pubswh.pub_access_contact') }}?title={{ pubdata['title'] }}">here.</a></li>
+                        {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Journal Article' and pubdata['publicAccess']) %}
+                            <li>The full text of this publication can be requested by filling out the form <a href="{{ url_for('pubswh.pub_access_contact') }}?title={{ pubdata['title'] }}&index_id={{ pubdata['indexId'] }}">here.</a></li>
                         {% endif %}
                         <li>Download citation as:  <a href="{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}?mimetype=ris">RIS</a> | <a href="{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}?mimetype=dublincore">Dublin Core</a></li>
                     </ul>

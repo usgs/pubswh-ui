@@ -23,7 +23,7 @@ from .utils import (pull_feed, create_display_links,
                     SearchPublications, change_to_pubs_test,
                     munge_pubdata_for_display, extract_related_pub_info,
                     update_geographic_extents, generate_sb_data, create_store_info,
-                    get_altmetric_badge_img_links, generate_dublin_core)
+                    get_altmetric_badge_img_links, generate_dublin_core, public_access)
 
 
 # set UTF-8 to be default throughout app
@@ -169,7 +169,7 @@ def pub_access_contact():
                           )
             mail.send(msg)
             return redirect(url_for(
-                'pubswh.contact_confirmation'))  # redirect to a conf page after successful validation and message sending
+                'pubswh.pub_access_contact_confirmation'))  # redirect to a conf page after successful validation and message sending
         else:
             return render_template('pubswh/pub_access_contact.html',
                                    contact_form=contact_form)  # redisplay the form with errors if validation fails
@@ -177,7 +177,10 @@ def pub_access_contact():
         contact_referrer = request.referrer
         contact_form.originating_page.data = 'Originating Page: {}'.format(contact_referrer)
         title = request.args.get('title')
-        contact_form.message.data = 'I would like to request the full-text public access version of the following publication: {}'.format(title)
+        index_id = request.args.get('index_id')
+        contact_form.message.data = 'I would like to request the full-text public access version of the following ' \
+                                    'publication: {0} \n\n USGS support team: Get more details on this publication here:' \
+                                    ' https://pubs.er.usgs.gov/public_access_details/{1}'.format(title, index_id)
         return render_template('pubswh/pub_access_contact.html', contact_form=contact_form)
 
 
@@ -185,6 +188,20 @@ def pub_access_contact():
 def pub_access_contact_confirmation():
     confirmation_message = 'Thank you for contacting the USGS Publications Warehouse Public Access support team.'
     return render_template('pubswh/pub_access_contact_confirm.html', confirm_message=confirmation_message)
+
+@pubswh.route('/public_access_details/<index_id>')
+@login_required
+def public_access_details(index_id):
+    # generate the auth header from the request
+    auth_header = generate_auth_header(request)
+    # build the url to call the endpoint
+    r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
+    if r.status_code in [404, 406]:  # a 406 pretty much always means that it is some sort of other weird malformed URL.
+        return render_template('pubswh/404.html'), 404
+    pubreturn = r.json()
+    pubdata = munge_pubdata_for_display(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+
+    return render_template('pubswh/pub_access_data.html', indexID=index_id, pubdata=pubdata)
 
 
 # contact form
@@ -254,6 +271,8 @@ def publication(index_id):
     altmetric_links = {'image': small_badge, 'details': pub_altmetric_details}
     pubdata['altmetric'] = altmetric_links
     related_pubs = extract_related_pub_info(pubdata)
+    if pub_doi:
+        pubdata = public_access(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'dublincore':

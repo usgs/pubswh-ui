@@ -658,7 +658,6 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     pubdata['formattedModifiedDateTime'] = arrow.get(pubdata['lastModifiedDate']).format('MMMM DD, YYYY HH:mm:ss')
     pubdata = munge_abstract(pubdata)
     pubdata = has_excel(pubdata)
-    pubdata = public_access(pubdata)
     # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov.
     # Flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI
     # The Apache rewrite changes this to pubs-test.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI, where there is
