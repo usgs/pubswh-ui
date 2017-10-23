@@ -1005,7 +1005,7 @@ def munge_crossref_data(doi):
 
 
 @cache.memoize(timeout=2592000)
-def get_crossref_data(doi, verify=verify_cert):
+def get_crossref_data(doi, endpoint='https://api.crossref.org', verify=verify_cert):
     """
     All this function does is pull data from the crossref API for a specific URL and put it in the cache
     :param doi: the DOI of the pub you are interested in
@@ -1015,7 +1015,7 @@ def get_crossref_data(doi, verify=verify_cert):
     parameters = {'mailto': 'pubs_tech_group@usgs.gov'}
     crossref_data = None
     try:
-        resp = requests.get('https://api.crossref.org/works/'+doi, params=parameters, verify=verify)
+        resp = requests.get('{0}/works/{1}'.format(endpoint, doi), params=parameters, verify=verify)
     except requests.ConnectionError:
         pass
     else:
