@@ -22,6 +22,7 @@ verify_cert = app.config['VERIFY_CERT']
 base_search_url = app.config['BASE_SEARCH_URL']
 altmetric_key = app.config['ALTMETRIC_KEY']
 altmetric_endpoint = app.config['ALTMETRIC_ENDPOINT']
+crossref_endpoint = app.config['CROSSREF_ENDPOINT']
 
 
 def pubdetails(pubdata):
@@ -983,8 +984,7 @@ def public_access(pubdata):
     october_1_2016 = arrow.get('2016-10-01T00:00:00')
     online_date = None
     if pubdata.get('doi'):
-        crossref_data = munge_crossref_data(pubdata['doi'])
-        online_date = crossref_data.get('published_online_date')
+        online_date = get_published_online_date(pubdata['doi'])
     if online_date and one_year_ago > online_date and online_date > october_1_2016:
         pubdata['publicAccess'] = True
     return(pubdata)
@@ -992,9 +992,9 @@ def public_access(pubdata):
 
 def get_published_online_date(doi):
     """
-
-    :param doi:
-    :return:
+    This function pulls the published online date out of the crossref data and returns it as an arrow date object
+    :param doi: the DOI of interest that you want the published online date for
+    :return: arrow date object for published online date if it exists
     """
     published_online_date = None
     resp_json = get_crossref_data(doi)
@@ -1013,7 +1013,7 @@ def get_published_online_date(doi):
 
 
 @cache.memoize(timeout=2592000)  # Cache data for a month so the nice people at crossref don't yell at us
-def get_crossref_data(doi, endpoint='https://api.crossref.org', verify=verify_cert):
+def get_crossref_data(doi, endpoint=crossref_endpoint, verify=verify_cert):
     """
     All this function does is pull data from the crossref API for a specific URL and put it in the cache
     :param doi: the DOI of the pub you are interested in
