@@ -9,7 +9,7 @@
 <main class="container-fluid">
 	    <h1>Contact us!</h1>
 	      <h2>Contact the USGS Public Access Team to request public access version of USGS authored publications</h2>
-	  <form id="contactForm" action="{{ url_for('pubswh.contact') }}" method=post>
+	  <form id="contactForm" action="{{ url_for('pubswh.pub_access_contact') }}" method=post>
 	    {{ contact_form.hidden_tag() }}
 		
 		{% for name_error in contact_form.name.errors %}
