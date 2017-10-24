@@ -138,13 +138,15 @@
                             <a href="https://twitter.com/share" class="twitter-share-button" data-text="USGS Pub" data-via="USGS_Pubs" data-dnt="true">Tweet</a>
                             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 	                    </div>
-                        <div id="altmetric">
-                            {% if pubdata['altmetric']['image'] is not none and pubdata['altmetric']['details'] is not none %}
-                                <a href="{{ pubdata['altmetric']['details'] }}">
-                                    <img src="{{ pubdata['altmetric']['image'] }}" alt="Altmetric Badge">
-                                </a>
-                            {%  endif %}
-                        </div>
+                        {% if pubdata['altmetric']  %}
+                            <div id="altmetric">
+                                {% if pubdata['altmetric']['image'] is not none and pubdata['altmetric']['details'] is not none %}
+                                    <a href="{{ pubdata['altmetric']['details'] }}">
+                                        <img src="{{ pubdata['altmetric']['image'] }}" alt="Altmetric Badge">
+                                    </a>
+                                {%  endif %}
+                            </div>
+                        {% endif %}
                     </div>
                 </section>
                 <section>
@@ -154,7 +156,7 @@
                             <a title="Link to USGS Manual" href="https://www.usgs.gov/usgs-manual/">USGS Manual</a>.</p>
                     {% endif %}
                 </section>
-                
+
                 <section id="suggested">
                     {% macro linkdisplay(link) -%}
                         <a href="{{ link['url'] }}" target="_blank"
@@ -213,7 +215,8 @@
                 			{% endfor %}
                 		{% endif %}
                     {% endmacro %}
-                    
+                    {% block public_access %}
+                    {% endblock %}
                     <h4>Links</h4>
                     <ul class="fileslist">
                         {{- linkdisplaylists('Index Page','More information','More Information') -}}
@@ -260,7 +263,9 @@
                         {{- linkdisplaylists('Referenced Work','Referenced Work','Referenced Work') -}}
                         {{- linkdisplaylists('Spatial Data','Spatial Data','Spatial Data') -}}
                         {{- linkdisplaylists('Version History','Version History','Version History') -}}
-                        {{- related_links() -}}
+                        {% if related_pubs %}
+                            {{- related_links() -}}
+                        {% endif %}
                         {% if pubdata['pubHasNoLinks'] == True %}
                         	<li>The Publications Warehouse does not have links to digital versions of this publication at this time</li>
                         {% endif %}

@@ -201,7 +201,7 @@ def public_access_details(index_id):
     pubreturn = r.json()
     pubdata = munge_pubdata_for_display(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
 
-    return render_template('pubswh/pub_access_data.html', indexID=index_id, pubdata=pubdata)
+    return render_template('pubswh/pub_access_data.html', indexID=index_id, pubdata=pubdata, related_pubs=None)
 
 
 # contact form
