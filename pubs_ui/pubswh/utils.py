@@ -990,11 +990,16 @@ def public_access(pubdata):
     return(pubdata)
 
 
-def munge_crossref_data(doi):
-    crossref_data = {}
+def get_published_online_date(doi):
+    """
+
+    :param doi:
+    :return:
+    """
+    published_online_date = None
     resp_json = get_crossref_data(doi)
     if resp_json.get('status') == 'ok':
-        published_online = resp_json['message'].get('published-online')
+        published_online = resp_json.get('message', {}).get('published-online')
         if published_online:
             online_date_parts = published_online.get('date-parts', [None])[0]
             if len(online_date_parts) >= 3:
@@ -1003,11 +1008,11 @@ def munge_crossref_data(doi):
                 online_date = arrow.get(online_date_parts[0], online_date_parts[1])
             else:
                 online_date = None
-            crossref_data['published_online_date'] = online_date
-    return crossref_data
+            published_online_date = online_date
+    return published_online_date
 
 
-@cache.memoize(timeout=2592000)
+@cache.memoize(timeout=2592000)  # Cache data for a month so the nice people at crossref don't yell at us
 def get_crossref_data(doi, endpoint='https://api.crossref.org', verify=verify_cert):
     """
     All this function does is pull data from the crossref API for a specific URL and put it in the cache
