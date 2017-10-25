@@ -4,7 +4,7 @@ from mock import MagicMock, patch
 import requests as r
 import requests_mock
 
-from test_data import crossref_200_ok
+from test_data import crossref_200_ok, crossref_200_not_ok
 from ..utils import manipulate_doi_information, generate_sb_data, update_geographic_extents, create_store_info, \
     get_altmetric_badge_img_links, SearchPublications, get_crossref_data
 from ... import app
@@ -323,16 +323,25 @@ class GetCrossrefDataTestCase(unittest.TestCase):
         self.fake_doi = '00.00001/bc.1729'
         self.fake_doi_unregistered = '00.00001/bc.1729ABC'
         self.fake_endpoint = 'https://fake.api.crossref.org'
+        self.fake_broken_endpoint = 'https://fake.api.croossref.org'
         self.fake_url = '{0}/works/{1}?mailto=pubs_tech_group%40usgs.gov'.format(self.fake_endpoint, self.fake_doi)
         self.fake_url_404 = '{0}/works/{1}?mailto=pubs_tech_group%40usgs.gov'.format(self.fake_endpoint, self.fake_doi_unregistered)
+        self.fake_url_broken = '{0}/works/{1}?mailto=pubs_tech_group%40usgs.gov'.format(self.fake_broken_endpoint, self.fake_doi)
         self.verify_cert = False
-        self.data_200_ok = crossref_200_ok
+        self.data_200 = crossref_200_ok
 
     @requests_mock.Mocker()
     def test_get_data_from_indexed_doi(self, m):
-        m.get(self.fake_url, status_code=200, json=self.data_200_ok)
+        m.get(self.fake_url, status_code=200, json=self.data_200)
         result = get_crossref_data(self.fake_doi, endpoint=self.fake_endpoint, verify=self.verify_cert)
-        expected = self.data_200_ok
+        expected = self.data_200
+        self.assertEqual(result, expected)
+
+    @requests_mock.Mocker()
+    def test_connection_error(self, m):
+        m.get(self.fake_url_broken, exc=r.exceptions.ConnectionError)
+        result = get_crossref_data(doi=self.fake_doi, endpoint=self.fake_broken_endpoint, verify=self.verify_cert)
+        expected = None
         self.assertEqual(result, expected)
 
     @requests_mock.Mocker()
@@ -341,6 +350,7 @@ class GetCrossrefDataTestCase(unittest.TestCase):
         result = get_crossref_data(doi=self.fake_doi_unregistered, endpoint=self.fake_endpoint, verify=self.verify_cert)
         expected = None
         self.assertEqual(result, expected)
+
 
 
 

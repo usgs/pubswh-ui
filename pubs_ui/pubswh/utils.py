@@ -1043,6 +1043,7 @@ def get_crossref_data(doi, endpoint=crossref_endpoint, verify=verify_cert):
             crossref_data = resp.json()
     return crossref_data
 
+
 @cache.memoize(timeout=86400)  # Cache data for a day so the nice people at altmetrics don't yell at us
 def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=altmetric_endpoint,
                                   altmetric_key=altmetric_key, verify=verify_cert):

@@ -751,3 +751,8 @@ crossref_200_ok = {u'message': {u'DOI': u'10.1002/ecy.1625',
                 u'message-type': u'work',
                 u'message-version': u'1.0.0',
                 u'status': u'ok'}
+
+crossref_200_not_ok = {u'message': None,
+                u'message-type': u'work',
+                u'message-version': u'1.0.0',
+                u'status': u'error'}
