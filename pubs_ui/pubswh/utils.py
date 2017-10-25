@@ -659,6 +659,8 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     pubdata['formattedModifiedDateTime'] = arrow.get(pubdata['lastModifiedDate']).format('MMMM DD, YYYY HH:mm:ss')
     pubdata = munge_abstract(pubdata)
     pubdata = has_excel(pubdata)
+    pubdata['crossref'] = get_crossref_data(pubdata)
+    pubdata['publicAccess'] = check_public_access(pubdata)
     # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov.
     # Flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI
     # The Apache rewrite changes this to pubs-test.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI, where there is
@@ -972,34 +974,44 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
     return sbdata
 
 
-def public_access(pubdata):
+def check_public_access(pubdata):
     """
     runs through a few different checks to see if the publication is publically accessable
     :param pubdata:
     :return: pubdata
     """
-    pubdata['crossrefResponse'] = get_crossref_data(pubdata.get('doi'))
-    current_date_time = arrow.utcnow()
-    one_year_ago = current_date_time.shift(years=-1)
+    public_access = False
+    # 2016-10-01 is the key date for the USGS public access policy, and we will use it in several ways
     october_1_2016 = arrow.get('2016-10-01T00:00:00')
-    online_date = None
+    # We need today's time in arrow format to determine the one-year embargo policy
+    current_date_time = arrow.utcnow()
+    # We need to know when one year ago was to make embargo decisions
+    one_year_ago = current_date_time.shift(years=-1)
+    # set a compliance date that we will check against
+    compliance_date = None
+    # Check if publication has a DOI.  If no DOI, we will work with the display to public date
     if pubdata.get('doi'):
-        online_date = get_published_online_date(pubdata['doi'])
-    if online_date and one_year_ago > online_date and online_date > october_1_2016:
-        pubdata['publicAccess'] = True
-    return(pubdata)
+        crossref_response = get_crossref_data(pubdata['doi'])
+        online_date = get_published_online_date(crossref_response)
+        if online_date:
+            compliance_date = online_date
+    if compliance_date is None and pubdata.get('displayToPublicDate'):
+        compliance_date = arrow.get(pubdata.get('displayToPublicDate'))
+    # now check to see if
+    if compliance_date and one_year_ago > compliance_date and compliance_date > october_1_2016:
+        public_access = True
+    return(public_access)
 
 
-def get_published_online_date(doi):
+def get_published_online_date(crossref_data):
     """
     This function pulls the published online date out of the crossref data and returns it as an arrow date object
     :param doi: the DOI of interest that you want the published online date for
     :return: arrow date object for published online date if it exists
     """
     published_online_date = None
-    resp_json = get_crossref_data(doi)
-    if resp_json.get('status') == 'ok':
-        published_online = resp_json.get('message', {}).get('published-online')
+    if crossref_data.get('status') == 'ok':
+        published_online = crossref_data.get('message', {}).get('published-online')
         if published_online:
             online_date_parts = published_online.get('date-parts', [None])[0]
             if len(online_date_parts) >= 3:
