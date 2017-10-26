@@ -5,9 +5,9 @@ import requests as r
 import requests_mock
 import arrow
 
-from test_data import crossref_200_ok, crossref_200_not_ok
+from test_data import crossref_200_ok, crossref_200_not_ok, crossref_200_ok_2_date_parts, crossref_200_ok_1_date_part, crossref_200_ok_message_empty
 from ..utils import manipulate_doi_information, generate_sb_data, update_geographic_extents, create_store_info, \
-    get_altmetric_badge_img_links, SearchPublications, get_crossref_data, check_public_access
+    get_altmetric_badge_img_links, SearchPublications, get_crossref_data, check_public_access, get_published_online_date
 from ... import app
 
 
@@ -412,8 +412,35 @@ class GetPublishedOnlineDateTestCase(unittest.TestCase):
     def setUp(self):
         self.good_crossref_data = crossref_200_ok
         self.not_good_crossref_data = crossref_200_not_ok
+        self.good_crossref_2_parts = crossref_200_ok_2_date_parts
+        self.good_crossref_1_part = crossref_200_ok_1_date_part
+        self.ok_no_published_online = crossref_200_ok_message_empty
 
 
+    def test_not_ok_data(self):
+        result = get_published_online_date(self.not_good_crossref_data)
+        expected = None
+        self.assertEqual(result, expected)
+
+    def test_ok_data_3_parts(self):
+        result = get_published_online_date(self.good_crossref_data)
+        expected = arrow.get(2016, 12, 9)
+        self.assertEqual(result, expected)
+
+    def test_ok_data_2_parts(self):
+        result = get_published_online_date(self.good_crossref_2_parts)
+        expected = arrow.get(2016, 12, 1)
+        self.assertEqual(result, expected)
+
+    def test_ok_data_1_part(self):
+        result = get_published_online_date(self.good_crossref_1_part)
+        expected = None
+        self.assertEqual(result, expected)
+
+    def test_ok_data_no_online_date(self):
+        result = get_published_online_date(self.ok_no_published_online)
+        expected = None
+        self.assertEqual(result, expected)
 
 
 

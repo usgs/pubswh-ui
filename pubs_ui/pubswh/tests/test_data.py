@@ -756,3 +756,18 @@ crossref_200_not_ok = {u'message': None,
                 u'message-type': u'work',
                 u'message-version': u'1.0.0',
                 u'status': u'error'}
+
+crossref_200_ok_2_date_parts = {u'message': {u'published-online': {u'date-parts': [[2016, 12]]}},
+                u'message-type': u'work',
+                u'message-version': u'1.0.0',
+                u'status': u'ok'}
+
+crossref_200_ok_1_date_part = {u'message': {u'published-online': {u'date-parts': [[2016]]}},
+                u'message-type': u'work',
+                u'message-version': u'1.0.0',
+                u'status': u'ok'}
+
+crossref_200_ok_message_empty = {u'message': {},
+                u'message-type': u'work',
+                u'message-version': u'1.0.0',
+                u'status': u'ok'}

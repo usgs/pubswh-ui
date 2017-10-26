@@ -1013,7 +1013,7 @@ def get_published_online_date(crossref_data):
             if len(online_date_parts) >= 3:
                 online_date = arrow.get(online_date_parts[0], online_date_parts[1], online_date_parts[2])
             elif len(online_date_parts) == 2:
-                online_date = arrow.get(online_date_parts[0], online_date_parts[1])
+                online_date = arrow.get(online_date_parts[0], online_date_parts[1], 1)
             else:
                 online_date = None
             published_online_date = online_date
