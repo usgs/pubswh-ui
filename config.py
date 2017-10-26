@@ -53,6 +53,9 @@ GA_DISCOVERY_URI = ('https://analyticsreporting.googleapis.com/$discovery/rest')
 ALTMETRIC_KEY = ''
 ALTMETRIC_ENDPOINT = 'https://api.altmetric.com/v1/'
 
+# Crossref API information
+CROSSREF_ENDPOINT = 'https://api.crossref.org'
+
 try:
     from deploy_date import *
 except ImportError:

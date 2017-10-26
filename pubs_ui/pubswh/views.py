@@ -18,12 +18,13 @@ from flask_mail import Message
 from ..auth.views import generate_auth_header
 from .. import app, mail, cache
 from .canned_text import EMAIL_RESPONSE
-from .forms import ContactForm, NumSeries
+from .forms import ContactForm, NumSeries, PublicAccessContactForm
 from .utils import (pull_feed, create_display_links,
                     SearchPublications, change_to_pubs_test,
                     munge_pubdata_for_display, extract_related_pub_info,
                     update_geographic_extents, generate_sb_data, create_store_info,
-                    get_altmetric_badge_img_links, generate_dublin_core)
+                    get_altmetric_badge_img_links, generate_dublin_core, get_crossref_data, get_published_online_date,
+                    check_public_access)
 
 
 # set UTF-8 to be default throughout app
@@ -138,6 +139,71 @@ def index():
     return render_template('pubswh/home.html',
                            recent_publications=pubs_records)
 
+# contact form
+@pubswh.route('/public_access_contact', methods=['GET', 'POST'])
+def pub_access_contact():
+    contact_form = PublicAccessContactForm()
+    if request.method == 'POST':
+        if contact_form.validate_on_submit():
+            human_name = contact_form.name.data
+            human_email = contact_form.email.data
+            if human_name:
+                sender_str = '({name}, {email})'.format(name=human_name, email=human_email)
+            else:
+                sender_str = '({email})'.format(email=human_email)
+            subject_line = 'Pubs Warehouse Public Access request Comments'  # this is want Remedy filters on to determine if an email
+            # goes to the pubs support group
+            originating_page = contact_form.originating_page.data
+            message_body = contact_form.message.data
+            message_content = EMAIL_RESPONSE.format(contact_str=sender_str,
+                                                    message_body=message_body,
+                                                    originating_page=originating_page
+                                                    )
+            msg = Message(subject=subject_line,
+                          sender=(human_name, human_email),
+                          reply_to=('IPDS_NO_REPLY', 'gs_help_ipds@usgs.gov'),
+                          # this is not what Remedy filters on to determine if a message
+                          # goes to the pubs support group...
+                          recipients=contact_recipients,
+                          # will go to servicedesk@usgs.gov if application has DEBUG = False
+                          body=message_content
+                          )
+            mail.send(msg)
+            return redirect(url_for(
+                'pubswh.pub_access_contact_confirmation'))  # redirect to a conf page after successful validation and message sending
+        else:
+            return render_template('pubswh/pub_access_contact.html',
+                                   contact_form=contact_form)  # redisplay the form with errors if validation fails
+    elif request.method == 'GET':
+        contact_referrer = request.referrer
+        contact_form.originating_page.data = 'Originating Page: {}'.format(contact_referrer)
+        title = request.args.get('title')
+        index_id = request.args.get('index_id')
+        contact_form.message.data = 'I would like to request the full-text public access version of the following ' \
+                                    'publication: {0} \n\n USGS support team: Get more details on this publication here:' \
+                                    ' https://pubs.er.usgs.gov/public_access_details/{1}'.format(title, index_id)
+        return render_template('pubswh/pub_access_contact.html', contact_form=contact_form)
+
+
+@pubswh.route('/public_access_contact_confirm')
+def pub_access_contact_confirmation():
+    confirmation_message = 'Thank you for contacting the USGS Publications Warehouse Public Access support team.'
+    return render_template('pubswh/pub_access_contact_confirm.html', confirm_message=confirmation_message)
+
+@pubswh.route('/public_access_details/<index_id>')
+@login_required
+def public_access_details(index_id):
+    # generate the auth header from the request
+    auth_header = generate_auth_header(request)
+    # build the url to call the endpoint
+    r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
+    if r.status_code in [404, 406]:  # a 406 pretty much always means that it is some sort of other weird malformed URL.
+        return render_template('pubswh/404.html'), 404
+    pubreturn = r.json()
+    pubdata = munge_pubdata_for_display(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+
+    return render_template('pubswh/pub_access_data.html', indexID=index_id, pubdata=pubdata, related_pubs=None)
+
 
 # contact form
 @pubswh.route('/contact', methods=['GET', 'POST'])
@@ -205,6 +271,10 @@ def publication(index_id):
     pubdata.update(store_data)
     altmetric_links = {'image': small_badge, 'details': pub_altmetric_details}
     pubdata['altmetric'] = altmetric_links
+    crossref_data = get_crossref_data(pubdata)
+    online_date_arrow = get_published_online_date(crossref_data)
+    pubdata['crossref'] = crossref_data
+    pubdata['publicAccess'] = check_public_access(pubdata, online_date_arrow)
     related_pubs = extract_related_pub_info(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)

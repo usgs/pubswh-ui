@@ -11,8 +11,10 @@ from operator import itemgetter
 from bs4 import BeautifulSoup
 from dcxml import simpledc
 
-from pubs_ui import app
+from pubs_ui import app, cache
 from ..custom_filters import display_publication_info
+
+from pprint import pprint
 
 json_ld_id_base_url = app.config.get('JSON_LD_ID_BASE_URL')
 # should requests verify the certificates for ssl connections
@@ -20,6 +22,7 @@ verify_cert = app.config['VERIFY_CERT']
 base_search_url = app.config['BASE_SEARCH_URL']
 altmetric_key = app.config['ALTMETRIC_KEY']
 altmetric_endpoint = app.config['ALTMETRIC_ENDPOINT']
+crossref_endpoint = app.config['CROSSREF_ENDPOINT']
 
 
 def pubdetails(pubdata):
@@ -774,15 +777,15 @@ def munge_abstract(pubdata):
 
     return pubdata
 
+
 def generate_dublin_core(pubrecord):
     """
     This function turns a publication record into a simple dublin core XML record
     :param pubrecord:
     :return: dublin core XML record
     """
+
     data = {
-            "contributors": pubrecord.get('authorsList')[1:],
-            "creators": [pubrecord.get('authorsList')[0]],
             "dates": [pubrecord.get('publicationYear')],
             "descriptions": [pubrecord.get('docAbstract')],
             "formats": ['application/pdf'],
@@ -791,7 +794,13 @@ def generate_dublin_core(pubrecord):
             "publishers": [pubrecord.get('publisher')],
             "titles": [pubrecord.get('title')],
             }
+    if pubrecord.get('authorslist') and len(pubrecord.get('authorslist') ) >= 1:
+        data["creators"] = [pubrecord.get('authorsList')[0]]
+    if pubrecord.get('authorslist') and len(pubrecord.get('authorslist') ) >= 2:
+        data["contributors"] = pubrecord.get('authorsList')[1:],
+
     return '\n'.join(simpledc.tostring(data).splitlines()[1:])
+
 
 def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url):
     """
@@ -963,6 +972,75 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
     return sbdata
 
 
+def check_public_access(pubdata, online_date_arrow, current_date_time=arrow.utcnow()):
+    """
+    runs through a few different checks to see if the publication is publically accessable
+    :param pubdata: a publications warehouse object
+    :param online_date_arrow: an arrow date object that represents the online date for the publication, from crossref
+    :param current_date_time: an arrow date object that represents the current date time, but can be overidden for tests
+    This is needed for tests around the embargo policy
+    :return: a boolean if there should be public access or not
+    """
+    public_access = False
+    # 2016-10-01 is the key date for the USGS public access policy, and we will use it in several ways
+    october_1_2016 = arrow.get('2016-10-01T00:00:00')
+    # We need to know when one year ago was to make embargo decisions
+    one_year_ago = current_date_time.shift(years=-1)
+    # set a compliance date that we will check against
+    compliance_date = None
+    # Check if publication has a DOI.  If no DOI, we will work with the display to public date
+    if online_date_arrow:
+        compliance_date = online_date_arrow
+    if compliance_date is None and pubdata.get('displayToPublicDate'):
+        compliance_date = arrow.get(pubdata.get('displayToPublicDate'))
+    # now check to see if the policy is followed
+    if compliance_date and (one_year_ago > compliance_date > october_1_2016):
+        public_access = True
+    return public_access
+
+
+def get_published_online_date(crossref_data):
+    """
+    This function pulls the published online date out of the crossref data and returns it as an arrow date object
+    :param doi: the DOI of interest that you want the published online date for
+    :return: arrow date object for published online date if it exists
+    """
+    published_online_date = None
+    if crossref_data.get('status') == 'ok':
+        published_online = crossref_data.get('message', {}).get('published-online')
+        if published_online:
+            online_date_parts = published_online.get('date-parts', [None])[0]
+            if len(online_date_parts) >= 3:
+                online_date = arrow.get(online_date_parts[0], online_date_parts[1], online_date_parts[2])
+            elif len(online_date_parts) == 2:
+                online_date = arrow.get(online_date_parts[0], online_date_parts[1], 1)
+            else:
+                online_date = None
+            published_online_date = online_date
+    return published_online_date
+
+
+@cache.memoize(timeout=2592000)  # Cache data for a month so the nice people at crossref don't yell at us
+def get_crossref_data(doi, endpoint=crossref_endpoint, verify=verify_cert):
+    """
+    All this function does is pull data from the crossref API for a specific URL and put it in the cache
+    :param doi: the DOI of the pub you are interested in
+    :param verify: sets the verification for the calls
+    :return: data from crossref API about that DOI
+    """
+    parameters = {'mailto': 'pubs_tech_group@usgs.gov'}
+    crossref_data = None
+    try:
+        resp = requests.get('{0}/works/{1}'.format(endpoint, doi), params=parameters, verify=verify)
+    except requests.ConnectionError:
+        pass
+    else:
+        if resp.status_code == 200:
+            crossref_data = resp.json()
+    return crossref_data
+
+
+@cache.memoize(timeout=86400)  # Cache data for a day so the nice people at altmetrics don't yell at us
 def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=altmetric_endpoint,
                                   altmetric_key=altmetric_key, verify=verify_cert):
     """
