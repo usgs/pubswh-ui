@@ -40,6 +40,7 @@ lookup_url = app.config['LOOKUP_URL']
 supersedes_url = app.config['SUPERSEDES_URL']
 search_url = app.config['BASE_SEARCH_URL']
 contact_recipients = app.config['CONTACT_RECIPIENTS']
+ipds_contact_recipients = app.config.get('IPDS_CONTACT_RECIPIENTS')
 replace_pubs_with_pubs_test = app.config.get('REPLACE_PUBS_WITH_PUBS_TEST')
 robots_welcome = app.config.get('ROBOTS_WELCOME')
 json_ld_id_base_url = app.config.get('JSON_LD_ID_BASE_URL')
@@ -162,11 +163,11 @@ def pub_access_contact():
                                                     )
             msg = Message(subject=subject_line,
                           sender=(human_name, human_email),
-                          reply_to=('IPDS_NO_REPLY', 'gs_help_ipds@usgs.gov'),
+                          reply_to=('IPDS_Help', 'GS_Help_IPDS@usgs.gov'),
                           # this is not what Remedy filters on to determine if a message
                           # goes to the pubs support group...
-                          recipients=contact_recipients,
-                          # will go to servicedesk@usgs.gov if application has DEBUG = False
+                          recipients=ipds_contact_recipients,
+                          # will go to gs_ipds_help@usgs.gov if application has DEBUG = False
                           body=message_content
                           )
             mail.send(msg)
