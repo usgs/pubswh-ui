@@ -48,6 +48,7 @@ auth_endpoint_url = app.config.get('AUTH_ENDPOINT_URL')
 preview_endpoint_url = app.config.get('PREVIEW_ENDPOINT_URL')
 max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
 cache_config = app.config['CACHE_CONFIG']
+crossref_endpoint = app.config['CROSSREF_ENDPOINT']
 
 
 # should requests verify the certificates for ssl connections
@@ -271,7 +272,7 @@ def publication(index_id):
     pubdata.update(store_data)
     altmetric_links = {'image': small_badge, 'details': pub_altmetric_details}
     pubdata['altmetric'] = altmetric_links
-    crossref_data = get_crossref_data(pubdata)
+    crossref_data = get_crossref_data(pubdata.get('doi'))
     online_date_arrow = get_published_online_date(crossref_data)
     pubdata['crossref'] = crossref_data
     pubdata['publicAccess'] = check_public_access(pubdata, online_date_arrow)

@@ -1006,7 +1006,7 @@ def get_published_online_date(crossref_data):
     :return: arrow date object for published online date if it exists
     """
     published_online_date = None
-    if crossref_data.get('status') == 'ok':
+    if crossref_data and crossref_data.get('status') == 'ok':
         published_online = crossref_data.get('message', {}).get('published-online')
         if published_online:
             online_date_parts = published_online.get('date-parts', [None])[0]
@@ -1030,13 +1030,14 @@ def get_crossref_data(doi, endpoint=crossref_endpoint, verify=verify_cert):
     """
     parameters = {'mailto': 'pubs_tech_group@usgs.gov'}
     crossref_data = None
-    try:
-        resp = requests.get('{0}/works/{1}'.format(endpoint, doi), params=parameters, verify=verify)
-    except requests.ConnectionError:
-        pass
-    else:
-        if resp.status_code == 200:
-            crossref_data = resp.json()
+    if doi:
+        try:
+            resp = requests.get('{0}/works/{1}'.format(endpoint, doi), params=parameters, verify=verify)
+        except requests.ConnectionError:
+            pass
+        else:
+            if resp.status_code == 200:
+                crossref_data = resp.json()
     return crossref_data
 
 

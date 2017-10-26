@@ -354,6 +354,10 @@ class GetCrossrefDataTestCase(unittest.TestCase):
         expected = None
         self.assertEqual(result, expected)
 
+    def test_doi_is_None(self):
+        result = get_crossref_data(None, endpoint=self.fake_endpoint, verify=self.verify_cert)
+        expected = None
+        self.assertEqual(result, expected)
 
 class CheckPublicAccessTestCase(unittest.TestCase):
 
@@ -439,6 +443,11 @@ class GetPublishedOnlineDateTestCase(unittest.TestCase):
 
     def test_ok_data_no_online_date(self):
         result = get_published_online_date(self.ok_no_published_online)
+        expected = None
+        self.assertEqual(result, expected)
+
+    def test_crossref_is_None(self):
+        result = get_published_online_date(None)
         expected = None
         self.assertEqual(result, expected)
 
