@@ -3,10 +3,11 @@ import unittest
 from mock import MagicMock, patch
 import requests as r
 import requests_mock
+import arrow
 
 from test_data import crossref_200_ok, crossref_200_not_ok
 from ..utils import manipulate_doi_information, generate_sb_data, update_geographic_extents, create_store_info, \
-    get_altmetric_badge_img_links, SearchPublications, get_crossref_data
+    get_altmetric_badge_img_links, SearchPublications, get_crossref_data, check_public_access
 from ... import app
 
 
@@ -325,8 +326,10 @@ class GetCrossrefDataTestCase(unittest.TestCase):
         self.fake_endpoint = 'https://fake.api.crossref.org'
         self.fake_broken_endpoint = 'https://fake.api.croossref.org'
         self.fake_url = '{0}/works/{1}?mailto=pubs_tech_group%40usgs.gov'.format(self.fake_endpoint, self.fake_doi)
-        self.fake_url_404 = '{0}/works/{1}?mailto=pubs_tech_group%40usgs.gov'.format(self.fake_endpoint, self.fake_doi_unregistered)
-        self.fake_url_broken = '{0}/works/{1}?mailto=pubs_tech_group%40usgs.gov'.format(self.fake_broken_endpoint, self.fake_doi)
+        self.fake_url_404 = '{0}/works/{1}?mailto=pubs_tech_group%40usgs.gov'.format(self.fake_endpoint,
+                                                                                     self.fake_doi_unregistered)
+        self.fake_url_broken = '{0}/works/{1}?mailto=pubs_tech_group%40usgs.gov'.format(self.fake_broken_endpoint,
+                                                                                        self.fake_doi)
         self.verify_cert = False
         self.data_200 = crossref_200_ok
 
@@ -350,6 +353,68 @@ class GetCrossrefDataTestCase(unittest.TestCase):
         result = get_crossref_data(doi=self.fake_doi_unregistered, endpoint=self.fake_endpoint, verify=self.verify_cert)
         expected = None
         self.assertEqual(result, expected)
+
+
+class CheckPublicAccessTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.current_date = arrow.get('2017-11-01')
+        self.pubdata_future_disp_pub_date = {'displayToPublicDate': '2016-11-25T00:00:00'}
+        self.pubdata_past_disp_pub_date = {'displayToPublicDate': '2016-10-25T00:00:00'}
+        self.pubdata_past_disp_pub_date_before_oct_1_2016 = {'displayToPublicDate': '2016-09-01T00:00:00'}
+        self.future_online_date = arrow.get('2016-12-01')
+        self.past_online_date_after_oct_1_2016 = arrow.get('2016-10-15')
+        self.past_online_date_before_oct_1_2016 = arrow.get('2016-09-01')
+
+    def test_online_date_less_than_one_year_ago(self):
+        result = check_public_access(pubdata=self.pubdata_future_disp_pub_date,
+                                     online_date_arrow=self.future_online_date, current_date_time=self.current_date)
+        expected = False
+        self.assertEqual(result, expected)
+
+    def test_online_date_more_than_one_year_ago_and_after_oct_1_2016(self):
+        result = check_public_access(pubdata=self.pubdata_past_disp_pub_date,
+                                     online_date_arrow=self.past_online_date_after_oct_1_2016, current_date_time=self.current_date)
+        expected = True
+        self.assertEqual(result, expected)
+
+    def test_online_date_more_than_one_year_ago_and_before_oct_1_2016(self):
+        result = check_public_access(pubdata=self.pubdata_past_disp_pub_date_before_oct_1_2016,
+                                     online_date_arrow=self.past_online_date_before_oct_1_2016, current_date_time=self.current_date)
+        expected = False
+        self.assertEqual(result, expected)
+
+    def test_disp_pub_date_less_than_one_year_ago(self):
+        result = check_public_access(pubdata=self.pubdata_future_disp_pub_date,
+                                     online_date_arrow=None, current_date_time=self.current_date)
+        expected = False
+        self.assertEqual(result, expected)
+
+    def test_disp_pub_date_more_than_one_year_ago_and_after_oct_1_2016(self):
+        result = check_public_access(pubdata=self.pubdata_past_disp_pub_date,
+                                     online_date_arrow=None,
+                                     current_date_time=self.current_date)
+        expected = True
+        self.assertEqual(result, expected)
+
+    def test_disp_pub_date_more_than_one_year_ago_and_before_oct_1_2016(self):
+        result = check_public_access(pubdata=self.pubdata_past_disp_pub_date_before_oct_1_2016,
+                                     online_date_arrow=None,
+                                     current_date_time=self.current_date)
+        expected = False
+        self.assertEqual(result, expected)
+
+
+
+
+class GetPublishedOnlineDateTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.good_crossref_data = crossref_200_ok
+        self.not_good_crossref_data = crossref_200_not_ok
+
+
+
 
 
 

@@ -23,7 +23,8 @@ from .utils import (pull_feed, create_display_links,
                     SearchPublications, change_to_pubs_test,
                     munge_pubdata_for_display, extract_related_pub_info,
                     update_geographic_extents, generate_sb_data, create_store_info,
-                    get_altmetric_badge_img_links, generate_dublin_core)
+                    get_altmetric_badge_img_links, generate_dublin_core, get_crossref_data, get_published_online_date,
+                    check_public_access)
 
 
 # set UTF-8 to be default throughout app
@@ -270,6 +271,10 @@ def publication(index_id):
     pubdata.update(store_data)
     altmetric_links = {'image': small_badge, 'details': pub_altmetric_details}
     pubdata['altmetric'] = altmetric_links
+    crossref_data = get_crossref_data(pubdata)
+    online_date_arrow = get_published_online_date(crossref_data)
+    pubdata['crossref'] = crossref_data
+    pubdata['publicAccess'] = check_public_access(pubdata, online_date_arrow)
     related_pubs = extract_related_pub_info(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
