@@ -6,7 +6,7 @@ from flask_caching import Cache
 from flask_images import Images
 from flask_mail import Mail
 
-from custom_filters import display_publication_info, date_format
+from custom_filters import display_publication_info, date_format, w3c_date
 
 
 FORMAT = '%(asctime)s %(message)s'
@@ -36,6 +36,7 @@ mail = Mail(app)
 app.view_functions['images'] = images.handle_request
 app.jinja_env.filters['display_pub_info'] = display_publication_info
 app.jinja_env.filters['date_format'] = date_format
+app.jinja_env.filters['w3c_date'] = w3c_date
 app.jinja_env.globals.update(wsgi_str=app.config['WSGI_STR'])
 app.jinja_env.globals.update(GOOGLE_ANALYTICS_CODE=app.config['GOOGLE_ANALYTICS_CODE'])
 app.jinja_env.globals.update(GOOGLE_WEBMASTER_TOOLS_CODE=app.config['GOOGLE_WEBMASTER_TOOLS_CODE'])

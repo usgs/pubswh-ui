@@ -4,7 +4,7 @@
    {% for item in publication_list %}
         <url>
           <loc>https://pubs.er.usgs.gov/publication/{{ item['indexId'] }}</loc>
-          {% if item['modified'] %}<lastmod>{{ item['modified'] }}</lastmod>{% endif %}
+          {% if item['modified'] %}<lastmod>{{ item['modified'] | w3c_date }}</lastmod>{% endif %}
        </url>
    {% endfor %}
 

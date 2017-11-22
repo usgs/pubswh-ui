@@ -86,3 +86,12 @@ def display_publication_info(json_content):
 
 def date_format(value):
     return arrow.get(value).format('MMMM D, YYYY')
+
+
+def w3c_date(value):
+    """
+    The W#C likes dates in a certain format
+    :param value: a date string that is parsable by arrow
+    :return: a W3C compatible date with accuracy to day
+    """
+    return arrow.get(value).format('YYYY-MM-DD')
