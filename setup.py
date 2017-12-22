@@ -62,7 +62,7 @@ parsed_requirements = read_requirements()
 data_files = identify_data_files(['static'])
 
 setup(name='usgs_flask_pubs_ui',
-      version='2.14.0dev',
+      version='2.14.0',
       description='USGS Publications Warehouse User Interface',
       long_description=read('README.md'),
       author='Mary Bucknell, James Kreft, Andrew Yan',
