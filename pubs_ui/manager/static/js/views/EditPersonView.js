@@ -38,7 +38,8 @@ define([
 			'#suffix' : 'suffix',
 			'#email' : 'email',
 			'#orcid-id' : 'orcid',
-			'#is-usgs' : 'usgs'
+			'#is-usgs' : 'usgs',
+			'#preferred': 'preferred'
 		},
 
 		initialize : function(options) {
