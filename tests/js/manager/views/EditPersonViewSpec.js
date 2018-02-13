@@ -114,7 +114,8 @@ define([
 					suffix : 'MD',
 					email : 'mjones@usgs.gov',
 					orcid : 'http://orcid.org/0000-0000-0000-0002',
-					usgs : true
+					usgs : true,
+					preferred: true
 				});
 				testView.render();
 
@@ -124,6 +125,7 @@ define([
 				expect($testDiv.find('#email').val()).toEqual('mjones@usgs.gov');
 				expect($testDiv.find('#orcid-id').val()).toEqual('http://orcid.org/0000-0000-0000-0002');
 				expect($testDiv.find('#is-usgs').is(':checked')).toEqual(true);
+				expect($testDiv.find('#preferred').is(':checked')).toEqual(true);
 			});
 
 			it('Expects the all affiliation select to be initialized when all affiliations have been fetched', function() {
@@ -172,7 +174,8 @@ define([
 					suffix : 'MD',
 					email : 'mjones@usgs.gov',
 					orcid : 'http://orcid.org/0000-0000-0000-0002',
-					usgs : true
+					usgs : true,
+					preferred : true
 				});
 
 				expect($testDiv.find('#first-name').val()).toEqual('Mary');
@@ -181,6 +184,7 @@ define([
 				expect($testDiv.find('#email').val()).toEqual('mjones@usgs.gov');
 				expect($testDiv.find('#orcid-id').val()).toEqual('http://orcid.org/0000-0000-0000-0002');
 				expect($testDiv.find('#is-usgs').is(':checked')).toEqual(true);
+				expect($testDiv.find('#preferred').is(':checked')).toEqual(true);
 			});
 		});
 
@@ -215,6 +219,12 @@ define([
 
 				$testDiv.find('#is-usgs').trigger('click');
 				expect(testModel.get('usgs')).toBe(false);
+
+				$testDiv.find('#preferred').trigger('click');
+				expect(testModel.get('preferred')).toBe(true);
+
+				$testDiv.find('#preferred').trigger('click');
+				expect(testModel.get('preferred')).toBe(false);
 			});
 
 			it('Expects that when an affiliation is selected, it is added to the current affiliations', function() {
