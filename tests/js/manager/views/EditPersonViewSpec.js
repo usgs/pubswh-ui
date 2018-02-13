@@ -114,7 +114,8 @@ define([
 					suffix : 'MD',
 					email : 'mjones@usgs.gov',
 					orcid : 'http://orcid.org/0000-0000-0000-0002',
-					usgs : true
+					usgs : true,
+					preferred: true
 				});
 				testView.render();
 
