@@ -794,9 +794,10 @@ def generate_dublin_core(pubrecord):
             "publishers": [pubrecord.get('publisher')],
             "titles": [pubrecord.get('title')],
             }
-    if pubrecord.get('authorslist') and len(pubrecord.get('authorslist') ) >= 1:
+
+    if pubrecord.get('authorsList') and len(pubrecord.get('authorsList') ) >= 1:
         data["creators"] = [pubrecord.get('authorsList')[0]]
-    if pubrecord.get('authorslist') and len(pubrecord.get('authorslist') ) >= 2:
+    if pubrecord.get('authorsList') and len(pubrecord.get('authorsList') ) >= 2:
         data["contributors"] = pubrecord.get('authorsList')[1:],
 
     return '\n'.join(simpledc.tostring(data).splitlines()[1:])
