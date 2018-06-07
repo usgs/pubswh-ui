@@ -785,6 +785,16 @@ def generate_dublin_core(pubrecord):
     :return: dublin core XML record
     """
 
+    authors = pubrecord.get('authorsList')
+    editors = pubrecord.get('editorsList')
+    all_contributors = None
+    if authors and editors:
+        all_contributors = authors + editors
+    elif authors:
+        all_contributors = authors
+    elif editors:
+        all_contributors = editors
+
     data = {
             "dates": [pubrecord.get('publicationYear')],
             "descriptions": [pubrecord.get('docAbstract')],
@@ -794,11 +804,22 @@ def generate_dublin_core(pubrecord):
             "publishers": [pubrecord.get('publisher')],
             "titles": [pubrecord.get('title')],
             }
-    if pubrecord.get('authorslist') and len(pubrecord.get('authorslist') ) >= 1:
-        data["creators"] = [pubrecord.get('authorsList')[0]]
-    if pubrecord.get('authorslist') and len(pubrecord.get('authorslist') ) >= 2:
-        data["contributors"] = pubrecord.get('authorsList')[1:],
 
+    if all_contributors and len(all_contributors) >= 1:
+        data["creators"] = [all_contributors[0]]
+    if all_contributors and len(all_contributors) >= 2:
+        data["contributors"] = all_contributors[1:]
+
+    if pubrecord['publicationType']['text'] == 'Book chapter':
+        data['types'] = ['chapter']
+    elif pubrecord['publicationType']['text'] == 'Book':
+        data['types'] = ['book']
+    elif pubrecord['publicationType']['text'] == 'Article':
+        data['types'] = ['article']
+    elif pubrecord['publicationType']['text'] == 'Report':
+        data['types'] = ['reports']
+    else:
+        data['types'] = ['text']
     return '\n'.join(simpledc.tostring(data).splitlines()[1:])
 
 
