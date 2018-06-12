@@ -9,7 +9,7 @@ Object.keys(window.__karma__.files).forEach(function(file) {
 
 require.config({
 	// Karma serves files under /base, which is the basePath from your config file
-	baseUrl: '/base/pubs_ui/manager/static/js',
+	baseUrl: '/base/scripts/manager',
 
 	config: {
 		'views/ContributorRowView': {
@@ -24,25 +24,25 @@ require.config({
 	},
 
 	paths: {
-		'squire': '/base/pubs_ui/bower_components/Squire.js/src/Squire',
-		'jquery': '/base/pubs_ui/bower_components/jquery/dist/jquery',
-		'jquery-ui': '/base/pubs_ui/bower_components/jquery-ui/jquery-ui',
-		'select2': '/base/pubs_ui/bower_components/select2/dist/js/select2.full',
-		'tinymce': '/base/pubs_ui/bower_components/tinymce/tinymce',
-		'bootstrap': '/base/pubs_ui/bower_components/bootstrap/dist/js/bootstrap',
-		'text': '/base/pubs_ui/bower_components/text/text',
-		'underscore': '/base/pubs_ui/bower_components/underscore/underscore',
-		'backbone': '/base/pubs_ui/bower_components/backbone/backbone',
-		'backbone.paginator': '/base/pubs_ui/bower_components/backbone.paginator/lib/backbone.paginator',
-		'backgrid': '/base/pubs_ui/bower_components/backgrid/lib/backgrid',
-		'backgrid-select-all': '/base/pubs_ui/bower_components/backgrid-select-all/backgrid-select-all',
-		'backgrid-paginator': '/base/pubs_ui/bower_components/backgrid-paginator/backgrid-paginator',
-		'handlebars': '/base/pubs_ui/bower_components/handlebars/handlebars.amd',
-		'hbs': '/base/pubs_ui/bower_components/requirejs-hbs/hbs',
-		'backbone.stickit': '/base/pubs_ui/bower_components/backbone.stickit/backbone.stickit',
-		'moment': '/base/pubs_ui/bower_components/moment/min/moment.min',
-		'datetimepicker': '/base/pubs_ui/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min',
-		'loglevel' : '/base/pubs_ui/bower_components/loglevel/dist/loglevel.min'
+		'squire': '/base/bower_components/Squire.js/src/Squire',
+		'jquery': '/base/bower_components/jquery/dist/jquery',
+		'jquery-ui': '/base/bower_components/jquery-ui/jquery-ui',
+		'select2': '/base/bower_components/select2/dist/js/select2.full',
+		'tinymce': '/base/bower_components/tinymce/tinymce',
+		'bootstrap': '/base/bower_components/bootstrap/dist/js/bootstrap',
+		'text': '/base/bower_components/text/text',
+		'underscore': '/base/bower_components/underscore/underscore',
+		'backbone': '/base/bower_components/backbone/backbone',
+		'backbone.paginator': '/base/bower_components/backbone.paginator/lib/backbone.paginator',
+		'backgrid': '/base/bower_components/backgrid/lib/backgrid',
+		'backgrid-select-all': '/base/bower_components/backgrid-select-all/backgrid-select-all',
+		'backgrid-paginator': '/base/bower_components/backgrid-paginator/backgrid-paginator',
+		'handlebars': '/base/bower_components/handlebars/handlebars.amd',
+		'hbs': '/base/bower_components/requirejs-hbs/hbs',
+		'backbone.stickit': '/base/bower_components/backbone.stickit/backbone.stickit',
+		'moment': '/base/bower_components/moment/min/moment.min',
+		'datetimepicker': '/base/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min',
+		'loglevel' : '/base/bower_components/loglevel/dist/loglevel.min'
 	},
 	shim: {
 		'jquery': {
@@ -96,6 +96,3 @@ require.config({
 	}
 });
 require(allTestFiles, window.__karma__.start);
-
-
-

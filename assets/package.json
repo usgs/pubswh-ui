@@ -2,7 +2,7 @@
   "name": "pubs_ui",
   "version": "1.0.0",
   "description": "Publications Warehouse User Interface",
-  "main": "pubs_ui/manager/static/js/index.js",
+  "main": "scripts/manager/index.js",
   "directories": {
     "test": "tests"
   },

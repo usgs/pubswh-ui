@@ -22,20 +22,20 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-    	'pubs_ui/bower_components/moment/min/moment.min.js',
-		'pubs_ui/bower_components/underscore/underscore-min.js',
-		'pubs_ui/bower_components/jquery/dist/jquery.js',
+    	'bower_components/moment/min/moment.min.js',
+		'bower_components/underscore/underscore-min.js',
+		'bower_components/jquery/dist/jquery.js',
 		'tests/js/metrics/resources/config.js',
-		'pubs_ui/metrics/static/js/*.js',
+		'scripts/metrics/*.js',
 		'tests/js/metrics/*.js'
 		],
 
 
     // list of files to exclude
     exclude: [
-        'pubs_ui/metrics/static/js/pubGraphController.js',
-		'pubs_ui/metrics/static/js/pubsAcquisitionGraphController.js',
-		'pubs_ui/metrics/static/js/pubsGraphController.js'
+        'scripts/metrics/pubGraphController.js',
+		'scripts/metrics/pubsAcquisitionGraphController.js',
+		'scripts/metrics/pubsGraphController.js'
     ],
 
 
@@ -45,7 +45,7 @@ module.exports = function(config) {
       // source files, that you wanna generate coverage for
       // do not include tests or libraries
       // (these files will be instrumented by Istanbul)
-      'pubs_ui/metrics/static/js/*.js': sourcePreprocessors
+      'scripts/metrics/*.js': sourcePreprocessors
     },
 
     // test results reporter to use

@@ -21,26 +21,26 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-		'pubs_ui/bower_components/jquery/dist/jquery.js',
-		'pubs_ui/bower_components/bootstrap/dist/js/bootstrap.js',
-		'pubs_ui/bower_components/select2/dist/js/select2.js',
-		'pubs_ui/bower_components/handlebars/handlebars.js',
-		'pubs_ui/bower_components/leaflet/dist/leaflet.js',
-		'pubs_ui/bower_components/esri-leaflet/dist/esri-leaflet.js',
-		'pubs_ui/bower_components/moment/min/moment.min.js',
-		'pubs_ui/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-		'pubs_ui/bower_components/underscore/underscore.js',
-		'pubs_ui/pubswh/static/vendor/mapbox/leaflet-pip/leaflet-pip.js',
+		'bower_components/jquery/dist/jquery.js',
+		'bower_components/bootstrap/dist/js/bootstrap.js',
+		'bower_components/select2/dist/js/select2.js',
+		'bower_components/handlebars/handlebars.js',
+		'bower_components/leaflet/dist/leaflet.js',
+		'bower_components/esri-leaflet/dist/esri-leaflet.js',
+		'bower_components/moment/min/moment.min.js',
+		'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+		'bower_components/underscore/underscore.js',
+		'scripts/pubswh/vendor/mapbox/leaflet-pip/leaflet-pip.js',
 		'tests/js/pubswh/resources/config.js',
-		'pubs_ui/pubswh/static/js/*.js',
+		'scripts/pubswh/*.js',
 		'tests/js/pubswh/*.js'
 		],
 
 
     // list of files to exclude
     exclude: [
-        'pubs_ui/pubswh/static/js/searchFormOnReady.js',
-		'pubs_ui/pubswh/static/js/extentsMapOnReady.js'
+        'scripts/pubswh/searchFormOnReady.js',
+		'scripts/pubswh/extentsMapOnReady.js'
     ],
 
 
@@ -50,7 +50,7 @@ module.exports = function(config) {
       // source files, that you wanna generate coverage for
       // do not include tests or libraries
       // (these files will be instrumented by Istanbul)
-      'pubs_ui/pubswh/static/js/*.js': sourcePreprocessors
+      'scripts/pubswh/*.js': sourcePreprocessors
     },
 
     // test results reporter to use
