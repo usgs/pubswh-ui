@@ -43,7 +43,7 @@ bundles={
     ),
 
     'usgs_style' : Bundle(
-        'manager/less/usgs_header_footer.less',
+        '../../../assets/styles/manager/usgs_header_footer.less',
         filters='less,cssmin',
         output='gen/usgs_style.css'
     ),
@@ -54,36 +54,36 @@ bundles={
         output='gen/min_base.css'
     ),
     'auth_style' : Bundle(
-        'auth/less/auth.less',
+        '../../../assets/styles/auth.less',
         depends=[
-            'manager/less/usgs_header_footer.less'
+            '../../../assets/styles/manager/usgs_header_footer.less'
         ],
         filters='less,cssmin',
         output='gen/auth_style.css'
     ),
     'manager_style' : Bundle(
-        'manager/less/manager_custom.less',
+        '../../../assets/styles/manager/manager_custom.less',
         depends=[
-            'manager/less/usgs_header_footer.less',
-            'manager/less/manage_publications.less',
-            'manager/less/publication.less',
-            'manager/less/bibliodata.less',
-            'manager/less/links.less',
-            'manager/less/contributors.less',
-            'manager/less/spn.less',
-            'manager/less/cataloging.less',
-            'manager/less/geospatial.less',
-            'manager/less/editSeriesTitle.less',
-            'manager/less/manageContributors.less',
-            'manager/less/manageAffiliations.less'
+            '../../../assets/styles/manager/usgs_header_footer.less',
+            '../../../assets/styles/manager/manage_publications.less',
+            '../../../assets/styles/manager/publication.less',
+            '../../../assets/styles/manager/bibliodata.less',
+            '../../../assets/styles/manager/links.less',
+            '../../../assets/styles/manager/contributors.less',
+            '../../../assets/styles/manager/spn.less',
+            '../../../assets/styles/manager/cataloging.less',
+            '../../../assets/styles/manager/geospatial.less',
+            '../../../assets/styles/manager/editSeriesTitle.less',
+            '../../../assets/styles/manager/manageContributors.less',
+            '../../../assets/styles/manager/manageAffiliations.less'
         ],
         filters='less,cssmin',
         output='gen/manager_style.css'
     ),
     'metrics_style' : Bundle(
-        'metrics/less/metrics_custom.less',
+        '../../../assets/styles/metrics/metrics_custom.less',
         depends=[
-            'manager/less/usgs_header_footer.less',
+            '../../../assets/styles/manager/usgs_header_footer.less',
         ],
         filters='less,cssmin',
         output='gen/metrics_style.css'
