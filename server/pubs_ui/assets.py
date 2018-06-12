@@ -92,4 +92,3 @@ bundles={
 
 assets = Environment(app)
 assets.register(bundles)
-

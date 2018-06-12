@@ -39,7 +39,7 @@ BOWER_TRY_MINIFIED = False  # set to solve problem with backgrid-paginator
 # Config for Flask-Assets
 ASSETS_DEBUG = False  # to disable compression of js and css set to True
 ASSETS_AUTO_BUILD = False  # Local developers will typically set this to True in their instance/config.py.
-LESS_BIN = os.path.join(PROJECT_HOME, 'node_modules', 'less', 'bin', 'lessc')
+LESS_BIN = os.path.join(PROJECT_HOME, '..', 'assets', 'node_modules', 'less', 'bin', 'lessc')
 
 CONTACT_RECIPIENTS = ['servicedesk@usgs.gov'] # recipient address
 
