@@ -41,3 +41,7 @@ ASSETS_AUTO_BUILD = False  # Local developers will typically set this to True in
 
 # Altmetric API information
 ALTMETRIC_KEY = ''
+
+#ASSET_MANIFEST_PATH = '~/src/PubsWarehouse_UI/assets/dist/rev-manifest.json'
+
+STATIC_ROOT = 'http://localhost:9000'

@@ -10,11 +10,6 @@ base_metrics_js = Bundle(
     'metrics/js/dataUtils.js',
 )
 bundles={
-    'js_base_libs' : Bundle(
-        'pubswh/js/plugins.js',
-        filters='rjsmin',
-        output='gen/base_libs.js'
-    ),
     'js_advanced_search' : Bundle(
         'pubswh/js/searchMap.js',
         'pubswh/js/clearFeatureControl.js',

@@ -47,7 +47,7 @@
            <!--[if lt IE 7]>
                 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
             <![endif]-->
-            
+
             <!--[if IE 8]>
 				<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/ie8.css') }}">
 			<![endif]-->
@@ -180,9 +180,7 @@
 		   <script type="text/javascript" src="{{ url_for('bower.static', filename='select2/dist/js/select2.js') }}"></script>
 		   <script type="text/javascript" src="{{ url_for('bower.static', filename='underscore/underscore-min.js') }}"></script>
 		   <script type="text/javascript" src="{{ url_for('bower.static', filename='handlebars/handlebars.js') }}"></script>
-		   {% assets "js_base_libs" %}
-			   <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-		   {% endassets %}
+		   <script type="text/javascript" src="{{ 'scripts/base_libs.js' | asset_url }}"></script>
 
 		   {% block page_footer_script %}{% endblock page_footer_script %}
 
