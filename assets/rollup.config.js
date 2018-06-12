@@ -74,5 +74,6 @@ const getBundleConfig = function (src, dest) {
 };
 
 module.exports = [
-    getBundleConfig('scripts/pubswh/plugins.js', 'dist/scripts/base_libs.js')
+    getBundleConfig('scripts/pubswh/plugins.js', 'dist/scripts/base_libs.js'),
+    getBundleConfig('scripts/pubswh/searchFormOnReady.js', 'dist/scripts/advanced_search.js')
 ];

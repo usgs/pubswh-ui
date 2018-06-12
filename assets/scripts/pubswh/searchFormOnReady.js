@@ -3,6 +3,14 @@
 /* global PUBS_WH */
 /* global CONFIG */
 
+require('./searchMap');
+require('./clearFeatureControl');
+require('./advancedSearchForm');
+
+// Dummy
+module.exports = null;
+
+
 $(document).ready(function() {
 	"use strict";
 
