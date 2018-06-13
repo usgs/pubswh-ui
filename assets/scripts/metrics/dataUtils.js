@@ -2,7 +2,7 @@
 /* global moment */
 /* global _ */
 
-var METRICS = METRICS || {};
+var METRICS = window.METRICS = window.METRICS || {};
 
 METRICS.dataUtils = (function() {
 	"use strict";

@@ -4,6 +4,9 @@
 /* global _ */
 /* global $ */
 
+// Dummy
+module.exports = null;
+
 (function() {
 	"use strict";
 

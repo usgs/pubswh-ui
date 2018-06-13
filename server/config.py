@@ -75,3 +75,7 @@ if nose_testing or lettuce_testing:
     BASE_SEARCH_URL = 'https://pubs-fake.er.usgs.gov/pubs-services/publication/'
     PUB_URL = 'https://pubs-fake.er.usgs.gov/pubs-services/'
     SUPERSEDES_URL = 'http://cida-eros-pubsfake.er.usgs.gov:8080/pubs2_ui/service/citation/json/extras?'
+
+# Use Flask-Cors to enable cross-origin requests. Useful for local development,
+# when static assets are hosted on a different port than the Flask dev server.
+FLASK_CORS = False

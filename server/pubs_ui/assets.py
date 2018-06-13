@@ -10,18 +10,6 @@ base_metrics_js = Bundle(
     'metrics/js/dataUtils.js',
 )
 bundles={
-    'metrics_publications_js' : Bundle(
-        base_metrics_js,
-        Bundle('metrics/js/pubsGraphController.js'),
-        filters='rjsmin',
-        output='gen/metrics_publications.js'
-    ),
-    'metrics_publications_aquisition_js' : Bundle(
-        base_metrics_js,
-        Bundle('metrics/js/pubsAcquisitionGraphController.js'),
-        filters='rjsmin',
-        output='gen/metrics_publications_acquisition.js'
-    ),
     'metrics_publication_js': Bundle(
         base_metrics_js,
         Bundle('metrics/js/pubGraphController.js'),

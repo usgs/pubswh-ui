@@ -4,6 +4,10 @@
 /* global CONFIG */
 /* global _ */
 
+require('./analyticsData.js');
+require('./analyticsGraph.js');
+require('./dataUtils.js');
+
 (function() {
 	"use strict";
 

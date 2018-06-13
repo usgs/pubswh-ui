@@ -3,7 +3,7 @@
 /* global moment */
 /* global _ */
 
-var METRICS = METRICS || {};
+var METRICS = window.METRICS = window.METRICS || {};
 
 METRICS.analyticsGraph = (function() {
 	"use strict";

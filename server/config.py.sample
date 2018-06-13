@@ -45,3 +45,7 @@ ALTMETRIC_KEY = ''
 #ASSET_MANIFEST_PATH = '~/src/PubsWarehouse_UI/assets/dist/rev-manifest.json'
 
 STATIC_ROOT = 'http://localhost:9000'
+
+# Use Flask-Cors to enable cross-origin requests. Useful for local development,
+# when static assets are hosted on a different port than the Flask dev server.
+FLASK_CORS = True

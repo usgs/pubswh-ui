@@ -57,6 +57,11 @@ if _manifest_path:
     with open(_manifest_path, 'r') as f:
         app.config['ASSET_MANIFEST'] = json.loads(f.read())
 
+# Enable CORS, if specified in the configuration.
+if app.config.get('FLASK_CORS'):
+    from flask_cors import CORS
+    CORS(app)
+
 import assets
 
 from auth.views import auth
@@ -69,4 +74,3 @@ app.register_blueprint(auth)
 app.register_blueprint(manager, url_prefix='/manager')
 app.register_blueprint(metrics, url_prefix='/metrics')
 app.register_blueprint(pubswh)
-
