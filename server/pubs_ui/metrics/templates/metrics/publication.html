@@ -28,7 +28,5 @@
 
 {% block page_script %}
 	{{ super() }}
-	{% assets "metrics_publication_js" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-	{% endassets %}
+	<script type="text/javascript" src="{{ 'scripts/metrics_publication.js' | asset_url }}"></script>
 {% endblock %}

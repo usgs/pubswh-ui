@@ -34,7 +34,6 @@ http = _handle_http_certificates()
 
 
 try:
-    import pdb; pdb.set_trace()  #pylint: disable=C0321
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
           app.config.get('GA_KEY_FILE_PATH'),
           app.config.get('GA_OAUTH2_SCOPE'))

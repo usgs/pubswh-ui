@@ -10,13 +10,6 @@ base_metrics_js = Bundle(
     'metrics/js/dataUtils.js',
 )
 bundles={
-    'metrics_publication_js': Bundle(
-        base_metrics_js,
-        Bundle('metrics/js/pubGraphController.js'),
-        filters='rjsmin',
-        output='gen/metrics_publication_js'
-    ),
-
     'usgs_style' : Bundle(
         '../../../assets/styles/manager/usgs_header_footer.less',
         filters='less,cssmin',
