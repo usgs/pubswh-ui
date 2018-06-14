@@ -34,5 +34,5 @@ coveralls:
 	cp assets/coverage/metrics/Firefox*/lcov.info assets/coverage/metrics.info
 	cp assets/coverage/pubswh/Firefox*/lcov.info assets/coverage/pubswh.info
 	lcov --add-tracefile assets/coverage/manager.info --add-tracefile assets/coverage/metrics.info --add-tracefile assets/coverage/pubswh.info --output-file assets/coverage/combined.info
-	coveralls-lcov -v -n assets/coverage/combined.info > assets/coverage/coverage.json
+	cd assets && coveralls-lcov -v -n coverage/combined.info > coverage/coverage.json
 	cd server && env/bin/coveralls --merge=../assets/coverage/coverage.json
