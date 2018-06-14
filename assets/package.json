@@ -20,6 +20,7 @@
     "buildcss:manager": "lessc styles/manager/manager_custom.less > dist/manager.css && uglifycss --output dist/manager.css dist/manager.css && postcss dist/manager.css --no-map --use autoprefixer -o dist/manager.css",
     "buildcss:metrics": "lessc styles/metrics/metrics_custom.less > dist/metrics.css && uglifycss --output dist/metrics.css dist/metrics.css && postcss dist/metrics.css --no-map --use autoprefixer -o dist/metrics.css",
     "hash-assets": "echo TODO",
+    "lint": "eslint scripts",
     "serve:static": "live-server --port=9000 --cors --no-browser dist",
     "test": "karma start tests/js/manager/karma.conf.js && karma start tests/js/metrics/karma.conf.js && karma start tests/js/pubswh/karma.conf.js",
     "test:watch": "run-p test:watchitem:*",

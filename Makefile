@@ -22,6 +22,7 @@ MAKEPID:= $(shell echo $$PPID)
 
 env: env-assets env-server
 test: test-assets test-server
+lint: lint-assets lint-server
 clean: clean-assets clean-server
 cleanenv: cleanenv-assets cleanenv-server
 build: env build-assets build-server
