@@ -24,7 +24,7 @@ watch-assets:
 #
 # Environment configuration targets
 #
-env-assets: assert-assets-node assets-node-modules
+env-assets: assert-assets-node assets-node-modules assets-bower-modules
 
 # Assert that we're using the proper node.js version
 assert-assets-node:
@@ -39,6 +39,10 @@ endif
 assets-node-modules:
 	@echo 'Installing assets dependencies...'
 	cd assets && npm install
+
+assets-bower-modules:
+	@echo 'Installing bower assets dependencies...'
+	cd assets && npx bower install
 
 cleanenv-assets: clean-assets
 	@echo 'Cleaning assets environment...'

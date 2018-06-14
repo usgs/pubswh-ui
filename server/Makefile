@@ -21,7 +21,7 @@ clean-server:
 # Development targets
 #
 test-server:
-	cd server && env/bin/coverage run --omit=wqp/tests/*.py,env/* -m unittest
+	cd server && env/bin/nosetests  --with-coverage --cover-package=pubs_ui
 
 watch-server:
 	$(PYTHON) server/run.py
