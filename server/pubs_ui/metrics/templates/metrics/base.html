@@ -5,9 +5,7 @@
 {% block head_script %}
 	<link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='font-awesome/css/font-awesome.min.css') }}" />
 
-	{%  assets "metrics_style" %}
-		<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
-	{% endassets %}
+	<link rel="stylesheet" href="{{ 'metrics.css' | asset_url }}" type="text/css" />
 
 	{% block config_initialize_script %}
 		<script>
