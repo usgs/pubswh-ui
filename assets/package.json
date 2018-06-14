@@ -21,7 +21,7 @@
     "buildcss:metrics": "lessc styles/metrics/metrics_custom.less > dist/metrics.css && uglifycss --output dist/metrics.css dist/metrics.css && postcss dist/metrics.css --no-map --use autoprefixer -o dist/metrics.css",
     "hash-assets": "echo TODO",
     "serve:static": "live-server --port=9000 --cors --no-browser dist",
-    "test": "karma start tests/js/manager/karma.conf.js --reporters progress && karma start tests/js/metrics/karma.conf.js && karma start tests/js/pubswh/karma.conf.js --reporters progress",
+    "test": "karma start tests/js/manager/karma.conf.js && karma start tests/js/metrics/karma.conf.js && karma start tests/js/pubswh/karma.conf.js",
     "watch": "run-p watch:* serve:static",
     "watch:css": "nodemon -w ./styles -e less -x \"npm run build:css\"",
     "watch:js": "mkdir -p dist/scripts && rollup -c --watch"
