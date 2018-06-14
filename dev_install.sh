@@ -2,39 +2,47 @@
 
 echo "This script assumes you have python 2.7, virtualenv, and npm installed. Firefox is required to run the javascript tests"
 
-if [ ! -s instance/config.py ]; then
+if [ ! -s server/instance/config.py ]; then
    echo "Please create a instance/config.py file before proceeding. See the README.md for what's required"
    exit
 fi
 
 if [ "$1" == "--clean" ]; then
    echo "Cleaning the project"
-   rm -rf node_modules;
-   rm -rf env;
-   rm -rf static;
-   rm -rf pubs_ui/bower_components;
-   rm -rf pubs_ui/static/.webassets-cache;
-   rm -rf pubs_ui/static/gen;
+   rm -rf assets/node_modules;
+   rm -rf server/env;
+   rm -rf server/static;
+   rm -rf assets/bower_components;
+   rm -rf server/pubs_ui/static/.webassets-cache;
+   rm -rf server/pubs_ui/static/gen;
 fi
 
 echo "Creating the virtualenv env if needed and installing requirements"
+pushd server
 if [ ! -s env ]; then
-    virtualenv --python=python2.7 env;
+   virtualenv --python=python2.7 env;
 fi
 env/bin/pip install -r requirements.txt;
+popd
 
 echo "Installing the node and bower dependencies"
+pushd assets
 npm install;
-node_modules/bower/bin/bower install;
+npx bower install;
+popd
 
 echo "Successfully installed the pubs_ui app. "
 echo "Run all tests"
-node_modules/karma/bin/karma start tests/js/manager/karma.conf.js
-node_modules/karma/bin/karma start tests/js/metrics/karma.conf.js
-node_modules/karma/bin/karma start tests/js/pubswh/karma.conf.js
+pushd assets
+npx karma start tests/js/manager/karma.conf.js
+npx karma start tests/js/metrics/karma.conf.js
+npx karma start tests/js/pubswh/karma.conf.js
+popd
+
+pushd server
 env/bin/nosetests -w pubs_ui;
 env/bin/lettuce --with-xunit pubs_ui/lettuce_testing;
-
+popd
 
 
 echo "When running scripts in this project set up the python interpreter to use env/bin/python."

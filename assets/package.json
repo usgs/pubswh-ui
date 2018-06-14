@@ -1,0 +1,34 @@
+{
+  "name": "pubs_ui",
+  "version": "1.0.0",
+  "description": "Publications Warehouse User Interface",
+  "main": "scripts/manager/index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/USGS-CIDA/PubsWarehouse_UI"
+  },
+  "scripts": {
+    "test": "karma start tests/js/manager/karma.conf.js --reporters progress && karma start tests/js/metrics/karma.conf.js && karma start tests/js/pubswh/karma.conf.js --reporters progress"
+  },
+  "author": "OWI",
+  "license": "MIT",
+  "devDependencies": {
+    "bower": "1.8.2",
+    "jasmine-core": "2.6.1",
+    "karma": "1.7.0",
+    "karma-chrome-launcher": "2.1.1",
+    "karma-firefox-launcher": "1.0.1",
+    "karma-jasmine": "1.1.0",
+    "karma-js-coverage": "0.4.0",
+    "karma-requirejs": "1.1.0",
+    "karma-sinon": "1.0.5",
+    "requirejs": "2.3.3",
+    "sinon": "2.2.0"
+  },
+  "dependencies": {
+    "less": "2.7.1"
+  }
+}
