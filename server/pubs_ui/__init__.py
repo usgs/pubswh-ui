@@ -62,8 +62,6 @@ if app.config.get('FLASK_CORS'):
     from flask_cors import CORS
     CORS(app)
 
-import assets
-
 from auth.views import auth
 from manager.views import manager
 from pubswh.views import pubswh

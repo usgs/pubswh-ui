@@ -12,9 +12,7 @@
   },
   "scripts": {
     "build": "run-p build:* && npm run hash-assets",
-    "build:flaskassets": "../server/env/bin/python ../server/manage.py assets build",
     "build:js": "mkdir -p dist/scripts && rollup -c --environment NODE_ENV:production",
-    "build:collectassets": "../server/env/bin/python ../server/manage.py collect",
     "build:css": "run-p buildcss:*",
     "buildcss:usgs": "lessc styles/usgs_header_footer.less > dist/usgs_style.css && uglifycss --output dist/usgs_style.css dist/usgs_style.css && postcss dist/usgs_style.css --no-map --use autoprefixer -o dist/usgs_style.css",
     "buildcss:css_base": "lessc styles/min_base.less > dist/min_base.css && uglifycss --output dist/min_base.css dist/min_base.css && postcss dist/min_base.css --no-map --use autoprefixer -o dist/min_base.css",

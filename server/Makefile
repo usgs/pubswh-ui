@@ -3,9 +3,13 @@ PIP := server/env/bin/pip
 
 .PHONY: env-server test-server clean-server cleanenv-server watch-server
 
-build-server: build-assets
+build-server: build-assets flask-collect
 	@echo 'Building server...'
 	cd server && ./env/bin/python setup.py bdist_wheel
+
+flask-collect:
+	@echo 'Collecting static files...'
+	$(PYTHON) server/manage.py collect
 
 clean-server:
 	@echo 'Cleaning server...'
