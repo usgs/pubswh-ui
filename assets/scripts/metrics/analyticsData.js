@@ -8,7 +8,7 @@
 
 var METRICS = window.METRICS = window.METRICS || {};
 METRICS.analyticsData = (function() {
-	"use strict";
+	'use strict';
 
 	var DATE_FORMAT = 'YYYY-MM-DD';
 	var MONTH_DIM_FORMAT = 'YYYYMM';
@@ -37,7 +37,7 @@ METRICS.analyticsData = (function() {
 	 *			why the request failed.
 	 */
 	self.batchFetchMonthlyPastYear = function(metricsAndDimFilters, fromDate) {
-		var requestedDate = (fromDate) ? fromDate : moment();
+		var requestedDate = fromDate ? fromDate : moment();
 		var dateRange = METRICS.dataUtils.getPastYear(requestedDate);
 
 		var transformToRequest = function(metricAndDimFilter) {
@@ -98,7 +98,7 @@ METRICS.analyticsData = (function() {
 	 *			why the request failed.	 *	@returns Jquery Promise
 	 */
 	self.batchFetchPast30Days = function(metricsAndDimFilters, fromDate) {
-		var requestedDate = (fromDate) ? fromDate : moment();
+		var requestedDate = fromDate ? fromDate : moment();
 		var thirtyDaysAgo = requestedDate.clone().subtract(30, 'days');
 
 		var transformToRequest = function(metricAndDimFilter) {

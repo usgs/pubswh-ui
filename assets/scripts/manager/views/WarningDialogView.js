@@ -5,7 +5,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/warningDialog'
 ], function(bootstrap, BaseView, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	var view = BaseView.extend({
 		template : hbTemplate,

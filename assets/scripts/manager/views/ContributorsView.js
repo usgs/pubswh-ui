@@ -9,7 +9,7 @@ define([
 	'views/ContributorTabView',
 	'hbs!hb_templates/contributors'
 ], function(bootstrap, stickit, ContributorTypeCollection, PublicationContributorCollection, BaseView, ContributorTabView, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	var view = BaseView.extend({
 
@@ -40,7 +40,7 @@ define([
 				self.typeTabViews = self.contributorTypeCollection.map(function(model) {
 					var typeProp = model.attributes.text.toLowerCase();
 					if (!contributors.has(typeProp)) {
-						contributors.set(typeProp, new PublicationContributorCollection())
+						contributors.set(typeProp, new PublicationContributorCollection());
 					}
 
 					return {
@@ -84,4 +84,4 @@ define([
 	});
 
 	return view;
-})
+});

@@ -12,7 +12,7 @@ require('./analyticsGraph.js');
 require('./dataUtils.js');
 
 (function() {
-	"use strict";
+	'use strict';
 
 	var DAY_FORMAT = 'MMM DD YYYY';
 	var MONTH_FORMAT = 'MMM YYYY';

@@ -6,7 +6,7 @@ define([
 	'models/LookupModel',
 	'module'
 ], function(Backbone, LookupModel, module) {
-	"use strict";
+	'use strict';
 
 	var collection = Backbone.Collection.extend({
 		model : LookupModel,

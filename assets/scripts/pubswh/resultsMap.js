@@ -16,7 +16,7 @@ var PUBS_WH = PUBS_WH || {};
  * @returns {L.Map} - Returns the map object created.
  */
 PUBS_WH.createResultsMap = function(options) {
-	"use strict";
+	'use strict';
 
 	var EMPTY_PUBS_EXTENTS = {
 		type: 'FeatureCollection',
@@ -78,7 +78,7 @@ PUBS_WH.createResultsMap = function(options) {
 	var map = L.map(options.mapDivId, {
 		layers: baseMaps.Topographic,
 		zoom: 4,
-		center: [38, -115],
+		center: [38, -115]
 	});
 
 	var resetStyles = function() {
@@ -118,8 +118,7 @@ PUBS_WH.createResultsMap = function(options) {
 		pubsExtentLayers.forEach(function(layer, index) {
 			if (index === layerIndex) {
 				layer.setStyle(loud);
-			}
-			else {
+			} else {
 				layer.setStyle(quiet);
 			}
 		});

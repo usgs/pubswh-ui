@@ -7,7 +7,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/cataloging'
 ], function(bootstrap, datetimepicker, stickit, BaseView, hb_template) {
-	"use strict";
+	'use strict';
 
 	var view = BaseView.extend({
 
@@ -30,19 +30,19 @@ define([
 			'#online-only-input' : {
 				observe : 'onlineOnly',
 				onGet : function(value) {
-					return (value === 'Y');
+					return value === 'Y';
 				},
 				onSet : function(val) {
-					return (val) ? 'Y' : 'N';
+					return val ? 'Y' : 'N';
 				}
 			},
 			'#additional-files-input' : {
 				observe : 'additionalOnlineFiles',
 				onGet : function(value) {
-					return (value === 'Y');
+					return value === 'Y';
 				},
 				onSet : function(val) {
-					return (val) ? 'Y' : 'N';
+					return val ? 'Y' : 'N';
 				}
 			},
 			'#temporal-start-input' : 'temporalStart',
@@ -76,8 +76,7 @@ define([
 		changeTemporalStart : function(ev) {
 			if (ev.date) {
 				this.model.set('temporalStart', ev.date.format('YYYY-MM-DD'));
-			}
-			else {
+			} else {
 				this.model.unset('temporalStart');
 			}
 		},
@@ -85,8 +84,7 @@ define([
 		changeTemporalEnd : function(ev) {
 			if (ev.date) {
 				this.model.set('temporalEnd', ev.date.format('YYYY-MM-DD'));
-			}
-			else {
+			} else {
 				this.model.unset('temporalEnd');
 			}
 		}

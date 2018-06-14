@@ -13,7 +13,7 @@ define([
 	'hbs!hb_templates/manageAffiliations'
 ], function($, _, stickit, bootstrap, BaseView, AlertView,
 			AffiliationModel, CostCenterCollection, OutsideAffiliationCollection, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	var DEFAULT_SELECT2_OPTIONS = {
 		allowClear : true,
@@ -90,11 +90,9 @@ define([
 			var affiliationTypeValue = this.$(AFFILIATION_TYPE_INPUT_SEL).val();
 			if (affiliationTypeValue == 1 ) {
 				isCostCenter = true;
-			}
-			else if (affiliationTypeValue == 2 ) {
+			} else if (affiliationTypeValue == 2 ) {
 				isCostCenter = false;
-			}
-			else {
+			} else {
 				isCostCenter = null;
 			}
 			return isCostCenter;
@@ -139,8 +137,7 @@ define([
 					self.$(COST_CENTER_INPUT_DIV).show();
 					self.$(OUTSIDE_AFFILIATION_INPUT_DIV).hide();
 				});
-			}
-			else {
+			} else {
 				this.outsideAffiliatesPromise.done(function() {
 					self.$(OA_AFFILIATION_INPUT_SEL).select2(_.extend({
 						data : [{
@@ -243,7 +240,7 @@ define([
 				})
 				.fail(function(jqxhr) {
 					self.alertView.showDangerAlert('Unable to save the affiliation.');
-					if ((jqxhr.responseJSON) && (jqxhr.responseJSON.validationErrors)) {
+					if (jqxhr.responseJSON && jqxhr.responseJSON.validationErrors) {
 						$errorDiv.html('<pre>' + JSON.stringify(jqxhr.responseJSON.validationErrors) + '</pre>');
 					}
 				})

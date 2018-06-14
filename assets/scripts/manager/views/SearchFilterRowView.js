@@ -12,7 +12,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/searchFilterRow'
 ], function(_, $, Handlebars, DynamicSelect2, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	var DEFAULT_SELECT2_OPTIONS = {
 		allowClear : true,
@@ -57,7 +57,7 @@ define([
 						$select.select2(_.extend({
 							data : context.publicationTypeCollection.toJSON()
 						}, DEFAULT_SELECT2_OPTIONS));
-						if (context.model.has('typeName') && (context.model.attributes.typeName)) {
+						if (context.model.has('typeName') && context.model.attributes.typeName) {
 							var selections = context.model.get('typeName').selections;
 							$select.val(_.pluck(selections, 'id')).trigger('change');
 						}
@@ -73,7 +73,7 @@ define([
 					$select.select2(DynamicSelect2.getSelectOptions({
 						lookupType : 'publicationsubtypes'
 					}, DEFAULT_SELECT2_OPTIONS));
-					if (context.model.has('subtypeName') && (context.model.attributes.subtypeName)) {
+					if (context.model.has('subtypeName') && context.model.attributes.subtypeName) {
 						var selections = context.model.get('subtypeName').selections;
 						// Add options for selections
 						_.each(selections, function(selection) {
@@ -95,7 +95,7 @@ define([
 						lookupType : 'publicationseries',
 						activeSubgroup : true
 					}, DEFAULT_SELECT2_OPTIONS));
-					if (context.model.has('seriesName') && (context.model.attributes.seriesName)) {
+					if (context.model.has('seriesName') && context.model.attributes.seriesName) {
 						var selections = context.model.get('seriesName').selections;
 						// Add options for selections
 						_.each(selections, function(selection) {
@@ -123,7 +123,7 @@ define([
 								children : context.notActiveCostCenters.toJSON()
 							}]
 						}, DEFAULT_SELECT2_OPTIONS));
-						if (context.model.has('contributingOffice') && (context.model.attributes.contributingOffice)) {
+						if (context.model.has('contributingOffice') && context.model.attributes.contributingOffice) {
 							var selections = context.model.get('contributingOffice').selections;
 							$select.val(_.pluck(selections, 'id')).trigger('change');
 						}
@@ -142,10 +142,10 @@ define([
 		 */
 		initialize : function(options) {
 			var isCategoryId = function(category) {
-				return (options.initialCategory === category.id);
+				return options.initialCategory === category.id;
 			};
 			BaseView.prototype.initialize.apply(this, arguments);
-			this.initialCategory = (options.initialCategory) ? _.find(this.categories, isCategoryId) : undefined;
+			this.initialCategory = options.initialCategory ? _.find(this.categories, isCategoryId) : undefined;
 
 			this.publicationTypeCollection = new PublicationTypeCollection();
 			this.pubTypeFetch = this.publicationTypeCollection.fetch();
@@ -161,11 +161,11 @@ define([
 		},
 
 		render : function() {
-			this.context.initialCategoryId = (this.initialCategory) ? this.initialCategory.id : undefined;
+			this.context.initialCategoryId = this.initialCategory ? this.initialCategory.id : undefined;
 			this.context.categories = _.map(this.categories, function (category) {
 				var result = _.clone(category);
 				result.disabled = this.model.has(result.id);
-				result.selected = (this.initialCategory) ? (result.id === this.initialCategory.id) : false;
+				result.selected = this.initialCategory ? result.id === this.initialCategory.id : false;
 				return result;
 			}, this);
 
@@ -177,12 +177,10 @@ define([
 					this.initialCategory.select2Init(this);
 					this.$('.select-input-div').show();
 					this.$('.text-input-div').hide();
-				}
-				else {
+				} else {
 					this.$('.value-text-input').val(this.model.get(this.initialCategory.id));
 				}
-			}
-			else {
+			} else {
 				// Dummy initialization of the value select2
 				this.$('.value-select-input').select2(DEFAULT_SELECT2_OPTIONS);
 			}
@@ -223,15 +221,14 @@ define([
 			$textInputDiv.find('input').val('');
 			$select.val('');
 			// Show/hide the appropriate input div and perform any initialization
-			if ((!selectedCategory) || (selectedCategory.inputType === 'text')) {
+			if (!selectedCategory || selectedCategory.inputType === 'text') {
 				if (selectedCategory) {
 					$textInputDiv.find('input').val(this.model.get(selectedCategory.id));
 				}
 
 				$textInputDiv.show();
 				$selectInputDiv.hide();
-			}
-			else {
+			} else {
 				$textInputDiv.hide();
 
 				$select.select2('destroy');
@@ -261,7 +258,7 @@ define([
 			var $categorySelect = this.$('.search-category-input');
 			var category = $categorySelect.data('current-value');
 			var useId = $categorySelect.find('option[value="' + category + '"]').data('sendid');
-			var categorySelections = (this.model.has(category) && (this.model.attributes[category])) ? this.model.get(category).selections : [];
+			var categorySelections = this.model.has(category) && this.model.attributes[category] ? this.model.get(category).selections : [];
 			categorySelections.push({
 				id : parseInt(ev.params.data.id),
 				text : ev.params.data.text
@@ -276,7 +273,7 @@ define([
 			var $categorySelect = this.$('.search-category-input');
 			var category = $categorySelect.data('current-value');
 			var useId = $categorySelect.find('option[value="' + category + '"]').data('sendid');
-			var categorySelections = (this.model.has(category) && (this.model.attributes[category])) ? this.model.get(category).selections : [];
+			var categorySelections = this.model.has(category) && this.model.attributes[category] ? this.model.get(category).selections : [];
 			var selectionToRemove = parseInt(ev.params.data.id);
 			this.model.set(category, {
 				useId : useId,

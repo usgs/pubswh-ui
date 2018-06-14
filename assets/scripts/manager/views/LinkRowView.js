@@ -8,7 +8,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/linkRow'
 ], function($, jqueryUI, select2, module, stickit, BaseView, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	var view = BaseView.extend({
 
@@ -131,8 +131,7 @@ define([
 
 			if (_.has(linkType, 'id')) {
 				$select.val(linkType.id).trigger('change');
-			}
-			else {
+			} else {
 				$select.val('').trigger('change');
 			}
 		},
@@ -143,8 +142,7 @@ define([
 
 			if (_.has(linkFileType, 'id')) {
 				$select.val(linkFileType.id).trigger('change');
-			}
-			else {
+			} else {
 				$select.val('').trigger('change');
 			}
 		}

@@ -6,7 +6,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/editCorporation'
 ], function(stickit, BaseView, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	/*
 	 * @constructs

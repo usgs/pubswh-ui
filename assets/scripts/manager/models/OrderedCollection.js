@@ -3,7 +3,7 @@
 define([
 	'backbone'
 ], function(Backbone) {
-	"use strict";
+	'use strict';
 
 	var collection = Backbone.Collection.extend({
 
@@ -22,18 +22,17 @@ define([
 			if (oldRank < newRank) {
 				this.chain()
 						.filter(function(model) {
-							return (model.attributes.rank > oldRank) && (model.attributes.rank <= newRank);
+							return model.attributes.rank > oldRank && model.attributes.rank <= newRank;
 						})
 						.each(function(model) {
 							var thisRank = model.get('rank');
 							model.set('rank', thisRank - 1);
 						});
 
-			}
-			else if (oldRank > newRank) {
+			} else if (oldRank > newRank) {
 				this.chain()
 						.filter(function(model) {
-							return (model.attributes.rank >= newRank) && (model.attributes.rank < oldRank);
+							return model.attributes.rank >= newRank && model.attributes.rank < oldRank;
 						})
 						.each(function(model) {
 							var thisRank = model.get('rank');
@@ -57,7 +56,7 @@ define([
 			Backbone.Collection.prototype.remove.apply(this, arguments);
 			this.chain()
 					.filter(function(model) {
-						return (model.attributes.rank > modelRank);
+						return model.attributes.rank > modelRank;
 					})
 					.each(function(model) {
 						model.set('rank', model.get('rank') - 1);

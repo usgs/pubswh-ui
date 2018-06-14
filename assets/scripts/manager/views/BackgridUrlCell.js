@@ -3,7 +3,7 @@
 define([
 	'backgrid'
 	], function(Backgrid) {
-	"use strict";
+	'use strict';
 
 	/*
 	 * This implements a cell which contains a link. The title attribute can be set via the title property.

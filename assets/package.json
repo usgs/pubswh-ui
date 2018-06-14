@@ -68,5 +68,6 @@
   },
   "dependencies": {
     "less": "2.7.1"
-  }
+  },
+  "eslintIgnore": ["scripts/vendor"]
 }

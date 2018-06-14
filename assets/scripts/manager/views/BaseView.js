@@ -4,7 +4,7 @@ define([
 	'backbone',
 	'underscore'
 ], function (Backbone, _) {
-	"use strict";
+	'use strict';
 
 	var view = Backbone.View.extend({
 		/*

@@ -4,7 +4,7 @@
 /* global CONFIG */
 
 $(document).ready(function() {
-	"use strict";
+	'use strict';
 
 	var TOGGLE_BTN_SHOW_TEXT = 'Show results on a map';
 	var TOGGLE_BTN_HIDE_TEXT = 'Hide results on a map';
@@ -25,8 +25,7 @@ $(document).ready(function() {
 			$extentsMapContainer.show();
 			map.invalidateSize();
 			$(this).html(TOGGLE_BTN_HIDE_TEXT);
-		}
-		else {
+		} else {
 			$extentsMapContainer.hide();
 			$(this).html(TOGGLE_BTN_SHOW_TEXT);
 		}

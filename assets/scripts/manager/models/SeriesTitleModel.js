@@ -5,7 +5,7 @@ define([
 	'backbone',
 	'module'
 ], function(Backbone, module) {
-	"use strict";
+	'use strict';
 	var model = Backbone.Model.extend({
 
 		urlRoot : module.config().scriptRoot + '/manager/services/publicationSeries',
@@ -17,4 +17,4 @@ define([
 	});
 
 	return model;
-})
+});

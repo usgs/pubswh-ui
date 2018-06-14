@@ -7,14 +7,13 @@ define([
 	'controller/AppRouter',
 	'module'
 ], function (Backbone, log, AppRouter, module) {
-	"use strict";
+	'use strict';
 
 	var config = module.config();
 
 	if (config.jsDebug) {
 		log.setLevel('debug', false);
-	}
-	else {
+	} else {
 		log.setLevel('warn', false);
 	}
 	var router = new AppRouter();

@@ -6,7 +6,7 @@ define([
 	'jquery',
 	'module'
 ], function(_, $, module) {
-	"use strict";
+	'use strict';
 	/*
 	 * @param {Object} options
 	 *     @prop {String or Function which returns a String} lookupType - Used to form the url. It is appended to the lookupUrl in the module config.
@@ -22,8 +22,7 @@ define([
 			url = function() {
 				return module.config().lookupUrl + options.lookupType();
 			};
-		}
-		else {
+		} else {
 			url = module.config().lookupUrl + options.lookupType;
 		}
 		var result = {
@@ -77,15 +76,13 @@ define([
 						children: []
 					}]
 				};
-				if ((resp.length === 2) && (resp[0].length === 3) && (resp[1].length === 3)) {
+				if (resp.length === 2 && resp[0].length === 3 && resp[1].length === 3) {
 					results.results[0].children = resp[0][0].slice(0, 30);
 					results.results[1].children = resp[1][0].slice(0, 30);
 				}
 				return results;
 			};
-		}
-
-		else {
+		} else {
 			result.ajax.processResults = function(resp) {
 				return {
 					results : resp
@@ -93,7 +90,7 @@ define([
 			};
 		}
 
-		return _.extend(result, (defaults) ? defaults : {});
+		return _.extend(result, defaults ? defaults : {});
 	};
 
 	return {

@@ -4,10 +4,10 @@ define([
 	'models/LinkModel',
 	'models/OrderedCollection'
 ], function(LinkModel, OrderedCollection) {
-	"use strict";
+	'use strict';
 
 	var collection = OrderedCollection.extend({
-		model : LinkModel,
+		model : LinkModel
 	});
 
 	return collection;

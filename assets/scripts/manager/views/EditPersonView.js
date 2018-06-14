@@ -11,7 +11,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/editPerson'
 ], function(_, $, stickit, $select2, CostCenterCollection, OutsideAffiliationLookupCollection, BaseView, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	var DEFAULT_SELECT2_OPTIONS = {
 		allowClear : true,
@@ -114,8 +114,7 @@ define([
 			var personAffiliations = this.model.get('affiliations');
 			if (_.isEmpty(personAffiliations)) {
 				$allAffiliationsSelect.val('').trigger('change');
-			}
-			else {
+			} else {
 				$allAffiliationsSelect.val(_.pluck(personAffiliations, 'id')).trigger('change');
 			}
 		},
@@ -128,8 +127,7 @@ define([
 			var selectedAffiliations;
 			if (this.model.has('affiliations')) {
 				selectedAffiliations = _.clone(this.model.get('affiliations'));
-			}
-			else {
+			} else {
 				selectedAffiliations = [];
 			}
 			selectedAffiliations.push({

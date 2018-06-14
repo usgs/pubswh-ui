@@ -6,7 +6,7 @@
 var METRICS = window.METRICS = window.METRICS || {};
 
 METRICS.analyticsGraph = (function() {
-	"use strict";
+	'use strict';
 
 	var self = {};
 
@@ -21,7 +21,7 @@ METRICS.analyticsGraph = (function() {
 	 * 			library's format function.
 	 */
 	self.createGraph = function(el, rows, options) {
-		var thisOptions = (options) ? options : {};
+		var thisOptions = options ? options : {};
 		var labels = ['Date', _.has(thisOptions, 'ylabel') ? thisOptions.ylabel : ''];
 		var format = _.has(thisOptions, 'dateFormat') ? thisOptions.dateFormat : 'MM/DD/YYYY';
 
@@ -39,8 +39,7 @@ METRICS.analyticsGraph = (function() {
 				valueFormatter : function(value, valueOptions, seriesName) {
 					if (seriesName === 'Date') {
 						return moment(value).format(format);
-					}
-					else {
+					} else {
 						return value;
 					}
 				},
@@ -52,8 +51,7 @@ METRICS.analyticsGraph = (function() {
 							// Only show whole numbers on the y axis
 							if (y % 1 === 0) {
 								return y;
-							}
-							else {
+							} else {
 								return '';
 							}
 						}

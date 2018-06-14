@@ -12,7 +12,7 @@ module.exports = null;
 
 
 $(document).ready(function() {
-	"use strict";
+	'use strict';
 
 	// Constants for link text
 	var SHOW_SEARCH = 'Show Advanced Search';
@@ -63,8 +63,7 @@ $(document).ready(function() {
 	if (initialSearchRows.length > 0) {
 		$showHideSearchBtn.html(HIDE_SEARCH);
 		$advancedSearchDiv.show();
-	}
-	else {
+	} else {
 		$showHideSearchBtn.html(SHOW_SEARCH);
 		$advancedSearchDiv.hide();
 	}
@@ -75,8 +74,7 @@ $(document).ready(function() {
 			$categorySelect.find('option').prop('disabled', false);
 			$categorySelect.select2();
 			$advancedSearchDiv.hide();
-		}
-		else {
+		} else {
 			$showHideSearchBtn.html(HIDE_SEARCH);
 			$advancedSearchDiv.show();
 		}

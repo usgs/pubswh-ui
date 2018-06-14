@@ -14,7 +14,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/contributorTabRow'
 ], function(Handlebars, log, _, $, jqueryUi, select2, module, stickit, DynamicSelect2, BaseView, hb_template) {
-	"use strict";
+	'use strict';
 	var view = BaseView.extend({
 
 		bindings : {
@@ -25,8 +25,7 @@ define([
 					if (value && value.length > 0) {
 						var stagingText = _.pluck(value, 'text');
 						displayText = stagingText.join(', ');
-					}
-					else {
+					} else {
 						displayText = '';
 					}
 					return displayText;
@@ -79,7 +78,7 @@ define([
 
 			this.$('.contributor-name-input').select2(DynamicSelect2.getSelectOptions({
 				lookupType: function () {
-					return (self.model.get('corporation') ? 'corporations' : 'people');
+					return self.model.get('corporation') ? 'corporations' : 'people';
 				}
 			}, _.extend({minimumInputLength: 2}, DEFAULT_SELECT2_OPTIONS)));
 			this.updateName();
@@ -123,8 +122,7 @@ define([
 			var corporation = this.model.get('corporation');
 			if (corporation) {
 				$select.val('corporations').trigger('change');
-			}
-			else {
+			} else {
 				$select.val('people').trigger('change');
 			}
 		},
@@ -138,8 +136,7 @@ define([
 					$select.append(this.optionTemplate(this.model.attributes));
 				}
 				$select.val(this.model.get('contributorId')).trigger('change');
-			}
-			else {
+			} else {
 				$select.val('').trigger('change');
 			}
 		}

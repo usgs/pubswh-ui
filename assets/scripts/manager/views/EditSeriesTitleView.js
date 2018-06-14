@@ -13,7 +13,7 @@ define([
 	'views/AlertView',
 	'hbs!hb_templates/editSeriesTitle'
 ], function($, _, select2, stickit, bootstrap, DynamicSelect2, PublicationSubtypeCollection, BaseView, AlertView, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	var DEFAULT_SELECT2_OPTIONS = {
 		theme : 'bootstrap'
@@ -122,8 +122,7 @@ define([
 			if (this.model.has('publicationSubtype')) {
 				subtype = this.model.get('publicationSubtype');
 				$select.val(subtype.id).trigger('change');
-			}
-			else {
+			} else {
 				$select.val('').trigger('change');
 			}
 		},
@@ -206,7 +205,7 @@ define([
 				})
 				.fail(function(jqxhr) {
 					self.alertView.showDangerAlert('Unable to save the series title');
-					if ((jqxhr.responseJSON) && (jqxhr.responseJSON.validationErrors)) {
+					if (jqxhr.responseJSON && jqxhr.responseJSON.validationErrors) {
 						$errorDiv.html('<pre>' + JSON.stringify(jqxhr.responseJSON.validationErrors) + '</pre>');
 					}
 				})

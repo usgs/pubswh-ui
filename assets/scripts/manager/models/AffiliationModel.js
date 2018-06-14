@@ -5,7 +5,7 @@ define([
 	'underscore',
 	'module'
 ], function(Backbone, _, module) {
-	"use strict";
+	'use strict';
 
 	var model = Backbone.Model.extend({
 
@@ -24,8 +24,7 @@ define([
 			var scriptRoot = module.config().scriptRoot;
 			if (isCostCenter) {
 				targetUrl = scriptRoot + '/manager/services/costcenter';
-			}
-			else {
+			} else {
 				targetUrl = scriptRoot + '/manager/services/outsideaffiliation';
 			}
 			return targetUrl;

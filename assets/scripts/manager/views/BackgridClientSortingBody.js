@@ -2,7 +2,7 @@
 define([
 	'backgrid'
 ], function(Backgrid) {
-	"use strict";
+	'use strict';
 	/*
 	 * Extended Backgrid body to redefine the sort function to always use client side sorting.
 	 */
@@ -13,7 +13,7 @@ define([
 		*/
 		sort: function (column, direction) {
 
-			if (!_.contains(["ascending", "descending", null], direction)) {
+			if (!_.contains(['ascending', 'descending', null], direction)) {
 				throw new RangeError('direction must be one of "ascending", "descending" or `null`');
 			}
 
@@ -22,24 +22,24 @@ define([
 			var collection = this.collection;
 
 			var order;
-			if (direction === "ascending") order = -1;
-			else if (direction === "descending") order = 1;
+			if (direction === 'ascending') order = -1;
+			else if (direction === 'descending') order = 1;
 			else order = null;
 
-			var comparator = this.makeComparator(column.get("name"), order,
+			var comparator = this.makeComparator(column.get('name'), order,
 					order ?
 							column.sortValue() :
 							function (model) {
 								return model.cid.replace('c', '') * 1;
 							});
 
-			collection.setSorting(order && column.get("name"), order,
+			collection.setSorting(order && column.get('name'), order,
 					{sortValue: column.sortValue()});
 			collection.comparator = comparator;
 			collection.sort();
-			collection.trigger("backgrid:sorted", column, direction, collection);
+			collection.trigger('backgrid:sorted', column, direction, collection);
 
-			column.set("direction", direction);
+			column.set('direction', direction);
 
 			return this;
 		}

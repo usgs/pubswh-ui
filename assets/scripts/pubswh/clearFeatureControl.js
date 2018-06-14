@@ -23,8 +23,8 @@ PUBS_WH.ClearFeatureControl = L.Control.extend({
 		L.DomUtil.addClass(container, 'leaflet-bar');
 
 		this.button = L.DomUtil.create('a', 'leaflet-clear-control-button', container);
-		this.button.href="#";
-		this.button.title = "Clear search area";
+		this.button.href='#';
+		this.button.title = 'Clear search area';
 		this.button.innerHTML = '<span class="fa fa-trash fa-lg" style="color:black"></span>';
 		L.DomEvent.addListener(this.button, 'click', this._removeFeature, this);
 

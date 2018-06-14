@@ -25,7 +25,7 @@ var PUBS_WH = window.PUBS_WH = window.PUBS_WH || {};
  *		@prop {Function} deleteAllRows - deletes all rows in $container and $mapContainter
  */
 PUBS_WH.advancedSearchForm = function(options) {
-	"use strict";
+	'use strict';
 
 	var self = {};
 
@@ -87,14 +87,14 @@ PUBS_WH.advancedSearchForm = function(options) {
 		var addRowDeferred = $.Deferred();
 		var lookupOptions = [];
 
-		if ((row.inputType === 'select') && row.lookup) {
+		if (row.inputType === 'select' && row.lookup) {
 			$.ajax({
 				url: CONFIG.lookupUrl + row.lookup,
 				method: 'GET',
 				success : function(resp) {
 					lookupOptions = resp.map(function(option) {
 						var result = option;
-						result.selected = row.value ? (option.text === row.value) : false;
+						result.selected = row.value ? option.text === row.value : false;
 						return result;
 					});
 
@@ -111,14 +111,14 @@ PUBS_WH.advancedSearchForm = function(options) {
 			isSelect : row.inputType === 'select' || row.inputType === 'boolean',
 			isBoolean : row.inputType === 'boolean',
 			isDate : row.inputType === 'date',
-			mapId: (row.inputType === "map") ? 'map-name-' + row.name : '',
+			mapId: row.inputType === 'map' ? 'map-name-' + row.name : '',
 			row : row
 		};
 		var $row;
 
 		// Additional context properties
-		context.isTrue = context.isBoolean ? (row.value === 'true') : false;
-		context.isFalse = context.isBoolean ? (row.value === 'false') : false;
+		context.isTrue = context.isBoolean ? row.value === 'true' : false;
+		context.isFalse = context.isBoolean ? row.value === 'false' : false;
 
 		if (context.mapId) {
 			options.$mapContainer.append(mapTemplate(context));

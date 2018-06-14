@@ -6,7 +6,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/confirmationDialog'
 ], function(bootstrap, _, BaseView, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	var view = BaseView.extend({
 		template : hbTemplate,
@@ -31,7 +31,7 @@ define([
 		show : function(message, actionFnc) {
 			this.actionFnc = actionFnc;
 			this.$('.modal-body').html(message);
-			this.$('.modal').modal('show')
+			this.$('.modal').modal('show');
 		},
 
 		close : function() {

@@ -7,7 +7,7 @@ define([
 	'backbone.paginator',
 	'module'
 ], function(_, Backbone, Pageable, module) {
-	"use strict";
+	'use strict';
 
 	var collection = Backbone.PageableCollection.extend({
 
@@ -25,7 +25,7 @@ define([
 		// maps the query parameters accepted by service to `state` keys
 		// to those your server supports
 		queryParams: {
-			pageSize:  "page_size"
+			pageSize:  'page_size'
 		},
 
 		initialize : function(models, options) {
@@ -57,7 +57,7 @@ define([
 		updateFilters : function(filters) {
 			// Remove values that are null or undefined.
 			this.filters = _.pick(filters, function(value) {
-				return (value);
+				return value;
 			});
 		},
 

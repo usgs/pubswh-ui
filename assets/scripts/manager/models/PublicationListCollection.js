@@ -4,7 +4,7 @@ define([
 	'backbone',
 	'module'
 ], function(Backbone, module) {
-	"use strict";
+	'use strict';
 
 	var collection = Backbone.Collection.extend({
 		url : module.config().scriptRoot + '/manager/services/lists',
@@ -13,4 +13,4 @@ define([
 	});
 
 	return collection;
-})
+});

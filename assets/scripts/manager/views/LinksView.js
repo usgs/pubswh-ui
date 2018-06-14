@@ -10,7 +10,7 @@ define([
 	'views/LinkRowView',
 	'hbs!hb_templates/links'
 ], function(_, jqueryUI, LinkModel, LinkTypeCollection, LinkFileTypeCollection, BaseView, LinkRowView, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	var view = BaseView.extend({
 
@@ -69,7 +69,7 @@ define([
 							return view.model.get('rank');
 						})
 						.each(function(view) {
-							self.renderViewRow(view)
+							self.renderViewRow(view);
 						})
 						.value();
 			});
@@ -82,7 +82,7 @@ define([
 		 */
 		renderViewRow : function(rowView) {
 			var $grid = this.$('.grid');
-			var divText = '<div class="link-row-div"></div>'
+			var divText = '<div class="link-row-div"></div>';
 			$grid.append(divText);
 			rowView.setElement($grid.find('.link-row-div:last-child')).render();
 		},
@@ -135,14 +135,14 @@ define([
 			this.linkRowViews = _.chain(this.linkRowViews)
 					// Sort row views and them move them by successively appending them to the grid.
 					.sortBy(function(view) {
-						return view.model.attributes.rank
+						return view.model.attributes.rank;
 					})
 					.each(function(view) {
-						view.$el.appendTo($grid)
+						view.$el.appendTo($grid);
 					})
 					.value();
 		}
 	});
 
 	return view;
-})
+});

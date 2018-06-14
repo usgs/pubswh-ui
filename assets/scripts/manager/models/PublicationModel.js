@@ -9,7 +9,7 @@ define([
 	'models/LinkCollection',
 	'models/PublicationContributorCollection'
 ], function(_, $, Backbone, module, LinkCollection, PublicationContributorCollection) {
-	"use strict";
+	'use strict';
 
 	var model = Backbone.Model.extend({
 		urlRoot : module.config().scriptRoot + '/manager/services/mppublications',
@@ -26,12 +26,11 @@ define([
 		},
 
 		parse : function(response, options) {
-			var links = (this.has('links')) ? this.get('links') : new LinkCollection();
-			var contributors = (this.has('contributors')) ? this.get('contributors') : new Backbone.Model();
+			var links = this.has('links') ? this.get('links') : new LinkCollection();
+			var contributors = this.has('contributors') ? this.get('contributors') : new Backbone.Model();
 			if (_.has(response, 'links') && response.links.length) {
 				links.set(_.sortBy(response.links, 'rank'));
-			}
-			else {
+			} else {
 				links.reset(null);
 			}
 			response.links = links;
@@ -48,14 +47,12 @@ define([
 						var collection = contributors.get(contribType);
 						collection.set(contribs);
 						collection.sort();
-					}
-					else {
+					} else {
 						contributors.set(contribType, new PublicationContributorCollection(contribs));
 					}
 				});
 
-			}
-			else {
+			} else {
 				_.each(contributors.attributes, function(value, contribType) {
 					var contribTypeCollection = contributors.get(contribType);
 					contribTypeCollection.reset();
@@ -103,23 +100,21 @@ define([
 					processData : false,
 					data: '{"id" : ' + this.get('id') + '}',
 					success : function(response, textStatus, jqXHR) {
-						deferred.resolve(response)
+						deferred.resolve(response);
 					},
 					error : function(jqXHR, textStatus, error) {
 						var resp = jqXHR.responseJSON;
 						if (_.has(resp, 'validationErrors') &&
 							_.isArray(resp.validationErrors) &&
-							(resp.validationErrors.length > 0)) {
+							resp.validationErrors.length > 0) {
 							self.set('validationErrors', resp.validationErrors);
 							deferred.reject(jqXHR, 'Validation errors');
-						}
-						else {
+						} else {
 							deferred.reject(jqXHR, 'Unable to ' + op + ' the publication with error: ' + error);
 						}
 					}
 				});
-			}
-			else {
+			} else {
 				deferred.resolve();
 			}
 			return deferred.promise();

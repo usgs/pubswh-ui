@@ -12,7 +12,7 @@ define([
 	'views/EditCorporationView',
 	'hbs!hb_templates/manageContributors'
 ], function(_, $select2, DynamicSelect2, $utils, BaseView, AlertView, EditPersonView, EditCorporationView, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	var DEFAULT_SELECT2_OPTIONS = {
 		theme : 'bootstrap'
@@ -68,8 +68,7 @@ define([
 					.always(function() {
 						$loadingIndicator.hide();
 					});
-			}
-			else {
+			} else {
 				this.$('.select-contributor-container').show();
 			}
 
@@ -98,7 +97,7 @@ define([
 		 * Helper function to create an edit contributor view.
 		 */
 		_createContributorView : function() {
-			var EditView = (this.model.has('corporation') && this.model.get('corporation')) ? EditCorporationView : EditPersonView;
+			var EditView = this.model.has('corporation') && this.model.get('corporation') ? EditCorporationView : EditPersonView;
 			this.$('.select-contributor-container').hide();
 			this.$('.contributor-button-container').show();
 			this.editContributorView = new EditView({
@@ -138,7 +137,7 @@ define([
 		createContributor : function() {
 			var contributorType = this.$('.contributor-type-select').val();
 
-			this.model.set('corporation', (contributorType === 'corporation') ? true : false);
+			this.model.set('corporation', contributorType === 'corporation' ? true : false);
 			this._createContributorView();
 		},
 
@@ -151,7 +150,7 @@ define([
 			$loadingIndicator.show();
 			this.model.set({
 				contributorId: contributorId,
-				corporation: (contributorType === 'corporation') ? true : false
+				corporation: contributorType === 'corporation' ? true : false
 			});
 			this.model.fetch()
 				.done(function() {
@@ -182,7 +181,7 @@ define([
 				})
 				.fail(function(jqXHR) {
 					self.alertView.showDangerAlert('Unable to save contributor.');
-					if ((jqXHR.responseJSON) && (jqXHR.responseJSON.validationErrors)) {
+					if (jqXHR.responseJSON && jqXHR.responseJSON.validationErrors) {
 						$errorDiv.html('<pre>' + JSON.stringify(jqXHR.responseJSON.validationErrors) + '</pre>');
 					}
 				})

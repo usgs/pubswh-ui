@@ -4,7 +4,7 @@ define([
 	'backbone',
 	'module'
 ], function(Backbone, module) {
-	"use strict";
+	'use strict';
 
 	var model = Backbone.Model.extend({
 
@@ -17,7 +17,7 @@ define([
 		defaults : function() {
 			return {
 				rank : ''
-			}
+			};
 		},
 
 		fetch : function(options) {
@@ -36,7 +36,7 @@ define([
 			var affiliation = new Object();
 			if (!_.has(response, 'affiliation')) {
 				response.affiliation = affiliation;
-			};
+			}
 			return response;
 		}
 	});

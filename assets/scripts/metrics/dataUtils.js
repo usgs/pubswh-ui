@@ -5,7 +5,7 @@
 var METRICS = window.METRICS = window.METRICS || {};
 
 METRICS.dataUtils = (function() {
-	"use strict";
+	'use strict';
 
 	var self = {};
 
@@ -40,7 +40,9 @@ METRICS.dataUtils = (function() {
 		var rowIndex = 0;
 		var currentDate = options.startDate.clone();
 		var result = [];
-		var zeroMetrics = _.object(options.metricNames, _.map(options.metricNames, function() { return '0';}));
+		var zeroMetrics = _.object(options.metricNames, _.map(options.metricNames, function() {
+ return '0';
+}));
 		var emptyRow;
 
 		while (currentDate.isSameOrBefore(options.endDate, options.timeUnit)) {
@@ -48,8 +50,7 @@ METRICS.dataUtils = (function() {
 				currentDate.isSame(options.rows[rowIndex].date, options.timeUnit)) {
 				result.push(options.rows[rowIndex]);
 				rowIndex = rowIndex + 1;
-			}
-			else {
+			} else {
 				emptyRow = _.clone(zeroMetrics);
 				emptyRow.date = currentDate.clone();
 				result.push(emptyRow);

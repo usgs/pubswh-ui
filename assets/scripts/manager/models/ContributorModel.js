@@ -5,7 +5,7 @@ define([
 	'backbone',
 	'module'
 ], function(Backbone, module) {
-	"use strict";
+	'use strict';
 
 	var model = Backbone.Model.extend({
 		idAttribute : 'contributorId',
@@ -19,11 +19,9 @@ define([
 				case 'update':
 					if (model.has('corporation') && model.get('corporation')) {
 						urlEndpoint = 'corporation';
-					}
-					else if (model.has('usgs') && model.get('usgs')) {
+					} else if (model.has('usgs') && model.get('usgs')) {
 						urlEndpoint = 'usgscontributor';
-					}
-					else {
+					} else {
 						urlEndpoint = 'outsidecontributor';
 					}
 

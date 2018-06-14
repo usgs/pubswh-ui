@@ -8,7 +8,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/loginDialog'
 ], function($, _, bootstrap, module, BaseView, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	var view = BaseView.extend({
 		template : hbTemplate,
@@ -51,7 +51,7 @@ define([
 					if (_.has(self, 'loginFnc')) {
 						self.loginFnc();
 					}
-					self.close()
+					self.close();
 				},
 				error : function(jqXHR, textStatus, error) {
 					self.$('.login-errors').html('Unable to log in with error: ' + textStatus +

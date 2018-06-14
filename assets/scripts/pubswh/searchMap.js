@@ -14,7 +14,7 @@ var PUBS_WH = window.PUBS_WH = window.PUBS_WH || {};
  * @return a Leaflet map object
  */
 PUBS_WH.createSearchMap = function(mapDivId, $geomInput) {
-	"use strict";
+	'use strict';
 
 	var SHAPE_OPTIONS = {
 			color: '#ff0000',
@@ -22,13 +22,13 @@ PUBS_WH.createSearchMap = function(mapDivId, $geomInput) {
 	};
 
 	var baseLayers = {
-		"Topographic" : L.esri.basemapLayer('Topographic'),
-		"Streets" : L.esri.basemapLayer('Streets'),
-		"Oceans" : L.esri.basemapLayer('Oceans')
+		'Topographic' : L.esri.basemapLayer('Topographic'),
+		'Streets' : L.esri.basemapLayer('Streets'),
+		'Oceans' : L.esri.basemapLayer('Oceans')
 	};
 
 	var overlayLayers = {
-		"Ocean Labels" : L.esri.basemapLayer('OceansLabels')
+		'Ocean Labels' : L.esri.basemapLayer('OceansLabels')
 	};
 
 	var searchFeature = new L.FeatureGroup();

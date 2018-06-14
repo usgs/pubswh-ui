@@ -11,7 +11,7 @@ define([
 	'views/ContributorRowView',
 	'hbs!hb_templates/contributorTab'
 ], function(_, $, jqueryUi, Handlebars, log, BaseView, ContributorRowView, hb_template) {
-	"use strict";
+	'use strict';
 
 	var view = BaseView.extend({
 

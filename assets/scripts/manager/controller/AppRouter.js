@@ -18,7 +18,7 @@ define([
 			 ManagePublicationsView, PublicationView, ManageContributorsView, EditSeriesTitleView,
 			 ManageAffiliationView, PublicationModel, PublicationCollection, ContributorModel, SeriesTitleModel,
 			 AffiliationModel) {
-	"use strict";
+	'use strict';
 
 	var appRouter = Backbone.Router.extend({
 		routes: {
@@ -64,7 +64,7 @@ define([
 		},
 
 		managePublicationsView: function () {
-			var searchFilters = (sessionStorage.searchFilters) ? JSON.parse(sessionStorage.searchFilters) : {};
+			var searchFilters = sessionStorage.searchFilters ? JSON.parse(sessionStorage.searchFilters) : {};
 			var collection = new PublicationCollection();
 			var filterModel = new Backbone.Model(searchFilters);
 

@@ -3,7 +3,7 @@
 define([
 	'backbone'
 ], function(Backbone) {
-	"use strict";
+	'use strict';
 
 	var model = Backbone.Model.extend({
 		defaults: {

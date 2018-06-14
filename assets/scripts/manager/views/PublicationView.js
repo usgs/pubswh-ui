@@ -21,7 +21,7 @@ define([
 	'hbs!hb_templates/publication'
 ], function(_, $, bootstrap, datetimepicker, Stickit, module, BaseView, AlertView, ConfirmationDialogView, LoginDialogView,
 			BibliodataView, LinksView, ContributorsView, SPNView, CatalogingView, GeospatialView, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	var view = BaseView.extend({
 
@@ -43,8 +43,7 @@ define([
 				onGet : function(value) {
 					if (value && _.isArray(value) && value.length > 0) {
 						return '<pre>' + JSON.stringify(value) + '</pre>';
-					}
-					else {
+					} else {
 						return '';
 					}
 				}
@@ -57,8 +56,7 @@ define([
 				onGet : function(value) {
 					if (value) {
 						return value + ' ET';
-					}
-					else {
+					} else {
 						return '';
 					}
 				}
@@ -106,11 +104,10 @@ define([
 				var $modal = self.$('.locked-pub-dialog-container .modal');
 				var message;
 				if (jqXhr.status === 409) {
-					message = (jqXhr.responseJSON.validationErrors.length > 0) ? jqXhr.responseJSON.validationErrors[0].message : 'Unknown error'
+					message = jqXhr.responseJSON.validationErrors.length > 0 ? jqXhr.responseJSON.validationErrors[0].message : 'Unknown error';
 					$modal.find('.modal-body').html(message + '. Click OK to return to the Search page');
 					$modal.modal();
-				}
-				else {
+				} else {
 					self.alertView.showDangerAlert('Can\'t retrieve the publication: ' + jqXhr.statusText);
 				}
 			});
@@ -133,8 +130,7 @@ define([
 
 			if (this.model.isNew()) {
 				this.fetchPromise = $.Deferred().resolve();
-			}
-			else {
+			} else {
 				this.fetchPromise = this.model.fetch();
 			}
 
@@ -216,8 +212,7 @@ define([
 			if (newId) {
 				this.$('#pub-preview-div').show();
 				this.$('#pub-preview-div a').attr('href', this.context.previewUrl + newId);
-			}
-			else {
+			} else {
 				this.$('#pub-preview-div').hide();
 			}
 		},
@@ -236,8 +231,7 @@ define([
 						self.loginDialogView.show(function() {
 							self.alertView.showWarningAlert('Please click Release to release the publication');
 						});
-					}
-					else {
+					} else {
 						self.alertView.showDangerAlert('Publication not released: ' + error);
 					}
 				});
@@ -268,14 +262,12 @@ define([
 						self.loginDialogView.show(function() {
 							self.alertView.showWarningAlert('Please click Save Changes to save the publication');
 						});
-					}
-					else if (_.has(response, 'responseJSON') &&
+					} else if (_.has(response, 'responseJSON') &&
 						_.has(response.responseJSON, 'validationErrors') &&
-						(response.responseJSON.validationErrors.length > 0)) {
+						response.responseJSON.validationErrors.length > 0) {
 						self.model.set('validationErrors', response.responseJSON.validationErrors);
 						self.alertView.showDangerAlert('Publication not saved with validation errors');
-					}
-					else {
+					} else {
 						self.alertView.showDangerAlert('Publication not saved: ' + error);
 					}
 				})
@@ -299,8 +291,7 @@ define([
 							self.loginDialogView.show(function() {
 								self.alertView.showWarningAlert('Please click Publish to publish the publication');
 							});
-						}
-						else {
+						} else {
 							self.alertView.showDangerAlert(error);
 						}
 					})
@@ -332,8 +323,7 @@ define([
 							self.loginDialogView.show(function() {
 								self.alertView.showWarningAlert('Please clicke Delete to delete the publication');
 							});
-						}
-						else {
+						} else {
 							self.alertView.showDangerAlert('Publication not deleted with error: ' + jqxhr.statusText);
 						}
 					});
@@ -342,8 +332,7 @@ define([
 
 			if (this.model.has('id')) {
 				this.confirmationDialogView.show('Are you sure you want to delete this publication?', callDelete);
-			}
-			else {
+			} else {
 				self.returnToSearch();
 			}
 
@@ -361,8 +350,7 @@ define([
 		changeDisplayToPublicDate : function(ev) {
 			if (ev.date) {
 				this.model.set('displayToPublicDate', ev.date.format('YYYY-MM-DDTHH:mm:ss'));
-			}
-			else {
+			} else {
 				this.model.unset('displayToPublicDate');
 			}
 		},
@@ -376,8 +364,7 @@ define([
 			var $ipdsInput = this.$('#ipds-input');
 			if (this.model.get('ipdsId')) {
 				$ipdsInput.prop('readonly', true);
-			}
-			else {
+			} else {
 				$ipdsInput.prop('readonly', false);
 			}
 		}

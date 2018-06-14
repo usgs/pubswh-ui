@@ -17,7 +17,7 @@ define([
 	'hbs!hb_templates/spn'
 ], function(Handlebars, $, _, bootstrap, datetimepicker, select2, tinymce, stickit, module,
 			DynamicSelect2, PublishingServiceCenterCollection, BaseView, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	var view = BaseView.extend({
 
@@ -177,8 +177,7 @@ define([
 		changePublishedDate : function(ev) {
 			if (ev.date) {
 				this.model.set('publishedDate', ev.date.format('YYYY-MM-DD'));
-			}
-			else {
+			} else {
 				this.model.unset('publishedDate');
 			}
 		},
@@ -186,8 +185,7 @@ define([
 		changeRevisedDate : function(ev) {
 			if (ev.date) {
 				this.model.set('revisedDate', ev.date.format('YYYY-MM-DD'));
-			}
-			else {
+			} else {
 				this.model.unset('revisedDate');
 			}
 		},
@@ -205,8 +203,7 @@ define([
 					$select.append(this.optionTemplate(value));
 				}
 				$select.val(value.id).trigger('change');
-			}
-			else {
+			} else {
 				$select.val('').trigger('change');
 			}
 		},
@@ -219,7 +216,7 @@ define([
 		updatePSC : function() {
 			var $select = this.$('#psc-input');
 			var value = this.model.get('publishingServiceCenter');
-			$select.val((_.has(value, 'id')) ? value.id : '').trigger('change');
+			$select.val(_.has(value, 'id') ? value.id : '').trigger('change');
 		},
 		updateContact : function() {
 			this.$('#contacts-input').html(this.model.get('contact'));

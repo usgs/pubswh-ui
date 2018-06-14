@@ -20,7 +20,7 @@ define([
 ], function (module, Backbone, _, $, Backgrid, Paginator, PublicationListCollection,
 			 BackgridUrlCell, BackgridClientSortingBody, BaseView,
 			 AlertView, WarningDialogView, SearchFilterRowView, hbTemplate, pubListTemplate) {
-	"use strict";
+	'use strict';
 
 	var DEFAULT_SELECT2_OPTIONS = {
 		allowClear : true,
@@ -32,10 +32,9 @@ define([
 			var result;
 			if (_.isString(val)) {
 				result = val;
-			}
-			else {
+			} else {
 				result = _.map(val.selections, function(selection) {
-					return (val.useId) ? selection.id : selection.text;
+					return val.useId ? selection.id : selection.text;
 				});
 			}
 
@@ -94,20 +93,19 @@ define([
 			this.fetchPromise = this.collection.fetch({reset: true});
 
 			var fromRawLookup = function(rawValue) {
-				return (rawValue) ? rawValue.text : '';
+				return rawValue ? rawValue.text : '';
 			};
 			var sortValueLookup = function(model, colName) {
 				return fromRawLookup(model.get(colName), model);
 			};
 			var sortValueText = function(model, colName) {
-				return (model.has(colName)) ? model.get(colName) : '';
+				return model.has(colName) ? model.get(colName) : '';
 			};
 
 			var fromRawFirstAuthor = function(rawValue) {
-				if ((rawValue) && _.has(rawValue, 'authors') && (_.isArray(rawValue.authors)) && (rawValue.authors.length > 0)) {
+				if (rawValue && _.has(rawValue, 'authors') && _.isArray(rawValue.authors) && rawValue.authors.length > 0) {
 					return rawValue.authors[0].text;
-				}
-				else {
+				} else {
 					return '';
 				}
 			};
@@ -148,32 +146,32 @@ define([
 						}
 					}
 				}, {
-					name: "publicationType",
-					label: "Type",
+					name: 'publicationType',
+					label: 'Type',
 					editable: false,
 					sortable : true,
-					cell: "string",
+					cell: 'string',
 					formatter : {
 						fromRaw : fromRawLookup
 					},
 
 					sortValue : sortValueLookup
 				}, {
-					name: "seriesTitle",
-					label: "Series Name",
+					name: 'seriesTitle',
+					label: 'Series Name',
 					editable: false,
 					sortable : true,
-					cell: "string",
+					cell: 'string',
 					formatter: {
 						fromRaw: fromRawLookup
 					},
 					sortValue : sortValueLookup
 				}, {
-					name: "seriesNumber",
-					label: "Report Number",
+					name: 'seriesNumber',
+					label: 'Report Number',
 					editable: false,
 					sortable : true,
-					cell: "string",
+					cell: 'string',
 					sortValue : sortValueText
 				}, {
 					name: 'chapter',
@@ -183,11 +181,11 @@ define([
 					cell: 'string',
 					sortValue : sortValueText
 				}, {
-					name: "publicationYear",
-					label: "Year",
+					name: 'publicationYear',
+					label: 'Year',
 					editable: false,
 					sortable : true,
-					cell: "string",
+					cell: 'string',
 					sortValue : sortValueText
 				},{
 					name: 'indexId',
@@ -197,11 +195,11 @@ define([
 					cell: 'string',
 					sortValue : sortValueText
 				}, {
-					name: "title",
-					label: "Title",
+					name: 'title',
+					label: 'Title',
 					editable: false,
 					sortable : true,
-					cell: "string",
+					cell: 'string',
 					sortValue : sortValueText
 				},{
 					name: 'contributors',
@@ -229,7 +227,7 @@ define([
 					cell : 'string',
 					formatter : {
 						fromRaw : function(rawValue) {
-							return (rawValue) ? 'Yes' : 'No';
+							return rawValue ? 'Yes' : 'No';
 						}
 					}
 				}
@@ -263,7 +261,7 @@ define([
 			var self = this;
 			var $pubList;
 
-			this.context.qTerm = (this.model.has('q') ? this.model.get('q') : '');
+			this.context.qTerm = this.model.has('q') ? this.model.get('q') : '';
 			BaseView.prototype.render.apply(this, arguments);
 
 			$pubList = this.$('.pub-grid');
@@ -410,7 +408,7 @@ define([
 			var self = this;
 
 			var selectedPubs = this.collection.filter(function(model) {
-				return (model.has('selected') && model.get('selected'));
+				return model.has('selected') && model.get('selected');
 			});
 			var pubsIdData = $.param({
 				publicationId : _.map(selectedPubs, function(model) {
@@ -428,14 +426,12 @@ define([
 					'Select Publications',
 					'You must select at least one publication to add to the list(s)'
 				);
-			}
-			else if (!pubsList || pubsList.length === 0) {
+			} else if (!pubsList || pubsList.length === 0) {
 				this.warningDialogView.show(
 					'Select Lists',
 					'You must select at least one publication list'
 				);
-			}
-			else {
+			} else {
 				addDeferreds = _.map(pubsList, function (pubListId) {
 					return $.ajax({
 						url: serviceUrl + pubListId + '/pubs?' + pubsIdData,
@@ -457,7 +453,7 @@ define([
 			var selectedFilter = _.first(getFilters(this.model).listId);
 			var serviceUrl = module.config().scriptRoot + '/manager/services/lists/' + selectedFilter;
 			var selectedPubs = this.collection.filter(function(model) {
-				return (model.has('selected') && model.get('selected'));
+				return model.has('selected') && model.get('selected');
 			});
 			// get publication ids from selectedPubs
 			var selectedPubIds = _.pluck(selectedPubs, 'id');
@@ -468,8 +464,7 @@ define([
 					'Select Publications',
 					'You must select at least one publication to remove from the current filter list.'
 				);
-			}
-			else {
+			} else {
 				removeDeferreds = _.map(selectedPubIds, function(selectedPubId) {
 					var targetUrl = serviceUrl + '/pubs/' + selectedPubId;
 					return $.ajax({
@@ -524,8 +519,7 @@ define([
 				selectedText = this.publicationListCollection.findWhere({id : parseInt(selectedFilter)}).get('text');
 				$removePubBtn.html('Remove Selected Publications From "' + selectedText + '" List');
 				$removePubBtn.show();
-			}
-			else {
+			} else {
 				$removePubBtn.hide();
 			}
 		},

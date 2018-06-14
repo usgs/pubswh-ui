@@ -6,7 +6,7 @@ define([
 	'views/BaseView',
 	'text!hb_templates/alert.hbs'
 ], function(Handlebars, bootstrap, BaseView, hbTemplate) {
-	"use strict";
+	'use strict';
 
 	var view = BaseView.extend({
 
@@ -33,8 +33,7 @@ define([
 				this.context.alertKind = kind;
 				this.context.message = message;
 				this.render();
-			}
-			else {
+			} else {
 				this.$('.alert').removeClass(this.context.alertKind).addClass(kind);
 				this.$('.alert-message').html(message);
 
