@@ -29,8 +29,10 @@ watch:
 	(make watch-server & \
 	 make watch-assets & \
 	 wait) || kill -TERM $(MAKEPID)
-coverage:
-	mkdir -p ./server/coverage
-	find ./assets/coverage/ -mindepth 2 -iname '*.info' -exec cp {} ./server/coverage \;
-	coveralls-lcov -v -n ./server/coverage/lcov.info > ./server/coverage/coverage.json
-	cd server && env/bin/coveralls --merge=./coverage/coverage.json
+coveralls:
+	cp assets/coverage/manager/Firefox*/lcov.info assets/coverage/manager.info
+	cp assets/coverage/metrics/Firefox*/lcov.info assets/coverage/metrics.info
+	cp assets/coverage/pubswh/Firefox*/lcov.info assets/coverage/pubswh.info
+	lcov --add-tracefile assets/coverage/manager.info --add-tracefile assets/coverage/metrics.info --add-tracefile assets/coverage/pubswh.info --output-file assets/coverage/combined.info
+	coveralls-lcov -v -n assets/coverage/combined.info > assets/coverage/coverage.json
+	cd server && env/bin/coveralls --merge=../assets/coverage/coverage.json
