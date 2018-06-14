@@ -20,7 +20,7 @@ def create_mock(step):
     # This is a really long raw string meant to mock the type of xml we would find on the confluence wiki
     mock_xml = """<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/"><title>TEST_XML</title><link rel="alternate" href="https://my.usgs.gov/confluence" /><subtitle>Imitation of Confluence Syndication Feed</subtitle><id>https://my.usgs.gov/confluence</id><entry><title>Test Resources</title><link rel="alternate" href="https://my.usgs.gov/confluence/display/pubswarehouseinfo/Other+Resources" /><category term="other_resources" /><author><name>Steve K</name></author><id>tag:my.usgs.gov,2009:page-test-page</id><updated>2014-09-26T02:34:53Z</updated><published>2014-09-26T02:34:53Z</published><summary type="html">&lt;div class="feed"&gt;&lt;p&gt;Page&lt;b&gt;edited&lt;/b&gt; by&lt;a href="https://my.usgs.gov/confluence/display/~jkreft@usgs.gov"&gt;Steve K&lt;/a&gt;&lt;/p&gt;&lt;div style="border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;padding: 10px;"&gt;&lt;h4 id="OtherResources-Ordering:"&gt;Ordering:&lt;/h4&gt;&lt;p&gt;&lt;ahref="http://www.usgs.gov/pubprod/" class="external-link" rel="nofollow"&gt; All this test text &lt;/p&gt;&lt;/div&gt;&lt;div style="padding: 10px 0;"&gt;&lt;a href="https://my.usgs.gov/confluence/display/pubswarehouseinfo/Other+Resources"&gt;View Online&lt;/a&gt;&amp;middot;&lt;ahref="https://my.usgs.gov/confluence/pages/diffpagesbyversion.action?pageId=518425134&amp;revisedVersion=3&amp;originalVersion=2"&gt;View Changes Online&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;</summary><dc:creator>Steve K</dc:creator><dc:date>2014-09-26T02:34:53Z</dc:date></entry></feed>"""
     httpretty.register_uri(httpretty.GET, "http://test_url/test", body = mock_xml)
-    
+
 @step(r'I pull_feed the fake url')
 def enable_mock(step):
     world.output = pull_feed("http://test_url/test")
@@ -44,7 +44,7 @@ def set_mock_pubs(step):
     test_url = "http://test_url/test/publication/a1"
     world.body = json.loads('{"publicationYear":"1880","publicationType":{"id":18,"text":"Report"}}')
 
-@step(r'I find fake details with pubdetails')   
+@step(r'I find fake details with pubdetails')
 def get_pubdetails(step):
     world.output = pubdetails(world.body)
     world.expected_output = {u'publicationType': {u'text': u'Report', u'id': 18}, u'publicationYear': u'1880', 'details': [{'Publication type:': u'Report'}, {'Year Published:': u'1880'}]}
@@ -70,7 +70,7 @@ display-link scenarios
 @step(r'I have a fake json full of pubs-related links')
 def mock_pubs_links(step):
     world.body = json.loads('{"links":[{"id":5277443,"rank":0,"type":{"id":24,"text":"Thumbnail"},"url":"http://pubs.usgs.gov/ar/01/report-thumb.jpg"},{"id":5166317,"rank":300,"type":{"id":11,"text":"Document"},"url":"http://pubs.usgs.gov/ar/01/report.pdf","linkFileType":{"id":1,"text":"pdf"}},{"id":5344307,"rank":400,"type":{"id":17,"text":"Plate"},"url":"http://pubs.usgs.gov/ar/01/plate-1.pdf","size":"9056","linkFileType":{"id":1,"text":"pdf"}}]}')
-    
+
 @step(r'I create_display_links using the dummy list')
 def display_links(step):
     world.output = create_display_links(world.body)
@@ -594,28 +594,28 @@ def setup_list(step):
     world.test_list = [{'year': '2013', 'title': 'Napoleonic Wars 1810 - 1815'},
                        {'year': '2010', 'title': 'Napoleanic Wars 1803 - 1810'}
                        ]
-    
+
 @step(r'I provide the list and a valid key name')
 def perform_sorting(step):
     world.result = sort_list_of_dicts(world.test_list, key_name='year')
-    
+
 @step(r'I see a list sorted by the specified key')
 def check_sort_results(step):
     world.expected_first_item = {'year': '2010', 'title': 'Napoleanic Wars 1803 - 1810'}
     actual_first_item = world.result[0]
     assert_equal(world.expected_first_item, actual_first_item)
-    
+
 """
 Parse superseding information scenario
 """
 @step(r'I have mocked some publication JSON')
 def mock_supersedes(step):
     world.mock_supersedes = {u'seriesNumber': u'071-99', u'links': [{u'url': u'http://pubs.usgs.gov/fs/1999/0071/report.pdf', u'rank': 300, u'type': {u'text': u'Document', u'id': 11}, u'id': 5107809, u'linkFileType': {u'text': u'pdf', u'id': 1}}, {u'url': u'http://pubs.usgs.gov/fs/1999/0071/report-thumb.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5231293, u'rank': 0}], u'edition': u'-', u'authorsList': [u'U.S. Geological Survey'], u'displayLinks': {u'Project Site': [], u'Application Site': [], u'Raw Data': [], u'Document': [{u'url': u'http://pubs.usgs.gov/fs/1999/0071/report.pdf', u'rank': 300, u'type': {u'text': u'Document', u'id': 11}, u'id': 5107809, u'linkFileType': {u'text': u'pdf', u'id': 1}}], u'Thumbnail': [{u'url': u'http://pubs.usgs.gov/fs/1999/0071/report-thumb.jpg', u'type': {u'text': u'Thumbnail', u'id': 24}, u'id': 5231293, u'rank': 0}], u'Metadata': [], u'Plate': [], u'Spatial Data': [], u'Companion Files': [], u'Illustration': [], u'Appendix': [], u'Index Page': [], u'Chapter': [], u'Read Me': [], u'Version History': [], u'Database': [], u'Cover': [], u'Authors Website': [], u'Errata': [], u'Additional Report Piece': [], u'Related Work': [], u'Abstract': [], u'Referenced Work': [], u'Digital Object Identifier': [], u'Image': []}, u'pubHasNoLinks': False, u'id': 5329, u'relationships': {u'@context': {u'rdac': u'http://rdaregistry.info/Elements/c/', u'rdaw:replacedByWork': {u'@type': u'@id'}, u'rdaw': u'http://rdaregistry.info/Elements/w/', u'dc': u'http://purl.org/dc/elements/1.1/', u'rdaw:replacementOfWork': {u'@type': u'@id'}, u'xsd': u'http://www.w3.org/2001/XMLSchema#'}, u'@graph': [{u'dc:date': u'1999', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs-fake.er.usgs.gov/publication/rj17u', u'@type': u'rdac:Work'}, {u'dc:date': u'1997', u'dc:title': u'U.S. Geological Survey World Wide Web information', u'@id': u'http://pubs-fake.er.usgs.gov/publication/fs12196', u'@type': u'rdac:Work', u'rdaw:replacedByWork': u'http://pubs-fake.er.usgs.gov/publication/rj17u'}, {u'dc:date': u'1997', u'dc:title': u'U.S. Geological Survey World Wide Web information', u'@id': u'http://pubs-fake.er.usgs.gov/publication/fs12196', u'@type': u'rdac:Work', u'rdaw:replacedByWork': u'http://pubs-fake.er.usgs.gov/publication/rj17u'}, {u'dc:date': u'2000', u'rdaw:replacementOfWork': u'http://pubs-fake.er.usgs.gov/publication/rj17u', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs-fake.er.usgs.gov/publication/fs03700', u'@type': u'rdac:Work'}, {u'dc:date': u'2001', u'rdaw:replacementOfWork': u'http://pubs-fake.er.usgs.gov/publication/rj17u', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs-fake.er.usgs.gov/publication/fs03301', u'@type': u'rdac:Work'}, {u'dc:date': u'2003', u'rdaw:replacementOfWork': u'http://pubs-fake.er.usgs.gov/publication/rj17u', u'dc:title': u'U.S. Geological Survey World Wide Web Information', u'@id': u'http://pubs-fake.er.usgs.gov/publication/fs05503', u'@type': u'rdac:Work'}]}, u'productDescription': u'2 p.', u'publisherLocation': u'Reston, VA', u'contributors': {u'authors': [{u'corporation': True, u'rank': 1, u'contributorType': {u'text': u'Authors', u'id': 1}, u'organization': u'U.S. Geological Survey', u'contributorId': 128075, u'text': u'U.S. Geological Survey', u'id': 528496, u'usgs': False}]}, u'docAbstract': u'The U.S. Geological Survey (USGS) invites you to explore an earth science virtual library of digital information, publications, and data. The USGS Internet World Wide Web sites offer an array of information that reflects scientific research and monitoring programs conducted in the areas of natural hazards, environmental resources, and cartography. This list provides gateways to access a cross section of the digital information on the USGS World Wide Web sites.', u'details': [{u'Publication type:': u'Report'}, {u'Publication Subtype:': u'USGS Numbered Series'}, {u'Title:': u'U.S. Geological Survey World Wide Web Information'}, {u'Series title:': u'Fact Sheet'}, {u'Series number:': u'071-99'}, {u'Edition:': u'-'}, {u'Year Published:': u'1999'}, {u'Language:': u'ENGLISH'}, {u'Publisher:': u'U.S.Geological Survey'}, {u'Publisher location:': u'Reston, VA'}, {u'Contributing office(s):': u'U.S. Geological Survey'}, {u'Description:': u'2 p.'}], u'lastModifiedDate': u'2012-03-16T17:16:05.000', u'seriesTitle': {u'onlineIssn': u'2327-6932', u'text': u'Fact Sheet', u'id': 313, u'printIssn': u'2327-6916'}, u'publicationType': {u'text': u'Report', u'id': 18}, u'costCenters': [{u'text': u'U.S. Geological Survey', u'id': 595}], u'indexId': u'rj17u', u'formattedModifiedDateTime': u'March 16, 2012 17:16:05', u'publisher': u'U.S.Geological Survey', u'publicationYear': u'1999', u'language': u'ENGLISH', u'title': u'U.S. Geological Survey World Wide Web Information', u'displayToPublicDate': u'1994-01-01T00:00:00.000', u'publicationSubtype': {u'text': u'USGS Numbered Series', u'id': 5}, u'authorsListTyped': [{u'text': u'U.S. Geological Survey', u'type': u'corporation'}], u'usgsCitation': u'U.S. Geological Survey World Wide Web Information; 1999; FS; 071-99; Geological Survey (U.S.)'}
-    
+
 @step(r'I pass the JSON to extract_related_pub_info')
 def execute_supersedes_parsing(step):
     world.parse_result = extract_related_pub_info(world.mock_supersedes)
-    
+
 @step(r'I see a dictionary containing the preceding and superseding publications')
 def check_supersedes_parsing(step):
     expected = {'precede_info': [{'year': u'1997', 'id': u'fs12196', 'title': u'U.S. Geological Survey World Wide Web information'}, {'year': u'1997', 'id': u'fs12196', 'title': u'U.S. Geological Survey World Wide Web information'}], 'supersede_info': [{'year': u'2000', 'id': u'fs03700', 'title': u'U.S. Geological Survey World Wide Web Information'}, {'year': u'2001', 'id': u'fs03301', 'title': u'U.S. Geological Survey World Wide Web Information'}, {'year': u'2003', 'id': u'fs05503', 'title': u'U.S. Geological Survey World Wide Web Information'}], 'precede_len': 2, 'supersede_len': 3}

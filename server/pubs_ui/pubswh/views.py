@@ -290,7 +290,7 @@ def publication(index_id):
                         headers={"Content-Disposition": "attachment;filename=USGS_PW_" + pubdata['indexId'] + ".ris"})
     else:
         return render_template('pubswh/publication.html',
-                               indexID=index_id, 
+                               indexID=index_id,
                                pubdata=pubdata,
                                related_pubs=related_pubs
                                )

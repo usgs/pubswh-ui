@@ -6,8 +6,8 @@
 
 {% block main %}
 <main class="container-fluid">
-	<div class="space">
-	    <p class="breadcrumb">
+  <div class="space">
+      <p class="breadcrumb">
             <a href="{{ url_for('pubswh.index') }}" title="Pubs Warehouse Home">Pubs Warehouse Home</a>
             <span> > </span><a href="{{ url_for('pubswh.browse_types') }}" title="Browse USGS Publications">Browse</a>
             {% if pub_type %}<span> > </span><a href="{{ url_for("pubswh.browse_subtypes", pub_type=pub_type) }}" title="See subtypes in or a publication list for {{ pub_type }}">{{ pub_type }}</a>{% endif %}
@@ -16,9 +16,9 @@
             {% if pub_year %}<span> > </span><a href="{{ url_for("pubswh.browse_series_year", pub_type=pub_type, pub_subtype=pub_subtype, pub_series_name=series_title, year=pub_year ) }}" title="See list of publications in {{ pub_year }}">{{ pub_year }}</a>{% endif %}
         </p>
 
-	    <h1>Browse the USGS Publication Warehouse</h1>
-	    <h2>Publications in the Series {{ series_title }}</h2>
-	    <div class="fix">
+      <h1>Browse the USGS Publication Warehouse</h1>
+      <h2>Publications in the Series {{ series_title }}</h2>
+      <div class="fix">
             <ul>
                 {% if pubs_data %}
                     {% for publication in pubs_data %}
@@ -39,7 +39,7 @@
                     <li class="pubs-browse-list-theme">There are no publications to list in this area</li>
                 {% endif %}
             </ul>
-	    </div>
+      </div>
     </div>
 </main>
 {% endblock %}

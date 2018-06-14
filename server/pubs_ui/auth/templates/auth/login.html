@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block meta_data %}
-		<meta name="description" content="Log in to the Pubs Warehouse">
+    <meta name="description" content="Log in to the Pubs Warehouse">
 {% endblock %}
 
 {%  block title %}Log in to the Publications Warehouse{% endblock %}
@@ -10,26 +10,26 @@
 {% endblock %}
 
 {% block main %}
-	{% with messages = get_flashed_messages() %}
-  		{% if messages %}
-    		<ul class=flashes>
-				{% for message in messages %}
-					<li>{{ message }}</li>
-				{% endfor %}
-    		</ul>
-  		{% endif %}
-	{% endwith %}
-  	<h1>Sign In</h1>
+  {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+  {% endwith %}
+    <h1>Sign In</h1>
     <p>To access certain Publications Warehouse content and features, you need to log in using your Active Directory Username and Password.</p>
-  	{% if error %}
-    	<p class=error><strong>Error:</strong> {{ error }}
-  	{% endif %}
-  	<form style="display: inline;" action="" method="post" name="login">
-		{{ form.hidden_tag() }}
-		{{ form.username.label }} {{ form.username }}
-		{{ form.password.label }} {{ form.password }}
-		<button type="submit" class="btn">Log In</button>
-  	</form>
+    {% if error %}
+      <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
+    <form style="display: inline;" action="" method="post" name="login">
+    {{ form.hidden_tag() }}
+    {{ form.username.label }} {{ form.username }}
+    {{ form.password.label }} {{ form.password }}
+    <button type="submit" class="btn">Log In</button>
+    </form>
     <br>
     <br>
 {% endblock %}

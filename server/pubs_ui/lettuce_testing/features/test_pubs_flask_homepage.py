@@ -16,16 +16,16 @@ search_url = app.config['BASE_SEARCH_URL']
 def i_have_imitated_a_failing_search_service_from_pubs(step):
     world.search_url = search_url
     httpretty.enable()
-    httpretty.register_uri(httpretty.GET, 
-                           world.search_url, 
-                           content_type='application/json', 
+    httpretty.register_uri(httpretty.GET,
+                           world.search_url,
+                           content_type='application/json',
                            status=503
                            )
-    
+
 @step
 def i_created_a_flask_client_to_test_the_homepage_with_the_failing_service(step):
     world.client = app.test_client()
-    
+
 @step
 def i_access_the_homepage_url_with_the_failing_service_backend(step):
     world.index_url = '/'
@@ -33,13 +33,13 @@ def i_access_the_homepage_url_with_the_failing_service_backend(step):
         response = c.get(world.index_url)
     world.response_status_code = response.status_code
     world.expected = 200
-    
+
 @step
 def i_should_see_a_200_status_code_from_the_homepage(step):
     httpretty.disable()
     httpretty.reset()
     assert_equal(world.response_status_code, world.expected)
-    
+
 # Homepage responds if service is working
 @step
 def i_have_imitated_a_working_search_service_from_pubs(step):
@@ -73,20 +73,20 @@ def i_have_imitated_a_working_search_service_from_pubs(step):
                            status_code=200
                            )
 
-@step 
+@step
 def i_created_a_flask_client_to_test_the_homepage_with_the_working_service(step):
     world.client = app.test_client()
-    
+
 @ step
 def i_access_the_homepage_url_with_the_working_service(step):
     world.index_url = '/'
     with world.client as c:
         response = c.get(world.index_url)
     world.response_content = response.get_data()
-    
+
 @step
 def i_should_see_the_imitated_pubs_content_on_the_page(step):
     httpretty.disable()
     httpretty.enable()
     assert_in('Das Boot', world.response_content)
-    
+

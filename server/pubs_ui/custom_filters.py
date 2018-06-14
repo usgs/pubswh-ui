@@ -43,7 +43,7 @@ def display_publication_info(json_content):
                                                                             title=series_title_text,
                                                                             series_number=series_number
                                                                             )
-        full_pub_info = pub_info           
+        full_pub_info = pub_info
     elif series_title_value is not None and publication_type_text == 'Article':
         start_page = json_content.get('startPage', None)
         end_page = json_content.get('endPage', None)
@@ -62,7 +62,7 @@ def display_publication_info(json_content):
             pub_info = '{pub_info} {start_page}'.format(pub_info=pub_info, start_page=start_page)
         else:
             pub_info = pub_info
-            
+
         if end_page is not None:
             full_pub_info = '{pub_info}-{end_page}'.format(pub_info=pub_info, end_page=end_page)
         else:
@@ -80,7 +80,7 @@ def display_publication_info(json_content):
                                                                      get('largerWorkTitle', None)
                                                                      )
         else:
-            full_pub_info = pub_info    
+            full_pub_info = pub_info
     return full_pub_info
 
 

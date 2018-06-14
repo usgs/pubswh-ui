@@ -1,13 +1,13 @@
 {% extends 'pubswh/base.html' %}
 
 {% block head %}
-	<title>Application Site Map URLs</title>
+    <title>Application Site Map URLs</title>
 {% endblock head %}
 
 {% block main %}
-	<ul>
-	{% for app_url in app_urls %}
-		<li>{{ app_url }}</li>
-	{% endfor %}
-	</ul>
+    <ul>
+    {% for app_url in app_urls %}
+        <li>{{ app_url }}</li>
+    {% endfor %}
+    </ul>
 {% endblock main %}

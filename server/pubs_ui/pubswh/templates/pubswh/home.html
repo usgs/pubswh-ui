@@ -1,85 +1,85 @@
 {% extends 'pubswh/base.html' %}
 {% block head %}
-	<title>U.S. Geological Survey Publications Warehouse</title>
-	<meta name="description"
-		  content="The Publications warehouse contains over 150,000 publications that cover the 150 year history of the USGS">
-	{% include 'pubswh/meta.html' %}
+    <title>U.S. Geological Survey Publications Warehouse</title>
+    <meta name="description"
+          content="The Publications warehouse contains over 150,000 publications that cover the 150 year history of the USGS">
+    {% include 'pubswh/meta.html' %}
 {% endblock head %}
 
 {% block page_style %}
-	<link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet/dist/leaflet.css') }}">
-	<link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet-draw/dist/leaflet.draw.css') }}">
+    <link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet/dist/leaflet.css') }}">
+    <link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet-draw/dist/leaflet.draw.css') }}">
 {% endblock page_style %}
 
 {% block main %}
 
-	<main class="container-fluid">
+    <main class="container-fluid">
 
-		<article class="index_article">
+        <article class="index_article">
 
-			<section id="welcome">
-				<h1>USGS Publications Warehouse</h1>
-				<h4>The Pubs Warehouse provides access to over 150,000 publications written by USGS scientists over the
-					century-plus history of the bureau</h4>
-			</section>
+            <section id="welcome">
+                <h1>USGS Publications Warehouse</h1>
+                <h4>The Pubs Warehouse provides access to over 150,000 publications written by USGS scientists over the
+                    century-plus history of the bureau</h4>
+            </section>
 
-			<section id="search" class="no-margin">
-				{% include 'pubswh/search_form.html' %}
-			</section>
+            <section id="search" class="no-margin">
+                {% include 'pubswh/search_form.html' %}
+            </section>
 
-			<aside id="new_pubs">
+            <aside id="new_pubs">
 
-				<h3 id="new_pubs_title"><a id="new_pubs_title_link" href="{{ url_for('pubswh.new_pubs') }}">New
-					Publications by USGS Authors</a></h3>
+                <h3 id="new_pubs_title"><a id="new_pubs_title_link" href="{{ url_for('pubswh.new_pubs') }}">New
+                    Publications by USGS Authors</a></h3>
 
-				{% for recent_publication in recent_publications %}
-					<div class="pubs-thumbnail"><img id="thumbnail" src="
-							{{ wsgi_str }}{% if recent_publication['displayLinks']['Thumbnail'][0]['url'] %}{{ url_for('images', filename=recent_publication['displayLinks']['Thumbnail'][0]['url'], width=50) }}{% else %}{{ url_for('pubswh.images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=50) }}{% endif %}"
-													 alt="thumbnail"/></div>
-					<div class="recent-pub-title">
-						<a href="{{ url_for('pubswh.publication', index_id = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
-					</div>
-					<div class="recent-pub-info">
-						{{ recent_publication|display_pub_info }}
-					</div>
-				{% endfor %}
+                {% for recent_publication in recent_publications %}
+                    <div class="pubs-thumbnail"><img id="thumbnail" src="
+                            {{ wsgi_str }}{% if recent_publication['displayLinks']['Thumbnail'][0]['url'] %}{{ url_for('images', filename=recent_publication['displayLinks']['Thumbnail'][0]['url'], width=50) }}{% else %}{{ url_for('pubswh.images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=50) }}{% endif %}"
+                                                     alt="thumbnail"/></div>
+                    <div class="recent-pub-title">
+                        <a href="{{ url_for('pubswh.publication', index_id = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
+                    </div>
+                    <div class="recent-pub-info">
+                        {{ recent_publication|display_pub_info }}
+                    </div>
+                {% endfor %}
 
-			</aside>
+            </aside>
 
 
-			<section id="twitter">
-				<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/USGS_Pubs"
-				   data-widget-id="541086703717347328">Tweets by @USGS_Pubs</a>
-				<script>!function (d, s, id) {
-					var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
-					if (!d.getElementById(id)) {
-						js = d.createElement(s);
-						js.id = id;
-						js.src = p + "://platform.twitter.com/widgets.js";
-						fjs.parentNode.insertBefore(js, fjs);
-					}
-				}(document, "script", "twitter-wjs");</script>
-			</section>
+            <section id="twitter">
+                <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/USGS_Pubs"
+                   data-widget-id="541086703717347328">Tweets by @USGS_Pubs</a>
+                <script>!function (d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                    if (!d.getElementById(id)) {
+                        js = d.createElement(s);
+                        js.id = id;
+                        js.src = p + "://platform.twitter.com/widgets.js";
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }
+                }(document, "script", "twitter-wjs");</script>
+            </section>
 
-		</article>
-	</main>
+        </article>
+    </main>
 
 {% endblock %}
 
 {% block url %}
-	<a href="{{ url_for('pubswh.index') }}">http://pubs.er.usgs.gov{{ url_for('pubswh.index') }}</a>{% endblock %}
+    <a href="{{ url_for('pubswh.index') }}">http://pubs.er.usgs.gov{{ url_for('pubswh.index') }}</a>{% endblock %}
 
 {% block page_footer_script %}
 
-	{% include "pubswh/search_form_script.html" %}
-	<!-- This basically catches links that were built on the old search parameter url design, which was all in the "fragment" after the hash -->
-	<script type="text/javascript">
-		//grab the contents of the fragment
-		var searchstring = window.location.href.split('#')[1];
-		//pass the contents of the fragment to the legacysearch endpoint for further munging and redirection
-		if (searchstring) {
-			window.location = "/legacysearch/" + searchstring;
-		}
-	</script>
+    {% include "pubswh/search_form_script.html" %}
+    <!-- This basically catches links that were built on the old search parameter url design, which was all in the "fragment" after the hash -->
+    <script type="text/javascript">
+        //grab the contents of the fragment
+        var searchstring = window.location.href.split('#')[1];
+        //pass the contents of the fragment to the legacysearch endpoint for further munging and redirection
+        if (searchstring) {
+            window.location = "/legacysearch/" + searchstring;
+        }
+    </script>
 
 {% endblock page_footer_script %}

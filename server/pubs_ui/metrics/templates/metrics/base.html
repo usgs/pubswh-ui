@@ -3,22 +3,22 @@
 {% block title %}Google Analytics for Publications Warehouse{%  endblock %}
 
 {% block head_script %}
-	<link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='font-awesome/css/font-awesome.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('bower.static', filename='font-awesome/css/font-awesome.min.css') }}" />
 
-	<link rel="stylesheet" href="{{ 'metrics.css' | asset_url }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'metrics.css' | asset_url }}" type="text/css" />
 
-	{% block config_initialize_script %}
-		<script>
-			var CONFIG = {};
-		</script>
-	{% endblock %}
+    {% block config_initialize_script %}
+        <script>
+            var CONFIG = {};
+        </script>
+    {% endblock %}
 {% endblock %}
 
 {% block main %}{% endblock %}
 
 {% block page_script %}
-	<script type="text/javascript" src="{{ url_for('bower.static', filename='moment/min/moment.min.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('bower.static', filename='dygraphs/dygraph-combined.js')}}"></script>
-	<script type="text/javascript" src="{{ url_for('bower.static', filename='jquery/dist/jquery.min.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('bower.static', filename='underscore/underscore-min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('bower.static', filename='moment/min/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('bower.static', filename='dygraphs/dygraph-combined.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('bower.static', filename='jquery/dist/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('bower.static', filename='underscore/underscore-min.js') }}"></script>
 {% endblock %}

@@ -307,18 +307,18 @@ def pull_feed(feed_url):
 
 
 class SearchPublications(object):
-    
+
     """
     Methods for executing various types
     of searches against the backend
     Pubs API.
-    
+
     :param str search_url: URL without any search parameters appended
     """
-    
+
     def __init__(self, search_url):
         self.search_url = search_url
-        
+
     def get_pubs_search_results(self, params=None):
         """
         Searches Pubs API for a specified query parameter
@@ -469,7 +469,7 @@ def create_store_info(publication_resp):
     :param requests.Response publication_resp: response object for a publication returned from a GET request on
                                                the /publication service.
     :return: dict containing two items:
-        'context_id': the index (prod) ID of the context pub. Included as 
+        'context_id': the index (prod) ID of the context pub. Included as
             confirmation only; identical to the 'context_id' param.
         'offers': the object that contains a representations of the USGS store offer for the publication
     """
@@ -490,15 +490,15 @@ def create_store_info(publication_resp):
     # The service returns JSON, which is converted into Python structures.
     #
     #
-    # Concerning the sense of the terminology, the occurrence of 
-    # '"@type": "succeeding"' or '"@type": "preceding"' refers to the 
-    # relationship of the linked pub TO the context pub. 
+    # Concerning the sense of the terminology, the occurrence of
+    # '"@type": "succeeding"' or '"@type": "preceding"' refers to the
+    # relationship of the linked pub TO the context pub.
     #
-    # To put it another way, the "@type" relationship descriptor assumes 
-    # that the linked pub is the SUBJECT, and the context pub is the OBJECT. 
-    # This can be subtly confusing for those of us who have absorbed the RDF 
+    # To put it another way, the "@type" relationship descriptor assumes
+    # that the linked pub is the SUBJECT, and the context pub is the OBJECT.
+    # This can be subtly confusing for those of us who have absorbed the RDF
     # conventions about framing the predicate from the viewpoint of the subject.
-    # 
+    #
     # Just think of the @type as saying "This linked pub is ___ the context pub."
     if product is not None:
         # check if the product is in stock or not
@@ -528,18 +528,18 @@ def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):
     Accepts publication data JSON for the desired context publication,
     extracts the context publication's index_id, calls precedes_supersedes_url
     for that index_id. If the current publication supersedes, and/or
-    is superseded by, any other publications, inserts summary info about 
-    those pubs into the passed context_pubdata. 
+    is superseded by, any other publications, inserts summary info about
+    those pubs into the passed context_pubdata.
 
 
-    context_pubdata: the Python decode of the JSON representation of the 
+    context_pubdata: the Python decode of the JSON representation of the
         context publication.  the most important elements here is called "interactions"
     supersedes_service_url: the endpoint of the service from which info about
         related items should be obtained
-    param pubs_base_url: the url needed to compose a publication URL given 
+    param pubs_base_url: the url needed to compose a publication URL given
         a known prod_id
     """
-    
+
     base_id_url = urljoin(url_root, 'publication/')
     return_pubdata = deepcopy(context_pubdata)
     index_id = context_pubdata['indexId']
@@ -548,7 +548,7 @@ def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):
     # this LITERAL is probably OK for this particular use. However, it
     # needs to be exported to a configuration.
     pub_type = 'rdac:Work'
-    
+
     # obtain data from legacy api (down to just store data now)
     # pre_super = legacy_api_info(index_id, supersedes_service_url)
     pre_super = {"offers": None}
@@ -688,13 +688,13 @@ def has_excel(pubdata):
 def sort_list_of_dicts(list_to_be_sorted, key_name, reverse=False):
     """
     Sort a list of dictionaries by a specified key.
-    
+
     :param list list_to_be_sorted: list of dictionaries to be sorted
     :param str key_name: key in the dictionaries to be sorted by
     :param bool reverse: should the dictionaries be sorted in descending order
     :return: sorted list of dictionaries by specified key
     :rtype: list
-    
+
     """
     new_list = sorted(list_to_be_sorted, key=itemgetter(key_name), reverse=reverse)
     return new_list
@@ -702,16 +702,16 @@ def sort_list_of_dicts(list_to_be_sorted, key_name, reverse=False):
 
 def extract_related_pub_info(pubdata):
     """
-    Take some json-ld publication and extract the 
+    Take some json-ld publication and extract the
     information for preceding and superseding
     publications. If no preceding or superseding
     information is present, empty lists are returned
     for each.
-    
+
     :param dict pubdata: publication JSON data
     :return: a dictionary containing a list containing dictionaries of related publication information
     :rtype: dict
-    
+
     """
     preceding_info = []  # this list may have multiple elements in it
     superceding_info = []  # this list should never have more than 1 element in it

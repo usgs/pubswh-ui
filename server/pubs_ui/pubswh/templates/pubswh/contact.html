@@ -7,32 +7,32 @@
 
 {% block main %}
 <main class="container-fluid">
-	    <h1>Contact us!</h1>
-	      <h2>Contact the Publications Warehouse Team</h2>
-	  <form id="contactForm" action="{{ url_for('pubswh.contact') }}" method=post>
-	    {{ contact_form.hidden_tag() }}
-		
-		{% for name_error in contact_form.name.errors %}
-			{{ name_error }}
-		{% endfor %}
-	    {{ contact_form.name(placeholder="Name") }}
-		
-		{% for email_error in contact_form.email.errors %}
-			{{ email_error }}
-		{% endfor %}
-	    {{ contact_form.email(placeholder="Email") }}
+        <h1>Contact us!</h1>
+          <h2>Contact the Publications Warehouse Team</h2>
+      <form id="contactForm" action="{{ url_for('pubswh.contact') }}" method=post>
+        {{ contact_form.hidden_tag() }}
 
-	    {{ contact_form.originating_page(placeholder="Originating Page") }}
-	
-	    {{ contact_form.message(placeholder="Write a Message") }}
-	    
-	    {% for captcha_error in contact_form.recaptcha.errors %}
-	    	{{ captcha_error }}
-	    {% endfor %}
-	    {{ contact_form.recaptcha }}
+        {% for name_error in contact_form.name.errors %}
+            {{ name_error }}
+        {% endfor %}
+        {{ contact_form.name(placeholder="Name") }}
 
-	    {{ contact_form.submit }}
-	  </form>
+        {% for email_error in contact_form.email.errors %}
+            {{ email_error }}
+        {% endfor %}
+        {{ contact_form.email(placeholder="Email") }}
+
+        {{ contact_form.originating_page(placeholder="Originating Page") }}
+
+        {{ contact_form.message(placeholder="Write a Message") }}
+
+        {% for captcha_error in contact_form.recaptcha.errors %}
+            {{ captcha_error }}
+        {% endfor %}
+        {{ contact_form.recaptcha }}
+
+        {{ contact_form.submit }}
+      </form>
 </main>
 {% endblock %}
 {% block url %}<a href="{{ url_for('pubswh.contact') }}">http://pubs.er.usgs.gov{{ url_for('pubswh.contact') }}</a>{% endblock %}
