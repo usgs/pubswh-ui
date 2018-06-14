@@ -3,11 +3,11 @@
 /* global $ */
 /* global Wkt */
 
-var PUBS_WH = PUBS_WH || {};
+var PUBS_WH = window.PUBS_WH = window.PUBS_WH || {};
 /*
  * Creates a Leaflet map and controls to draw a search box and to update an input element
  * when a box has been drawn or cleared.
- * 
+ *
  * @param mapDivId {String} id of the div where the search map will be created
  * @param $geomInput {Jquery element} - input element whose value will be updated when
  *        a polygon is drawn on the map.
@@ -15,12 +15,12 @@ var PUBS_WH = PUBS_WH || {};
  */
 PUBS_WH.createSearchMap = function(mapDivId, $geomInput) {
 	"use strict";
-	
+
 	var SHAPE_OPTIONS = {
 			color: '#ff0000',
 			fill : true
 	};
-	
+
 	var baseLayers = {
 		"Topographic" : L.esri.basemapLayer('Topographic'),
 		"Streets" : L.esri.basemapLayer('Streets'),
@@ -32,13 +32,13 @@ PUBS_WH.createSearchMap = function(mapDivId, $geomInput) {
 	};
 
 	var searchFeature = new L.FeatureGroup();
-	
+
 	var map = L.map(mapDivId, {
 		layers : [baseLayers.Topographic]
 	});
-	
+
 	// If $geomInput has a value, then add that feature to the feature group.
-	var initialGeomVal = $geomInput.val();	
+	var initialGeomVal = $geomInput.val();
 	var wkt;
 	if (initialGeomVal) {
 		wkt = new Wkt.Wkt();
@@ -50,15 +50,15 @@ PUBS_WH.createSearchMap = function(mapDivId, $geomInput) {
 
 	// Add event handlers on the searchFeature layer to update $geomInput
 	searchFeature.on('layeradd', function(e) {
-		var wkt = new Wkt.Wkt();		
+		var wkt = new Wkt.Wkt();
 		wkt.fromObject(e.layer);
 		$geomInput.val(wkt.write());
 	});
-	
+
 	searchFeature.on('layerremove', function(e) {
 		$geomInput.val('');
 	});
-	
+
 	// Create controls
 	var drawControl = new L.Control.Draw({
 		draw : {
@@ -78,11 +78,11 @@ PUBS_WH.createSearchMap = function(mapDivId, $geomInput) {
 			remove : false
 		}
 	});
-	
+
 	var deleteFeatureControl = new PUBS_WH.ClearFeatureControl(searchFeature, {});
 
 	// Add controls
-	L.control.layers(baseLayers, overlayLayers).addTo(map);	
+	L.control.layers(baseLayers, overlayLayers).addTo(map);
 	drawControl.addTo(map);
 	deleteFeatureControl.addTo(map);
 

@@ -1,3 +1,4 @@
+import json
 import logging
 
 from flask import Flask, request
@@ -49,15 +50,25 @@ cache = Cache(app, config=app.config.get('CACHE_CONFIG'))
 # Creates the bower blueprint
 bower = Bower(app)
 
-import assets
+# Load static assets manifest file, which maps source file names to the
+# corresponding versioned/hashed file name.
+_manifest_path = app.config.get('ASSET_MANIFEST_PATH')
+if _manifest_path:
+    with open(_manifest_path, 'r') as f:
+        app.config['ASSET_MANIFEST'] = json.loads(f.read())
+
+# Enable CORS, if specified in the configuration.
+if app.config.get('FLASK_CORS'):
+    from flask_cors import CORS
+    CORS(app)
 
 from auth.views import auth
 from manager.views import manager
 from pubswh.views import pubswh
 from metrics.views import metrics
+from . import filters  # pylint: disable=C0413
 
 app.register_blueprint(auth)
 app.register_blueprint(manager, url_prefix='/manager')
 app.register_blueprint(metrics, url_prefix='/metrics')
 app.register_blueprint(pubswh)
-

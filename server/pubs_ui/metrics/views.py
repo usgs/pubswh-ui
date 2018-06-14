@@ -93,8 +93,3 @@ def gadata():
                 break
 
     return response
-
-
-
-
-

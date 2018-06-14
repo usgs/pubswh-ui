@@ -4,7 +4,7 @@
 /* global CONFIG */
 /* global console */
 
-var PUBS_WH = PUBS_WH || {};
+var PUBS_WH = window.PUBS_WH = window.PUBS_WH || {};
 
 /*
  * Initially creates inputs to be be used for the advanced search form.

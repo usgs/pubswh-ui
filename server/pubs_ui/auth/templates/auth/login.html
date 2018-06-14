@@ -6,9 +6,7 @@
 {%  block title %}Log in to the Publications Warehouse{% endblock %}
 
 {% block page_style %}
-	{% assets "auth_style" %}
-		<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
-	{% endassets %}
+    <link rel="stylesheet" href="{{ 'auth.css' | asset_url }}" type="text/css" />
 {% endblock %}
 
 {% block main %}

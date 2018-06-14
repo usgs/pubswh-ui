@@ -6,9 +6,4 @@
 <script type="text/javascript" src="{{ url_for('bower.static', filename='moment/min/moment.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('bower.static',filename='eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}">
 </script>
-
-{% assets "js_advanced_search" %}
-	<script type="text/javascript" src="{{ ASSET_URL }}"></script>
-{% endassets %}
-
-</script>
+<script type="text/javascript" src="{{ 'scripts/advanced_search.js' | asset_url }}"></script>

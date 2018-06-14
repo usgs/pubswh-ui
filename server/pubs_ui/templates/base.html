@@ -8,9 +8,7 @@
 
 		<title>{% block title %}USGS Publications Warehouse{% endblock %}</title>
 		{% block page_style %}
-			{% assets "usgs_style" %}
-				<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
-			{% endassets %}
+			<link rel="stylesheet" href="{{ 'usgs_style.css' | asset_url }}" type="text/css" />
 		{% endblock %}
 		{% block head_script %}
 		{% endblock %}
@@ -62,7 +60,7 @@
 				{% endblock %}
 			</footer>
 		</div>
-		
+
 		{% block page_script %}{% endblock %}
 
 	</body>

@@ -4,6 +4,13 @@
 /* global _ */
 /* global $ */
 
+// Dummy
+module.exports = null;
+
+require('./analyticsData.js');
+require('./analyticsGraph.js');
+require('./dataUtils.js');
+
 (function() {
 	"use strict";
 

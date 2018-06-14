@@ -3,33 +3,21 @@ language: python
 python:
   - "2.7"
 
+addons:
+  firefox: "latest"
+
 before_install:
   - sudo apt-get install lcov
-  - nvm install 6.11.4
+  - nvm install $(python -c "import json; print(json.loads(open('./assets/package.json').read())['engines']['node'])")
 
 install:
-  - pip install -r requirements.txt
-  - pip install coveralls
-  - npm install
-  - node_modules/bower/bin/bower install
+  - make env
   - gem install coveralls-lcov
 
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-  - mkdir instance
-  - echo "SECRET_KEY = 'key-for-jenkins';ASSETS_AUTO_BUILD = True" > instance/config.py
+  - mkdir coverage
 
 script:
-  - nosetests  --with-coverage --cover-package=pubs_ui
-  - node_modules/karma/bin/karma start tests/js/manager/karma.conf.js
-  - node_modules/karma/bin/karma start tests/js/metrics/karma.conf.js
-  - node_modules/karma/bin/karma start tests/js/pubswh/karma.conf.js
-
-after_success:
-  cp coverage/manager/Firefox*/lcov.info coverage/manager.info;
-  cp coverage/metrics/Firefox*/lcov.info coverage/metrics.info;
-  cp coverage/pubswh/Firefox*/lcov.info coverage/pubswh.info;
-  lcov --add-tracefile coverage/manager.info --add-tracefile coverage/metrics.info --add-tracefile coverage/pubswh.info --output-file coverage/combined.info;
-  coveralls-lcov -v -n coverage/combined.info > coverage/combined.json;
-  coveralls --merge=coverage/combined.json;
+  - make test coveralls

@@ -6,7 +6,7 @@
 /* global $ */
 /* global _ */
 
-var METRICS = METRICS || {};
+var METRICS = window.METRICS = window.METRICS || {};
 METRICS.analyticsData = (function() {
 	"use strict";
 
