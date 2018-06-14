@@ -37,10 +37,14 @@
     "leafletPip": true,
     "$": true,
     "_": true,
+    "Backbone": true,
+    "Wkt": true,
     "define": true,
     "moment": true,
+    "sinon": true,
     "METRICS": true,
     "Dygraph": true,
-    "CONFIG": true
+    "CONFIG": true,
+    "PUBS_WH": true
   }
 }

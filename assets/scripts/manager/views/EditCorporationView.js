@@ -1,31 +1,28 @@
-/* jslint browser: true */
-/* global define */
-
 define([
-	'backbone.stickit',
-	'views/BaseView',
-	'hbs!hb_templates/editCorporation'
+    'backbone.stickit',
+    'views/BaseView',
+    'hbs!hb_templates/editCorporation'
 ], function(stickit, BaseView, hbTemplate) {
-		/*
-	 * @constructs
-	 * @param {Object} options
-	 * 		@prop {Jquery selector} el
-	 * 		@prop {ContributorModel} model
-	 */
-	var view = BaseView.extend({
-		template : hbTemplate,
+        /*
+     * @constructs
+     * @param {Object} options
+     *      @prop {Jquery selector} el
+     *      @prop {ContributorModel} model
+     */
+    var view = BaseView.extend({
+        template : hbTemplate,
 
-		bindings : {
-			'#organization' : 'organization'
-		},
+        bindings : {
+            '#organization' : 'organization'
+        },
 
-		render : function() {
-			BaseView.prototype.render.apply(this, arguments);
-			this.stickit();
-			return this;
-		}
+        render : function() {
+            BaseView.prototype.render.apply(this, arguments);
+            this.stickit();
+            return this;
+        }
 
-	});
+    });
 
-	return view;
+    return view;
 });

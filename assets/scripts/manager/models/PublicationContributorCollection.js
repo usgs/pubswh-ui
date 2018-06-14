@@ -1,12 +1,10 @@
-/* jslint browser: true */
-
 define([
-	'models/PublicationContributorModel',
-	'models/OrderedCollection'
+    'models/PublicationContributorModel',
+    'models/OrderedCollection'
 ], function(PublicationContributorModel, OrderedCollection) {
-		var collection = OrderedCollection.extend({
-		model : PublicationContributorModel
-	});
+        var collection = OrderedCollection.extend({
+        model : PublicationContributorModel
+    });
 
-	return collection;
+    return collection;
 });

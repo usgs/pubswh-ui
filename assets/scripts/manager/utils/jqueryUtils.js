@@ -1,21 +1,18 @@
-/* jslint browser: true */
-/* global define */
-
 define([
-	'jquery'
+    'jquery'
 ], function($) {
-		var utils = (function() {
-		var self = {};
+        var utils = (function() {
+        var self = {};
 
-		self.createDivInContainer = function($container) {
-			var $newDiv = $('<div />');
-			$container.append($newDiv);
+        self.createDivInContainer = function($container) {
+            var $newDiv = $('<div />');
+            $container.append($newDiv);
 
-			return $newDiv;
-		};
+            return $newDiv;
+        };
 
-		return self;
-	})();
+        return self;
+    })();
 
-	return utils;
+    return utils;
 });

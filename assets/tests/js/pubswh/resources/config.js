@@ -1,3 +1,3 @@
-var CONFIG = {
-	lookupUrl : 'https://fake.com/lookups/'
+window.CONFIG = {
+    lookupUrl : 'https://fake.com/lookups/'
 };

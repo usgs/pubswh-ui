@@ -3,7 +3,7 @@
 var sourcePreprocessors = ['coverage'];
 function isDebug(argument) {
     return argument === '--debug';
-};
+}
 if (process.argv.some(isDebug)) {
     sourcePreprocessors = [];
 }
@@ -22,20 +22,20 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-    	'bower_components/moment/min/moment.min.js',
-		'bower_components/underscore/underscore-min.js',
-		'bower_components/jquery/dist/jquery.js',
-		'tests/js/metrics/resources/config.js',
-		'scripts/metrics/*.js',
-		'tests/js/metrics/*.js'
-		],
+        'bower_components/moment/min/moment.min.js',
+        'bower_components/underscore/underscore-min.js',
+        'bower_components/jquery/dist/jquery.js',
+        'tests/js/metrics/resources/config.js',
+        'scripts/metrics/*.js',
+        'tests/js/metrics/*.js'
+        ],
 
 
     // list of files to exclude
     exclude: [
         'scripts/metrics/pubGraphController.js',
-		'scripts/metrics/pubsAcquisitionGraphController.js',
-		'scripts/metrics/pubsGraphController.js'
+        'scripts/metrics/pubsAcquisitionGraphController.js',
+        'scripts/metrics/pubsGraphController.js'
     ],
 
 

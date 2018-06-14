@@ -3,7 +3,7 @@
 var sourcePreprocessors = ['coverage'];
 function isDebug(argument) {
     return argument === '--debug';
-};
+}
 if (process.argv.some(isDebug)) {
     sourcePreprocessors = [];
 }

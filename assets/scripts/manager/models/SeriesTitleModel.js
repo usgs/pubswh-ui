@@ -1,19 +1,16 @@
-/* jslint browser: true */
-/* global define */
-
 define([
-	'backbone',
-	'module'
+    'backbone',
+    'module'
 ], function(Backbone, module) {
-	var model = Backbone.Model.extend({
+    var model = Backbone.Model.extend({
 
-		urlRoot : module.config().scriptRoot + '/manager/services/publicationSeries',
+        urlRoot : module.config().scriptRoot + '/manager/services/publicationSeries',
 
-		defaults : {
-			'active' : true
-		}
+        defaults : {
+            'active' : true
+        }
 
-	});
+    });
 
-	return model;
+    return model;
 });
