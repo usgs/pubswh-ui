@@ -1,6 +1,3 @@
-/* jslint browser: true */
-/* global define */
-
 define([
 	'handlebars',
 	'loglevel',
@@ -14,13 +11,12 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/contributorTabRow'
 ], function(Handlebars, log, _, $, jqueryUi, select2, module, stickit, DynamicSelect2, BaseView, hb_template) {
-	'use strict';
 	var view = BaseView.extend({
 
 		bindings : {
 			'.affiliation-input' : {
 				observe : 'affiliations',
-				onGet : function(value, options) {
+				onGet : function(value) {
 					var displayText;
 					if (value && value.length > 0) {
 						var stagingText = _.pluck(value, 'text');
@@ -52,7 +48,7 @@ define([
 		 *     @prop {PublicationContributorModel} model
 		 *     @prop {PublicationContributorCollection} collection
 		 */
-		initialize : function(options) {
+		initialize : function() {
 			BaseView.prototype.initialize.apply(this, arguments);
 
 			this.context.contributorId = this.model.get('contributorId');
@@ -102,7 +98,7 @@ define([
 			this.collection.updateModelRank(this.model, newIndex + 1);
 		},
 
-		deleteRow : function(ev) {
+		deleteRow : function() {
 			log.debug('Delete contributor ' + this.model.get('text'));
 			this.collection.remove(this.model);
 		},

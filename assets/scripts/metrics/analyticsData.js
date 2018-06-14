@@ -1,16 +1,6 @@
-/* jslint browser: true */
-/* global gapi */
-/* global Promise */
-/* global moment */
-/* global CONFIG */
-/* global $ */
-/* global _ */
-
 var METRICS = window.METRICS = window.METRICS || {};
 METRICS.analyticsData = (function() {
-	'use strict';
-
-	var DATE_FORMAT = 'YYYY-MM-DD';
+		var DATE_FORMAT = 'YYYY-MM-DD';
 	var MONTH_DIM_FORMAT = 'YYYYMM';
 	var DAY_DIM_FORMAT = 'YYYYMMDD';
 	var BATCH_FETCH_ENDPOINT = CONFIG.JSON_LD_ID_BASE_URL + 'metrics/gadata/';

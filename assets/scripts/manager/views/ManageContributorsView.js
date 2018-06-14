@@ -1,6 +1,3 @@
-/* jslint browser: true */
-/* global define */
-
 define([
 	'underscore',
 	'select2',
@@ -12,9 +9,7 @@ define([
 	'views/EditCorporationView',
 	'hbs!hb_templates/manageContributors'
 ], function(_, $select2, DynamicSelect2, $utils, BaseView, AlertView, EditPersonView, EditCorporationView, hbTemplate) {
-	'use strict';
-
-	var DEFAULT_SELECT2_OPTIONS = {
+		var DEFAULT_SELECT2_OPTIONS = {
 		theme : 'bootstrap'
 	};
 
@@ -38,7 +33,7 @@ define([
 			'click .create-new-btn' : 'resetContributorView'
 		},
 
-		initialize : function(options) {
+		initialize : function() {
 			BaseView.prototype.initialize.apply(this, arguments);
 			if (!this.model.isNew()) {
 				this.initialFetchPromise = this.model.fetch();

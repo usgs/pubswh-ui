@@ -6,9 +6,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/editCorporation'
 ], function(stickit, BaseView, hbTemplate) {
-	'use strict';
-
-	/*
+		/*
 	 * @constructs
 	 * @param {Object} options
 	 * 		@prop {Jquery selector} el

@@ -5,9 +5,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/geospatial'
 ], function(stickit, BaseView, hb_template) {
-	'use strict';
-
-	var view = BaseView.extend({
+		var view = BaseView.extend({
 		template : hb_template,
 
 		bindings : {

@@ -4,9 +4,7 @@ define([
 	'backbone',
 	'module'
 ], function(Backbone, module) {
-	'use strict';
-
-	var model = Backbone.Model.extend({
+		var model = Backbone.Model.extend({
 
 		comparator : 'rank',
 

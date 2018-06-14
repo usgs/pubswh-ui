@@ -7,9 +7,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/cataloging'
 ], function(bootstrap, datetimepicker, stickit, BaseView, hb_template) {
-	'use strict';
-
-	var view = BaseView.extend({
+		var view = BaseView.extend({
 
 		template : hb_template,
 

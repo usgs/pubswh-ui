@@ -4,9 +4,7 @@
 /* global CONFIG */
 
 $(document).ready(function() {
-	'use strict';
-
-	var TOGGLE_BTN_SHOW_TEXT = 'Show results on a map';
+		var TOGGLE_BTN_SHOW_TEXT = 'Show results on a map';
 	var TOGGLE_BTN_HIDE_TEXT = 'Hide results on a map';
 
 	var $extentsMapContainer = $('#extents-map-section');

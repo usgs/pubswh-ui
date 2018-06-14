@@ -1,13 +1,9 @@
-/* jslint browser: true */
-
 define([
 	'bootstrap',
 	'views/BaseView',
 	'hbs!hb_templates/warningDialog'
 ], function(bootstrap, BaseView, hbTemplate) {
-	'use strict';
-
-	var view = BaseView.extend({
+		var view = BaseView.extend({
 		template : hbTemplate,
 
 		events : {

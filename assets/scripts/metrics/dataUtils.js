@@ -5,9 +5,7 @@
 var METRICS = window.METRICS = window.METRICS || {};
 
 METRICS.dataUtils = (function() {
-	'use strict';
-
-	var self = {};
+		var self = {};
 
 	/*
 	 * @param {moment} forMoment - The function will return a full year range where the end will be the previous

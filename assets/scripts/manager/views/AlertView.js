@@ -1,14 +1,10 @@
-/* jslint browser: true */
-
 define([
 	'handlebars',
 	'bootstrap',
 	'views/BaseView',
 	'text!hb_templates/alert.hbs'
 ], function(Handlebars, bootstrap, BaseView, hbTemplate) {
-	'use strict';
-
-	var view = BaseView.extend({
+		var view = BaseView.extend({
 
 		ALERT_KINDS : {
 			success : 'alert-success',
@@ -22,7 +18,7 @@ define([
 		/*
 		 * @params {String} el - jquery selector where to render the alert
 		 */
-		initialize : function(options) {
+		initialize : function() {
 			BaseView.prototype.initialize.apply(this, arguments);
 			this.context.alertKind = '';
 			this.context.message = '';

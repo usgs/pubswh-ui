@@ -1,5 +1,3 @@
-/* jslint browser:true */
-
 define([
 	'jquery',
 	'underscore',
@@ -13,9 +11,7 @@ define([
 	'hbs!hb_templates/manageAffiliations'
 ], function($, _, stickit, bootstrap, BaseView, AlertView,
 			AffiliationModel, CostCenterCollection, OutsideAffiliationCollection, hbTemplate) {
-	'use strict';
-
-	var DEFAULT_SELECT2_OPTIONS = {
+		var DEFAULT_SELECT2_OPTIONS = {
 		allowClear : true,
 		theme : 'bootstrap'
 	};
@@ -54,7 +50,7 @@ define([
 			'#affiliation-active-input' : 'active'
 		},
 
-		initialize : function(options) {
+		initialize : function() {
 			BaseView.prototype.initialize.apply(this, arguments);
 
 			// Create child views
@@ -115,7 +111,7 @@ define([
 			this.$(ERRORS_SEL).html('');
 		},
 
-		enableAffiliationSelect : function(ev) {
+		enableAffiliationSelect : function() {
 			var self = this;
 			this.$(CREATE_EDIT_CONTAINER).show();
 			this.affiliationIsCostCenter = this._isCostCenterSelected();
@@ -157,19 +153,19 @@ define([
 			}
 		},
 
-		showCreateNewAffiliation : function(ev) {
+		showCreateNewAffiliation : function() {
 			this.model.clear();
 			this.$(DELETE_BUTTON_SEL).prop('disabled', true);
 			this.showEditSection();
 		},
 
-		clearPage : function(ev) {
+		clearPage : function() {
 			this.hideEditSection();
 			this.model.clear();
 			this.router.navigate('affiliation', {trigger : true});
 		},
 
-		resetFields : function(ev) {
+		resetFields : function() {
 			var self = this;
 			this.affiliationIsCostCenter = this._isCostCenterSelected();
 			var modelId = this.model.get('id');
@@ -203,7 +199,7 @@ define([
 			});
 		},
 
-		deleteAffiliation : function(ev) {
+		deleteAffiliation : function() {
 			var self = this;
 			var affiliationName = this.model.get('text');
 			var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
@@ -224,7 +220,7 @@ define([
 				});
 		},
 
-		saveAffiliation : function(ev) {
+		saveAffiliation : function() {
 			var self = this;
 			var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
 			var $errorDiv = this.$(ERRORS_SEL);

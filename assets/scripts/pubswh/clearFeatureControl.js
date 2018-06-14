@@ -18,7 +18,7 @@ PUBS_WH.ClearFeatureControl = L.Control.extend({
 		L.Util.setOptions(this, options);
 	},
 
-	onAdd: function(map) {
+	onAdd: function() {
 		var container = L.DomUtil.create('div', 'leaflet-clear-control');
 		L.DomUtil.addClass(container, 'leaflet-bar');
 
@@ -31,7 +31,7 @@ PUBS_WH.ClearFeatureControl = L.Control.extend({
 		return container;
 	},
 
-	onRemove: function(map) {
+	onRemove: function() {
 		L.DomEvent.removeListener(this.button, 'click', this._removeFeature, this);
 	},
 

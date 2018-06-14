@@ -1,5 +1,3 @@
-/* jslint browser: true */
-/* global define */
 define([
 	'handlebars',
 	'jquery',
@@ -14,9 +12,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/bibliodata'
 ], function(Handlebars, $, _, select2, tinymce, module, stickit, DynamicSelect2, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate) {
-	'use strict';
-
-	var view = BaseView.extend({
+		var view = BaseView.extend({
 
 		// Because we are using select2 for the menus, we need to use the select2:select and select2:unselect events to update
 		// the model. We can't use the change event because we must trigger this event when programatically updating the view to
@@ -71,7 +67,7 @@ define([
 		 *      @prop {PublicationModel} model
 		 *      @prop {String} el - jquery selector where this view is rendered
 		 */
-		initialize : function(options) {
+		initialize : function() {
 			BaseView.prototype.initialize.apply(this, arguments);
 
 			// Retrieve lookups for publication types and cost centers
@@ -189,7 +185,7 @@ define([
 			var isInit = false;
 			var abstractInitDeferred = $.Deferred();
 			var tocInitDeferred = $.Deferred();
-			var interval = setInterval(function() {
+			var interval = window.setInterval(function() {
 				if (isInit) {
 					tinymce.execCommand('mceRemoveEditor', true, 'docAbstract-input');
 					tinymce.execCommand('mceAddEditor', true, 'docAbstract-input');
@@ -199,7 +195,7 @@ define([
 					selector: '#docAbstract-input',
 					setup: function (ed) {
 						abstractInitDeferred.resolve();
-						clearInterval(interval);
+						window.clearInterval(interval);
 						ed.on('change', function (ev) {
 							self.model.set('docAbstract', ev.level.content);
 						});
@@ -240,7 +236,7 @@ define([
 			abstractInitDeferred.done(function() {
 				var tocInit = false;
 				var tocInterval;
-				tocInterval = setInterval(function() {
+				tocInterval = window.setInterval(function() {
 					if (tocInit) {
 						tinymce.execCommand('mceRemoveEditor', true, 'tableOfContents-input');
 						tinymce.execCommand('mceAddEditor', true, 'tableOfContents-input');
@@ -249,7 +245,7 @@ define([
 						selector: '#tableOfContents-input',
 						setup: function (ed) {
 							tocInitDeferred.resolve();
-							clearInterval(tocInterval);
+							window.clearInterval(tocInterval);
 							ed.on('change', function (ev) {
 								self.model.set('tableOfContents', ev.level.content);
 							});
@@ -279,7 +275,7 @@ define([
 			this.model.unset('seriesTitle');
 		},
 
-		resetPubType : function(ev) {
+		resetPubType : function() {
 			this.model.unset('publicationType');
 			this.model.unset('publicationSubtype');
 			this.model.unset('seriesTitle');
@@ -292,7 +288,7 @@ define([
 			this.model.unset('seriesTitle');
 		},
 
-		resetPubSubtype : function(ev) {
+		resetPubSubtype : function() {
 			this.model.unset('publicationSubtype');
 			this.model.unset('seriesTitle');
 		},
@@ -303,7 +299,7 @@ define([
 			this.model.set('seriesTitle', {id : selected, text : selectedText});
 		},
 
-		resetSeriesTitle : function(ev) {
+		resetSeriesTitle : function() {
 			this.model.unset('seriesTitle');
 		},
 
@@ -337,7 +333,7 @@ define([
 			this.model.unset('largerWorkSubtype');
 		},
 
-		resetLargerWorkType : function(ev) {
+		resetLargerWorkType : function() {
 			this.model.unset('largerWorkType');
 			this.model.unset('largerWorkSubtype');
 		},
@@ -348,7 +344,7 @@ define([
 			this.model.set('largerWorkSubtype', {id: selected, text : selectedText});
 		},
 
-		resetLargerWorkSubtype : function(ev) {
+		resetLargerWorkSubtype : function() {
 			this.model.unset('largerWorkSubtype');
 		},
 

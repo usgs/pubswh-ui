@@ -1,17 +1,9 @@
-/* jslint browser: true */
-/* global METRICS */
-/* global gapi */
-/* global CONFIG */
-/* global _ */
-
 require('./analyticsData.js');
 require('./analyticsGraph.js');
 require('./dataUtils.js');
 
 (function() {
-	'use strict';
-
-	var DAY_FORMAT = 'MMM DD YYYY';
+		var DAY_FORMAT = 'MMM DD YYYY';
 	var MONTH_FORMAT = 'MMM YYYY';
 
 	var recentSearchesDiv = document.getElementById('recent-searches-container');

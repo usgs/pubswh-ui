@@ -1,13 +1,8 @@
-/* jslint browser: true */
-/* global define */
-
 define([
 	'backbone',
 	'module'
 ], function(Backbone, module) {
-	'use strict';
-
-	var model = Backbone.Model.extend({
+		var model = Backbone.Model.extend({
 		idAttribute : 'contributorId',
 
 		url : module.config().scriptRoot + '/manager/services/',
@@ -38,7 +33,7 @@ define([
 			return Backbone.sync(method, model, options);
 		},
 
-		save : function(attributes, options) {
+		save : function() {
 			/* Don't send validationErrors to the server */
 			this.unset('validationErrors');
 			return Backbone.Model.prototype.save.apply(this, arguments);

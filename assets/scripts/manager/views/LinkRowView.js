@@ -1,4 +1,3 @@
-/* jslint browser: true */
 define([
 	'jquery',
 	'jquery-ui',
@@ -8,9 +7,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/linkRow'
 ], function($, jqueryUI, select2, module, stickit, BaseView, hbTemplate) {
-	'use strict';
-
-	var view = BaseView.extend({
+		var view = BaseView.extend({
 
 		events: {
 			'select2:select .link-type': 'selectLinkType',
@@ -40,7 +37,6 @@ define([
 		 *     @prop {Collection of LookupModels} linkFileTypeCollection - this should contain data before render is called.
 		 */
 		initialize: function (options) {
-			var self = this;
 			BaseView.prototype.initialize.apply(this, arguments);
 
 			this.linkTypeCollection = options.linkTypeCollection;
@@ -82,35 +78,31 @@ define([
 
 
 		selectLinkType: function (ev) {
-			var selected = ev.currentTarget.value;
-			var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
 			this.model.set('type', {
 				id: ev.currentTarget.value,
 				text: ev.currentTarget.selectedOptions[0].innerHTML
 			});
 		},
 
-		resetLinkType: function (ev) {
+		resetLinkType: function () {
 			this.model.unset('type');
 		},
 
 		selectLinkFileType: function (ev) {
-			var selected = ev.currentTarget.value;
-			var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
 			this.model.set('linkFileType', {
 				id: ev.currentTarget.value,
 				text: ev.currentTarget.selectedOptions[0].innerHTML
 			});
 		},
 
-		resetLinkFileType: function (ev) {
+		resetLinkFileType: function () {
 			this.model.unset('linkFileType');
 		},
 
 		/*
 		 * Remove the model from the collection
 		 */
-		deleteRow : function(ev) {
+		deleteRow : function() {
 			this.collection.remove(this.model);
 		},
 

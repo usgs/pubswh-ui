@@ -1,15 +1,10 @@
-/* jslint browser: true */
-/* global define */
-
 define([
 	'underscore',
 	'backbone',
 	'backbone.paginator',
 	'module'
 ], function(_, Backbone, Pageable, module) {
-	'use strict';
-
-	var collection = Backbone.PageableCollection.extend({
+		var collection = Backbone.PageableCollection.extend({
 
 		url : function() {
 			return module.config().scriptRoot + '/manager/services/mppublications';
@@ -28,7 +23,7 @@ define([
 			pageSize:  'page_size'
 		},
 
-		initialize : function(models, options) {
+		initialize : function() {
 			this.filters = {};
 			Backbone.PageableCollection.prototype.initialize.apply(this, arguments);
 		},
@@ -62,7 +57,7 @@ define([
 		},
 
 		// get the state from web service result
-		parseState: function (resp, queryParams, state, options) {
+		parseState: function (resp) {
 			return {
 				pageRowStart : resp.pageRowStart,
 				totalRecords: resp.recordCount
@@ -72,7 +67,7 @@ define([
 		// get the actual records. We are not using PublicationModel.parse because that returns some properties as models
 		// or collections. The Backbone code does not seem to handle this well as the collections and models get garbled.
 		// This collection will contain properties which are JSON objects.
-		parseRecords: function (resp, options) {
+		parseRecords: function (resp) {
 			return resp.records;
 		}
 

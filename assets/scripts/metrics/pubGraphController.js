@@ -12,9 +12,7 @@ require('./analyticsGraph.js');
 require('./dataUtils.js');
 
 (function() {
-	'use strict';
-
-	var DAY_FORMAT = 'MMM DD YYYY';
+		var DAY_FORMAT = 'MMM DD YYYY';
 	var MONTH_FORMAT = 'MMM YYYY';
 
 	var pageURI = '/publication/' + CONFIG.PUBSID;

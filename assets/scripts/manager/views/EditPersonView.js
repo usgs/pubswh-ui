@@ -1,6 +1,3 @@
-/* jslint browser: true */
-/* global define */
-
 define([
 	'underscore',
 	'jquery',
@@ -11,9 +8,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/editPerson'
 ], function(_, $, stickit, $select2, CostCenterCollection, OutsideAffiliationLookupCollection, BaseView, hbTemplate) {
-	'use strict';
-
-	var DEFAULT_SELECT2_OPTIONS = {
+		var DEFAULT_SELECT2_OPTIONS = {
 		allowClear : true,
 		theme : 'bootstrap'
 	};
@@ -42,7 +37,7 @@ define([
 			'#preferred': 'preferred'
 		},
 
-		initialize : function(options) {
+		initialize : function() {
 			BaseView.prototype.initialize.apply(this, arguments);
 
 			this.activeCostCenters = new CostCenterCollection();

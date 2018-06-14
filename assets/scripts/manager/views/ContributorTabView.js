@@ -1,6 +1,3 @@
-/* jslint browser: true */
-/* global define */
-
 define([
 	'underscore',
 	'jquery',
@@ -11,9 +8,7 @@ define([
 	'views/ContributorRowView',
 	'hbs!hb_templates/contributorTab'
 ], function(_, $, jqueryUi, Handlebars, log, BaseView, ContributorRowView, hb_template) {
-	'use strict';
-
-	var view = BaseView.extend({
+		var view = BaseView.extend({
 
 		events : {
 			'click .add-btn' : 'addNewRow',
@@ -35,7 +30,7 @@ define([
 			this.contributorType = options.contributorType;
 			this.renderDeferred = $.Deferred();
 
-			this.rowViews = this.collection.map(function(model, index) {
+			this.rowViews = this.collection.map(function(model) {
 				return  new ContributorRowView({
 					el : '.grid',
 					model : model,

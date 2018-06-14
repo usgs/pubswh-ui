@@ -3,9 +3,7 @@
 define([
 	'backbone'
 ], function(Backbone) {
-	'use strict';
-
-	var collection = Backbone.Collection.extend({
+		var collection = Backbone.Collection.extend({
 
 		comparator : 'rank',
 

@@ -7,9 +7,7 @@ define([
 	'controller/AppRouter',
 	'module'
 ], function (Backbone, log, AppRouter, module) {
-	'use strict';
-
-	var config = module.config();
+		var config = module.config();
 
 	if (config.jsDebug) {
 		log.setLevel('debug', false);

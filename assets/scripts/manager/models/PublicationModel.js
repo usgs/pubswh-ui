@@ -1,6 +1,3 @@
-/*jslint browser: true */
-/* global define */
-
 define([
 	'underscore',
 	'jquery',
@@ -9,9 +6,7 @@ define([
 	'models/LinkCollection',
 	'models/PublicationContributorCollection'
 ], function(_, $, Backbone, module, LinkCollection, PublicationContributorCollection) {
-	'use strict';
-
-	var model = Backbone.Model.extend({
+		var model = Backbone.Model.extend({
 		urlRoot : module.config().scriptRoot + '/manager/services/mppublications',
 
 		/*
@@ -25,7 +20,7 @@ define([
 			};
 		},
 
-		parse : function(response, options) {
+		parse : function(response) {
 			var links = this.has('links') ? this.get('links') : new LinkCollection();
 			var contributors = this.has('contributors') ? this.get('contributors') : new Backbone.Model();
 			if (_.has(response, 'links') && response.links.length) {
@@ -99,7 +94,7 @@ define([
 					contentType : 'application/json',
 					processData : false,
 					data: '{"id" : ' + this.get('id') + '}',
-					success : function(response, textStatus, jqXHR) {
+					success : function(response) {
 						deferred.resolve(response);
 					},
 					error : function(jqXHR, textStatus, error) {
@@ -138,7 +133,7 @@ define([
 			return this.changeState('publish', options);
 		},
 
-		save : function(attributes, options) {
+		save : function() {
 			/* Don't send validationErrors to the server */
 			this.unset('validationErrors');
 			return Backbone.Model.prototype.save.apply(this, arguments);

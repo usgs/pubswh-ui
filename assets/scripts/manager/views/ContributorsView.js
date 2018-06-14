@@ -1,5 +1,3 @@
-/* jslint browser:true */
-
 define([
 	'bootstrap',
 	'backbone.stickit',
@@ -9,9 +7,7 @@ define([
 	'views/ContributorTabView',
 	'hbs!hb_templates/contributors'
 ], function(bootstrap, stickit, ContributorTypeCollection, PublicationContributorCollection, BaseView, ContributorTabView, hbTemplate) {
-	'use strict';
-
-	var view = BaseView.extend({
+		var view = BaseView.extend({
 
 		events : {
 			'click .contributor-types-tabs' : 'showTab'
@@ -29,7 +25,7 @@ define([
 		 *     @prop {String} el - jquery selector where this view is rendered
 		 *     @prop {Backbone.Model} model - assumes that model be a PublicationModel
 		 */
-		initialize : function(options) {
+		initialize : function() {
 			var self = this;
 			var contributors = this.model.get('contributors');
 			var fetchDeferred = $.Deferred();

@@ -1,6 +1,3 @@
-/*jslint browser: true */
-/* global define */
-
 define([
 	'underscore',
 	'jquery',
@@ -21,9 +18,7 @@ define([
 	'hbs!hb_templates/publication'
 ], function(_, $, bootstrap, datetimepicker, Stickit, module, BaseView, AlertView, ConfirmationDialogView, LoginDialogView,
 			BibliodataView, LinksView, ContributorsView, SPNView, CatalogingView, GeospatialView, hbTemplate) {
-	'use strict';
-
-	var view = BaseView.extend({
+		var view = BaseView.extend({
 
 		events : {
 			'click .reset-btn' : 'reloadPage',
@@ -120,7 +115,7 @@ define([
 		 *     @prop {String} el - jquery selector where the view should be rendered
 		 *     @prop {PublicationModel} model
 		 */
-		initialize : function(options) {
+		initialize : function() {
 			BaseView.prototype.initialize.apply(this, arguments);
 
 			this.context.indexId = this.model.get('indexId');

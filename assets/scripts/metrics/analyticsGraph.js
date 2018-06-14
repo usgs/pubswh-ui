@@ -1,14 +1,7 @@
-/* jslint browser: true */
-/* global Dygraph */
-/* global moment */
-/* global _ */
-
 var METRICS = window.METRICS = window.METRICS || {};
 
 METRICS.analyticsGraph = (function() {
-	'use strict';
-
-	var self = {};
+		var self = {};
 
 	/*
 	 * Creates a graph of data
@@ -25,7 +18,7 @@ METRICS.analyticsGraph = (function() {
 		var labels = ['Date', _.has(thisOptions, 'ylabel') ? thisOptions.ylabel : ''];
 		var format = _.has(thisOptions, 'dateFormat') ? thisOptions.dateFormat : 'MM/DD/YYYY';
 
-		var graph = new Dygraph(
+		new Dygraph(
 			el,
 			rows,
 			{

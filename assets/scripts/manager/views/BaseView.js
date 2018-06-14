@@ -4,9 +4,7 @@ define([
 	'backbone',
 	'underscore'
 ], function (Backbone, _) {
-	'use strict';
-
-	var view = Backbone.View.extend({
+		var view = Backbone.View.extend({
 		/*
 		 * Renders the object's template using it's context into the view's element.
 		 * @returns {extended Backbone.View}

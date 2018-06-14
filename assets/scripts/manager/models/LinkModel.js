@@ -3,9 +3,7 @@
 define([
 	'backbone'
 ], function(Backbone) {
-	'use strict';
-
-	var model = Backbone.Model.extend({
+		var model = Backbone.Model.extend({
 		defaults : function() {
 			return {rank : ''};
 		}

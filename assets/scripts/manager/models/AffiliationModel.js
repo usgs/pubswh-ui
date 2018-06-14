@@ -5,9 +5,7 @@ define([
 	'underscore',
 	'module'
 ], function(Backbone, _, module) {
-	'use strict';
-
-	var model = Backbone.Model.extend({
+		var model = Backbone.Model.extend({
 
 		/*
 		 * @param {Boolean} isCostCenter - boolean indicating whether affiliation belongs to a cost center

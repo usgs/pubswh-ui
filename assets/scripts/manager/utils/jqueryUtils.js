@@ -4,9 +4,7 @@
 define([
 	'jquery'
 ], function($) {
-	'use strict';
-
-	var utils = (function() {
+		var utils = (function() {
 		var self = {};
 
 		self.createDivInContainer = function($container) {

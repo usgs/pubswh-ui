@@ -4,9 +4,7 @@ define([
 	'backbone',
 	'module'
 ], function(Backbone, module) {
-	'use strict';
-
-	var collection = Backbone.Collection.extend({
+		var collection = Backbone.Collection.extend({
 		url : module.config().scriptRoot + '/manager/services/lists',
 
 		comparator : 'text'

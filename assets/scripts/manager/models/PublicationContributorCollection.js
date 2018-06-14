@@ -4,9 +4,7 @@ define([
 	'models/PublicationContributorModel',
 	'models/OrderedCollection'
 ], function(PublicationContributorModel, OrderedCollection) {
-	'use strict';
-
-	var collection = OrderedCollection.extend({
+		var collection = OrderedCollection.extend({
 		model : PublicationContributorModel
 	});
 

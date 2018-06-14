@@ -1,11 +1,7 @@
-/* jslint browser: true */
-
 define([
 	'backgrid'
 	], function(Backgrid) {
-	'use strict';
-
-	/*
+		/*
 	 * This implements a cell which contains a link. The title attribute can be set via the title property.
 	 * The link text uses the formatter's fromRaw result. When the link is clicked, the view uses the provided
 	 * router property to navigate to the result of the toFragment property.
@@ -28,7 +24,7 @@ define([
 		 * @returns String - The fragment that will be passed to the router's navigate function when
 		 * the cell is clicked.
 		 */
-		toFragment : function(rawValue, model) {
+		toFragment : function(rawValue) {
 			return rawValue;
 		},
 

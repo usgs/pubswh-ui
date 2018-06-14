@@ -1,17 +1,9 @@
-/* jslint brower: true */
-/* global _ */
-/* global METRICS */
-/* global gapi */
-/* global CONFIG */
-
 require('./analyticsData.js');
 require('./analyticsGraph.js');
 require('./dataUtils.js');
 
 (function() {
-	'use strict';
-
-	var DAY_FORMAT = 'MMM DD YYYY';
+		var DAY_FORMAT = 'MMM DD YYYY';
 	var MONTH_FORMAT = 'MMM YYYY';
 
 	var recentSessionsDiv = document.getElementById('recent-sessions-container');

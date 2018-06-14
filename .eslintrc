@@ -32,14 +32,15 @@
     "process": true,
     "window": true,
     "XMLHttpRequest": true,
-    "PORTAL": true,
-    "SITES": true,
-    "COVERAGE": true,
-    "NLDI": true,
-    "WQP": true,
+    "Handlebars": true,
     "L": true,
+    "leafletPip": true,
     "$": true,
-    "Config": true,
-    "sinon": true
+    "_": true,
+    "define": true,
+    "moment": true,
+    "METRICS": true,
+    "Dygraph": true,
+    "CONFIG": true
   }
 }

@@ -1,6 +1,3 @@
-/* jslint browser: true */
-/* global define */
-
 define([
 	'jquery',
 	'underscore',
@@ -13,9 +10,7 @@ define([
 	'views/AlertView',
 	'hbs!hb_templates/editSeriesTitle'
 ], function($, _, select2, stickit, bootstrap, DynamicSelect2, PublicationSubtypeCollection, BaseView, AlertView, hbTemplate) {
-	'use strict';
-
-	var DEFAULT_SELECT2_OPTIONS = {
+		var DEFAULT_SELECT2_OPTIONS = {
 		theme : 'bootstrap'
 	};
 
@@ -60,7 +55,7 @@ define([
 
 		template : hbTemplate,
 
-		initialize : function(options) {
+		initialize : function() {
 			BaseView.prototype.initialize.apply(this, arguments);
 			if (!this.model.isNew()) {
 				this.model.fetch();
@@ -153,7 +148,7 @@ define([
 			this.router.navigate('', {trigger : true});
 		},
 
-		enableEditSeriesTitleSelect : function(ev){
+		enableEditSeriesTitleSelect : function(){
 			this.$(EDIT_SERIES_TITLE_INPUT_SEL).prop('disabled', false);
 		},
 
@@ -162,7 +157,7 @@ define([
 			var seriesId = ev.currentTarget.value;
 			var seriesTitle = ev.currentTarget.selectedOptions[0].innerHTML;
 			var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
-			
+
 			$loadingIndicator.show();
 			this.alertView.closeAlert();
 
@@ -181,7 +176,7 @@ define([
 				});
 		},
 
-		showCreateNewSeriesTitle : function(ev) {
+		showCreateNewSeriesTitle : function() {
 			this.$(DELETE_BUTTON_SEL).prop('disabled', true);
 			this.showEditSection();
 		},
@@ -190,7 +185,7 @@ define([
 			this.model.set('publicationSubtype', {id : ev.currentTarget.value});
 		},
 
-		saveSeriesTitle : function(ev) {
+		saveSeriesTitle : function() {
 			var self = this;
 			var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
 			var $errorDiv = this.$(ERRORS_SEL);
@@ -213,7 +208,7 @@ define([
 					$loadingIndicator.hide();
 				});
 		},
-		resetFields : function(ev) {
+		resetFields : function() {
 			var self = this;
 			var modelId = this.model.get('id');
 			this.model.clear();
@@ -224,13 +219,13 @@ define([
 				});
 		},
 
-		clearPage : function(ev) {
+		clearPage : function() {
 			this.hideEditSection();
 			this.model.clear();
 			this.router.navigate('seriesTitle');
 		},
 
-		deleteSeriesTitle : function(ev) {
+		deleteSeriesTitle : function() {
 			var self = this;
 			var seriesTitle = this.model.get('text');
 			var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);

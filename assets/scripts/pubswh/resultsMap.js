@@ -1,12 +1,4 @@
-/* jslint browser: true */
-/* global L */
-/* global leafletPip */
-/* global CONFIG */
-/* global _ */
-/* global $ */
-/* global Handlebars */
-
-var PUBS_WH = PUBS_WH || {};
+var PUBS_WH = window.PUBS_WH = window.PUBS_WH || {};
 
 /*
  * @param {Object} options
@@ -16,13 +8,11 @@ var PUBS_WH = PUBS_WH || {};
  * @returns {L.Map} - Returns the map object created.
  */
 PUBS_WH.createResultsMap = function(options) {
-	'use strict';
-
-	var EMPTY_PUBS_EXTENTS = {
+		/*var EMPTY_PUBS_EXTENTS = {
 		type: 'FeatureCollection',
 		features: [],
 		properties: {title: 'All pubs extents'}
-	};
+	};*/
 
 	var POPUP_HTML =
 		'{{#each layers}}' +
@@ -87,6 +77,17 @@ PUBS_WH.createResultsMap = function(options) {
 		});
 	};
 
+	var highlightMatch = function() {
+		var layerIndex = $(this).data('layer-index');
+		pubsExtentLayers.forEach(function(layer, index) {
+			if (index === layerIndex) {
+				layer.setStyle(loud);
+			} else {
+				layer.setStyle(quiet);
+			}
+		});
+	};
+
 	var showExtentInfoPopup = function(evt) {
 		var clickedLayerProps = {layers: []};
 
@@ -111,17 +112,6 @@ PUBS_WH.createResultsMap = function(options) {
 			});
 			$('.filter-button').click(highlightMatch);
 		}
-	};
-
-	var highlightMatch = function(evt) {
-		var layerIndex = $(this).data('layer-index');
-		pubsExtentLayers.forEach(function(layer, index) {
-			if (index === layerIndex) {
-				layer.setStyle(loud);
-			} else {
-				layer.setStyle(quiet);
-			}
-		});
 	};
 
 	map.addControl(L.control.layers(baseMaps, overlayMaps));

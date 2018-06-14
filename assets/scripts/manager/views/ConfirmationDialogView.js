@@ -6,9 +6,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/confirmationDialog'
 ], function(bootstrap, _, BaseView, hbTemplate) {
-	'use strict';
-
-	var view = BaseView.extend({
+		var view = BaseView.extend({
 		template : hbTemplate,
 
 		events : {

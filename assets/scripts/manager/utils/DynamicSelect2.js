@@ -6,7 +6,6 @@ define([
 	'jquery',
 	'module'
 ], function(_, $, module) {
-	'use strict';
 	/*
 	 * @param {Object} options
 	 *     @prop {String or Function which returns a String} lookupType - Used to form the url. It is appended to the lookupUrl in the module config.

@@ -2,7 +2,6 @@
 define([
 	'backgrid'
 ], function(Backgrid) {
-	'use strict';
 	/*
 	 * Extended Backgrid body to redefine the sort function to always use client side sorting.
 	 */

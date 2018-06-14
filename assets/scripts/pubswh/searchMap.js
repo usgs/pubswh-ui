@@ -14,9 +14,7 @@ var PUBS_WH = window.PUBS_WH = window.PUBS_WH || {};
  * @return a Leaflet map object
  */
 PUBS_WH.createSearchMap = function(mapDivId, $geomInput) {
-	'use strict';
-
-	var SHAPE_OPTIONS = {
+		var SHAPE_OPTIONS = {
 			color: '#ff0000',
 			fill : true
 	};
@@ -55,7 +53,7 @@ PUBS_WH.createSearchMap = function(mapDivId, $geomInput) {
 		$geomInput.val(wkt.write());
 	});
 
-	searchFeature.on('layerremove', function(e) {
+	searchFeature.on('layerremove', function() {
 		$geomInput.val('');
 	});
 
@@ -91,7 +89,7 @@ PUBS_WH.createSearchMap = function(mapDivId, $geomInput) {
 		searchFeature.addLayer(e.layer);
 		map.addLayer(searchFeature);
 	});
-	map.on('draw:drawstart', function(e) {
+	map.on('draw:drawstart', function() {
 		if (searchFeature.getLayers().length !== 0) {
 			map.removeLayer(searchFeature);
 			searchFeature.clearLayers();

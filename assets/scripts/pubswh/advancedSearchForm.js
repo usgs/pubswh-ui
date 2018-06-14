@@ -25,9 +25,7 @@ var PUBS_WH = window.PUBS_WH = window.PUBS_WH || {};
  *		@prop {Function} deleteAllRows - deletes all rows in $container and $mapContainter
  */
 PUBS_WH.advancedSearchForm = function(options) {
-	'use strict';
-
-	var self = {};
+		var self = {};
 
 	var ROW_HTML =
 		'<div class="form-group">' +
@@ -84,7 +82,6 @@ PUBS_WH.advancedSearchForm = function(options) {
 	 */
 	self.addRow = function(row) {
 		var lookupDeferred = $.Deferred();
-		var addRowDeferred = $.Deferred();
 		var lookupOptions = [];
 
 		if (row.inputType === 'select' && row.lookup) {
@@ -100,7 +97,7 @@ PUBS_WH.advancedSearchForm = function(options) {
 
 					lookupDeferred.resolve();
 				},
-				error : function(jqXHR) {
+				error : function() {
 					console.log('Lookup did not succeed. Select will be empty');
 					lookupDeferred.resolve();
 				}

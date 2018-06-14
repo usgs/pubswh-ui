@@ -1,5 +1,3 @@
-/* jslint browser: true */
-
 define([
 	'jquery',
 	'underscore',
@@ -8,9 +6,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/loginDialog'
 ], function($, _, bootstrap, module, BaseView, hbTemplate) {
-	'use strict';
-
-	var view = BaseView.extend({
+		var view = BaseView.extend({
 		template : hbTemplate,
 
 		events : {
@@ -53,14 +49,14 @@ define([
 					}
 					self.close();
 				},
-				error : function(jqXHR, textStatus, error) {
+				error : function(jqXHR, textStatus) {
 					self.$('.login-errors').html('Unable to log in with error: ' + textStatus +
 						'<br/>Please try again');
 				}
 			});
 		},
 
-		close : function(ev) {
+		close : function() {
 			this.$('.modal').modal('hide');
 			this.$('.login-errors').html('');
 			this.$('input').val('');

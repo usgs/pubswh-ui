@@ -12,9 +12,7 @@ define([
 	'views/BaseView',
 	'hbs!hb_templates/searchFilterRow'
 ], function(_, $, Handlebars, DynamicSelect2, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate) {
-	'use strict';
-
-	var DEFAULT_SELECT2_OPTIONS = {
+		var DEFAULT_SELECT2_OPTIONS = {
 		allowClear : true,
 		theme : 'bootstrap'
 	};
