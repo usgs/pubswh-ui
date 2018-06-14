@@ -22,6 +22,10 @@
     "hash-assets": "echo TODO",
     "serve:static": "live-server --port=9000 --cors --no-browser dist",
     "test": "karma start tests/js/manager/karma.conf.js && karma start tests/js/metrics/karma.conf.js && karma start tests/js/pubswh/karma.conf.js",
+    "test:watch": "run-p test:watchitem:*",
+    "test:watchitem:manager": "karma start tests/js/manager/karma.conf.js --debug --no-single-run --browsers Chrome",
+    "test:watchitem:metrics": "karma start tests/js/metrics/karma.conf.js --debug --no-single-run --browsers Chrome",
+    "test:watchitem:pubswh": "karma start tests/js/pubswh/karma.conf.js --debug --no-single-run --browsers Chrome",
     "watch": "run-p watch:* serve:static",
     "watch:css": "nodemon -w ./styles -e less -x \"npm run build:css\"",
     "watch:js": "mkdir -p dist/scripts && rollup -c --watch"
