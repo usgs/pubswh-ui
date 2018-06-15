@@ -13,12 +13,14 @@
   "scripts": {
     "build": "run-p build:* && npm run hash-assets",
     "build:js": "mkdir -p dist/scripts && rollup -c --environment NODE_ENV:production",
+    "build:js:vendor": "cp -r scripts/vendor dist/scripts",
     "build:css": "run-p buildcss:*",
     "buildcss:usgs": "lessc styles/usgs_header_footer.less > dist/usgs_style.css && uglifycss --output dist/usgs_style.css dist/usgs_style.css && postcss dist/usgs_style.css --no-map --use autoprefixer -o dist/usgs_style.css",
     "buildcss:css_base": "lessc styles/min_base.less > dist/min_base.css && uglifycss --output dist/min_base.css dist/min_base.css && postcss dist/min_base.css --no-map --use autoprefixer -o dist/min_base.css",
     "buildcss:auth": "lessc styles/auth.less > dist/auth.css && uglifycss --output dist/auth.css dist/auth.css && postcss dist/auth.css --no-map --use autoprefixer -o dist/auth.css",
     "buildcss:manager": "lessc styles/manager/manager_custom.less > dist/manager.css && uglifycss --output dist/manager.css dist/manager.css && postcss dist/manager.css --no-map --use autoprefixer -o dist/manager.css",
     "buildcss:metrics": "lessc styles/metrics/metrics_custom.less > dist/metrics.css && uglifycss --output dist/metrics.css dist/metrics.css && postcss dist/metrics.css --no-map --use autoprefixer -o dist/metrics.css",
+    "build:images": "cp -r images dist",
     "hash-assets": "echo TODO",
     "lint": "eslint scripts tests",
     "serve:static": "live-server --port=9000 --cors --no-browser dist",
@@ -29,7 +31,8 @@
     "test:watchitem:pubswh": "karma start tests/js/pubswh/karma.conf.js --debug --no-single-run --browsers Chrome",
     "watch": "run-p watch:* serve:static",
     "watch:css": "nodemon -w ./styles -e less -x \"npm run build:css\"",
-    "watch:js": "mkdir -p dist/scripts && rollup -c --watch"
+    "watch:js": "mkdir -p dist/scripts && npm run build:js:vendor && rollup -c --watch",
+    "watch:images": "npm run build:images"
   },
   "engines": {
     "node": "8.11.2"

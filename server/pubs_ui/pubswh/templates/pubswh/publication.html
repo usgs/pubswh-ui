@@ -96,7 +96,7 @@
                             <span itemprop="{{ contributorKind }}" itemtype="http://schema.org/Person">{{ contributor['text'] }}</span>
                               {% if contributor['orcid'] %}
                                   <a href="{{ contributor['orcid'] }}">
-                                    <img alt="ORCID iD" src="{{ url_for('pubswh.static', filename = 'img/orcid_16x16.png') }}" style="width:16px; height:16px; margin-right:4px; margin-left:4px">
+                                    <img alt="ORCID iD" src="{{ 'images/pubswh/orcid_16x16.png' | asset_url }}" style="width:16px; height:16px; margin-right:4px; margin-left:4px">
                                   </a>
                               {% endif %}
                           {%- else -%}
@@ -361,7 +361,7 @@
             {%- if pubdata["geographicExtents"] -%}
                 <script type="text/javascript" src="{{ url_for('bower.static', filename='leaflet/dist/leaflet.js') }}"></script>
                 <script type="text/javascript" src="{{ url_for('bower.static', filename='esri-leaflet/dist/esri-leaflet.js') }}"></script>
-                <script type="text/javascript" src="{{ url_for('pubswh.static', filename='js/resultsMap.js') }}"></script>
+                <script type="text/javascript" src="{{ 'scripts/resultsMap.js' | asset_url }}"></script>
 
                 <script type="application/javascript">
                     PUBS_WH.createResultsMap({

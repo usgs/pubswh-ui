@@ -18,7 +18,7 @@
         <link rel="stylesheet" href="{{ url_for('bower.static', filename='font-awesome/css/font-awesome.min.css') }}"/>
         <link rel="stylesheet" href="{{ url_for('bower.static', filename='select2/dist/css/select2.min.css') }}"/>
         <link rel="stylesheet" href="{{ url_for('bower.static', filename='eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css') }}" />
-        <link rel="shortcut icon" href="{{ url_for('pubswh.static', filename='img/favicon.ico') }}"/>
+        <link rel="shortcut icon" href="{{ 'images/pubswh/favicon.ico' | asset_url }}"/>
         <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('pubswh.open_search') }}" title="USGS Pubs"/>
         <link rel="unapi-server" type="application/xml" title="unAPI" href="{{ url_for('pubswh.unapi') }}" />
         <link rel="alternate" type="application/rss+xml" title="USGS Publications Warehouse RSS Feed" href="https://pubs.er.usgs.gov/pubs-services/publication/rss"/>
@@ -53,10 +53,10 @@
            <header>
                <section id="usgs_logo">
                    <a href="http://www.usgs.gov"><img
-                           src="{{ url_for('pubswh.static', filename = 'img/usgslogo.jpg') }}" alt="usgs logo"/></a>
+                           src="{{ 'images/pubswh/usgslogo.jpg' | asset_url }}" alt="usgs logo"/></a>
                </section>
                <section id="banner">
-                   <img src="{{ url_for('pubswh.static', filename = 'img/banner.png') }}" alt="banner"/>
+                   <img src="{{ 'images/pubswh/banner.png' | asset_url }}" alt="banner"/>
                </section>
                <section id="header_nav">
                    <ul>
@@ -73,7 +73,7 @@
                <ul id="mobile_ul">
                    <li onclick="toggle_visibility('mobile_list');">
                        <img id="bars"
-                            src="{{ url_for('pubswh.static', filename='img/bars.png') }}"
+                            src="{{ 'images/pubswh/bars.png' | asset_url }}"
                             alt="mobile menu bars"/>
                        <ul id="mobile_list">
                            <li><a href="{{ url_for('pubswh.index') }}">USGS Publications Warehouse</a></li>
@@ -93,7 +93,7 @@
                        </ul>
                    </li>
                </ul>
-               <img src="{{ url_for('pubswh.static', filename='img/usgs_logo_mobile.png') }}" alt="usgs mobile logo"/>
+               <img src="{{ 'images/pubswh/usgs_logo_mobile.png' | asset_url }}" alt="usgs mobile logo"/>
 
                <ul id="desktop_ul">
                    <li><a id='nav_title' href="{{ url_for('pubswh.index') }}">USGS Publications Warehouse</a></li>
@@ -153,7 +153,7 @@
 
                <p id="usgsfootertext">
                    <a href="http://usa.gov/"><img id="usa_gov"
-                                                  src="{{ url_for('pubswh.static', filename='img/footer_graphic_usagov.jpg') }}"
+                                                  src="{{ 'images/pubswh/footer_graphic_usagov.jpg' | asset_url }}"
                                                   alt="USA.gov logo" title="USAGov: Government Made Easy" width="90"
                                                   height="26"/>
                    </a>

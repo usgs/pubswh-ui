@@ -74,7 +74,9 @@ const getBundleConfig = function (src, dest) {
 };
 
 module.exports = [
+    getBundleConfig('scripts/pubswh/extentsMapOnReady.js', 'dist/scripts/extentsMapOnReady.js'),
     getBundleConfig('scripts/pubswh/plugins.js', 'dist/scripts/base_libs.js'),
+    getBundleConfig('scripts/pubswh/resultsMap.js', 'dist/scripts/resultsMap.js'),
     getBundleConfig('scripts/pubswh/searchFormOnReady.js', 'dist/scripts/advanced_search.js'),
     getBundleConfig('scripts/metrics/pubGraphController.js', 'dist/scripts/metrics_publication.js'),
     getBundleConfig('scripts/metrics/pubsGraphController.js', 'dist/scripts/metrics_publications.js'),
