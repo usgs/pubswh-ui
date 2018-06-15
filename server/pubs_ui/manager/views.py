@@ -1,3 +1,7 @@
+"""
+Manager blueprint views
+"""
+# pylint: disable=C0103,C0111
 
 from requests import Request, Session
 
@@ -6,6 +10,7 @@ from flask_login import login_required
 
 from ..auth.utils import generate_auth_header
 from .. import app
+
 
 SERVICES_ENDPOINT = app.config['PUB_URL']
 # should requests verify the certificates for ssl connections
@@ -27,6 +32,9 @@ def show_app(path=None):
 @manager.route('/services/<op1>/<op2>/<op3>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @manager.route('/services/<op1>/<op2>/<op3>/<op4>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def services_proxy(op1, op2=None, op3=None, op4=None):
+    """
+    View for proxying service calls
+    """
     url = '%s%s/' % (SERVICES_ENDPOINT, op1)
     if op2 is not None:
         url = url + op2
@@ -35,10 +43,10 @@ def services_proxy(op1, op2=None, op3=None, op4=None):
     if op4 is not None:
         url = url + '/' + op4
     headers = generate_auth_header(request)
-    if request.method == 'POST' or request.method == 'PUT' :
+    if request.method == 'POST' or request.method == 'PUT':
         headers.update(request.headers)
 
-    app.logger.info('Service URL is %s?%s' % (url, request.query_string))
+    app.logger.info('Service URL is %s?%s', url, request.query_string)
     # Setting the query_string in the url. If we use params set to request.args, params that are repeated
     # in the query_string do not get encoded. Instead only the first one does.
     proxy_request = Request(method=request.method,
@@ -55,4 +63,7 @@ def services_proxy(op1, op2=None, op3=None, op4=None):
 
 @manager.errorhandler(404)
 def page_not_found(e):
+    """
+    Returns 404 (not found) status code and 404.html template.
+    """
     return render_template('manager/404.html'), 404

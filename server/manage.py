@@ -3,6 +3,7 @@ Created on Oct 17, 2014
 
 @author: ayan
 """
+# pylint: disable=C0111
 
 from flask_script import Manager, Command
 from flask_collect import Collect
@@ -46,7 +47,7 @@ class ReportDeployDate(Command):
         self.write_py_file()
 
 
-manager = Manager(application)
+manager = Manager(application)  # pylint: disable=C0103
 manager.add_command('collect', CollectStaticFiles())
 manager.add_command('date_report', ReportDeployDate())
 

@@ -1,7 +1,10 @@
-from itsdangerous import BadSignature, BadPayload
-from urlparse import urlparse, urljoin
+"""
+Authorization utilities
+"""
 from urllib import unquote
+from urlparse import urlparse, urljoin
 
+from itsdangerous import BadSignature, BadPayload
 from werkzeug.exceptions import NotFound, MethodNotAllowed
 
 from . import login_serializer
@@ -19,13 +22,13 @@ def get_url_endpoint(url, server_name, fallback, wsgi_str=None):
     '''
     if not wsgi_str:
         wsgi_str = app.config['WSGI_STR']
-    app.logger.info('Decoded url ' + unquote(url))
+    app.logger.info('Decoded url %s', unquote(url))
     this_rule = unquote(url).replace(wsgi_str, '')
-    app.logger.info('Rule is ' + this_rule)
+    app.logger.info('Rule is %s', this_rule)
 
     try:
-        ma = app.url_map.bind(server_name)
-        matched_rule = ma.match(this_rule)
+        map_adapter = app.url_map.bind(server_name)
+        matched_rule = map_adapter.match(this_rule)
         return matched_rule
     except (NotFound, MethodNotAllowed):
         return fallback
@@ -50,8 +53,9 @@ def get_cida_auth_token(cookies):
     '''
     token_cookie = cookies.get(app.config['REMEMBER_COOKIE_NAME'], '')
     try:
-        session_data = login_serializer.loads(token_cookie, max_age=app.config['REMEMBER_COOKIE_DURATION'].total_seconds())
-    except (BadSignature, BadPayload) :
+        session_data = login_serializer.loads(
+            token_cookie, max_age=app.config['REMEMBER_COOKIE_DURATION'].total_seconds())
+    except (BadSignature, BadPayload):
         token = ''
     else:
         token = session_data[1]
@@ -65,5 +69,4 @@ def generate_auth_header(request):
     :param request: the request object to get the cookie
     :return: A dictionary containing the authorization header that can be sent along to the pubs-services endpoint.
     '''
-    return {'Authorization' : 'Bearer  ' + get_cida_auth_token(request.cookies)}
-
+    return {'Authorization': 'Bearer  ' + get_cida_auth_token(request.cookies)}

@@ -1,3 +1,7 @@
+"""
+Base configuration settings for Pubs Warehouse
+"""
+
 from datetime import timedelta
 import os
 import sys
@@ -32,11 +36,11 @@ PREVIEW_ENDPOINT_URL = ''  # pubs services endpoint for publications currently i
 CACHE_CONFIG = {'CACHE_TYPE': 'null'}
 REDIS_CONFIG = ''
 IMAGE_CACHE = ''  # path to image cache for thumbnails
-SCIENCEBASE_PARENT_UUID = '' #set to the sciecebase folder id for the core publications warehouse SB folder
+SCIENCEBASE_PARENT_UUID = ''  # set to the sciecebase folder id for the core publications warehouse SB folder
 
 BOWER_TRY_MINIFIED = False  # set to solve problem with backgrid-paginator
 
-CONTACT_RECIPIENTS = ['servicedesk@usgs.gov'] # recipient address
+CONTACT_RECIPIENTS = ['servicedesk@usgs.gov']  # recipient address
 
 IPDS_CONTACT_RECIPIENTS = ['GS_Help_IPDS@usgs.gov']
 
@@ -54,16 +58,20 @@ ALTMETRIC_ENDPOINT = 'https://api.altmetric.com/v1/'
 CROSSREF_ENDPOINT = 'https://api.crossref.org'
 
 try:
-    from deploy_date import *
+    from deploy_date import *  # pylint: disable=W0401
 except ImportError:
     pass
 
-# variables used for testing purposes
-nose_testing = sys.argv[0].endswith('nosetests')  # returns True if 'nosetests' is a command line argument
-if 'lettuce' in sys.argv[0]:  # determine if a lettuce is being run
-    lettuce_testing = True
-else:
-    lettuce_testing = False
+#
+# Variables used for testing purposes
+#
+#
+# True if 'nosetests' is a command line argument
+nose_testing = sys.argv[0].endswith('nosetests')  # pylint: disable=C0103
+
+# Determine if a lettuce is being run
+lettuce_testing = 'lettuce' in sys.argv[0]  # pylint: disable=C0103
+
 if nose_testing or lettuce_testing:
     WTF_CSRF_ENABLED = False
     TESTING = True

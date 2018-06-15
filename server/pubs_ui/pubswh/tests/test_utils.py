@@ -1,11 +1,16 @@
+"""
+Tests for pubswh blueprint's utility functions
+"""
 import unittest
 
+import arrow
 from mock import MagicMock, patch
 import requests as r
 import requests_mock
-import arrow
 
-from test_data import crossref_200_ok, crossref_200_not_ok, crossref_200_ok_2_date_parts, crossref_200_ok_1_date_part, crossref_200_ok_message_empty
+from .test_data import (
+    crossref_200_ok, crossref_200_not_ok, crossref_200_ok_2_date_parts,
+    crossref_200_ok_1_date_part, crossref_200_ok_message_empty)
 from ..utils import manipulate_doi_information, generate_sb_data, update_geographic_extents, create_store_info, \
     get_altmetric_badge_img_links, SearchPublications, get_crossref_data, check_public_access, get_published_online_date
 from ... import app
@@ -15,7 +20,10 @@ unittest.TestCase.maxDiff = None
 
 
 class ManipulateDoiInformationTestCase(unittest.TestCase):
-    """Tests for create_display_links"""
+    """
+    Tests for create_display_links
+    """
+    # pylint: disable=C0103,R0201,C0301
 
     def test_will_doi_link_be_generated_from_doi(self):
         """given a DOI, will an index link be generated?"""
@@ -75,12 +83,14 @@ class ManipulateDoiInformationTestCase(unittest.TestCase):
                 'url': 'http://dx.doi.org/10.1002/2012rg000417'},
             'doi': '10.1002/2012RG000417',
             'links': [{
-                       'linkHelpText': 'Publicly accessible after 10/20/2014 (public access data via <a href="http://www.chorusaccess.org" title="link to Chorus.org homepage">CHORUS</a>)',
-                       'rank': None,
-                       'text': 'Publisher Index Page (via DOI)',
-                       'type': {'id': 15, 'text': 'Index Page'},
-                       'url': 'https://doi.org/10.1002/2012RG000417'}],
-            'publicationSubtype': {'text': 'Journal Article'}}
+                'linkHelpText': 'Publicly accessible after 10/20/2014 (public access data via <a href="http://www.chorusaccess.org" title="link to Chorus.org homepage">CHORUS</a>)',
+                'rank': None,
+                'text': 'Publisher Index Page (via DOI)',
+                'type': {'id': 15, 'text': 'Index Page'},
+                'url': 'https://doi.org/10.1002/2012RG000417'
+            }],
+            'publicationSubtype': {'text': 'Journal Article'}
+        }
         assert manipulate_doi_information(chorus_pubsdata) == expected_chorus_pubsdata
 
     def test_will_missing_link_list_be_generated(self):
@@ -155,7 +165,10 @@ class ManipulateDoiInformationTestCase(unittest.TestCase):
 
 
 class GenerateScienceBaseData(unittest.TestCase):
-    """Tests for generate_sb_data"""
+    """
+    Tests for generate_sb_data
+    """
+    # pylint: disable=C0103,R0201,C0301
 
     replace_pubs_with_pubs_test = False
     supersedes_url = "https://pubs.er.usgs.gov/service/citation/json/extras?"
@@ -178,56 +191,58 @@ class GenerateScienceBaseData(unittest.TestCase):
             'links': [],
             'interactions': []
         }
-        expected_sbdata = {"title": "Environmental conditions in the Namskaket Marsh Area, Orleans, Massachusetts",
-             "id": "567922a9e4b0da412f4fb509",
-             "identifiers": [
-                 {
-                    "type": "local-index",
-                    "scheme": "unknown",
-                    "key": "sir20165122"
-                    },
-                    {
-                    "type": "local-pk",
-                    "scheme": "unknown",
-                    "key": 70176077
-                    }
-             ],
-             "body":  "There is fog and rain and tides and sometomes sun and the tide keeps rising",
-             "citation": "A carefully formatted citation with lots of extraneous em and en dashes",
-             "contacts": [],
-             "dates": [],
-             "tags": [],
-             "browseCategories": [
-                 "Publication"
-             ],
-             "browseTypes": [
-                 "Citation"
-             ],
-             'webLinks': [
-                 {
-                     "type": "webLink",
-                     "uri": "http://pubs.er.usgs.gov/publication/sir20165122",
-                     "rel": "related",
-                     "title": "Publications Warehouse Index Page",
-                     "hidden": False
-                 }
-             ],
-             'facets': [{'citationType': 'Report',
-                         'className': 'gov.sciencebase.catalog.item.facet.CitationFacet',
-                         'conference': None,
-                         'edition': None,
-                         'journal': None,
-                         'language': None,
-                         'note': '',
-                         'parts': [],
-                         'tableOfContents': None}],
-             "parentId": app.config['SCIENCEBASE_PARENT_UUID']
-             }
-        self.assertEqual(generate_sb_data(simple_pubsdata, self.replace_pubs_with_pubs_test,
-                         self.supersedes_url, self.json_ld_id_base_url), expected_sbdata)
+        expected_sbdata = {
+            "title": "Environmental conditions in the Namskaket Marsh Area, Orleans, Massachusetts",
+            "id": "567922a9e4b0da412f4fb509",
+            "identifiers": [{
+                "type": "local-index",
+                "scheme": "unknown",
+                "key": "sir20165122"
+            }, {
+                "type": "local-pk",
+                "scheme": "unknown",
+                "key": 70176077
+            }],
+            "body":  "There is fog and rain and tides and sometomes sun and the tide keeps rising",
+            "citation": "A carefully formatted citation with lots of extraneous em and en dashes",
+            "contacts": [],
+            "dates": [],
+            "tags": [],
+            "browseCategories": [
+                "Publication"
+            ],
+            "browseTypes": [
+                "Citation"
+            ],
+            'webLinks': [{
+                "type": "webLink",
+                "uri": "http://pubs.er.usgs.gov/publication/sir20165122",
+                "rel": "related",
+                "title": "Publications Warehouse Index Page",
+                "hidden": False
+            }],
+            'facets': [{
+                'citationType': 'Report',
+                'className': 'gov.sciencebase.catalog.item.facet.CitationFacet',
+                'conference': None,
+                'edition': None,
+                'journal': None,
+                'language': None,
+                'note': '',
+                'parts': [],
+                'tableOfContents': None
+            }],
+            "parentId": app.config['SCIENCEBASE_PARENT_UUID']
+        }
+        self.assertEqual(
+            generate_sb_data(simple_pubsdata, self.replace_pubs_with_pubs_test,
+                             self.supersedes_url, self.json_ld_id_base_url),
+            expected_sbdata
+        )
 
 
 class CreateStoreInfoTestCase(unittest.TestCase):
+    # pylint: disable=C0103,R0201,C0301
 
     def setUp(self):
         self.resp_with_store = r.Response()
@@ -236,25 +251,18 @@ class CreateStoreInfoTestCase(unittest.TestCase):
                                                             'stores': [{'publicationId': 7850,
                                                                         'store': 'https://fake.store.gov',
                                                                         'available': True,
-                                                                        'price': 18}
-                                                                       ]
-                                                            }
-                                              )
+                                                                        'price': 18}]})
         self.resp_pub_not_avail = r.Response()
         self.resp_pub_not_avail = MagicMock(status_code=200)
         self.resp_pub_not_avail.json = MagicMock(return_value={'indexId': 'efg845',
                                                                'stores': [{'publicationId': 6980,
                                                                            'store': 'https://fake.store.gov',
                                                                            'available': False,
-                                                                           'price': 17}
-                                                                          ]
-                                                               }
-                                                 )
+                                                                           'price': 17}]})
         self.resp_without_store = r.Response()
         self.resp_without_store = MagicMock(status_code=200)
         self.resp_without_store.json = MagicMock(return_value={'indexId': 'xyz735',
-                                                               'stores': []}
-                                                 )
+                                                               'stores': []})
         self.resp_no_store = r.Response()
         self.resp_no_store = MagicMock(status_code=200)
         self.resp_no_store.json = MagicMock(return_value={'indexId': 'mno426'})
@@ -288,7 +296,7 @@ class CreateStoreInfoTestCase(unittest.TestCase):
 
 
 class GetAltmetricBadgeImgLinksTestCase(unittest.TestCase):
-
+    # pylint: disable=R0902,C0103
     def setUp(self):
         self.fake_doi = '00.00001/bc.1729'
         self.fake_bad_doi = '00.00001/bc.1729ABC'
@@ -298,8 +306,7 @@ class GetAltmetricBadgeImgLinksTestCase(unittest.TestCase):
         self.fake_altmetric_key = 'IfWeCanHitTheBullsEyeTheRestOfTheDominoesWillFallLikeAHouseOfCards.Checkmate!'
         self.verify_cert = False
         self.data_200 = {'images': {'small': 'small_url', 'medium': 'medium_url', 'large': 'large_url'},
-                         'details_url': 'https://some_url.fake'
-                         }
+                         'details_url': 'https://some_url.fake'}
 
     @requests_mock.Mocker()
     def test_get_badge_images_from_indexed_doi(self, m):
@@ -319,7 +326,7 @@ class GetAltmetricBadgeImgLinksTestCase(unittest.TestCase):
 
 
 class GetCrossrefDataTestCase(unittest.TestCase):
-
+    # pylint: disable=R0902,C0103
     def setUp(self):
         self.fake_doi = '00.00001/bc.1729'
         self.fake_doi_unregistered = '00.00001/bc.1729ABC'
@@ -359,8 +366,9 @@ class GetCrossrefDataTestCase(unittest.TestCase):
         expected = None
         self.assertEqual(result, expected)
 
-class CheckPublicAccessTestCase(unittest.TestCase):
 
+class CheckPublicAccessTestCase(unittest.TestCase):
+    # pylint: disable=C0103
     def setUp(self):
         self.current_date = arrow.get('2017-11-01')
         self.pubdata_future_disp_pub_date = {'displayToPublicDate': '2016-11-25T00:00:00'}
@@ -372,19 +380,22 @@ class CheckPublicAccessTestCase(unittest.TestCase):
 
     def test_online_date_less_than_one_year_ago(self):
         result = check_public_access(pubdata=self.pubdata_future_disp_pub_date,
-                                     online_date_arrow=self.future_online_date, current_date_time=self.current_date)
+                                     online_date_arrow=self.future_online_date,
+                                     current_date_time=self.current_date)
         expected = False
         self.assertEqual(result, expected)
 
     def test_online_date_more_than_one_year_ago_and_after_oct_1_2016(self):
         result = check_public_access(pubdata=self.pubdata_past_disp_pub_date,
-                                     online_date_arrow=self.past_online_date_after_oct_1_2016, current_date_time=self.current_date)
+                                     online_date_arrow=self.past_online_date_after_oct_1_2016,
+                                     current_date_time=self.current_date)
         expected = True
         self.assertEqual(result, expected)
 
     def test_online_date_more_than_one_year_ago_and_before_oct_1_2016(self):
         result = check_public_access(pubdata=self.pubdata_past_disp_pub_date_before_oct_1_2016,
-                                     online_date_arrow=self.past_online_date_before_oct_1_2016, current_date_time=self.current_date)
+                                     online_date_arrow=self.past_online_date_before_oct_1_2016,
+                                     current_date_time=self.current_date)
         expected = False
         self.assertEqual(result, expected)
 
@@ -409,8 +420,6 @@ class CheckPublicAccessTestCase(unittest.TestCase):
         self.assertEqual(result, expected)
 
 
-
-
 class GetPublishedOnlineDateTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -419,7 +428,6 @@ class GetPublishedOnlineDateTestCase(unittest.TestCase):
         self.good_crossref_2_parts = crossref_200_ok_2_date_parts
         self.good_crossref_1_part = crossref_200_ok_1_date_part
         self.ok_no_published_online = crossref_200_ok_message_empty
-
 
     def test_not_ok_data(self):
         result = get_published_online_date(self.not_good_crossref_data)
@@ -446,18 +454,14 @@ class GetPublishedOnlineDateTestCase(unittest.TestCase):
         expected = None
         self.assertEqual(result, expected)
 
-    def test_crossref_is_None(self):
+    def test_crossref_is_none(self):
         result = get_published_online_date(None)
         expected = None
         self.assertEqual(result, expected)
 
 
-
-
-
-
 class UpdateGeographicExtentsTestCase(unittest.TestCase):
-
+    # pylint: disable=C0103
     def setUp(self):
         self.record = {'indexId': '1234', 'title': 'Title 1'}
 
@@ -469,19 +473,19 @@ class UpdateGeographicExtentsTestCase(unittest.TestCase):
         self.record['geographicExtents'] = ''
         update_geographic_extents(self.record)
 
-        self.assertFalse(self.record.has_key('geographicExtentns'))
+        self.assertFalse('geographicExtentns' in self.record)
 
     def test_record_with_geographic_extents_with_invalid_json(self):
         self.record['geographicExtents'] = 'asdfasdfasdf'
         update_geographic_extents(self.record)
-        self.assertFalse(self.record.has_key('geographicExtents'))
+        self.assertFalse('geographicExtents' in self.record)
 
     def test_record_with_geographic_extents_with_single_feature(self):
         self.record['geographicExtents'] = '{"type" : "Feature", "geometry": {"type": "Polygon", ' \
             + '"coordinates": [[ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0] ]]}}'
         update_geographic_extents(self.record)
 
-        self.assertTrue(self.record.has_key('geographicExtents'))
+        self.assertTrue('geographicExtents' in self.record)
         extents = self.record.get('geographicExtents')
         self.assertEqual(extents.get('type'), 'FeatureCollection')
         self.assertEqual(extents.get('properties'), {'title': 'Title 1'})
@@ -499,7 +503,7 @@ class UpdateGeographicExtentsTestCase(unittest.TestCase):
 
         update_geographic_extents(self.record)
 
-        self.assertTrue(self.record.has_key('geographicExtents'))
+        self.assertTrue('geographicExtents' in self.record)
         extents = self.record.get('geographicExtents')
         self.assertEqual(extents.get('type'), 'FeatureCollection')
         self.assertEqual(extents.get('properties'), {'title': 'Title 1'})
@@ -511,44 +515,44 @@ class UpdateGeographicExtentsTestCase(unittest.TestCase):
 
 
 class SearchPublicationsGetPubsSearchResultsTestCase(unittest.TestCase):
-
+    # pylint: disable=C0103
     @requests_mock.Mocker()
     def test_bad_status_response(self, m):
-        searchPublications = SearchPublications('https://fake.com/search')
+        search_publications = SearchPublications('https://fake.com/search')
         m.get('https://fake.com/search', text="Server Error", status_code=500)
-        result, status = searchPublications.get_pubs_search_results()
+        result, status = search_publications.get_pubs_search_results()
 
         self.assertIsNone(result)
         self.assertEqual(status, 500)
 
     @requests_mock.Mocker()
     def test_good_status_with_valid_json(self, m):
-        searchPublications = SearchPublications('https://fake.com/search')
+        search_publications = SearchPublications('https://fake.com/search')
         m.get('https://fake.com/search', json={"a": 1, "b": 2})
-        result, status = searchPublications.get_pubs_search_results()
+        result, status = search_publications.get_pubs_search_results()
 
         self.assertEqual(result, {"a": 1, "b": 2})
         self.assertEqual(status, 200)
 
     @requests_mock.Mocker()
     def test_good_status_with_invalid_json(self, m):
-        searchPublications = SearchPublications('https://fake.com/search')
+        search_publications = SearchPublications('https://fake.com/search')
         m.get('https://fake.com/search', text="Hello")
-        result, status = searchPublications.get_pubs_search_results()
+        result, status = search_publications.get_pubs_search_results()
 
         self.assertIsNone(result)
         self.assertEqual(status, 200)
 
     @patch('requests.get')
     def test_request_without_params(self, mock_get):
-        searchPublications = SearchPublications('https://fake.com/search')
-        result, status = searchPublications.get_pubs_search_results()
+        search_publications = SearchPublications('https://fake.com/search')
+        search_publications.get_pubs_search_results()
 
         self.assertIsNone(mock_get.call_args[1]['params'])
 
     @patch('requests.get')
     def test_request_with_params(self, mock_get):
-        searchPublications = SearchPublications('https://fake.com/search')
-        result, status = searchPublications.get_pubs_search_results({'param1': 'V1', 'param2': 'V2'})
+        search_publications = SearchPublications('https://fake.com/search')
+        search_publications.get_pubs_search_results({'param1': 'V1', 'param2': 'V2'})
 
         self.assertEqual(mock_get.call_args[1]['params'], {'param1': 'V1', 'param2': 'V2'})

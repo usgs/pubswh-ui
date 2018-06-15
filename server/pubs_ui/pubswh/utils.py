@@ -1,28 +1,32 @@
-import json
-from urlparse import urljoin
-from copy import deepcopy
+"""
+Utilities for the pubswh Blueprint
+"""
+# pylint: disable=C0103,C0302
 
-import requests
-import feedparser
-import re
-import arrow
-import natsort
+from copy import deepcopy
+import json
 from operator import itemgetter
+import re
+from urlparse import urljoin
+
+import arrow
 from bs4 import BeautifulSoup
 from dcxml import simpledc
+import feedparser
+import natsort
+import requests
 
 from pubs_ui import app, cache
 from ..custom_filters import display_publication_info
 
-from pprint import pprint
 
-json_ld_id_base_url = app.config.get('JSON_LD_ID_BASE_URL')
+JSON_LD_ID_BASE_URL = app.config.get('JSON_LD_ID_BASE_URL')
 # should requests verify the certificates for ssl connections
-verify_cert = app.config['VERIFY_CERT']
-base_search_url = app.config['BASE_SEARCH_URL']
-altmetric_key = app.config['ALTMETRIC_KEY']
-altmetric_endpoint = app.config['ALTMETRIC_ENDPOINT']
-crossref_endpoint = app.config['CROSSREF_ENDPOINT']
+VERIFY_CERT = app.config['VERIFY_CERT']
+BASE_SEARCH_URL = app.config['BASE_SEARCH_URL']
+ALTMETRIC_KEY = app.config['ALTMETRIC_KEY']
+ALTMETRIC_ENDPOINT = app.config['ALTMETRIC_ENDPOINT']
+CROSSREF_ENDPOINT = app.config['CROSSREF_ENDPOINT']
 
 
 def pubdetails(pubdata):
@@ -92,13 +96,13 @@ def pubdetails(pubdata):
             # if the thing is a list of dicts and if there is something in the list,
             # concatenate the values into a string
             elif pubdata.get(detail[0]) is not None and isinstance(pubdata.get(detail[0]), list) \
-                    and len(pubdata.get(detail[0])) > 0:
+                    and pubdata.get(detail[0]):
                 dd = []
                 for det in pubdata.get(detail[0]):
                     dd.append(det.get(detail[1]))
                 dd = ', '.join(filter(None, dd))
                 pubdata['details'].append({detail[2]: dd})
-        elif len(detail) == 2 and pubdata.get(detail[0]) is not None and len(pubdata.get(detail[0])) > 0:
+        elif len(detail) == 2 and pubdata.get(detail[0]) is not None and pubdata.get(detail[0]):
             pubdata['details'].append({detail[1]: pubdata.get(detail[0])})
     return pubdata
 
@@ -195,7 +199,7 @@ def create_display_links(pubdata):
     # set a variable so that we can display something if the pub has no links other than a thumbnail
     pub_has_no_links = True
     for key, value in display_links.iteritems():
-        if key != 'Thumbnail' and len(value) > 0:
+        if key != 'Thumbnail' and value:
             pub_has_no_links = False
     pubdata['pubHasNoLinks'] = pub_has_no_links
     return pubdata
@@ -208,7 +212,7 @@ def manipulate_index_page_links(display_links):
     :return:
     """
     # only do something if there are links in the index page links section
-    if len(display_links.get('Index Page')) > 0:
+    if display_links.get('Index Page'):
         for link in display_links["Index Page"]:
             if link.get("text") is None and 'pubs.usgs.gov' in link["url"]:
                 link["text"] = "USGS Index Page"
@@ -232,7 +236,7 @@ def manipulate_plate_links(display_links):
     :return: display links with rejiggered plate link order
     """
     # only do something if there are links in the plate links section
-    if len(display_links.get("Plate")) > 0:
+    if display_links.get("Plate"):
         for link in display_links["Plate"]:
             url = link["url"]
             file_name = url.split("/")[-1].split(".")
@@ -248,13 +252,13 @@ def manipulate_plate_links(display_links):
                 if len(file_name[0].split("_")) > 1:
                     try:
                         text = file_name[0].split("_")[-1]
-                        text = re.split('(\d+)', text)[0:2]
+                        text = re.split(r'(\d+)', text)[0:2]
                         text[1] = int(text[1])
                         link['rank'] = text[1]
                     except (ValueError, IndexError):
                         try:
                             text = file_name[0].split("_")[0]
-                            text = re.split('(\d+)', text)[0:2]
+                            text = re.split(r'(\d+)', text)[0:2]
                             text[1] = int(text[1])
                             link['rank'] = text[1]
                         except (ValueError, IndexError):
@@ -285,7 +289,7 @@ def pull_feed(feed_url):
 
     # Process html to remove unwanted mark-up and fix links
     post = ''
-    if len(feed['entries']) > 0:
+    if feed['entries']:
         soup = BeautifulSoup(feed['entries'][0].summary, 'lxml')
 
         # Remove edited by paragraph
@@ -307,7 +311,6 @@ def pull_feed(feed_url):
 
 
 class SearchPublications(object):
-
     """
     Methods for executing various types
     of searches against the backend
@@ -315,6 +318,7 @@ class SearchPublications(object):
 
     :param str search_url: URL without any search parameters appended
     """
+    # pylint: disable=R0903
 
     def __init__(self, search_url):
         self.search_url = search_url
@@ -328,7 +332,7 @@ class SearchPublications(object):
         :rtype: tuple
         """
 
-        search_result_obj = requests.get(url=self.search_url, params=params, verify=verify_cert)
+        search_result_obj = requests.get(url=self.search_url, params=params, verify=VERIFY_CERT)
         search_result_json = None
         if search_result_obj.status_code == requests.codes.ok:
             try:
@@ -336,8 +340,8 @@ class SearchPublications(object):
             except ValueError:
                 pass
             else:
-                #TODO: Refactor to add the additional dictionary keys where needed. This simplifies this function so that
-                # just returns the json result.
+                # TODO: Refactor to add the additional dictionary keys where needed.
+                # This simplifies this function so that just returns the json result.
                 for record in search_result_json.get('records', []):
                     contributor_lists(record)
 
@@ -352,8 +356,9 @@ def contributor_lists(record):
     concatenated names and another with concatenated names and types
     """
 
-    #TODO: Refactor to make clear this updates record in place and don't return record. Consider whether contributor_types should
-    # be hardcoded or fetched from pub service lookup.
+    # TODO: Refactor to make clear this updates record in place and don't
+    # return record. Consider whether contributor_types should be hardcoded or
+    # fetched from pub service lookup.
     contributor_types = ['authors', 'editors', 'compilers']
     for contributor_type in contributor_types:
         if record.get('contributors') is not None:
@@ -366,8 +371,9 @@ def contributor_lists(record):
 
 def make_contributor_list(contributors):
     """
-    Makes a list of names for contributors regardless of type that is easy to join in jinja.  Useful when you need
-    a list of names and don't have to do all of the semantic jiggery-poky that one needs for names otherwise.
+    Makes a list of names for contributors regardless of type that is easy to
+    join in jinja.  Useful when you need a list of names and don't have to do
+    all of the semantic jiggery-poky that one needs for names otherwise.
 
     :param list contributors: a list of dicts of a contributor type (authors, editors, etc)
     :return list of concatenated author names in given family suffix or corporate name
@@ -401,11 +407,11 @@ def concatenate_contributor_names(contributors):
             contributor_name_list = []
             contributor_dict = {"type": "person"}
             # add parts of name to the list if they exist and aren't empty strings
-            if contributor.get("given") is not None and len(contributor.get("given")) > 0:
+            if contributor.get("given") is not None and contributor.get("given"):
                 contributor_name_list.append(contributor['given'])
-            if contributor.get("family") is not None and len(contributor.get("family")) > 0:
+            if contributor.get("family") is not None and contributor.get("family"):
                 contributor_name_list.append(contributor['family'])
-            if contributor.get("suffix") is not None and len(contributor.get("suffix")) > 0:
+            if contributor.get("suffix") is not None and contributor.get("suffix"):
                 contributor_name_list.append(contributor['suffix'])
             contributor_dict["text"] = " ".join(contributor_name_list)
             if contributor.get("orcid"):
@@ -430,7 +436,7 @@ def update_geographic_extents(record):
     """
     result = None
 
-    if record.has_key('geographicExtents'):
+    if 'geographicExtents' in record:
         try:
             geojson = json.loads(record.get('geographicExtents'))
         except ValueError as e:
@@ -440,10 +446,9 @@ def update_geographic_extents(record):
             featureId = record.get('indexId') + '.base_id'
             properties = {'title': record.get('title'),
                           'id': record.get('indexId'),
-                          'url': json_ld_id_base_url + 'publication/' + record.get('indexId'),
+                          'url': JSON_LD_ID_BASE_URL + 'publication/' + record.get('indexId'),
                           'year': record.get('publicationYear'),
-                          'info': display_publication_info(record)
-                          }
+                          'info': display_publication_info(record)}
 
             if geojson.get('type') == "FeatureCollection":
                 result = geojson
@@ -457,7 +462,7 @@ def update_geographic_extents(record):
 
         if result:
             record['geographicExtents'] = result
-        elif record.has_key('geographicExtents'):
+        elif 'geographicExtents' in record:
             del record['geographicExtents']
 
 
@@ -482,7 +487,7 @@ def create_store_info(publication_resp):
         index_id = response_json.get('indexId')
         if 'stores' in response_json.keys():
             stores = response_json['stores']
-            if len(stores) > 0:
+            if stores:
                 product = stores[0]
 
     # REMARKS ABOUT SERVICE RETURNED VALUE ASSUMPTIONS
@@ -581,8 +586,7 @@ def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):
             '@type': pub_type,
             'dc:title': return_pubdata.get('title'),
             'dc:date': str(return_pubdata.get('publicationYear'))
-        }
-        )
+        })
 
         for interaction in interactions:
             # add any linked data for superseding another publication
@@ -630,16 +634,14 @@ def make_chapter_data_for_display(pubdata):
     :param pubdata:  data for a single publication from the pubs-services endpoint
     :return: pubdata
     """
-    if len(pubdata.get('interactions')) > 0:
+    if pubdata.get('interactions'):
         # natural sort the indexIDs so that chapter 2 comes after chapter one and before chapter three
         pubdata['interactions'] = natsort.natsorted(pubdata['interactions'], key=lambda x: x['subject']['indexId'],
                                                     alg=natsort.ns.IGNORECASE)
         # determine wheter to display the publication subparts chunk of the template
         for interaction in pubdata['interactions']:
-            if interaction['predicate'] == "IS_PART_OF" and interaction['subject']['indexId'] != pubdata['indexId']:
-                pubdata['hasSubParts'] = True
-            else:
-                pubdata['hasSubParts'] = False
+            pubdata['hasSubParts'] = bool(interaction['predicate'] == "IS_PART_OF" and
+                                          interaction['subject']['indexId'] != pubdata['indexId'])
     return pubdata
 
 
@@ -718,15 +720,14 @@ def extract_related_pub_info(pubdata):
     graph = pubdata.get('relationships', {}).get('@graph', [])
     related_pubs = []
     for graph_element in graph:
-        if graph_element.has_key('rdaw:replacedByWork') or graph_element.has_key('rdaw:replacementOfWork'):
+        if 'rdaw:replacedByWork' in graph_element or 'rdaw:replacementOfWork' in graph_element:
             related_pubs.append(graph_element)
     related_length = len(related_pubs)
     if related_length == 0:
         relations = {'precede_len': 0,
                      'supersede_len': 0,
                      'precede_info': [],
-                     'supersede_info': []
-                     }
+                     'supersede_info': []}
     elif related_length >= 1:
         for related_pub in related_pubs:
             item_year = related_pub['dc:date']
@@ -735,17 +736,17 @@ def extract_related_pub_info(pubdata):
             item_id = related_pub['@id'].rsplit('/', 1)[1]
             item_info = {'id': item_id,
                          'title': item_title,
-                         'year': item_year
-                         }
-            if related_pub.has_key('rdaw:replacedByWork'):
+                         'year': item_year}
+            if 'rdaw:replacedByWork' in related_pub:
                 preceding_info.append(item_info)
-            elif related_pub.has_key('rdaw:replacementOfWork'):
+            elif 'rdaw:replacementOfWork' in related_pub:
                 superceding_info.append(item_info)
-        relations = {'precede_len': len(preceding_info),
-                     'supersede_len': len(superceding_info),
-                     'precede_info': sort_list_of_dicts(preceding_info, 'year'),
-                     'supersede_info': sort_list_of_dicts(superceding_info, 'year')
-                     }
+        relations = {
+            'precede_len': len(preceding_info),
+            'supersede_len': len(superceding_info),
+            'precede_info': sort_list_of_dicts(preceding_info, 'year'),
+            'supersede_info': sort_list_of_dicts(superceding_info, 'year')
+        }
     else:
         raise Exception('Failed to parse supersede information.')
     return relations
@@ -796,14 +797,14 @@ def generate_dublin_core(pubrecord):
         all_contributors = editors
 
     data = {
-            "dates": [pubrecord.get('publicationYear')],
-            "descriptions": [pubrecord.get('docAbstract')],
-            "formats": ['application/pdf'],
-            "identifiers": [pubrecord.get('doi')],
-            "languages": ['en'],
-            "publishers": [pubrecord.get('publisher')],
-            "titles": [pubrecord.get('title')],
-            }
+        "dates": [pubrecord.get('publicationYear')],
+        "descriptions": [pubrecord.get('docAbstract')],
+        "formats": ['application/pdf'],
+        "identifiers": [pubrecord.get('doi')],
+        "languages": ['en'],
+        "publishers": [pubrecord.get('publisher')],
+        "titles": [pubrecord.get('title')],
+    }
 
     if all_contributors and len(all_contributors) >= 1:
         data["creators"] = [all_contributors[0]]
@@ -835,71 +836,59 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
     https://my.usgs.gov/confluence/display/sciencebase/ScienceBase+Item+Core+Model
     """
     pubdata = munge_pubdata_for_display(pubrecord, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
-    sbdata= {"title": pubdata.get('title'),
-             "id": pubdata.get('scienceBaseUri'),
-             "identifiers": [
-                 {
-                    "type": "local-index",
-                    "scheme": "unknown",
-                    "key": pubdata['indexId']
-                    },
-                    {
-                    "type": "local-pk",
-                    "scheme": "unknown",
-                    "key": pubdata['id']
-                    }
-             ],
-             "body": pubdata.get('docAbstract'),
-             "citation": pubdata.get('usgsCitation'),
-             "contacts": [],
-             "facets": [],
-             "dates": [],
-             "tags": [],
-             "browseCategories": [
-                 "Publication"
-             ],
-             "browseTypes": [
-                 "Citation"
-             ],
-             'webLinks': [
-                 {
-                     "type": "webLink",
-                     "uri": "http://pubs.er.usgs.gov/publication/"+pubdata['indexId'],
-                     "rel": "related",
-                     "title": "Publications Warehouse Index Page",
-                     "hidden": False
-                 }
-             ],
-             "parentId": app.config['SCIENCEBASE_PARENT_UUID']
-             }
+    sbdata = {
+        "title": pubdata.get('title'),
+        "id": pubdata.get('scienceBaseUri'),
+        "identifiers": [{
+            "type": "local-index",
+            "scheme": "unknown",
+            "key": pubdata['indexId']
+        }, {
+            "type": "local-pk",
+            "scheme": "unknown",
+            "key": pubdata['id']
+        }],
+        "body": pubdata.get('docAbstract'),
+        "citation": pubdata.get('usgsCitation'),
+        "contacts": [],
+        "facets": [],
+        "dates": [],
+        "tags": [],
+        "browseCategories": ["Publication"],
+        "browseTypes": ["Citation"],
+        'webLinks': [{
+            "type": "webLink",
+            "uri": "http://pubs.er.usgs.gov/publication/"+pubdata['indexId'],
+            "rel": "related",
+            "title": "Publications Warehouse Index Page",
+            "hidden": False
+        }],
+        "parentId": app.config['SCIENCEBASE_PARENT_UUID']
+    }
 
     if pubdata.get('doi'):
-        doi_object = {
+        sbdata['identifiers'].append({
             "type": "doi",
             "scheme": "http://www.loc.gov/standards/mods/mods-outline-3-5.html#identifier",
             "key": "doi:"+pubdata['doi']
-        }
-        sbdata['identifiers'].append(doi_object)
+        })
     if pubdata.get('seriesTitle'):
-        series_object = {
+        sbdata['identifiers'].append({
             "type": "series",
             "scheme": "unknown",
             "key": pubdata['seriesTitle'].get('text')
-        }
-        sbdata['identifiers'].append(series_object)
-        title_tag = {
+        })
+        sbdata['tags'].append({
             "type": "Publication",
             "scheme": "USGS Publications Warehouse",
             "name": pubdata['seriesTitle']['text'][:78] if pubdata['seriesTitle'].get('text') else None
-        }
-        sbdata['tags'].append(title_tag)
+        })
     if pubdata.get('publicationYear'):
-        publication_year = {
+        sbdata['dates'].append({
             "type": "Publication",
             "dateString": pubdata['publicationYear'],
             "label": "Publication Date"
-        }
-        sbdata['dates'].append(publication_year)
+        })
     if pubdata.get('contributors', {}).get('authors'):
         if pubdata.get('authorsListTyped'):
             for author in pubdata['authorsListTyped']:
@@ -929,32 +918,32 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
     for (linktype, linklist) in pubdata['displayLinks'].items():
         if linktype == "Thumbnail" and len(linklist) == 1:
             thumbnail_link = {
-                        "type": "browseImage",
-                        "uri": linklist[0]['url'],
-                        "rel": "related",
-                        "title": "Thumbnail",
-                        "hidden": False
-                        }
+                "type": "browseImage",
+                "uri": linklist[0]['url'],
+                "rel": "related",
+                "title": "Thumbnail",
+                "hidden": False
+            }
             sbdata["webLinks"].append(thumbnail_link)
         if linktype == "Document" and len(linklist) >= 1:
             for link in linklist:
                 document_link = {
-                        "type": "pdf",
-                        "uri": link['url'],
-                        "rel": "related",
-                        "title": link['text'] if link.get('text') else "Document",
-                        "hidden": False
-                        }
+                    "type": "pdf",
+                    "uri": link['url'],
+                    "rel": "related",
+                    "title": link['text'] if link.get('text') else "Document",
+                    "hidden": False
+                }
                 sbdata["webLinks"].append(document_link)
         if linktype == "Data Release" and len(linklist) >= 1:
             for link in linklist:
                 document_link = {
-                        "type": "webLink",
-                        "uri": link['url'],
-                        "rel": "related",
-                        "title": link['text'] if link.get('text') else "USGS Data Release",
-                        "hidden": False
-                        }
+                    "type": "webLink",
+                    "uri": link['url'],
+                    "rel": "related",
+                    "title": link['text'] if link.get('text') else "USGS Data Release",
+                    "hidden": False
+                }
                 sbdata["webLinks"].append(document_link)
     # Set the citation facet
     citation_facet = {
@@ -1042,7 +1031,7 @@ def get_published_online_date(crossref_data):
 
 
 @cache.memoize(timeout=2592000)  # Cache data for a month so the nice people at crossref don't yell at us
-def get_crossref_data(doi, endpoint=crossref_endpoint, verify=verify_cert):
+def get_crossref_data(doi, endpoint=CROSSREF_ENDPOINT, verify=VERIFY_CERT):
     """
     All this function does is pull data from the crossref API for a specific URL and put it in the cache
     :param doi: the DOI of the pub you are interested in
@@ -1063,8 +1052,8 @@ def get_crossref_data(doi, endpoint=crossref_endpoint, verify=verify_cert):
 
 
 @cache.memoize(timeout=86400)  # Cache data for a day so the nice people at altmetrics don't yell at us
-def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=altmetric_endpoint,
-                                  altmetric_key=altmetric_key, verify=verify_cert):
+def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=ALTMETRIC_ENDPOINT,
+                                  altmetric_key=ALTMETRIC_KEY, verify=VERIFY_CERT):
     """
     Get the links for small, medium, and altmetric badges, and the link
     that provides further information about the attention score in the badge.
