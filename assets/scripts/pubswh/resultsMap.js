@@ -8,7 +8,7 @@ import popupTemplate from './hb_templates/resultsMapPopup.hbs';
  *      @prop {Boolean} enablePopup - publication extent layers should be interactive only when set to true
  * @returns {L.Map} - Returns the map object created.
  */
-export const createResultsMap = function(options) {
+export const createResultsMap = window.createResultsMap = function(options) {
     /*var EMPTY_PUBS_EXTENTS = {
         type: 'FeatureCollection',
         features: [],

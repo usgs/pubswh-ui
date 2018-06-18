@@ -364,7 +364,7 @@
                 <script type="text/javascript" src="{{ 'scripts/resultsMap.js' | asset_url }}"></script>
 
                 <script type="application/javascript">
-                    PUBS_WH.createResultsMap({
+                    window.createResultsMap({
                         mapDivId: 'mymap',
                         publications: [{{ pubdata | tojson | safe }}],
                         enablePopup: false
