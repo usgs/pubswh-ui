@@ -12,7 +12,7 @@ Flask-Bower==1.2.1
 Flask-Caching==1.0.1
 Flask-Collect==1.2.2
 Flask-Cors==3.0.6
-Flask-Images==2.1.2
+git+git://github.com/wzuo/Flask-Images.git@d3477b6380d1ee74d21425f787fa194354a1ca2d
 Flask-Login==0.3.2
 Flask-Mail==0.9.1
 flask-paginate==0.2.7
@@ -49,7 +49,7 @@ requests-mock==1.1.0
 rsa==3.4.2
 six==1.11.0
 sure==1.4.0
-tablib==0.11.2
+tablib==0.12.1
 testtools==2.2.0
 traceback2==1.4.0
 uncurl==0.0.8
