@@ -1,6 +1,5 @@
-require('./analyticsData.js');
 import { createGraph } from './analyticsGraph';
-require('./dataUtils.js');
+
 
 (function() {
     var DAY_FORMAT = 'MMM DD YYYY';

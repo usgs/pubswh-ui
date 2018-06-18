@@ -3,7 +3,6 @@ module.exports = null;
 
 import { batchFetchMonthlyPastYear, batchFetchPast30Days } from './analyticsData.js';
 import { createGraph } from './analyticsGraph';
-require('./dataUtils.js');
 
 
 (function() {

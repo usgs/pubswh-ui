@@ -1,4 +1,5 @@
-var METRICS = window.METRICS = window.METRICS || {};
+import { getPastYear, fillMissingDates } from './dataUtils';
+
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const MONTH_DIM_FORMAT = 'YYYYMM';
@@ -27,7 +28,7 @@ const transformRow = function(metricNames, dateDimFormat, row) {
  */
 export const batchFetchMonthlyPastYear = function(metricsAndDimFilters, fromDate) {
     var requestedDate = fromDate ? fromDate : moment();
-    var dateRange = METRICS.dataUtils.getPastYear(requestedDate);
+    var dateRange = getPastYear(requestedDate);
 
     var transformToRequest = function(metricAndDimFilter) {
         return {
@@ -53,7 +54,7 @@ export const batchFetchMonthlyPastYear = function(metricsAndDimFilters, fromDate
                 var transformMonthRow = _.partial(transformRow, metricNames, MONTH_DIM_FORMAT);
                 var rows = _.has(report.data, 'rows') ? report.data.rows : [];
 
-                return METRICS.dataUtils.fillMissingDates({
+                return fillMissingDates({
                     startDate: dateRange[0],
                     endDate: dateRange[1],
                     timeUnit: 'month',
@@ -115,7 +116,7 @@ export const batchFetchPast30Days = function(metricsAndDimFilters, fromDate) {
                 var transformDayRow = _.partial(transformRow, metricNames, DAY_DIM_FORMAT);
                 var rows = _.has(report.data, 'rows') ? report.data.rows : [];
 
-                return METRICS.dataUtils.fillMissingDates({
+                return fillMissingDates({
                     startDate: thirtyDaysAgo,
                     endDate: requestedDate,
                     timeUnit: 'day',
