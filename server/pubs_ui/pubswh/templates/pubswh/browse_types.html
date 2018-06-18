@@ -6,18 +6,18 @@
 
 {% block main %}
 <main class="container-fluid">
-	<div class="space">
-	       <p class="breadcrumb"> <a href="{{ url_for('pubswh.index') }}" title="Pubs Warehouse Home">Pubs Warehouse Home</a>
+  <div class="space">
+         <p class="breadcrumb"> <a href="{{ url_for('pubswh.index') }}" title="Pubs Warehouse Home">Pubs Warehouse Home</a>
             <span> > </span><a href="{{ url_for('pubswh.browse_types') }}" title="Browse USGS Publications">Browse</a>
             </p>
-	    <h1>Browse the USGS Publications Warehouse</h1>
-	    <h2>Publication types</h2>
+      <h1>Browse the USGS Publications Warehouse</h1>
+      <h2>Publication types</h2>
         <p>The Publications Warehouse collection is broken into several broad types.  Nearly all publications are in the Article or Report types</p>
-	    <div class="fix">
-		   <ul>
+      <div class="fix">
+       <ul>
                {% for type in types %}<li><a title="See a list of publications subtypes for the publication type of {{ type['text'] }}" href="{{ url_for("pubswh.browse_subtypes", pub_type=type['text']) }}">{{ type['text'] }}</a></li>{% endfor %}
            </ul>
-	    </div>
+      </div>
     </div>
 </main>
 {% endblock %}

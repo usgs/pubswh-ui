@@ -1,16 +1,12 @@
-/* jslint browser: true */
-
 define([
-	'backbone'
+    'backbone'
 ], function(Backbone) {
-	"use strict";
+        var model = Backbone.Model.extend({
+        defaults: {
+            'id': '',
+            'text': ''
+        }
+    });
 
-	var model = Backbone.Model.extend({
-		defaults: {
-			'id': '',
-			'text': ''
-		}
-	});
-
-	return model;
+    return model;
 });

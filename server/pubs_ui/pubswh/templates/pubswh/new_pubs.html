@@ -1,12 +1,12 @@
 {% extends 'pubswh/base.html' %}
 {% block head %}
-	<title>New Publications by USGS Authors</title>
-	<meta name="description" content="Explore publications recently added to the USGS Publications Warehouse">
+    <title>New Publications by USGS Authors</title>
+    <meta name="description" content="Explore publications recently added to the USGS Publications Warehouse">
     {% include 'pubswh/mathjax.html' %}
 {% endblock head %}
 
 {% block page_style %}
-	<link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/pagination.css') }}">
+    <link rel="stylesheet" href="{{ url_for('pubswh.static', filename = 'css/pagination.css') }}">
 {% endblock page_style %}
 
 {% block main %}

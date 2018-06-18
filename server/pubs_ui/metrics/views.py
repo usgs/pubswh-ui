@@ -1,8 +1,12 @@
+"""
+Metrics blueprint views
+"""
+# pylint: disable=C0103,C0111
+
 import random
 import time
 
 from flask import Blueprint, render_template, request, jsonify, Response
-from flask_login import login_required
 
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -35,9 +39,13 @@ http = _handle_http_certificates()
 
 try:
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
-          app.config.get('GA_KEY_FILE_PATH'),
-          app.config.get('GA_OAUTH2_SCOPE'))
-    analytics = build('analytics', 'v4', http=credentials.authorize(http), discoveryServiceUrl=app.config.get('GA_DISCOVERY_URI'))
+        app.config.get('GA_KEY_FILE_PATH'),
+        app.config.get('GA_OAUTH2_SCOPE')
+    )
+    analytics = build(
+        'analytics', 'v4',
+        http=credentials.authorize(http),
+        discoveryServiceUrl=app.config.get('GA_DISCOVERY_URI'))
 except IOError:
     analytics = None
 
@@ -66,11 +74,13 @@ def publication(pubsid):
 def gadata():
     view_id = app.config.get('GA_PUBS_VIEW_ID')
     report_requests = request.get_json()
-    [r.update({'viewId': view_id}) for r in report_requests]
+    for r in report_requests:
+        r.update({'viewId': view_id})
     for n in range(0, 5):
         try:
             report_response = analytics.reports().batchGet(
-                quotaUser=request.remote_addr,  # Pass so that the quota to limit 10 queries per second per IP uses the client's IP.
+                # Pass so that the quota to limit 10 queries per second per IP uses the client's IP.
+                quotaUser=request.remote_addr,
                 body={
                     'reportRequests': report_requests
                 }
@@ -83,9 +93,9 @@ def gadata():
                                 status=int(error.resp['status']),
                                 mimetype='application/json')
             if error.resp.reason in [
-                'userRateLimitExceeded',
-                'rateLimitExceeded'
-                'quotaExceeded']:
+                    'userRateLimitExceeded',
+                    'rateLimitExceeded'
+                    'quotaExceeded']:
                 # Assign a response but try again until succeeds or loop exits
                 response = Response
                 time.sleep((2 ** n) + random.random())

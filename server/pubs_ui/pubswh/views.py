@@ -1,5 +1,9 @@
+"""
+pubswh blueprint views
+"""
+# pylint: disable=C0103,C0301,C0111,W0613
+
 from datetime import date, timedelta
-from dateutil import parser as dateparser
 import json
 from operator import itemgetter
 import sys
@@ -7,6 +11,7 @@ import urllib
 import random
 
 import arrow
+from dateutil import parser as dateparser
 from requests import get
 import tablib
 
@@ -64,6 +69,7 @@ def make_cache_key(*args, **kwargs):
 
 @pubswh.errorhandler(404)
 def page_not_found(e):
+    # pylint: disable=W0613
     return render_template('pubswh/404.html'), 404
 
 
@@ -94,8 +100,7 @@ def restricted_page(index_id):
         related_pubs = extract_related_pub_info(pubdata)
         if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
             return jsonify(pubdata)
-        else:
-            return render_template("pubswh/preview.html", indexID=index_id, pubdata=pubdata, related_pubs=related_pubs)
+        return render_template("pubswh/preview.html", indexID=index_id, pubdata=pubdata, related_pubs=related_pubs)
     # if the publication has been published (so it is out of manage) redirect to the right URL
     elif response.status_code == 404 and published_status == 200:
         return redirect(url_for('pubswh.publication', index_id=index_id))
@@ -121,8 +126,6 @@ def webmaster_tools_verification():
 @pubswh.route('/')
 @cache.cached(timeout=300, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def index():
-    user = current_user.get_id()
-
     sp = SearchPublications(search_url)
     recent_publications_resp = sp.get_pubs_search_results(params={'pub_x_days': 7,
                                                                   'page_size': 6})  # bring back recent publications
@@ -141,6 +144,7 @@ def index():
     return render_template('pubswh/home.html',
                            recent_publications=pubs_records)
 
+
 # contact form
 @pubswh.route('/public_access_contact', methods=['GET', 'POST'])
 def pub_access_contact():
@@ -153,14 +157,13 @@ def pub_access_contact():
                 sender_str = '({name}, {email})'.format(name=human_name, email=human_email)
             else:
                 sender_str = '({email})'.format(email=human_email)
-            subject_line = 'Pubs Warehouse Public Access request Comments'  # this is want Remedy filters on to determine if an email
-            # goes to the pubs support group
+            # this is want Remedy filters on to determine if an email goes to the pubs support group
+            subject_line = 'Pubs Warehouse Public Access request Comments'
             originating_page = contact_form.originating_page.data
             message_body = contact_form.message.data
             message_content = EMAIL_RESPONSE.format(contact_str=sender_str,
                                                     message_body=message_body,
-                                                    originating_page=originating_page
-                                                    )
+                                                    originating_page=originating_page)
             msg = Message(subject=subject_line,
                           sender=(human_name, human_email),
                           reply_to=('IPDS_Help', 'GS_Help_IPDS@usgs.gov'),
@@ -168,29 +171,29 @@ def pub_access_contact():
                           # goes to the pubs support group...
                           recipients=ipds_contact_recipients,
                           # will go to gs_ipds_help@usgs.gov if application has DEBUG = False
-                          body=message_content
-                          )
+                          body=message_content)
             mail.send(msg)
-            return redirect(url_for(
-                'pubswh.pub_access_contact_confirmation'))  # redirect to a conf page after successful validation and message sending
+            # redirect to a conf page after successful validation and message sending
+            return redirect(url_for('pubswh.pub_access_contact_confirmation'))
         else:
-            return render_template('pubswh/pub_access_contact.html',
-                                   contact_form=contact_form)  # redisplay the form with errors if validation fails
-    elif request.method == 'GET':
-        contact_referrer = request.referrer
-        contact_form.originating_page.data = 'Originating Page: {}'.format(contact_referrer)
-        title = request.args.get('title')
-        index_id = request.args.get('index_id')
-        contact_form.message.data = 'I would like to request the full-text public access version of the following ' \
-                                    'publication: {0} \n\n USGS support team: Get more details on this publication here:' \
-                                    ' https://pubs.er.usgs.gov/public_access_details/{1}'.format(title, index_id)
-        return render_template('pubswh/pub_access_contact.html', contact_form=contact_form)
+            # redisplay the form with errors if validation fails
+            return render_template('pubswh/pub_access_contact.html', contact_form=contact_form)
+
+    contact_referrer = request.referrer
+    contact_form.originating_page.data = 'Originating Page: {}'.format(contact_referrer)
+    title = request.args.get('title')
+    index_id = request.args.get('index_id')
+    contact_form.message.data = 'I would like to request the full-text public access version of the following ' \
+                                'publication: {0} \n\n USGS support team: Get more details on this publication here:' \
+                                ' https://pubs.er.usgs.gov/public_access_details/{1}'.format(title, index_id)
+    return render_template('pubswh/pub_access_contact.html', contact_form=contact_form)
 
 
 @pubswh.route('/public_access_contact_confirm')
 def pub_access_contact_confirmation():
     confirmation_message = 'Thank you for contacting the USGS Publications Warehouse Public Access support team.'
     return render_template('pubswh/pub_access_contact_confirm.html', confirm_message=confirmation_message)
+
 
 @pubswh.route('/public_access_details/<index_id>')
 @login_required
@@ -225,8 +228,7 @@ def contact():
             message_body = contact_form.message.data
             message_content = EMAIL_RESPONSE.format(contact_str=sender_str,
                                                     message_body=message_body,
-                                                    originating_page=originating_page
-                                                    )
+                                                    originating_page=originating_page)
             msg = Message(subject=subject_line,
                           sender=(human_name, human_email),
                           reply_to=('PUBSV2_NO_REPLY', 'pubsv2_no_reply@usgs.gov'),
@@ -234,18 +236,17 @@ def contact():
                           # goes to the pubs support group...
                           recipients=contact_recipients,
                           # will go to servicedesk@usgs.gov if application has DEBUG = False
-                          body=message_content
-                          )
+                          body=message_content)
             mail.send(msg)
-            return redirect(url_for(
-                'pubswh.contact_confirmation'))  # redirect to a conf page after successful validation and message sending
-        else:
-            return render_template('pubswh/contact.html',
-                                   contact_form=contact_form)  # redisplay the form with errors if validation fails
-    elif request.method == 'GET':
-        contact_referrer = request.referrer
-        contact_form.originating_page.data = 'Originating Page: {}'.format(contact_referrer)
+            # redirect to a conf page after successful validation and message sending
+            return redirect(url_for('pubswh.contact_confirmation'))
+
+        # redisplay the form with errors if validation fails
         return render_template('pubswh/contact.html', contact_form=contact_form)
+
+    contact_referrer = request.referrer
+    contact_form.originating_page.data = 'Originating Page: {}'.format(contact_referrer)
+    return render_template('pubswh/contact.html', contact_form=contact_form)
 
 
 @pubswh.route('/contact_confirm')
@@ -258,8 +259,10 @@ def contact_confirmation():
 @pubswh.route('/publication/<index_id>')
 @cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def publication(index_id):
+    # pylint: disable=R0914
     r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
-    if r.status_code in [404, 406]:  # a 406 pretty much always means that it is some sort of other weird malformed URL.
+    # a 406 pretty much always means that it is some sort of other weird malformed URL.
+    if r.status_code in [404, 406]:
         return render_template('pubswh/404.html'), 404
     pubreturn = r.json()
     pub_doi = pubreturn.get('doi')
@@ -282,21 +285,20 @@ def publication(index_id):
         return jsonify(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'dublincore':
         content = generate_dublin_core(pubdata)
-        doc = render_template('pubswh/oai_dc.xml', indexID=index_id, content = content )
+        doc = render_template('pubswh/oai_dc.xml', indexID=index_id, content=content)
         return Response(doc, mimetype="application/xml")
     if 'mimetype' in request.args and request.args.get("mimetype") == 'ris':
         content = render_template('pubswh/ris_single.ris', result=pubdata)
         return Response(content, mimetype="application/x-research-info-systems",
                         headers={"Content-Disposition": "attachment;filename=USGS_PW_" + pubdata['indexId'] + ".ris"})
-    else:
-        return render_template('pubswh/publication.html',
-                               indexID=index_id, 
-                               pubdata=pubdata,
-                               related_pubs=related_pubs
-                               )
+
+    return render_template('pubswh/publication.html',
+                           indexID=index_id,
+                           pubdata=pubdata,
+                           related_pubs=related_pubs)
 
 
-#clears the cache for a specific page
+# clears the cache for a specific page
 @pubswh.route('/clear_cache/', defaults={'path': ''})
 @pubswh.route('/clear_cache/<path:path>')
 def clear_cache(path):
@@ -307,9 +309,9 @@ def clear_cache(path):
         # The cache.delete(key) doesn't work for some reason but this does
         cache_config['CACHE_REDIS_HOST'].delete(key)
         return 'cache cleared ' + path + " args: " + str(request.args)
-    else:
-        cache.clear()
-        return "no redis cache, full cache cleared"
+
+    cache.clear()
+    return "no redis cache, full cache cleared"
 
 
 @pubswh.route('/clear_full_cache/')
@@ -323,11 +325,12 @@ def clear_full_cache():
 def lookup(endpoint):
     endpoint_list = ['costcenters', 'publicationtypes', 'publicationsubtypes', 'publicationseries']
     endpoint = endpoint.lower()
-    if endpoint in endpoint_list:
-        r = get(lookup_url + endpoint, params={'mimetype': 'json'}, verify=verify_cert).json()
-        return Response(json.dumps(r), mimetype='application/json')
-    else:
+
+    if endpoint not in endpoint_list:
         abort(404)
+
+    r = get(lookup_url + endpoint, params={'mimetype': 'json'}, verify=verify_cert).json()
+    return Response(json.dumps(r), mimetype='application/json')
 
 
 @pubswh.route('/documentation/faq')
@@ -386,23 +389,23 @@ def browse_subtypes(pub_type):
                 return render_template('pubswh/browse_pubs_list.html',
                                        pub_type=pub_type, pub_subtype=None, series_title=None,
                                        pubs_data=pubs_data_dict)
-            else:
-                return render_template('pubswh/browse_pubs_list.html',
-                                       pub_type=pub_type, pub_subtype=None, series_title=None,
-                                       pubs_data=None)
-        else:
-            pub_subtypes = get(pub_url + "/lookup/publicationtype/" + str(pub_types_dict[pub_type.lower()]) +
-                               "/publicationsubtypes/", verify=verify_cert).json()
-            return render_template('pubswh/browse_subtypes.html', pub_type=pub_type, subtypes=pub_subtypes)
-    else:
-        abort(404)
+
+            return render_template('pubswh/browse_pubs_list.html',
+                                   pub_type=pub_type, pub_subtype=None, series_title=None,
+                                   pubs_data=None)
+
+        pub_subtypes = get(pub_url + "/lookup/publicationtype/" + str(pub_types_dict[pub_type.lower()]) +
+                           "/publicationsubtypes/", verify=verify_cert).json()
+        return render_template('pubswh/browse_subtypes.html', pub_type=pub_type, subtypes=pub_subtypes)
+
+    abort(404)
 
 
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/')
 @cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def browse_subtype(pub_type, pub_subtype):
     subtype_has_no_series = ['usgs data release', 'website', 'database-nonspatial', 'database-spatial', 'letter',
-                             'newspaper article', 'review', 'other report', 'organization series', 'usgs unnumbered series' ]
+                             'newspaper article', 'review', 'other report', 'organization series', 'usgs unnumbered series']
     pub_types = get(pub_url+"/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
     if pub_type.lower() in pub_types_dict.keys():
@@ -422,48 +425,54 @@ def browse_subtype(pub_type, pub_subtype):
                     return render_template('pubswh/browse_pubs_list.html',
                                            pub_type=pub_type, pub_subtype=pub_subtype, series_title=None,
                                            pubs_data=pubs_data_dict)
-                else:
-                    return render_template('pubswh/browse_pubs_list.html',
-                                           pub_type=pub_type, pub_subtype=pub_subtype, series_title=None,
-                                           pubs_data=None)
 
+                return render_template('pubswh/browse_pubs_list.html',
+                                       pub_type=pub_type, pub_subtype=pub_subtype, series_title=None,
+                                       pubs_data=None)
 
-            else:
-                series_data = get(pub_url+"/lookup/publicationtype/"+
-                                  str(pub_types_dict[pub_type.lower()])+"/publicationsubtype/"+
-                                  str(pub_subtypes_dict[pub_subtype.lower()])+"/publicationseries", verify=verify_cert).json()
-                return render_template('pubswh/browse_subtype.html',
-                                       pub_type=pub_type, pub_subtype=pub_subtype, series_titles=series_data)
-        else:
-            abort(404)
-    else:
-        abort(404)
+            series_data = get(pub_url+"/lookup/publicationtype/"+
+                              str(pub_types_dict[pub_type.lower()])+"/publicationsubtype/"+
+                              str(pub_subtypes_dict[pub_subtype.lower()])+"/publicationseries", verify=verify_cert).json()
+            return render_template('pubswh/browse_subtype.html',
+                                   pub_type=pub_type, pub_subtype=pub_subtype, series_titles=series_data)
+
+    abort(404)
 
 
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>/')
 @cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def browse_series(pub_type, pub_subtype, pub_series_name):
     pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
-    pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
+    pub_types_dict = {
+        publication_type['text'].lower(): publication_type['id']
+        for publication_type in pub_types
+    }
     if pub_type.lower() in pub_types_dict.keys():
         pub_subtypes = get(pub_url + "/lookup/publicationtype/" +
                            str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/", verify=verify_cert).json()
-        pub_subtypes_dict = {publication_subtype['text'].lower(): publication_subtype['id']
-                             for publication_subtype in pub_subtypes}
+        pub_subtypes_dict = {
+            publication_subtype['text'].lower(): publication_subtype['id']
+            for publication_subtype in pub_subtypes
+        }
         if pub_subtype.lower() in pub_subtypes_dict.keys():
             series_data = get(pub_url + "/lookup/publicationtype/" +
                               str(pub_types_dict[pub_type.lower()]) + "/publicationsubtype/" +
                               str(pub_subtypes_dict[pub_subtype.lower()]) + "/publicationseries", verify=verify_cert).json()
-            pub_series_dict = {publication_series['text'].lower(): publication_series['id']
-                                 for publication_series in series_data}
+            pub_series_dict = {
+                publication_series['text'].lower(): publication_series['id']
+                for publication_series in series_data
+            }
             if pub_series_name.lower() in pub_series_dict.keys():
                 year = int(arrow.utcnow().year)+1
-                generate_years = {'fact sheet': range(1994, year), "open-file report": range(1902, year),
-                                  'scientific investigations report': range(2004, year),
-                                  'professional paper': range(1902, year),
-                                  'water-resources investigations report': range(1972, 2006),
-                                  'water supply paper': range(1896,2002), 'circular': range(1933, year)
-                                  }
+                generate_years = {
+                    'fact sheet': range(1994, year),
+                    'open-file report': range(1902, year),
+                    'scientific investigations report': range(2004, year),
+                    'professional paper': range(1902, year),
+                    'water-resources investigations report': range(1972, 2006),
+                    'water supply paper': range(1896, 2002),
+                    'circular': range(1933, year)
+                }
                 if pub_series_name.lower() in generate_years.keys():
                     print "we made it this far..."
                     return render_template('pubswh/browse_series_years.html',
@@ -479,17 +488,12 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
                     return render_template('pubswh/browse_pubs_list.html',
                                            pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
                                            pubs_data=pubs_data_dict)
-                else:
-                    return render_template('pubswh/browse_pubs_list.html',
-                                           pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
-                                           pubs_data=None)
 
-            else:
-                abort(404)
-        else:
-            abort(404)
-    else:
-        abort(404)
+                return render_template('pubswh/browse_pubs_list.html',
+                                       pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
+                                       pubs_data=None)
+
+    abort(404)
 
 
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>/<year>/')
@@ -520,22 +524,18 @@ def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
                     return render_template('pubswh/browse_pubs_list.html',
                                            pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
                                            pubs_data=pubs_data_dict, pub_year=year)
-                else:
-                    return render_template('pubswh/browse_pubs_list.html',
-                                           pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
-                                           pubs_data=None, pub_year=year)
 
-            else:
-                abort(404)
-        else:
-            abort(404)
-    else:
-        abort(404)
+                return render_template('pubswh/browse_pubs_list.html',
+                                       pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
+                                       pubs_data=None, pub_year=year)
+
+    abort(404)
 
 
 @pubswh.route('/search', methods=['GET'])
 @cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def search_results():
+    # pylint: disable=R0914,R0915,R0914,R0912
     search_kwargs = request.args.to_dict(flat=False)
     page = search_kwargs.get('page')
     query_request_args = search_kwargs.copy()
@@ -543,7 +543,7 @@ def search_results():
         del query_request_args['page']
 
     # Remove the mimeType so that json will be returned from the web service call
-    if search_kwargs.has_key('mimetype'):
+    if 'mimetype' in search_kwargs:
         del search_kwargs['mimetype']
 
     # Default paging parameters if not present or empty
@@ -584,12 +584,16 @@ def search_results():
     mimetype = request.args.get('mimetype', '')
     if mimetype == 'ris':
         content = render_template('pubswh/ris_output.ris', search_result_records=search_result_records)
-        response = Response(content, mimetype="application/x-research-info-systems",
-                               headers={"Content-Disposition":"attachment;filename=PubsWarehouseResults.ris"})
+        response = Response(
+            content,
+            mimetype="application/x-research-info-systems",
+            headers={"Content-Disposition": "attachment;filename=PubsWarehouseResults.ris"}
+        )
     elif mimetype == 'sbjson':
         sciencebase_records = []
         for record in search_result_records:
-            sb_record = generate_sb_data(record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+            sb_record = generate_sb_data(
+                record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
             sciencebase_records.append(sb_record)
         sb_response = {
             "pageSize": search_results_response['pageSize'],
@@ -603,8 +607,14 @@ def search_results():
         dublinecore_records = []
         for record in search_result_records:
             dublincore_record = generate_dublin_core(record)
-            dublinecore_records.append({"identifier": record['indexId'], "dublincore_record": dublincore_record })
-        content = render_template('pubswh/oai_dc_multiple.xml', search_result_records = dublinecore_records, mimetype='application/xml')
+            dublinecore_records.append({
+                "identifier": record['indexId'],
+                "dublincore_record": dublincore_record
+            })
+        content = render_template(
+            'pubswh/oai_dc_multiple.xml',
+            search_result_records=dublinecore_records,
+            mimetype='application/xml')
         response = Response(content, mimetype="application/xml")
     else:
         for record in search_result_records:
@@ -690,20 +700,22 @@ def legacy_search(series_code=None, report_number=None, pub_year=None):
     :return: redirect to new search page with legacy arguments mapped to new arguments
     """
     # all the pubcodes that might be coming from the USGS store
-    usgs_series_codes = {'AR': 'Annual Report', 'A': 'Antarctic Map', 'B': 'Bulletin', 'CIR': 'Circular',
-                         'CP': 'Circum-Pacific Map', 'COAL': 'Coal Map', 'DS': 'Data Series', 'FS': 'Fact Sheet',
-                         'GF': 'Folios of the Geologic Atlas', 'GIP': 'General Information Product',
-                         'GQ': 'Geologic Quadrangle', 'GP': 'Geophysical Investigation Map', 'HA': 'Hydrologic Atlas',
-                         'HU': 'Hydrologic Unit', 'I': 'IMAP', 'L': 'Land Use/ Land Cover',
-                         'MINERAL': 'Mineral Commodities Summaries', 'MR': 'Mineral Investigations Resource Map',
-                         'MF': 'Miscellaneous Field Studies Map', 'MB': 'Missouri Basin Study', 'M': 'Monograph',
-                         'OC': 'Oil and Gas Investigation Chart', 'OM': 'Oil and Gas Investigation Map',
-                         'OFR': 'Open-File Report', 'PP': 'Professional Paper', 'RP': 'Resource Publication',
-                         'SIM': 'Scientific Investigations Map', 'SIR': 'Scientific Investigations Report',
-                         'TM': 'Techniques and Methods', 'TWRI': 'Techniques of Water-Resource Investigation',
-                         'TEI': 'Trace Elements Investigations', 'TEM': 'Trace Elements Memorandum',
-                         'WDR': 'Water Data Report', 'WSP': 'Water Supply Paper',
-                         'WRI': 'Water-Resources Investigations Report'}
+    # usgs_series_codes = {
+    #     'AR': 'Annual Report', 'A': 'Antarctic Map', 'B': 'Bulletin', 'CIR': 'Circular',
+    #     'CP': 'Circum-Pacific Map', 'COAL': 'Coal Map', 'DS': 'Data Series', 'FS': 'Fact Sheet',
+    #     'GF': 'Folios of the Geologic Atlas', 'GIP': 'General Information Product',
+    #     'GQ': 'Geologic Quadrangle', 'GP': 'Geophysical Investigation Map', 'HA': 'Hydrologic Atlas',
+    #     'HU': 'Hydrologic Unit', 'I': 'IMAP', 'L': 'Land Use/ Land Cover',
+    #     'MINERAL': 'Mineral Commodities Summaries', 'MR': 'Mineral Investigations Resource Map',
+    #     'MF': 'Miscellaneous Field Studies Map', 'MB': 'Missouri Basin Study', 'M': 'Monograph',
+    #     'OC': 'Oil and Gas Investigation Chart', 'OM': 'Oil and Gas Investigation Map',
+    #     'OFR': 'Open-File Report', 'PP': 'Professional Paper', 'RP': 'Resource Publication',
+    #     'SIM': 'Scientific Investigations Map', 'SIR': 'Scientific Investigations Report',
+    #     'TM': 'Techniques and Methods', 'TWRI': 'Techniques of Water-Resource Investigation',
+    #     'TEI': 'Trace Elements Investigations', 'TEM': 'Trace Elements Memorandum',
+    #     'WDR': 'Water Data Report', 'WSP': 'Water Supply Paper',
+    #     'WRI': 'Water-Resources Investigations Report'
+    # }
 
     # horrible hack to deal with the fact that the USGS store apparently never heard of 4 digit dates
 
@@ -712,9 +724,9 @@ def legacy_search(series_code=None, report_number=None, pub_year=None):
             pub_year = ''.join(['19', pub_year])
         elif int(pub_year) < 30:
             pub_year = ''.join(['20', pub_year])
-        return redirect(url_for('pubswh.search_results', q=series_code+" "+report_number, year=pub_year))
+        return redirect(url_for('pubswh.search_results', q=series_code+" " + report_number, year=pub_year))
 
-    return redirect(url_for('pubswh.search_results', q=series_code+" "+report_number))
+    return redirect(url_for('pubswh.search_results', q=series_code + " " + report_number))
 
 
 @pubswh.route('/service/rss/')
@@ -746,7 +758,7 @@ def unapi():
     if unapi_format is None or unapi_format not in formats:
         if unapi_id is not None:
             unapi_id = unapi_id.split('/')[-1]
-        return render_template('pubswh/unapi_formats.xml', unapi_id=unapi_id, formats=formats,  mimetype='text/xml')
+        return render_template('pubswh/unapi_formats.xml', unapi_id=unapi_id, formats=formats, mimetype='text/xml')
     if unapi_id is not None and unapi_format in formats:
         unapi_id = unapi_id.split('/')[-1]
         r = get(pub_url + 'publication/' + unapi_id, params={'mimetype': 'json'}, verify=verify_cert)
@@ -755,6 +767,7 @@ def unapi():
         pubdata = r.json()
         return render_template('pubswh/'+formats[unapi_format]['template'], pubdata=pubdata, formats=formats,
                                mimetype='text/xml')
+
 
 @pubswh.route('/sitemap.xml')
 @cache.cached(timeout=4320000, key_prefix=make_cache_key)

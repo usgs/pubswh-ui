@@ -26,6 +26,8 @@ test-server:
 watch-server:
 	$(PYTHON) server/run.py
 
+lint-server:
+	cd server && env/bin/pylint pubs_ui
 
 #
 # Environment configuration targets

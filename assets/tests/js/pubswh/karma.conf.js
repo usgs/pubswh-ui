@@ -3,7 +3,7 @@
 var sourcePreprocessors = ['coverage'];
 function isDebug(argument) {
     return argument === '--debug';
-};
+}
 if (process.argv.some(isDebug)) {
     sourcePreprocessors = [];
 }
@@ -21,26 +21,26 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-		'bower_components/jquery/dist/jquery.js',
-		'bower_components/bootstrap/dist/js/bootstrap.js',
-		'bower_components/select2/dist/js/select2.js',
-		'bower_components/handlebars/handlebars.js',
-		'bower_components/leaflet/dist/leaflet.js',
-		'bower_components/esri-leaflet/dist/esri-leaflet.js',
-		'bower_components/moment/min/moment.min.js',
-		'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-		'bower_components/underscore/underscore.js',
-		'scripts/pubswh/vendor/mapbox/leaflet-pip/leaflet-pip.js',
-		'tests/js/pubswh/resources/config.js',
-		'scripts/pubswh/*.js',
-		'tests/js/pubswh/*.js'
-		],
+        'bower_components/jquery/dist/jquery.js',
+        'bower_components/bootstrap/dist/js/bootstrap.js',
+        'bower_components/select2/dist/js/select2.js',
+        'bower_components/handlebars/handlebars.js',
+        'bower_components/leaflet/dist/leaflet.js',
+        'bower_components/esri-leaflet/dist/esri-leaflet.js',
+        'bower_components/moment/min/moment.min.js',
+        'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+        'bower_components/underscore/underscore.js',
+        'scripts/pubswh/vendor/mapbox/leaflet-pip/leaflet-pip.js',
+        'tests/js/pubswh/resources/config.js',
+        'scripts/pubswh/*.js',
+        'tests/js/pubswh/*.js'
+        ],
 
 
     // list of files to exclude
     exclude: [
         'scripts/pubswh/searchFormOnReady.js',
-		'scripts/pubswh/extentsMapOnReady.js'
+        'scripts/pubswh/extentsMapOnReady.js'
     ],
 
 

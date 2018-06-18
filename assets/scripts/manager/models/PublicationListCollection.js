@@ -1,16 +1,12 @@
-/* jslint browser: true */
-
 define([
-	'backbone',
-	'module'
+    'backbone',
+    'module'
 ], function(Backbone, module) {
-	"use strict";
+        var collection = Backbone.Collection.extend({
+        url : module.config().scriptRoot + '/manager/services/lists',
 
-	var collection = Backbone.Collection.extend({
-		url : module.config().scriptRoot + '/manager/services/lists',
+        comparator : 'text'
+    });
 
-		comparator : 'text'
-	});
-
-	return collection;
-})
+    return collection;
+});

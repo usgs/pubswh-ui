@@ -1,12 +1,14 @@
+"""
+Authorization views
+"""
 from itsdangerous import BadSignature, BadPayload
 from requests import post
 
-from wtforms import StringField, PasswordField
-from wtforms.validators import DataRequired
-
-from flask import render_template, request, flash, redirect, url_for, Blueprint
+from flask import render_template, request, redirect, url_for, Blueprint
 from flask_login import LoginManager, logout_user, UserMixin, login_user
 from flask_wtf import Form
+from wtforms import StringField, PasswordField
+from wtforms.validators import DataRequired
 
 from . import login_serializer
 from .utils import get_cida_auth_token, generate_auth_header, get_url_endpoint, is_safe_url
@@ -24,6 +26,9 @@ VERIFY_CERT = app.config['VERIFY_CERT']
 
 
 class LoginForm(Form):
+    """
+    Authorization login form
+    """
     username = StringField('AD Username:', validators=[DataRequired()])
     password = PasswordField('AD Password:', validators=[DataRequired()])
 
@@ -31,6 +36,7 @@ class LoginForm(Form):
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'auth.login_page'
+
 
 class User(UserMixin):
     """
@@ -116,6 +122,7 @@ def load_token(token):
 
     return user
 
+
 @auth.route("/logout/<forward>")
 def logout_page(forward):
     """
@@ -151,22 +158,25 @@ def login_page():
             login_user(user, remember=True)
 
             next_page = request.args.get("next")
-            app.logger.info("Next page: %s" % next_page)
+            app.logger.info('Next page: %s', next_page)
 
             if next_page is not None and is_safe_url(next_page, request.host_url):
                 endpoint = get_url_endpoint(next_page, request.environ['SERVER_NAME'], ('pubswh.index', {}))
                 url = url_for(endpoint[0], **endpoint[1])
                 return redirect(url)
 
-            else:
-                return redirect(url_for('pubswh.index'))
+            return redirect(url_for('pubswh.index'))
         else:
             error = 'Username or Password is invalid '+str(mp_response.status_code)
 
     return render_template("auth/login.html", form=form, error=error)
 
+
 @auth.route('/loginservice/', methods=["POST"])
 def login_service():
+    """
+    Login service view
+    """
     resp = post(AUTH_ENDPOINT_URL + 'token', data=request.form, verify=VERIFY_CERT)
     if resp.status_code == 200:
         user = User(request.form['username'], resp.json().get('token'))
@@ -176,4 +186,3 @@ def login_service():
     if 'transfer-encoding' in resp.headers:
         del resp.headers['transfer-encoding']
     return (resp.text, resp.status_code, resp.headers.items())
-

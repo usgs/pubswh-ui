@@ -1,5 +1,6 @@
-
-
+"""
+Auth utils tests
+"""
 from flask_testing import TestCase
 from .. import app
 from ..utils import get_url_endpoint, is_safe_url

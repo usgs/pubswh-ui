@@ -21,6 +21,9 @@ test-assets:
 watch-assets:
 	cd assets && npm run watch
 
+lint-assets:
+	cd assets && npm run lint
+
 #
 # Environment configuration targets
 #
