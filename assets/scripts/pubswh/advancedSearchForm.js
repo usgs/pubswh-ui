@@ -1,8 +1,8 @@
-var PUBS_WH = window.PUBS_WH = window.PUBS_WH || {};
-
+import SearchMap from './searchMap';
 import rowTemplate from './hb_templates/rowTemplate.hbs';
 import mapTemplate from './hb_templates/mapTemplate.hbs';
 import optionTemplate from './hb_templates/optionTemplate.hbs';
+
 
 /*
  * Initially creates inputs to be be used for the advanced search form.
@@ -83,7 +83,7 @@ export default class AdvancedSearchForm {
         if (context.mapId) {
             this.options.$mapContainer.append(mapTemplate(context));
             $row = this.options.$mapContainer.children('div:last-child');
-            PUBS_WH.createSearchMap(context.mapId, $row.find('input'));
+            new SearchMap(context.mapId, $row.find('input'));
         } else {
             this.options.$container.append(rowTemplate(context));
             $row = this.options.$container.children('div:last-child');
