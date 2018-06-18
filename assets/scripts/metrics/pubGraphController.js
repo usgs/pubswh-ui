@@ -2,7 +2,7 @@
 module.exports = null;
 
 import { batchFetchMonthlyPastYear, batchFetchPast30Days } from './analyticsData.js';
-require('./analyticsGraph.js');
+import { createGraph } from './analyticsGraph';
 require('./dataUtils.js');
 
 
@@ -65,17 +65,17 @@ require('./dataUtils.js');
             var visitorsData = data[1].map(transformToVisitorsData);
             var downloadsData = data[2].map(transformToDownloadsData);
 
-            METRICS.analyticsGraph.createGraph(yearSessionsDiv, sessionsData, {
+            createGraph(yearSessionsDiv, sessionsData, {
                 ylabel : 'Sessions',
                 title : 'Visitors per month',
                 dateFormat : MONTH_FORMAT
             });
-            METRICS.analyticsGraph.createGraph(yearVisitorsDiv, visitorsData, {
+            createGraph(yearVisitorsDiv, visitorsData, {
                 ylabel : 'Users',
                 title : 'Unique visitors per month',
                 dateFormat : MONTH_FORMAT
             });
-            METRICS.analyticsGraph.createGraph(yearDownloadsDiv, downloadsData, {
+            createGraph(yearDownloadsDiv, downloadsData, {
                 ylabel : 'Downloads',
                 title : 'Downloads per month',
                 dateFormat : MONTH_FORMAT
@@ -91,17 +91,17 @@ require('./dataUtils.js');
                     var visitorsData = data[1].map(transformToVisitorsData);
                     var downloadsData = data[2].map(transformToDownloadsData);
 
-                    METRICS.analyticsGraph.createGraph(recentSessionsDiv, sessionsData, {
+                    createGraph(recentSessionsDiv, sessionsData, {
                         ylabel: 'Sessions',
                         title: 'Visitors per day',
                         dateFormat: DAY_FORMAT
                     });
-                    METRICS.analyticsGraph.createGraph(recentVisitorsDiv, visitorsData, {
+                    createGraph(recentVisitorsDiv, visitorsData, {
                         ylabel: 'Users',
                         title: 'Unique visitors per day',
                         dateFormat: DAY_FORMAT
                     });
-                    METRICS.analyticsGraph.createGraph(recentDownloadsDiv, downloadsData, {
+                    createGraph(recentDownloadsDiv, downloadsData, {
                         ylabel : 'Downloads',
                         title : 'Downloads per day',
                         dateFormat : DAY_FORMAT

@@ -1,9 +1,9 @@
 import { batchFetchMonthlyPastYear } from './analyticsData.js';
-require('./analyticsGraph.js');
+import { createGraph } from './analyticsGraph';
 require('./dataUtils.js');
 
 (function() {
-        var DAY_FORMAT = 'MMM DD YYYY';
+    var DAY_FORMAT = 'MMM DD YYYY';
     var MONTH_FORMAT = 'MMM YYYY';
 
     var recentSearchesDiv = document.getElementById('recent-searches-container');
@@ -81,27 +81,27 @@ require('./dataUtils.js');
             var twitterData = data[3].map(transformToSessisonsData);
             var emailData = data[4].map(transformToSessisonsData);
 
-            METRICS.analyticsGraph.createGraph(yearSearchesDiv, organicData, {
+            createGraph(yearSearchesDiv, organicData, {
                 ylabel: 'Organic Searches',
                 title: 'Organic searches per month',
                 dateFormat: MONTH_FORMAT
             });
-            METRICS.analyticsGraph.createGraph(yearSearchReferralsDiv, referralData, {
+            createGraph(yearSearchReferralsDiv, referralData, {
                 ylabel: 'Referral Sessions',
                 title: 'Referrals per month',
                 dateFormat: MONTH_FORMAT
             });
-            METRICS.analyticsGraph.createGraph(yearSearchDirectDiv, directData, {
+            createGraph(yearSearchDirectDiv, directData, {
                 ylabel: 'Direct Sessions',
                 title: 'Direct sessions per month',
                 dateFormat: MONTH_FORMAT
             });
-            METRICS.analyticsGraph.createGraph(yearSearchSocialDiv, twitterData, {
+            createGraph(yearSearchSocialDiv, twitterData, {
                 ylabel: 'Twitter Sessions',
                 title: 'Twitter sessions per month',
                 dateFormat: MONTH_FORMAT
             });
-            METRICS.analyticsGraph.createGraph(yearSearchEmailDiv, emailData, {
+            createGraph(yearSearchEmailDiv, emailData, {
                 ylabel: 'Sessions from emails',
                 title: 'Sessions from emails per month',
                 dateFormat: MONTH_FORMAT
@@ -119,27 +119,27 @@ require('./dataUtils.js');
                     var twitterData = data[3].map(transformToSessisonsData);
                     var emailData = data[4].map(transformToSessisonsData);
 
-                    METRICS.analyticsGraph.createGraph(recentSearchesDiv, organicData, {
+                    createGraph(recentSearchesDiv, organicData, {
                         ylabel: 'Organic Searches',
                         title: 'Organic searches per day',
                         dateFormat: DAY_FORMAT
                     });
-                    METRICS.analyticsGraph.createGraph(recentSearchReferralsDiv, referralData, {
+                    createGraph(recentSearchReferralsDiv, referralData, {
                         ylabel: 'Referral Sessions',
                         title: 'Referrals per day',
                         dateFormat: DAY_FORMAT
                     });
-                    METRICS.analyticsGraph.createGraph(recentSearchDirectDiv, directData, {
+                    createGraph(recentSearchDirectDiv, directData, {
                         ylabel: 'Direct Sessions',
                         title: 'Direct sessions per day',
                         dateFormat: DAY_FORMAT
                     });
-                    METRICS.analyticsGraph.createGraph(recentSearchSocialDiv, twitterData, {
+                    createGraph(recentSearchSocialDiv, twitterData, {
                         ylabel: 'Twitter Sessions',
                         title: 'Twitter sessions per day',
                         dateFormat: DAY_FORMAT
                     });
-                    METRICS.analyticsGraph.createGraph(recentSearchEmailDiv, emailData, {
+                    createGraph(recentSearchEmailDiv, emailData, {
                         ylabel: 'Sessions from emails',
                         title: 'Sessions from emails per day',
                         dateFormat: DAY_FORMAT
