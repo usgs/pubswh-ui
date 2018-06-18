@@ -1,45 +1,8 @@
 var PUBS_WH = window.PUBS_WH = window.PUBS_WH || {};
 
-const rowTemplate = Handlebars.compile(
-    '<div class="form-group">' +
-    '<div class="col-sm-4">' +
-    '<span class="fa fa-minus-circle delete-row"></span>' +
-    '<label class="">{{row.displayName}}:</label>' +
-    '</div>' +
-    '<div class="col-sm-8">' +
-    '{{#if isSelect}}<select class="form-control" name="{{row.name}}">' +
-    '<option value="">{{row.placeholder}}</option>' +
-    '{{#if isBoolean}}' +
-    '<option value="true" {{#if isTrue}}selected{{/if}}>True</option>' +
-    '<option value="false" {{#if isFalse}}selected{{/if}}>False</option>' +
-    '{{/if}}' +
-    '</select>' +
-    '{{else if isDate}}' +
-    '<div class="input-group date">' +
-    '<input type="text" name="{{row.name}}" value="{{row.value}}" class="form-control" />' +
-    '<span class="input-group-addon">' +
-    '<i class="fa fa-calendar"></i>' +
-    '</span>' +
-    '</div>' +
-    '{{else}}' +
-    '<input class="form-control" type="{{row.inputType}}" name="{{row.name}}" value="{{row.value}}" placeholder="{{row.placeholder}}"/>' +
-    '{{/if}}' +
-    '</div>' +
-    '</div>'
-);
-
-const mapTemplate = Handlebars.compile(
-    '<div class="form-group">' +
-    '<div class="col-sm-3">' +
-    '<span class="fa fa-minus-circle delete-row"></span>' +
-    '<label class="">{{row.displayName}}:</label>' +
-    '</div>' +
-    '<div class="col-sm-12 search-form-map-div" id="{{mapId}}"></div>' +
-    '<input type="hidden" name="{{row.name}}" value="{{row.value}}" />' +
-    '</div>'
-);
-
-const optionTemplate = Handlebars.compile('{{#each this.options}}<option {{#if selected }}selected{{/if}} value="{{text}}">{{text}}</option>{{/each}}');
+import rowTemplate from './hb_templates/rowTemplate.hbs';
+import mapTemplate from './hb_templates/mapTemplate.hbs';
+import optionTemplate from './hb_templates/optionTemplate.hbs';
 
 /*
  * Initially creates inputs to be be used for the advanced search form.
