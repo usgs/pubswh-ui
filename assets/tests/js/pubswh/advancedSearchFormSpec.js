@@ -1,4 +1,7 @@
-describe('PUBS_WH.advancedSearchForm', function() {
+import AdvancedSearchForm from '../../../scripts/pubswh/advancedSearchForm';
+
+
+describe('AdvancedSearchForm', function() {
     var $testDiv, $mapDiv;
     var fakeServer;
     var advancedSearchForm;
@@ -19,7 +22,7 @@ describe('PUBS_WH.advancedSearchForm', function() {
 
     describe('Test with no initialRows', function() {
         beforeEach(function() {
-            advancedSearchForm = PUBS_WH.advancedSearchForm({
+            advancedSearchForm = new AdvancedSearchForm({
                 $container: $testDiv,
                 $mapContainer : $mapDiv
             });
@@ -251,7 +254,7 @@ describe('PUBS_WH.advancedSearchForm', function() {
             deleteCallbackSpy  = jasmine.createSpy('deleteCallbackSpy');
             spyOn(PUBS_WH, 'createSearchMap');
 
-            advancedSearchForm = PUBS_WH.advancedSearchForm({
+            advancedSearchForm = new AdvancedSearchForm({
                 $container: $testDiv,
                 $mapContainer: $mapDiv,
                 initialRows: initialRows,
@@ -311,7 +314,7 @@ describe('PUBS_WH.advancedSearchForm', function() {
             fakeServer.respondWith([200, {'Content-Type': 'application/json'}, '[{"id": "1", "text": "T1"}, {"id": "2", "text": "T2"}]']);
             spyOn(PUBS_WH, 'createSearchMap');
 
-            advancedSearchForm = PUBS_WH.advancedSearchForm({
+            advancedSearchForm = new AdvancedSearchForm({
                 $container: $testDiv,
                 $mapContainer: $mapDiv,
                 initialRows: initialRows

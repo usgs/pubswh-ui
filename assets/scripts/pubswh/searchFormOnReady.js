@@ -1,6 +1,6 @@
 require('./searchMap');
 require('./clearFeatureControl');
-require('./advancedSearchForm');
+import AdvancedSearchForm from './advancedSearchForm';
 
 // Dummy
 module.exports = null;
@@ -45,7 +45,7 @@ $(document).ready(function() {
             }
         });
     }
-    advancedSearchForm = PUBS_WH.advancedSearchForm ({
+    advancedSearchForm = new AdvancedSearchForm({
         $container : $form.find('.advanced-search-container'),
         $mapContainer: $form.find('.map-search-container'),
         initialRows : initialSearchRows,
