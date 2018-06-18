@@ -7,7 +7,7 @@ from flask_caching import Cache
 from flask_images import Images
 from flask_mail import Mail
 
-from custom_filters import display_publication_info, date_format, w3c_date
+from .custom_filters import display_publication_info, date_format, w3c_date
 
 
 FORMAT = '%(asctime)s %(message)s'
@@ -62,10 +62,10 @@ if app.config.get('FLASK_CORS'):
     from flask_cors import CORS
     CORS(app)
 
-from auth.views import auth
-from manager.views import manager
-from pubswh.views import pubswh
-from metrics.views import metrics
+from .auth.views import auth
+from .manager.views import manager
+from .pubswh.views import pubswh
+from .metrics.views import metrics
 from . import filters  # pylint: disable=C0413
 
 app.register_blueprint(auth)

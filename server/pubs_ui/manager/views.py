@@ -58,7 +58,7 @@ def services_proxy(op1, op2=None, op3=None, op4=None):
     if 'transfer-encoding' in resp.headers:
         del resp.headers['transfer-encoding']
 
-    return (resp.text, resp.status_code, resp.headers.items())
+    return (resp.text, resp.status_code, list(resp.headers.items()))
 
 
 @manager.errorhandler(404)

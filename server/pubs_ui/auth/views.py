@@ -132,7 +132,7 @@ def logout_page(forward):
     logout_url = AUTH_ENDPOINT_URL + 'logout'
     response = post(logout_url, headers=auth_header, verify=VERIFY_CERT)
     if response.status_code == 200:
-        print 'logout works!'
+        print('logout works!')
 
     logout_user()
 
@@ -185,4 +185,4 @@ def login_service():
     # This fixed an an ERR_INVALID_CHUNKED_ENCODING when the app was run on the deployment server.
     if 'transfer-encoding' in resp.headers:
         del resp.headers['transfer-encoding']
-    return (resp.text, resp.status_code, resp.headers.items())
+    return (resp.text, resp.status_code, list(resp.headers.items()))

@@ -1,1592 +1,1592 @@
 crossref_200_ok = {
-    u'message': {
-        u'DOI':
-        u'10.1002/ecy.1625',
-        u'ISSN': [u'0012-9658'],
-        u'URL':
-        u'http://dx.doi.org/10.1002/ecy.1625',
-        u'archive': [u'Portico'],
-        u'author': [{
-            u'affiliation': [{
-                u'name':
-                u'U.S. Geological Survey; 700 Cajundome Blvd. Lafayette Louisiana 70506 USA'
+    'message': {
+        'DOI':
+        '10.1002/ecy.1625',
+        'ISSN': ['0012-9658'],
+        'URL':
+        'http://dx.doi.org/10.1002/ecy.1625',
+        'archive': ['Portico'],
+        'author': [{
+            'affiliation': [{
+                'name':
+                'U.S. Geological Survey; 700 Cajundome Blvd. Lafayette Louisiana 70506 USA'
             }],
-            u'family':
-            u'Osland',
-            u'given':
-            u'Michael J.'
+            'family':
+            'Osland',
+            'given':
+            'Michael J.'
         }, {
-            u'affiliation': [{
-                u'name':
-                u'U.S. Geological Survey; 700 Cajundome Blvd. Lafayette Louisiana 70506 USA'
+            'affiliation': [{
+                'name':
+                'U.S. Geological Survey; 700 Cajundome Blvd. Lafayette Louisiana 70506 USA'
             }],
-            u'family':
-            u'Day',
-            u'given':
-            u'Richard H.'
+            'family':
+            'Day',
+            'given':
+            'Richard H.'
         }, {
-            u'affiliation': [{
-                u'name':
-                u'U.S. Geological Survey; 700 Cajundome Blvd. Lafayette Louisiana 70506 USA'
+            'affiliation': [{
+                'name':
+                'U.S. Geological Survey; 700 Cajundome Blvd. Lafayette Louisiana 70506 USA'
             }],
-            u'family':
-            u'Hall',
-            u'given':
-            u'Courtney T.'
+            'family':
+            'Hall',
+            'given':
+            'Courtney T.'
         }, {
-            u'affiliation': [{
-                u'name':
-                u'University of Oklahoma; Norman Oklahoma 73019-0390 USA'
+            'affiliation': [{
+                'name':
+                'University of Oklahoma; Norman Oklahoma 73019-0390 USA'
             }],
-            u'family':
-            u'Brumfield',
-            u'given':
-            u'Marisa D.'
+            'family':
+            'Brumfield',
+            'given':
+            'Marisa D.'
         }, {
-            u'affiliation': [{
-                u'name':
-                u'U.S. Geological Survey; 700 Cajundome Blvd. Lafayette Louisiana 70506 USA'
+            'affiliation': [{
+                'name':
+                'U.S. Geological Survey; 700 Cajundome Blvd. Lafayette Louisiana 70506 USA'
             }],
-            u'family':
-            u'Dugas',
-            u'given':
-            u'Jason L.'
+            'family':
+            'Dugas',
+            'given':
+            'Jason L.'
         }, {
-            u'affiliation': [{
-                u'name':
-                u'U.S. Geological Survey; 700 Cajundome Blvd. Lafayette Louisiana 70506 USA'
+            'affiliation': [{
+                'name':
+                'U.S. Geological Survey; 700 Cajundome Blvd. Lafayette Louisiana 70506 USA'
             }],
-            u'family':
-            u'Jones',
-            u'given':
-            u'William R.'
+            'family':
+            'Jones',
+            'given':
+            'William R.'
         }],
-        u'container-title': [u'Ecology'],
-        u'content-domain': {
-            u'crossmark-restriction': False,
-            u'domain': []
+        'container-title': ['Ecology'],
+        'content-domain': {
+            'crossmark-restriction': False,
+            'domain': []
         },
-        u'created': {
-            u'date-parts': [[2016, 10, 17]],
-            u'date-time': u'2016-10-17T13:33:09Z',
-            u'timestamp': 1476711189000
+        'created': {
+            'date-parts': [[2016, 10, 17]],
+            'date-time': '2016-10-17T13:33:09Z',
+            'timestamp': 1476711189000
         },
-        u'deposited': {
-            u'date-parts': [[2017, 6, 15]],
-            u'date-time': u'2017-06-15T01:27:37Z',
-            u'timestamp': 1497490057000
+        'deposited': {
+            'date-parts': [[2017, 6, 15]],
+            'date-time': '2017-06-15T01:27:37Z',
+            'timestamp': 1497490057000
         },
-        u'funder': [{
-            u'DOI': u'10.13039/100000203',
-            u'award': [],
-            u'doi-asserted-by': u'publisher',
-            u'name': u'U.S. Geological Survey'
+        'funder': [{
+            'DOI': '10.13039/100000203',
+            'award': [],
+            'doi-asserted-by': 'publisher',
+            'name': 'U.S. Geological Survey'
         }, {
-            u'DOI': u'10.13039/501100001589',
-            u'award': [],
-            u'doi-asserted-by': u'publisher',
-            u'name': u'Environmental Protection Agency'
+            'DOI': '10.13039/501100001589',
+            'award': [],
+            'doi-asserted-by': 'publisher',
+            'name': 'Environmental Protection Agency'
         }, {
-            u'award': [],
-            u'name':
-            u'Department of Interior Southeast Climate Science Center'
+            'award': [],
+            'name':
+            'Department of Interior Southeast Climate Science Center'
         }, {
-            u'award': [],
-            u'name':
-            u'Department of Interior South Central Climate Science Center'
+            'award': [],
+            'name':
+            'Department of Interior South Central Climate Science Center'
         }, {
-            u'award': [],
-            u'name': u'Southern Climate Impacts Planning Program'
+            'award': [],
+            'name': 'Southern Climate Impacts Planning Program'
         }],
-        u'indexed': {
-            u'date-parts': [[2017, 10, 5]],
-            u'date-time': u'2017-10-05T13:42:23Z',
-            u'timestamp': 1507210943579
+        'indexed': {
+            'date-parts': [[2017, 10, 5]],
+            'date-time': '2017-10-05T13:42:23Z',
+            'timestamp': 1507210943579
         },
-        u'is-referenced-by-count':
+        'is-referenced-by-count':
         10,
-        u'issn-type': [{
-            u'type': u'print',
-            u'value': u'0012-9658'
+        'issn-type': [{
+            'type': 'print',
+            'value': '0012-9658'
         }],
-        u'issue':
-        u'1',
-        u'issued': {
-            u'date-parts': [[2016, 12, 9]]
+        'issue':
+        '1',
+        'issued': {
+            'date-parts': [[2016, 12, 9]]
         },
-        u'license': [{
-            u'URL': u'http://doi.wiley.com/10.1002/tdm_license_1',
-            u'content-version': u'tdm',
-            u'delay-in-days': 0,
-            u'start': {
-                u'date-parts': [[2016, 12, 9]],
-                u'date-time': u'2016-12-09T00:00:00Z',
-                u'timestamp': 1481241600000
+        'license': [{
+            'URL': 'http://doi.wiley.com/10.1002/tdm_license_1',
+            'content-version': 'tdm',
+            'delay-in-days': 0,
+            'start': {
+                'date-parts': [[2016, 12, 9]],
+                'date-time': '2016-12-09T00:00:00Z',
+                'timestamp': 1481241600000
             }
         }, {
-            u'URL':
-            u'http://onlinelibrary.wiley.com/termsAndConditions',
-            u'content-version':
-            u'am',
-            u'delay-in-days':
+            'URL':
+            'http://onlinelibrary.wiley.com/termsAndConditions',
+            'content-version':
+            'am',
+            'delay-in-days':
             365,
-            u'start': {
-                u'date-parts': [[2017, 12, 9]],
-                u'date-time': u'2017-12-09T00:00:00Z',
-                u'timestamp': 1512777600000
+            'start': {
+                'date-parts': [[2017, 12, 9]],
+                'date-time': '2017-12-09T00:00:00Z',
+                'timestamp': 1512777600000
             }
         }, {
-            u'URL':
-            u'http://onlinelibrary.wiley.com/termsAndConditions',
-            u'content-version':
-            u'vor',
-            u'delay-in-days':
+            'URL':
+            'http://onlinelibrary.wiley.com/termsAndConditions',
+            'content-version':
+            'vor',
+            'delay-in-days':
             0,
-            u'start': {
-                u'date-parts': [[2016, 12, 9]],
-                u'date-time': u'2016-12-09T00:00:00Z',
-                u'timestamp': 1481241600000
+            'start': {
+                'date-parts': [[2016, 12, 9]],
+                'date-time': '2016-12-09T00:00:00Z',
+                'timestamp': 1481241600000
             }
         }],
-        u'link': [{
-            u'URL':
-            u'https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1002%2Fecy.1625',
-            u'content-type':
-            u'application/pdf',
-            u'content-version':
-            u'vor',
-            u'intended-application':
-            u'text-mining'
+        'link': [{
+            'URL':
+            'https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1002%2Fecy.1625',
+            'content-type':
+            'application/pdf',
+            'content-version':
+            'vor',
+            'intended-application':
+            'text-mining'
         }, {
-            u'URL':
-            u'https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1002%2Fecy.1625',
-            u'content-type':
-            u'unspecified',
-            u'content-version':
-            u'vor',
-            u'intended-application':
-            u'text-mining'
+            'URL':
+            'https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1002%2Fecy.1625',
+            'content-type':
+            'unspecified',
+            'content-version':
+            'vor',
+            'intended-application':
+            'text-mining'
         }, {
-            u'URL':
-            u'http://api.wiley.com/onlinelibrary/chorus/v1/articles/10.1002%2Fecy.1625',
-            u'content-type':
-            u'application/pdf',
-            u'content-version':
-            u'am',
-            u'intended-application':
-            u'syndication'
+            'URL':
+            'http://api.wiley.com/onlinelibrary/chorus/v1/articles/10.1002%2Fecy.1625',
+            'content-type':
+            'application/pdf',
+            'content-version':
+            'am',
+            'intended-application':
+            'syndication'
         }, {
-            u'URL':
-            u'http://onlinelibrary.wiley.com/wol1/doi/10.1002/ecy.1625/fullpdf',
-            u'content-type':
-            u'unspecified',
-            u'content-version':
-            u'vor',
-            u'intended-application':
-            u'similarity-checking'
+            'URL':
+            'http://onlinelibrary.wiley.com/wol1/doi/10.1002/ecy.1625/fullpdf',
+            'content-type':
+            'unspecified',
+            'content-version':
+            'vor',
+            'intended-application':
+            'similarity-checking'
         }],
-        u'member':
-        u'311',
-        u'original-title': [],
-        u'page':
-        u'125-137',
-        u'prefix':
-        u'10.1002',
-        u'published-online': {
-            u'date-parts': [[2016, 12, 9]]
+        'member':
+        '311',
+        'original-title': [],
+        'page':
+        '125-137',
+        'prefix':
+        '10.1002',
+        'published-online': {
+            'date-parts': [[2016, 12, 9]]
         },
-        u'published-print': {
-            u'date-parts': [[2017, 1]]
+        'published-print': {
+            'date-parts': [[2017, 1]]
         },
-        u'publisher':
-        u'Wiley-Blackwell',
-        u'reference': [{
-            u'author':
-            u'Ackerman',
-            u'first-page':
-            u'223',
-            u'key':
-            u'10.1002/ecy.1625-BIB0001|ecy1625-cit-0001',
-            u'volume-title':
-            u'Population biology of the Florida manatee. Information and technology report 1',
-            u'year':
-            u'1995'
-        }, {
-            u'DOI': u'10.1017/CBO9780511565328',
-            u'author': u'Adam',
-            u'doi-asserted-by': u'crossref',
-            u'key': u'10.1002/ecy.1625-BIB0002|ecy1625-cit-0002',
-            u'volume-title': u'Saltmarsh ecology',
-            u'year': u'1990'
-        }, {
-            u'DOI':
-            u'10.1016/j.foreco.2009.09.001',
-            u'article-title':
-            u'A global overview of drought and heat-induced tree mortality reveals emerging climate change risks for forests',
-            u'author':
-            u'Allen',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'660',
-            u'journal-title':
-            u'Forest Ecology and Management',
-            u'key':
-            u'10.1002/ecy.1625-BIB0003|ecy1625-cit-0003',
-            u'volume':
-            u'259',
-            u'year':
-            u'2010'
-        }, {
-            u'author': u'Alongi',
-            u'key': u'10.1002/ecy.1625-BIB0004|ecy1625-cit-0004',
-            u'volume-title': u'The energetics of mangrove forests',
-            u'year': u'2009'
-        }, {
-            u'DOI':
-            u'10.1007/s40641-015-0002-x',
-            u'article-title':
-            u'The impact of climate change on mangrove forests',
-            u'author':
-            u'Alongi',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'30',
-            u'journal-title':
-            u'Current Climate Change Reports',
-            u'key':
-            u'10.1002/ecy.1625-BIB0005|ecy1625-cit-0005',
-            u'volume':
-            u'1',
-            u'year':
-            u'2015'
-        }, {
-            u'DOI':
-            u'10.1371/journal.pone.0125404',
-            u'article-title':
-            u'The contribution of mangrove expansion to salt marsh loss on the Texas Gulf Coast',
-            u'author':
-            u'Armitage',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'e0125404',
-            u'journal-title':
-            u'PLoS ONE',
-            u'key':
-            u'10.1002/ecy.1625-BIB0006|ecy1625-cit-0006',
-            u'volume':
-            u'10',
-            u'year':
-            u'2015'
-        }, {
-            u'DOI':
-            u'10.1016/j.ecss.2012.12.007',
-            u'article-title':
-            u'Historical reconstruction of mangrove expansion in the Gulf of Mexico: linking climate change with carbon sequestration in coastal wetlands',
-            u'author':
-            u'Bianchi',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'7',
-            u'journal-title':
-            u'Estuarine, Coastal and Shelf Science',
-            u'key':
-            u'10.1002/ecy.1625-BIB0007|ecy1625-cit-0007',
-            u'volume':
-            u'119',
-            u'year':
-            u'2013'
-        }, {
-            u'DOI':
-            u'10.1111/gcb.12574',
-            u'article-title':
-            u'Climate extremes drive changes in functional community structure',
-            u'author':
-            u'Boucek',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'1821',
-            u'journal-title':
-            u'Global Change Biology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0008|ecy1625-cit-0008',
-            u'volume':
-            u'20',
-            u'year':
-            u'2014'
-        }, {
-            u'DOI':
-            u'10.1002/ecs2.1455',
-            u'article-title':
-            u'A\xa0review of subtropical community resistance and resilience\xa0to extreme cold spells',
-            u'author':
-            u'Boucek',
-            u'doi-asserted-by':
-            u'publisher',
-            u'first-page':
-            u'e01455',
-            u'journal-title':
-            u'Ecosphere',
-            u'key':
-            u'10.1002/ecy.1625-BIB0009|ecy1625-cit-0009',
-            u'volume':
-            u'7'
-        }, {
-            u'DOI':
-            u'10.1007/s13157-016-0793-0',
-            u'article-title':
-            u'Allometric models for estimating aboveground biomass, carbon and nitrogen stocks in temperate Avicennia marina',
-            u'author':
-            u'Bulmer',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'841',
-            u'journal-title':
-            u'Wetlands',
-            u'key':
-            u'10.1002/ecy.1625-BIB0010|ecy1625-cit-0010',
-            u'volume':
-            u'36',
-            u'year':
-            u'2016'
-        }, {
-            u'DOI':
-            u'10.1073/pnas.1315800111',
-            u'article-title':
-            u'Poleward expansion of mangroves is a threshold response to decreased frequency of extreme cold events',
-            u'author':
-            u'Cavanaugh',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'723',
-            u'journal-title':
-            u'Proceedings of the National Academy of Sciences',
-            u'key':
-            u'10.1002/ecy.1625-BIB0011|ecy1625-cit-0011',
-            u'volume':
-            u'111',
-            u'year':
-            u'2014'
-        }, {
-            u'DOI':
-            u'10.1111/gcb.12843',
-            u'article-title':
-            u"Integrating physiological threshold experiments with climate modeling to project mangrove species' range expansion",
-            u'author':
-            u'Cavanaugh',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'1928',
-            u'journal-title':
-            u'Global Change Biology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0012|ecy1625-cit-0012',
-            u'volume':
-            u'21',
-            u'year':
-            u'2015'
-        }, {
-            u'DOI': u'10.1029/CE041p0225',
-            u'author': u'Clough',
-            u'doi-asserted-by': u'crossref',
-            u'first-page': u'225',
-            u'key': u'10.1002/ecy.1625-BIB0013|ecy1625-cit-0013',
-            u'volume-title': u'Tropical mangrove ecosystems',
-            u'year': u'1992'
-        }, {
-            u'DOI':
-            u'10.1111/1365-2435.12443',
-            u'article-title':
-            u'Convergence of three mangrove species towards freeze-tolerant phenotypes at an expanding range edge',
-            u'author':
-            u'Cook-Patton',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'1332',
-            u'journal-title':
-            u'Functional Ecology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0014|ecy1625-cit-0014',
-            u'volume':
-            u'29',
-            u'year':
-            u'2015'
-        }, {
-            u'key':
-            u'10.1002/ecy.1625-BIB0015|ecy1625-cit-0015',
-            u'unstructured':
-            u'Couvillion , B. R. J. A. Barras G. D. Steyer W. Sleavin M. \xa0 Fischer H. Beck N. Trahan B. Griffin D. Heckman 2011 Land area change in coastal Louisiana from 1932 to 2010: U.S. Geological Survey Scientific Investigations Map 3164, scale 1:265,000'
-        }, {
-            u'DOI':
-            u'10.1002/joc.937',
-            u'article-title':
-            u'Mapping the climate of Puerto Rico, Vieques and Culebra',
-            u'author':
-            u'Daly',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'1359',
-            u'journal-title':
-            u'International Journal of Climatology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0016|ecy1625-cit-0016',
-            u'volume':
-            u'23',
-            u'year':
-            u'2003'
-        }, {
-            u'DOI':
-            u'10.1002/joc.1688',
-            u'article-title':
-            u'Physiographically sensitive mapping of climatological temperature and precipitation across the conterminous United States',
-            u'author':
-            u'Daly',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'2031',
-            u'journal-title':
-            u'International Journal of Climatology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0017|ecy1625-cit-0017',
-            u'volume':
-            u'28',
-            u'year':
-            u'2008'
-        }, {
-            u'DOI':
-            u'10.1175/2010JAMC2536.1',
-            u'article-title':
-            u'Development of a new USDA plant hardiness zone map for the United States',
-            u'author':
-            u'Daly',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'242',
-            u'journal-title':
-            u'Journal of Applied Meteorology and Climatology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0018|ecy1625-cit-0018',
-            u'volume':
-            u'51',
-            u'year':
-            u'2012'
-        }, {
-            u'DOI':
-            u'10.1002/ece3.2270',
-            u'article-title':
-            u'Precocious reproduction increases at the leading edge of a mangrove range expansion',
-            u'author':
-            u'Dangremond',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'5087',
-            u'journal-title':
-            u'Ecology and Evolution',
-            u'key':
-            u'10.1002/ecy.1625-BIB0019|ecy1625-cit-0019',
-            u'volume':
-            u'6',
-            u'year':
-            u'2016'
-        }, {
-            u'article-title':
-            u'The ecology and geologic role of mangroves in Florida. Carnegie Institute of Washington Publications',
-            u'author':
-            u'Davis',
-            u'first-page':
-            u'303',
-            u'journal-title':
-            u'Papers from Tortugas Laboratory',
-            u'key':
-            u'10.1002/ecy.1625-BIB0020|ecy1625-cit-0020',
-            u'volume':
-            u'32',
-            u'year':
-            u'1940'
-        }, {
-            u'DOI':
-            u'10.1111/geb.12000',
-            u'article-title':
-            u'Vegetation-microclimate feedbacks in woodland-grassland ecotones',
-            u'author':
-            u"D'Odorico",
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'364',
-            u'journal-title':
-            u'Global Ecology and Biogeography',
-            u'key':
-            u'10.1002/ecy.1625-BIB0021|ecy1625-cit-0021',
-            u'volume':
-            u'22',
-            u'year':
-            u'2013'
-        }, {
-            u'DOI':
-            u'10.1007/s12237-015-9993-8',
-            u'article-title':
-            u'Mangrove range expansion rapidly increases coastal wetland carbon storage',
-            u'author':
-            u'Doughty',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'385',
-            u'journal-title':
-            u'Estuaries and Coasts',
-            u'key':
-            u'10.1002/ecy.1625-BIB0022|ecy1625-cit-0022',
-            u'volume':
-            u'39',
-            u'year':
-            u'2016'
-        }, {
-            u'DOI':
-            u'10.1002/ecs2.1302',
-            u'article-title':
-            u'Differential impacts from an extreme cold spell on subtropical vs. tropical specialist bees in southern Florida',
-            u'author':
-            u'Downing',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'e01302',
-            u'journal-title':
-            u'Ecosphere',
-            u'key':
-            u'10.1002/ecy.1625-BIB0023|ecy1625-cit-0023',
-            u'volume':
-            u'7',
-            u'year':
-            u'2016'
-        }, {
-            u'DOI':
-            u'10.1126/science.289.5487.2068',
-            u'article-title':
-            u'Climate extremes: observations, modeling, and impacts',
-            u'author':
-            u'Easterling',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'2068',
-            u'journal-title':
-            u'Science',
-            u'key':
-            u'10.1002/ecy.1625-BIB0024|ecy1625-cit-0024',
-            u'volume':
-            u'289',
-            u'year':
-            u'2000'
-        }, {
-            u'article-title':
-            u'Integration of remote sensing and spatial information technologies for mapping black mangrove on the Texas gulf coast',
-            u'author':
-            u'Everitt',
-            u'first-page':
-            u'64',
-            u'journal-title':
-            u'Journal of Coastal Research',
-            u'key':
-            u'10.1002/ecy.1625-BIB0025|ecy1625-cit-0025',
-            u'volume':
-            u'12',
-            u'year':
-            u'1996'
-        }, {
-            u'article-title':
-            u'Macroclimatic change expected to transform coastal wetland ecosystems this century',
-            u'author':
-            u'Gabler',
-            u'journal-title':
-            u'Nature Climate Change',
-            u'key':
-            u'10.1002/ecy.1625-BIB0026|ecy1625-cit-0026'
-        }, {
-            u'DOI':
-            u'10.1098/rspb.2008.1480',
-            u'article-title':
-            u'Geographic range limits: achieving synthesis',
-            u'author':
-            u'Gaston',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'1395',
-            u'journal-title':
-            u'Proceedings of the Royal Society of London B: Biological Sciences',
-            u'key':
-            u'10.1002/ecy.1625-BIB0027|ecy1625-cit-0027',
-            u'volume':
-            u'276',
-            u'year':
-            u'2009'
-        }, {
-            u'DOI':
-            u'10.1073/pnas.1400687111',
-            u'article-title':
-            u'Mangrove reemergence in the northernmost range limit of eastern Florida',
-            u'author':
-            u'Giri',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'E1447',
-            u'journal-title':
-            u'Proceedings of the National Academy of Sciences',
-            u'key':
-            u'10.1002/ecy.1625-BIB0028|ecy1625-cit-0028',
-            u'volume':
-            u'111',
-            u'year':
-            u'2014'
-        }, {
-            u'DOI':
-            u'10.2112/JCOASTRES-D-11-00028.1',
-            u'article-title':
-            u"Mapping and monitoring Louisiana's mangroves in the aftermath of the 2010 Gulf of Mexico oil spill",
-            u'author':
-            u'Giri',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'1059',
-            u'journal-title':
-            u'Journal of Coastal Research',
-            u'key':
-            u'10.1002/ecy.1625-BIB0029|ecy1625-cit-0029',
-            u'volume':
-            u'27',
-            u'year':
-            u'2011'
-        }, {
-            u'article-title':
-            u"On the evolutionary ecology of species' ranges",
-            u'author':
-            u'Holt',
-            u'first-page':
-            u'159',
-            u'journal-title':
-            u'Evolutionary Ecology Research',
-            u'key':
-            u'10.1002/ecy.1625-BIB0030|ecy1625-cit-0030',
-            u'volume':
-            u'5',
-            u'year':
-            u'2003'
-        }, {
-            u'DOI':
-            u'10.1890/13-2186.1',
-            u'article-title':
-            u'Resistance and resilience of a grassland ecosystem to climate extremes',
-            u'author':
-            u'Hoover',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'2646',
-            u'journal-title':
-            u'Ecology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0031|ecy1625-cit-0031',
-            u'volume':
-            u'95',
-            u'year':
-            u'2014'
-        }, {
-            u'DOI': u'10.1002/9781118412787.ch6',
-            u'author': u'Ib\xe1\xf1ez',
-            u'doi-asserted-by': u'crossref',
-            u'edition': u'2',
-            u'first-page': u'129',
-            u'key': u'10.1002/ecy.1625-BIB0032|ecy1625-cit-0032',
-            u'volume-title': u'Estuarine ecology',
-            u'year': u'2012'
-        }, {
-            u'author':
-            u'IPCC',
-            u'key':
-            u'10.1002/ecy.1625-BIB0033|ecy1625-cit-0033',
-            u'volume-title':
-            u'Climate change 2013: the physical science basis. Contribution of working group I to the fifth assessment report of the intergovernmental panel on climate change',
-            u'year':
-            u'2013'
-        }, {
-            u'DOI':
-            u'10.1016/j.crte.2008.07.002',
-            u'article-title':
-            u'Research frontiers in climate change: effects of extreme meteorological events on ecosystems',
-            u'author':
-            u'Jentsch',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'621',
-            u'journal-title':
-            u'Comptes Rendus Geoscience',
-            u'key':
-            u'10.1002/ecy.1625-BIB0034|ecy1625-cit-0034',
-            u'volume':
-            u'340',
-            u'year':
-            u'2008'
-        }, {
-            u'DOI':
-            u'10.1890/1540-9295(2007)5[365:ANGOCE]2.0.CO;2',
-            u'article-title':
-            u'A new generation of climate-change experiments: events, not trends',
-            u'author':
-            u'Jentsch',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'365',
-            u'journal-title':
-            u'Frontiers in Ecology and the Environment',
-            u'key':
-            u'10.1002/ecy.1625-BIB0035|ecy1625-cit-0035',
-            u'volume':
-            u'5',
-            u'year':
-            u'2007'
-        }, {
-            u'DOI':
-            u'10.1016/j.ecolmodel.2015.04.013',
-            u'article-title':
-            u'Defining the next generation modeling of coastal ecotone dynamics in response to global change',
-            u'author':
-            u'Jiang',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'168',
-            u'journal-title':
-            u'Ecological Modelling',
-            u'key':
-            u'10.1002/ecy.1625-BIB0036|ecy1625-cit-0036',
-            u'volume':
-            u'326',
-            u'year':
-            u'2016'
-        }, {
-            u'DOI':
-            u'10.1111/jbi.12813',
-            u'article-title':
-            u'Contrasting genetic effects of red mangrove (Rhizophora mangle L.) range expansion along West and East Florida',
-            u'author':
-            u'Kennedy',
-            u'doi-asserted-by':
-            u'publisher',
-            u'journal-title':
-            u'Journal of Biogeography',
-            u'key':
-            u'10.1002/ecy.1625-BIB0037|ecy1625-cit-0037'
-        }, {
-            u'DOI':
-            u'10.1007/978-3-662-05214-3',
-            u'author':
-            u'Larcher',
-            u'doi-asserted-by':
-            u'crossref',
-            u'key':
-            u'10.1002/ecy.1625-BIB0038|ecy1625-cit-0038',
-            u'volume-title':
-            u'Physiological plant ecology: ecophysiology and stress physiology of functional groups',
-            u'year':
-            u'2003'
-        }, {
-            u'DOI':
-            u'10.1371/journal.pone.0023047',
-            u'article-title':
-            u'Severe 2010 cold-water event caused unprecedented mortality to corals of the Florida reef tract and reversed previous survivorship patterns',
-            u'author':
-            u'Lirman',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'e23047',
-            u'journal-title':
-            u'PLoS ONE',
-            u'key':
-            u'10.1002/ecy.1625-BIB0039|ecy1625-cit-0039',
-            u'volume':
-            u'6',
-            u'year':
-            u'2011'
-        }, {
-            u'DOI':
-            u'10.2307/3671923',
-            u'article-title':
-            u'Comparison of the effects of the severe freezes of 1983 and 1989 on native woody plants in the Lower Rio Grande Valley, Texas',
-            u'author':
-            u'Lonard',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'213',
-            u'journal-title':
-            u'The Southwestern Naturalist',
-            u'key':
-            u'10.1002/ecy.1625-BIB0040|ecy1625-cit-0040',
-            u'volume':
-            u'36',
-            u'year':
-            u'1991'
-        }, {
-            u'DOI':
-            u'10.1007/978-3-319-27422-5_7',
-            u'author':
-            u'Lovelock',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'149',
-            u'key':
-            u'10.1002/ecy.1625-BIB0041|ecy1625-cit-0041',
-            u'volume-title':
-            u'Tropical tree physiology: adaptations and responses in a changing environment',
-            u'year':
-            u'2016'
-        }, {
-            u'article-title':
-            u'The impact of low temperature stress on mangrove structure and growth',
-            u'author':
-            u'Lugo',
-            u'first-page':
-            u'149',
-            u'journal-title':
-            u'Tropical Ecology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0042|ecy1625-cit-0042',
-            u'volume':
-            u'18',
-            u'year':
-            u'1977'
-        }, {
-            u'author':
-            u'MacArthur',
-            u'key':
-            u'10.1002/ecy.1625-BIB0043|ecy1625-cit-0043',
-            u'volume-title':
-            u'Geographical ecology: patterns in the distribution of species',
-            u'year':
-            u'1972'
-        }, {
-            u'DOI':
-            u'10.3389/fpls.2014.00503',
-            u'article-title':
-            u'Avicennia germinans (black mangrove) vessel architecture is linked to chilling and salinity tolerance in the Gulf of Mexico',
-            u'author':
-            u'Madrid',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'503',
-            u'journal-title':
-            u'Frontiers in Plant Science',
-            u'key':
-            u'10.1002/ecy.1625-BIB0044|ecy1625-cit-0044',
-            u'volume':
-            u'5',
-            u'year':
-            u'2014'
-        }, {
-            u'key':
-            u'10.1002/ecy.1625-BIB0045|ecy1625-cit-0045',
-            u'unstructured':
-            u'Martin , J. H. L. W. McEachron 1996 Historical annotated review of winter kills of marine organisms in Texas bays'
-        }, {
-            u'DOI':
-            u'10.1002/ecs2.1439',
-            u'article-title':
-            u'Large reptiles and cold temperatures: Do extreme cold spells set distributional limits for tropical reptiles in Florida?',
-            u'author':
-            u'Mazzotti',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'e01439',
-            u'journal-title':
-            u'Ecosphere',
-            u'key':
-            u'10.1002/ecy.1625-BIB0046|ecy1625-cit-0046',
-            u'volume':
-            u'7',
-            u'year':
-            u'2016'
-        }, {
-            u'key':
-            u'10.1002/ecy.1625-BIB0047|ecy1625-cit-0047',
-            u'unstructured':
-            u'Michot , T. C. R. H. Day C. J. Wells 2010 Increase in black mangrove abundance in coastal Louisiana'
-        }, {
-            u'author':
-            u'Montagna',
-            u'edition':
-            u'2',
-            u'first-page':
-            u'96',
-            u'key':
-            u'10.1002/ecy.1625-BIB0048|ecy1625-cit-0048',
-            u'volume-title':
-            u'The impact of global warming on Texas',
-            u'year':
-            u'2011'
-        }, {
-            u'article-title':
-            u'Effects of freezes on tropical trees in Everglades National Park Florida, USA',
-            u'author':
-            u'Olmsted',
-            u'first-page':
-            u'17',
-            u'journal-title':
-            u'Tropical Ecology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0049|ecy1625-cit-0049',
-            u'volume':
-            u'34',
-            u'year':
-            u'1993'
-        }, {
-            u'DOI':
-            u'10.1111/gcb.12126',
-            u'article-title':
-            u'Winter climate change and coastal wetland foundation species: salt marshes vs. mangrove forests in the southeastern United States',
-            u'author':
-            u'Osland',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'1482',
-            u'journal-title':
-            u'Global Change Biology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0050|ecy1625-cit-0050',
-            u'volume':
-            u'19',
-            u'year':
-            u'2013'
-        }, {
-            u'DOI':
-            u'10.1371/journal.pone.0099604',
-            u'article-title':
-            u'Aboveground allometric models for freeze-affected black mangroves (Avicennia germinans): equations for a climate sensitive mangrove-marsh ecotone',
-            u'author':
-            u'Osland',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'e99604',
-            u'journal-title':
-            u'PLoS ONE',
-            u'key':
-            u'10.1002/ecy.1625-BIB0051|ecy1625-cit-0051',
-            u'volume':
-            u'9',
-            u'year':
-            u'2014'
-        }, {
-            u'DOI':
-            u'10.1890/ES15-00042.1',
-            u'article-title':
-            u'Life stage influences the resistance and resilience of black mangrove forests to winter climate extremes',
-            u'author':
-            u'Osland',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'art160',
-            u'journal-title':
-            u'Ecosphere',
-            u'key':
-            u'10.1002/ecy.1625-BIB0052|ecy1625-cit-0052',
-            u'volume':
-            u'6',
-            u'year':
-            u'2015'
-        }, {
-            u'DOI':
-            u'10.1111/gcb.13084',
-            u'article-title':
-            u'Beyond just sea-level rise: considering macroclimatic drivers within coastal wetland vulnerability assessments to climate change',
-            u'author':
-            u'Osland',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'1',
-            u'journal-title':
-            u'Global Change Biology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0053|ecy1625-cit-0053',
-            u'volume':
-            u'22',
-            u'year':
-            u'2016'
-        }, {
-            u'DOI':
-            u'10.1146/annurev.ecolsys.37.091305.110100',
-            u'article-title':
-            u'Ecological and evolutionary responses to recent climate change',
-            u'author':
-            u'Parmesan',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'637',
-            u'journal-title':
-            u'Annual Review of Ecology, Evolution, and Systematics',
-            u'key':
-            u'10.1002/ecy.1625-BIB0054|ecy1625-cit-0054',
-            u'volume':
-            u'37',
-            u'year':
-            u'2006'
-        }, {
-            u'DOI':
-            u'10.2307/1943020',
-            u'article-title':
-            u'Plant communities in the marshlands of southeastern Louisiana',
-            u'author':
-            u'Penfound',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'1',
-            u'journal-title':
-            u'Ecological Monographs',
-            u'key':
-            u'10.1002/ecy.1625-BIB0055|ecy1625-cit-0055',
-            u'volume':
-            u'8',
-            u'year':
-            u'1938'
-        }, {
-            u'DOI':
-            u'10.1007/s12237-010-9358-2',
-            u'article-title':
-            u'Temperature tolerance of early life history stages of black mangrove Avicennia germinans: implications for range expansion',
-            u'author':
-            u'Pickens',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'824',
-            u'journal-title':
-            u'Estuaries and Coasts',
-            u'key':
-            u'10.1002/ecy.1625-BIB0056|ecy1625-cit-0056',
-            u'volume':
-            u'34',
-            u'year':
-            u'2011'
-        }, {
-            u'DOI':
-            u'10.1038/307321a0',
-            u'article-title':
-            u'The complexity and stability of ecosystems',
-            u'author':
-            u'Pimm',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'321',
-            u'journal-title':
-            u'Nature',
-            u'key':
-            u'10.1002/ecy.1625-BIB0057|ecy1625-cit-0057',
-            u'volume':
-            u'307',
-            u'year':
-            u'1984'
-        }, {
-            u'DOI':
-            u'10.1002/ecs2.1268',
-            u'article-title':
-            u'Knocking back invasions: variable resistance and resilience to multiple cold spells in native vs. nonnative fishes',
-            u'author':
-            u'Rehage',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'e01268',
-            u'journal-title':
-            u'Ecosphere',
-            u'key':
-            u'10.1002/ecy.1625-BIB0058|ecy1625-cit-0058',
-            u'volume':
-            u'7',
-            u'year':
-            u'2016'
-        }, {
-            u'DOI':
-            u'10.1016/j.gecco.2016.07.005',
-            u'article-title':
-            u'Spatio-temporal changes of a mangrove-saltmarsh ecotone in the northeastern coast of Florida, USA',
-            u'author':
-            u'Rodriguez',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'245',
-            u'journal-title':
-            u'Global Ecology and Conservation',
-            u'key':
-            u'10.1002/ecy.1625-BIB0059|ecy1625-cit-0059',
-            u'volume':
-            u'7',
-            u'year':
-            u'2016'
-        }, {
-            u'DOI':
-            u'10.1175/1520-0442(1991)004<1103:FCFAPA>2.0.CO;2',
-            u'article-title':
-            u'Florida citrus freezes and polar anticyclones in the Great Plains',
-            u'author':
-            u'Rogers',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'1103',
-            u'journal-title':
-            u'Journal of Climate',
-            u'key':
-            u'10.1002/ecy.1625-BIB0060|ecy1625-cit-0060',
-            u'volume':
-            u'4',
-            u'year':
-            u'1991'
-        }, {
-            u'DOI':
-            u'10.1111/j.1365-2486.2009.01900.x',
-            u'article-title':
-            u'Chilling damage in a changing climate in coastal landscapes of the subtropical zone: a case study from south Florida',
-            u'author':
-            u'Ross',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'1817',
-            u'journal-title':
-            u'Global Change Biology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0061|ecy1625-cit-0061',
-            u'volume':
-            u'15',
-            u'year':
-            u'2009'
-        }, {
-            u'DOI':
-            u'10.1111/nph.13147',
-            u'article-title':
-            u'Woody plant encroachment of grasslands: a comparison of terrestrial and wetland settings',
-            u'author':
-            u'Saintilan',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'1062',
-            u'journal-title':
-            u'New Phytologist',
-            u'key':
-            u'10.1002/ecy.1625-BIB0062|ecy1625-cit-0062',
-            u'volume':
-            u'205',
-            u'year':
-            u'2015'
-        }, {
-            u'DOI':
-            u'10.1111/gcb.12341',
-            u'article-title':
-            u'Mangrove expansion and salt marsh decline at\xa0mangrove poleward limits',
-            u'author':
-            u'Saintilan',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'147',
-            u'journal-title':
-            u'Global Change Biology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0063|ecy1625-cit-0063',
-            u'volume':
-            u'20',
-            u'year':
-            u'2014'
-        }, {
-            u'DOI':
-            u'10.1007/978-3-642-71745-1',
-            u'author':
-            u'Sakai',
-            u'doi-asserted-by':
-            u'crossref',
-            u'key':
-            u'10.1002/ecy.1625-BIB0064|ecy1625-cit-0064',
-            u'volume-title':
-            u'Frost survival of plants: responses and adaptation to freezing stress',
-            u'year':
-            u'1987'
-        }, {
-            u'DOI':
-            u'10.1146/annurev.ecolsys.110308.120317',
-            u'article-title':
-            u'Evolution and ecology of species range limits',
-            u'author':
-            u'Sexton',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'415',
-            u'journal-title':
-            u'Annual Review of Ecology, Evolution, and Systematics',
-            u'key':
-            u'10.1002/ecy.1625-BIB0065|ecy1625-cit-0065',
-            u'volume':
-            u'40',
-            u'year':
-            u'2009'
-        }, {
-            u'article-title':
-            u'The distributional history and ecology of mangrove vegetation along the northern Gulf of Mexico coastal region',
-            u'author':
-            u'Sherrod',
-            u'first-page':
-            u'129',
-            u'journal-title':
-            u'Contributions in Marine Science',
-            u'key':
-            u'10.1002/ecy.1625-BIB0066|ecy1625-cit-0066',
-            u'volume':
-            u'28',
-            u'year':
-            u'1985'
-        }, {
-            u'DOI':
-            u'10.1111/j.1365-2745.2011.01833.x',
-            u'article-title':
-            u'The ecological role of climate extremes: current understanding and future prospects',
-            u'author':
-            u'Smith',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'651',
-            u'journal-title':
-            u'Journal of Ecology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0067|ecy1625-cit-0067',
-            u'volume':
-            u'99',
-            u'year':
-            u'2011'
-        }, {
-            u'DOI':
-            u'10.1890/09-2128.1',
-            u'article-title':
-            u'Controls on resilience and stability in a sediment-subsidized salt marsh',
-            u'author':
-            u'Stagg',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'1731',
-            u'journal-title':
-            u'Ecological Applications',
-            u'key':
-            u'10.1002/ecy.1625-BIB0068|ecy1625-cit-0068',
-            u'volume':
-            u'21',
-            u'year':
-            u'2011'
-        }, {
-            u'DOI':
-            u'10.1007/s11273-006-0006-3',
-            u'article-title':
-            u'The interplay between mangroves and saltmarshes at the transition between temperate and subtropical climate in Florida',
-            u'author':
-            u'Stevens',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'435',
-            u'journal-title':
-            u'Wetlands Ecology and Management',
-            u'key':
-            u'10.1002/ecy.1625-BIB0069|ecy1625-cit-0069',
-            u'volume':
-            u'14',
-            u'year':
-            u'2006'
-        }, {
-            u'DOI':
-            u'10.1002/ecs2.1400',
-            u'article-title':
-            u'Resilience of a tropical sport fish population to a severe cold event varies across five estuaries in southern Florida',
-            u'author':
-            u'Stevens',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'e01400',
-            u'journal-title':
-            u'Ecosphere',
-            u'key':
-            u'10.1002/ecy.1625-BIB0070|ecy1625-cit-0070',
-            u'volume':
-            u'7',
-            u'year':
-            u'2016'
-        }, {
-            u'DOI':
-            u'10.1111/j.1469-8137.2006.01938.x',
-            u'article-title':
-            u'The role of freezing in setting the latitudinal limits of mangrove forests',
-            u'author':
-            u'Stuart',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'576',
-            u'journal-title':
-            u'New Phytologist',
-            u'key':
-            u'10.1002/ecy.1625-BIB0071|ecy1625-cit-0071',
-            u'volume':
-            u'173',
-            u'year':
-            u'2007'
-        }, {
-            u'DOI':
-            u'10.1038/367363a0',
-            u'article-title':
-            u'Biodiversity and stability in grasslands',
-            u'author':
-            u'Tilman',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'363',
-            u'journal-title':
-            u'Nature',
-            u'key':
-            u'10.1002/ecy.1625-BIB0072|ecy1625-cit-0072',
-            u'volume':
-            u'367',
-            u'year':
-            u'1994'
-        }, {
-            u'author': u'Tomlinson',
-            u'key': u'10.1002/ecy.1625-BIB0073|ecy1625-cit-0073',
-            u'volume-title': u'The botany of mangroves',
-            u'year': u'1986'
-        }, {
-            u'DOI': u'10.1002/9781118412787.ch7',
-            u'author': u'Twilley',
-            u'doi-asserted-by': u'crossref',
-            u'edition': u'2',
-            u'first-page': u'165',
-            u'key': u'10.1002/ecy.1625-BIB0074|ecy1625-cit-0074',
-            u'volume-title': u'Estuarine ecology',
-            u'year': u'2012'
-        }, {
-            u'DOI':
-            u'10.1098/rspb.2014.0846',
-            u'article-title':
-            u'The tropicalization of temperate marine ecosystems: climate-mediated changes in herbivory and community phase shifts',
-            u'author':
-            u'Verg\xe9s',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'20140846',
-            u'journal-title':
-            u'Proceedings of the Royal Society B: Biological Sciences',
-            u'key':
-            u'10.1002/ecy.1625-BIB0075|ecy1625-cit-0075',
-            u'volume':
-            u'281',
-            u'year':
-            u'2014'
-        }, {
-            u'DOI':
-            u'10.1002/ehs2.1211',
-            u'article-title':
-            u'Impacts of climate change on mangrove ecosystems: a region by region overview',
-            u'author':
-            u'Ward',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'e012111',
-            u'journal-title':
-            u'Ecosystem Health and Sustainability',
-            u'key':
-            u'10.1002/ecy.1625-BIB0076|ecy1625-cit-0076',
-            u'volume':
-            u'2',
-            u'year':
-            u'2016'
-        }, {
-            u'author': u'West',
-            u'first-page': u'193',
-            u'key': u'10.1002/ecy.1625-BIB0077|ecy1625-cit-0077',
-            u'volume-title': u'Wet coastal ecosystems',
-            u'year': u'1977'
-        }, {
-            u'DOI':
-            u'10.1016/S0034-6667(00)00042-7',
-            u'article-title':
-            u'Pollen assemblages as paleoenvironmental proxies in the Florida Everglades',
-            u'author':
-            u'Willard',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'213',
-            u'journal-title':
-            u'Review of Palaeobotany and Palynology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0078|ecy1625-cit-0078',
-            u'volume':
-            u'113',
-            u'year':
-            u'2001'
-        }, {
-            u'author': u'Woodward',
-            u'key': u'10.1002/ecy.1625-BIB0079|ecy1625-cit-0079',
-            u'volume-title': u'Climate and plant distribution',
-            u'year': u'1987'
-        }, {
-            u'DOI':
-            u'10.1111/1365-2745.12571',
-            u'article-title':
-            u'Salt marsh-mangrove ecotones: using structural gradients to investigate the effects of woody plant encroachment on plant-soil interactions and ecosystem carbon pools',
-            u'author':
-            u'Yando',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'1020',
-            u'journal-title':
-            u'Journal of Ecology',
-            u'key':
-            u'10.1002/ecy.1625-BIB0080|ecy1625-cit-0080',
-            u'volume':
-            u'104',
-            u'year':
-            u'2016'
-        }, {
-            u'DOI':
-            u'10.1016/j.yqres.2015.03.005',
-            u'article-title':
-            u'Palynological reconstruction of environmental changes in coastal wetlands of the Florida Everglades since the mid-Holocene',
-            u'author':
-            u'Yao',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'449',
-            u'journal-title':
-            u'Quaternary Research',
-            u'key':
-            u'10.1002/ecy.1625-BIB0081|ecy1625-cit-0081',
-            u'volume':
-            u'83',
-            u'year':
-            u'2015'
-        }, {
-            u'DOI':
-            u'10.1002/ecs2.1366',
-            u'article-title':
-            u'Remote sensing of seasonal changes and disturbances in mangrove forest: a case study from South Florida',
-            u'author':
-            u'Zhang',
-            u'doi-asserted-by':
-            u'crossref',
-            u'first-page':
-            u'e01366',
-            u'journal-title':
-            u'Ecosphere',
-            u'key':
-            u'10.1002/ecy.1625-BIB0082|ecy1625-cit-0082',
-            u'volume':
-            u'7',
-            u'year':
-            u'2016'
+        'publisher':
+        'Wiley-Blackwell',
+        'reference': [{
+            'author':
+            'Ackerman',
+            'first-page':
+            '223',
+            'key':
+            '10.1002/ecy.1625-BIB0001|ecy1625-cit-0001',
+            'volume-title':
+            'Population biology of the Florida manatee. Information and technology report 1',
+            'year':
+            '1995'
+        }, {
+            'DOI': '10.1017/CBO9780511565328',
+            'author': 'Adam',
+            'doi-asserted-by': 'crossref',
+            'key': '10.1002/ecy.1625-BIB0002|ecy1625-cit-0002',
+            'volume-title': 'Saltmarsh ecology',
+            'year': '1990'
+        }, {
+            'DOI':
+            '10.1016/j.foreco.2009.09.001',
+            'article-title':
+            'A global overview of drought and heat-induced tree mortality reveals emerging climate change risks for forests',
+            'author':
+            'Allen',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '660',
+            'journal-title':
+            'Forest Ecology and Management',
+            'key':
+            '10.1002/ecy.1625-BIB0003|ecy1625-cit-0003',
+            'volume':
+            '259',
+            'year':
+            '2010'
+        }, {
+            'author': 'Alongi',
+            'key': '10.1002/ecy.1625-BIB0004|ecy1625-cit-0004',
+            'volume-title': 'The energetics of mangrove forests',
+            'year': '2009'
+        }, {
+            'DOI':
+            '10.1007/s40641-015-0002-x',
+            'article-title':
+            'The impact of climate change on mangrove forests',
+            'author':
+            'Alongi',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '30',
+            'journal-title':
+            'Current Climate Change Reports',
+            'key':
+            '10.1002/ecy.1625-BIB0005|ecy1625-cit-0005',
+            'volume':
+            '1',
+            'year':
+            '2015'
+        }, {
+            'DOI':
+            '10.1371/journal.pone.0125404',
+            'article-title':
+            'The contribution of mangrove expansion to salt marsh loss on the Texas Gulf Coast',
+            'author':
+            'Armitage',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            'e0125404',
+            'journal-title':
+            'PLoS ONE',
+            'key':
+            '10.1002/ecy.1625-BIB0006|ecy1625-cit-0006',
+            'volume':
+            '10',
+            'year':
+            '2015'
+        }, {
+            'DOI':
+            '10.1016/j.ecss.2012.12.007',
+            'article-title':
+            'Historical reconstruction of mangrove expansion in the Gulf of Mexico: linking climate change with carbon sequestration in coastal wetlands',
+            'author':
+            'Bianchi',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '7',
+            'journal-title':
+            'Estuarine, Coastal and Shelf Science',
+            'key':
+            '10.1002/ecy.1625-BIB0007|ecy1625-cit-0007',
+            'volume':
+            '119',
+            'year':
+            '2013'
+        }, {
+            'DOI':
+            '10.1111/gcb.12574',
+            'article-title':
+            'Climate extremes drive changes in functional community structure',
+            'author':
+            'Boucek',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '1821',
+            'journal-title':
+            'Global Change Biology',
+            'key':
+            '10.1002/ecy.1625-BIB0008|ecy1625-cit-0008',
+            'volume':
+            '20',
+            'year':
+            '2014'
+        }, {
+            'DOI':
+            '10.1002/ecs2.1455',
+            'article-title':
+            'A\xa0review of subtropical community resistance and resilience\xa0to extreme cold spells',
+            'author':
+            'Boucek',
+            'doi-asserted-by':
+            'publisher',
+            'first-page':
+            'e01455',
+            'journal-title':
+            'Ecosphere',
+            'key':
+            '10.1002/ecy.1625-BIB0009|ecy1625-cit-0009',
+            'volume':
+            '7'
+        }, {
+            'DOI':
+            '10.1007/s13157-016-0793-0',
+            'article-title':
+            'Allometric models for estimating aboveground biomass, carbon and nitrogen stocks in temperate Avicennia marina',
+            'author':
+            'Bulmer',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '841',
+            'journal-title':
+            'Wetlands',
+            'key':
+            '10.1002/ecy.1625-BIB0010|ecy1625-cit-0010',
+            'volume':
+            '36',
+            'year':
+            '2016'
+        }, {
+            'DOI':
+            '10.1073/pnas.1315800111',
+            'article-title':
+            'Poleward expansion of mangroves is a threshold response to decreased frequency of extreme cold events',
+            'author':
+            'Cavanaugh',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '723',
+            'journal-title':
+            'Proceedings of the National Academy of Sciences',
+            'key':
+            '10.1002/ecy.1625-BIB0011|ecy1625-cit-0011',
+            'volume':
+            '111',
+            'year':
+            '2014'
+        }, {
+            'DOI':
+            '10.1111/gcb.12843',
+            'article-title':
+            "Integrating physiological threshold experiments with climate modeling to project mangrove species' range expansion",
+            'author':
+            'Cavanaugh',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '1928',
+            'journal-title':
+            'Global Change Biology',
+            'key':
+            '10.1002/ecy.1625-BIB0012|ecy1625-cit-0012',
+            'volume':
+            '21',
+            'year':
+            '2015'
+        }, {
+            'DOI': '10.1029/CE041p0225',
+            'author': 'Clough',
+            'doi-asserted-by': 'crossref',
+            'first-page': '225',
+            'key': '10.1002/ecy.1625-BIB0013|ecy1625-cit-0013',
+            'volume-title': 'Tropical mangrove ecosystems',
+            'year': '1992'
+        }, {
+            'DOI':
+            '10.1111/1365-2435.12443',
+            'article-title':
+            'Convergence of three mangrove species towards freeze-tolerant phenotypes at an expanding range edge',
+            'author':
+            'Cook-Patton',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '1332',
+            'journal-title':
+            'Functional Ecology',
+            'key':
+            '10.1002/ecy.1625-BIB0014|ecy1625-cit-0014',
+            'volume':
+            '29',
+            'year':
+            '2015'
+        }, {
+            'key':
+            '10.1002/ecy.1625-BIB0015|ecy1625-cit-0015',
+            'unstructured':
+            'Couvillion , B. R. J. A. Barras G. D. Steyer W. Sleavin M. \xa0 Fischer H. Beck N. Trahan B. Griffin D. Heckman 2011 Land area change in coastal Louisiana from 1932 to 2010: U.S. Geological Survey Scientific Investigations Map 3164, scale 1:265,000'
+        }, {
+            'DOI':
+            '10.1002/joc.937',
+            'article-title':
+            'Mapping the climate of Puerto Rico, Vieques and Culebra',
+            'author':
+            'Daly',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '1359',
+            'journal-title':
+            'International Journal of Climatology',
+            'key':
+            '10.1002/ecy.1625-BIB0016|ecy1625-cit-0016',
+            'volume':
+            '23',
+            'year':
+            '2003'
+        }, {
+            'DOI':
+            '10.1002/joc.1688',
+            'article-title':
+            'Physiographically sensitive mapping of climatological temperature and precipitation across the conterminous United States',
+            'author':
+            'Daly',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '2031',
+            'journal-title':
+            'International Journal of Climatology',
+            'key':
+            '10.1002/ecy.1625-BIB0017|ecy1625-cit-0017',
+            'volume':
+            '28',
+            'year':
+            '2008'
+        }, {
+            'DOI':
+            '10.1175/2010JAMC2536.1',
+            'article-title':
+            'Development of a new USDA plant hardiness zone map for the United States',
+            'author':
+            'Daly',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '242',
+            'journal-title':
+            'Journal of Applied Meteorology and Climatology',
+            'key':
+            '10.1002/ecy.1625-BIB0018|ecy1625-cit-0018',
+            'volume':
+            '51',
+            'year':
+            '2012'
+        }, {
+            'DOI':
+            '10.1002/ece3.2270',
+            'article-title':
+            'Precocious reproduction increases at the leading edge of a mangrove range expansion',
+            'author':
+            'Dangremond',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '5087',
+            'journal-title':
+            'Ecology and Evolution',
+            'key':
+            '10.1002/ecy.1625-BIB0019|ecy1625-cit-0019',
+            'volume':
+            '6',
+            'year':
+            '2016'
+        }, {
+            'article-title':
+            'The ecology and geologic role of mangroves in Florida. Carnegie Institute of Washington Publications',
+            'author':
+            'Davis',
+            'first-page':
+            '303',
+            'journal-title':
+            'Papers from Tortugas Laboratory',
+            'key':
+            '10.1002/ecy.1625-BIB0020|ecy1625-cit-0020',
+            'volume':
+            '32',
+            'year':
+            '1940'
+        }, {
+            'DOI':
+            '10.1111/geb.12000',
+            'article-title':
+            'Vegetation-microclimate feedbacks in woodland-grassland ecotones',
+            'author':
+            "D'Odorico",
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '364',
+            'journal-title':
+            'Global Ecology and Biogeography',
+            'key':
+            '10.1002/ecy.1625-BIB0021|ecy1625-cit-0021',
+            'volume':
+            '22',
+            'year':
+            '2013'
+        }, {
+            'DOI':
+            '10.1007/s12237-015-9993-8',
+            'article-title':
+            'Mangrove range expansion rapidly increases coastal wetland carbon storage',
+            'author':
+            'Doughty',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '385',
+            'journal-title':
+            'Estuaries and Coasts',
+            'key':
+            '10.1002/ecy.1625-BIB0022|ecy1625-cit-0022',
+            'volume':
+            '39',
+            'year':
+            '2016'
+        }, {
+            'DOI':
+            '10.1002/ecs2.1302',
+            'article-title':
+            'Differential impacts from an extreme cold spell on subtropical vs. tropical specialist bees in southern Florida',
+            'author':
+            'Downing',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            'e01302',
+            'journal-title':
+            'Ecosphere',
+            'key':
+            '10.1002/ecy.1625-BIB0023|ecy1625-cit-0023',
+            'volume':
+            '7',
+            'year':
+            '2016'
+        }, {
+            'DOI':
+            '10.1126/science.289.5487.2068',
+            'article-title':
+            'Climate extremes: observations, modeling, and impacts',
+            'author':
+            'Easterling',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '2068',
+            'journal-title':
+            'Science',
+            'key':
+            '10.1002/ecy.1625-BIB0024|ecy1625-cit-0024',
+            'volume':
+            '289',
+            'year':
+            '2000'
+        }, {
+            'article-title':
+            'Integration of remote sensing and spatial information technologies for mapping black mangrove on the Texas gulf coast',
+            'author':
+            'Everitt',
+            'first-page':
+            '64',
+            'journal-title':
+            'Journal of Coastal Research',
+            'key':
+            '10.1002/ecy.1625-BIB0025|ecy1625-cit-0025',
+            'volume':
+            '12',
+            'year':
+            '1996'
+        }, {
+            'article-title':
+            'Macroclimatic change expected to transform coastal wetland ecosystems this century',
+            'author':
+            'Gabler',
+            'journal-title':
+            'Nature Climate Change',
+            'key':
+            '10.1002/ecy.1625-BIB0026|ecy1625-cit-0026'
+        }, {
+            'DOI':
+            '10.1098/rspb.2008.1480',
+            'article-title':
+            'Geographic range limits: achieving synthesis',
+            'author':
+            'Gaston',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '1395',
+            'journal-title':
+            'Proceedings of the Royal Society of London B: Biological Sciences',
+            'key':
+            '10.1002/ecy.1625-BIB0027|ecy1625-cit-0027',
+            'volume':
+            '276',
+            'year':
+            '2009'
+        }, {
+            'DOI':
+            '10.1073/pnas.1400687111',
+            'article-title':
+            'Mangrove reemergence in the northernmost range limit of eastern Florida',
+            'author':
+            'Giri',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            'E1447',
+            'journal-title':
+            'Proceedings of the National Academy of Sciences',
+            'key':
+            '10.1002/ecy.1625-BIB0028|ecy1625-cit-0028',
+            'volume':
+            '111',
+            'year':
+            '2014'
+        }, {
+            'DOI':
+            '10.2112/JCOASTRES-D-11-00028.1',
+            'article-title':
+            "Mapping and monitoring Louisiana's mangroves in the aftermath of the 2010 Gulf of Mexico oil spill",
+            'author':
+            'Giri',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '1059',
+            'journal-title':
+            'Journal of Coastal Research',
+            'key':
+            '10.1002/ecy.1625-BIB0029|ecy1625-cit-0029',
+            'volume':
+            '27',
+            'year':
+            '2011'
+        }, {
+            'article-title':
+            "On the evolutionary ecology of species' ranges",
+            'author':
+            'Holt',
+            'first-page':
+            '159',
+            'journal-title':
+            'Evolutionary Ecology Research',
+            'key':
+            '10.1002/ecy.1625-BIB0030|ecy1625-cit-0030',
+            'volume':
+            '5',
+            'year':
+            '2003'
+        }, {
+            'DOI':
+            '10.1890/13-2186.1',
+            'article-title':
+            'Resistance and resilience of a grassland ecosystem to climate extremes',
+            'author':
+            'Hoover',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '2646',
+            'journal-title':
+            'Ecology',
+            'key':
+            '10.1002/ecy.1625-BIB0031|ecy1625-cit-0031',
+            'volume':
+            '95',
+            'year':
+            '2014'
+        }, {
+            'DOI': '10.1002/9781118412787.ch6',
+            'author': 'Ib\xe1\xf1ez',
+            'doi-asserted-by': 'crossref',
+            'edition': '2',
+            'first-page': '129',
+            'key': '10.1002/ecy.1625-BIB0032|ecy1625-cit-0032',
+            'volume-title': 'Estuarine ecology',
+            'year': '2012'
+        }, {
+            'author':
+            'IPCC',
+            'key':
+            '10.1002/ecy.1625-BIB0033|ecy1625-cit-0033',
+            'volume-title':
+            'Climate change 2013: the physical science basis. Contribution of working group I to the fifth assessment report of the intergovernmental panel on climate change',
+            'year':
+            '2013'
+        }, {
+            'DOI':
+            '10.1016/j.crte.2008.07.002',
+            'article-title':
+            'Research frontiers in climate change: effects of extreme meteorological events on ecosystems',
+            'author':
+            'Jentsch',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '621',
+            'journal-title':
+            'Comptes Rendus Geoscience',
+            'key':
+            '10.1002/ecy.1625-BIB0034|ecy1625-cit-0034',
+            'volume':
+            '340',
+            'year':
+            '2008'
+        }, {
+            'DOI':
+            '10.1890/1540-9295(2007)5[365:ANGOCE]2.0.CO;2',
+            'article-title':
+            'A new generation of climate-change experiments: events, not trends',
+            'author':
+            'Jentsch',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '365',
+            'journal-title':
+            'Frontiers in Ecology and the Environment',
+            'key':
+            '10.1002/ecy.1625-BIB0035|ecy1625-cit-0035',
+            'volume':
+            '5',
+            'year':
+            '2007'
+        }, {
+            'DOI':
+            '10.1016/j.ecolmodel.2015.04.013',
+            'article-title':
+            'Defining the next generation modeling of coastal ecotone dynamics in response to global change',
+            'author':
+            'Jiang',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '168',
+            'journal-title':
+            'Ecological Modelling',
+            'key':
+            '10.1002/ecy.1625-BIB0036|ecy1625-cit-0036',
+            'volume':
+            '326',
+            'year':
+            '2016'
+        }, {
+            'DOI':
+            '10.1111/jbi.12813',
+            'article-title':
+            'Contrasting genetic effects of red mangrove (Rhizophora mangle L.) range expansion along West and East Florida',
+            'author':
+            'Kennedy',
+            'doi-asserted-by':
+            'publisher',
+            'journal-title':
+            'Journal of Biogeography',
+            'key':
+            '10.1002/ecy.1625-BIB0037|ecy1625-cit-0037'
+        }, {
+            'DOI':
+            '10.1007/978-3-662-05214-3',
+            'author':
+            'Larcher',
+            'doi-asserted-by':
+            'crossref',
+            'key':
+            '10.1002/ecy.1625-BIB0038|ecy1625-cit-0038',
+            'volume-title':
+            'Physiological plant ecology: ecophysiology and stress physiology of functional groups',
+            'year':
+            '2003'
+        }, {
+            'DOI':
+            '10.1371/journal.pone.0023047',
+            'article-title':
+            'Severe 2010 cold-water event caused unprecedented mortality to corals of the Florida reef tract and reversed previous survivorship patterns',
+            'author':
+            'Lirman',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            'e23047',
+            'journal-title':
+            'PLoS ONE',
+            'key':
+            '10.1002/ecy.1625-BIB0039|ecy1625-cit-0039',
+            'volume':
+            '6',
+            'year':
+            '2011'
+        }, {
+            'DOI':
+            '10.2307/3671923',
+            'article-title':
+            'Comparison of the effects of the severe freezes of 1983 and 1989 on native woody plants in the Lower Rio Grande Valley, Texas',
+            'author':
+            'Lonard',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '213',
+            'journal-title':
+            'The Southwestern Naturalist',
+            'key':
+            '10.1002/ecy.1625-BIB0040|ecy1625-cit-0040',
+            'volume':
+            '36',
+            'year':
+            '1991'
+        }, {
+            'DOI':
+            '10.1007/978-3-319-27422-5_7',
+            'author':
+            'Lovelock',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '149',
+            'key':
+            '10.1002/ecy.1625-BIB0041|ecy1625-cit-0041',
+            'volume-title':
+            'Tropical tree physiology: adaptations and responses in a changing environment',
+            'year':
+            '2016'
+        }, {
+            'article-title':
+            'The impact of low temperature stress on mangrove structure and growth',
+            'author':
+            'Lugo',
+            'first-page':
+            '149',
+            'journal-title':
+            'Tropical Ecology',
+            'key':
+            '10.1002/ecy.1625-BIB0042|ecy1625-cit-0042',
+            'volume':
+            '18',
+            'year':
+            '1977'
+        }, {
+            'author':
+            'MacArthur',
+            'key':
+            '10.1002/ecy.1625-BIB0043|ecy1625-cit-0043',
+            'volume-title':
+            'Geographical ecology: patterns in the distribution of species',
+            'year':
+            '1972'
+        }, {
+            'DOI':
+            '10.3389/fpls.2014.00503',
+            'article-title':
+            'Avicennia germinans (black mangrove) vessel architecture is linked to chilling and salinity tolerance in the Gulf of Mexico',
+            'author':
+            'Madrid',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '503',
+            'journal-title':
+            'Frontiers in Plant Science',
+            'key':
+            '10.1002/ecy.1625-BIB0044|ecy1625-cit-0044',
+            'volume':
+            '5',
+            'year':
+            '2014'
+        }, {
+            'key':
+            '10.1002/ecy.1625-BIB0045|ecy1625-cit-0045',
+            'unstructured':
+            'Martin , J. H. L. W. McEachron 1996 Historical annotated review of winter kills of marine organisms in Texas bays'
+        }, {
+            'DOI':
+            '10.1002/ecs2.1439',
+            'article-title':
+            'Large reptiles and cold temperatures: Do extreme cold spells set distributional limits for tropical reptiles in Florida?',
+            'author':
+            'Mazzotti',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            'e01439',
+            'journal-title':
+            'Ecosphere',
+            'key':
+            '10.1002/ecy.1625-BIB0046|ecy1625-cit-0046',
+            'volume':
+            '7',
+            'year':
+            '2016'
+        }, {
+            'key':
+            '10.1002/ecy.1625-BIB0047|ecy1625-cit-0047',
+            'unstructured':
+            'Michot , T. C. R. H. Day C. J. Wells 2010 Increase in black mangrove abundance in coastal Louisiana'
+        }, {
+            'author':
+            'Montagna',
+            'edition':
+            '2',
+            'first-page':
+            '96',
+            'key':
+            '10.1002/ecy.1625-BIB0048|ecy1625-cit-0048',
+            'volume-title':
+            'The impact of global warming on Texas',
+            'year':
+            '2011'
+        }, {
+            'article-title':
+            'Effects of freezes on tropical trees in Everglades National Park Florida, USA',
+            'author':
+            'Olmsted',
+            'first-page':
+            '17',
+            'journal-title':
+            'Tropical Ecology',
+            'key':
+            '10.1002/ecy.1625-BIB0049|ecy1625-cit-0049',
+            'volume':
+            '34',
+            'year':
+            '1993'
+        }, {
+            'DOI':
+            '10.1111/gcb.12126',
+            'article-title':
+            'Winter climate change and coastal wetland foundation species: salt marshes vs. mangrove forests in the southeastern United States',
+            'author':
+            'Osland',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '1482',
+            'journal-title':
+            'Global Change Biology',
+            'key':
+            '10.1002/ecy.1625-BIB0050|ecy1625-cit-0050',
+            'volume':
+            '19',
+            'year':
+            '2013'
+        }, {
+            'DOI':
+            '10.1371/journal.pone.0099604',
+            'article-title':
+            'Aboveground allometric models for freeze-affected black mangroves (Avicennia germinans): equations for a climate sensitive mangrove-marsh ecotone',
+            'author':
+            'Osland',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            'e99604',
+            'journal-title':
+            'PLoS ONE',
+            'key':
+            '10.1002/ecy.1625-BIB0051|ecy1625-cit-0051',
+            'volume':
+            '9',
+            'year':
+            '2014'
+        }, {
+            'DOI':
+            '10.1890/ES15-00042.1',
+            'article-title':
+            'Life stage influences the resistance and resilience of black mangrove forests to winter climate extremes',
+            'author':
+            'Osland',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            'art160',
+            'journal-title':
+            'Ecosphere',
+            'key':
+            '10.1002/ecy.1625-BIB0052|ecy1625-cit-0052',
+            'volume':
+            '6',
+            'year':
+            '2015'
+        }, {
+            'DOI':
+            '10.1111/gcb.13084',
+            'article-title':
+            'Beyond just sea-level rise: considering macroclimatic drivers within coastal wetland vulnerability assessments to climate change',
+            'author':
+            'Osland',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '1',
+            'journal-title':
+            'Global Change Biology',
+            'key':
+            '10.1002/ecy.1625-BIB0053|ecy1625-cit-0053',
+            'volume':
+            '22',
+            'year':
+            '2016'
+        }, {
+            'DOI':
+            '10.1146/annurev.ecolsys.37.091305.110100',
+            'article-title':
+            'Ecological and evolutionary responses to recent climate change',
+            'author':
+            'Parmesan',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '637',
+            'journal-title':
+            'Annual Review of Ecology, Evolution, and Systematics',
+            'key':
+            '10.1002/ecy.1625-BIB0054|ecy1625-cit-0054',
+            'volume':
+            '37',
+            'year':
+            '2006'
+        }, {
+            'DOI':
+            '10.2307/1943020',
+            'article-title':
+            'Plant communities in the marshlands of southeastern Louisiana',
+            'author':
+            'Penfound',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '1',
+            'journal-title':
+            'Ecological Monographs',
+            'key':
+            '10.1002/ecy.1625-BIB0055|ecy1625-cit-0055',
+            'volume':
+            '8',
+            'year':
+            '1938'
+        }, {
+            'DOI':
+            '10.1007/s12237-010-9358-2',
+            'article-title':
+            'Temperature tolerance of early life history stages of black mangrove Avicennia germinans: implications for range expansion',
+            'author':
+            'Pickens',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '824',
+            'journal-title':
+            'Estuaries and Coasts',
+            'key':
+            '10.1002/ecy.1625-BIB0056|ecy1625-cit-0056',
+            'volume':
+            '34',
+            'year':
+            '2011'
+        }, {
+            'DOI':
+            '10.1038/307321a0',
+            'article-title':
+            'The complexity and stability of ecosystems',
+            'author':
+            'Pimm',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '321',
+            'journal-title':
+            'Nature',
+            'key':
+            '10.1002/ecy.1625-BIB0057|ecy1625-cit-0057',
+            'volume':
+            '307',
+            'year':
+            '1984'
+        }, {
+            'DOI':
+            '10.1002/ecs2.1268',
+            'article-title':
+            'Knocking back invasions: variable resistance and resilience to multiple cold spells in native vs. nonnative fishes',
+            'author':
+            'Rehage',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            'e01268',
+            'journal-title':
+            'Ecosphere',
+            'key':
+            '10.1002/ecy.1625-BIB0058|ecy1625-cit-0058',
+            'volume':
+            '7',
+            'year':
+            '2016'
+        }, {
+            'DOI':
+            '10.1016/j.gecco.2016.07.005',
+            'article-title':
+            'Spatio-temporal changes of a mangrove-saltmarsh ecotone in the northeastern coast of Florida, USA',
+            'author':
+            'Rodriguez',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '245',
+            'journal-title':
+            'Global Ecology and Conservation',
+            'key':
+            '10.1002/ecy.1625-BIB0059|ecy1625-cit-0059',
+            'volume':
+            '7',
+            'year':
+            '2016'
+        }, {
+            'DOI':
+            '10.1175/1520-0442(1991)004<1103:FCFAPA>2.0.CO;2',
+            'article-title':
+            'Florida citrus freezes and polar anticyclones in the Great Plains',
+            'author':
+            'Rogers',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '1103',
+            'journal-title':
+            'Journal of Climate',
+            'key':
+            '10.1002/ecy.1625-BIB0060|ecy1625-cit-0060',
+            'volume':
+            '4',
+            'year':
+            '1991'
+        }, {
+            'DOI':
+            '10.1111/j.1365-2486.2009.01900.x',
+            'article-title':
+            'Chilling damage in a changing climate in coastal landscapes of the subtropical zone: a case study from south Florida',
+            'author':
+            'Ross',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '1817',
+            'journal-title':
+            'Global Change Biology',
+            'key':
+            '10.1002/ecy.1625-BIB0061|ecy1625-cit-0061',
+            'volume':
+            '15',
+            'year':
+            '2009'
+        }, {
+            'DOI':
+            '10.1111/nph.13147',
+            'article-title':
+            'Woody plant encroachment of grasslands: a comparison of terrestrial and wetland settings',
+            'author':
+            'Saintilan',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '1062',
+            'journal-title':
+            'New Phytologist',
+            'key':
+            '10.1002/ecy.1625-BIB0062|ecy1625-cit-0062',
+            'volume':
+            '205',
+            'year':
+            '2015'
+        }, {
+            'DOI':
+            '10.1111/gcb.12341',
+            'article-title':
+            'Mangrove expansion and salt marsh decline at\xa0mangrove poleward limits',
+            'author':
+            'Saintilan',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '147',
+            'journal-title':
+            'Global Change Biology',
+            'key':
+            '10.1002/ecy.1625-BIB0063|ecy1625-cit-0063',
+            'volume':
+            '20',
+            'year':
+            '2014'
+        }, {
+            'DOI':
+            '10.1007/978-3-642-71745-1',
+            'author':
+            'Sakai',
+            'doi-asserted-by':
+            'crossref',
+            'key':
+            '10.1002/ecy.1625-BIB0064|ecy1625-cit-0064',
+            'volume-title':
+            'Frost survival of plants: responses and adaptation to freezing stress',
+            'year':
+            '1987'
+        }, {
+            'DOI':
+            '10.1146/annurev.ecolsys.110308.120317',
+            'article-title':
+            'Evolution and ecology of species range limits',
+            'author':
+            'Sexton',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '415',
+            'journal-title':
+            'Annual Review of Ecology, Evolution, and Systematics',
+            'key':
+            '10.1002/ecy.1625-BIB0065|ecy1625-cit-0065',
+            'volume':
+            '40',
+            'year':
+            '2009'
+        }, {
+            'article-title':
+            'The distributional history and ecology of mangrove vegetation along the northern Gulf of Mexico coastal region',
+            'author':
+            'Sherrod',
+            'first-page':
+            '129',
+            'journal-title':
+            'Contributions in Marine Science',
+            'key':
+            '10.1002/ecy.1625-BIB0066|ecy1625-cit-0066',
+            'volume':
+            '28',
+            'year':
+            '1985'
+        }, {
+            'DOI':
+            '10.1111/j.1365-2745.2011.01833.x',
+            'article-title':
+            'The ecological role of climate extremes: current understanding and future prospects',
+            'author':
+            'Smith',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '651',
+            'journal-title':
+            'Journal of Ecology',
+            'key':
+            '10.1002/ecy.1625-BIB0067|ecy1625-cit-0067',
+            'volume':
+            '99',
+            'year':
+            '2011'
+        }, {
+            'DOI':
+            '10.1890/09-2128.1',
+            'article-title':
+            'Controls on resilience and stability in a sediment-subsidized salt marsh',
+            'author':
+            'Stagg',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '1731',
+            'journal-title':
+            'Ecological Applications',
+            'key':
+            '10.1002/ecy.1625-BIB0068|ecy1625-cit-0068',
+            'volume':
+            '21',
+            'year':
+            '2011'
+        }, {
+            'DOI':
+            '10.1007/s11273-006-0006-3',
+            'article-title':
+            'The interplay between mangroves and saltmarshes at the transition between temperate and subtropical climate in Florida',
+            'author':
+            'Stevens',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '435',
+            'journal-title':
+            'Wetlands Ecology and Management',
+            'key':
+            '10.1002/ecy.1625-BIB0069|ecy1625-cit-0069',
+            'volume':
+            '14',
+            'year':
+            '2006'
+        }, {
+            'DOI':
+            '10.1002/ecs2.1400',
+            'article-title':
+            'Resilience of a tropical sport fish population to a severe cold event varies across five estuaries in southern Florida',
+            'author':
+            'Stevens',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            'e01400',
+            'journal-title':
+            'Ecosphere',
+            'key':
+            '10.1002/ecy.1625-BIB0070|ecy1625-cit-0070',
+            'volume':
+            '7',
+            'year':
+            '2016'
+        }, {
+            'DOI':
+            '10.1111/j.1469-8137.2006.01938.x',
+            'article-title':
+            'The role of freezing in setting the latitudinal limits of mangrove forests',
+            'author':
+            'Stuart',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '576',
+            'journal-title':
+            'New Phytologist',
+            'key':
+            '10.1002/ecy.1625-BIB0071|ecy1625-cit-0071',
+            'volume':
+            '173',
+            'year':
+            '2007'
+        }, {
+            'DOI':
+            '10.1038/367363a0',
+            'article-title':
+            'Biodiversity and stability in grasslands',
+            'author':
+            'Tilman',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '363',
+            'journal-title':
+            'Nature',
+            'key':
+            '10.1002/ecy.1625-BIB0072|ecy1625-cit-0072',
+            'volume':
+            '367',
+            'year':
+            '1994'
+        }, {
+            'author': 'Tomlinson',
+            'key': '10.1002/ecy.1625-BIB0073|ecy1625-cit-0073',
+            'volume-title': 'The botany of mangroves',
+            'year': '1986'
+        }, {
+            'DOI': '10.1002/9781118412787.ch7',
+            'author': 'Twilley',
+            'doi-asserted-by': 'crossref',
+            'edition': '2',
+            'first-page': '165',
+            'key': '10.1002/ecy.1625-BIB0074|ecy1625-cit-0074',
+            'volume-title': 'Estuarine ecology',
+            'year': '2012'
+        }, {
+            'DOI':
+            '10.1098/rspb.2014.0846',
+            'article-title':
+            'The tropicalization of temperate marine ecosystems: climate-mediated changes in herbivory and community phase shifts',
+            'author':
+            'Verg\xe9s',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '20140846',
+            'journal-title':
+            'Proceedings of the Royal Society B: Biological Sciences',
+            'key':
+            '10.1002/ecy.1625-BIB0075|ecy1625-cit-0075',
+            'volume':
+            '281',
+            'year':
+            '2014'
+        }, {
+            'DOI':
+            '10.1002/ehs2.1211',
+            'article-title':
+            'Impacts of climate change on mangrove ecosystems: a region by region overview',
+            'author':
+            'Ward',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            'e012111',
+            'journal-title':
+            'Ecosystem Health and Sustainability',
+            'key':
+            '10.1002/ecy.1625-BIB0076|ecy1625-cit-0076',
+            'volume':
+            '2',
+            'year':
+            '2016'
+        }, {
+            'author': 'West',
+            'first-page': '193',
+            'key': '10.1002/ecy.1625-BIB0077|ecy1625-cit-0077',
+            'volume-title': 'Wet coastal ecosystems',
+            'year': '1977'
+        }, {
+            'DOI':
+            '10.1016/S0034-6667(00)00042-7',
+            'article-title':
+            'Pollen assemblages as paleoenvironmental proxies in the Florida Everglades',
+            'author':
+            'Willard',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '213',
+            'journal-title':
+            'Review of Palaeobotany and Palynology',
+            'key':
+            '10.1002/ecy.1625-BIB0078|ecy1625-cit-0078',
+            'volume':
+            '113',
+            'year':
+            '2001'
+        }, {
+            'author': 'Woodward',
+            'key': '10.1002/ecy.1625-BIB0079|ecy1625-cit-0079',
+            'volume-title': 'Climate and plant distribution',
+            'year': '1987'
+        }, {
+            'DOI':
+            '10.1111/1365-2745.12571',
+            'article-title':
+            'Salt marsh-mangrove ecotones: using structural gradients to investigate the effects of woody plant encroachment on plant-soil interactions and ecosystem carbon pools',
+            'author':
+            'Yando',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '1020',
+            'journal-title':
+            'Journal of Ecology',
+            'key':
+            '10.1002/ecy.1625-BIB0080|ecy1625-cit-0080',
+            'volume':
+            '104',
+            'year':
+            '2016'
+        }, {
+            'DOI':
+            '10.1016/j.yqres.2015.03.005',
+            'article-title':
+            'Palynological reconstruction of environmental changes in coastal wetlands of the Florida Everglades since the mid-Holocene',
+            'author':
+            'Yao',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            '449',
+            'journal-title':
+            'Quaternary Research',
+            'key':
+            '10.1002/ecy.1625-BIB0081|ecy1625-cit-0081',
+            'volume':
+            '83',
+            'year':
+            '2015'
+        }, {
+            'DOI':
+            '10.1002/ecs2.1366',
+            'article-title':
+            'Remote sensing of seasonal changes and disturbances in mangrove forest: a case study from South Florida',
+            'author':
+            'Zhang',
+            'doi-asserted-by':
+            'crossref',
+            'first-page':
+            'e01366',
+            'journal-title':
+            'Ecosphere',
+            'key':
+            '10.1002/ecy.1625-BIB0082|ecy1625-cit-0082',
+            'volume':
+            '7',
+            'year':
+            '2016'
         }],
-        u'reference-count':
+        'reference-count':
         82,
-        u'references-count':
+        'references-count':
         82,
-        u'relation': {
-            u'cites': []
+        'relation': {
+            'cites': []
         },
-        u'score':
+        'score':
         1.0,
-        u'short-container-title': [u'Ecology'],
-        u'short-title': [],
-        u'source':
-        u'Crossref',
-        u'subject': [u'Ecology, Evolution, Behavior and Systematics'],
-        u'subtitle': [],
-        u'title': [
-            u'Mangrove expansion and contraction at a poleward range limit: climate extremes and land-ocean temperature gradients'
+        'short-container-title': ['Ecology'],
+        'short-title': [],
+        'source':
+        'Crossref',
+        'subject': ['Ecology, Evolution, Behavior and Systematics'],
+        'subtitle': [],
+        'title': [
+            'Mangrove expansion and contraction at a poleward range limit: climate extremes and land-ocean temperature gradients'
         ],
-        u'type':
-        u'journal-article',
-        u'volume':
-        u'98'
+        'type':
+        'journal-article',
+        'volume':
+        '98'
     },
-    u'message-type': u'work',
-    u'message-version': u'1.0.0',
-    u'status': u'ok'
+    'message-type': 'work',
+    'message-version': '1.0.0',
+    'status': 'ok'
 }
 
 crossref_200_not_ok = {
-    u'message': None,
-    u'message-type': u'work',
-    u'message-version': u'1.0.0',
-    u'status': u'error'
+    'message': None,
+    'message-type': 'work',
+    'message-version': '1.0.0',
+    'status': 'error'
 }
 
 crossref_200_ok_2_date_parts = {
-    u'message': {
-        u'published-online': {
-            u'date-parts': [[2016, 12]]
+    'message': {
+        'published-online': {
+            'date-parts': [[2016, 12]]
         }
     },
-    u'message-type': u'work',
-    u'message-version': u'1.0.0',
-    u'status': u'ok'
+    'message-type': 'work',
+    'message-version': '1.0.0',
+    'status': 'ok'
 }
 
 crossref_200_ok_1_date_part = {
-    u'message': {
-        u'published-online': {
-            u'date-parts': [[2016]]
+    'message': {
+        'published-online': {
+            'date-parts': [[2016]]
         }
     },
-    u'message-type': u'work',
-    u'message-version': u'1.0.0',
-    u'status': u'ok'
+    'message-type': 'work',
+    'message-version': '1.0.0',
+    'status': 'ok'
 }
 
 crossref_200_ok_message_empty = {
-    u'message': {},
-    u'message-type': u'work',
-    u'message-version': u'1.0.0',
-    u'status': u'ok'
+    'message': {},
+    'message-type': 'work',
+    'message-version': '1.0.0',
+    'status': 'ok'
 }
