@@ -1,5 +1,3 @@
-var PUBS_WH = window.PUBS_WH = window.PUBS_WH || {};
-
 /*
  * Leaflet control used to remove a feature group from the map and to clear its layers.
  *
@@ -8,7 +6,7 @@ var PUBS_WH = window.PUBS_WH = window.PUBS_WH || {};
  * @param options {Object} standard L.Control options
  */
 
-PUBS_WH.ClearFeatureControl = L.Control.extend({
+export const ClearFeatureControl = L.Control.extend({
     options: {
         position: 'topleft'
     },
@@ -44,6 +42,6 @@ PUBS_WH.ClearFeatureControl = L.Control.extend({
 
 });
 
-PUBS_WH.clearFeatureControl = function(options) {
+export const clearFeatureControl = function(options) {
     return new L.ClearFeatureControl(options);
 };

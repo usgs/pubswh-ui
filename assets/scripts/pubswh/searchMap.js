@@ -1,3 +1,6 @@
+import { ClearFeatureControl } from './clearFeatureControl';
+
+
 var PUBS_WH = window.PUBS_WH = window.PUBS_WH || {};
 /*
  * Creates a Leaflet map and controls to draw a search box and to update an input element
@@ -72,7 +75,7 @@ PUBS_WH.createSearchMap = function(mapDivId, $geomInput) {
         }
     });
 
-    var deleteFeatureControl = new PUBS_WH.ClearFeatureControl(searchFeature, {});
+    var deleteFeatureControl = new ClearFeatureControl(searchFeature, {});
 
     // Add controls
     L.control.layers(baseLayers, overlayLayers).addTo(map);
