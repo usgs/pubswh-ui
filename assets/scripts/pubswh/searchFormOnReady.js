@@ -1,9 +1,4 @@
-require('./searchMap');
-require('./clearFeatureControl');
 import AdvancedSearchForm from './advancedSearchForm';
-
-// Dummy
-module.exports = null;
 
 
 $(document).ready(function() {

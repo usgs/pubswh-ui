@@ -1,10 +1,13 @@
+import { createResultsMap } from './resultsMap';
+
+
 $(document).ready(function() {
     var TOGGLE_BTN_SHOW_TEXT = 'Show results on a map';
     var TOGGLE_BTN_HIDE_TEXT = 'Hide results on a map';
 
     var $extentsMapContainer = $('#extents-map-section');
     var $toggleResultsBtn = $('.toggle-results-map-btn');
-    var map = PUBS_WH.createResultsMap({
+    var map = createResultsMap({
         mapDivId: 'extents-map',
         publications: CONFIG.publications,
         enablePopup: true

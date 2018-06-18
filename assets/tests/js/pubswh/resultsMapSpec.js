@@ -1,4 +1,7 @@
-describe('PUBS_WH.resultsMap', function() {
+import { createResultsMap } from '../../../scripts/pubswh/resultsMap';
+
+
+describe('ResultsMap', function() {
 
     var map;
     var $mapDiv;
@@ -18,7 +21,7 @@ describe('PUBS_WH.resultsMap', function() {
     });
 
     it('Expect no extent layers to be created if an empty publications object is passed in', function() {
-        map = PUBS_WH.createResultsMap({
+        map = createResultsMap({
             mapDivId: 'test-map-div',
             publications: [],
             enablePopup: true
@@ -39,7 +42,7 @@ describe('PUBS_WH.resultsMap', function() {
                 info: 'Description 2'
             }
         ];
-        map = PUBS_WH.createResultsMap({
+        map = createResultsMap({
             mapDivId: 'test-map-div',
             publications: publications,
             enablePopup: true
@@ -102,7 +105,7 @@ describe('PUBS_WH.resultsMap', function() {
                 }
             }
         ];
-        map = PUBS_WH.createResultsMap({
+        map = createResultsMap({
             mapDivId: 'test-map-div',
             publications: publications,
             enablePopup: true
