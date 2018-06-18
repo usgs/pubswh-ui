@@ -31,11 +31,6 @@ from .utils import (pull_feed, create_display_links,
                     get_altmetric_badge_img_links, generate_dublin_core, get_crossref_data, get_published_online_date,
                     check_public_access)
 
-
-# set UTF-8 to be default throughout app
-reload(sys)
-sys.setdefaultencoding("utf-8")
-
 pubswh = Blueprint('pubswh', __name__,
                    template_folder='templates',
                    static_folder='static',
