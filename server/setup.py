@@ -72,7 +72,7 @@ setup(name='usgs_flask_pubs_ui',
           'Environment :: Web Environment',
           'Framework :: Flask',
           'License :: Public Domain',
-          'Programming Language :: Python :: 2.7'
+          'Programming Language :: Python :: 3.6'
       ],
       packages=find_packages(),
       include_package_data=True,

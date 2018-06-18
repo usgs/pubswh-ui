@@ -7,7 +7,7 @@ This project produces server-rendered HTML pages for the USGS Pubs Warehouse.
 1. Create a virtualenv and install the project's Python requirements.
 
 ```bash
-virtualenv --python=python2.7 env
+virtualenv --python=python3.6 env
 env/bin/pip install -r requirements.txt
 ```
 
