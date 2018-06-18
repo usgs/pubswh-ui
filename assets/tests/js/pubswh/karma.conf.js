@@ -108,7 +108,7 @@ module.exports = function(config) {
                     ...karmaConfig.rollupPreprocessor.plugins,
                     istanbul({
                         exclude: [
-                            'test/**/*.js',
+                            'tests/**/*.js',
                             'node_modules/**/*.js'
                         ]
                     })

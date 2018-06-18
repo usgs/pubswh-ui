@@ -1,3 +1,6 @@
+import { batchFetchPast30Days, batchFetchMonthlyPastYear } from '../../../scripts/metrics/analyticsData';
+
+
 describe('analyticsData', function() {
     var fakeserver;
 
@@ -37,7 +40,7 @@ describe('analyticsData', function() {
 
         it('Expects that the payload to the GA_ENDPOINT properly encodes the inputs', function() {
             var requestBody;
-            METRICS.analyticsData.batchFetchMonthlyPastYear(fetchParams);
+            batchFetchMonthlyPastYear(fetchParams);
 
             expect(fakeserver.requests.length).toBe(1);
             expect(fakeserver.requests[0].url).toEqual(GA_ENDPOINT);
@@ -53,7 +56,7 @@ describe('analyticsData', function() {
 
         it('Expects that the dateRange is the past year from the date passed into the function', function() {
             var requestBody;
-            METRICS.analyticsData.batchFetchMonthlyPastYear(fetchParams, moment('20101015', 'YYYYMMDD'));
+            batchFetchMonthlyPastYear(fetchParams, moment('20101015', 'YYYYMMDD'));
             requestBody = $.parseJSON(fakeserver.requests[0].requestBody);
 
             expect(requestBody[0].dateRanges.length).toBe(1);
@@ -66,7 +69,7 @@ describe('analyticsData', function() {
 
         it('Expects that a failed response will reject the promise', function() {
             fakeserver.respondWith([500, {'Content-Type' : 'text/html'}, 'Internal server error']);
-            METRICS.analyticsData.batchFetchMonthlyPastYear(fetchParams).done(successSpy).fail(failSpy);
+            batchFetchMonthlyPastYear(fetchParams).done(successSpy).fail(failSpy);
 
             expect(successSpy).not.toHaveBeenCalled();
             expect(failSpy).not.toHaveBeenCalled();
@@ -79,7 +82,7 @@ describe('analyticsData', function() {
         it('Expects that a successful response will resolve the promise', function() {
             fakeserver.respondWith([200, {'Content-Type' : 'application/json'},
                 '{"reports" : [{"columnHeader" : {"metricHeader" : {"metricHeaderEntries" : [{"name" : "ga:sessions"}]}}}]}']);
-            METRICS.analyticsData.batchFetchMonthlyPastYear(fetchParams).done(successSpy).fail(failSpy);
+            batchFetchMonthlyPastYear(fetchParams).done(successSpy).fail(failSpy);
             fakeserver.respond();
 
             expect(successSpy).toHaveBeenCalled();
@@ -116,7 +119,7 @@ describe('analyticsData', function() {
 
         it('Expects that the payload to the GA_ENDPOINT properly encodes the inputs', function() {
             var requestBody;
-            METRICS.analyticsData.batchFetchPast30Days(fetchParams);
+            batchFetchPast30Days(fetchParams);
 
             expect(fakeserver.requests.length).toBe(1);
             expect(fakeserver.requests[0].url).toEqual(GA_ENDPOINT);
@@ -132,7 +135,7 @@ describe('analyticsData', function() {
 
         it('Expects that the dateRange is the past year from the date passed into the function', function() {
             var requestBody;
-            METRICS.analyticsData.batchFetchPast30Days(fetchParams, moment('20101015', 'YYYYMMDD'));
+            batchFetchPast30Days(fetchParams, moment('20101015', 'YYYYMMDD'));
             requestBody = $.parseJSON(fakeserver.requests[0].requestBody);
 
             expect(requestBody[0].dateRanges.length).toBe(1);
@@ -145,7 +148,7 @@ describe('analyticsData', function() {
 
         it('Expects that a failed response will reject the promise', function() {
             fakeserver.respondWith([500, {'Content-Type' : 'text/html'}, 'Internal server error']);
-            METRICS.analyticsData.batchFetchPast30Days(fetchParams).done(successSpy).fail(failSpy);
+            batchFetchPast30Days(fetchParams).done(successSpy).fail(failSpy);
 
             expect(successSpy).not.toHaveBeenCalled();
             expect(failSpy).not.toHaveBeenCalled();
@@ -158,7 +161,7 @@ describe('analyticsData', function() {
         it('Expects that a successful response will resolve the promise', function() {
             fakeserver.respondWith([200, {'Content-Type' : 'application/json'},
                 '{"reports" : [{"columnHeader" : {"metricHeader" : {"metricHeaderEntries" : [{"name" : "ga:sessions"}]}}}]}']);
-            METRICS.analyticsData.batchFetchPast30Days(fetchParams).done(successSpy).fail(failSpy);
+            batchFetchPast30Days(fetchParams).done(successSpy).fail(failSpy);
             fakeserver.respond();
 
             expect(successSpy).toHaveBeenCalled();

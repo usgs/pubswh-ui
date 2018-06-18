@@ -1,12 +1,13 @@
 // Dummy
 module.exports = null;
 
-require('./analyticsData.js');
+import { batchFetchMonthlyPastYear, batchFetchPast30Days } from './analyticsData.js';
 require('./analyticsGraph.js');
 require('./dataUtils.js');
 
+
 (function() {
-        var DAY_FORMAT = 'MMM DD YYYY';
+    var DAY_FORMAT = 'MMM DD YYYY';
     var MONTH_FORMAT = 'MMM YYYY';
 
     var pageURI = '/publication/' + CONFIG.PUBSID;
@@ -56,7 +57,7 @@ require('./dataUtils.js');
 
     // When the two calls to GA where made simultaneously, frequently only one of the calls worked.
     // Therefore, we are waiting until the first call returns before making the second request.
-    var monthlyDataPromise = METRICS.analyticsData.batchFetchMonthlyPastYear(metricsAndDimFilters);
+    var monthlyDataPromise = batchFetchMonthlyPastYear(metricsAndDimFilters);
 
     monthlyDataPromise
         .done(function(data) {
@@ -84,7 +85,7 @@ require('./dataUtils.js');
             yearSessionsDiv.innerHTML = response.responseJSON.error.message;
         })
         .always(function() {
-            METRICS.analyticsData.batchFetchPast30Days(metricsAndDimFilters)
+            batchFetchPast30Days(metricsAndDimFilters)
                 .done(function (data) {
                     var sessionsData = data[0].map(transformToSessionsData);
                     var visitorsData = data[1].map(transformToVisitorsData);

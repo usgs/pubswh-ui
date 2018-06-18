@@ -1,4 +1,4 @@
-require('./analyticsData.js');
+import { batchFetchMonthlyPastYear } from './analyticsData.js';
 require('./analyticsGraph.js');
 require('./dataUtils.js');
 
@@ -71,7 +71,7 @@ require('./dataUtils.js');
 
     // When the two calls to GA where made simultaneously, frequently only one of the calls worked.
     // Therefore, we are waiting until the first call returns before making the second request.
-    var monthlyDataPromise = METRICS.analyticsData.batchFetchMonthlyPastYear(metricsAndDimFilters);
+    var monthlyDataPromise = batchFetchMonthlyPastYear(metricsAndDimFilters);
 
     monthlyDataPromise
         .done(function(data) {
