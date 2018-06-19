@@ -1,0 +1,27 @@
+// This loads all the tests in the manager bundle.
+import './models/ContributorModelSpec.js';
+import './models/OrderedCollectionSpec.js';
+import './models/PublicationCollectionSpec.js';
+import './models/PublicationModelSpec.js';
+import './utils/DynamicSelect2Spec.js';
+import './views/AlertViewSpec.js';
+import './views/BackgridUrlCellSpec.js';
+import './views/BaseViewSpec.js';
+import './views/BibliodataViewSpec.js';
+import './views/CatalogingViewSpec.js';
+import './views/ContributorRowViewSpec.js';
+import './views/ContributorsViewSpec.js';
+import './views/ContributorTabViewSpec.js';
+import './views/EditCorporationViewSpec.js';
+import './views/EditPersonViewSpec.js';
+import './views/EditSeriesTitleViewSpec.js';
+import './views/GeospatialViewSpec.js';
+import './views/LinkRowViewSpec.js';
+import './views/LinksViewSpec.js';
+import './views/LoginDialogViewSpec.js';
+import './views/ManageAffiliationViewSpec.js';
+import './views/ManageContributorsViewSpec.js';
+import './views/ManagePublicationViewSpec.js';
+import './views/PublicationViewSpec.js';
+import './views/SearchFilterRowViewSpec.js';
+import './views/SPNViewSpec.js';

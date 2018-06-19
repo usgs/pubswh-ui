@@ -1,108 +1,123 @@
 // Karma configuration
-// Generated on Wed Dec 30 2015 09:23:08 GMT-0600 (CST)
-var sourcePreprocessors = ['coverage'];
+var istanbul = require('rollup-plugin-istanbul');
+
 function isDebug(argument) {
     return argument === '--debug';
 }
-if (process.argv.some(isDebug)) {
-    sourcePreprocessors = [];
-}
+
 
 module.exports = function(config) {
-  config.set({
-
-    // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '../../..',
-
-
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'requirejs', 'sinon'],
+    let karmaConfig = {
+        // base path that will be used to resolve all patterns (eg. files, exclude)
+        basePath: '../../..',
 
 
-    // list of files / patterns to load in the browser
-    files: [
-        'tests/js/manager/test-main.js',
-      {pattern: 'bower_components/Squire.js/src/Squire.js', included: false},
-      {pattern: 'bower_components/jquery/dist/jquery.js', included: false},
-      {pattern: 'bower_components/jquery-ui/jquery-ui.js', included: false},
-      {pattern: 'bower_components/select2/dist/js/select2.full.js', included: false},
-      {pattern: 'bower_components/underscore/underscore.js', included: false},
-      {pattern: 'bower_components/backbone/backbone.js', included: false},
-      {pattern: 'bower_components/tinymce/tinymce.js', included: false},
-      {pattern: 'bower_components/bootstrap/dist/js/bootstrap.js', included: false},
-      {pattern: 'bower_components/text/text.js', included: false},
-      {pattern: 'bower_components/backbone.paginator/lib/backbone.paginator.js', included: false},
-      {pattern: 'bower_components/backgrid/lib/backgrid.js', included: false},
-      {pattern: 'bower_components/backgrid-select-all/backgrid-select-all.js', included: false},
-      {pattern: 'bower_components/backgrid-paginator/backgrid-paginator.js', included: false},
-      {pattern: 'bower_components/handlebars/handlebars.amd.js', included: false},
-      {pattern: 'bower_components/requirejs-hbs/hbs.js', included: false},
-      {pattern: 'bower_components/backbone.stickit/backbone.stickit.js', included: false},
-      {pattern: 'bower_components/moment/min/moment.min.js', included: false},
-      {pattern: 'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js', included: false},
-      {pattern: 'bower_components/loglevel/dist/loglevel.min.js', included: false},
-      {pattern: 'scripts/manager/**/*.js', included: false},
-      {pattern: 'scripts/manager/hb_templates/*.hbs', included: false},
-      {pattern: 'tests/js/manager/**/*.js', included: false}
+        // frameworks to use
+        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+        frameworks: ['jasmine', 'sinon'],
+
+
+        // list of files / patterns to load in the browser
+        files: [
+            'tests/js/manager/test-manifest.js'
         ],
 
-    // list of files to exclude
-    exclude: [
-        'scripts/manager/init.js'
-    ],
+
+        // preprocess matching files before serving them to the browser
+        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+        preprocessors: {
+            // source files, that you wanna generate coverage for
+            // do not include tests or libraries
+            // (these files will be instrumented by Istanbul)
+            'scripts/manager/**/*.js': ['rollup'],
+            'tests/js/manager/**/*.js': ['rollup']
+        },
+
+        rollupPreprocessor: {
+            /**
+             * This is just a normal Rollup config object,
+             * except that `input` is handled for you.
+             */
+            ...require('../../../rollup.config')[0]
+        },
+
+        // test results reporter to use
+        // possible values: 'dots', 'progress'
+        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+        reporters: ['dots', 'coverage'],
+
+        coverageReporter: {
+            reporters : [
+                //{type: 'html', dir : 'coverage/manager/'},
+                {type: 'cobertura', dir: 'coverage/manager/'},
+                {type: 'lcovonly', dir: 'coverage/manager/'}
+            ]
+        },
+
+        // web server port
+        port: 9876,
 
 
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-      // source files, that you wanna generate coverage for
-      // do not include tests or libraries
-      // (these files will be instrumented by Istanbul)
-      'scripts/manager/**/*.js': sourcePreprocessors
-    },
-
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['dots', 'coverage'],
-
-    coverageReporter: {
-      reporters : [
-        {type: 'html', dir : 'coverage/manager/'},
-        {type: 'cobertura', dir: 'coverage/manager/'},
-        {type: 'lcovonly', dir: 'coverage/manager/'}
-      ]
-    },
-
-    // web server port
-    port: 9876,
+        // enable / disable colors in the output (reporters and logs)
+        colors: true,
 
 
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
+        // level of logging
+        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+        logLevel: config.LOG_INFO,
 
 
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+        // enable / disable watching file and executing tests whenever any file changes
+        autoWatch: true,
 
 
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+        // start these browsers
+        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+        browsers: ['Firefox'],
 
 
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Firefox'],
+        // Continuous Integration mode
+        // if true, Karma captures browsers, runs the tests and exits
+        singleRun: true,
 
+        // Concurrency level
+        // how many browser should be started simultaneous
+        concurrency: Infinity
+    };
 
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true,
+    /**
+     * Produce a code coverage report
+     */
+    if (!process.argv.some(isDebug)) {
+        karmaConfig = {
+            ...karmaConfig,
+            rollupPreprocessor: {
+                ...karmaConfig.rollupPreprocessor,
+                plugins: [
+                    ...karmaConfig.rollupPreprocessor.plugins,
+                    istanbul({
+                        exclude: [
+                            'tests/**/*.js',
+                            'node_modules/**/*.js'
+                        ]
+                    })
+                ]
+            },
+            reporters: [
+                ...karmaConfig.reporters,
+                'coverage'
+            ],
+            coverageReporter: {
+                reporters: [
+                    //{type: 'html', dir: 'coverage/'},
+                    {type: 'cobertura', dir: 'coverage/'},
+                    {type: 'lcovonly', dir: 'coverage/'}
+                ]
+            }
+        };
+    } else {
+        console.log('Skipping code coverage report...');
+    }
 
-    // Concurrency level
-    // how many browser should be started simultaneous
-    concurrency: Infinity
-  });
+    config.set(karmaConfig);
 };
