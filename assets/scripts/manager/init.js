@@ -1,5 +1,7 @@
-const $ = require('jquery');
+require('./vendor-globals');
 require('jquery-ui');
+require('bootstrap');
+
 const Backbone = require('backbone');
 Backbone.$ = $;
 

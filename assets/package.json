@@ -20,6 +20,7 @@
     "buildcss:auth": "lessc styles/auth.less > dist/auth.css && uglifycss --output dist/auth.css dist/auth.css && postcss dist/auth.css --no-map --use autoprefixer -o dist/auth.css",
     "buildcss:manager": "lessc styles/manager/manager_custom.less > dist/manager.css && uglifycss --output dist/manager.css dist/manager.css && postcss dist/manager.css --no-map --use autoprefixer -o dist/manager.css",
     "buildcss:metrics": "lessc styles/metrics/metrics_custom.less > dist/metrics.css && uglifycss --output dist/metrics.css dist/metrics.css && postcss dist/metrics.css --no-map --use autoprefixer -o dist/metrics.css",
+    "build:fonts": "mkdir -p dist/fonts && cp node_modules/font-awesome/fonts/* dist/fonts",
     "build:images": "cp -r images dist",
     "hash-assets": "echo TODO",
     "lint": "eslint scripts tests",
@@ -32,6 +33,7 @@
     "watch": "run-p watch:* serve:static",
     "watch:css": "nodemon -w ./styles -e less -x \"npm run build:css\"",
     "watch:js": "mkdir -p dist/scripts && npm run build:js:vendor && rollup -c --watch",
+    "watch:fonts": "npm run build:fonts",
     "watch:images": "npm run build:images"
   },
   "engines": {
@@ -75,6 +77,9 @@
     "uglifycss": "0.0.29"
   },
   "dependencies": {
+    "font-awesome": "^4.6.3",
+    "jquery": "^2.2.4",
+    "jquery-ui": "^1.12.0",
     "less": "2.7.1"
   },
   "eslintIgnore": [
