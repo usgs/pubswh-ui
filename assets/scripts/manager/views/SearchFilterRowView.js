@@ -1,19 +1,17 @@
 define([
     'underscore',
     'jquery',
-    'handlebars',
-    'utils/DynamicSelect2',
-    'models/PublicationTypeCollection',
-    'models/CostCenterCollection',
-    'views/BaseView',
-    'hbs!hb_templates/searchFilterRow'
-], function(_, $, Handlebars, DynamicSelect2, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate) {
+    '../utils/DynamicSelect2',
+    '../models/PublicationTypeCollection',
+    '../models/CostCenterCollection',
+    './BaseView',
+    '../hb_templates/searchFilterRow.hbs',
+    '../hb_templates/searchFilterRowOption.hbs'
+], function(_, $, DynamicSelect2, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate, optionTemplate) {
         var DEFAULT_SELECT2_OPTIONS = {
         allowClear : true,
         theme : 'bootstrap'
     };
-
-    var OPTIONS_TEMPLATE = Handlebars.compile('<option value={{id}}>{{text}}</option>');
 
     var view = BaseView.extend({
 
@@ -72,7 +70,7 @@ define([
                         // Add options for selections
                         _.each(selections, function(selection) {
                             if ($select.find('option[value="' + selection.id + '"]').length === 0) {
-                                $select.append(OPTIONS_TEMPLATE(selection));
+                                $select.append(optionTemplate(selection));
                             }
                         });
                         $select.val(_.pluck(selections, 'id')).trigger('change');
@@ -94,7 +92,7 @@ define([
                         // Add options for selections
                         _.each(selections, function(selection) {
                             if ($select.find('option[value="' + selection.id + '"]').length === 0) {
-                                $select.append(OPTIONS_TEMPLATE(selection));
+                                $select.append(optionTemplate(selection));
                             }
                         });
                         $select.val(_.pluck(selections, 'id')).trigger('change');

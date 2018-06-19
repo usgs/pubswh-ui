@@ -1,13 +1,13 @@
 define([
     'underscore',
     'select2',
-    'utils/DynamicSelect2',
-    'utils/jqueryUtils',
-    'views/BaseView',
-    'views/AlertView',
-    'views/EditPersonView',
-    'views/EditCorporationView',
-    'hbs!hb_templates/manageContributors'
+    '../utils/DynamicSelect2',
+    '../utils/jqueryUtils',
+    './BaseView',
+    './AlertView',
+    './EditPersonView',
+    './EditCorporationView',
+    '../hb_templates/manageContributors.hbs'
 ], function(_, $select2, DynamicSelect2, $utils, BaseView, AlertView, EditPersonView, EditCorporationView, hbTemplate) {
         var DEFAULT_SELECT2_OPTIONS = {
         theme : 'bootstrap'

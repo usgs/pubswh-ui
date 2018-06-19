@@ -1,13 +1,12 @@
 define([
-    'backbone',
-    'module'
-], function(Backbone, module) {
+    'backbone'
+], function(Backbone) {
         var model = Backbone.Model.extend({
 
         comparator : 'rank',
 
         url : function() {
-            return module.config().scriptRoot + '/manager/services/contributor/' + this.get('contributorId');
+            return window.CONFIG.scriptRoot + '/manager/services/contributor/' + this.get('contributorId');
         },
 
         defaults : function() {

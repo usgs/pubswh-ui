@@ -1,6 +1,6 @@
 define([
-    'models/PublicationContributorModel',
-    'models/OrderedCollection'
+    './PublicationContributorModel',
+    './OrderedCollection'
 ], function(PublicationContributorModel, OrderedCollection) {
         var collection = OrderedCollection.extend({
         model : PublicationContributorModel

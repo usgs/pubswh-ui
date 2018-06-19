@@ -3,10 +3,10 @@ define([
     'jquery',
     'backbone.stickit',
     'select2',
-    'models/CostCenterCollection',
-    'models/OutsideAffiliationLookupCollection',
-    'views/BaseView',
-    'hbs!hb_templates/editPerson'
+    '../models/CostCenterCollection',
+    '../models/OutsideAffiliationLookupCollection',
+    './BaseView',
+    '../hb_templates/editPerson.hbs'
 ], function(_, $, stickit, $select2, CostCenterCollection, OutsideAffiliationLookupCollection, BaseView, hbTemplate) {
         var DEFAULT_SELECT2_OPTIONS = {
         allowClear : true,

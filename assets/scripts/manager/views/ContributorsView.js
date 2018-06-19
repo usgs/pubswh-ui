@@ -1,12 +1,11 @@
 define([
-    'bootstrap',
     'backbone.stickit',
-    'models/ContributorTypeCollection',
-    'models/PublicationContributorCollection',
-    'views/BaseView',
-    'views/ContributorTabView',
-    'hbs!hb_templates/contributors'
-], function(bootstrap, stickit, ContributorTypeCollection, PublicationContributorCollection, BaseView, ContributorTabView, hbTemplate) {
+    '../models/ContributorTypeCollection',
+    '../models/PublicationContributorCollection',
+    './BaseView',
+    './ContributorTabView',
+    '../hb_templates/contributors.hbs'
+], function(stickit, ContributorTypeCollection, PublicationContributorCollection, BaseView, ContributorTabView, hbTemplate) {
         var view = BaseView.extend({
 
         events : {

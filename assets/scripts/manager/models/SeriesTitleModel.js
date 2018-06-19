@@ -1,10 +1,9 @@
 define([
-    'backbone',
-    'module'
-], function(Backbone, module) {
+    'backbone'
+], function(Backbone) {
     var model = Backbone.Model.extend({
 
-        urlRoot : module.config().scriptRoot + '/manager/services/publicationSeries',
+        urlRoot : window.CONFIG.scriptRoot + '/manager/services/publicationSeries',
 
         defaults : {
             'active' : true

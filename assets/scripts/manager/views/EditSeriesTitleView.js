@@ -3,14 +3,13 @@ define([
     'underscore',
     'select2',
     'backbone.stickit',
-    'bootstrap',
-    'utils/DynamicSelect2',
-    'models/PublicationSubtypeCollection',
-    'views/BaseView',
-    'views/AlertView',
-    'hbs!hb_templates/editSeriesTitle'
-], function($, _, select2, stickit, bootstrap, DynamicSelect2, PublicationSubtypeCollection, BaseView, AlertView, hbTemplate) {
-        var DEFAULT_SELECT2_OPTIONS = {
+    '../utils/DynamicSelect2',
+    '../models/PublicationSubtypeCollection',
+    './BaseView',
+    './AlertView',
+    '../hb_templates/editSeriesTitle.hbs'
+], function($, _, select2, stickit, DynamicSelect2, PublicationSubtypeCollection, BaseView, AlertView, hbTemplate) {
+    var DEFAULT_SELECT2_OPTIONS = {
         theme : 'bootstrap'
     };
 

@@ -1,11 +1,10 @@
 define([
     'backbone',
-    'models/LookupModel',
-    'module'
-], function(Backbone, LookupModel, module) {
+    './LookupModel'
+], function(Backbone, LookupModel) {
         var collection = Backbone.Collection.extend({
         model: LookupModel,
-        url: module.config().lookupUrl + 'costcenters?mimetype=json'
+        url: window.CONFIG.lookupUrl + 'costcenters?mimetype=json'
     });
 
     return collection;

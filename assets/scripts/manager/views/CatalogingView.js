@@ -1,10 +1,9 @@
 define([
-    'bootstrap',
-    'datetimepicker',
+    'eonasdan-bootstrap-datetimepicker',
     'backbone.stickit',
-    'views/BaseView',
-    'hbs!hb_templates/cataloging'
-], function(bootstrap, datetimepicker, stickit, BaseView, hb_template) {
+    './BaseView',
+    '../hb_templates/cataloging.hbs'
+], function(datetimepicker, stickit, BaseView, hb_template) {
         var view = BaseView.extend({
 
         template : hb_template,

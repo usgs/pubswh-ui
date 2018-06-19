@@ -1,7 +1,7 @@
 define([
     'backbone.stickit',
-    'views/BaseView',
-    'hbs!hb_templates/editCorporation'
+    './BaseView',
+    '../hb_templates/editCorporation.hbs'
 ], function(stickit, BaseView, hbTemplate) {
         /*
      * @constructs

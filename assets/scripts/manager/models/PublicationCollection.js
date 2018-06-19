@@ -1,13 +1,12 @@
 define([
     'underscore',
     'backbone',
-    'backbone.paginator',
-    'module'
-], function(_, Backbone, Pageable, module) {
+    'backbone.paginator'
+], function(_, Backbone, Pageable) {
         var collection = Backbone.PageableCollection.extend({
 
         url : function() {
-            return module.config().scriptRoot + '/manager/services/mppublications';
+            return window.CONFIG.scriptRoot + '/manager/services/mppublications';
         },
                 // Initial pagination states
         state: {

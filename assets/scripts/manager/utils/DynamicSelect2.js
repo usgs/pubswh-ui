@@ -1,8 +1,7 @@
 define([
     'underscore',
-    'jquery',
-    'module'
-], function(_, $, module) {
+    'jquery'
+], function(_, $) {
     /*
      * @param {Object} options
      *     @prop {String or Function which returns a String} lookupType - Used to form the url. It is appended to the lookupUrl in the module config.
@@ -16,10 +15,10 @@ define([
         var url;
         if (_.isFunction(options.lookupType)) {
             url = function() {
-                return module.config().lookupUrl + options.lookupType();
+                return window.CONFIG.lookupUrl + options.lookupType();
             };
         } else {
-            url = module.config().lookupUrl + options.lookupType;
+            url = window.CONFIG.lookupUrl + options.lookupType;
         }
         var result = {
             ajax : {

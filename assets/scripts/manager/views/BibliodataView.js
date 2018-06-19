@@ -1,17 +1,16 @@
 define([
-    'handlebars',
     'jquery',
     'underscore',
     'select2',
     'tinymce',
-    'module',
     'backbone.stickit',
-    'utils/DynamicSelect2',
-    'models/PublicationTypeCollection',
-    'models/CostCenterCollection',
-    'views/BaseView',
-    'hbs!hb_templates/bibliodata'
-], function(Handlebars, $, _, select2, tinymce, module, stickit, DynamicSelect2, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate) {
+    '../utils/DynamicSelect2',
+    '../models/PublicationTypeCollection',
+    '../models/CostCenterCollection',
+    './BaseView',
+    '../hb_templates/bibliodata.hbs',
+    '../hb_templates/bibliodataOption.hbs'
+], function($, _, select2, tinymce, stickit, DynamicSelect2, PublicationTypeCollection, CostCenterCollection, BaseView, hbTemplate, optionTemplate) {
         var view = BaseView.extend({
 
         // Because we are using select2 for the menus, we need to use the select2:select and select2:unselect events to update
@@ -59,7 +58,7 @@ define([
 
         template : hbTemplate,
 
-        optionTemplate : Handlebars.compile('<option value={{id}}>{{text}}</option>'),
+        optionTemplate : optionTemplate,
 
         /*
          * @constructs

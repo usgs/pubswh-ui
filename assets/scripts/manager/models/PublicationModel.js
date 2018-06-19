@@ -2,12 +2,11 @@ define([
     'underscore',
     'jquery',
     'backbone',
-    'module',
-    'models/LinkCollection',
-    'models/PublicationContributorCollection'
-], function(_, $, Backbone, module, LinkCollection, PublicationContributorCollection) {
+    './LinkCollection',
+    './PublicationContributorCollection'
+], function(_, $, Backbone, LinkCollection, PublicationContributorCollection) {
         var model = Backbone.Model.extend({
-        urlRoot : module.config().scriptRoot + '/manager/services/mppublications',
+        urlRoot : window.CONFIG.scriptRoot + '/manager/services/mppublications',
 
         /*
          * The contributors attribute is a backbone model. This model contains attributes whose value

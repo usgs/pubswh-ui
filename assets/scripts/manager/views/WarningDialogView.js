@@ -1,8 +1,7 @@
 define([
-    'bootstrap',
-    'views/BaseView',
-    'hbs!hb_templates/warningDialog'
-], function(bootstrap, BaseView, hbTemplate) {
+    './BaseView',
+    '../hb_templates/warningDialog.hbs'
+], function(BaseView, hbTemplate) {
         var view = BaseView.extend({
         template : hbTemplate,
 

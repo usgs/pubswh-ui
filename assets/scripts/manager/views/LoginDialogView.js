@@ -1,11 +1,9 @@
 define([
     'jquery',
     'underscore',
-    'bootstrap',
-    'module',
-    'views/BaseView',
-    'hbs!hb_templates/loginDialog'
-], function($, _, bootstrap, module, BaseView, hbTemplate) {
+    './BaseView',
+    '../hb_templates/loginDialog.hbs'
+], function($, _, BaseView, hbTemplate) {
         var view = BaseView.extend({
         template : hbTemplate,
 
@@ -40,7 +38,7 @@ define([
             ev.preventDefault();
 
             $.ajax({
-                url : module.config().scriptRoot + '/loginservice/',
+                url : window.CONFIG.scriptRoot + '/loginservice/',
                 method : 'POST',
                 data : data,
                 success : function() {

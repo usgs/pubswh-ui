@@ -1,22 +1,20 @@
 define([
     'underscore',
     'jquery',
-    'bootstrap',
-    'datetimepicker',
+    'eonasdan-bootstrap-datetimepicker',
     'backbone.stickit',
-    'module',
-    'views/BaseView',
-    'views/AlertView',
-    'views/ConfirmationDialogView',
-    'views/LoginDialogView',
-    'views/BibliodataView',
-    'views/LinksView',
-    'views/ContributorsView',
-    'views/SPNView',
-    'views/CatalogingView',
-    'views/GeospatialView',
-    'hbs!hb_templates/publication'
-], function(_, $, bootstrap, datetimepicker, Stickit, module, BaseView, AlertView, ConfirmationDialogView, LoginDialogView,
+    './BaseView',
+    './AlertView',
+    './ConfirmationDialogView',
+    './LoginDialogView',
+    './BibliodataView',
+    './LinksView',
+    './ContributorsView',
+    './SPNView',
+    './CatalogingView',
+    './GeospatialView',
+    '../hb_templates/publication.hbs'
+], function(_, $, datetimepicker, Stickit, BaseView, AlertView, ConfirmationDialogView, LoginDialogView,
             BibliodataView, LinksView, ContributorsView, SPNView, CatalogingView, GeospatialView, hbTemplate) {
         var view = BaseView.extend({
 
@@ -119,7 +117,7 @@ define([
             BaseView.prototype.initialize.apply(this, arguments);
 
             this.context.indexId = this.model.get('indexId');
-            this.context.previewUrl = module.config().previewUrl;
+            this.context.previewUrl = window.CONFIG.previewUrl;
             this.listenTo(this.model, 'change:indexId', this.updateIndexId);
             this.listenTo(this.model, 'sync', this._readOnlyControlIpds);
 
@@ -352,7 +350,7 @@ define([
 
         closeLockedDialog : function(ev) {
             ev.preventDefault();
-            window.location.assign(module.config().scriptRoot + '/manager');
+            window.location.assign(window.CONFIG.scriptRoot + '/manager');
         },
 
         _readOnlyControlIpds: function() {

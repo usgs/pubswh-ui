@@ -1,11 +1,10 @@
 define([
-    'backbone',
-    'module'
-], function(Backbone, module) {
+    'backbone'
+], function(Backbone) {
         var model = Backbone.Model.extend({
         idAttribute : 'contributorId',
 
-        url : module.config().scriptRoot + '/manager/services/',
+        url : window.CONFIG.scriptRoot + '/manager/services/',
 
         sync : function(method, model, options) {
             var urlEndpoint;

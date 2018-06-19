@@ -1,13 +1,11 @@
 define([
     'underscore',
     'jquery',
-    'jquery-ui',
-    'handlebars',
     'loglevel',
-    'views/BaseView',
-    'views/ContributorRowView',
-    'hbs!hb_templates/contributorTab'
-], function(_, $, jqueryUi, Handlebars, log, BaseView, ContributorRowView, hb_template) {
+    './BaseView',
+    './ContributorRowView',
+    '../hb_templates/contributorTab.hbs'
+], function(_, $, log, BaseView, ContributorRowView, hb_template) {
         var view = BaseView.extend({
 
         events : {

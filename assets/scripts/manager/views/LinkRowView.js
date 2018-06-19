@@ -1,12 +1,10 @@
 define([
     'jquery',
-    'jquery-ui',
     'select2',
-    'module',
     'backbone.stickit',
-    'views/BaseView',
-    'hbs!hb_templates/linkRow'
-], function($, jqueryUI, select2, module, stickit, BaseView, hbTemplate) {
+    './BaseView',
+    '../hb_templates/linkRow.hbs'
+], function($, select2, stickit, BaseView, hbTemplate) {
         var view = BaseView.extend({
 
         events: {

@@ -1,8 +1,6 @@
 define([
-    'backbone',
-    'underscore',
-    'module'
-], function(Backbone, _, module) {
+    'backbone'
+], function(Backbone) {
         var model = Backbone.Model.extend({
 
         /*
@@ -17,7 +15,7 @@ define([
 
         _constructUrl : function(isCostCenter) {
             var targetUrl;
-            var scriptRoot = module.config().scriptRoot;
+            var scriptRoot = window.CONFIG.scriptRoot;
             if (isCostCenter) {
                 targetUrl = scriptRoot + '/manager/services/costcenter';
             } else {

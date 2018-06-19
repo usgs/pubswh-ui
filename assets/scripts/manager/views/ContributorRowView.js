@@ -1,16 +1,14 @@
 define([
-    'handlebars',
     'loglevel',
     'underscore',
     'jquery',
-    'jquery-ui',
     'select2',
-    'module',
     'backbone.stickit',
-    'utils/DynamicSelect2',
-    'views/BaseView',
-    'hbs!hb_templates/contributorTabRow'
-], function(Handlebars, log, _, $, jqueryUi, select2, module, stickit, DynamicSelect2, BaseView, hb_template) {
+    '../utils/DynamicSelect2',
+    './BaseView',
+    '../hb_templates/contributorTabRow.hbs',
+    '../hb_templates/contributorTabRowOption.hbs'
+], function(log, _, $, select2, stickit, DynamicSelect2, BaseView, hb_template, optionTemplate) {
     var view = BaseView.extend({
 
         bindings : {
@@ -39,7 +37,7 @@ define([
 
         template : hb_template,
 
-        optionTemplate : Handlebars.compile('<option value={{contributorId}}>{{text}}</option>'),
+        optionTemplate : optionTemplate,
 
         /*
          * @constructs
@@ -52,7 +50,7 @@ define([
             BaseView.prototype.initialize.apply(this, arguments);
 
             this.context.contributorId = this.model.get('contributorId');
-            this.context.scriptRoot = module.config().scriptRoot;
+            this.context.scriptRoot = window.CONFIG.scriptRoot;
 
             this.listenTo(this.model, 'change:corporation', this.updateType);
             this.listenTo(this.model, 'change:text', this.updateName);

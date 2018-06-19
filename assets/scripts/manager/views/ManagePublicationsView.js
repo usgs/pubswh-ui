@@ -1,20 +1,19 @@
 define([
-    'module',
     'backbone',
     'underscore',
     'jquery',
     'backgrid',
     'backgrid-paginator',
-    'models/PublicationListCollection',
-    'views/BackgridUrlCell',
-    'views/BackgridClientSortingBody',
-    'views/BaseView',
-    'views/AlertView',
-    'views/WarningDialogView',
-    'views/SearchFilterRowView',
-    'hbs!hb_templates/managePublications',
-    'hbs!hb_templates/publicationListFilter'
-], function (module, Backbone, _, $, Backgrid, Paginator, PublicationListCollection,
+    '../models/PublicationListCollection',
+    './BackgridUrlCell',
+    './BackgridClientSortingBody',
+    './BaseView',
+    './AlertView',
+    './WarningDialogView',
+    './SearchFilterRowView',
+    '../hb_templates/managePublications.hbs',
+    '../hb_templates/publicationListFilter.hbs'
+], function (Backbone, _, $, Backgrid, Paginator, PublicationListCollection,
              BackgridUrlCell, BackgridClientSortingBody, BaseView,
              AlertView, WarningDialogView, SearchFilterRowView, hbTemplate, pubListTemplate) {
     var DEFAULT_SELECT2_OPTIONS = {
@@ -78,7 +77,7 @@ define([
             this.filterRowViews = [];
 
             // Can get rid of this once the edit contributors page is implemented.
-            this.context.oldMyPubsEndpoint = module.config().oldMyPubsEndpoint;
+            this.context.oldMyPubsEndpoint = window.CONFIG.oldMyPubsEndpoint;
 
             // Set up collection event handlers and then fetch the collection
             this.listenTo(this.collection, 'request', this.showLoadingIndicator);
@@ -412,7 +411,7 @@ define([
             }, true);
             var pubsList = this.$('#pubs-categories-select').val();
             var addDeferreds = [];
-            var serviceUrl = module.config().scriptRoot + '/manager/services/lists/';
+            var serviceUrl = window.CONFIG.scriptRoot + '/manager/services/lists/';
 
             ev.preventDefault();
 
@@ -446,7 +445,7 @@ define([
         removeSelectedPubsFromCategory: function() {
             var self = this;
             var selectedFilter = _.first(getFilters(this.model).listId);
-            var serviceUrl = module.config().scriptRoot + '/manager/services/lists/' + selectedFilter;
+            var serviceUrl = window.CONFIG.scriptRoot + '/manager/services/lists/' + selectedFilter;
             var selectedPubs = this.collection.filter(function(model) {
                 return model.has('selected') && model.get('selected');
             });

@@ -1,7 +1,7 @@
 define([
     'backbone.stickit',
-    'views/BaseView',
-    'hbs!hb_templates/geospatial'
+    './BaseView',
+    '../hb_templates/geospatial.hbs'
 ], function(stickit, BaseView, hb_template) {
         var view = BaseView.extend({
         template : hb_template,

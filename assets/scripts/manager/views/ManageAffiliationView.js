@@ -2,16 +2,15 @@ define([
     'jquery',
     'underscore',
     'backbone.stickit',
-    'bootstrap',
-    'views/BaseView',
-    'views/AlertView',
-    'models/AffiliationModel',
-    'models/CostCenterCollection',
-    'models/OutsideAffiliationLookupCollection',
-    'hbs!hb_templates/manageAffiliations'
-], function($, _, stickit, bootstrap, BaseView, AlertView,
+    './BaseView',
+    './AlertView',
+    '../models/AffiliationModel',
+    '../models/CostCenterCollection',
+    '../models/OutsideAffiliationLookupCollection',
+    '../hb_templates/manageAffiliations.hbs'
+], function($, _, stickit, BaseView, AlertView,
             AffiliationModel, CostCenterCollection, OutsideAffiliationCollection, hbTemplate) {
-        var DEFAULT_SELECT2_OPTIONS = {
+    var DEFAULT_SELECT2_OPTIONS = {
         allowClear : true,
         theme : 'bootstrap'
     };

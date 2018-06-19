@@ -1,13 +1,12 @@
 define([
     'underscore',
-    'jquery-ui',
-    'models/LinkModel',
-    'models/LinkTypeCollection',
-    'models/LinkFileTypeCollection',
-    'views/BaseView',
-    'views/LinkRowView',
-    'hbs!hb_templates/links'
-], function(_, jqueryUI, LinkModel, LinkTypeCollection, LinkFileTypeCollection, BaseView, LinkRowView, hbTemplate) {
+    '../models/LinkModel',
+    '../models/LinkTypeCollection',
+    '../models/LinkFileTypeCollection',
+    './BaseView',
+    './LinkRowView',
+    '../hb_templates/links.hbs'
+], function(_, LinkModel, LinkTypeCollection, LinkFileTypeCollection, BaseView, LinkRowView, hbTemplate) {
     var view = BaseView.extend({
 
         events : {

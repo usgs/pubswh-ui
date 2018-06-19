@@ -1,24 +1,22 @@
 define([
-    'handlebars',
     'jquery',
     'underscore',
-    'bootstrap',
-    'datetimepicker',
+    'eonasdan-bootstrap-datetimepicker',
     'select2',
     'tinymce',
     'backbone.stickit',
-    'module',
-    'utils/DynamicSelect2',
-    'models/PublishingServiceCenterCollection',
-    'views/BaseView',
-    'hbs!hb_templates/spn'
-], function(Handlebars, $, _, bootstrap, datetimepicker, select2, tinymce, stickit, module,
-            DynamicSelect2, PublishingServiceCenterCollection, BaseView, hbTemplate) {
+    '../utils/DynamicSelect2',
+    '../models/PublishingServiceCenterCollection',
+    './BaseView',
+    '../hb_templates/spn.hbs',
+    '../hb_templates/spnOption.hbs'
+], function($, _, datetimepicker, select2, tinymce, stickit,
+            DynamicSelect2, PublishingServiceCenterCollection, BaseView, hbTemplate, optionTemplate) {
     var view = BaseView.extend({
 
         template : hbTemplate,
 
-        optionTemplate : Handlebars.compile('<option value={{id}}>{{text}}</option>'),
+        optionTemplate : optionTemplate,
 
         events : {
             'select2:select #is-part-of-input' : 'selectIsPartOf',

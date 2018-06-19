@@ -1,9 +1,7 @@
 define([
-    'handlebars',
-    'bootstrap',
-    'views/BaseView',
-    'text!hb_templates/alert.hbs'
-], function(Handlebars, bootstrap, BaseView, hbTemplate) {
+    './BaseView',
+    '../hb_templates/alert.hbs'
+], function(BaseView, hbTemplate) {
         var view = BaseView.extend({
 
         ALERT_KINDS : {
@@ -13,7 +11,7 @@ define([
             danger : 'alert-danger'
         },
 
-        template: Handlebars.compile(hbTemplate),
+        template: hbTemplate,
 
         /*
          * @params {String} el - jquery selector where to render the alert

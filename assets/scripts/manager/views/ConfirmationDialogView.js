@@ -1,9 +1,8 @@
 define([
-    'bootstrap',
     'underscore',
-    'views/BaseView',
-    'hbs!hb_templates/confirmationDialog'
-], function(bootstrap, _, BaseView, hbTemplate) {
+    './BaseView',
+    '../hb_templates/confirmationDialog.hbs'
+], function(_, BaseView, hbTemplate) {
         var view = BaseView.extend({
         template : hbTemplate,
 
