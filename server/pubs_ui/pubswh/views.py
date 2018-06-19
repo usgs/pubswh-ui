@@ -7,7 +7,9 @@ from datetime import date, timedelta
 import json
 from operator import itemgetter
 import sys
-import urllib.request, urllib.parse, urllib.error
+import urllib.error
+import urllib.parse
+import urllib.request
 import random
 
 import arrow
@@ -83,7 +85,7 @@ def restricted_page(index_id):
     # go out to manage and get the record
     response = get(preview_endpoint_url+index_id+'/preview', headers=auth_header, verify=verify_cert,
                    params={'mimetype': 'json'})
-    print("preview status code: ", response.status_code)
+
     if response.status_code == 200:
         record = response.json()
         pubdata = munge_pubdata_for_display(record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
@@ -469,7 +471,6 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
                     'circular': list(range(1933, year))
                 }
                 if pub_series_name.lower() in list(generate_years.keys()):
-                    print("we made it this far...")
                     return render_template('pubswh/browse_series_years.html',
                                            pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
                                            year_range=generate_years[pub_series_name.lower()])

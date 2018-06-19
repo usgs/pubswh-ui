@@ -1,8 +1,7 @@
 """
 Authorization utilities
 """
-from urllib.parse import unquote
-from urllib.parse import urlparse, urljoin
+from urllib.parse import unquote, urljoin, urlparse
 
 from itsdangerous import BadSignature, BadPayload
 from werkzeug.exceptions import NotFound, MethodNotAllowed

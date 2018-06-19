@@ -131,8 +131,6 @@ def logout_page(forward):
     auth_header = generate_auth_header(request)
     logout_url = AUTH_ENDPOINT_URL + 'logout'
     response = post(logout_url, headers=auth_header, verify=VERIFY_CERT)
-    if response.status_code == 200:
-        print('logout works!')
 
     logout_user()
 
