@@ -36,7 +36,7 @@ env-server: server/env server/instance/config.py server-env-requirements
 
 server/env:
 	@echo 'Creating the virtualenv env'
-	virtualenv --python=python2.7 --no-download server/env
+	virtualenv --python=python3.6 --no-download server/env
 
 server-env-requirements:
 	@echo 'Installing requirements.txt'

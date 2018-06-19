@@ -2,7 +2,7 @@
 Jinja2 filters. Must be imported (via pubs_ui.__init__) for them to register
 via the `app.template_filter` decorator.
 """
-from urlparse import urljoin
+from urllib.parse import urljoin
 
 from . import app
 

@@ -7,7 +7,7 @@ from copy import deepcopy
 import json
 from operator import itemgetter
 import re
-from urlparse import urljoin
+from urllib.parse import urljoin
 
 import arrow
 from bs4 import BeautifulSoup
@@ -100,7 +100,7 @@ def pubdetails(pubdata):
                 dd = []
                 for det in pubdata.get(detail[0]):
                     dd.append(det.get(detail[1]))
-                dd = ', '.join(filter(None, dd))
+                dd = ', '.join([_f for _f in dd if _f])
                 pubdata['details'].append({detail[2]: dd})
         elif len(detail) == 2 and pubdata.get(detail[0]) is not None and pubdata.get(detail[0]):
             pubdata['details'].append({detail[1]: pubdata.get(detail[0])})
@@ -180,7 +180,7 @@ def create_display_links(pubdata):
     links = deepcopy(pubdata.get("links"))
     # sort links into the different link types
 
-    for key, value in display_links.iteritems():
+    for key, value in display_links.items():
         for link in links:
             if link['type']['text'] == key:
                 value.append(link)
@@ -188,7 +188,7 @@ def create_display_links(pubdata):
     display_links = manipulate_plate_links(display_links)
     display_links = manipulate_index_page_links(display_links)
     # shove a rank onto everything that doesn't have one
-    for key, value in display_links.iteritems():
+    for key, value in display_links.items():
         rank_counter = 1
         for link in value:
             if link.get("rank") is None:
@@ -198,7 +198,7 @@ def create_display_links(pubdata):
     pubdata["displayLinks"] = display_links
     # set a variable so that we can display something if the pub has no links other than a thumbnail
     pub_has_no_links = True
-    for key, value in display_links.iteritems():
+    for key, value in display_links.items():
         if key != 'Thumbnail' and value:
             pub_has_no_links = False
     pubdata['pubHasNoLinks'] = pub_has_no_links
@@ -305,7 +305,7 @@ def pull_feed(feed_url):
         links = feed_div.select('a[href^="' + base + '"]')
         for link in links:
             link['href'] = link['href'].replace(base, '')
-        post = unicode(soup)
+        post = str(soup)
 
     return post
 
@@ -485,7 +485,7 @@ def create_store_info(publication_resp):
     if publication_resp.status_code == 200:
         response_json = publication_resp.json()
         index_id = response_json.get('indexId')
-        if 'stores' in response_json.keys():
+        if 'stores' in list(response_json.keys()):
             stores = response_json['stores']
             if stores:
                 product = stores[0]
@@ -915,7 +915,7 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
                     sbdata['contacts'].append(contact)
     if pubdata.get('publisher'):
         sbdata['contacts'].append({"name": pubdata['publisher'], "type": "Publisher"})
-    for (linktype, linklist) in pubdata['displayLinks'].items():
+    for (linktype, linklist) in list(pubdata['displayLinks'].items()):
         if linktype == "Thumbnail" and len(linklist) == 1:
             thumbnail_link = {
                 "type": "browseImage",

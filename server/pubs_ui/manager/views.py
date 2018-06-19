@@ -46,11 +46,12 @@ def services_proxy(op1, op2=None, op3=None, op4=None):
     if request.method == 'POST' or request.method == 'PUT':
         headers.update(request.headers)
 
-    app.logger.info('Service URL is %s?%s', url, request.query_string)
+    query_string = request.query_string.decode('utf-8')
+    app.logger.info('Service URL is %s?%s', url, query_string)
     # Setting the query_string in the url. If we use params set to request.args, params that are repeated
     # in the query_string do not get encoded. Instead only the first one does.
     proxy_request = Request(method=request.method,
-                            url='%s?%s' %(url, request.query_string),
+                            url='%s?%s' %(url, query_string),
                             headers=headers,
                             data=request.data)
     resp = Session().send(proxy_request.prepare(), verify=VERIFY_CERT)
@@ -58,7 +59,7 @@ def services_proxy(op1, op2=None, op3=None, op4=None):
     if 'transfer-encoding' in resp.headers:
         del resp.headers['transfer-encoding']
 
-    return (resp.text, resp.status_code, resp.headers.items())
+    return (resp.text, resp.status_code, list(resp.headers.items()))
 
 
 @manager.errorhandler(404)

@@ -29,7 +29,7 @@ class ManipulateDoiInformationTestCase(unittest.TestCase):
         """given a DOI, will an index link be generated?"""
         simple_pubsdata = {
             'publicationSubtype': {
-                'text': u'Journal Article'
+                'text': 'Journal Article'
             },
             'doi': '10.65165468/asdflasdfnlasdkf',
             'links': []
@@ -97,7 +97,7 @@ class ManipulateDoiInformationTestCase(unittest.TestCase):
         """given a DOI, will an index link be generated even if the links list doesn't exist?"""
         simple_pubsdata = {
             'publicationSubtype': {
-                'text': u'Journal Article'
+                'text': 'Journal Article'
             },
             'doi': '10.65165468/asdflasdfnlasdkf'
         }
@@ -124,7 +124,7 @@ class ManipulateDoiInformationTestCase(unittest.TestCase):
         """given a DOI and a pre-populated links list, will the original link be maintained in the list"""
         simple_pubsdata = {
             'publicationSubtype': {
-                'text': u'Journal Article'
+                'text': 'Journal Article'
             },
             'doi': '10.65165468/asdflasdfnlasdkf',
             'links': [{

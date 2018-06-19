@@ -7,7 +7,9 @@ from datetime import date, timedelta
 import json
 from operator import itemgetter
 import sys
-import urllib
+import urllib.error
+import urllib.parse
+import urllib.request
 import random
 
 import arrow
@@ -30,11 +32,6 @@ from .utils import (pull_feed, create_display_links,
                     update_geographic_extents, generate_sb_data, create_store_info,
                     get_altmetric_badge_img_links, generate_dublin_core, get_crossref_data, get_published_online_date,
                     check_public_access)
-
-
-# set UTF-8 to be default throughout app
-reload(sys)
-sys.setdefaultencoding("utf-8")
 
 pubswh = Blueprint('pubswh', __name__,
                    template_folder='templates',
@@ -88,7 +85,7 @@ def restricted_page(index_id):
     # go out to manage and get the record
     response = get(preview_endpoint_url+index_id+'/preview', headers=auth_header, verify=verify_cert,
                    params={'mimetype': 'json'})
-    print "preview status code: ", response.status_code
+
     if response.status_code == 200:
         record = response.json()
         pubdata = munge_pubdata_for_display(record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
@@ -303,7 +300,7 @@ def publication(index_id):
 @pubswh.route('/clear_cache/<path:path>')
 def clear_cache(path):
     if cache_config['CACHE_TYPE'] == 'redis':
-        args = str(hash(frozenset(request.args.items())))
+        args = str(hash(frozenset(list(request.args.items()))))
         key = cache_config['CACHE_KEY_PREFIX'] + '/' + (path + args).encode('utf-8')
         # Get the StrictRedis instance from the cache_config and delete the key using that.
         # The cache.delete(key) doesn't work for some reason but this does
@@ -378,7 +375,7 @@ def browse_subtypes(pub_type):
     pub_types = get(pub_url+"/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
     just_list_pubs = ['book', 'book chapter', 'pamphlet', 'patent', 'speech', 'thesis', 'videorecording', 'conference paper']
-    if pub_type.lower() in pub_types_dict.keys():
+    if pub_type.lower() in list(pub_types_dict.keys()):
         if pub_type.lower() in just_list_pubs:
             pubs = get(pub_url + "publication/", params={"mimeType": "tsv", "typeName": pub_type}, verify=verify_cert)
             if pubs.text:
@@ -408,12 +405,12 @@ def browse_subtype(pub_type, pub_subtype):
                              'newspaper article', 'review', 'other report', 'organization series', 'usgs unnumbered series']
     pub_types = get(pub_url+"/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
-    if pub_type.lower() in pub_types_dict.keys():
+    if pub_type.lower() in list(pub_types_dict.keys()):
         pub_subtypes = get(pub_url + "/lookup/publicationtype/" +
                            str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/", verify=verify_cert).json()
         pub_subtypes_dict = {publication_subtype['text'].lower(): publication_subtype['id']
                              for publication_subtype in pub_subtypes}
-        if pub_subtype.lower() in pub_subtypes_dict.keys():
+        if pub_subtype.lower() in list(pub_subtypes_dict.keys()):
             if pub_subtype.lower() in subtype_has_no_series:
                 pubs = get(pub_url + "publication/", params={"mimeType": "tsv", "typeName": pub_type,
                                                              "subtypeName": pub_subtype}, verify=verify_cert)
@@ -447,14 +444,14 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
         publication_type['text'].lower(): publication_type['id']
         for publication_type in pub_types
     }
-    if pub_type.lower() in pub_types_dict.keys():
+    if pub_type.lower() in list(pub_types_dict.keys()):
         pub_subtypes = get(pub_url + "/lookup/publicationtype/" +
                            str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/", verify=verify_cert).json()
         pub_subtypes_dict = {
             publication_subtype['text'].lower(): publication_subtype['id']
             for publication_subtype in pub_subtypes
         }
-        if pub_subtype.lower() in pub_subtypes_dict.keys():
+        if pub_subtype.lower() in list(pub_subtypes_dict.keys()):
             series_data = get(pub_url + "/lookup/publicationtype/" +
                               str(pub_types_dict[pub_type.lower()]) + "/publicationsubtype/" +
                               str(pub_subtypes_dict[pub_subtype.lower()]) + "/publicationseries", verify=verify_cert).json()
@@ -462,19 +459,18 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
                 publication_series['text'].lower(): publication_series['id']
                 for publication_series in series_data
             }
-            if pub_series_name.lower() in pub_series_dict.keys():
+            if pub_series_name.lower() in list(pub_series_dict.keys()):
                 year = int(arrow.utcnow().year)+1
                 generate_years = {
-                    'fact sheet': range(1994, year),
-                    'open-file report': range(1902, year),
-                    'scientific investigations report': range(2004, year),
-                    'professional paper': range(1902, year),
-                    'water-resources investigations report': range(1972, 2006),
-                    'water supply paper': range(1896, 2002),
-                    'circular': range(1933, year)
+                    'fact sheet': list(range(1994, year)),
+                    'open-file report': list(range(1902, year)),
+                    'scientific investigations report': list(range(2004, year)),
+                    'professional paper': list(range(1902, year)),
+                    'water-resources investigations report': list(range(1972, 2006)),
+                    'water supply paper': list(range(1896, 2002)),
+                    'circular': list(range(1933, year))
                 }
-                if pub_series_name.lower() in generate_years.keys():
-                    print "we made it this far..."
+                if pub_series_name.lower() in list(generate_years.keys()):
                     return render_template('pubswh/browse_series_years.html',
                                            pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
                                            year_range=generate_years[pub_series_name.lower()])
@@ -501,18 +497,18 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
 def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
     pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
-    if pub_type.lower() in pub_types_dict.keys():
+    if pub_type.lower() in list(pub_types_dict.keys()):
         pub_subtypes = get(pub_url + "/lookup/publicationtype/" +
                            str(pub_types_dict[pub_type.lower()]) + "/publicationsubtypes/", verify=verify_cert).json()
         pub_subtypes_dict = {publication_subtype['text'].lower(): publication_subtype['id']
                              for publication_subtype in pub_subtypes}
-        if pub_subtype.lower() in pub_subtypes_dict.keys():
+        if pub_subtype.lower() in list(pub_subtypes_dict.keys()):
             series_data = get(pub_url + "/lookup/publicationtype/" +
                               str(pub_types_dict[pub_type.lower()]) + "/publicationsubtype/" +
                               str(pub_subtypes_dict[pub_subtype.lower()]) + "/publicationseries", verify=verify_cert).json()
             pub_series_dict = {publication_series['text'].lower(): publication_series['id']
                                for publication_series in series_data}
-            if pub_series_name.lower() in pub_series_dict.keys():
+            if pub_series_name.lower() in list(pub_series_dict.keys()):
                 pubs = get(pub_url + "publication/", params={"mimeType": "csv", "subtypeName": pub_subtype,
                                                              "seriesName": pub_series_name, "typeName": pub_type,
                                                              "year": year}, verify=verify_cert)
@@ -625,7 +621,7 @@ def search_results():
                                    search_result_records=search_result_records,
                                    pagination=pagination,
                                    search_service_down=search_service_down,
-                                   query_request_string=urllib.urlencode(query_request_args, True))
+                                   query_request_string=urllib.parse.urlencode(query_request_args, True))
 
     return response
 
@@ -777,7 +773,7 @@ def sitemap_index():
     :return: a sitemap index xml file as described at sitemaps.org
     """
     year = int(arrow.now().format('YYYY'))
-    year_range = range(1900, year+2)
+    year_range = list(range(1900, year+2))
     response = Response(response=render_template('pubswh/sitemap_index.xml', years=year_range), mimetype='application/xml')
     return response
 
