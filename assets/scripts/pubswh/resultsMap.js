@@ -1,4 +1,5 @@
-var PUBS_WH = window.PUBS_WH = window.PUBS_WH || {};
+import popupTemplate from './hb_templates/resultsMapPopup.hbs';
+
 
 /*
  * @param {Object} options
@@ -7,21 +8,12 @@ var PUBS_WH = window.PUBS_WH = window.PUBS_WH || {};
  *      @prop {Boolean} enablePopup - publication extent layers should be interactive only when set to true
  * @returns {L.Map} - Returns the map object created.
  */
-PUBS_WH.createResultsMap = function(options) {
-        /*var EMPTY_PUBS_EXTENTS = {
+export const createResultsMap = window.createResultsMap = function(options) {
+    /*var EMPTY_PUBS_EXTENTS = {
         type: 'FeatureCollection',
         features: [],
         properties: {title: 'All pubs extents'}
     };*/
-
-    var POPUP_HTML =
-        '{{#each layers}}' +
-            '<p><span class="search-title"><a href="{{url}}">{{{title}}}</a></span></br>' +
-            '<span class="pubinfo">{{info}}</span></br>' +
-            '<button class="filter-button" data-layer-index="{{layerIndex}}">Highlight</button>' +
-            '</p>' +
-        '{{/each}}';
-    var popupTemplate = Handlebars.compile(POPUP_HTML);
 
     // This is the default style of extent layers when the user isn't interacting
     // with the map

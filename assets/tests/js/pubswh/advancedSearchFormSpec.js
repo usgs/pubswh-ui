@@ -1,4 +1,8 @@
-describe('PUBS_WH.advancedSearchForm', function() {
+import AdvancedSearchForm from '../../../scripts/pubswh/advancedSearchForm';
+import SearchMap from '../../../scripts/pubswh/searchMap';
+
+
+describe('AdvancedSearchForm', function() {
     var $testDiv, $mapDiv;
     var fakeServer;
     var advancedSearchForm;
@@ -19,11 +23,11 @@ describe('PUBS_WH.advancedSearchForm', function() {
 
     describe('Test with no initialRows', function() {
         beforeEach(function() {
-            advancedSearchForm = PUBS_WH.advancedSearchForm({
+            advancedSearchForm = new AdvancedSearchForm({
                 $container: $testDiv,
                 $mapContainer : $mapDiv
             });
-            spyOn(PUBS_WH, 'createSearchMap');
+            spyOn(SearchMap.prototype, 'initialize');
         });
 
         it('Expects that the test-div and map-div will be empty', function() {
@@ -114,7 +118,7 @@ describe('PUBS_WH.advancedSearchForm', function() {
 
             expect($input.length).toEqual(1);
             expect($input.attr('name')).toEqual('map1');
-            expect(PUBS_WH.createSearchMap).toHaveBeenCalled();
+            expect(SearchMap.prototype.initialize).toHaveBeenCalled();
         });
 
         it('Expects that calling addRow with a "boolean" inputType sets up a select with options for True and False', function() {
@@ -249,9 +253,9 @@ describe('PUBS_WH.advancedSearchForm', function() {
 
         beforeEach(function() {
             deleteCallbackSpy  = jasmine.createSpy('deleteCallbackSpy');
-            spyOn(PUBS_WH, 'createSearchMap');
+            spyOn(SearchMap.prototype, 'initialize');
 
-            advancedSearchForm = PUBS_WH.advancedSearchForm({
+            advancedSearchForm = new AdvancedSearchForm({
                 $container: $testDiv,
                 $mapContainer: $mapDiv,
                 initialRows: initialRows,
@@ -309,9 +313,9 @@ describe('PUBS_WH.advancedSearchForm', function() {
                 }
             ];
             fakeServer.respondWith([200, {'Content-Type': 'application/json'}, '[{"id": "1", "text": "T1"}, {"id": "2", "text": "T2"}]']);
-            spyOn(PUBS_WH, 'createSearchMap');
+            spyOn(SearchMap.prototype, 'initialize');
 
-            advancedSearchForm = PUBS_WH.advancedSearchForm({
+            advancedSearchForm = new AdvancedSearchForm({
                 $container: $testDiv,
                 $mapContainer: $mapDiv,
                 initialRows: initialRows
@@ -336,7 +340,7 @@ describe('PUBS_WH.advancedSearchForm', function() {
 
             expect($text.val()).toEqual('This');
             expect($select.find('option:selected').val()).toEqual('T2');
-            expect(PUBS_WH.createSearchMap).toHaveBeenCalled();
+            expect(SearchMap.prototype.initialize).toHaveBeenCalled();
             expect($map.attr('name')).toEqual('map1');
             expect($map.val()).toEqual('POLYGON((-91 39,-89 39,-89 37,-91 37,-91 39))');
             expect($boolean.find('option:selected').val()).toEqual('false');

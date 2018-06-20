@@ -42,9 +42,7 @@
     "define": true,
     "moment": true,
     "sinon": true,
-    "METRICS": true,
     "Dygraph": true,
-    "CONFIG": true,
-    "PUBS_WH": true
+    "CONFIG": true
   }
 }
