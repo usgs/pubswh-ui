@@ -8,7 +8,7 @@ require('./models/OrderedCollectionSpec');
 require('./models/PublicationCollectionSpec');
 require('./models/PublicationModelSpec');
 require('./utils/DynamicSelect2Spec');
-// require('./views/AlertViewSpec');
+require('./views/AlertViewSpec');
 require('./views/BackgridUrlCellSpec');
 require('./views/BaseViewSpec');
 // require('./views/BibliodataViewSpec');

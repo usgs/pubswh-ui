@@ -1,33 +1,21 @@
-import Squire from 'squire';
 import $ from 'jquery';
+
+import AlertView from '../../../../scripts/manager/views/AlertView';
 
 
 describe('AlertView', function() {
-    var AlertView;
     var testView;
     var $testDiv;
-    var injector;
 
-    beforeEach(function(done) {
+    beforeEach(function() {
         $('body').append('<div id="test-div"><div>');
         $testDiv = $('#test-div');
-        injector = new Squire();
-
-        injector.mock('text!hb_templates/alert.hbs',
-            '<div class="alert {{alertKind}}"><div class="alert-message">{{message}}</div></div>'
-        );
-
-        injector.require(['views/AlertView'], function(view) {
-            AlertView = view;
-            testView = new AlertView({
-                el : '#test-div'
-            });
-            done();
+        testView = new AlertView({
+            el : '#test-div'
         });
     });
 
     afterEach(function() {
-        injector.remove();
         testView.remove();
         $testDiv.remove();
     });
