@@ -1,39 +1,21 @@
-import Squire from 'squire';
 import $ from 'jquery';
-import _ from 'underscore';
-import * as bootstrap from 'bootstrap';
-import module from 'module';
 
-import BaseView from '../../../../scripts/manager/views/BaseView';
-import hbTemplate from '../../../../scripts/manager/hb_templates/loginDialog.hbs';
+import LoginDialogView from '../../../../scripts/manager/views/LoginDialogView';
 
 
 describe('LoginDialogView', function() {
-    var LoginDialogView, testView;
-    var injector;
+    var testView;
 
-    beforeEach(function(done) {
+    beforeEach(function() {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-        injector = new Squire();
         $('body').append('<div id="test-div"></div>');
 
-        injector.mock('jquery', $);
-        injector.mock('underscore', _);
-        injector.mock('bootstrap', bootstrap);
-        injector.mock('module', module);
-        injector.mock('views/BaseView', BaseView);
-        injector.mock('hbs!hb_templates/loginDialog', hbTemplate);
-        injector.require(['views/LoginDialogView'], function(view) {
-            LoginDialogView = view;
-            testView = new LoginDialogView({
-                el: '#test-div'
-            });
-            done();
+        testView = new LoginDialogView({
+            el: '#test-div'
         });
     });
 
     afterEach(function() {
-        injector.remove();
         testView.remove();
         $('#test-div').remove();
     });
