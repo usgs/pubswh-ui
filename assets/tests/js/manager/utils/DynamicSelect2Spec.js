@@ -1,25 +1,16 @@
-import Squire from 'squire';
 import $ from 'jquery';
+
+import * as DynamicSelect2 from '../../../../scripts/manager/utils/DynamicSelect2';
 
 
 describe('DynamicSelect2', function() {
     describe('Tests for getSelectOptions', function() {
-        var DynamicSelect2, resultOptions;
-        var injector;
+        var resultOptions;
 
-        beforeEach(function(done) {
-            injector = new Squire();
+        beforeEach(function() {
             spyOn($, 'ajax');
-            injector.mock('jquery', $);
-            injector.require(['utils/DynamicSelect2'], function(module) {
-                DynamicSelect2 = module;
-                done();
-            });
         });
 
-        afterEach(function() {
-            injector.remove();
-        });
         it('Expects that if the lookupType is a String in options, it will be used to form the lookup url', function() {
             resultOptions = DynamicSelect2.getSelectOptions({lookupType : 'nameType'});
 
