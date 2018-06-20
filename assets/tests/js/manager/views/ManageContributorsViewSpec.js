@@ -1,27 +1,23 @@
 import 'select2';
 
-import Squire from 'squire';
 import $ from 'jquery';
 import _ from 'underscore';
-import Backbone from 'backbone';
 
+import AlertView from '../../../../scripts/manager/views/AlertView';
 import ContributorModel from '../../../../scripts/manager/models/ContributorModel';
+import EditCorporationView from '../../../../scripts/manager/views/EditCorporationView';
+import EditPersonView from '../../../../scripts/manager/views/EditPersonView';
+import ManageContributorsView from '../../../../scripts/manager/views/ManageContributorsView';
 
 
 describe('views/ManageContributorsView', function() {
-    var testView, ManageContributorsView;
+    var testView;
     var $testDiv;
     var testModel, testRouter;
 
-    var setElementAlertViewSpy, showSuccessAlertSpy, showDangerAlertSpy, closeAlertSpy, removeAlertViewSpy;
-    var setElementPersonViewSpy, renderPersonViewSpy, removePersonViewSpy;
-    var setElementCorpViewSpy, renderCorpViewSpy, removeCorpViewSpy;
-
     var fetchModelDeferred, saveModelDeferred;
 
-    var injector;
-
-    beforeEach(function(done) {
+    beforeEach(function() {
         $('body').append('<div id="test-div"></div>');
         $testDiv = $('#test-div');
 
@@ -31,51 +27,22 @@ describe('views/ManageContributorsView', function() {
         spyOn(testModel, 'fetch').and.returnValue(fetchModelDeferred.promise());
         spyOn(testModel, 'save').and.returnValue(saveModelDeferred.promise());
 
-        setElementAlertViewSpy = jasmine.createSpy('setElementAlertViewSpy');
-        showSuccessAlertSpy = jasmine.createSpy('showSuccessAlertSpy');
-        showDangerAlertSpy = jasmine.createSpy('showDangerAlertSpy');
-        closeAlertSpy = jasmine.createSpy('closeAlertSpy');
-        removeAlertViewSpy = jasmine.createSpy('removeAlertViewSpy');
-
-        setElementPersonViewSpy = jasmine.createSpy('setElementPersonViewSpy');
-        renderPersonViewSpy = jasmine.createSpy('renderPersonViewSpy');
-        removePersonViewSpy = jasmine.createSpy('removePersonViewSpy');
-
-        setElementCorpViewSpy = jasmine.createSpy('setElementCorpViewSpy');
-        renderCorpViewSpy = jasmine.createSpy('renderCorpViewSpy');
-        removeCorpViewSpy = jasmine.createSpy('removeCorpViewSpy');
-
         testRouter = jasmine.createSpyObj('routerSpy', ['navigate']);
 
-        injector = new Squire();
-        injector.mock('jquery', $);
-        injector.mock('views/AlertView', Backbone.View.extend({
-            setElement : setElementAlertViewSpy,
-            showSuccessAlert : showSuccessAlertSpy,
-            showDangerAlert : showDangerAlertSpy,
-            closeAlert : closeAlertSpy,
-            remove : removeAlertViewSpy
-        }));
-        injector.mock('views/EditPersonView', Backbone.View.extend({
-            setElement : setElementPersonViewSpy,
-            render : renderPersonViewSpy,
-            remove : removePersonViewSpy
-        }));
-        injector.mock('views/EditCorporationView', Backbone.View.extend({
-            setElement : setElementCorpViewSpy,
-            render : renderCorpViewSpy,
-            remove : removeCorpViewSpy
-        }));
-
-        injector.require(['views/ManageContributorsView'], function(View) {
-            ManageContributorsView = View;
-
-            done();
-        });
+        spyOn(AlertView.prototype, 'setElement');
+        spyOn(AlertView.prototype, 'showSuccessAlert');
+        spyOn(AlertView.prototype, 'showDangerAlert');
+        spyOn(AlertView.prototype, 'closeAlert');
+        spyOn(AlertView.prototype, 'remove');
+        spyOn(EditCorporationView.prototype, 'setElement');
+        spyOn(EditCorporationView.prototype, 'render');
+        spyOn(EditCorporationView.prototype, 'remove');
+        spyOn(EditPersonView.prototype, 'setElement');
+        spyOn(EditPersonView.prototype, 'render');
+        spyOn(EditPersonView.prototype, 'remove');
     });
 
     afterEach(function() {
-        injector.remove();
         if (testView) {
             testView.remove();
         }
@@ -89,7 +56,7 @@ describe('views/ManageContributorsView', function() {
             router : testRouter
         });
 
-        expect(setElementAlertViewSpy).toHaveBeenCalled();
+        expect(AlertView.prototype.setElement).toHaveBeenCalled();
     });
 
     it('Expects that the model fetch is not called on a new model', function() {
@@ -126,7 +93,7 @@ describe('views/ManageContributorsView', function() {
         });
 
         it('Expects the alert view\'s setElement to be called', function() {
-            expect(setElementAlertViewSpy.calls.count()).toBe(2);
+            expect(AlertView.prototype.setElement.calls.count()).toBe(2);
         });
 
         it('Expects the select2s to pick contributor type, person, and corporation to be initialized', function() {
@@ -158,7 +125,7 @@ describe('views/ManageContributorsView', function() {
         });
 
         it('Expects that the edit person view is not created and rendered until the model has been fetched', function() {
-            expect(setElementPersonViewSpy).not.toHaveBeenCalled();
+            expect(EditPersonView.prototype.setElement).not.toHaveBeenCalled();
         });
 
         it('Expects a failed fetch to show an alert message', function() {
@@ -167,16 +134,16 @@ describe('views/ManageContributorsView', function() {
                 statusText : 'Internal Server Error'
             });
 
-            expect(showDangerAlertSpy).toHaveBeenCalled();
+            expect(AlertView.prototype.showDangerAlert).toHaveBeenCalled();
         });
 
         it('Expects that if the fetch is successful an edit person view is created, the select contributor container is hidden and the edit buttons are visible', function() {
             fetchModelDeferred.resolve();
 
-            expect(setElementPersonViewSpy).toHaveBeenCalled();
-            expect(renderPersonViewSpy).toHaveBeenCalled();
-            expect(setElementCorpViewSpy).not.toHaveBeenCalled();
-            expect(renderCorpViewSpy).not.toHaveBeenCalled();
+            expect(EditPersonView.prototype.setElement).toHaveBeenCalled();
+            expect(EditPersonView.prototype.render).toHaveBeenCalled();
+            expect(EditCorporationView.prototype.setElement).not.toHaveBeenCalled();
+            expect(EditCorporationView.prototype.render).not.toHaveBeenCalled();
             expect($testDiv.find('.select-contributor-container').is(':visible')).toBe(false);
             expect($testDiv.find('.contributor-button-container').is(':visible')).toBe(true);
         });
@@ -197,16 +164,16 @@ describe('views/ManageContributorsView', function() {
         });
 
         it('Expects that the edit corporation view is not created and rendered until the model has been fetched', function() {
-            expect(setElementCorpViewSpy).not.toHaveBeenCalled();
+            expect(EditCorporationView.prototype.setElement).not.toHaveBeenCalled();
         });
 
         it('Expects that if the fetch is successful an edit person view is created, the select contributor container is hidden and the edit buttons are visible', function() {
             fetchModelDeferred.resolve();
 
-            expect(setElementPersonViewSpy).not.toHaveBeenCalled();
-            expect(renderPersonViewSpy).not.toHaveBeenCalled();
-            expect(setElementCorpViewSpy).toHaveBeenCalled();
-            expect(renderCorpViewSpy).toHaveBeenCalled();
+            expect(EditPersonView.prototype.setElement).not.toHaveBeenCalled();
+            expect(EditPersonView.prototype.render).not.toHaveBeenCalled();
+            expect(EditCorporationView.prototype.setElement).toHaveBeenCalled();
+            expect(EditCorporationView.prototype.render).toHaveBeenCalled();
         });
     });
 
@@ -220,9 +187,9 @@ describe('views/ManageContributorsView', function() {
             testView.render();
             testView.remove();
 
-            expect(removeAlertViewSpy).toHaveBeenCalled();
-            expect(removePersonViewSpy).not.toHaveBeenCalled();
-            expect(removeCorpViewSpy).not.toHaveBeenCalled();
+            expect(AlertView.prototype.remove).toHaveBeenCalled();
+            expect(EditPersonView.prototype.remove).not.toHaveBeenCalled();
+            expect(EditCorporationView.prototype.remove).not.toHaveBeenCalled();
         });
 
         it('Expects that the edit person view to be removed if editing a person', function() {
@@ -239,9 +206,9 @@ describe('views/ManageContributorsView', function() {
             testView.render();
             testView.remove();
 
-            expect(removeAlertViewSpy).toHaveBeenCalled();
-            expect(removePersonViewSpy).toHaveBeenCalled();
-            expect(removeCorpViewSpy).not.toHaveBeenCalled();
+            expect(AlertView.prototype.remove).toHaveBeenCalled();
+            expect(EditPersonView.prototype.remove).toHaveBeenCalled();
+            expect(EditCorporationView.prototype.remove).not.toHaveBeenCalled();
         });
 
         it('Expects that the edit corporation view to be removed if editing a corporation', function() {
@@ -258,9 +225,9 @@ describe('views/ManageContributorsView', function() {
             testView.render();
             testView.remove();
 
-            expect(removeAlertViewSpy).toHaveBeenCalled();
-            expect(removePersonViewSpy).not.toHaveBeenCalled();
-            expect(removeCorpViewSpy).toHaveBeenCalled();
+            expect(AlertView.prototype.remove).toHaveBeenCalled();
+            expect(EditPersonView.prototype.remove).not.toHaveBeenCalled();
+            expect(EditCorporationView.prototype.remove).toHaveBeenCalled();
         });
     });
 
@@ -313,8 +280,8 @@ describe('views/ManageContributorsView', function() {
             $contributorTypeSelect.val('person').trigger('select2:select');
             $createBtn.trigger('click');
 
-            expect(renderPersonViewSpy).toHaveBeenCalled();
-            expect(renderCorpViewSpy).not.toHaveBeenCalled();
+            expect(EditPersonView.prototype.render).toHaveBeenCalled();
+            expect(EditCorporationView.prototype.render).not.toHaveBeenCalled();
             expect(testModel.get('corporation')).toBe(false);
         });
 
@@ -322,8 +289,8 @@ describe('views/ManageContributorsView', function() {
             $contributorTypeSelect.val('corporation').trigger('select2:select');
             $createBtn.trigger('click');
 
-            expect(renderPersonViewSpy).not.toHaveBeenCalled();
-            expect(renderCorpViewSpy).toHaveBeenCalled();
+            expect(EditPersonView.prototype.render).not.toHaveBeenCalled();
+            expect(EditCorporationView.prototype.render).toHaveBeenCalled();
             expect(testModel.get('corporation')).toBe(true);
         });
 
@@ -355,7 +322,7 @@ describe('views/ManageContributorsView', function() {
                     statusText : 'Internal server error'
                 });
 
-                expect(showDangerAlertSpy).toHaveBeenCalled();
+                expect(AlertView.prototype.showDangerAlert).toHaveBeenCalled();
             });
 
             it('Expects that a successfully fetch creates a person view and navigates to that contributorId', function() {
@@ -364,8 +331,8 @@ describe('views/ManageContributorsView', function() {
                 testModel.set('contributorId', 1234);
                 fetchModelDeferred.resolve();
 
-                expect(renderPersonViewSpy).toHaveBeenCalled();
-                expect(renderCorpViewSpy).not.toHaveBeenCalled();
+                expect(EditPersonView.prototype.render).toHaveBeenCalled();
+                expect(EditCorporationView.prototype.render).not.toHaveBeenCalled();
                 expect(testRouter.navigate).toHaveBeenCalledWith('contributor/1234');
             });
 
@@ -383,8 +350,8 @@ describe('views/ManageContributorsView', function() {
                 testModel.set('contributorId', 1234);
                 fetchModelDeferred.resolve();
 
-                expect(renderPersonViewSpy).not.toHaveBeenCalled();
-                expect(renderCorpViewSpy).toHaveBeenCalled();
+                expect(EditPersonView.prototype.render).not.toHaveBeenCalled();
+                expect(EditCorporationView.prototype.render).toHaveBeenCalled();
                 expect(testRouter.navigate).toHaveBeenCalledWith('contributor/1234');
             });
         });
@@ -405,7 +372,7 @@ describe('views/ManageContributorsView', function() {
                 responseJSON : {validationErrors: {given : 'Needs to be non null'}}
             });
 
-            expect(showDangerAlertSpy).toHaveBeenCalled();
+            expect(AlertView.prototype.showDangerAlert).toHaveBeenCalled();
             expect($errorDiv.html()).toContain('{"given":"Needs to be non null"}');
         });
 
@@ -414,7 +381,7 @@ describe('views/ManageContributorsView', function() {
             testModel.set('contributorId', 1234);
             saveModelDeferred.resolve();
 
-            expect(showSuccessAlertSpy).toHaveBeenCalled();
+            expect(AlertView.prototype.showSuccessAlert).toHaveBeenCalled();
             expect(testRouter.navigate).toHaveBeenCalledWith('contributor/1234');
         });
 
@@ -437,7 +404,7 @@ describe('views/ManageContributorsView', function() {
             testModel.set('contributorId',  1234);
             $cancelBtn.trigger('click');
             fetchModelDeferred.reject();
-            expect(showDangerAlertSpy).toHaveBeenCalled();
+            expect(AlertView.prototype.showDangerAlert).toHaveBeenCalled();
         });
 
         it('Expects that if the create a new contributor button is clicked, the model is cleared, the select contributor container shown', function() {
@@ -450,7 +417,7 @@ describe('views/ManageContributorsView', function() {
             $createNewBtn.trigger('click');
 
             expect(testModel.clear).toHaveBeenCalled();
-            expect(removeCorpViewSpy).toHaveBeenCalled();
+            expect(EditCorporationView.prototype.remove).toHaveBeenCalled();
             expect($testDiv.find('.select-contributor-container').is(':visible')).toBe(true);
             expect($testDiv.find('.contributor-button-container').is(':visible')).toBe(false);
         });
