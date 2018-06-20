@@ -1,11 +1,8 @@
-define([
-    'backbone'
-], function(Backbone) {
-        var collection = Backbone.Collection.extend({
-        url : window.CONFIG.scriptRoot + '/manager/services/lists',
+import Backbone from 'backbone';
 
-        comparator : 'text'
-    });
 
-    return collection;
+export default Backbone.Collection.extend({
+    url : window.CONFIG.scriptRoot + '/manager/services/lists',
+
+    comparator : 'text'
 });

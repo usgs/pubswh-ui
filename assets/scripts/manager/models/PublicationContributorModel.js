@@ -1,40 +1,37 @@
-define([
-    'backbone'
-], function(Backbone) {
-        var model = Backbone.Model.extend({
+import Backbone from 'backbone';
 
-        comparator : 'rank',
 
-        url : function() {
-            return window.CONFIG.scriptRoot + '/manager/services/contributor/' + this.get('contributorId');
-        },
+export default Backbone.Model.extend({
 
-        defaults : function() {
-            return {
-                rank : ''
-            };
-        },
+    comparator : 'rank',
 
-        fetch : function(options) {
-            var params = {
-                data : {
-                    mimetype : 'json'
-                }
-            };
-            if (_.isObject(options)) {
-                _.extend(params, options);
+    url : function() {
+        return window.CONFIG.scriptRoot + '/manager/services/contributor/' + this.get('contributorId');
+    },
+
+    defaults : function() {
+        return {
+            rank : ''
+        };
+    },
+
+    fetch : function(options) {
+        var params = {
+            data : {
+                mimetype : 'json'
             }
-            return Backbone.Model.prototype.fetch.call(this, params);
-        },
-
-        parse : function(response) {
-            var affiliation = new Object();
-            if (!_.has(response, 'affiliation')) {
-                response.affiliation = affiliation;
-            }
-            return response;
+        };
+        if (_.isObject(options)) {
+            _.extend(params, options);
         }
-    });
+        return Backbone.Model.prototype.fetch.call(this, params);
+    },
 
-    return model;
+    parse : function(response) {
+        var affiliation = new Object();
+        if (!_.has(response, 'affiliation')) {
+            response.affiliation = affiliation;
+        }
+        return response;
+    }
 });

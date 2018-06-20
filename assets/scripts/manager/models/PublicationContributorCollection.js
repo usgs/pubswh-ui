@@ -1,10 +1,7 @@
-define([
-    './PublicationContributorModel',
-    './OrderedCollection'
-], function(PublicationContributorModel, OrderedCollection) {
-        var collection = OrderedCollection.extend({
-        model : PublicationContributorModel
-    });
+import PublicationContributorModel from './PublicationContributorModel';
+import OrderedCollection from './OrderedCollection';
 
-    return collection;
+
+export default OrderedCollection.extend({
+    model : PublicationContributorModel
 });

@@ -1,15 +1,9 @@
-define([
-    'backbone'
-], function(Backbone) {
-    var model = Backbone.Model.extend({
+import Backbone from 'backbone';
 
-        urlRoot : window.CONFIG.scriptRoot + '/manager/services/publicationSeries',
 
-        defaults : {
-            'active' : true
-        }
-
-    });
-
-    return model;
+export default Backbone.Model.extend({
+    urlRoot : window.CONFIG.scriptRoot + '/manager/services/publicationSeries',
+    defaults : {
+        'active' : true
+    }
 });
