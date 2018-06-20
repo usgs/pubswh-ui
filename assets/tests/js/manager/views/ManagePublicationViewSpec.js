@@ -1,57 +1,37 @@
-import Squire from 'squire';
 import $ from 'jquery';
-import _ from 'underscore';
-import module from 'module';
 import Backbone from 'backbone';
-import Backgrid from 'backgrid';
-import Paginator from 'backgrid-paginator';
 
-import BackgridUrlCell from '../../../../scripts/manager/views/BackgridUrlCell';
-import BackgridClientSortingBody from '../../../../scripts/manager/views/BackgridClientSortingBody';
+import AlertView from '../../../../scripts/manager/views/AlertView';
+import ManagePublicationsView from '../../../../scripts/manager/views/ManagePublicationsView';
 import PublicationCollection from '../../../../scripts/manager/models/PublicationCollection';
-import BaseView from '../../../../scripts/manager/views/BaseView';
-import hbTemplate from '../../../../scripts/manager/hb_templates/managePublications.hbs';
+import PublicationListCollection from '../../../../scripts/manager/models/PublicationListCollection';
 import pubListTemplate from '../../../../scripts/manager/hb_templates/publicationListFilter.hbs';
+import SearchFilterRowView from '../../../../scripts/manager/views/SearchFilterRowView';
+import WarningDialogView from '../../../../scripts/manager/views/WarningDialogView';
 
 
 // Mocking Backgrid is difficult since it's namespaced and encompasses many different methods
 // We will have to be satisified with putting spies on the backrid view objects within testView
 
 describe('ManagePublicationsView', function() {
-    var ManagePublicationsView;
     var testView, testCollection, testModel;
-    var injector;
     var $testDiv;
 
-    var setElAlertSpy, renderAlertSpy, removeAlertSpy, successAlertSpy, dangerAlertSpy;
-    var setElWarningDialogSpy, renderWarningDialogSpy, removeWarningDialogSpy, showWarningDialogSpy;
-    var setElSearchFilterRowViewSpy, renderSearchFilterRowViewSpy, removeSearchFilterRowViewSpy;
-    var fetchListSpy;
+    var renderWarningDialogSpy;
+    var renderSearchFilterRowViewSpy;
     var fetchDeferred, fetchListDeferred;
     var pubListTemplateSpy;
 
-    beforeEach(function (done) {
+    beforeEach(function () {
 
         $('body').append('<div id="test-div"></div>');
         $testDiv = $('#test-div');
 
-        setElAlertSpy = jasmine.createSpy('setElAlertSpy');
-        renderAlertSpy = jasmine.createSpy('renderAlertSpy');
-        removeAlertSpy = jasmine.createSpy('removeAlertSpy');
-        successAlertSpy = jasmine.createSpy('successAlertSpy');
-        dangerAlertSpy = jasmine.createSpy('dangerAlertSpy');
-
-        setElWarningDialogSpy = jasmine.createSpy('setElWarningDialogSpy');
         renderWarningDialogSpy = jasmine.createSpy('renderWarningDialogSpy');
-        removeWarningDialogSpy = jasmine.createSpy('removeWarningDialogSpy');
-        showWarningDialogSpy = jasmine.createSpy('showWarningDialogSpy');
 
-        setElSearchFilterRowViewSpy = jasmine.createSpy('setElSearchFilterRowViewSpy');
         renderSearchFilterRowViewSpy = jasmine.createSpy('renderSearchFilterRowViewSpy');
-        removeSearchFilterRowViewSpy = jasmine.createSpy('removeSearchFilterRowViewSpy');
 
         fetchListDeferred = $.Deferred();
-        fetchListSpy = jasmine.createSpy('fetchListSpy').and.returnValue(fetchListDeferred);
 
         pubListTemplateSpy = jasmine.createSpy('pubListTemplateSpy').and.callFake(pubListTemplate);
 
@@ -63,69 +43,39 @@ describe('ManagePublicationsView', function() {
 
         testModel = new Backbone.Model();
 
-        injector = new Squire();
-        /* preloading all modules to see if this eliminates the timeout issue on Jenkins */
-        injector.mock('module', module);
-        injector.mock('backbone', Backbone);
-        injector.mock('underscore', _);
-        injector.mock('jquery', $);
-        injector.mock('backgrid', Backgrid);
-        injector.mock('backgrid-paginator', Paginator);
-        injector.mock('views/BackgridUrlCell', BackgridUrlCell);
-        injector.mock('views/BackgridClientSortingBody', BackgridClientSortingBody);
-        injector.mock('views/BaseView', BaseView);
-        injector.mock('hbs!hb_templates/managePublications', hbTemplate);
-        injector.mock('hbs!hb_templates/publicationListFilter', pubListTemplateSpy);
-
-        injector.mock('models/PublicationListCollection', Backbone.Collection.extend({
-            fetch : fetchListSpy,
-            toJSON : function() {
-                return [{id : 1, text : 'Pub Cat 1'}, {id : 2, text : 'Pub Cat 2'}];
-            },
-            findWhere : function() {
-                var mockModel = new Backbone.Model();
-                return mockModel.set({id : 2, text : 'Pub Cat 2'});
-            }
-        }));
-
-        injector.mock('views/AlertView', BaseView.extend({
-            setElement: setElAlertSpy,
-            render: renderAlertSpy,
-            remove: removeAlertSpy,
-            showSuccessAlert : successAlertSpy,
-            showDangerAlert: dangerAlertSpy
-        }));
-
-        injector.mock('views/WarningDialogView', BaseView.extend({
-            setElement : setElWarningDialogSpy.and.returnValue({
-                render : renderWarningDialogSpy
-            }),
-            render : renderWarningDialogSpy,
-            remove : removeWarningDialogSpy,
-            show : showWarningDialogSpy
-        }));
-
-        injector.mock('views/SearchFilterRowView', BaseView.extend({
-            setElement : setElSearchFilterRowViewSpy.and.returnValue({
+        spyOn(PublicationListCollection.prototype, 'fetch').and.returnValue(fetchListDeferred);
+        spyOn(PublicationListCollection.prototype, 'toJSON').and.callFake(function() {
+            return [{id : 1, text : 'Pub Cat 1'}, {id : 2, text : 'Pub Cat 2'}];
+        });
+        spyOn(PublicationListCollection.prototype, 'findWhere').and.callFake(function() {
+            var mockModel = new Backbone.Model();
+            return mockModel.set({id : 2, text : 'Pub Cat 2'});
+        });
+        spyOn(AlertView.prototype, 'setElement');
+        spyOn(AlertView.prototype, 'render');
+        spyOn(AlertView.prototype, 'remove');
+        spyOn(AlertView.prototype, 'showSuccessAlert');
+        spyOn(AlertView.prototype, 'showDangerAlert');
+        spyOn(WarningDialogView.prototype, 'setElement').and.returnValue({
+            render : renderWarningDialogSpy
+        });
+        spyOn(WarningDialogView.prototype, 'render').and.callFake(renderWarningDialogSpy);
+        spyOn(WarningDialogView.prototype, 'remove');
+        spyOn(WarningDialogView.prototype, 'show');
+        spyOn(SearchFilterRowView.prototype, 'setElement').and.returnValue({
                 render : renderSearchFilterRowViewSpy
-            }),
-            render : renderSearchFilterRowViewSpy,
-            remove : removeSearchFilterRowViewSpy
-        }));
-
-        injector.require(['views/ManagePublicationsView'], function(view) {
-            ManagePublicationsView = view;
-            testView = new ManagePublicationsView({
-                el: '#test-div',
-                collection: testCollection,
-                model : testModel
             });
-            done();
+        spyOn(SearchFilterRowView.prototype, 'render').and.callFake(renderSearchFilterRowViewSpy);
+        spyOn(SearchFilterRowView.prototype, 'remove');
+
+        testView = new ManagePublicationsView({
+            el: '#test-div',
+            collection: testCollection,
+            model : testModel
         });
     });
 
     afterEach(function () {
-        injector.remove();
         testView.remove();
         $testDiv.remove();
     });
@@ -135,12 +85,12 @@ describe('ManagePublicationsView', function() {
     });
 
     it('Expects that the publication lists are fetched at initialization', function() {
-        expect(fetchListSpy).toHaveBeenCalled();
+        expect(PublicationListCollection.prototype.fetch).toHaveBeenCalled();
     });
 
     it('Expects that the child view\'s are created', function() {
-        expect(setElAlertSpy).toHaveBeenCalled();
-        expect(setElWarningDialogSpy).toHaveBeenCalled();
+        expect(AlertView.prototype.setElement).toHaveBeenCalled();
+        expect(WarningDialogView.prototype.setElement).toHaveBeenCalled();
         expect(testView.grid).toBeDefined();
         expect(testView.paginator).toBeDefined();
     });
@@ -159,14 +109,14 @@ describe('ManagePublicationsView', function() {
         it('Expects that the alertView\'s element is set but the view is not rendered', function() {
             testView.render();
 
-            expect(setElAlertSpy.calls.count()).toBe(2);
-            expect(renderAlertSpy).not.toHaveBeenCalled();
+            expect(AlertView.prototype.setElement.calls.count()).toBe(2);
+            expect(AlertView.prototype.render).not.toHaveBeenCalled();
         });
 
         it('Expects the warningDialogView to be rendered', function() {
             testView.render();
 
-            expect(setElWarningDialogSpy.calls.count()).toBe(2);
+            expect(WarningDialogView.prototype.setElement.calls.count()).toBe(2);
             expect(renderWarningDialogSpy).toHaveBeenCalled();
         });
 
@@ -204,11 +154,11 @@ describe('ManagePublicationsView', function() {
         it('Expects that the publications list filter is rendered after the list has been fetched', function() {
             testView.render();
 
-            expect(pubListTemplateSpy).not.toHaveBeenCalled();
+            expect($('.list-unstyled').length).toBe(0);
 
             fetchListDeferred.resolve();
 
-            expect(pubListTemplateSpy).toHaveBeenCalled();
+            expect($('.list-unstyled').length).toBe(1);
         });
 
         it('Expects the search term to equal the value in model', function() {
@@ -252,9 +202,9 @@ describe('ManagePublicationsView', function() {
 
         it('Expects the children view to be removed', function() {
             testView.remove();
-            expect(removeAlertSpy).toHaveBeenCalled();
-            expect(removeWarningDialogSpy).toHaveBeenCalled();
-            expect(removeSearchFilterRowViewSpy.calls.count()).toEqual(2);
+            expect(AlertView.prototype.remove).toHaveBeenCalled();
+            expect(WarningDialogView.prototype.remove).toHaveBeenCalled();
+            expect(SearchFilterRowView.prototype.remove.calls.count()).toEqual(2);
             expect(testView.grid.remove).toHaveBeenCalled();
             expect(testView.paginator.remove).toHaveBeenCalled();
         });
@@ -335,18 +285,18 @@ describe('ManagePublicationsView', function() {
         it('Expects that clicking the add category btn creates and renders a SearchFilterRowView', function() {
             var $addBtn = testView.$('.add-category-btn');
             $addBtn.trigger('click');
-            expect(setElSearchFilterRowViewSpy.calls.count()).toBe(2);
+            expect(SearchFilterRowView.prototype.setElement.calls.count()).toBe(2);
             expect(renderSearchFilterRowViewSpy).toHaveBeenCalled();
 
             $addBtn.trigger('click');
-            expect(setElSearchFilterRowViewSpy.calls.count()).toBe(4);
+            expect(SearchFilterRowView.prototype.setElement.calls.count()).toBe(4);
             expect(renderSearchFilterRowViewSpy.calls.count()).toBe(2);
         });
 
         it('Expects that clicking on Add to Lists with no lists selected but publications selected shows the warning dialog', function() {
             testCollection.add([{id : 1, selected : true}, {id : 2}]);
             testView.$('.add-to-lists-btn').trigger('click');
-            expect(showWarningDialogSpy).toHaveBeenCalled();
+            expect(WarningDialogView.prototype.show).toHaveBeenCalled();
         });
 
         it('Expects that clicking on Add to List with a list selected but no publications selected shows the warning dialog', function() {
@@ -355,7 +305,7 @@ describe('ManagePublicationsView', function() {
             testCollection.add([{id : 1}, {id : 2}]);
 
             testView.$('.add-to-lists-btn').trigger('click');
-            expect(showWarningDialogSpy).toHaveBeenCalled();
+            expect(WarningDialogView.prototype.show).toHaveBeenCalled();
         });
 
         it('Expects an ajax call for each publication list selected with the ids passed as query parameters', function() {
@@ -378,7 +328,7 @@ describe('ManagePublicationsView', function() {
 
         it('Expects that a warning is raised if the Remove from List button is clicked but no publication is selected', function() {
             testView.$('.remove-from-list-btn').trigger('click');
-            expect(showWarningDialogSpy).toHaveBeenCalled();
+            expect(WarningDialogView.prototype.show).toHaveBeenCalled();
         });
 
         it('Expects an Ajax call is made for each selected publication when the Remove from List button is clicked', function() {
