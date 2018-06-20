@@ -1,22 +1,22 @@
-import Squire from 'squire';
 import $ from 'jquery';
 import _ from 'underscore';
 
+import ContributorRowView from '../../../../scripts/manager/views/ContributorRowView';
+import ContributorTabView from '../../../../scripts/manager/views/ContributorTabView';
 import PublicationContributorCollection from '../../../../scripts/manager/models/PublicationContributorCollection';
 import PublicationContributorModel from '../../../../scripts/manager/models/PublicationContributorModel';
 
 
 describe('ContributorTabView', function() {
-    var ContributorTabView, testView;
+    var testView;
     var testCollection;
     var CONTRIB_TYPE = {id : 1, text : 'Type1'};
 
-    var setElContribRowViewSpy, renderContribRowViewSpy, removeContribRowViewSpy;
+    var renderContribRowViewSpy;
     var appendToSpy;
-    var injector;
 
-    beforeEach(function (done) {
-        $('body').append('<div id="test-div">');
+    beforeEach(function () {
+        $('body').append('<div id="test-div"></div>');
 
         testCollection = new PublicationContributorCollection([{
             contributorId : 1,
@@ -31,31 +31,21 @@ describe('ContributorTabView', function() {
             contributorType : CONTRIB_TYPE,
             rank : 2
         }]);
-        setElContribRowViewSpy = jasmine.createSpy('setElLinkRowViewSpy');
         renderContribRowViewSpy = jasmine.createSpy('renderLinkRowViewSpy');
-        removeContribRowViewSpy = jasmine.createSpy('removeLinkRowViewSpy');
         appendToSpy = jasmine.createSpy('appendToSpy');
 
-        injector = new Squire();
-        injector.mock('jquery', $);// Needed to spy on sortable call
-        injector.mock('views/ContributorRowView', Backbone.View.extend({
-            setElement : setElContribRowViewSpy.and.returnValue({
-                render : renderContribRowViewSpy
-            }),
-            render : renderContribRowViewSpy,
-            remove : removeContribRowViewSpy,
-            $el : {
-                appendTo : appendToSpy
-            }
-        }));
-        injector.require(['views/ContributorTabView'], function(view) {
-            ContributorTabView = view;
-            done();
+        spyOn(ContributorRowView.prototype, 'setElement').and.returnValue({
+            render : renderContribRowViewSpy
         });
+        spyOn(ContributorRowView.prototype, 'render').and.callFake(renderContribRowViewSpy);
+        spyOn(ContributorRowView.prototype, 'remove');
+        ContributorRowView.prototype.$el = {
+            appendTo : appendToSpy
+        };
     });
 
     afterEach(function () {
-        injector.remove();
+        ContributorRowView.prototype.$el = undefined;
         testView.remove();
         $('#test-div').remove();
     });
@@ -67,7 +57,7 @@ describe('ContributorTabView', function() {
             collection : testCollection
         });
         expect(testView.rowViews.length).toBe(3);
-        expect(setElContribRowViewSpy.calls.count()).toBe(3);
+        expect(ContributorRowView.prototype.setElement.calls.count()).toBe(3);
     });
 
     describe('Tests for render', function() {
@@ -80,13 +70,14 @@ describe('ContributorTabView', function() {
         });
 
         it('Expects that the row views are sorted by it\'s model\'s rank and then rendered', function() {
+            console.log($.fn.sortable);
             testView.render();
             expect(testView.rowViews[0].model.attributes).toEqual({contributorId : 1, contributorType : CONTRIB_TYPE, rank : 1});
             expect(testView.rowViews[1].model.attributes).toEqual({contributorId : 2, contributorType : CONTRIB_TYPE, rank : 2});
             expect(testView.rowViews[2].model.attributes).toEqual({contributorId : 3, contributorType : CONTRIB_TYPE, rank : 3});
 
             expect(renderContribRowViewSpy.calls.count()).toBe(3);
-            expect(setElContribRowViewSpy.calls.count()).toBe(6);
+            expect(ContributorRowView.prototype.setElement.calls.count()).toBe(6);
         });
 
         it('Expects that the sortable plugin is initialized', function() {
@@ -107,7 +98,7 @@ describe('ContributorTabView', function() {
 
         it('Expects that child row views are removed', function() {
             testView.remove();
-            expect(removeContribRowViewSpy.calls.count()).toBe(3);
+            expect(ContributorRowView.prototype.remove.calls.count()).toBe(3);
         });
     });
 
@@ -141,14 +132,14 @@ describe('ContributorTabView', function() {
         });
         it('Expects that adding a new model to the collection before render has been called, creates a new view but does not render it until the view\'s render is called', function() {
             var newModel = new PublicationContributorModel({contributorType : CONTRIB_TYPE, rank : 4});
-            var childViewCount = setElContribRowViewSpy.calls.count();
+            var childViewCount = ContributorRowView.prototype.setElement.calls.count();
             testCollection.add(newModel);
 
-            expect(setElContribRowViewSpy.calls.count()).toBe(childViewCount + 1);
+            expect(ContributorRowView.prototype.setElement.calls.count()).toBe(childViewCount + 1);
             expect(renderContribRowViewSpy).not.toHaveBeenCalled();
 
             testView.render();
-            expect(setElContribRowViewSpy.calls.count()).toBe(childViewCount * 2 + 2);
+            expect(ContributorRowView.prototype.setElement.calls.count()).toBe(childViewCount * 2 + 2);
             expect(renderContribRowViewSpy.calls.count()).toBe(childViewCount + 1);
         });
 
@@ -160,7 +151,7 @@ describe('ContributorTabView', function() {
             childViewCount = renderContribRowViewSpy.calls.count();
             testCollection.add(newModel);
 
-            expect(setElContribRowViewSpy.calls.count()).toBe(childViewCount * 2 + 2);
+            expect(ContributorRowView.prototype.setElement.calls.count()).toBe(childViewCount * 2 + 2);
             expect(renderContribRowViewSpy.calls.count()).toBe(childViewCount + 1);
         });
 
@@ -168,7 +159,7 @@ describe('ContributorTabView', function() {
             var modelToRemove = testCollection.at(1);
             testCollection.remove(modelToRemove);
 
-            expect(removeContribRowViewSpy).toHaveBeenCalled();
+            expect(ContributorRowView.prototype.remove).toHaveBeenCalled();
             expect(testView.rowViews.length).toBe(2);
             expect(_.findIndex(testView.rowViews, function(view) {
                 return view.model === modelToRemove;

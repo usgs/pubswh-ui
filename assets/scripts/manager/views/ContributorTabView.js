@@ -130,15 +130,16 @@ export default BaseView.extend({
 
     updateRowOrder : function() {
         var $grid = this.$('.grid');
-
         this.rowViews = _.chain(this.rowViews)
             // Sort row views and them move them by successively appending them to the grid.
             .sortBy(function(view) {
                 return view.model.attributes.rank;
             })
             .each(function(view) {
-                view.$el.appendTo($grid);
+                if (view.$el) {
+                    view.$el.appendTo($grid);
+                }
             })
             .value();
-        }
-    });
+    }
+});

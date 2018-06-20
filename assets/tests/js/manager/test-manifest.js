@@ -15,7 +15,7 @@ require('./views/BibliodataViewSpec');
 require('./views/CatalogingViewSpec');
 require('./views/ContributorRowViewSpec');
 require('./views/ContributorsViewSpec');
-// require('./views/ContributorTabViewSpec');
+require('./views/ContributorTabViewSpec');
 require('./views/EditCorporationViewSpec');
 // require('./views/EditPersonViewSpec');
 require('./views/EditSeriesTitleViewSpec');
