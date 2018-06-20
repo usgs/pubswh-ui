@@ -1,19 +1,17 @@
-import Squire from 'squire';
 import $ from 'jquery';
-import Backbone from 'backbone';
 
+import BibliodataView from '../../../../scripts/manager/views/BibliodataView';
+import CostCenterCollection from '../../../../scripts/manager/models/CostCenterCollection';
 import PublicationModel from '../../../../scripts/manager/models/PublicationModel';
-import LookupModel from '../../../../scripts/manager/models/LookupModel';
+import PublicationTypeCollection from '../../../../scripts/manager/models/PublicationTypeCollection';
 
 
 describe('BibliodataView', function() {
     var pubTypeFetchDeferred, costCenterFetchActiveDeferred, costCenterFetchNotActiveDeferred;
-    var pubTypeFetchSpy, costCenterFetchSpy;
     var pubModel;
-    var BibliodataView, testView;
-    var injector;
+    var testView;
 
-    beforeEach(function(done) {
+    beforeEach(function() {
         $('body').append('<div id="test-div"></div>');
 
         pubModel = new PublicationModel();
@@ -22,38 +20,19 @@ describe('BibliodataView', function() {
         costCenterFetchActiveDeferred = $.Deferred();
         costCenterFetchNotActiveDeferred = $.Deferred();
 
-        pubTypeFetchSpy = jasmine.createSpy('pubTypeFetchSpy').and.returnValue(pubTypeFetchDeferred);
-        costCenterFetchSpy = jasmine.createSpy('costCenterFetchSpy').and.callFake(function(options) {
+        spyOn(window, 'setInterval');  // So the tinymce does not get initialized
+
+        spyOn(PublicationTypeCollection.prototype, 'fetch').and.returnValue(pubTypeFetchDeferred);
+        spyOn(CostCenterCollection.prototype, 'fetch').and.callFake(function(options) {
             if (options.data.active === 'y') {
                 return costCenterFetchActiveDeferred;
             } else {
                 return costCenterFetchNotActiveDeferred;
             }
         });
-
-        spyOn(window, 'setInterval');// So the tinymce does not get initialized
-
-        injector = new Squire();
-        injector.mock('jquery', $);
-        injector.mock('models/PublicationTypeCollection', Backbone.Collection.extend({
-            model: LookupModel,
-            url: '/test/lookup',
-            fetch: pubTypeFetchSpy
-        }));
-        injector.mock('models/CostCenterCollection', Backbone.Collection.extend({
-            model : LookupModel,
-            url : '/test/lookup',
-            fetch : costCenterFetchSpy
-        }));
-
-        injector.require(['views/BibliodataView'], function(view){
-            BibliodataView = view;
-            done();
-        });
     });
 
     afterEach(function() {
-        injector.remove();
         testView.remove();
         $('#test-div').remove();
     });
@@ -64,7 +43,7 @@ describe('BibliodataView', function() {
             el : '#test-div'
         });
 
-        expect(pubTypeFetchSpy).toHaveBeenCalled();
+        expect(PublicationTypeCollection.prototype.fetch).toHaveBeenCalled();
     });
 
     it('Expects that the both the active and not active cost centers are fetched at initialization', function() {
@@ -73,9 +52,9 @@ describe('BibliodataView', function() {
             el : '#test-div'
         });
 
-        expect(costCenterFetchSpy.calls.count()).toBe(2);
-        expect(costCenterFetchSpy.calls.argsFor(0)[0].data.active).toEqual('y');
-        expect(costCenterFetchSpy.calls.argsFor(1)[0].data.active).toEqual('n');
+        expect(CostCenterCollection.prototype.fetch.calls.count()).toBe(2);
+        expect(CostCenterCollection.prototype.fetch.calls.argsFor(0)[0].data.active).toEqual('y');
+        expect(CostCenterCollection.prototype.fetch.calls.argsFor(1)[0].data.active).toEqual('n');
     });
 
     describe('Tests for render', function() {

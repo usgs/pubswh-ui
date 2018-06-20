@@ -11,7 +11,7 @@ require('./utils/DynamicSelect2Spec');
 require('./views/AlertViewSpec');
 require('./views/BackgridUrlCellSpec');
 require('./views/BaseViewSpec');
-// require('./views/BibliodataViewSpec');
+require('./views/BibliodataViewSpec');
 // require('./views/CatalogingViewSpec');
 // require('./views/ContributorRowViewSpec');
 // require('./views/ContributorsViewSpec');
