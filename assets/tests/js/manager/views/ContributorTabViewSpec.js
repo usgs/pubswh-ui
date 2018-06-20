@@ -70,7 +70,6 @@ describe('ContributorTabView', function() {
         });
 
         it('Expects that the row views are sorted by it\'s model\'s rank and then rendered', function() {
-            console.log($.fn.sortable);
             testView.render();
             expect(testView.rowViews[0].model.attributes).toEqual({contributorId : 1, contributorType : CONTRIB_TYPE, rank : 1});
             expect(testView.rowViews[1].model.attributes).toEqual({contributorId : 2, contributorType : CONTRIB_TYPE, rank : 2});

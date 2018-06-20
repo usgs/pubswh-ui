@@ -1,15 +1,17 @@
-import Squire from 'squire';
 import $ from 'jquery';
-import Backbone from 'backbone';
 import _ from 'underscore';
 
 import AffiliationModel from '../../../../scripts/manager/models/AffiliationModel';
+import AlertView from '../../../../scripts/manager/views/AlertView';
 import LookupModel from '../../../../scripts/manager/models/LookupModel';
 import BaseView from '../../../../scripts/manager/views/BaseView';
+import CostCenterCollection from '../../../../scripts/manager/models/CostCenterCollection';
+import ManageAffiliationView from '../../../../scripts/manager/views/ManageAffiliationView';
+import OutsideAffiliationLookupCollection from '../../../../scripts/manager/models/OutsideAffiliationLookupCollection';
 
 
 describe('views/ManageAffiliationView', function() {
-    var ManageAffiliationView, testView;
+    var testView;
     var $testDiv;
     var testModel;
     var fetchModelDeferred;
@@ -17,14 +19,10 @@ describe('views/ManageAffiliationView', function() {
     var deleteModelDeferred;
     var testRouter;
 
-    var setElementAlertViewSpy, showSuccessAlertSpy, showDangerAlertSpy, closeAlertSpy, removeAlertViewSpy;
+    var costCenterFetchActiveDeferred, costCenterFetchInactiveDeferred;
+    var outsideAffiliationActiveDeferred, outsideAffiliationInactiveDeferred;
 
-    var costCenterFetchSpy, costCenterFetchActiveDeferred, costCenterFetchInactiveDeferred;
-    var outsideAffiliationFetchSpy, outsideAffiliationActiveDeferred, outsideAffiliationInactiveDeferred;
-
-    var injector;
-
-    beforeEach(function(done) {
+    beforeEach(function() {
         $('body').append('<div id="test-div"></div>');
         $testDiv = $('#test-div');
 
@@ -33,23 +31,9 @@ describe('views/ManageAffiliationView', function() {
 
         costCenterFetchActiveDeferred = $.Deferred();
         costCenterFetchInactiveDeferred = $.Deferred();
-        costCenterFetchSpy = jasmine.createSpy('costCenterFetchSpy').and.callFake(function(options) {
-            if (options.data.active === 'y') {
-                return costCenterFetchActiveDeferred;
-            } else {
-                return costCenterFetchInactiveDeferred;
-            }
-        });
 
         outsideAffiliationActiveDeferred = $.Deferred();
         outsideAffiliationInactiveDeferred = $.Deferred();
-        outsideAffiliationFetchSpy = jasmine.createSpy('outsideAffiliationFetchSpy').and.callFake(function(options) {
-            if (options.data.active === 'y') {
-                return outsideAffiliationActiveDeferred;
-            } else {
-                return outsideAffiliationInactiveDeferred;
-            }
-        });
 
         testModel = new AffiliationModel();
         fetchModelDeferred = $.Deferred();
@@ -59,47 +43,36 @@ describe('views/ManageAffiliationView', function() {
         spyOn(testModel, 'save').and.returnValue(saveModelDeferred.promise());
         spyOn(testModel, 'destroy').and.returnValue(deleteModelDeferred.promise());
 
-        setElementAlertViewSpy = jasmine.createSpy('setElementAlertViewSpy');
-        showSuccessAlertSpy = jasmine.createSpy('showSuccessAlertSpy');
-        showDangerAlertSpy = jasmine.createSpy('showDangerAlertSpy');
-        closeAlertSpy = jasmine.createSpy('closeAlertSpy');
-        removeAlertViewSpy = jasmine.createSpy('removeAlertViewSpy');
-
         testRouter = jasmine.createSpyObj('testRouterSpy', ['navigate']);
 
-        injector = new Squire();
-        injector.mock('jquery', $);
-        injector.mock('views/AlertView', Backbone.View.extend({
-            setElement : setElementAlertViewSpy,
-            showSuccessAlert : showSuccessAlertSpy,
-            showDangerAlert : showDangerAlertSpy,
-            closeAlert : closeAlertSpy,
-            remove : removeAlertViewSpy
-        }));
-        injector.mock('models/CostCenterCollection', Backbone.Collection.extend({
-            model : LookupModel,
-            url : '/test/lookup',
-            fetch : costCenterFetchSpy
-        }));
-        injector.mock('models/OutsideAffiliationLookupCollection', Backbone.Collection.extend({
-            model : LookupModel,
-            url : '/test/lookup',
-            fetch : outsideAffiliationFetchSpy
-        }));
+        spyOn(AlertView.prototype, 'setElement');
+        spyOn(AlertView.prototype, 'showSuccessAlert');
+        spyOn(AlertView.prototype, 'showDangerAlert');
+        spyOn(AlertView.prototype, 'closeAlert');
+        spyOn(AlertView.prototype, 'remove');
+        spyOn(CostCenterCollection.prototype, 'fetch').and.callFake(function(options) {
+            if (options.data.active === 'y') {
+                return costCenterFetchActiveDeferred;
+            } else {
+                return costCenterFetchInactiveDeferred;
+            }
+        });
+        spyOn(OutsideAffiliationLookupCollection.prototype, 'fetch').and.callFake(function(options) {
+            if (options.data.active === 'y') {
+                return outsideAffiliationActiveDeferred;
+            } else {
+                return outsideAffiliationInactiveDeferred;
+            }
+        });
 
-        injector.require(['views/ManageAffiliationView'], function(View) {
-            ManageAffiliationView = View;
-            testView = new ManageAffiliationView({
-                el : $testDiv,
-                model : testModel,
-                router : testRouter
-            });
-            done();
+        testView = new ManageAffiliationView({
+            el : $testDiv,
+            model : testModel,
+            router : testRouter
         });
     });
 
     afterEach(function() {
-        injector.remove();
         if (testView) {
             testView.remove();
         }
@@ -107,28 +80,28 @@ describe('views/ManageAffiliationView', function() {
     });
 
     it('Expects that the alertView has been created', function() {
-        expect(setElementAlertViewSpy).toHaveBeenCalled();
+        expect(AlertView.prototype.setElement).toHaveBeenCalled();
     });
 
     it('Expects active and inactive cost centers to fetched', function() {
-        expect(costCenterFetchSpy.calls.count()).toBe(2);
-        var activeCostCenters = _.find(costCenterFetchSpy.calls.allArgs(), function(arg) {
+        expect(CostCenterCollection.prototype.fetch.calls.count()).toBe(2);
+        var activeCostCenters = _.find(CostCenterCollection.prototype.fetch.calls.allArgs(), function(arg) {
             return arg[0].data.active === 'y';
         });
         expect(activeCostCenters).toBeDefined();
-        var inactiveCostCenters = _.find(costCenterFetchSpy.calls.allArgs(), function(arg) {
+        var inactiveCostCenters = _.find(CostCenterCollection.prototype.fetch.calls.allArgs(), function(arg) {
             return arg[0].data.active === 'n';
         });
         expect(inactiveCostCenters).toBeDefined();
     });
 
     it('Expects active and inactive outside affiliates to be fetched', function() {
-        expect(outsideAffiliationFetchSpy.calls.count()).toBe(2);
-        var activeAffiliates = _.find(outsideAffiliationFetchSpy.calls.allArgs(), function(arg) {
+        expect(OutsideAffiliationLookupCollection.prototype.fetch.calls.count()).toBe(2);
+        var activeAffiliates = _.find(OutsideAffiliationLookupCollection.prototype.fetch.calls.allArgs(), function(arg) {
             return arg[0].data.active === 'y';
         });
         expect(activeAffiliates).toBeDefined();
-        var inactiveAffiliates = _.find(outsideAffiliationFetchSpy.calls.allArgs(), function(arg) {
+        var inactiveAffiliates = _.find(OutsideAffiliationLookupCollection.prototype.fetch.calls.allArgs(), function(arg) {
             return arg[0].data.active === 'n';
         });
         expect(inactiveAffiliates).toBeDefined();
@@ -199,7 +172,7 @@ describe('views/ManageAffiliationView', function() {
 
             it('Expects the cost center values are read if the cost center type is selected', function() {
                 $testDiv.find('#edit-affiliation-type-input').val('1').trigger('select2:select');
-                expect(costCenterFetchSpy).toHaveBeenCalled();
+                expect(CostCenterCollection.prototype.fetch).toHaveBeenCalled();
             });
         });
 
@@ -228,7 +201,7 @@ describe('views/ManageAffiliationView', function() {
                 testModel.set('id', 78391);
                 saveModelDeferred.resolve();
 
-                expect(showSuccessAlertSpy).toHaveBeenCalled();
+                expect(AlertView.prototype.showSuccessAlert).toHaveBeenCalled();
                 expect(testRouter.navigate).toHaveBeenCalledWith('affiliation/78391');
             });
         });
