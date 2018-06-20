@@ -1,20 +1,20 @@
-import Squire from 'squire';
 import $ from 'jquery';
 
 import LinkCollection from '../../../../scripts/manager/models/LinkCollection';
+import LinkFileTypeCollection from '../../../../scripts/manager/models/LinkFileTypeCollection';
+import LinkRowView from '../../../../scripts/manager/views/LinkRowView';
+import LinkTypeCollection from '../../../../scripts/manager/models/LinkTypeCollection';
+import LinksView from '../../../../scripts/manager/views/LinksView';
 
 
 describe('LinksView', function() {
 
-    var LinksView, testView;
+    var testView;
     var testCollection;
     var fetchDeferred, linkTypeDeferred, linkFileTypeDeferred;
-    var fetchLinkTypeSpy, fetchLinkFileTypeSpy;
-    var setElLinkRowViewSpy, renderLinkRowViewSpy, removeLinkRowViewSpy;
-    var appendToSpy;
-    var injector;
+    var renderLinkRowViewSpy;
 
-    beforeEach(function(done) {
+    beforeEach(function() {
         $('body').append('<div id="test-div"></div>');
 
         fetchDeferred = $.Deferred();
@@ -28,40 +28,22 @@ describe('LinksView', function() {
         ]);
         spyOn(testCollection, 'fetch').and.returnValue(fetchDeferred.promise);
 
-        setElLinkRowViewSpy = jasmine.createSpy('setElLinkRowViewSpy');
         renderLinkRowViewSpy = jasmine.createSpy('renderLinkRowViewSpy');
-        removeLinkRowViewSpy = jasmine.createSpy('removeLinkRowViewSpy');
-        appendToSpy = jasmine.createSpy('appendToSpy');
 
-        fetchLinkTypeSpy = jasmine.createSpy('fetchLinkTypeSpy').and.returnValue(linkTypeDeferred.promise());
-        fetchLinkFileTypeSpy = jasmine.createSpy('fetchLinkFileTypeSpy').and.returnValue(linkFileTypeDeferred.promise());
-
-        injector = new Squire();
-        injector.mock('jquery', $);
-        injector.mock('models/LinkTypeCollection', Backbone.Collection.extend({
-            fetch : fetchLinkTypeSpy
-        }));
-        injector.mock('models/LinkFileTypeCollection', Backbone.Collection.extend({
-            fetch : fetchLinkFileTypeSpy
-        }));
-        injector.mock('views/LinkRowView', Backbone.View.extend({
-            setElement : setElLinkRowViewSpy.and.returnValue({
-                render : renderLinkRowViewSpy
-            }),
-            render : renderLinkRowViewSpy,
-            remove : removeLinkRowViewSpy,
-            $el : {
-                appendTo : appendToSpy
-            }
-        }));
-        injector.require(['views/LinksView'], function(view) {
-            LinksView = view;
-            done();
+        spyOn(LinkTypeCollection.prototype, 'fetch').and.returnValue(linkTypeDeferred.promise());
+        spyOn(LinkFileTypeCollection.prototype, 'fetch').and.returnValue(linkFileTypeDeferred.promise());
+        spyOn(LinkRowView.prototype, 'setElement').and.returnValue({
+            render : renderLinkRowViewSpy
         });
+        spyOn(LinkRowView.prototype, 'render').and.callFake(renderLinkRowViewSpy);
+        spyOn(LinkRowView.prototype, 'remove');
+        LinkRowView.prototype.$el = {
+            appendTo : jasmine.createSpy('appendToSpy')
+        };
     });
 
     afterEach(function() {
-        injector.remove();
+        LinkRowView.prototype.$el = undefined;
         testView.remove();
         $('#test-div').remove();
     });
@@ -72,9 +54,9 @@ describe('LinksView', function() {
             el : '#test-div'
         });
 
-        expect(setElLinkRowViewSpy.calls.count()).toBe(3);
-        expect(fetchLinkTypeSpy).toHaveBeenCalled();
-        expect(fetchLinkFileTypeSpy).toHaveBeenCalled();
+        expect(LinkRowView.prototype.setElement.calls.count()).toBe(3);
+        expect(LinkTypeCollection.prototype.fetch).toHaveBeenCalled();
+        expect(LinkFileTypeCollection.prototype.fetch).toHaveBeenCalled();
     });
 
     describe('Tests for render', function() {
@@ -116,7 +98,7 @@ describe('LinksView', function() {
 
         it('Expects that the link row views will also be removed', function() {
             testView.remove();
-            expect(removeLinkRowViewSpy.calls.count()).toBe(3);
+            expect(LinkRowView.prototype.remove.calls.count()).toBe(3);
         });
     });
 
@@ -147,13 +129,13 @@ describe('LinksView', function() {
 
         it('Expects that adding a model to the collection causes a new link row view to be added', function() {
             testCollection.add([{id : 4, rank : 4}]);
-            expect(setElLinkRowViewSpy.calls.count()).toBe(4);
+            expect(LinkRowView.prototype.setElement.calls.count()).toBe(4);
         });
 
         it('Expects that removing a model from a collection removes it associate view', function() {
             var modelToRemove = testCollection.at(2);
             testCollection.remove(modelToRemove);
-            expect(removeLinkRowViewSpy).toHaveBeenCalled();
+            expect(LinkRowView.prototype.remove).toHaveBeenCalled();
             expect(testView.linkRowViews.length).toBe(2);
         });
     });

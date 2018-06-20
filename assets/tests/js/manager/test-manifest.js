@@ -21,7 +21,7 @@ require('./views/EditPersonViewSpec');
 require('./views/EditSeriesTitleViewSpec');
 require('./views/GeospatialViewSpec');
 require('./views/LinkRowViewSpec');
-// require('./views/LinksViewSpec');
+require('./views/LinksViewSpec');
 // require('./views/LoginDialogViewSpec');
 // require('./views/ManageAffiliationViewSpec');
 // require('./views/ManageContributorsViewSpec');
