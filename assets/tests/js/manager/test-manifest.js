@@ -17,7 +17,7 @@ require('./views/ContributorRowViewSpec');
 require('./views/ContributorsViewSpec');
 require('./views/ContributorTabViewSpec');
 require('./views/EditCorporationViewSpec');
-// require('./views/EditPersonViewSpec');
+require('./views/EditPersonViewSpec');
 require('./views/EditSeriesTitleViewSpec');
 require('./views/GeospatialViewSpec');
 // require('./views/LinkRowViewSpec');

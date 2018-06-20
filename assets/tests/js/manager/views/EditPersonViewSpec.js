@@ -1,93 +1,74 @@
 import 'select2';
 
-import Squire from 'squire';
 import $ from 'jquery';
 import _ from 'underscore';
 import Backbone from 'backbone';
 
-import LookupModel from '../../../../scripts/manager/models/LookupModel';
+import CostCenterCollection from '../../../../scripts/manager/models/CostCenterCollection';
+import EditPersonView from '../../../../scripts/manager/views/EditPersonView';
+import OutsideAffiliationLookupCollection from '../../../../scripts/manager/models/OutsideAffiliationLookupCollection';
 
 
 describe('views/EditPersonView', function() {
-    var EditPersonView, testView;
+    var testView;
     var $testDiv;
     var testModel;
 
-    var costCenterFetchSpy, costCenterFetchActiveDeferred, costCenterFetchNotActiveDeferred;
-    var outsideAffFetchSpy, outsideAffFetchActiveDeferred, outsideAffFetchNotActiveDeferred;
+    var costCenterFetchActiveDeferred, costCenterFetchNotActiveDeferred;
+    var outsideAffFetchActiveDeferred, outsideAffFetchNotActiveDeferred;
 
-    var injector;
-
-    beforeEach(function(done) {
+    beforeEach(function() {
         $('body').append('<div id="test-div"></div>');
         $testDiv = $('#test-div');
         testModel = new Backbone.Model();
 
         costCenterFetchActiveDeferred = $.Deferred();
         costCenterFetchNotActiveDeferred = $.Deferred();
-        costCenterFetchSpy = jasmine.createSpy('costCenterFetchSpy').and.callFake(function(options) {
+
+        outsideAffFetchActiveDeferred = $.Deferred();
+        outsideAffFetchNotActiveDeferred  = $.Deferred();
+
+        spyOn(CostCenterCollection.prototype, 'fetch').and.callFake(function(options) {
             if (options.data.active === 'y') {
                 return costCenterFetchActiveDeferred;
             } else {
                 return costCenterFetchNotActiveDeferred;
             }
         });
-
-        outsideAffFetchActiveDeferred = $.Deferred();
-        outsideAffFetchNotActiveDeferred  = $.Deferred();
-        outsideAffFetchSpy = jasmine.createSpy('outsideAffFetchSpy').and.callFake(function(options) {
+        spyOn(OutsideAffiliationLookupCollection.prototype, 'fetch').and.callFake(function(options) {
             if (options.data.active === 'y') {
                 return outsideAffFetchActiveDeferred;
             } else {
                 return outsideAffFetchNotActiveDeferred;
             }
         });
-
-        injector = new Squire();
-        injector.mock('jquery', $);
-        injector.mock('models/CostCenterCollection', Backbone.Collection.extend({
-            model : LookupModel,
-            url : '/test/lookup',
-            fetch : costCenterFetchSpy
-        }));
-        injector.mock('models/OutsideAffiliationLookupCollection', Backbone.Collection.extend({
-            model : LookupModel,
-            url : '/test/lookup',
-            fetch : outsideAffFetchSpy
-        }));
-
-        injector.require(['views/EditPersonView'], function(View){
-            EditPersonView = View;
-            testView = new EditPersonView({
-                el : $testDiv,
-                model : testModel
-            });
-            done();
+        testView = new EditPersonView({
+            el : $testDiv,
+            model : testModel
         });
     });
 
     afterEach(function() {
-        injector.remove();
         testView.remove();
         $testDiv.remove();
     });
 
     it('Expects the active and not active cost centers to be fetched', function() {
-        expect(costCenterFetchSpy.calls.count()).toBe(2);
-        expect(_.find(costCenterFetchSpy.calls.allArgs(), function(arg) {
+        expect(CostCenterCollection.prototype.fetch.calls.count()).toBe(2);
+        expect(_.find(CostCenterCollection.prototype.fetch.calls.allArgs(), function(arg) {
             return arg[0].data.active === 'y';
         })).toBeDefined();
-        expect(_.find(costCenterFetchSpy.calls.allArgs(), function(arg) {
+        expect(_.find(CostCenterCollection.prototype.fetch.calls.allArgs(), function(arg) {
             return arg[0].data.active === 'n';
         })).toBeDefined();
     });
 
     it('Expects the active and not active outside affiliations to be fetched', function() {
-        expect(outsideAffFetchSpy.calls.count()).toBe(2);
-        expect(_.find(outsideAffFetchSpy.calls.allArgs(), function(arg) {
+        expect(OutsideAffiliationLookupCollection.prototype.fetch.calls.count()).toBe(2);
+        expect(_.find(OutsideAffiliationLookupCollection.prototype.fetch.calls.allArgs(), function(arg) {
             return arg[0].data.active === 'y';
         })).toBeDefined();
-        expect(_.find(outsideAffFetchSpy.calls.allArgs(), function(arg) {
+        expect(_.find(OutsideAffiliationLookupCollection.prototype.fetch.calls.allArgs(), function(arg) {
             return arg[0].data.active === 'n';
         })).toBeDefined();
     });
