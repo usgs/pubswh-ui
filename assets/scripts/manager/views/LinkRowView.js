@@ -1,6 +1,8 @@
 import 'select2';
 import 'backbone.stickit';
 
+import _ from 'underscore';
+
 import BaseView from './BaseView';
 import hbTemplate from '../hb_templates/linkRow.hbs';
 

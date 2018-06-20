@@ -1,23 +1,18 @@
-import Squire from 'squire';
+import 'backbone.stickit';
+import 'select2';
+
 import $ from 'jquery';
-import * as jqueryUI from 'jquery-ui';
-import select2 from 'select2';
-import module from 'module';
 import Backbone from 'backbone';
-import stickit from 'backbone.stickit';
 
 import LinkCollection from '../../../../scripts/manager/models/LinkCollection';
-import BaseView from '../../../../scripts/manager/views/BaseView';
-import hbTemplate from '../../../../scripts/manager/hb_templates/linkRow.hbs';
+import LinkRowView from '../../../../scripts/manager/views/LinkRowView';
 
 
 describe('LinkRowView', function() {
     var testModel, testCollection, linkTypeCollection, linkFileTypeCollection;
-    var LinkRowView;
     var testView;
-    var injector;
 
-    beforeEach(function(done) {
+    beforeEach(function() {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
         $('body').append('<div id="test-div"></div>');
 
@@ -40,11 +35,7 @@ describe('LinkRowView', function() {
         spyOn(testCollection, 'updateModelRank');
         spyOn(testCollection, 'remove');
 
-        injector = new Squire();
-        injector.mock('jquery', $);
-        injector.mock('jquery-ui', jqueryUI);
-        injector.mock('select2', select2);
-        injector.mock('module', module);
+        /*
         injector.mock('backbone.stickit', stickit);
         injector.mock('views/BaseView', BaseView);
         injector.mock('hbs!hb_templates/linkRow', hbTemplate);
@@ -52,11 +43,10 @@ describe('LinkRowView', function() {
         injector.require(['views/LinkRowView'], function(view) {
             LinkRowView = view;
             done();
-        });
+        });*/
     });
 
     afterEach(function() {
-        injector.remove();
         testView.remove();
         $('#test-div').remove();
     });
