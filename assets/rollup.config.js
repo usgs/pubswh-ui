@@ -142,6 +142,7 @@ const requireJSConfig = {
     },
     baseUrl: './scripts/manager',
     paths: {
+        'squire': '/base/bower_components/Squire.js/src/Squire',
         'jquery': 'bower_components/jquery/dist/jquery.js',
         'jquery-ui': 'bower_components/jquery-ui/jquery-ui.js',
         'select2': 'bower_components/select2/dist/js/select2.full.js',
@@ -209,7 +210,7 @@ const requireJSConfig = {
 };
 
 module.exports = [
-    getBundleConfig('scripts/manager/init.js', 'dist/scripts/manager.js'),
+    getBundleConfig('scripts/manager/init.js', 'dist/scripts/manager.js')
     // getBundleConfig('scripts/pubswh/extentsMapOnReady.js', 'dist/scripts/extentsMapOnReady.js'),
     // getBundleConfig('scripts/pubswh/plugins.js', 'dist/scripts/base_libs.js'),
     // getBundleConfig('scripts/pubswh/resultsMap.js', 'dist/scripts/resultsMap.js'),
