@@ -142,7 +142,6 @@ const requireJSConfig = {
     },
     baseUrl: './scripts/manager',
     paths: {
-        'squire': '/base/bower_components/Squire.js/src/Squire',
         'jquery': 'bower_components/jquery/dist/jquery.js',
         'jquery-ui': 'bower_components/jquery-ui/jquery-ui.js',
         'select2': 'bower_components/select2/dist/js/select2.full.js',

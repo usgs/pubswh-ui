@@ -2,7 +2,6 @@ require('./test-config');
 
 
 // This loads all the tests in the manager bundle.
-// Tests that use Squire are commented out.
 require('./models/ContributorModelSpec');
 require('./models/OrderedCollectionSpec');
 require('./models/PublicationCollectionSpec');
@@ -28,4 +27,4 @@ require('./views/ManageContributorsViewSpec');
 require('./views/ManagePublicationViewSpec');
 require('./views/PublicationViewSpec');
 require('./views/SearchFilterRowViewSpec');
-//require('./views/SPNViewSpec');
+require('./views/SPNViewSpec');

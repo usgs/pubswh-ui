@@ -1,19 +1,16 @@
-import Backbone from 'backbone';
-import Squire from 'squire';
 import $ from 'jquery';
 
 import PublicationModel from '../../../../scripts/manager/models/PublicationModel';
-import LookupModel from '../../../../scripts/manager/models/LookupModel';
+import PublishingServiceCenterCollection from '../../../../scripts/manager/models/PublishingServiceCenterCollection';
+import SPNView from '../../../../scripts/manager/views/SPNView';
 
 
 describe('SPNView', function() {
-    var SPNView, testView;
+    var testView;
     var testModel;
     var serviceCenterFetchDeferred;
-    var serviceCenterFetchSpy;
-    var injector;
 
-    beforeEach(function(done) {
+    beforeEach(function() {
 
         $('body').append('<div id="test-div"></div>');
 
@@ -21,25 +18,12 @@ describe('SPNView', function() {
 
         serviceCenterFetchDeferred = $.Deferred();
 
-        serviceCenterFetchSpy = jasmine.createSpy('serviceCenterFetchSpy').and.returnValue(serviceCenterFetchDeferred.promise());
-
         spyOn(window, 'setInterval');// So the tinymce does not get initialized
 
-        injector = new Squire();
-        injector.mock('jquery', $); // So we can spy on select2 and datetimepicker functions
-        injector.mock('models/PublishingServiceCenterCollection', Backbone.Collection.extend({
-            model : LookupModel,
-            url: '/test/lookup',
-            fetch : serviceCenterFetchSpy
-        }));
-        injector.require(['views/SPNView'], function(view) {
-            SPNView = view;
-            done();
-        });
+        spyOn(PublishingServiceCenterCollection.prototype, 'fetch').and.returnValue(serviceCenterFetchDeferred.promise());
     });
 
     afterEach(function() {
-        injector.remove();
         testView.remove();
         $('#test-div').remove();
     });
@@ -49,7 +33,7 @@ describe('SPNView', function() {
             el : '#test-div',
             model : testModel
         });
-        expect(serviceCenterFetchSpy).toHaveBeenCalled();
+        expect(PublishingServiceCenterCollection.prototype.fetch).toHaveBeenCalled();
     });
 
     describe('Tests for render', function() {
