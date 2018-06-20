@@ -155,7 +155,7 @@ describe('PublicationView', function(){
             expect(renderDialogSpy).toHaveBeenCalled();
         });
 
-        fit('Expects the child tab views to not be rendered until a successful fetch occurs', function() {
+        it('Expects the child tab views to not be rendered until a successful fetch occurs', function() {
             pubModel.set('id', 1234);
             testView = new PublicationView({
                 model : pubModel,

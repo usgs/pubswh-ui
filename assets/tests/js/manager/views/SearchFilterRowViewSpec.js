@@ -1,58 +1,41 @@
 import 'select2';
 
-import Squire from 'squire';
 import $ from 'jquery';
 import Backbone from 'backbone';
 
+import CostCenterCollection from '../../../../scripts/manager/models/CostCenterCollection';
+import PublicationTypeCollection from '../../../../scripts/manager/models/PublicationTypeCollection';
+import SearchFilterRowView from '../../../../scripts/manager/views/SearchFilterRowView';
+
 
 describe('SearchFilterRowView', function() {
-    var SearchFilterRowView, testView, testModel;
-    var fetchPubTypeSpy, fetchPubTypeDeferred;
-    var costCenterFetchSpy, costCenterFetchActiveDeferred, costCenterFetchNotActiveDeferred;
-    var injector;
+    var testView, testModel;
+    var fetchPubTypeDeferred;
+    var costCenterFetchActiveDeferred, costCenterFetchNotActiveDeferred;
     var $testDiv;
 
-    beforeEach(function (done) {
-        injector = new Squire();
-
+    beforeEach(function () {
         $('body').append('<div id="test-div"></div>');
         $testDiv = $('#test-div');
         testModel = new Backbone.Model();
 
         fetchPubTypeDeferred = $.Deferred();
-        fetchPubTypeSpy = jasmine.createSpy('fetchPubTypeSpy').and.returnValue(fetchPubTypeDeferred);
 
-        costCenterFetchSpy = jasmine.createSpy('costCenterFetchSpy').and.callFake(function(options) {
+        spyOn(PublicationTypeCollection.prototype, 'fetch').and.returnValue(fetchPubTypeDeferred);
+        spyOn(PublicationTypeCollection.prototype, 'toJSON').and.callFake(function() {
+            return [{id : 1, text : 'Type1'}, {id : 2, text : 'Type2'}, {id : 3, text : 'Type3'}];
+        });
+        spyOn(CostCenterCollection.prototype, 'fetch').and.callFake(function(options) {
             if (options.data.active === 'y') {
                 return costCenterFetchActiveDeferred;
             } else {
                 return costCenterFetchNotActiveDeferred;
             }
         });
-
-        injector.mock('models/PublicationTypeCollection', Backbone.Collection.extend({
-            fetch: fetchPubTypeSpy,
-            toJSON : function() {
-                return [{id : 1, text : 'Type1'}, {id : 2, text : 'Type2'}, {id : 3, text : 'Type3'}];
-            }
-        }));
-        injector.mock('models/CostCenterCollection', Backbone.Collection.extend({
-            url : '/test/lookup',
-            fetch : costCenterFetchSpy
-        }));
-
         spyOn($.fn, 'select2').and.callThrough();
-        injector.mock('jquery', $); // Needed to spy on select2 initialization.
-
-        injector.require(['views/SearchFilterRowView'], function (view) {
-            SearchFilterRowView = view;
-            done();
-        });
-
     });
 
     afterEach(function () {
-        injector.remove();
         if (testView) {
             testView.remove();
         }
@@ -64,7 +47,7 @@ describe('SearchFilterRowView', function() {
                 el: '#test-div',
                 model: testModel
             });
-        expect(fetchPubTypeSpy).toHaveBeenCalled();
+        expect(PublicationTypeCollection.prototype.fetch).toHaveBeenCalled();
     });
 
 
