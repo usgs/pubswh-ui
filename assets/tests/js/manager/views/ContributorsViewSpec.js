@@ -1,25 +1,22 @@
-import Squire from 'squire';
 import $ from 'jquery';
 import Backbone from 'backbone';
 
 import BaseView from '../../../../scripts/manager/views/BaseView';
-import LookupModel from '../../../../scripts/manager/models/LookupModel';
+import ContributorsView from '../../../../scripts/manager/views/ContributorsView';
+import ContributorTabView from '../../../../scripts/manager/views/ContributorTabView';
+import ContributorTypeCollection from '../../../../scripts/manager/models/ContributorTypeCollection';
 
 
 describe('ContributorsView', function() {
-
-    var ContributorsView;
     var testView;
 
-    var setElContribTabSpy, renderContribTabSpy, removeContribTabSpy, findElContribTabSpy;
-    var fetchContribTypeSpy;
+    var renderContribTabSpy;
 
     var publicationModel;
     var contributorsModel;
     var fetchContribTypeDeferred;
-    var injector;
 
-    beforeEach(function (done) {
+    beforeEach(function () {
         $('body').append('<div id="test-div"></div>');
 
         publicationModel = new Backbone.Model(); // this is the model passed to the contributors view
@@ -28,38 +25,18 @@ describe('ContributorsView', function() {
 
         fetchContribTypeDeferred = $.Deferred();
 
-        setElContribTabSpy = jasmine.createSpy('setElContributorsSpy');
         renderContribTabSpy = jasmine.createSpy('renderContributorsSpy');
-        removeContribTabSpy = jasmine.createSpy('removeContributorsSpy');
-        findElContribTabSpy = jasmine.createSpy('findElContributorsSpy');
 
-        fetchContribTypeSpy = jasmine.createSpy('fetchContribTypeSpy').and.returnValue(fetchContribTypeDeferred);
-
-        injector = new Squire();
-
-        injector.mock('views/BaseView', BaseView); // needed to spy on BaseView functions
-        injector.mock('views/ContributorTabView', BaseView.extend({
-            setElement: setElContribTabSpy.and.returnValue({
-                render: renderContribTabSpy
-            }),
-            render: renderContribTabSpy,
-            remove: removeContribTabSpy,
-            $: findElContribTabSpy
-        }));
-
-        injector.mock('models/ContributorTypeCollection', Backbone.Collection.extend({
-            model: LookupModel,
-            fetch: fetchContribTypeSpy
-        }));
-
-        injector.require(['views/ContributorsView'], function (view) {
-            ContributorsView = view;
-            done();
+        spyOn(ContributorTabView.prototype, 'setElement').and.returnValue({
+            render: renderContribTabSpy
         });
+        spyOn(ContributorTabView.prototype, 'render');
+        spyOn(ContributorTabView.prototype, 'remove').and.callFake(renderContribTabSpy);
+        spyOn(ContributorTabView.prototype, '$');
+        spyOn(ContributorTypeCollection.prototype, 'fetch').and.returnValue(fetchContribTypeDeferred);
     });
 
     afterEach(function () {
-        injector.remove();
         testView.remove();
         $('#test-div').remove();
     });
@@ -70,7 +47,7 @@ describe('ContributorsView', function() {
             model: contributorsModel
         });
 
-        expect(fetchContribTypeSpy).toHaveBeenCalled();
+        expect(ContributorTypeCollection.prototype.fetch).toHaveBeenCalled();
     });
 
     it('Expects that a child tab view and a model property are created for each contributor type after the successful fetch', function() {
@@ -100,13 +77,13 @@ describe('ContributorsView', function() {
             spyOn(BaseView.prototype, 'render').and.callThrough();
             testView.render();
             expect(BaseView.prototype.render).not.toHaveBeenCalled();
-            expect(setElContribTabSpy).not.toHaveBeenCalled();
+            expect(ContributorTabView.prototype.setElement).not.toHaveBeenCalled();
             expect(renderContribTabSpy).not.toHaveBeenCalled();
 
             testView.contributorTypeCollection = new Backbone.Collection([{id : 1, text : 'Type1'}, {id : 2, text : 'Type2'}]);
             fetchContribTypeDeferred.resolve();
             expect(BaseView.prototype.render).toHaveBeenCalled();
-            expect(setElContribTabSpy.calls.count()).toBe(4);// Called twice for each child view
+            expect(ContributorTabView.prototype.setElement.calls.count()).toBe(4);// Called twice for each child view
             expect(renderContribTabSpy.calls.count()).toBe(2);
         });
     });
@@ -125,7 +102,7 @@ describe('ContributorsView', function() {
 
         it('Expects that the child views are removed when remove is called', function() {
             testView.remove();
-            expect(removeContribTabSpy.calls.count()).toBe(2);
+            expect(ContributorTabView.prototype.remove.calls.count()).toBe(2);
         });
     });
 });

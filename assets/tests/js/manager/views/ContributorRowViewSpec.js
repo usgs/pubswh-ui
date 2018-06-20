@@ -1,48 +1,21 @@
-import Squire from 'squire';
-import Handlebars from 'handlebars';
 import $ from 'jquery';
-import * as jqueryUi from 'jquery-ui';
-import select2 from 'select2';
-import module from 'module';
-import stickit from 'backbone.stickit';
 
-import * as DynamicSelect2 from '../../../../scripts/manager/utils/DynamicSelect2';
-import BaseView from '../../../../scripts/manager/views/BaseView';
-import hbTemplate from '../../../../scripts/manager/hb_templates/contributorTabRow.hbs';
+import ContributorRowView from '../../../../scripts/manager/views/ContributorRowView';
 import PublicationContributorModel from '../../../../scripts/manager/models/PublicationContributorModel';
 import PublicationContributorCollection from '../../../../scripts/manager/models/PublicationContributorCollection';
 
 
 describe('ContributorRowView', function() {
+    var testView, testModel, testCollection;
 
-    var ContributorRowView, testView, testModel, testCollection;
-    var injector;
-
-    beforeEach(function(done) {
+    beforeEach(function() {
         $('body').append('<div id="test-div"></div>');
 
         testModel = new PublicationContributorModel();
         testCollection = new PublicationContributorCollection();
-
-        injector = new Squire();
-        injector.mock('handlebars', Handlebars);
-        injector.mock('jquery', $); // Needed to spy on select2
-        injector.mock('jquery-ui', jqueryUi);
-        injector.mock('select2', select2);
-        injector.mock('module', module);
-        injector.mock('backbone.stickit', stickit);
-        injector.mock('utils/DynamicSelect2', DynamicSelect2);
-        injector.mock('views/BaseView', BaseView);
-        injector.mock('hbs!hb_templates/contributorTabRow', hbTemplate);
-
-        injector.require(['views/ContributorRowView'], function(view) {
-            ContributorRowView = view;
-            done();
-        });
     });
 
     afterEach(function() {
-        injector.remove();
         testView.remove();
         $('#test-div').remove();
     });

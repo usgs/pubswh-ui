@@ -1,34 +1,24 @@
-import Squire from 'squire';
 import $ from 'jquery';
 
+import CatalogingView from '../../../../scripts/manager/views/CatalogingView';
 import PublicationModel from '../../../../scripts/manager/models/PublicationModel';
 
 
 describe('CatalogingView', function() {
-    var CatalogingView, testView;
+    var testView;
     var testModel;
-    var injector;
 
-    beforeEach(function(done) {
+    beforeEach(function() {
         $('body').append('<div id="test-div"></div>');
 
         testModel = new PublicationModel();
-
-        injector = new Squire();
-        injector.mock('jquery', $); // So we can spy on select2 and datetimepicker functions
-
-        injector.require(['views/CatalogingView'], function(view) {
-            CatalogingView = view;
-            testView = new CatalogingView({
-                el : '#test-div',
-                model : testModel
-            });
-            done();
+        testView = new CatalogingView({
+            el : '#test-div',
+            model : testModel
         });
     });
 
     afterEach(function() {
-        injector.remove();
         testView.remove();
         $('#test-div').remove();
     });

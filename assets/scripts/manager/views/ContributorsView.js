@@ -1,5 +1,7 @@
 import 'backbone.stickit';
 
+import _ from 'underscore';
+
 import ContributorTypeCollection from '../models/ContributorTypeCollection';
 import PublicationContributorCollection from '../models/PublicationContributorCollection';
 import BaseView from './BaseView';
