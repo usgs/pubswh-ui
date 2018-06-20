@@ -3,7 +3,6 @@ import _ from 'underscore';
 
 import AffiliationModel from '../../../../scripts/manager/models/AffiliationModel';
 import AlertView from '../../../../scripts/manager/views/AlertView';
-import LookupModel from '../../../../scripts/manager/models/LookupModel';
 import BaseView from '../../../../scripts/manager/views/BaseView';
 import CostCenterCollection from '../../../../scripts/manager/models/CostCenterCollection';
 import ManageAffiliationView from '../../../../scripts/manager/views/ManageAffiliationView';

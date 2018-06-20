@@ -5,7 +5,6 @@ import AlertView from '../../../../scripts/manager/views/AlertView';
 import ManagePublicationsView from '../../../../scripts/manager/views/ManagePublicationsView';
 import PublicationCollection from '../../../../scripts/manager/models/PublicationCollection';
 import PublicationListCollection from '../../../../scripts/manager/models/PublicationListCollection';
-import pubListTemplate from '../../../../scripts/manager/hb_templates/publicationListFilter.hbs';
 import SearchFilterRowView from '../../../../scripts/manager/views/SearchFilterRowView';
 import WarningDialogView from '../../../../scripts/manager/views/WarningDialogView';
 
@@ -20,7 +19,6 @@ describe('ManagePublicationsView', function() {
     var renderWarningDialogSpy;
     var renderSearchFilterRowViewSpy;
     var fetchDeferred, fetchListDeferred;
-    var pubListTemplateSpy;
 
     beforeEach(function () {
 
@@ -28,13 +26,9 @@ describe('ManagePublicationsView', function() {
         $testDiv = $('#test-div');
 
         renderWarningDialogSpy = jasmine.createSpy('renderWarningDialogSpy');
-
         renderSearchFilterRowViewSpy = jasmine.createSpy('renderSearchFilterRowViewSpy');
 
         fetchListDeferred = $.Deferred();
-
-        pubListTemplateSpy = jasmine.createSpy('pubListTemplateSpy').and.callFake(pubListTemplate);
-
         fetchDeferred = $.Deferred();
 
         testCollection = new PublicationCollection();
