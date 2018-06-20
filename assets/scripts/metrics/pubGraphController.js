@@ -2,8 +2,8 @@ import { batchFetchMonthlyPastYear, batchFetchPast30Days } from './analyticsData
 import { createGraph } from './analyticsGraph';
 
 
-var DAY_FORMAT = 'MMM DD YYYY';
-var MONTH_FORMAT = 'MMM YYYY';
+const DAY_FORMAT = 'MMM DD YYYY';
+const MONTH_FORMAT = 'MMM YYYY';
 
 var pageURI = '/publication/' + CONFIG.PUBSID;
 
