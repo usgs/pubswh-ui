@@ -1,36 +1,40 @@
 import 'bootstrap';
 
-import Squire from 'squire';
 import $ from 'jquery';
 
-import BaseView from '../../../../scripts/manager/views/BaseView';
+import AlertView from '../../../../scripts/manager/views/AlertView';
+import BibliodataView from '../../../../scripts/manager/views/BibliodataView';
+import CatalogingView from '../../../../scripts/manager/views/CatalogingView';
+import ConfirmationDialogView from '../../../../scripts/manager/views/ConfirmationDialogView';
+import ContributorsView from '../../../../scripts/manager/views/ContributorsView';
+import GeospatialView from '../../../../scripts/manager/views/GeospatialView';
+import LinksView from '../../../../scripts/manager/views/LinksView';
+import LoginDialogView from '../../../../scripts/manager/views/LoginDialogView';
 import PublicationModel from '../../../../scripts/manager/models/PublicationModel';
+import PublicationView from '../../../../scripts/manager/views/PublicationView';
+import SPNView from '../../../../scripts/manager/views/SPNView';
 
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;  // Set to 20 seconds. Seems to need a larger timeout interval when
 
 // running on Jenkins.
 describe('PublicationView', function(){
-    var PublicationView;
     var testView;
 
-    var setElAlertSpy, renderAlertSpy, removeAlertSpy, dangerAlertSpy, successAlertSpy;
-    var setElLoginDialogSpy, renderLoginDialogSpy, removeLoginDialogSpy, showLoginDialogSpy;
-    var setElDialogSpy, renderDialogSpy, removeDialogSpy, showDialogSpy;
-    var setElBibliodataSpy, renderBibliodataSpy, removeBibliodataSpy, findElBibliodataSpy;
-    var setElLinksSpy, renderLinksSpy, removeLinksSpy, findElLinksSpy;
-    var setElContributorsSpy, renderContributorsSpy, removeContributorsSpy, findElContributorsSpy;
-    var setElSPNSpy, renderSPNSpy, removeSPNSpy, findElSPNSpy;
-    var setElCatalogingSpy, renderCatalogingSpy, removeCatalogingSpy, findElCatalogingSpy;
-    var setElGeospatialSpy, renderGeospatialSpy, removeGeospatialSpy, findElGeospatialSpy;
+    var renderLoginDialogSpy;
+    var renderDialogSpy;
+    var renderBibliodataSpy;
+    var renderLinksSpy;
+    var renderContributorsSpy;
+    var renderSPNSpy;
+    var renderCatalogingSpy;
+    var renderGeospatialSpy;
     var initTinyMceDeferred;
 
     var pubModel;
     var opDeferred;
 
-    var injector;
-
-    beforeEach(function(done) {
+    beforeEach(function() {
         $('body').append('<div id="test-div"></div>');
 
         opDeferred = $.Deferred();
@@ -43,149 +47,77 @@ describe('PublicationView', function(){
         spyOn(pubModel, 'publish').and.returnValue(opDeferred.promise());
         spyOn(pubModel, 'destroy').and.returnValue(opDeferred.promise());
 
-        setElAlertSpy = jasmine.createSpy('setElAlertSpy');
-        renderAlertSpy = jasmine.createSpy('renderAlertSpy');
-        removeAlertSpy = jasmine.createSpy('removeAlertSpy');
-        dangerAlertSpy = jasmine.createSpy('dangerAlertSpy');
-        successAlertSpy = jasmine.createSpy('successAlertSpy');
-
-        setElLoginDialogSpy = jasmine.createSpy('setElLoginDialogSpy');
-        renderLoginDialogSpy = jasmine.createSpy('renderLoginDialogSpy');
-        removeLoginDialogSpy = jasmine.createSpy('removeLoginDialogSpy');
-        showLoginDialogSpy = jasmine.createSpy('showLoginDialogSpy');
-
-        setElDialogSpy = jasmine.createSpy('setElDialogSpy');
         renderDialogSpy = jasmine.createSpy('renderDialogSpy');
-        removeDialogSpy = jasmine.createSpy('removeDialogSpy');
-        showDialogSpy = jasmine.createSpy('showDialogSpy');
-
-        setElBibliodataSpy = jasmine.createSpy('setElBibliodataSpy');
+        renderLoginDialogSpy = jasmine.createSpy('renderLoginDialogSpy');
         renderBibliodataSpy = jasmine.createSpy('renderBibliodataSpy');
-        removeBibliodataSpy = jasmine.createSpy('removeBibliodataSpy');
-        findElBibliodataSpy = jasmine.createSpy('findElBibliodataSpy').and.returnValue({
-            tooltip : jasmine.createSpy()
-        });
-
-        setElLinksSpy = jasmine.createSpy('setElLinksdataSpy');
         renderLinksSpy = jasmine.createSpy('renderLinksSpy');
-        removeLinksSpy = jasmine.createSpy('removeLinksSpy');
-        findElLinksSpy = jasmine.createSpy('findElLinksSpy').and.returnValue({
-            tooltip : jasmine.createSpy()
-        });
-
-        setElContributorsSpy = jasmine.createSpy('setElContributorsSpy');
         renderContributorsSpy = jasmine.createSpy('renderContributorsSpy');
-        removeContributorsSpy = jasmine.createSpy('removeContributorsSpy');
-        findElContributorsSpy = jasmine.createSpy('findElContributorsSpy').and.returnValue({
-            tooltip : jasmine.createSpy()
-        });
-
-        setElSPNSpy = jasmine.createSpy('setElSPNdataSpy');
         renderSPNSpy = jasmine.createSpy('renderSPNSpy');
-        removeSPNSpy = jasmine.createSpy('removeSPNSpy');
-        findElSPNSpy = jasmine.createSpy('findElSPNSpy').and.returnValue({
-            tooltip : jasmine.createSpy()
-        });
-
-        setElCatalogingSpy = jasmine.createSpy('setElCatalogingdataSpy');
         renderCatalogingSpy = jasmine.createSpy('renderCatalogingSpy');
-        removeCatalogingSpy = jasmine.createSpy('removeCatalogingSpy');
-        findElCatalogingSpy = jasmine.createSpy('findElCatalogingSpy').and.returnValue({
-            tooltip : jasmine.createSpy()
-        });
-
-        setElGeospatialSpy = jasmine.createSpy('setElGeospatialdataSpy');
         renderGeospatialSpy = jasmine.createSpy('renderGeospatialSpy');
-        removeGeospatialSpy = jasmine.createSpy('removeGeospatialSpy');
-        findElGeospatialSpy = jasmine.createSpy('findElGeospatialpy').and.returnValue({
+
+        var mockJquery = {
             tooltip : jasmine.createSpy()
+        };
+
+        spyOn(AlertView.prototype, 'setElement');
+        spyOn(AlertView.prototype, 'render');
+        spyOn(AlertView.prototype, 'remove');
+        spyOn(AlertView.prototype, 'showDangerAlert');
+        spyOn(AlertView.prototype, 'showSuccessAlert');
+        spyOn(LoginDialogView.prototype, 'setElement').and.returnValue({
+            render : renderLoginDialogSpy
         });
-
-
-        injector = new Squire();
-        injector.mock('jquery', $);
-        injector.mock('views/AlertView', BaseView.extend({
-            setElement : setElAlertSpy,
-            render : renderAlertSpy,
-            remove : removeAlertSpy,
-            showDangerAlert : dangerAlertSpy,
-            showSuccessAlert : successAlertSpy
-        }));
-        injector.mock('views/LoginDialogView', BaseView.extend({
-            setElement : setElLoginDialogSpy.and.returnValue({
-                render : renderLoginDialogSpy
-            }),
-            render : renderLoginDialogSpy,
-            remove : removeLoginDialogSpy,
-            show : showLoginDialogSpy
-        }));
-        injector.mock('views/ConfirmationDialogView', BaseView.extend({
-            setElement : setElDialogSpy.and.returnValue({
-                render : renderDialogSpy
-            }),
-            render : renderDialogSpy,
-            remove : removeDialogSpy,
-            show : showDialogSpy
-        }));
-        injector.mock('views/BibliodataView', BaseView.extend({
-            setElement : setElBibliodataSpy.and.returnValue({
-                render : renderBibliodataSpy
-            }),
-            render : renderBibliodataSpy,
-            remove : removeBibliodataSpy,
-            $ : findElBibliodataSpy,
-            initializeTinyMce : jasmine.createSpy('initializeTinyMceBibliodataView').and.returnValue(initTinyMceDeferred.promise())
-        }));
-        injector.mock('views/LinksView', BaseView.extend({
-            setElement : setElLinksSpy.and.returnValue({
-                render : renderLinksSpy
-            }),
-            render : renderLinksSpy,
-            remove : removeLinksSpy,
-            $ : findElLinksSpy
-        }));
-        injector.mock('views/ContributorsView', BaseView.extend({
-            setElement : setElContributorsSpy.and.returnValue({
-                render : renderContributorsSpy
-            }),
-            render : renderContributorsSpy,
-            remove : removeContributorsSpy,
-            $ : findElContributorsSpy
-        }));
-        injector.mock('views/SPNView', BaseView.extend({
-            setElement : setElSPNSpy.and.returnValue({
-                render : renderSPNSpy
-            }),
-            render : renderSPNSpy,
-            remove : removeSPNSpy,
-            $ : findElSPNSpy,
-            initializeTinyMce : jasmine.createSpy('initializeTinyMceSPNView').and.returnValue(initTinyMceDeferred.promise())
-        }));
-        injector.mock('views/CatalogingView', BaseView.extend({
-            setElement : setElCatalogingSpy.and.returnValue({
-                render : renderCatalogingSpy
-            }),
-            render : renderCatalogingSpy,
-            remove : removeCatalogingSpy,
-            $ : findElCatalogingSpy
-        }));
-        injector.mock('views/GeospatialView', BaseView.extend({
-            setElement : setElGeospatialSpy.and.returnValue({
-                render : renderGeospatialSpy
-            }),
-            render : renderGeospatialSpy,
-            remove : removeGeospatialSpy,
-            $ : findElGeospatialSpy
-        }));
-
-        injector.require(['views/PublicationView'], function(view){
-            PublicationView = view;
-            done();
+        spyOn(LoginDialogView.prototype, 'render').and.callFake(renderLoginDialogSpy);
+        spyOn(LoginDialogView.prototype, 'remove');
+        spyOn(LoginDialogView.prototype, 'show');
+        spyOn(ConfirmationDialogView.prototype, 'setElement').and.returnValue({
+            render : renderDialogSpy
         });
+        spyOn(ConfirmationDialogView.prototype, 'render').and.callFake(renderDialogSpy);
+        spyOn(ConfirmationDialogView.prototype, 'remove');
+        spyOn(ConfirmationDialogView.prototype, 'show');
+        spyOn(BibliodataView.prototype, 'setElement').and.returnValue({
+            render : renderBibliodataSpy
+        });
+        spyOn(BibliodataView.prototype, 'render').and.callFake(renderBibliodataSpy);
+        spyOn(BibliodataView.prototype, 'remove');
+        spyOn(BibliodataView.prototype, 'initializeTinyMce').and.returnValue(initTinyMceDeferred.promise());
+        spyOn(BibliodataView.prototype, '$').and.returnValue(mockJquery);
+        spyOn(LinksView.prototype, 'setElement').and.returnValue({
+            render : renderLinksSpy
+        });
+        spyOn(LinksView.prototype, 'render').and.callFake(renderLinksSpy);
+        spyOn(LinksView.prototype, 'remove');
+        spyOn(LinksView.prototype, '$').and.returnValue(mockJquery);
+        spyOn(ContributorsView.prototype, 'setElement').and.returnValue({
+            render : renderContributorsSpy
+        });
+        spyOn(ContributorsView.prototype, 'render').and.callFake(renderContributorsSpy);
+        spyOn(ContributorsView.prototype, 'remove');
+        spyOn(ContributorsView.prototype, '$').and.returnValue(mockJquery);
+        spyOn(SPNView.prototype, 'setElement').and.returnValue({
+            render : renderSPNSpy
+        });
+        spyOn(SPNView.prototype, 'render').and.callFake(renderSPNSpy);
+        spyOn(SPNView.prototype, 'remove');
+        spyOn(SPNView.prototype, 'initializeTinyMce').and.returnValue(initTinyMceDeferred.promise());
+        spyOn(SPNView.prototype, '$').and.returnValue(mockJquery);
+        spyOn(CatalogingView.prototype, 'setElement').and.returnValue({
+            render : renderCatalogingSpy
+        });
+        spyOn(CatalogingView.prototype, 'render').and.callFake(renderCatalogingSpy);
+        spyOn(CatalogingView.prototype, 'remove');
+        spyOn(CatalogingView.prototype, '$').and.returnValue(mockJquery);
+        spyOn(GeospatialView.prototype, 'setElement').and.returnValue({
+            render : renderGeospatialSpy
+        });
+        spyOn(GeospatialView.prototype, 'render').and.callFake(renderGeospatialSpy);
+        spyOn(GeospatialView.prototype, 'remove');
+        spyOn(GeospatialView.prototype, '$').and.returnValue(mockJquery);
     });
 
     afterEach(function() {
-        injector.remove();
         testView.remove();
         $('#test-div').remove();
     });
@@ -215,47 +147,47 @@ describe('PublicationView', function(){
                 el : '#test-div'
             }).render();
 
-            expect(setElAlertSpy.calls.count()).toBe(2);
-            expect(renderAlertSpy).not.toHaveBeenCalled();
-            expect(setElLoginDialogSpy.calls.count()).toBe(2);
+            expect(AlertView.prototype.setElement.calls.count()).toBe(2);
+            expect(AlertView.prototype.render).not.toHaveBeenCalled();
+            expect(LoginDialogView.prototype.setElement.calls.count()).toBe(2);
             expect(renderLoginDialogSpy).toHaveBeenCalled();
-            expect(setElDialogSpy.calls.count()).toBe(2);
+            expect(ConfirmationDialogView.prototype.setElement.calls.count()).toBe(2);
             expect(renderDialogSpy).toHaveBeenCalled();
         });
 
-        it('Expects the child tab views to not be rendered until a successful fetch occurs', function() {
+        fit('Expects the child tab views to not be rendered until a successful fetch occurs', function() {
             pubModel.set('id', 1234);
             testView = new PublicationView({
                 model : pubModel,
                 el : '#test-div'
             }).render();
 
-            expect(setElBibliodataSpy.calls.count()).toBe(1);
+            expect(BibliodataView.prototype.setElement.calls.count()).toBe(1);
             expect(renderBibliodataSpy).not.toHaveBeenCalled();
-            expect(setElLinksSpy.calls.count()).toBe(1);
+            expect(LinksView.prototype.setElement.calls.count()).toBe(1);
             expect(renderLinksSpy).not.toHaveBeenCalled();
-            expect(setElContributorsSpy.calls.count()).toBe(1);
+            expect(ContributorsView.prototype.setElement.calls.count()).toBe(1);
             expect(renderContributorsSpy).not.toHaveBeenCalled();
-            expect(setElSPNSpy.calls.count()).toBe(1);
+            expect(SPNView.prototype.setElement.calls.count()).toBe(1);
             expect(renderSPNSpy).not.toHaveBeenCalled();
-            expect(setElCatalogingSpy.calls.count()).toBe(1);
+            expect(CatalogingView.prototype.setElement.calls.count()).toBe(1);
             expect(renderCatalogingSpy).not.toHaveBeenCalled();
-            expect(setElGeospatialSpy.calls.count()).toBe(1);
+            expect(GeospatialView.prototype.setElement.calls.count()).toBe(1);
             expect(renderGeospatialSpy).not.toHaveBeenCalled();
 
             opDeferred.resolve();
 
-            expect(setElBibliodataSpy.calls.count()).toBe(2);
+            expect(BibliodataView.prototype.setElement.calls.count()).toBe(2);
             expect(renderBibliodataSpy).toHaveBeenCalled();
-            expect(setElLinksSpy.calls.count()).toBe(2);
+            expect(LinksView.prototype.setElement.calls.count()).toBe(2);
             expect(renderLinksSpy).toHaveBeenCalled();
-            expect(setElContributorsSpy.calls.count()).toBe(2);
+            expect(ContributorsView.prototype.setElement.calls.count()).toBe(2);
             expect(renderContributorsSpy).toHaveBeenCalled();
-            expect(setElSPNSpy.calls.count()).toBe(2);
+            expect(SPNView.prototype.setElement.calls.count()).toBe(2);
             expect(renderSPNSpy).toHaveBeenCalled();
-            expect(setElCatalogingSpy.calls.count()).toBe(2);
+            expect(CatalogingView.prototype.setElement.calls.count()).toBe(2);
             expect(renderCatalogingSpy).toHaveBeenCalled();
-            expect(setElGeospatialSpy.calls.count()).toBe(2);
+            expect(GeospatialView.prototype.setElement.calls.count()).toBe(2);
             expect(renderGeospatialSpy).toHaveBeenCalled();
         });
 
@@ -266,7 +198,7 @@ describe('PublicationView', function(){
                 el : '#test-div'
             }).render();
             opDeferred.resolve();
-            expect(dangerAlertSpy).not.toHaveBeenCalled();
+            expect(AlertView.prototype.showDangerAlert).not.toHaveBeenCalled();
         });
 
         it('Expects a failed fetch to show an alert but not to show the tab views', function() {
@@ -276,7 +208,7 @@ describe('PublicationView', function(){
                 el : '#test-div'
             }).render();
             opDeferred.reject({status : 500, statusText : 'Error text'});
-            expect(dangerAlertSpy).toHaveBeenCalled();
+            expect(AlertView.prototype.showDangerAlert).toHaveBeenCalled();
             expect(renderBibliodataSpy).not.toHaveBeenCalled();
             expect(renderLinksSpy).not.toHaveBeenCalled();
             expect(renderContributorsSpy).not.toHaveBeenCalled();
@@ -302,7 +234,7 @@ describe('PublicationView', function(){
                 model : pubModel,
                 el : '#test-div'
             }).render();
-            expect(dangerAlertSpy).not.toHaveBeenCalled();
+            expect(AlertView.prototype.showDangerAlert).not.toHaveBeenCalled();
         });
     });
 
@@ -313,15 +245,15 @@ describe('PublicationView', function(){
                 el : '#test-div'
             });
             testView.remove();
-            expect(removeAlertSpy).toHaveBeenCalled();
-            expect(removeLoginDialogSpy).toHaveBeenCalled();
-            expect(removeDialogSpy).toHaveBeenCalled();
-            expect(removeBibliodataSpy).toHaveBeenCalled();
-            expect(removeLinksSpy).toHaveBeenCalled();
-            expect(removeContributorsSpy).toHaveBeenCalled();
-            expect(removeSPNSpy).toHaveBeenCalled();
-            expect(removeCatalogingSpy).toHaveBeenCalled();
-            expect(removeGeospatialSpy).toHaveBeenCalled();
+            expect(AlertView.prototype.remove).toHaveBeenCalled();
+            expect(LoginDialogView.prototype.remove).toHaveBeenCalled();
+            expect(ConfirmationDialogView.prototype.remove).toHaveBeenCalled();
+            expect(BibliodataView.prototype.remove).toHaveBeenCalled();
+            expect(LinksView.prototype.remove).toHaveBeenCalled();
+            expect(ContributorsView.prototype.remove).toHaveBeenCalled();
+            expect(SPNView.prototype.remove).toHaveBeenCalled();
+            expect(CatalogingView.prototype.remove).toHaveBeenCalled();
+            expect(GeospatialView.prototype.remove).toHaveBeenCalled();
         });
     });
 
@@ -386,16 +318,16 @@ describe('PublicationView', function(){
 
         it('Expects that if release fails an alert is shown', function() {
             testView.releasePub();
-            expect(dangerAlertSpy).not.toHaveBeenCalled();
+            expect(AlertView.prototype.showDangerAlert).not.toHaveBeenCalled();
             opDeferred.reject('Error message');
-            expect(dangerAlertSpy).toHaveBeenCalled();
+            expect(AlertView.prototype.showDangerAlert).toHaveBeenCalled();
         });
 
         it('Expects that if release fails with a status of 401, the loginDialogView is shown', function() {
             testView.releasePub();
-            expect(showLoginDialogSpy).not.toHaveBeenCalled();
+            expect(LoginDialogView.prototype.show).not.toHaveBeenCalled();
             opDeferred.reject({status : 401});
-            expect(showLoginDialogSpy).toHaveBeenCalled();
+            expect(LoginDialogView.prototype.show).toHaveBeenCalled();
         });
     });
 
@@ -410,36 +342,36 @@ describe('PublicationView', function(){
 
         it('Expects that if the save succeeds a success alert is shown', function() {
             testView.savePub();
-            expect(successAlertSpy).not.toHaveBeenCalled();
+            expect(AlertView.prototype.showSuccessAlert).not.toHaveBeenCalled();
             opDeferred.resolve();
-            expect(successAlertSpy).toHaveBeenCalled();
+            expect(AlertView.prototype.showSuccessAlert).toHaveBeenCalled();
         });
 
         it('Expects that if the save contains validation errors, the model is updated with the errors and a danger alert is shown', function() {
             testView.savePub();
-            expect(dangerAlertSpy).not.toHaveBeenCalled();
+            expect(AlertView.prototype.showDangerAlert).not.toHaveBeenCalled();
             opDeferred.reject({
                 responseJSON: {
                     validationErrors: ['One error']
                 }
             });
             expect(pubModel.get('validationErrors')).toEqual(['One error']);
-            expect(dangerAlertSpy).toHaveBeenCalled();
+            expect(AlertView.prototype.showDangerAlert).toHaveBeenCalled();
         });
 
         it('Expects that if the save fails without validation errors, the model is not updated and the danger alert is shown', function() {
             testView.savePub();
-            expect(dangerAlertSpy).not.toHaveBeenCalled();
+            expect(AlertView.prototype.showDangerAlert).not.toHaveBeenCalled();
             opDeferred.reject({}, 'error', 'Server error');
             expect(pubModel.has('validationErrors')).toBe(false);
-            expect(dangerAlertSpy).toHaveBeenCalled();
+            expect(AlertView.prototype.showDangerAlert).toHaveBeenCalled();
         });
 
         it('Expects that if the save fails with a 401 status, the loginDialog is shown', function() {
             testView.savePub();
-            expect(showLoginDialogSpy).not.toHaveBeenCalled();
+            expect(LoginDialogView.prototype.show).not.toHaveBeenCalled();
             opDeferred.reject({status : 401});
-            expect(showLoginDialogSpy).toHaveBeenCalled();
+            expect(LoginDialogView.prototype.show).toHaveBeenCalled();
         });
     });
 
@@ -465,13 +397,13 @@ describe('PublicationView', function(){
         it('Expects a failed call to save to not call the confirmation dialog or the model\'s publish', function() {
             testView.publishPub();
             savePubDeferred.reject('an error');
-            expect(showDialogSpy).not.toHaveBeenCalled();
+            expect(ConfirmationDialogView.prototype.show).not.toHaveBeenCalled();
         });
 
         it('Expects a successful call to save to call the confirmation dialog', function() {
             testView.publishPub();
             savePubDeferred.resolve();
-            expect(showDialogSpy).toHaveBeenCalled();
+            expect(ConfirmationDialogView.prototype.show).toHaveBeenCalled();
         });
 
         describe('Tests for publishing a pub where the save has already worked', function() {
@@ -480,7 +412,7 @@ describe('PublicationView', function(){
                 testView.publishPub();
                 savePubDeferred.resolve();
 
-                actionCallback = showDialogSpy.calls.argsFor(0)[1];
+                actionCallback = ConfirmationDialogView.prototype.show.calls.argsFor(0)[1];
                 //This mocks what would happen if the confirmation dialog is confirmed.
                 actionCallback();
             });
@@ -497,13 +429,13 @@ describe('PublicationView', function(){
 
             it('Expects that if publish fails, the danger alert is shown', function() {
                 opDeferred.reject('Has error');
-                expect(dangerAlertSpy).toHaveBeenCalled();
+                expect(AlertView.prototype.showDangerAlert).toHaveBeenCalled();
             });
 
             it('Expects a failed call with a status of 401 shows the login dialog', function() {
-                expect(showLoginDialogSpy).not.toHaveBeenCalled();
+                expect(LoginDialogView.prototype.show).not.toHaveBeenCalled();
                 opDeferred.reject({status : 401});
-                expect(showLoginDialogSpy).toHaveBeenCalled();
+                expect(LoginDialogView.prototype.show).toHaveBeenCalled();
             });
         });
     });
@@ -526,14 +458,14 @@ describe('PublicationView', function(){
         it('Expects the confirmation dialog to be shown if the publication is not new', function() {
             pubModel.set('id', 1234);
             testView.deletePub();
-            expect(showDialogSpy).toHaveBeenCalled();
+            expect(ConfirmationDialogView.prototype.show).toHaveBeenCalled();
         });
 
         it('Expects the action callback to delete the publication', function() {
             var actionCallback;
             pubModel.set('id', 1234);
             testView.deletePub();
-            actionCallback = showDialogSpy.calls.argsFor(0)[1];
+            actionCallback = ConfirmationDialogView.prototype.show.calls.argsFor(0)[1];
             // This mocks what would happen if the confirmation dialog is confirmed.
             actionCallback();
             expect(pubModel.destroy).toHaveBeenCalled();
@@ -543,7 +475,7 @@ describe('PublicationView', function(){
             var actionCallback;
             pubModel.set('id', 1234);
             testView.deletePub();
-            actionCallback = showDialogSpy.calls.argsFor(0)[1];
+            actionCallback = ConfirmationDialogView.prototype.show.calls.argsFor(0)[1];
             // This mocks what would happen if the confirmation dialog is confirmed.
             actionCallback();
 
@@ -555,7 +487,7 @@ describe('PublicationView', function(){
             var actionCallback;
             pubModel.set('id', 1234);
             testView.deletePub();
-            actionCallback = showDialogSpy.calls.argsFor(0)[1];
+            actionCallback = ConfirmationDialogView.prototype.show.calls.argsFor(0)[1];
             // This mocks what would happen if the confirmation dialog is confirmed.
             actionCallback();
 
@@ -563,20 +495,20 @@ describe('PublicationView', function(){
                 statusText : 'Delete error'
             });
 
-            expect(dangerAlertSpy).toHaveBeenCalled();
+            expect(AlertView.prototype.showDangerAlert).toHaveBeenCalled();
         });
 
         it('Expects a failed delete with a status of 401 shows the login dialog', function() {
             var actionCallback;
             pubModel.set('id', 1234);
             testView.deletePub();
-            actionCallback = showDialogSpy.calls.argsFor(0)[1];
+            actionCallback = ConfirmationDialogView.prototype.show.calls.argsFor(0)[1];
             // This mocks what would happen if the confirmation dialog is confirmed.
             actionCallback();
 
-            expect(showLoginDialogSpy).not.toHaveBeenCalled();
+            expect(LoginDialogView.prototype.show).not.toHaveBeenCalled();
             opDeferred. reject({status : 401});
-            expect(showLoginDialogSpy).toHaveBeenCalled();
+            expect(LoginDialogView.prototype.show).toHaveBeenCalled();
         });
     });
 });

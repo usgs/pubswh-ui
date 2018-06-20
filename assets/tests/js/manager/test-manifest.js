@@ -26,6 +26,6 @@ require('./views/LoginDialogViewSpec');
 require('./views/ManageAffiliationViewSpec');
 require('./views/ManageContributorsViewSpec');
 require('./views/ManagePublicationViewSpec');
-// require('./views/PublicationViewSpec');
+require('./views/PublicationViewSpec');
 // require('./views/SearchFilterRowViewSpec');
 // require('./views/SPNViewSpec');

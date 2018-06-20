@@ -60,6 +60,7 @@ export default BaseView.extend({
 
     render : function() {
         var self = this;
+
         BaseView.prototype.render.apply(this, arguments);
         this.updateIndexId(this.model, this.model.get('indexId'));
 
