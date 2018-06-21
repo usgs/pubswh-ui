@@ -4,8 +4,6 @@
  */
 
 const bowerResolve = require('rollup-plugin-bower-resolve');
-const lookup = require('module-lookup-amd');
-const amd = require('rollup-plugin-amd');
 const buble = require('rollup-plugin-buble');
 const commonjs = require('rollup-plugin-commonjs');
 var handlebars = require('rollup-plugin-handlebars-plus');
@@ -85,19 +83,6 @@ const getBundleConfig = function (src, dest) {
                     'loglevel': 'dist/loglevel.min.js'
                 }
             }),
-            amd({
-                include: 'scripts/manager/**',
-                exclude: [
-                    'node_modules/**'
-                ],
-                rewire: function (moduleId, parentPath) {
-                    return lookup({
-                        partial: moduleId,
-                        filename: parentPath,
-                        config: requireJSConfig  // eslint-disable-line no-use-before-define
-                    });
-                }
-            }),
             commonjs(),
             handlebars({
                 handlebars: {
@@ -131,77 +116,6 @@ const getBundleConfig = function (src, dest) {
         },
         treeshake: ENV === 'production'
     };
-};
-
-const requireJSConfig = {
-    config: {
-    },
-    baseUrl: './scripts/manager',
-    paths: {
-        'jquery': 'bower_components/jquery/dist/jquery.js',
-        'jquery-ui': 'bower_components/jquery-ui/jquery-ui.js',
-        'select2': 'bower_components/select2/dist/js/select2.full.js',
-        'tinymce': 'bower_components/tinymce/tinymce.js',
-        'bootstrap': 'bower_components/bootstrap/dist/js/bootstrap.js',
-        'text': 'bower_components/text/text.js',
-        'underscore': 'bower_components/underscore/underscore.js',
-        'backbone': 'bower_components/backbone/backbone.js',
-        'backbone.paginator': 'bower_components/backbone.paginator/lib/backbone.paginator.js',
-        'backgrid': 'bower_components/backgrid/lib/backgrid.js',
-        'backgrid-select-all': 'bower_components/backgrid-select-all/backgrid-select-all.js',
-        'backgrid-paginator': 'bower_components/backgrid-paginator/backgrid-paginator.js',
-        'handlebars': 'bower_components/handlebars/handlebars.amd.js',
-        'hbs': 'bower_components/requirejs-hbs/hbs.js',
-        'backbone.stickit': 'bower_components/backbone.stickit/backbone.stickit.js',
-        'moment': 'bower_components/moment/min/moment.min.js',
-        'datetimepicker': 'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-        'loglevel': 'bower_components/loglevel/dist/loglevel.min.js'
-    },
-    shim: {
-        'select2': ['jquery'],
-        'bootstrap': ['jquery', 'jquery-ui'],  // Need to do this so jquery-ui is loaded first
-        'jquery-ui': {
-            deps: ['jquery'],
-            init: function() {
-                $.widget.bridge('uibutton', $.ui.button);
-                $.widget.bridge('uitooltip', $.ui.tooltip);
-            }
-        },
-        'backbone': {
-            deps: ['jquery', 'underscore'],
-            exports: 'Backbone'
-        },
-        'backbone.paginator': {
-            deps: ['underscore','backbone']
-        },
-        'backgrid': {
-            deps: ['jquery', 'underscore', 'backbone'],
-            exports: 'Backgrid'
-        },
-        'backgrid-select-all': {
-            deps: ['backgrid', 'backbone']
-        },
-        'backgrid-paginator': {
-            deps: ['backbone.paginator', 'backgrid']
-        },
-        'backbone.stickit': ['backbone', 'underscore'],
-        'datetimepicker': ['jquery', 'moment', 'bootstrap'],
-        'handlebars': {
-            exports: 'Handlebars'
-        },
-        'tinymce': {
-            exports: 'tinymce',
-            init: function () {
-                this.tinymce.DOM.events.domLoaded = true;
-                return this.tinymce;
-            }
-        }
-    },
-    packages: [{
-        name: 'hbs',
-        location: 'bower_components/requirejs-hbs/hbs.js',
-        main: 'hbs'
-    }]
 };
 
 module.exports = [
