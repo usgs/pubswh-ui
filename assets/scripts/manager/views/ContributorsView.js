@@ -1,83 +1,82 @@
-define([
-    'bootstrap',
-    'backbone.stickit',
-    'models/ContributorTypeCollection',
-    'models/PublicationContributorCollection',
-    'views/BaseView',
-    'views/ContributorTabView',
-    'hbs!hb_templates/contributors'
-], function(bootstrap, stickit, ContributorTypeCollection, PublicationContributorCollection, BaseView, ContributorTabView, hbTemplate) {
-        var view = BaseView.extend({
+import 'backbone.stickit';
 
-        events : {
-            'click .contributor-types-tabs' : 'showTab'
-        },
+import _ from 'underscore';
 
-        bindings : {
-            '#no-usgs-authors-input' : 'noUsgsAuthors'
-        },
+import ContributorTypeCollection from '../models/ContributorTypeCollection';
+import PublicationContributorCollection from '../models/PublicationContributorCollection';
+import BaseView from './BaseView';
+import ContributorTabView from './ContributorTabView';
+import hbTemplate from '../hb_templates/contributors.hbs';
 
-        template : hbTemplate,
 
-        /*
-         * @constructs
-         * @param {Object} options
-         *     @prop {String} el - jquery selector where this view is rendered
-         *     @prop {Backbone.Model} model - assumes that model be a PublicationModel
-         */
-        initialize : function() {
-            var self = this;
-            var contributors = this.model.get('contributors');
-            var fetchDeferred = $.Deferred();
-            BaseView.prototype.initialize.apply(this, arguments);
+export default BaseView.extend({
 
-            this.contributorTypeCollection = new ContributorTypeCollection();
-            this.contributorTypeCollection.fetch().always(function() {
-                self.typeTabViews = self.contributorTypeCollection.map(function(model) {
-                    var typeProp = model.attributes.text.toLowerCase();
-                    if (!contributors.has(typeProp)) {
-                        contributors.set(typeProp, new PublicationContributorCollection());
-                    }
+    events : {
+        'click .contributor-types-tabs' : 'showTab'
+    },
 
-                    return {
-                        el : '#type-' + model.get('id') + '-pane',
-                        view : new ContributorTabView({
-                            collection : contributors.get(typeProp),
-                            contributorType : model.attributes,
-                            el : '#type-' + model.get('id') + '-pane'
-                        })
-                    };
-                });
+    bindings : {
+        '#no-usgs-authors-input' : 'noUsgsAuthors'
+    },
 
-                fetchDeferred.resolve();
+    template : hbTemplate,
+
+    /*
+     * @constructs
+     * @param {Object} options
+     *     @prop {String} el - jquery selector where this view is rendered
+     *     @prop {Backbone.Model} model - assumes that model be a PublicationModel
+     */
+     initialize : function() {
+        var self = this;
+        var contributors = this.model.get('contributors');
+        var fetchDeferred = $.Deferred();
+        BaseView.prototype.initialize.apply(this, arguments);
+
+        this.contributorTypeCollection = new ContributorTypeCollection();
+        this.contributorTypeCollection.fetch().always(function() {
+            self.typeTabViews = self.contributorTypeCollection.map(function(model) {
+                var typeProp = model.attributes.text.toLowerCase();
+                if (!contributors.has(typeProp)) {
+                    contributors.set(typeProp, new PublicationContributorCollection());
+                }
+
+                return {
+                    el : '#type-' + model.get('id') + '-pane',
+                    view : new ContributorTabView({
+                        collection : contributors.get(typeProp),
+                        contributorType : model.attributes,
+                        el : '#type-' + model.get('id') + '-pane'
+                    })
+                };
             });
-            this.createTabViewsPromise = fetchDeferred.promise();
-        },
 
-        render : function() {
-            var self = this;
-            this.createTabViewsPromise.done(function() {
-                self.context.contributorTypes = self.contributorTypeCollection.toJSON();
-                BaseView.prototype.render.apply(self, arguments);
-                self.stickit();
-                _.each(self.typeTabViews, function(tab) {
-                    tab.view.setElement(tab.el).render();
-                });
+            fetchDeferred.resolve();
+        });
+        this.createTabViewsPromise = fetchDeferred.promise();
+    },
+
+    render : function() {
+        var self = this;
+        this.createTabViewsPromise.done(function() {
+            self.context.contributorTypes = self.contributorTypeCollection.toJSON();
+            BaseView.prototype.render.apply(self, arguments);
+            self.stickit();
+            _.each(self.typeTabViews, function(tab) {
+                tab.view.setElement(tab.el).render();
             });
-        },
+        });
+    },
 
-        remove : function() {
-            _.each(this.typeTabViews, function(tab) {
-                tab.view.remove();
-            });
-            BaseView.prototype.remove.apply(this, arguments);
-        },
+    remove : function() {
+        _.each(this.typeTabViews, function(tab) {
+            tab.view.remove();
+        });
+        BaseView.prototype.remove.apply(this, arguments);
+    },
 
-        showTab : function(ev) {
-            ev.preventDefault();
-            this.$('.contributor-types-tabs').tab('show');
-        }
-    });
-
-    return view;
+    showTab : function(ev) {
+        ev.preventDefault();
+        this.$('.contributor-types-tabs').tab('show');
+    }
 });

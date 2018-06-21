@@ -3,6 +3,7 @@
  * NOTE: This is a CommonJS module so it can be imported by Karma.
  */
 
+const bowerResolve = require('rollup-plugin-bower-resolve');
 const buble = require('rollup-plugin-buble');
 const commonjs = require('rollup-plugin-commonjs');
 var handlebars = require('rollup-plugin-handlebars-plus');
@@ -38,11 +39,55 @@ const getBundleConfig = function (src, dest) {
                 browser: false  // Default: false
             }),
             json(),
+            bowerResolve({
+                // The working directory to use with bower (i.e the directory where
+                // the `bower.json` is stored).
+                // Default is `process.cwd()`.
+                //cwd: '/tmp',
+
+                // Use `bower` offline.
+                // Default is `true`.
+                //offline: false,
+
+                // Use "module" field for ES6 module if possible, default is `true`.
+                // See: https://github.com/rollup/rollup/wiki/pkg.module
+                module: true,
+
+                // Use "jsnext:main" field for ES6 module if possible, default is `true`.
+                // This field should not be used, use `module` entry instead, but it is `true`
+                // by default because of legacy packages.
+                // See: https://github.com/rollup/rollup/wiki/jsnext:main
+                jsnext: true,
+
+                // if there's something your bundle requires that you DON'T
+                // want to include, add it to 'skip'
+                //skip: [ 'some-big-dependency' ],    // Default: []
+
+                // Override path to main file (relative to the module directory).
+                override: {
+                    //lodash: 'dist/lodash.js'
+                    'backbone-pageable': 'lib/backbone-pageable.js',
+                    'select2': 'dist/js/select2.full.js',
+                    'tinymce': 'tinymce.js',
+                    'bootstrap': 'dist/js/bootstrap.js',
+                    'text': 'text.js',
+                    'underscore': 'underscore.js',
+                    'backbone': 'backbone.js',
+                    'backbone.paginator': 'lib/backbone.paginator.js',
+                    'backgrid': 'lib/backgrid.js',
+                    'backgrid-select-all': 'backgrid-select-all.js',
+                    'backgrid-paginator': 'backgrid-paginator.js',
+                    'backbone.stickit': 'backbone.stickit.js',
+                    'moment': 'min/moment.min.js',
+                    'datetimepicker': 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+                    'loglevel': 'dist/loglevel.min.js'
+                }
+            }),
             commonjs(),
             handlebars({
                 handlebars: {
                     options: {
-                        sourceMap: ENV !== 'production' ? 'inline' : false
+                        sourceMap: ENV !== 'production' ? 'inline': false
                     }
                 },
                 templateExtension: '.hbs'
@@ -67,13 +112,14 @@ const getBundleConfig = function (src, dest) {
             name: 'pubs_bundle',
             file: dest,
             format: 'iife',
-            sourcemap: ENV !== 'production' ? 'inline' : false
+            sourcemap: ENV !== 'production' ? 'inline': false
         },
         treeshake: ENV === 'production'
     };
 };
 
 module.exports = [
+    getBundleConfig('scripts/manager/init.js', 'dist/scripts/manager.js'),
     getBundleConfig('scripts/pubswh/extentsMapOnReady.js', 'dist/scripts/extentsMapOnReady.js'),
     getBundleConfig('scripts/pubswh/plugins.js', 'dist/scripts/base_libs.js'),
     getBundleConfig('scripts/pubswh/resultsMap.js', 'dist/scripts/resultsMap.js'),

@@ -1,12 +1,9 @@
-define([
-    'backbone'
-], function(Backbone) {
-        var model = Backbone.Model.extend({
-        defaults: {
-            'id': '',
-            'text': ''
-        }
-    });
+import Backbone from 'backbone';
 
-    return model;
+
+export default Backbone.Model.extend({
+    defaults: {
+        'id': '',
+        'text': ''
+    }
 });

@@ -1,28 +1,25 @@
-define([
-    'backbone.stickit',
-    'views/BaseView',
-    'hbs!hb_templates/editCorporation'
-], function(stickit, BaseView, hbTemplate) {
-        /*
-     * @constructs
-     * @param {Object} options
-     *      @prop {Jquery selector} el
-     *      @prop {ContributorModel} model
-     */
-    var view = BaseView.extend({
-        template : hbTemplate,
+import 'backbone.stickit';
 
-        bindings : {
-            '#organization' : 'organization'
-        },
+import BaseView from './BaseView';
+import hbTemplate from '../hb_templates/editCorporation.hbs';
 
-        render : function() {
-            BaseView.prototype.render.apply(this, arguments);
-            this.stickit();
-            return this;
-        }
 
-    });
+/*
+ * @constructs
+ * @param {Object} options
+ *      @prop {Jquery selector} el
+ *      @prop {ContributorModel} model
+ */
+export default BaseView.extend({
+    template : hbTemplate,
 
-    return view;
+    bindings : {
+        '#organization' : 'organization'
+    },
+
+    render : function() {
+        BaseView.prototype.render.apply(this, arguments);
+        this.stickit();
+        return this;
+    }
 });

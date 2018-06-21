@@ -1,69 +1,65 @@
-define([
-    'jquery',
-    'underscore',
-    'bootstrap',
-    'module',
-    'views/BaseView',
-    'hbs!hb_templates/loginDialog'
-], function($, _, bootstrap, module, BaseView, hbTemplate) {
-        var view = BaseView.extend({
-        template : hbTemplate,
+import $ from 'jquery';
+import _ from 'underscore';
 
-        events : {
-            'click .submit-btn' : 'verifyCredentials',
-            'submit form' : 'verifyCredentials',
-            'click .cancel-btn' : 'close'
-        },
+import BaseView from './BaseView';
+import hbTemplate from '../hb_templates/loginDialog.hbs';
 
-        render : function() {
-            BaseView.prototype.render.apply(this, arguments);
-            this.$('.modal').modal({
-                show : false
-            });
-        },
 
-        /*
-         * Show the login dialog.
-         * @param {Function} loginFnc (optional) - A parameterless function which will be executed when a user tries to log in.
-         */
-        show : function(loginFnc) {
-            if (_.isFunction(loginFnc)) {
-                this.loginFnc = loginFnc;
-            }
-            this.$('.modal').modal('show');
-        },
+export default BaseView.extend({
+    template : hbTemplate,
 
-        verifyCredentials : function(ev) {
-            var self = this;
-            var data = this.$('form').serialize();
+    events : {
+        'click .submit-btn' : 'verifyCredentials',
+        'submit form' : 'verifyCredentials',
+        'click .cancel-btn' : 'close'
+    },
 
-            ev.preventDefault();
+    render : function() {
+        BaseView.prototype.render.apply(this, arguments);
+        this.$('.modal').modal({
+            show : false
+        });
+    },
 
-            $.ajax({
-                url : module.config().scriptRoot + '/loginservice/',
-                method : 'POST',
-                data : data,
-                success : function() {
-                    if (_.has(self, 'loginFnc')) {
-                        self.loginFnc();
-                    }
-                    self.close();
-                },
-                error : function(jqXHR, textStatus) {
-                    self.$('.login-errors').html('Unable to log in with error: ' + textStatus +
-                        '<br/>Please try again');
-                }
-            });
-        },
-
-        close : function() {
-            this.$('.modal').modal('hide');
-            this.$('.login-errors').html('');
-            this.$('input').val('');
-
-            _.omit(this, 'loginFnc');
+    /*
+     * Show the login dialog.
+     * @param {Function} loginFnc (optional) - A parameterless function which will be executed when a user tries to log in.
+     */
+    show : function(loginFnc) {
+        if (_.isFunction(loginFnc)) {
+            this.loginFnc = loginFnc;
         }
-    });
+        this.$('.modal').modal('show');
+    },
 
-    return view;
+    verifyCredentials : function(ev) {
+        var self = this;
+        var data = this.$('form').serialize();
+
+        ev.preventDefault();
+
+        $.ajax({
+            url : window.CONFIG.scriptRoot + '/loginservice/',
+            method : 'POST',
+            data : data,
+            success : function() {
+                if (_.has(self, 'loginFnc')) {
+                    self.loginFnc();
+                }
+                self.close();
+            },
+            error : function(jqXHR, textStatus) {
+                self.$('.login-errors').html('Unable to log in with error: ' + textStatus +
+                    '<br/>Please try again');
+            }
+        });
+    },
+
+    close : function() {
+        this.$('.modal').modal('hide');
+        this.$('.login-errors').html('');
+        this.$('input').val('');
+
+        _.omit(this, 'loginFnc');
+    }
 });

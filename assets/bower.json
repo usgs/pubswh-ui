@@ -17,7 +17,6 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "2.2.4",
     "requirejs": "2.2.0",
     "bootstrap": "3.3.7",
     "text": "requirejs-text#2.0.15",
@@ -27,16 +26,11 @@
     "backgrid": "0.3.5",
     "backgrid-select-all": "0.3.5",
     "backgrid-paginator": "1730e0231c51d4606945a3d3492213ec37b9dcdc",
-    "handlebars": "4.0.5",
-    "Squire.js": "https://github.com/iammerrick/Squire.js.git#0.2.0",
     "backbone.stickit": "0.9.2",
     "eonasdan-bootstrap-datetimepicker": "4.17.37",
-    "font-awesome": "v4.6.3",
     "select2": "4.0.3",
     "tinymce": "4.3.13",
-    "requirejs-hbs": "0.1.1",
     "select2-bootstrap-theme": "0.1.0-beta.7",
-    "jquery-ui": "1.12.0",
     "loglevel": "1.4.1",
     "moment": "2.15.2",
     "dygraphs": "1.1.1",
@@ -44,7 +38,8 @@
     "leaflet": "1.0.3",
     "esri-leaflet": "2.0.8",
     "leaflet-draw": "0.4.9",
-    "MathJax": "2.7.1"
+    "MathJax": "2.7.1",
+    "backbone-pageable": "backbone-paginator/backbone-pageable#^1.4.8"
   },
   "resolutions": {
     "underscore": "1.8.3",

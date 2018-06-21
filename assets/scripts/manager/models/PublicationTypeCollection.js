@@ -1,12 +1,9 @@
-define([
-    'backbone',
-    'models/LookupModel',
-    'module'
-], function(Backbone, LookupModel, module) {
-        var collection = Backbone.Collection.extend({
-        model : LookupModel,
-        url : module.config().lookupUrl + 'publicationtypes?mimetype=json'
-    });
+import Backbone from 'backbone';
 
-    return collection;
+import LookupModel from './LookupModel';
+
+
+export default Backbone.Collection.extend({
+    model : LookupModel,
+    url : window.CONFIG.lookupUrl + 'publicationtypes?mimetype=json'
 });

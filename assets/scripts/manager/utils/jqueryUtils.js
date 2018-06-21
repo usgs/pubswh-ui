@@ -1,18 +1,9 @@
-define([
-    'jquery'
-], function($) {
-        var utils = (function() {
-        var self = {};
+import $ from 'jquery';
 
-        self.createDivInContainer = function($container) {
-            var $newDiv = $('<div />');
-            $container.append($newDiv);
 
-            return $newDiv;
-        };
+export const createDivInContainer = function($container) {
+    var $newDiv = $('<div />');
+    $container.append($newDiv);
 
-        return self;
-    })();
-
-    return utils;
-});
+    return $newDiv;
+};

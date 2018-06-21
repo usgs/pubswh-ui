@@ -19,7 +19,7 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'bower_components/jquery/dist/jquery.js',
+            'node_modules/jquery/dist/jquery.min.js',
             'bower_components/bootstrap/dist/js/bootstrap.js',
             'bower_components/select2/dist/js/select2.js',
             'bower_components/handlebars/handlebars.js',
@@ -121,8 +121,8 @@ module.exports = function(config) {
             coverageReporter: {
                 reporters: [
                     //{type: 'html', dir: 'coverage/'},
-                    {type: 'cobertura', dir: 'coverage/'},
-                    {type: 'lcovonly', dir: 'coverage/'}
+                    {type: 'cobertura', dir: 'coverage/pubswh/'},
+                    {type: 'lcovonly', dir: 'coverage/pubswh/'}
                 ]
             }
         };

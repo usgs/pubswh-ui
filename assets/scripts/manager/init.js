@@ -1,21 +1,24 @@
-define([
-    'backbone',
-    'loglevel',
-    'controller/AppRouter',
-    'module'
-], function (Backbone, log, AppRouter, module) {
-        var config = module.config();
+require('./vendor-globals');
+require('jquery-ui');
+require('jquery-ui/ui/widgets/mouse');
+require('jquery-ui/ui/widgets/sortable');
+require('bootstrap');
 
-    if (config.jsDebug) {
-        log.setLevel('debug', false);
-    } else {
-        log.setLevel('warn', false);
-    }
-    var router = new AppRouter();
+const Backbone = require('backbone');
+Backbone.$ = $;
 
-    Backbone.history.start({
-        root: config.scriptRoot + '/manager/'
-    });
+const log = require('loglevel');
+const AppRouter = require('./controller/AppRouter');
 
-    return router;
+const config = window.CONFIG;
+
+if (config.jsDebug) {
+    log.setLevel('debug', false);
+} else {
+    log.setLevel('warn', false);
+}
+
+new AppRouter();
+Backbone.history.start({
+    root: config.scriptRoot + '/manager/'
 });

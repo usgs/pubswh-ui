@@ -9,12 +9,15 @@ build-server: build-assets flask-collect
 
 flask-collect:
 	@echo 'Collecting static files...'
-	$(PYTHON) server/manage.py collect
+	cd server && ./env/bin/python manage.py collect
+	cd server/static && ln -sfn ../../assets/dist assets
 
 clean-server:
 	@echo 'Cleaning server...'
 	rm -rf server/dist
 	rm -rf server/build
+	rm -rf server/static
+	rm -rf server/usgs_flask_pubs_ui.egg-info
 
 
 #

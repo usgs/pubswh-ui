@@ -1,10 +1,7 @@
-define([
-    'models/LinkModel',
-    'models/OrderedCollection'
-], function(LinkModel, OrderedCollection) {
-        var collection = OrderedCollection.extend({
-        model : LinkModel
-    });
+import LinkModel from './LinkModel';
+import OrderedCollection from './OrderedCollection';
 
-    return collection;
+
+export default OrderedCollection.extend({
+    model : LinkModel
 });

@@ -1,47 +1,42 @@
-define([
-    'backbone',
-    'underscore',
-    'module'
-], function(Backbone, _, module) {
-        var model = Backbone.Model.extend({
+import Backbone from 'backbone';
 
-        /*
-         * @param {Boolean} isCostCenter - boolean indicating whether affiliation belongs to a cost center
-         */
 
-        urlRoot : null,
+export default Backbone.Model.extend({
+    /*
+     * @param {Boolean} isCostCenter - boolean indicating whether affiliation belongs to a cost center
+     */
 
-        defaults : {
-            'active' : false
-        },
+    urlRoot : null,
 
-        _constructUrl : function(isCostCenter) {
-            var targetUrl;
-            var scriptRoot = module.config().scriptRoot;
-            if (isCostCenter) {
-                targetUrl = scriptRoot + '/manager/services/costcenter';
-            } else {
-                targetUrl = scriptRoot + '/manager/services/outsideaffiliation';
-            }
-            return targetUrl;
-        },
+    defaults : {
+        'active' : false
+    },
 
-        fetch : function(options, isCostCenter) {
-            var fetchedModel;
-            this.urlRoot = this._constructUrl(isCostCenter);
-            fetchedModel = Backbone.Model.prototype.fetch.call(this, options);
-            return fetchedModel;
-        },
-
-        destroy : function(options, isCostCenter) {
-            this.urlRoot = this._constructUrl(isCostCenter);
-            return Backbone.Model.prototype.destroy.call(this, options);
-        },
-
-        save : function(attributes, options, isCostCenter) {
-            this.urlRoot = this._constructUrl(isCostCenter);
-            return Backbone.Model.prototype.save.apply(this, attributes, options);
+    _constructUrl : function(isCostCenter) {
+        var targetUrl;
+        var scriptRoot = window.CONFIG.scriptRoot;
+        if (isCostCenter) {
+            targetUrl = scriptRoot + '/manager/services/costcenter';
+        } else {
+            targetUrl = scriptRoot + '/manager/services/outsideaffiliation';
         }
-    });
-    return model;
+        return targetUrl;
+    },
+
+    fetch : function(options, isCostCenter) {
+        var fetchedModel;
+        this.urlRoot = this._constructUrl(isCostCenter);
+        fetchedModel = Backbone.Model.prototype.fetch.call(this, options);
+        return fetchedModel;
+    },
+
+    destroy : function(options, isCostCenter) {
+        this.urlRoot = this._constructUrl(isCostCenter);
+        return Backbone.Model.prototype.destroy.call(this, options);
+    },
+
+    save : function(attributes, options, isCostCenter) {
+        this.urlRoot = this._constructUrl(isCostCenter);
+        return Backbone.Model.prototype.save.apply(this, attributes, options);
+    }
 });

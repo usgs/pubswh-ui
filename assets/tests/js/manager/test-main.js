@@ -24,7 +24,6 @@ require.config({
     },
 
     paths: {
-        'squire': '/base/bower_components/Squire.js/src/Squire',
         'jquery': '/base/bower_components/jquery/dist/jquery',
         'jquery-ui': '/base/bower_components/jquery-ui/jquery-ui',
         'select2': '/base/bower_components/select2/dist/js/select2.full',

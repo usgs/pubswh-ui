@@ -1,37 +1,33 @@
-define([
-    'bootstrap',
-    'views/BaseView',
-    'hbs!hb_templates/warningDialog'
-], function(bootstrap, BaseView, hbTemplate) {
-        var view = BaseView.extend({
-        template : hbTemplate,
+import BaseView from './BaseView';
+import hbTemplate from '../hb_templates/warningDialog.hbs';
 
-        events : {
-            'click .ok-btn': 'closeDialog'
-        },
 
-        render : function() {
-            BaseView.prototype.render.apply(this, arguments);
-            this.$('.modal').modal({
-                show : false
-            });
-            return this;
-        },
+export default BaseView.extend({
+    template : hbTemplate,
 
-        /*
-         * @param {String} title
-         * @param {String} message
-         */
-        show : function(title, message) {
-            this.$('.modal-title').html(title);
-            this.$('.modal-body').html(message);
-            this.$('.modal').modal('show');
-        },
+    events : {
+        'click .ok-btn': 'closeDialog'
+    },
 
-        closeDialog : function() {
-            this.$('.modal').modal('hide');
-        }
-    });
+    render : function() {
+        BaseView.prototype.render.apply(this, arguments);
+        this.$('.modal').modal({
+            show : false
+        });
+        return this;
+    },
 
-    return view;
+    /*
+     * @param {String} title
+     * @param {String} message
+     */
+    show : function(title, message) {
+        this.$('.modal-title').html(title);
+        this.$('.modal-body').html(message);
+        this.$('.modal').modal('show');
+    },
+
+    closeDialog : function() {
+        this.$('.modal').modal('hide');
+    }
 });

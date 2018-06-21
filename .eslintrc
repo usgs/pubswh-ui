@@ -36,8 +36,6 @@
     "L": true,
     "leafletPip": true,
     "$": true,
-    "_": true,
-    "Backbone": true,
     "Wkt": true,
     "define": true,
     "moment": true,

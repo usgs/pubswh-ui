@@ -21,7 +21,7 @@ module.exports = function(config) {
         files: [
             'bower_components/moment/min/moment.min.js',
             'bower_components/underscore/underscore-min.js',
-            'bower_components/jquery/dist/jquery.js',
+            'node_modules/jquery/dist/jquery.min.js',
             'tests/js/metrics/resources/config.js',
             'scripts/metrics/*.js',
             'tests/js/metrics/*.js'
@@ -115,8 +115,8 @@ module.exports = function(config) {
             coverageReporter: {
                 reporters: [
                     //{type: 'html', dir: 'coverage/'},
-                    {type: 'cobertura', dir: 'coverage/'},
-                    {type: 'lcovonly', dir: 'coverage/'}
+                    {type: 'cobertura', dir: 'coverage/metrics/'},
+                    {type: 'lcovonly', dir: 'coverage/metrics/'}
                 ]
             }
         };
