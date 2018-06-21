@@ -44,7 +44,7 @@ module.exports = function(config) {
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['dots', 'coverage'],
+        reporters: ['dots'],
 
         coverageReporter: {
             reporters : [
@@ -98,7 +98,8 @@ module.exports = function(config) {
                     istanbul({
                         exclude: [
                             'tests/**/*.js',
-                            'node_modules/**/*.js'
+                            'node_modules/**/*.js',
+                            'bower_components/**/*.js'
                         ]
                     })
                 ]

@@ -69,8 +69,6 @@ const getBundleConfig = function (src, dest) {
                 override: {
                     //lodash: 'dist/lodash.js'
                     'backbone-pageable': 'lib/backbone-pageable.js',
-                    'jquery': 'dist/jquery.js',
-                    'jquery-ui': 'jquery-ui.js',
                     'select2': 'dist/js/select2.full.js',
                     'tinymce': 'tinymce.js',
                     'bootstrap': 'dist/js/bootstrap.js',
@@ -81,8 +79,6 @@ const getBundleConfig = function (src, dest) {
                     'backgrid': 'lib/backgrid.js',
                     'backgrid-select-all': 'backgrid-select-all.js',
                     'backgrid-paginator': 'backgrid-paginator.js',
-                    'handlebars': 'handlebars.amd.js',
-                    'hbs': 'requirejs-hbs/hbs.js',
                     'backbone.stickit': 'backbone.stickit.js',
                     'moment': 'min/moment.min.js',
                     'datetimepicker': 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
