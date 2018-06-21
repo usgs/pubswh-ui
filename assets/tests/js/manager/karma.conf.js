@@ -46,14 +46,6 @@ module.exports = function(config) {
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
         reporters: ['dots'],
 
-        coverageReporter: {
-            reporters : [
-                //{type: 'html', dir : 'coverage/manager/'},
-                {type: 'cobertura', dir: 'coverage/manager/'},
-                {type: 'lcovonly', dir: 'coverage/manager/'}
-            ]
-        },
-
         // web server port
         port: 9876,
 
@@ -111,8 +103,8 @@ module.exports = function(config) {
             coverageReporter: {
                 reporters: [
                     //{type: 'html', dir: 'coverage/'},
-                    {type: 'cobertura', dir: 'coverage/'},
-                    {type: 'lcovonly', dir: 'coverage/'}
+                    {type: 'cobertura', dir: 'coverage/manager/'},
+                    {type: 'lcovonly', dir: 'coverage/manager/'}
                 ]
             }
         };
