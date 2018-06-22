@@ -20,7 +20,7 @@
     "buildcss:manager": "lessc styles/manager/manager_custom.less > dist/manager.css && uglifycss --output dist/manager.css dist/manager.css && postcss dist/manager.css --no-map --use autoprefixer -o dist/manager.css",
     "buildcss:metrics": "lessc styles/metrics/metrics_custom.less > dist/metrics.css && uglifycss --output dist/metrics.css dist/metrics.css && postcss dist/metrics.css --no-map --use autoprefixer -o dist/metrics.css",
     "build:fonts": "mkdir -p dist/fonts && cp node_modules/font-awesome/fonts/* dist/fonts",
-    "build:images": "cp -r images dist",
+    "build:images": "mkdir -p dist/images && cp -r images/* dist/images",
     "buildvendor:git": "cp -r scripts/vendor dist/scripts",
     "buildvendor:leaflet": "mkdir -p dist/vendor/leaflet && cp -r bower_components/leaflet/dist/* dist/vendor/leaflet",
     "buildvendor:esri-leaflet": "mkdir -p dist/vendor/esri-leaflet && cp -r bower_components/esri-leaflet/dist/* dist/vendor/esri-leaflet",
