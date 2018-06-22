@@ -1,3 +1,5 @@
+import './vendor';
+
 import { createGraph } from './analyticsGraph';
 import { batchFetchMonthlyPastYear, batchFetchPast30Days } from './analyticsData.js';
 

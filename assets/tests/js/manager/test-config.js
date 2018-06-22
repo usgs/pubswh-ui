@@ -6,7 +6,6 @@ window.CONFIG = {
     //previewUrl: ''
 };
 
-require('../../../scripts/manager/vendor-globals');
 require('jquery-ui');
 require('jquery-ui/ui/widgets/mouse');
 require('jquery-ui/ui/widgets/sortable');

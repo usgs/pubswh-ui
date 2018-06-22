@@ -22,3 +22,4 @@
 }());
 
 // Place any jQuery/helper plugins in here.
+require('select2/dist/js/select2.js');

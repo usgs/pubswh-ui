@@ -7,8 +7,8 @@
 {% endblock head %}
 
 {% block page_style %}
-    <link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet/dist/leaflet.css') }}">
-    <link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet-draw/dist/leaflet.draw.css') }}">
+    <link rel="stylesheet" href="{{ 'vendor/leaflet/leaflet.css' | asset_url }}">
+    <link rel="stylesheet" href="{{ 'vendor/leaflet-draw/leaflet.draw.css' | asset_url }}">
 {% endblock page_style %}
 
 {% block main %}

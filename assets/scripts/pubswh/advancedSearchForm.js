@@ -1,3 +1,5 @@
+import 'select2';
+
 import SearchMap from './searchMap';
 import rowTemplate from './hb_templates/rowTemplate.hbs';
 import mapTemplate from './hb_templates/mapTemplate.hbs';
