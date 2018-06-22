@@ -19,7 +19,6 @@
     "build:js:vendor:leaflet-draw": "mkdir -p dist/vendor/leaflet-draw && cp -r bower_components/leaflet-draw/dist/* dist/vendor/leaflet-draw",
     "build:js:vendor:MathJax": "mkdir -p dist/vendor && ln -sfn ../../bower_components/MathJax dist/vendor/MathJax",
     "build:js:vendor:modernizer": "mkdir -p dist/vendor/modernizer && cp -r bower_components/modernizer/* dist/vendor/modernizer",
-    "build:js:vendor:moment": "mkdir -p dist/vendor/moment && cp -r bower_components/moment/min/* dist/vendor/moment",
     "build:css": "run-p buildcss:*",
     "buildcss:usgs": "lessc styles/usgs_header_footer.less > dist/usgs_style.css && uglifycss --output dist/usgs_style.css dist/usgs_style.css && postcss dist/usgs_style.css --no-map --use autoprefixer -o dist/usgs_style.css",
     "buildcss:css_base": "lessc styles/pubswh/pubs_base.less > dist/pubs_base.css && uglifycss --output dist/pubs_base.css dist/pubs_base.css && postcss dist/pubs_base.css --no-map --use autoprefixer -o dist/pubs_base.css",
