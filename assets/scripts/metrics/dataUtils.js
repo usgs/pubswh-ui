@@ -1,3 +1,5 @@
+import _ from 'underscore';
+
 
 /*
  * @param {moment} forMoment - The function will return a full year range where the end will be the previous

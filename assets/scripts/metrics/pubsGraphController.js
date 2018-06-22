@@ -1,4 +1,4 @@
-import './vendor';
+import _ from 'underscore';
 
 import { createGraph } from './analyticsGraph';
 import { batchFetchMonthlyPastYear, batchFetchPast30Days } from './analyticsData.js';

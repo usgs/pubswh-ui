@@ -1,3 +1,7 @@
+import Dygraph from 'dygraphs';
+import _ from 'underscore';
+
+
 /*
  * Creates a graph of data
  * @param {HTML Element or String} el - Can be an HTML Element for a div or an id for a div
