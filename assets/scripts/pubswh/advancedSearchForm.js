@@ -1,3 +1,4 @@
+import 'eonasdan-bootstrap-datetimepicker';
 import 'select2';
 
 import SearchMap from './searchMap';
