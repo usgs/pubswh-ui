@@ -6,11 +6,7 @@ window.CONFIG = {
     //previewUrl: ''
 };
 
-require('../../../scripts/manager/vendor-globals');
-require('jquery-ui');
-require('jquery-ui/ui/widgets/mouse');
-require('jquery-ui/ui/widgets/sortable');
-require('bootstrap');
-
-const Backbone = require('backbone');
-Backbone.$ = $;
+import 'jquery-ui';
+import 'jquery-ui/ui/widgets/mouse';
+import 'jquery-ui/ui/widgets/sortable';
+import 'bootstrap';

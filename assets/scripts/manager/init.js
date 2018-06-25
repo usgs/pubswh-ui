@@ -1,14 +1,12 @@
-require('./vendor-globals');
-require('jquery-ui');
-require('jquery-ui/ui/widgets/mouse');
-require('jquery-ui/ui/widgets/sortable');
-require('bootstrap');
+import 'jquery-ui';
+import 'jquery-ui/ui/widgets/mouse';
+import 'jquery-ui/ui/widgets/sortable';
+import 'bootstrap';
 
-const Backbone = require('backbone');
-Backbone.$ = $;
+import Backbone from 'backbone';
 
-const log = require('loglevel');
-const AppRouter = require('./controller/AppRouter');
+import log from 'loglevel';
+import AppRouter from './controller/AppRouter';
 
 const config = window.CONFIG;
 

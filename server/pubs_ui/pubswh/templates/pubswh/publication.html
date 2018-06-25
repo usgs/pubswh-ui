@@ -36,7 +36,7 @@
 
     {% block page_style %}
        {%- if pubdata["geographicExtents"] -%}
-        <link rel="stylesheet" href="{{ url_for('bower.static', filename = 'leaflet/dist/leaflet.css') }}">
+        <link rel="stylesheet" href="{{ 'vendor/leaflet/leaflet.css' | asset_url }} ">
        {% endif %}
     {% endblock page_style %}
     {% include 'pubswh/mathjax.html' %}
@@ -359,8 +359,8 @@
 
         {% block page_footer_script %}
             {%- if pubdata["geographicExtents"] -%}
-                <script type="text/javascript" src="{{ url_for('bower.static', filename='leaflet/dist/leaflet.js') }}"></script>
-                <script type="text/javascript" src="{{ url_for('bower.static', filename='esri-leaflet/dist/esri-leaflet.js') }}"></script>
+                <script type="text/javascript" src="{{ 'vendor/leaflet/leaflet.js' | asset_url }}"></script>
+                <script type="text/javascript" src="{{ 'vendor/esri-leaflet/esri-leaflet.js' | asset_url }}"></script>
                 <script type="text/javascript" src="{{ 'scripts/resultsMap.js' | asset_url }}"></script>
 
                 <script type="application/javascript">

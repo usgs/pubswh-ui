@@ -2,7 +2,6 @@ import json
 import logging
 
 from flask import Flask, request
-from flask_bower import Bower
 from flask_caching import Cache
 from flask_images import Images
 from flask_mail import Mail
@@ -46,9 +45,6 @@ app.jinja_env.globals.update(ANNOUNCEMENT_BLOCK=app.config['ANNOUNCEMENT_BLOCK']
 
 # Set up the cache
 cache = Cache(app, config=app.config.get('CACHE_CONFIG'))
-
-# Creates the bower blueprint
-bower = Bower(app)
 
 # Load static assets manifest file, which maps source file names to the
 # corresponding versioned/hashed file name.

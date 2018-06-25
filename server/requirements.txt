@@ -8,7 +8,6 @@ extras==1.0.0
 feedparser==5.2.1
 fixtures==3.0.0
 Flask==0.11.1
-Flask-Bower==1.2.1
 Flask-Caching==1.0.1
 Flask-Collect==1.2.2
 Flask-Cors==3.0.6

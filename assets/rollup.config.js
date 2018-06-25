@@ -6,7 +6,8 @@
 const bowerResolve = require('rollup-plugin-bower-resolve');
 const buble = require('rollup-plugin-buble');
 const commonjs = require('rollup-plugin-commonjs');
-var handlebars = require('rollup-plugin-handlebars-plus');
+const handlebars = require('rollup-plugin-handlebars-plus');
+const inject = require('rollup-plugin-inject');
 const json = require('rollup-plugin-json');
 const resolve = require('rollup-plugin-node-resolve');
 const replace = require('rollup-plugin-replace');
@@ -19,6 +20,15 @@ const getBundleConfig = function (src, dest) {
     return {
         input: src,
         plugins: [
+            inject({
+                include: '**/*.js',
+                //exclude: 'node_modules/**',
+                modules: {
+                    $: 'jquery',
+                    jQuery: 'jquery',
+                    moment: 'moment'
+                }
+            }),
             resolve({
                 // use "module" field for ES6 module if possible
                 module: true, // Default: true
@@ -121,7 +131,7 @@ const getBundleConfig = function (src, dest) {
 module.exports = [
     getBundleConfig('scripts/manager/init.js', 'dist/scripts/manager.js'),
     getBundleConfig('scripts/pubswh/extentsMapOnReady.js', 'dist/scripts/extentsMapOnReady.js'),
-    getBundleConfig('scripts/pubswh/plugins.js', 'dist/scripts/base_libs.js'),
+    getBundleConfig('scripts/pubswh/plugins.js', 'dist/scripts/base_pubswh.js'),
     getBundleConfig('scripts/pubswh/resultsMap.js', 'dist/scripts/resultsMap.js'),
     getBundleConfig('scripts/pubswh/searchFormOnReady.js', 'dist/scripts/advanced_search.js'),
     getBundleConfig('scripts/metrics/pubGraphController.js', 'dist/scripts/metrics_publication.js'),

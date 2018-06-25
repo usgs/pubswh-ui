@@ -1,3 +1,5 @@
+import _ from 'underscore';
+
 import popupTemplate from './hb_templates/resultsMapPopup.hbs';
 
 

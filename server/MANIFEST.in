@@ -3,7 +3,6 @@ recursive-include pubs_ui/auth/static *
 recursive-include pubs_ui/manager/static *
 recursive-include pubs_ui/metrics/static *
 recursive-include pubs_ui/pubswh/static *
-recursive-include pubs_ui/bower_components *
 recursive-include tests *
 recursive-include docs *
 recursive-include pubs_ui/templates *
