@@ -26,7 +26,6 @@ module.exports = function(config) {
             'bower_components/leaflet/dist/leaflet.js',
             'bower_components/esri-leaflet/dist/esri-leaflet.js',
             'bower_components/moment/min/moment.min.js',
-            'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
             'bower_components/underscore/underscore.js',
             'scripts/pubswh/vendor/mapbox/leaflet-pip/leaflet-pip.js',
             'tests/js/pubswh/resources/config.js',

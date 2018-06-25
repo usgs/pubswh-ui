@@ -85,7 +85,6 @@ const getBundleConfig = function (src, dest) {
                     'backgrid-select-all': 'backgrid-select-all.js',
                     'backbone.stickit': 'backbone.stickit.js',
                     'moment': 'min/moment.min.js',
-                    'datetimepicker': 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
                     'loglevel': 'dist/loglevel.min.js'
                 }
             }),

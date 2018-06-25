@@ -87,6 +87,7 @@
     "backgrid": "^0.3.8",
     "backgrid-paginator": "^0.3.9",
     "bootstrap": "^3.3.7",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "font-awesome": "^4.6.3",
     "jquery": "^2.2.4",
     "jquery-ui": "^1.12.0",

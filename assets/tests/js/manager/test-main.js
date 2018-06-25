@@ -40,7 +40,7 @@ require.config({
         'hbs': '/base/bower_components/requirejs-hbs/hbs',
         'backbone.stickit': '/base/bower_components/backbone.stickit/backbone.stickit',
         'moment': '/base/bower_components/moment/min/moment.min',
-        'datetimepicker': '/base/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min',
+        'datetimepicker': '/base/node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min',
         'loglevel' : '/base/bower_components/loglevel/dist/loglevel.min'
     },
     shim: {
