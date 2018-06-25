@@ -1,5 +1,7 @@
 import Backbone from 'backbone';
-import _ from 'underscore';
+import extend from 'lodash/extend';
+import has from 'lodash/has';
+import isObject from 'lodash/isObject';
 
 
 export default Backbone.Model.extend({
@@ -22,15 +24,15 @@ export default Backbone.Model.extend({
                 mimetype : 'json'
             }
         };
-        if (_.isObject(options)) {
-            _.extend(params, options);
+        if (isObject(options)) {
+            extend(params, options);
         }
         return Backbone.Model.prototype.fetch.call(this, params);
     },
 
     parse : function(response) {
         var affiliation = new Object();
-        if (!_.has(response, 'affiliation')) {
+        if (!has(response, 'affiliation')) {
             response.affiliation = affiliation;
         }
         return response;

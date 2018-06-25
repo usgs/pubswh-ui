@@ -1,7 +1,7 @@
 import 'select2';
 import 'backbone.stickit';
 
-import _ from 'underscore';
+import extend from 'lodash/extend';
 
 import * as DynamicSelect2 from '../utils/DynamicSelect2';
 import PublicationSubtypeCollection from '../models/PublicationSubtypeCollection';
@@ -91,7 +91,7 @@ export default BaseView.extend({
             activeSubgroup : true
         }, DEFAULT_SELECT2_OPTIONS));
         this.pubSubtypePromise.done(function() {
-            var select2Options = _.extend({
+            var select2Options = extend({
                 data : [{id : ''}].concat(self.publicationSubtypeCollection.toJSON())
             }, DEFAULT_SELECT2_OPTIONS);
             self.$(EDIT_PUB_SUBTYPE_INPUT_SEL).select2(select2Options);

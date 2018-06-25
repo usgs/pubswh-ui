@@ -1,4 +1,4 @@
-import _ from 'underscore';
+import partial from 'lodash/partial';
 
 import { batchFetchMonthlyPastYear, batchFetchPast30Days } from './analyticsData.js';
 import { createGraph } from './analyticsGraph';
@@ -48,9 +48,9 @@ var metricsAndDimFilters = [
 var transformToGraphData = function(metricName, row) {
     return [row.date.toDate(), parseInt(row[metricName])];
 };
-var transformToSessionsData = _.partial(transformToGraphData, sessionsMetric.expression);
-var transformToVisitorsData = _.partial(transformToGraphData, visitorsMetric.expression);
-var transformToDownloadsData = _.partial(transformToGraphData, downloadsMetric.expression);
+var transformToSessionsData = partial(transformToGraphData, sessionsMetric.expression);
+var transformToVisitorsData = partial(transformToGraphData, visitorsMetric.expression);
+var transformToDownloadsData = partial(transformToGraphData, downloadsMetric.expression);
 
 // When the two calls to GA where made simultaneously, frequently only one of the calls worked.
 // Therefore, we are waiting until the first call returns before making the second request.

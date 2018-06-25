@@ -1,4 +1,5 @@
-import _ from 'underscore';
+import clone from 'lodash/clone';
+import reduce from 'lodash/reduce';
 
 
 /*
@@ -32,9 +33,11 @@ export const fillMissingDates = function(options) {
     var rowIndex = 0;
     var currentDate = options.startDate.clone();
     var result = [];
-    var zeroMetrics = _.object(options.metricNames, _.map(options.metricNames, function() {
-        return '0';
-    }));
+
+    var zeroMetrics = reduce(options.metricNames, function (obj, name) {
+        obj[name] = '0';
+        return obj;
+    }, {});
     var emptyRow;
 
     while (currentDate.isSameOrBefore(options.endDate, options.timeUnit)) {
@@ -43,7 +46,7 @@ export const fillMissingDates = function(options) {
             result.push(options.rows[rowIndex]);
             rowIndex = rowIndex + 1;
         } else {
-            emptyRow = _.clone(zeroMetrics);
+            emptyRow = clone(zeroMetrics);
             emptyRow.date = currentDate.clone();
             result.push(emptyRow);
         }

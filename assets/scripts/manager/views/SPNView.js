@@ -3,7 +3,8 @@ import 'select2';
 import 'backbone.stickit';
 
 import $ from 'jquery';
-import _ from 'underscore';
+import extend from 'lodash/extend';
+import has from 'lodash/has';
 import tinymce from 'tinymce';
 
 import * as DynamicSelect2 from '../utils/DynamicSelect2';
@@ -78,7 +79,7 @@ export default BaseView.extend({
 
         // Set up static select2's once their options have been fetched
         this.serviceCenterPromise.done(function() {
-            self.$('#psc-input').select2(_.extend({
+            self.$('#psc-input').select2(extend({
                 data : self.serviceCenterCollection.toJSON()
             }, DEFAULT_SELECT2_OPTIONS));
             self.updatePSC();
@@ -191,7 +192,7 @@ export default BaseView.extend({
         var $select = this.$(selector);
         var value = this.model.get(modelProp);
 
-        if (_.has(value, 'id')) {
+        if (has(value, 'id')) {
             if ($select.find('option[value="' + value.id + '"]').length === 0) {
                 $select.append(this.optionTemplate(value));
             }
@@ -209,7 +210,7 @@ export default BaseView.extend({
     updatePSC : function() {
         var $select = this.$('#psc-input');
         var value = this.model.get('publishingServiceCenter');
-        $select.val(_.has(value, 'id') ? value.id : '').trigger('change');
+        $select.val(has(value, 'id') ? value.id : '').trigger('change');
     },
     updateContact : function() {
         this.$('#contacts-input').html(this.model.get('contact'));

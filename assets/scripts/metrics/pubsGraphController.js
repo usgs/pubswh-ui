@@ -1,4 +1,4 @@
-import _ from 'underscore';
+import partial from 'lodash/partial';
 
 import { createGraph } from './analyticsGraph';
 import { batchFetchMonthlyPastYear, batchFetchPast30Days } from './analyticsData.js';
@@ -46,10 +46,10 @@ var metricsAndDimFilters = [
 var transformToGraphData = function(metricName, row) {
     return [row.date.toDate(), parseInt(row[metricName])];
 };
-var transformToSessionsData = _.partial(transformToGraphData, sessionsMetric.expression);
-var transformToVisitorsData = _.partial(transformToGraphData, visitorsMetric.expression);
-var transformToPageviewsData = _.partial(transformToGraphData, pageviewsMetric.expression);
-var transformToDownloadsData = _.partial(transformToGraphData, downloadsMetric.expression);
+var transformToSessionsData = partial(transformToGraphData, sessionsMetric.expression);
+var transformToVisitorsData = partial(transformToGraphData, visitorsMetric.expression);
+var transformToPageviewsData = partial(transformToGraphData, pageviewsMetric.expression);
+var transformToDownloadsData = partial(transformToGraphData, downloadsMetric.expression);
 
 var monthlyDataPromise = batchFetchMonthlyPastYear(metricsAndDimFilters);
 

@@ -1,5 +1,5 @@
 import Dygraph from 'dygraphs';
-import _ from 'underscore';
+import has from 'lodash/has';
 
 
 /*
@@ -13,8 +13,8 @@ import _ from 'underscore';
  *          library's format function.
  */
 export const createGraph = function(el, rows, options = {}) {
-    var labels = ['Date', _.has(options, 'ylabel') ? options.ylabel : ''];
-    var format = _.has(options, 'dateFormat') ? options.dateFormat : 'MM/DD/YYYY';
+    var labels = ['Date', has(options, 'ylabel') ? options.ylabel : ''];
+    var format = has(options, 'dateFormat') ? options.dateFormat : 'MM/DD/YYYY';
 
     new Dygraph(
         el,
@@ -26,7 +26,7 @@ export const createGraph = function(el, rows, options = {}) {
             drawGrid : false,
             includeZero : true,
             fillGraph : true,
-            title : _.has(options, 'title') ? options.title : '',
+            title : has(options, 'title') ? options.title : '',
             valueFormatter : function(value, valueOptions, seriesName) {
                 if (seriesName === 'Date') {
                     return moment(value).format(format);

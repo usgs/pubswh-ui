@@ -1,4 +1,7 @@
-import _ from 'underscore';
+import each from 'lodash/each';
+import find from 'lodash/find';
+import reject from 'lodash/reject';
+import sortBy from 'lodash/sortBy';
 
 import LinkModel from '../models/LinkModel';
 import LinkTypeCollection from '../models/LinkTypeCollection';
@@ -45,7 +48,7 @@ export default BaseView.extend({
     },
 
     remove : function() {
-        _.each(this.linkRowViews, function(view){
+        each(this.linkRowViews, function(view){
             view.remove();
         });
         BaseView.prototype.remove.apply(this, arguments);
@@ -61,14 +64,12 @@ export default BaseView.extend({
         });
         this.lookupFetchPromise.done(function() {
             // Sort the views before rendering them
-            self.linkRowViews = _.chain(self.linkRowViews)
-                    .sortBy(function(view) {
-                        return view.model.get('rank');
-                    })
-                    .each(function(view) {
-                        self.renderViewRow(view);
-                    })
-                    .value();
+            self.linkRowViews = sortBy(self.linkRowViews, function(view) {
+                return view.model.get('rank');
+            });
+            each(self.linkRowViews, function(view) {
+                self.renderViewRow(view);
+            });
         });
 
         return this;
@@ -116,11 +117,11 @@ export default BaseView.extend({
     },
 
     removeLinkRow : function(model) {
-        var viewToRemove = _.findWhere(this.linkRowViews, {model : model});
+        var viewToRemove = find(this.linkRowViews, {model : model});
 
         if (viewToRemove) {
             viewToRemove.remove();
-            this.linkRowViews = _.reject(this.linkRowViews, function(view) {
+            this.linkRowViews = reject(this.linkRowViews, function(view) {
                 return view === viewToRemove;
             });
         }
@@ -129,14 +130,12 @@ export default BaseView.extend({
     updateRowOrder : function() {
         var $grid = this.$('.grid');
 
-        this.linkRowViews = _.chain(this.linkRowViews)
-            // Sort row views and them move them by successively appending them to the grid.
-            .sortBy(function(view) {
-                return view.model.attributes.rank;
-            })
-            .each(function(view) {
-                view.$el.appendTo($grid);
-            })
-            .value();
+        // Sort row views and them move them by successively appending them to the grid.
+        this.linkRowViews = sortBy(this.linkRowViews, function(view) {
+            return view.model.attributes.rank;
+        });
+        each(this.linkRowViews, function(view) {
+            view.$el.appendTo($grid);
+        });
     }
 });

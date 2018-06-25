@@ -1,7 +1,8 @@
 import 'backbone.stickit';
 
 import $ from 'jquery';
-import _ from 'underscore';
+import extend from 'lodash/extend';
+
 import BaseView from './BaseView';
 import AlertView from './AlertView';
 import CostCenterCollection from '../models/CostCenterCollection';
@@ -115,7 +116,7 @@ export default BaseView.extend({
         this.affiliationIsCostCenter = this._isCostCenterSelected();
         if (this.affiliationIsCostCenter) {
             this.costCenterPromise.done(function() {
-                self.$(CC_AFFILIATION_INPUT_SEL).select2(_.extend({
+                self.$(CC_AFFILIATION_INPUT_SEL).select2(extend({
                     data : [{
                         text : 'Active',
                         children : self.activeCostCenters.toJSON()
@@ -133,7 +134,7 @@ export default BaseView.extend({
             });
         } else {
             this.outsideAffiliatesPromise.done(function() {
-                self.$(OA_AFFILIATION_INPUT_SEL).select2(_.extend({
+                self.$(OA_AFFILIATION_INPUT_SEL).select2(extend({
                     data : [{
                         text : 'Active',
                         children : self.activeOutsideAffiliates.toJSON()

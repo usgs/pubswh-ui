@@ -1,5 +1,10 @@
 import $ from 'jquery';
-import _ from 'underscore';
+import clone from 'lodash/clone';
+import extend from 'lodash/extend';
+import has from 'lodash/has';
+import isEmpty from 'lodash/isEmpty';
+import map from 'lodash/map';
+import reject from 'lodash/reject';
 import tinymce from 'tinymce';
 
 import * as DynamicSelect2 from '../utils/DynamicSelect2';
@@ -114,12 +119,12 @@ export default BaseView.extend({
         // Set up for the publication type and larger work type select2's. These are set up once the data for the options
         // have been retrieved.
         this.pubTypePromise.done(function() {
-            self.$('#pub-type-input').select2(_.extend({
+            self.$('#pub-type-input').select2(extend({
                 data: self.publicationTypeCollection.toJSON()
             }, DEFAULT_SELECT2_OPTIONS));
             self.updatePubType();
 
-            self.$('#larger-work-type-input').select2(_.extend({
+            self.$('#larger-work-type-input').select2(extend({
                 data : self.publicationTypeCollection.toJSON()
             }, DEFAULT_SELECT2_OPTIONS));
             self.updateLargerWorkType();
@@ -127,7 +132,7 @@ export default BaseView.extend({
 
         // Set up for the cost center select2's. These are set up once the data for the options have been retrieved.
         this.costCenterPromise.done(function() {
-            self.$('#cost-centers-input').select2(_.extend({
+            self.$('#cost-centers-input').select2(extend({
                 data : [{
                     text : 'Active',
                     children : self.activeCostCenters.toJSON()
@@ -307,7 +312,7 @@ export default BaseView.extend({
     selectCostCenter : function(ev) {
         var costCenters;
         if (this.model.has('costCenters')) {
-            costCenters = _.clone(this.model.get('costCenters'));
+            costCenters = clone(this.model.get('costCenters'));
         } else {
             costCenters = [];
         }
@@ -319,10 +324,10 @@ export default BaseView.extend({
     },
 
     unselectCostCenter : function(ev) {
-        var costCenters = _.clone(this.model.get('costCenters'));
+        var costCenters = clone(this.model.get('costCenters'));
         var ccToRemove = parseInt(ev.params.data.id);
 
-        this.model.set('costCenters', _.reject(costCenters, function(cc) {
+        this.model.set('costCenters', reject(costCenters, function(cc) {
             return cc.id === ccToRemove;
         }));
     },
@@ -359,7 +364,7 @@ export default BaseView.extend({
         var $subtypeSelect = this.$('#pub-subtype-input');
 
         var pubType = this.model.get('publicationType');
-        var hasId = _.has(pubType, 'id');
+        var hasId = has(pubType, 'id');
 
         if (hasId) {
             $select.val(pubType.id).trigger('change');
@@ -374,7 +379,7 @@ export default BaseView.extend({
         var $seriesTitleSelect = this.$('#series-title-input');
 
         var pubSubtype = this.model.get('publicationSubtype');
-        var hasId = _.has(pubSubtype, 'id');
+        var hasId = has(pubSubtype, 'id');
 
         if (hasId) {
             if ($select.find('option[value="' + pubSubtype.id + '"]').length === 0) {
@@ -391,7 +396,7 @@ export default BaseView.extend({
         var $select = this.$('#series-title-input');
         var seriesTitle = this.model.get('seriesTitle');
 
-        if (_.has(seriesTitle, 'id')) {
+        if (has(seriesTitle, 'id')) {
             if ($select.find('option[value="' + seriesTitle.id + '"]').length === 0) {
                 $select.append(this.optionTemplate(seriesTitle));
             }
@@ -404,10 +409,10 @@ export default BaseView.extend({
     updateCostCenters : function() {
         var $select = this.$('#cost-centers-input');
         var costCenters = this.model.get('costCenters');
-        if (_.isEmpty(costCenters)) {
+        if (isEmpty(costCenters)) {
             $select.val('').trigger('change');
         } else {
-            $select.val(_.pluck(costCenters, 'id')).trigger('change');
+            $select.val(map(costCenters, 'id')).trigger('change');
         }
     },
 
@@ -416,7 +421,7 @@ export default BaseView.extend({
         var $subtypeSelect = this.$('#larger-work-subtype-input');
 
         var largerWorkType = this.model.get('largerWorkType');
-        var hasId = _.has(largerWorkType, 'id');
+        var hasId = has(largerWorkType, 'id');
 
         if (hasId) {
             $select.val(largerWorkType.id).trigger('change');
@@ -430,7 +435,7 @@ export default BaseView.extend({
         var $select = this.$('#larger-work-subtype-input');
 
         var largerWorkSubtype = this.model.get('largerWorkSubtype');
-        var hasId = _.has(largerWorkSubtype, 'id');
+        var hasId = has(largerWorkSubtype, 'id');
 
         if (hasId) {
             if ($select.find('option[value="' + largerWorkSubtype.id + '"]').length === 0) {

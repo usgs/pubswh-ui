@@ -1,5 +1,8 @@
-import _ from 'underscore';
 import $ from 'jquery';
+import clone from 'lodash/clone';
+import extend from 'lodash/extend';
+import has from 'lodash/has';
+import isFunction from 'lodash/isFunction';
 
 
 /*
@@ -13,7 +16,7 @@ import $ from 'jquery';
  */
  export const getSelectOptions = function(options, defaults) {
     var url;
-    if (_.isFunction(options.lookupType)) {
+    if (isFunction(options.lookupType)) {
         url = function() {
             return window.CONFIG.lookupUrl + options.lookupType();
         };
@@ -30,7 +33,7 @@ import $ from 'jquery';
                 if (options.parentId) {
                     result[options.parentId] = options.getParentId();
                 }
-                if (_.has(params, 'term')) {
+                if (has(params, 'term')) {
                     result.text = params.term;
                 }
                 return result;
@@ -41,17 +44,17 @@ import $ from 'jquery';
     // This is a special case where two lookup's are needed to fetch the active and not active values.
     // To do this, we redefined the transport function to make the two ajax calls, returning a
     // deferred which is resolved after both calls are done.
-    if (_.has(options, 'activeSubgroup')) {
+    if (has(options, 'activeSubgroup')) {
         result.ajax.transport = function(params, success, failure) {
             var deferred = $.Deferred();
-            var activeData = _.clone(params.data);
-            var notActiveData = _.clone(params.data);
+            var activeData = clone(params.data);
+            var notActiveData = clone(params.data);
             var activeRequest, notActiveRequest;
 
             activeData.active = 'y';
-            activeRequest = $.ajax(_.extend(_.clone(params), {data : activeData}));
+            activeRequest = $.ajax(extend(clone(params), {data : activeData}));
             notActiveData.active = 'n';
-            notActiveRequest = $.ajax(_.extend(_.clone(params), {data : notActiveData}));
+            notActiveRequest = $.ajax(extend(clone(params), {data : notActiveData}));
 
             $.when(activeRequest, notActiveRequest).always(function(activeResults, notActiveResults) {
                 deferred.resolve([activeResults, notActiveResults]);
@@ -85,5 +88,5 @@ import $ from 'jquery';
         };
     }
 
-    return _.extend(result, defaults ? defaults : {});
+    return extend(result, defaults ? defaults : {});
 };

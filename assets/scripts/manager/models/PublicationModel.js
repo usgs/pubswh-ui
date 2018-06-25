@@ -1,4 +1,10 @@
-import _ from 'underscore';
+import each from 'lodash/each';
+import extend from 'lodash/extend';
+import has from 'lodash/has';
+import isArray from 'lodash/isArray';
+import isObject from 'lodash/isObject';
+import omit from 'lodash/omit';
+import sortBy from 'lodash/sortBy';
 import $ from 'jquery';
 import Backbone from 'backbone';
 
@@ -23,21 +29,21 @@ export default Backbone.Model.extend({
     parse : function(response) {
         var links = this.has('links') ? this.get('links') : new LinkCollection();
         var contributors = this.has('contributors') ? this.get('contributors') : new Backbone.Model();
-        if (_.has(response, 'links') && response.links.length) {
-            links.set(_.sortBy(response.links, 'rank'));
+        if (has(response, 'links') && response.links.length) {
+            links.set(sortBy(response.links, 'rank'));
         } else {
             links.reset(null);
         }
         response.links = links;
 
-        if (_.has(response, 'contributors')) {
-            _.each(contributors.keys, function(contribType) {
+        if (has(response, 'contributors')) {
+            each(contributors.keys, function(contribType) {
                 // Clear out collection if response doesn't contain the contribType
-                if (!_.has(response.contributors, contribType)) {
+                if (!has(response.contributors, contribType)) {
                     contributors.unset(contribType);
                 }
             });
-            _.each(response.contributors, function(contribs, contribType) {
+            each(response.contributors, function(contribs, contribType) {
                 if (contributors.has(contribType)){
                     var collection = contributors.get(contribType);
                     collection.set(contribs);
@@ -48,7 +54,7 @@ export default Backbone.Model.extend({
             });
 
         } else {
-            _.each(contributors.attributes, function(value, contribType) {
+            each(contributors.attributes, function(value, contribType) {
                 var contribTypeCollection = contributors.get(contribType);
                 contribTypeCollection.reset();
             });
@@ -59,7 +65,7 @@ export default Backbone.Model.extend({
             Need to remove interactions and text to work around an issue with some properties being returned that shouldn't be.
             When PUBSTWO-1272 has been resolved, this code can be removed.
             */
-            return _.omit(response, ['interactions', 'text']);
+            return omit(response, ['interactions', 'text']);
         },
 
         fetch : function(options) {
@@ -68,8 +74,8 @@ export default Backbone.Model.extend({
                     mimetype : 'json'
                 }
             };
-            if (_.isObject(options)) {
-                _.extend(params, options);
+            if (isObject(options)) {
+                extend(params, options);
             }
             return Backbone.Model.prototype.fetch.call(this, params);
         },
@@ -99,8 +105,8 @@ export default Backbone.Model.extend({
                 },
                 error : function(jqXHR, textStatus, error) {
                     var resp = jqXHR.responseJSON;
-                    if (_.has(resp, 'validationErrors') &&
-                        _.isArray(resp.validationErrors) &&
+                    if (has(resp, 'validationErrors') &&
+                        isArray(resp.validationErrors) &&
                         resp.validationErrors.length > 0) {
                         self.set('validationErrors', resp.validationErrors);
                     deferred.reject(jqXHR, 'Validation errors');

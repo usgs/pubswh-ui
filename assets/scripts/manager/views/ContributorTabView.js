@@ -1,6 +1,9 @@
-import _ from 'underscore';
 import $ from 'jquery';
+import each from 'lodash/each';
+import find from 'lodash/find';
 import log from 'loglevel';
+import reject from 'lodash/reject';
+import sortBy from 'lodash/sortBy';
 
 import BaseView from './BaseView';
 import ContributorRowView from './ContributorRowView';
@@ -51,19 +54,19 @@ export default BaseView.extend({
                 ui.item.find('.contributor-row-container').trigger('updateOrder', ui.item.index());
             }
         });
-        this.rowViews = _.chain(this.rowViews)
-        .sortBy(function(view) {
+
+        this.rowViews = sortBy(this.rowViews, function(view) {
             return view.model.get('rank');
-        })
-        .each(function(view) {
+        });
+        each(this.rowViews, function(view) {
             self.renderViewRow(view);
-        })
-        .value();
+        });
+
         this.renderDeferred.resolve();
     },
 
     remove : function() {
-        _.each(this.rowViews, function(view) {
+        each(this.rowViews, function(view) {
             view.remove();
         });
 
@@ -118,11 +121,11 @@ export default BaseView.extend({
     },
 
     removeRow : function(model) {
-        var viewToRemove = _.findWhere(this.rowViews, {model : model});
+        var viewToRemove = find(this.rowViews, {model : model});
 
         if (viewToRemove) {
             viewToRemove.remove();
-            this.rowViews = _.reject(this.rowViews, function(view) {
+            this.rowViews = reject(this.rowViews, function(view) {
                 return view === viewToRemove;
             });
         }
@@ -130,16 +133,15 @@ export default BaseView.extend({
 
     updateRowOrder : function() {
         var $grid = this.$('.grid');
-        this.rowViews = _.chain(this.rowViews)
-            // Sort row views and them move them by successively appending them to the grid.
-            .sortBy(function(view) {
-                return view.model.attributes.rank;
-            })
-            .each(function(view) {
-                if (view.$el) {
-                    view.$el.appendTo($grid);
-                }
-            })
-            .value();
+
+        // Sort row views and them move them by successively appending them to the grid.
+        this.rowViews = sortBy(this.rowViews, function(view) {
+            return view.model.attributes.rank;
+        });
+        each(this.rowViews, function(view) {
+            if (view.$el) {
+                view.$el.appendTo($grid);
+            }
+        });
     }
 });
