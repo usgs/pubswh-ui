@@ -82,8 +82,7 @@ const getBundleConfig = function (src, dest) {
                     'backbone.paginator': 'lib/backbone.paginator.js',
                     'backgrid-select-all': 'backgrid-select-all.js',
                     'backbone.stickit': 'backbone.stickit.js',
-                    'moment': 'min/moment.min.js',
-                    'loglevel': 'dist/loglevel.min.js'
+                    'moment': 'min/moment.min.js'
                 }
             }),
             commonjs(),
