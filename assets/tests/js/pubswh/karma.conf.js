@@ -20,7 +20,7 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             'node_modules/jquery/dist/jquery.min.js',
-            'bower_components/bootstrap/dist/js/bootstrap.js',
+            'node_modules/bootstrap/dist/js/bootstrap.js',
             'bower_components/select2/dist/js/select2.js',
             'bower_components/handlebars/handlebars.js',
             'bower_components/leaflet/dist/leaflet.js',

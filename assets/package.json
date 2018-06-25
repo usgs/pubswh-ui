@@ -83,6 +83,7 @@
     "uglifycss": "0.0.29"
   },
   "dependencies": {
+    "bootstrap": "^3.3.7",
     "font-awesome": "^4.6.3",
     "jquery": "^2.2.4",
     "jquery-ui": "^1.12.0"
