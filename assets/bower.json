@@ -22,7 +22,6 @@
     "dygraphs": "1.1.1",
     "leaflet": "1.0.3",
     "esri-leaflet": "2.0.8",
-    "leaflet-draw": "0.4.9",
     "MathJax": "2.7.1",
     "backbone-pageable": "backbone-paginator/backbone-pageable#^1.4.8",
     "modernizer": "^2.8.2"
