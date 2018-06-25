@@ -5,7 +5,7 @@ import has from 'lodash/has';
 import isEmpty from 'lodash/isEmpty';
 import map from 'lodash/map';
 import reject from 'lodash/reject';
-import tinymce from 'tinymce';
+import tinymce from 'tinymce/tinymce';
 
 import * as DynamicSelect2 from '../utils/DynamicSelect2';
 import PublicationTypeCollection from '../models/PublicationTypeCollection';
@@ -16,6 +16,12 @@ import optionTemplate from '../hb_templates/bibliodataOption.hbs';
 
 import 'select2';
 import 'backbone.stickit';
+
+// Load the TinyMCE theme and plugins we need.
+import 'tinymce/themes/modern/theme';
+import 'tinymce/plugins/code';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/paste';
 
 
 export default BaseView.extend({
@@ -198,6 +204,7 @@ export default BaseView.extend({
 
             }
             tinymce.init({
+                skin_url: `${window.CONFIG.staticRoot}/tinymce/skins/lightgray`,
                 selector: '#docAbstract-input',
                 setup: function (ed) {
                     abstractInitDeferred.resolve();

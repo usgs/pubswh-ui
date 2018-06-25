@@ -5,13 +5,19 @@ import 'backbone.stickit';
 import $ from 'jquery';
 import extend from 'lodash/extend';
 import has from 'lodash/has';
-import tinymce from 'tinymce';
+import tinymce from 'tinymce/tinymce';
 
 import * as DynamicSelect2 from '../utils/DynamicSelect2';
 import PublishingServiceCenterCollection from '../models/PublishingServiceCenterCollection';
 import BaseView from './BaseView';
 import hbTemplate from '../hb_templates/spn.hbs';
 import optionTemplate from '../hb_templates/spnOption.hbs';
+
+// Load the TinyMCE theme and plugins we need.
+import 'tinymce/themes/modern/theme';
+import 'tinymce/plugins/code';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/paste';
 
 
 export default BaseView.extend({
@@ -115,6 +121,7 @@ export default BaseView.extend({
                 tinymce.execCommand('mceAddEditor', true, 'contacts-input');
             }
             tinymce.init({
+                skin_url: `${window.CONFIG.scriptRoot}/tinymce/skins/lightgray`,
                 selector : '#contacts-input',
                 setup : function(ed) {
                     deferred.resolve();

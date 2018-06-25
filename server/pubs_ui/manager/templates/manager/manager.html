@@ -16,6 +16,7 @@
 {% block page_script %}
 	<script type="text/javascript">
 		window.CONFIG = {
+			staticRoot: '{{ config.STATIC_ROOT }}',
 			scriptRoot: '{{ request.script_root }}',
 			jsDebug: '{{ config.JS_DEBUG }}',
 			lookupUrl: '{{ config.LOOKUP_URL }}',

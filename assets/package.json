@@ -21,6 +21,7 @@
     "buildcss:metrics": "lessc styles/metrics/metrics_custom.less > dist/metrics.css && uglifycss --output dist/metrics.css dist/metrics.css && postcss dist/metrics.css --no-map --use autoprefixer -o dist/metrics.css",
     "build:fonts": "mkdir -p dist/fonts && cp node_modules/font-awesome/fonts/* dist/fonts",
     "build:images": "mkdir -p dist/images && cp -r images/* dist/images",
+    "build:tinymceskins": "mkdir -p dist/tinymce/skins && cp -r node_modules/tinymce/skins/* dist/tinymce/skins",
     "buildvendor:git": "cp -r scripts/vendor dist/scripts",
     "buildvendor:leaflet": "mkdir -p dist/vendor/leaflet && cp -r bower_components/leaflet/dist/* dist/vendor/leaflet",
     "buildvendor:esri-leaflet": "mkdir -p dist/vendor/esri-leaflet && cp -r bower_components/esri-leaflet/dist/* dist/vendor/esri-leaflet",
@@ -91,7 +92,8 @@
     "font-awesome": "^4.6.3",
     "jquery": "^2.2.4",
     "jquery-ui": "^1.12.0",
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.10",
+    "tinymce": "^4.7.13"
   },
   "eslintIgnore": [
     "scripts/vendor"

@@ -27,7 +27,6 @@ require.config({
         'jquery': '/base/bower_components/jquery/dist/jquery',
         'jquery-ui': '/base/bower_components/jquery-ui/jquery-ui',
         'select2': '/base/bower_components/select2/dist/js/select2.full',
-        'tinymce': '/base/bower_components/tinymce/tinymce',
         'bootstrap': '/base/node_modules/bootstrap/dist/js/bootstrap',
         'text': '/base/bower_components/text/text',
         'underscore': '/base/bower_components/underscore/underscore',

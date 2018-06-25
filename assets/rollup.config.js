@@ -78,7 +78,6 @@ const getBundleConfig = function (src, dest) {
                     //lodash: 'dist/lodash.js'
                     'backbone-pageable': 'lib/backbone-pageable.js',
                     'select2': 'dist/js/select2.full.js',
-                    'tinymce': 'tinymce.js',
                     'underscore': 'underscore.js',
                     'backbone': 'backbone.js',
                     'backbone.paginator': 'lib/backbone.paginator.js',
