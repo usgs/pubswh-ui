@@ -19,13 +19,8 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'node_modules/jquery/dist/jquery.min.js',
-            'node_modules/bootstrap/dist/js/bootstrap.js',
-            'bower_components/handlebars/handlebars.js',
             'node_modules/leaflet/dist/leaflet.js',
             'node_modules/esri-leaflet/dist/esri-leaflet.js',
-            'bower_components/moment/min/moment.min.js',
-            'bower_components/underscore/underscore.js',
             'scripts/pubswh/vendor/mapbox/leaflet-pip/leaflet-pip.js',
             'tests/js/pubswh/resources/config.js',
             'scripts/pubswh/*.js',
