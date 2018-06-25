@@ -21,7 +21,6 @@ module.exports = function(config) {
         files: [
             'node_modules/jquery/dist/jquery.min.js',
             'node_modules/bootstrap/dist/js/bootstrap.js',
-            'bower_components/select2/dist/js/select2.js',
             'bower_components/handlebars/handlebars.js',
             'bower_components/leaflet/dist/leaflet.js',
             'bower_components/esri-leaflet/dist/esri-leaflet.js',

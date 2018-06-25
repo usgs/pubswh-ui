@@ -77,7 +77,6 @@ const getBundleConfig = function (src, dest) {
                 override: {
                     //lodash: 'dist/lodash.js'
                     'backbone-pageable': 'lib/backbone-pageable.js',
-                    'select2': 'dist/js/select2.full.js',
                     'underscore': 'underscore.js',
                     'backbone': 'backbone.js',
                     'backbone.paginator': 'lib/backbone.paginator.js',
