@@ -18,7 +18,6 @@
   ],
   "dependencies": {
     "dygraphs": "1.1.1",
-    "MathJax": "2.7.1",
     "modernizer": "^2.8.2"
   },
   "resolutions": {
