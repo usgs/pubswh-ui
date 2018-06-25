@@ -84,6 +84,8 @@
   },
   "dependencies": {
     "backbone.stickit": "^0.9.2",
+    "backgrid": "^0.3.8",
+    "backgrid-paginator": "^0.3.9",
     "bootstrap": "^3.3.7",
     "font-awesome": "^4.6.3",
     "jquery": "^2.2.4",
