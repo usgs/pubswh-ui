@@ -84,6 +84,7 @@
     "uglifycss": "0.0.29"
   },
   "dependencies": {
+    "backbone.paginator": "^2.0.5",
     "backbone.stickit": "^0.9.2",
     "backgrid": "^0.3.8",
     "backgrid-paginator": "^0.3.9",
