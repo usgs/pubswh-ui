@@ -25,6 +25,7 @@ const getBundleConfig = function (src, dest) {
                 //exclude: 'node_modules/**',
                 modules: {
                     $: 'jquery',
+                    //_: 'lodash',
                     jQuery: 'jquery',
                     moment: 'moment'
                 }
@@ -75,9 +76,7 @@ const getBundleConfig = function (src, dest) {
 
                 // Override path to main file (relative to the module directory).
                 override: {
-                    //lodash: 'dist/lodash.js'
                     'backbone-pageable': 'lib/backbone-pageable.js',
-                    'underscore': 'underscore.js',
                     'backbone': 'backbone.js',
                     'backbone.paginator': 'lib/backbone.paginator.js',
                     'backgrid-select-all': 'backgrid-select-all.js',
