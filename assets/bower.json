@@ -1,0 +1,22 @@
+{
+  "name": "pubs_ui",
+  "version": "0.0.0",
+  "homepage": "https://github.com/PubsWarehouse_UI",
+  "authors": [
+    "Mary Bucknell <mbucknell@usgs.gov>"
+  ],
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "academicons": "^1.8.6"
+  }
+}

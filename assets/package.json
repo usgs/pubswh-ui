@@ -22,6 +22,7 @@
     "build:fonts": "mkdir -p dist/fonts && cp node_modules/font-awesome/fonts/* dist/fonts && cp node_modules/bootstrap/fonts/* dist/fonts",
     "build:images": "mkdir -p dist/images && cp -r images/* dist/images",
     "build:tinymceskins": "mkdir -p dist/tinymce/skins && cp -r node_modules/tinymce/skins/* dist/tinymce/skins",
+    "buildvendor:academicons": "mkdir -p dist/vendor/academicons && cp -r bower_components/academicons/* dist/vendor/academicons",
     "buildvendor:git": "cp -r scripts/vendor dist/scripts",
     "buildvendor:leaflet": "mkdir -p dist/vendor/leaflet && cp -r node_modules/leaflet/dist/* dist/vendor/leaflet",
     "buildvendor:esri-leaflet": "mkdir -p dist/vendor/esri-leaflet && cp -r node_modules/esri-leaflet/dist/* dist/vendor/esri-leaflet",
@@ -48,6 +49,7 @@
   "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^8.6.2",
+    "bower": "^1.8.4",
     "eslint": "^4.19.1",
     "eslint-plugin-jasmine": "^2.10.1",
     "gulp": "^3.9.1",
