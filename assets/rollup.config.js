@@ -24,7 +24,6 @@ const getBundleConfig = function (src, dest) {
                 //exclude: 'node_modules/**',
                 modules: {
                     $: 'jquery',
-                    //_: 'lodash',
                     jQuery: 'jquery',
                     moment: 'moment'
                 }
