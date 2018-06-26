@@ -379,7 +379,7 @@ def browse_subtypes(pub_type):
         if pub_type.lower() in just_list_pubs:
             pubs = get(pub_url + "publication/", params={"mimeType": "tsv", "typeName": pub_type}, verify=verify_cert)
             if pubs.text:
-                pubs_data = tablib.Dataset().load(pubs.content)
+                pubs_data = tablib.Dataset().load(pubs.content.decode('utf-8'))
                 pubs_data_dict = pubs_data.dict
                 for row in pubs_data_dict:  # you can iterate over this dict becasue it is actually an ordered dict
                     row['indexId'] = row['URL'].split("/")[-1]
