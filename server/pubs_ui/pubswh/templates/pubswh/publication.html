@@ -38,6 +38,7 @@
        {%- if pubdata["geographicExtents"] -%}
         <link rel="stylesheet" href="{{ 'vendor/leaflet/leaflet.css' | asset_url }} ">
        {% endif %}
+       <link rel="stylesheet" href="{{ 'vendor/academicons/css/academicons.css' | asset_url }} ">
     {% endblock page_style %}
     {% include 'pubswh/mathjax.html' %}
 
@@ -91,19 +92,23 @@
                 {# macro for generating the contributor lists, including commas & ands where they are supposed to be  #}
                 {% macro contributor_list(contributorListTyped, contributorKind) %}
                     {%- for contributor in pubdata[contributorListTyped]  -%}
-                          {% if loop.length == 2 and loop.first != True %} and {% elif loop.last and loop.length > 2 %}and {% endif %}
-                          {%- if contributor['type'] == "person"  -%}
-                            <span itemprop="{{ contributorKind }}" itemtype="http://schema.org/Person">{{ contributor['text'] }}</span>
-                              {% if contributor['orcid'] %}
-                                  <a href="{{ contributor['orcid'] }}">
-                                    <img alt="ORCID iD" src="{{ 'images/pubswh/orcid_16x16.png' | asset_url }}" style="width:16px; height:16px; margin-right:4px; margin-left:4px">
-                                  </a>
-                              {% endif %}
-                          {%- else -%}
-                         <span itemprop="{{ contributorKind }}" itemtype="http://schema.org/Organization">{{ contributor['text'] }}</span>
-                          {%- endif -%}
-                          {% if not loop.last and loop.length > 2 %},
-                          {% endif %}
+                        {% if loop.length == 2 and loop.first != True %} and {% elif loop.last and loop.length > 2 %} and {% endif %}
+                        {%- if contributor['type'] == "person"  -%}
+                            <div class="contributor" itemprop="{{ contributorKind }}" itemtype="http://schema.org/Person">
+                                {{ contributor['text'] }}
+                                {% if contributor['orcid'] %}
+                                    <a href="{{ contributor['orcid'] }}">
+                                        <i class="ai ai-orcid ai-2x" style="color:#A6CE39;  font-size: 1.5em"></i>
+                                    </a>
+                                {% endif %}
+                                {% if not loop.last and loop.length > 2 %}, {% endif %}
+                            </div>
+                        {%- else -%}
+                            <div class="contributor" itemprop="{{ contributorKind }}" itemtype="http://schema.org/Organization" style="display: inline-block; white-space:nowrap;">
+                                {{ contributor['text'] }}
+                                {% if not loop.last and loop.length > 2 %}, {% endif %}
+                            </div>
+                        {%- endif -%}
                     {%-  endfor -%}
                 {% endmacro %}
 

@@ -27,7 +27,7 @@ lint-assets:
 #
 # Environment configuration targets
 #
-env-assets: assert-assets-node assets-node-modules
+env-assets: assert-assets-node assets-node-modules assets-bower-modules
 
 # Assert that we're using the proper node.js version
 assert-assets-node:
@@ -43,6 +43,11 @@ assets-node-modules:
 	@echo 'Installing assets dependencies...'
 	cd assets && npm install
 
+assets-bower-modules: assets-node-modules
+	@echo 'Installing assets dependencies...'
+	cd assets && npx bower install
+
 cleanenv-assets: clean-assets
 	@echo 'Cleaning assets environment...'
+	rm -rf assets/bower_components
 	rm -rf assets/node_modules
