@@ -1,5 +1,7 @@
 import 'select2';
-import _ from 'underscore';
+
+import extend from 'lodash/extend';
+import has from 'lodash/has';
 
 import * as DynamicSelect2 from '../utils/DynamicSelect2';
 import { createDivInContainer } from '../utils/jqueryUtils';
@@ -51,7 +53,7 @@ export default BaseView.extend({
         BaseView.prototype.render.apply(this, arguments);
 
         // If fetching an existing contributor, create edit view once the contributor has been fetched.
-        if (_.has(this, 'initialFetchPromise')) {
+        if (has(this, 'initialFetchPromise')) {
             $loadingIndicator = this.$('.loading-indicator');
             $loadingIndicator.show();
             this.initialFetchPromise
@@ -74,7 +76,7 @@ export default BaseView.extend({
         this.$('.contributor-type-select').select2(DEFAULT_SELECT2_OPTIONS);
         this.$('.person-select-div select').select2(DynamicSelect2.getSelectOptions({
             lookupType : 'people'
-        }, _.extend({minimumInputLength : 2}, DEFAULT_SELECT2_OPTIONS)));
+        }, extend({minimumInputLength : 2}, DEFAULT_SELECT2_OPTIONS)));
         this.$('.corporation-select-div select').select2(DynamicSelect2.getSelectOptions({
             lookupType : 'corporations'
         }, DEFAULT_SELECT2_OPTIONS));

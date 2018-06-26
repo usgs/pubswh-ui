@@ -1,8 +1,19 @@
 import 'backgrid-paginator';
 
-import _ from 'underscore';
 import $ from 'jquery';
 import Backgrid from 'backgrid';
+import bind from 'lodash/bind';
+import clone from 'lodash/clone';
+import each from 'lodash/each';
+import extend from 'lodash/extend';
+import first from 'lodash/first';
+import has from 'lodash/has';
+import includes from 'lodash/includes';
+import isArray from 'lodash/isArray';
+import isString from 'lodash/isString';
+import keys from 'lodash/keys';
+import map from 'lodash/map';
+import mapValues from 'lodash/mapValues';
 
 import PublicationListCollection from '../models/PublicationListCollection';
 import BackgridUrlCell from './BackgridUrlCell';
@@ -22,12 +33,12 @@ const DEFAULT_SELECT2_OPTIONS = {
 
 
 const getFilters = function(model) {
-    return _.mapObject(model.attributes, function(val) {
+    return mapValues(model.attributes, function(val) {
         var result;
-        if (_.isString(val)) {
+        if (isString(val)) {
             result = val;
         } else {
-            result = _.map(val.selections, function(selection) {
+            result = map(val.selections, function(selection) {
                 return val.useId ? selection.id : selection.text;
             });
         }
@@ -97,7 +108,7 @@ export default BaseView.extend({
         };
 
         var fromRawFirstAuthor = function(rawValue) {
-            if (rawValue && _.has(rawValue, 'authors') && _.isArray(rawValue.authors) && rawValue.authors.length > 0) {
+            if (rawValue && has(rawValue, 'authors') && isArray(rawValue.authors) && rawValue.authors.length > 0) {
                 return rawValue.authors[0].text;
             } else {
                 return '';
@@ -271,19 +282,19 @@ export default BaseView.extend({
         this.$('.pub-grid-footer').append(this.paginator.render().el);
 
         //Create any search filter rows
-        _.each(_.keys(this.model.omit(['listId', 'q'])), _.bind(this._createFilterRow, this));
+        each(keys(this.model.omit(['listId', 'q'])), bind(this._createFilterRow, this));
 
         // Initialize the publication lists select2 and filter
         this.pubListFetch.then(function() {
-            var listFilter = self.model.has('listId') ? _.pluck(self.model.get('listId').selections, 'id') : [];
-            var pubList = _.map(self.publicationListCollection.toJSON(), function(pubList) {
-                var result = _.clone(pubList);
-                if (_.contains(listFilter, JSON.stringify(result.id))) {
+            var listFilter = self.model.has('listId') ? map(self.model.get('listId').selections, 'id') : [];
+            var pubList = map(self.publicationListCollection.toJSON(), function(pubList) {
+                var result = clone(pubList);
+                if (includes(listFilter, JSON.stringify(result.id))) {
                     result.checked = true;
                 }
                 return result;
             });
-            self.$('#pubs-categories-select').select2(_.extend({
+            self.$('#pubs-categories-select').select2(extend({
                 data : pubList
             }, DEFAULT_SELECT2_OPTIONS));
             self.$('.pub-filter-list-div').html(pubListTemplate({pubList : pubList}));
@@ -307,7 +318,7 @@ export default BaseView.extend({
         this.paginator.remove();
         this.alertView.remove();
         this.warningDialogView.remove();
-        _.each(this.filterRowViews, function(view) {
+        each(this.filterRowViews, function(view) {
             view.remove();
         });
 
@@ -337,7 +348,7 @@ export default BaseView.extend({
         // No events will be fired so update DOM directly.
         this.updateQTerm();
         this.updatePubsListFilter();
-        _.each(this.filterRowViews, function(rowView) {
+        each(this.filterRowViews, function(rowView) {
             rowView.remove();
         });
 
@@ -372,7 +383,7 @@ export default BaseView.extend({
 
     clearFilterRows : function(ev) {
         ev.preventDefault();
-        _.each(this.filterRowViews, function(view) {
+        each(this.filterRowViews, function(view) {
             view.remove();
         });
         this.filterRowViews = [];
@@ -405,7 +416,7 @@ export default BaseView.extend({
             return model.has('selected') && model.get('selected');
         });
         var pubsIdData = $.param({
-            publicationId : _.map(selectedPubs, function(model) {
+            publicationId : map(selectedPubs, function(model) {
                 return model.get('id');
             })
         }, true);
@@ -426,7 +437,7 @@ export default BaseView.extend({
                 'You must select at least one publication list'
             );
         } else {
-            addDeferreds = _.map(pubsList, function (pubListId) {
+            addDeferreds = map(pubsList, function (pubListId) {
                 return $.ajax({
                     url: serviceUrl + pubListId + '/pubs?' + pubsIdData,
                     method: 'POST'
@@ -444,13 +455,13 @@ export default BaseView.extend({
 
     removeSelectedPubsFromCategory: function() {
         var self = this;
-        var selectedFilter = _.first(getFilters(this.model).listId);
+        var selectedFilter = first(getFilters(this.model).listId);
         var serviceUrl = window.CONFIG.scriptRoot + '/manager/services/lists/' + selectedFilter;
         var selectedPubs = this.collection.filter(function(model) {
             return model.has('selected') && model.get('selected');
         });
         // get publication ids from selectedPubs
-        var selectedPubIds = _.pluck(selectedPubs, 'id');
+        var selectedPubIds = map(selectedPubs, 'id');
         // execute the delete requests
         var removeDeferreds = [];
         if (selectedPubIds.length === 0) {
@@ -459,7 +470,7 @@ export default BaseView.extend({
                 'You must select at least one publication to remove from the current filter list.'
             );
         } else {
-            removeDeferreds = _.map(selectedPubIds, function(selectedPubId) {
+            removeDeferreds = map(selectedPubIds, function(selectedPubId) {
                 var targetUrl = serviceUrl + '/pubs/' + selectedPubId;
                 return $.ajax({
                     url: targetUrl,
@@ -495,10 +506,10 @@ export default BaseView.extend({
         this.$('#search-term-input').val(qTerm);
     },
     updatePubsListFilter : function() {
-        var pubsList = this.model.has('listId') ? _.pluck(this.model.get('listId').selections, 'id') : [];
+        var pubsList = this.model.has('listId') ? map(this.model.get('listId').selections, 'id') : [];
 
         this.$('.pub-filter-container input[type="checkbox"]').each(function() {
-            $(this).prop('checked', _.contains(pubsList, $(this).val()));
+            $(this).prop('checked', includes(pubsList, $(this).val()));
         });
     },
 
@@ -509,7 +520,7 @@ export default BaseView.extend({
         var selectedFilter;
         var selectedText;
         if (selectedFilters.length === 1) {
-            selectedFilter = _.first(selectedFilters);
+            selectedFilter = first(selectedFilters);
             selectedText = this.publicationListCollection.findWhere({id : parseInt(selectedFilter)}).get('text');
             $removePubBtn.html('Remove Selected Publications From "' + selectedText + '" List');
             $removePubBtn.show();

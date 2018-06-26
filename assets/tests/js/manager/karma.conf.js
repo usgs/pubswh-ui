@@ -90,8 +90,7 @@ module.exports = function(config) {
                     istanbul({
                         exclude: [
                             'tests/**/*.js',
-                            'node_modules/**/*.js',
-                            'bower_components/**/*.js'
+                            'node_modules/**/*.js'
                         ]
                     })
                 ]

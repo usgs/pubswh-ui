@@ -19,15 +19,8 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'node_modules/jquery/dist/jquery.min.js',
-            'bower_components/bootstrap/dist/js/bootstrap.js',
-            'bower_components/select2/dist/js/select2.js',
-            'bower_components/handlebars/handlebars.js',
-            'bower_components/leaflet/dist/leaflet.js',
-            'bower_components/esri-leaflet/dist/esri-leaflet.js',
-            'bower_components/moment/min/moment.min.js',
-            'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-            'bower_components/underscore/underscore.js',
+            'node_modules/leaflet/dist/leaflet.js',
+            'node_modules/esri-leaflet/dist/esri-leaflet.js',
             'scripts/pubswh/vendor/mapbox/leaflet-pip/leaflet-pip.js',
             'tests/js/pubswh/resources/config.js',
             'scripts/pubswh/*.js',
@@ -109,8 +102,7 @@ module.exports = function(config) {
                     istanbul({
                         exclude: [
                             'tests/**/*.js',
-                            'node_modules/**/*.js',
-                            'bower_components/**/*.js'
+                            'node_modules/**/*.js'
                         ]
                     })
                 ]

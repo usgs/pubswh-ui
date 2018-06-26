@@ -1,4 +1,7 @@
-import _ from 'underscore';
+import has from 'lodash/has';
+import map from 'lodash/map';
+import partial from 'lodash/partial';
+import reduce from 'lodash/reduce';
 
 import { getPastYear, fillMissingDates } from './dataUtils';
 
@@ -10,7 +13,10 @@ const BATCH_FETCH_ENDPOINT = CONFIG.JSON_LD_ID_BASE_URL + 'metrics/gadata/';
 
 
 const transformRow = function(metricNames, dateDimFormat, row) {
-    var result = _.object(metricNames, row.metrics[0].values);
+    var result = reduce(metricNames, function (obj, name, index) {
+        obj[name] = row.metrics[0].values[index];
+        return obj;
+    }, {});
     result.date = moment(row.dimensions[0], dateDimFormat);
     return result;
 };
@@ -52,9 +58,9 @@ export const batchFetchMonthlyPastYear = function(metricsAndDimFilters, fromDate
         data : JSON.stringify(metricsAndDimFilters.map(transformToRequest)),
         success: function(response) {
             var transformResponse = function(report) {
-                var metricNames = _.pluck(report.columnHeader.metricHeader.metricHeaderEntries, 'name');
-                var transformMonthRow = _.partial(transformRow, metricNames, MONTH_DIM_FORMAT);
-                var rows = _.has(report.data, 'rows') ? report.data.rows : [];
+                var metricNames = map(report.columnHeader.metricHeader.metricHeaderEntries, 'name');
+                var transformMonthRow = partial(transformRow, metricNames, MONTH_DIM_FORMAT);
+                var rows = has(report.data, 'rows') ? report.data.rows : [];
 
                 return fillMissingDates({
                     startDate: dateRange[0],
@@ -114,9 +120,9 @@ export const batchFetchPast30Days = function(metricsAndDimFilters, fromDate) {
         data : JSON.stringify(metricsAndDimFilters.map(transformToRequest)),
         success: function(response) {
             var transformResponse = function(report) {
-                var metricNames = _.pluck(report.columnHeader.metricHeader.metricHeaderEntries, 'name');
-                var transformDayRow = _.partial(transformRow, metricNames, DAY_DIM_FORMAT);
-                var rows = _.has(report.data, 'rows') ? report.data.rows : [];
+                var metricNames = map(report.columnHeader.metricHeader.metricHeaderEntries, 'name');
+                var transformDayRow = partial(transformRow, metricNames, DAY_DIM_FORMAT);
+                var rows = has(report.data, 'rows') ? report.data.rows : [];
 
                 return fillMissingDates({
                     startDate: thirtyDaysAgo,

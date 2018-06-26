@@ -1,6 +1,6 @@
 import 'backbone.stickit';
 
-import _ from 'underscore';
+import each from 'lodash/each';
 
 import ContributorTypeCollection from '../models/ContributorTypeCollection';
 import PublicationContributorCollection from '../models/PublicationContributorCollection';
@@ -62,14 +62,14 @@ export default BaseView.extend({
             self.context.contributorTypes = self.contributorTypeCollection.toJSON();
             BaseView.prototype.render.apply(self, arguments);
             self.stickit();
-            _.each(self.typeTabViews, function(tab) {
+            each(self.typeTabViews, function(tab) {
                 tab.view.setElement(tab.el).render();
             });
         });
     },
 
     remove : function() {
-        _.each(this.typeTabViews, function(tab) {
+        each(this.typeTabViews, function(tab) {
             tab.view.remove();
         });
         BaseView.prototype.remove.apply(this, arguments);

@@ -1,8 +1,13 @@
 import 'backbone.stickit';
 import 'select2';
 
-import _ from 'underscore';
 import $ from 'jquery';
+import clone from 'lodash/clone';
+import extend from 'lodash/extend';
+import flatten from 'lodash/flatten';
+import isEmpty from 'lodash/isEmpty';
+import map from 'lodash/map';
+import reject from 'lodash/reject';
 
 import CostCenterCollection from '../models/CostCenterCollection';
 import OutsideAffiliationLookupCollection from '../models/OutsideAffiliationLookupCollection';
@@ -94,9 +99,9 @@ var DEFAULT_SELECT2_OPTIONS = {
         $.when(this.outsideAffiliatesPromise, this.costCenterPromise).done(function() {
             var costCenterDataArr = costCenterData.data;
             var outsideDataArr = outsideData.data;
-            var allOptions = _.flatten([costCenterDataArr, outsideDataArr]);
+            var allOptions = flatten([costCenterDataArr, outsideDataArr]);
             var allOptionsChoices = {data: allOptions};
-            self.$('.all-affiliation-select').select2(_.extend(allOptionsChoices, DEFAULT_SELECT2_OPTIONS));
+            self.$('.all-affiliation-select').select2(extend(allOptionsChoices, DEFAULT_SELECT2_OPTIONS));
             self.updateAffiliations();
         });
 
@@ -110,10 +115,10 @@ var DEFAULT_SELECT2_OPTIONS = {
     updateAffiliations : function() {
         var $allAffiliationsSelect = this.$('.all-affiliation-select');
         var personAffiliations = this.model.get('affiliations');
-        if (_.isEmpty(personAffiliations)) {
+        if (isEmpty(personAffiliations)) {
             $allAffiliationsSelect.val('').trigger('change');
         } else {
-            $allAffiliationsSelect.val(_.pluck(personAffiliations, 'id')).trigger('change');
+            $allAffiliationsSelect.val(map(personAffiliations, 'id')).trigger('change');
         }
     },
 
@@ -124,7 +129,7 @@ var DEFAULT_SELECT2_OPTIONS = {
     selectAffiliations : function(ev) {
         var selectedAffiliations;
         if (this.model.has('affiliations')) {
-            selectedAffiliations = _.clone(this.model.get('affiliations'));
+            selectedAffiliations = clone(this.model.get('affiliations'));
         } else {
             selectedAffiliations = [];
         }
@@ -136,9 +141,9 @@ var DEFAULT_SELECT2_OPTIONS = {
     },
 
     unselectAffiliations : function(ev) {
-        var selectedAffiliations = _.clone(this.model.get('affiliations'));
+        var selectedAffiliations = clone(this.model.get('affiliations'));
         var terminalAffiliation = parseInt(ev.params.data.id);
-        var paredDownAffiliations = _.reject(selectedAffiliations, function(sa) {
+        var paredDownAffiliations = reject(selectedAffiliations, function(sa) {
             return sa.id === terminalAffiliation;
         });
         this.model.set('affiliations', paredDownAffiliations);

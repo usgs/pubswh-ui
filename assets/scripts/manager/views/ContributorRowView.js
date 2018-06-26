@@ -1,5 +1,7 @@
+import extend from 'lodash/extend';
 import log from 'loglevel';
-import _ from 'underscore';
+import map from 'lodash/map';
+
 import * as DynamicSelect2 from '../utils/DynamicSelect2';
 import BaseView from './BaseView';
 import hb_template from '../hb_templates/contributorTabRow.hbs';
@@ -16,7 +18,7 @@ export default BaseView.extend({
             onGet : function(value) {
                 var displayText;
                 if (value && value.length > 0) {
-                    var stagingText = _.pluck(value, 'text');
+                    var stagingText = map(value, 'text');
                     displayText = stagingText.join(', ');
                 } else {
                     displayText = '';
@@ -73,7 +75,7 @@ export default BaseView.extend({
             lookupType: function () {
                 return self.model.get('corporation') ? 'corporations' : 'people';
             }
-        }, _.extend({minimumInputLength: 2}, DEFAULT_SELECT2_OPTIONS)));
+        }, extend({minimumInputLength: 2}, DEFAULT_SELECT2_OPTIONS)));
         this.updateName();
         return this;
     },

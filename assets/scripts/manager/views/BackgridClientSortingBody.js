@@ -1,5 +1,6 @@
 import Backgrid from 'backgrid';
-import _ from 'underscore';
+import includes from 'lodash/includes';
+import isString from 'lodash/isString';
 
 
 /*
@@ -12,11 +13,11 @@ export default Backgrid.Body.extend({
     */
     sort: function (column, direction) {
 
-        if (!_.contains(['ascending', 'descending', null], direction)) {
+        if (!includes(['ascending', 'descending', null], direction)) {
             throw new RangeError('direction must be one of "ascending", "descending" or `null`');
         }
 
-        if (_.isString(column)) column = this.columns.findWhere({name: column});
+        if (isString(column)) column = this.columns.findWhere({name: column});
 
         var collection = this.collection;
 

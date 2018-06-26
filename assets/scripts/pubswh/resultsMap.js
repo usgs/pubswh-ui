@@ -1,4 +1,6 @@
-import _ from 'underscore';
+import filter from 'lodash/filter';
+import has from 'lodash/has';
+import map from 'lodash/map';
 
 import popupTemplate from './hb_templates/resultsMapPopup.hbs';
 
@@ -37,17 +39,15 @@ export const createResultsMap = window.createResultsMap = function(options) {
         weight: 2
     };
 
-    var pubsExtentLayers = _.chain(options.publications)
-        .filter(function(pub) {
-            return _.has(pub, 'geographicExtents');
-        })
-        .map(function(pub) {
-            return L.geoJSON(pub.geographicExtents, {
-                style: quiet,
-                interactive: options.enablePopup
-            });
-        })
-        .value();
+    var pubsExtentLayers = filter(options.publications, function(pub) {
+        return has(pub, 'geographicExtents');
+    });
+    pubsExtentLayers = map(pubsExtentLayers, function(pub) {
+        return L.geoJSON(pub.geographicExtents, {
+            style: quiet,
+            interactive: options.enablePopup
+        });
+    });
 
     var baseMaps = {
         'Oceans': L.esri.basemapLayer('Oceans', {detectRetina: true}),
@@ -59,7 +59,7 @@ export const createResultsMap = window.createResultsMap = function(options) {
         'Ocean Labels': L.esri.basemapLayer('OceansLabels')
     };
 
-    var map = L.map(options.mapDivId, {
+    var mapObj = L.map(options.mapDivId, {
         layers: baseMaps.Topographic,
         zoom: 4,
         center: [38, -115]
@@ -95,7 +95,7 @@ export const createResultsMap = window.createResultsMap = function(options) {
 
         });
         if (clickedLayerProps.layers.length) {
-            map.openPopup(popupTemplate(clickedLayerProps), evt.latlng, {
+            mapObj.openPopup(popupTemplate(clickedLayerProps), evt.latlng, {
                 maxWidth: 350,
                 minWidth: 150,
                 maxHeight: 300,
@@ -108,17 +108,17 @@ export const createResultsMap = window.createResultsMap = function(options) {
         }
     };
 
-    map.addControl(L.control.layers(baseMaps, overlayMaps));
-    map.on('popupclose', resetStyles);
+    mapObj.addControl(L.control.layers(baseMaps, overlayMaps));
+    mapObj.on('popupclose', resetStyles);
 
     pubsExtentLayers.forEach(function (layer) {
-        map.addLayer(layer);
+        mapObj.addLayer(layer);
         layer.on('click', showExtentInfoPopup);
     });
 
     if (pubsExtentLayers.length) {
-        map.fitBounds(L.featureGroup(pubsExtentLayers).getBounds());
+        mapObj.fitBounds(L.featureGroup(pubsExtentLayers).getBounds());
     }
 
-    return map;
+    return mapObj;
 };

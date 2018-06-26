@@ -1,7 +1,7 @@
 import 'select2';
 import 'backbone.stickit';
 
-import _ from 'underscore';
+import has from 'lodash/has';
 
 import BaseView from './BaseView';
 import hbTemplate from '../hb_templates/linkRow.hbs';
@@ -121,7 +121,7 @@ export default BaseView.extend({
         var $select = this.$('.link-type');
         var linkType = this.model.get('type');
 
-        if (_.has(linkType, 'id')) {
+        if (has(linkType, 'id')) {
             $select.val(linkType.id).trigger('change');
         } else {
             $select.val('').trigger('change');
@@ -132,7 +132,7 @@ export default BaseView.extend({
         var $select = this.$('.link-file-type');
         var linkFileType = this.model.get('linkFileType');
 
-        if (_.has(linkFileType, 'id')) {
+        if (has(linkFileType, 'id')) {
             $select.val(linkFileType.id).trigger('change');
         } else {
             $select.val('').trigger('change');

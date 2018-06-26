@@ -1,5 +1,5 @@
 import Backbone from 'backbone';
-import _ from 'underscore';
+import has from 'lodash/has';
 
 
 export default Backbone.View.extend({
@@ -35,13 +35,13 @@ export default Backbone.View.extend({
 
         this.context = options.context || {};
 
-        if (_.has(options, 'template')) {
+        if (has(options, 'template')) {
             $.extend(this.context, options.context);
         }
 
         this.router = options.router || null;
 
-        if (_.has(options, 'template')) {
+        if (has(options, 'template')) {
             this.template = options.template;
         }
 

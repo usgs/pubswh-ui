@@ -1,8 +1,10 @@
 import 'eonasdan-bootstrap-datetimepicker';
 import 'backbone.stickit';
 
-import _ from 'underscore';
 import $ from 'jquery';
+import each from 'lodash/each';
+import has from 'lodash/has';
+import isArray from 'lodash/isArray';
 
 import BaseView from './BaseView';
 import AlertView from './AlertView';
@@ -34,7 +36,7 @@ export default BaseView.extend({
             observe : 'validationErrors',
             updateMethod : 'html',
             onGet : function(value) {
-                if (value && _.isArray(value) && value.length > 0) {
+                if (value && isArray(value) && value.length > 0) {
                     return '<pre>' + JSON.stringify(value) + '</pre>';
                 } else {
                     return '';
@@ -83,7 +85,7 @@ export default BaseView.extend({
 
         // Don't render tabs until the publication has been fetched.
         this.fetchPromise.done(function() {
-            _.each(self.tabs, function (tab) {
+            each(self.tabs, function (tab) {
                 tab.view.setElement(tab.el).render();
                 tab.view.$('[data-toggle="tooltip"]').tooltip({
                     trigger : 'hover'
@@ -190,7 +192,7 @@ export default BaseView.extend({
         this.alertView.remove();
         this.confirmationDialogView.remove();
         this.loginDialogView.remove();
-        _.each(this.tabs, function(t) {
+        each(this.tabs, function(t) {
             t.view.remove();
         });
         BaseView.prototype.remove.apply(this, arguments);
@@ -254,8 +256,8 @@ export default BaseView.extend({
                 self.loginDialogView.show(function() {
                     self.alertView.showWarningAlert('Please click Save Changes to save the publication');
                 });
-            } else if (_.has(response, 'responseJSON') &&
-                _.has(response.responseJSON, 'validationErrors') &&
+            } else if (has(response, 'responseJSON') &&
+                has(response.responseJSON, 'validationErrors') &&
                 response.responseJSON.validationErrors.length > 0) {
                 self.model.set('validationErrors', response.responseJSON.validationErrors);
                 self.alertView.showDangerAlert('Publication not saved with validation errors');

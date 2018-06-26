@@ -1,4 +1,5 @@
-import _ from 'underscore';
+import has from 'lodash/has';
+import omit from 'lodash/omit';
 
 import BaseView from './BaseView';
 import hbTemplate from '../hb_templates/confirmationDialog.hbs';
@@ -32,11 +33,11 @@ export default BaseView.extend({
 
     close : function() {
         this.$('.modal').modal('hide');
-        _.omit(this, 'actionFnc');
+        omit(this, 'actionFnc');
     },
 
     confirmAction : function() {
-        if (_.has(this, 'actionFnc')) {
+        if (has(this, 'actionFnc')) {
             this.actionFnc();
         }
         this.close();
