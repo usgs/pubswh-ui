@@ -6,7 +6,7 @@ from requests import post
 
 from flask import render_template, request, redirect, url_for, Blueprint
 from flask_login import LoginManager, logout_user, UserMixin, login_user
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
 
@@ -25,7 +25,7 @@ AUTH_ENDPOINT_URL = app.config.get('AUTH_ENDPOINT_URL')
 VERIFY_CERT = app.config['VERIFY_CERT']
 
 
-class LoginForm(Form):
+class LoginForm(FlaskForm):
     """
     Authorization login form
     """
