@@ -19,12 +19,6 @@ Node.js dependencies are installed via:
 npm install
 ```
 
-... and Bower dependencies are installed via:
-
-```bash
-npx bower install
-```
-
 ## Run a development server
 
 Run the node.js development server at

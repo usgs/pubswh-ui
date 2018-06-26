@@ -12,7 +12,6 @@ if [ "$1" == "--clean" ]; then
    rm -rf assets/node_modules;
    rm -rf server/env;
    rm -rf server/static;
-   rm -rf assets/bower_components;
    rm -rf server/pubs_ui/static/.webassets-cache;
    rm -rf server/pubs_ui/static/gen;
 fi
@@ -25,10 +24,9 @@ fi
 env/bin/pip install -r requirements.txt;
 popd
 
-echo "Installing the node and bower dependencies"
+echo "Installing the node dependencies"
 pushd assets
 npm install;
-npx bower install;
 popd
 
 echo "Successfully installed the pubs_ui app. "

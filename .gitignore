@@ -18,13 +18,11 @@ server/pubs_ui/pubswh/static/css/min_base.css
 server/pubs_ui/pubswh/static/js/base_libs.js
 server/pubs_ui/static/gen
 server/pubs_ui/static/.webassets-cache
-assets/bower_components/
 server/instance
 server/instance/config.py
 /target
 /phantomjsdriver.log
 /node
-/bower
 /karma
 /npm
 .coverage

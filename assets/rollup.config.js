@@ -3,7 +3,6 @@
  * NOTE: This is a CommonJS module so it can be imported by Karma.
  */
 
-const bowerResolve = require('rollup-plugin-bower-resolve');
 const buble = require('rollup-plugin-buble');
 const commonjs = require('rollup-plugin-commonjs');
 const handlebars = require('rollup-plugin-handlebars-plus');
@@ -50,40 +49,6 @@ const getBundleConfig = function (src, dest) {
                 browser: false  // Default: false
             }),
             json(),
-            bowerResolve({
-                // The working directory to use with bower (i.e the directory where
-                // the `bower.json` is stored).
-                // Default is `process.cwd()`.
-                //cwd: '/tmp',
-
-                // Use `bower` offline.
-                // Default is `true`.
-                //offline: false,
-
-                // Use "module" field for ES6 module if possible, default is `true`.
-                // See: https://github.com/rollup/rollup/wiki/pkg.module
-                module: true,
-
-                // Use "jsnext:main" field for ES6 module if possible, default is `true`.
-                // This field should not be used, use `module` entry instead, but it is `true`
-                // by default because of legacy packages.
-                // See: https://github.com/rollup/rollup/wiki/jsnext:main
-                jsnext: true,
-
-                // if there's something your bundle requires that you DON'T
-                // want to include, add it to 'skip'
-                //skip: [ 'some-big-dependency' ],    // Default: []
-
-                // Override path to main file (relative to the module directory).
-                override: {
-                    'backbone-pageable': 'lib/backbone-pageable.js',
-                    'backbone': 'backbone.js',
-                    'backbone.paginator': 'lib/backbone.paginator.js',
-                    'backgrid-select-all': 'backgrid-select-all.js',
-                    'backbone.stickit': 'backbone.stickit.js',
-                    'moment': 'min/moment.min.js'
-                }
-            }),
             commonjs(),
             handlebars({
                 handlebars: {
