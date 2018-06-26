@@ -3,7 +3,7 @@ Forms for the pubswh Blueprint
 """
 # pylint: disable=C0111,C0301
 
-from flask_wtf import Form, RecaptchaField
+from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, TextAreaField, SubmitField, validators, BooleanField
 from wtforms.fields.html5 import DateField
 
@@ -11,7 +11,7 @@ from wtforms.fields.html5 import DateField
 __author__ = 'jameskreft'
 
 
-class ContactForm(Form):
+class ContactForm(FlaskForm):
     name = StringField("Name")
     # email validator also makes this a required field... a blank email is considered invalid
     email = StringField("Email", [validators.Email()])
@@ -21,7 +21,7 @@ class ContactForm(Form):
     submit = SubmitField("Send")
 
 
-class PublicAccessContactForm(Form):
+class PublicAccessContactForm(FlaskForm):
     name = StringField("Name")
     # email validator also makes this a required field... a blank email is considered invalid
     email = StringField("Email", [validators.Email()])
@@ -31,6 +31,6 @@ class PublicAccessContactForm(Form):
     submit = SubmitField("Send")
 
 
-class NumSeries(Form):
+class NumSeries(FlaskForm):
     num_series = BooleanField('Only USGS Numbered Series')
     date_range = DateField('Include publications back to date:   ')
