@@ -10,21 +10,46 @@
 
 {%  block main %}
     <h1>Google Analytics Dashboard for Pubs Warehouse</h1>
-    <div id="sessions-div" class="metric-div">
-        <div id="recent-sessions-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
-        <div id="year-sessions-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+    <div class="form-inline">
+        <label class="control-label">Display as:&nbsp;</label>
+        <label class="radio-inline"><input type="radio" name="display-style" value="chart" checked />&nbsp;Chart</label>
+        <label class="radio-inline"><input type="radio" name="display-style" value="table" />&nbsp;Table</label>
     </div>
-    <div id="users-div" class="metric-div">
-        <div id="recent-users-container" class="recent-div"></div>
-        <div id="year-users-container" class="year-div"></div>
+    <div class="chart-display">
+        <div id="sessions-div" class="metric-div">
+            <div id="recent-sessions-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+            <div id="year-sessions-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+        </div>
+        <div id="users-div" class="metric-div">
+            <div id="recent-users-container" class="recent-div"></div>
+            <div id="year-users-container" class="year-div"></div>
+        </div>
+        <div id="pageviews-div" class="metric-div">
+            <div id="recent-pageviews-container" class="recent-div"></div>
+            <div id="year-pageviews-container" class="year-div"></div>
+        </div>
+        <div id="downloadevents-div" class="metric-div">
+            <div id="recent-downloadevents-container" class="recent-div"></div>
+            <div id="year-downloadevents-container" class="year-div"></div>
+        </div>
     </div>
-    <div id="pageviews-div" class="metric-div">
-        <div id="recent-pageviews-container" class="recent-div"></div>
-        <div id="year-pageviews-container" class="year-div"></div>
-    </div>
-    <div id="downloadevents-div" class="metric-div">
-        <div id="recent-downloadevents-container" class="recent-div"></div>
-        <div id="year-downloadevents-container" class="year-div"></div>
+    <div class="table-display">
+        <div id="sessions-table-div" class="metric-table-div">
+            <table class="table metric-table" id="recent-sessions-table"></table>
+            <table class="table metric-table" id="year-sessions-table"></table>
+        </div>
+        <div id="users-table-div" class="metric-table-div">
+            <table class="table metric-table" id="recent-users-table"></table>
+            <table class="table metric-table" id="year-users-table"></table>
+        </div>
+        <div id="pageviews-table-div" class="metric-table-div">
+            <table class="table metric-table" id="recent-pageviews-table"></table>
+            <table class="table metric-table" id="year-pageviews-table"></table>
+        </div>
+        <div id="downloadevents-table-div" class="metric-table-div">
+            <table class="table metric-table" id="recent-downloadevents-table"></table>
+            <table class="table metric-table" id="year-downloadevents-table"></table>
+        </div>
     </div>
 {%  endblock %}
 

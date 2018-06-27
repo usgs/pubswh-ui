@@ -11,12 +11,13 @@ import has from 'lodash/has';
  *      @prop {String} title - title of the graph
  *      @prop {String} dateFormat - String representing the formatting for the date axis. Will feed the moment
  *          library's format function.
+ * @return Dygraph created
  */
 export const createGraph = function(el, rows, options = {}) {
     var labels = ['Date', has(options, 'ylabel') ? options.ylabel : ''];
     var format = has(options, 'dateFormat') ? options.dateFormat : 'MM/DD/YYYY';
 
-    new Dygraph(
+    return new Dygraph(
         el,
         rows,
         {

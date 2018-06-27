@@ -12,17 +12,38 @@
 {%  block main %}
     <h1>Google Analytics Dashboard for Pubs Warehouse</h1>
     <h2>Analytics for publication page with uri: publication/{{ pubsid }}</h2>
-    <div id="sessions-div" class="metric-div">
-        <div id="recent-sessions-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
-        <div id="year-sessions-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+    <div class="form-inline">
+        <label class="control-label">Display as:&nbsp;</label>
+        <label class="radio-inline"><input type="radio" name="display-style" value="chart" checked />&nbsp;Chart</label>
+        <label class="radio-inline"><input type="radio" name="display-style" value="table" />&nbsp;Table</label>
     </div>
-    <div id="visitors-div" class="metric-div">
-        <div id="recent-visitors-container" class="recent-div"></div>
-        <div id="year-visitors-container" class="year-div"></div>
+    <div class="chart-display">
+        <div id="sessions-div" class="metric-div">
+            <div id="recent-sessions-container" class="recent-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+            <div id="year-sessions-container" class="year-div"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+        </div>
+        <div id="visitors-div" class="metric-div">
+            <div id="recent-visitors-container" class="recent-div"></div>
+            <div id="year-visitors-container" class="year-div"></div>
+        </div>
+        <div id="downloads-div" class="metric-div">
+            <div id="recent-downloads-container" class="recent-div"></div>
+            <div id="year-downloads-container" class="year-div"></div>
+        </div>
     </div>
-    <div id="downloads-div" class="metric-div">
-        <div id="recent-downloads-container" class="recent-div"></div>
-        <div id="year-downloads-container" class="year-div"></div>
+    <div class="table-display">
+        <div id="sessions-table-div" class="metric-table-div">
+            <table class="table metric-table" id="recent-sessions-table"></table>
+            <table class="table metric-table" id="year-sessions-table"></table>
+        </div>
+        <div id="users-table-div" class="metric-table-div">
+            <table class="table metric-table" id="recent-users-table"></table>
+            <table class="table metric-table" id="year-users-table"></table>
+        </div>
+        <div id="downloadevents-table-div" class="metric-table-div">
+            <table class="table metric-table" id="recent-downloadevents-table"></table>
+            <table class="table metric-table" id="year-downloadevents-table"></table>
+        </div>
     </div>
 {%  endblock %}
 
