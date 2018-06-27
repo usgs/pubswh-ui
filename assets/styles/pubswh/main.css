@@ -103,7 +103,7 @@ textarea {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-   
+
 .headersearch{
 	color:#000;
 	height:22px;
@@ -147,7 +147,7 @@ textarea {
 	padding-bottom:25px;
 	clear:both;
 }
-		
+
 #new_pubs h3{padding:5px;
 			 color: #000;
 			margin-top:10px;
@@ -193,7 +193,7 @@ textarea {
 	margin-bottom:-5px;
     text-align: left;
 }
-	
+
 .recent-pub-info{
 	margin:0 0 15px 15px;
     text-align: left;
@@ -226,17 +226,17 @@ nav a:active{
     color: #fff;
 }
 
-		
+
 main#index{font-family:Arial;
 	color:#808080;
 	position:relative}
-	
+
 article{padding:0 10px;}
 
 #welcome{
 	margin-bottom:15px;
 }
-	
+
 #welcome h1{margin:10px 0 5px 0;}
 
 #welcome h3{margin:5px 0 0 0;}
@@ -252,13 +252,13 @@ article{padding:0 10px;}
 	height: 400px;
 	margin: 0 0 15px 0;
 }
-			
+
 .search-form-map-div .leaflet-control label {
 	font-weight: normal;
 }
-			
+
 #checklist{clear:both;}
-				
+
 #checklist input{margin: 0 5px 0 0;}
 
 #checklist label{line-height:1.5em;}
@@ -274,48 +274,48 @@ article{padding:0 10px;}
 		padding:4px 0 0 0;
 		margin:20px 5px 25px 0;
 		float:left;}
-		
+
 #checklist button:hover{background:rgb(0,102,153);}
-		
+
 #checklist p{font-weight:bold;
 			font-size:1em;
 			float:left;
 			margin:20px 0 0 0;
 			text-indent:0;
 			cursor:pointer;}
-			
+
 #checklist p#bar{
 				margin:20px 10px 0 0;
 				padding:0;
 				}
-			
+
 #options{margin:0 0 15px 0;}
 
 #options a,
 #links a{color:#808080;
 			text-decoration:none;}
-			
+
 #options a:hover,
 #links a:hover{
 	text-decoration:underline;
 	color:#000;}
-			
+
 #options h3,
 #links h3{font-weight:normal;}
 
 #options h4,
 #links h4{padding:0 0 0 15px;}
-			
+
 #options h3,
 #options h4,
 #links h3,
 #links h4{margin:5px 0 0 0;
 			clear:both;}
-			
+
 #links{margin:0 0 15px 0;}
 
 
-   
+
 /* ==========================================================================
    Publication.html styles
    ========================================================================== */
@@ -439,7 +439,7 @@ article p {
 }
 dl#contributors {margin:5px 0;
   font-size: .8em;
-  
+
 }
 dl#contributors dt {
 	float:left;
@@ -447,12 +447,20 @@ dl#contributors dt {
   font-weight: 600;
 }
 dl#contributors dd {
-	margin:0 10px 0 0; 
+	margin:0 10px 0 0;
 	display:block;
 }
 dl#contributors .clear {
   clear: both;
   margin-bottom:10px;
+}
+dl#contributors .contributor {
+  display: inline-block;
+  white-space:nowrap;
+}
+dl#contributors .contributor i.ai-orcid {
+  color: #A6CE39;
+  font-size: 1.5em;
 }
 ul#desktop {
   display: none;
@@ -548,7 +556,7 @@ address p {
 #details{width:100%;
 		min-height:100px;
 		margin:10px 0 -20px 0;}
-		
+
 #details h4 {
   color: #8c8c8c;
   padding-left:10px;
@@ -556,30 +564,30 @@ address p {
   margin-bottom: 0px;
   width:100%
 }
-		
+
 #details dl{width:100%;
 			min-height:245px;
 			font-size:.7em;
 			}
-			
+
 #details dl dt{
 				float:left;
 				width:50%;
 				text-align:right;
 				border-right:2px solid #fff;
 				padding:3px;}
-				
+
 #details dl dd{padding:3px;
 				float:left;
 				width:50%;
 				margin:0;}
-				
+
 .dark{background:#eee;}
 
 /* ==========================================================================
    contact styles
    ========================================================================== */
-   
+
 form#contactForm input,
 form#contactForm textarea{
 	display:block;
@@ -590,13 +598,13 @@ form#contactForm textarea{
 	padding-left:.5%;
 	border-radius:3px;
 	border:1px solid rgb(200,200,200);
-	
+
 }
 
 form#contactForm textarea{
 	min-height:60px;
 	padding-top:.5%;
-	
+
 }
 
 form#contactForm input#submit{
@@ -615,15 +623,15 @@ form#contactForm input#submit:hover{
 
 /* ==========================================================================
    Search styles
-   ========================================================================== */ 
-   
-.no-margin{margin-left:0 !important;}   
-   
+   ========================================================================== */
+
+.no-margin{margin-left:0 !important;}
+
 
 #search-results{
 	text-align:left;
 	margin-top:15px;
-}  
+}
 
  #search-results article{
  margin:0;
@@ -641,7 +649,7 @@ form#contactForm input#submit:hover{
 	color:#006621;
 	font-size:.85em;
 }
- 
+
 .search-results{
 	padding-left:15px;
 }
@@ -694,7 +702,7 @@ h1.search-results{
 	color:#808080;
 	text-decoration:none;
 	margin-right:10px;
-	
+
 }
 
 .pagination-nav a:hover{
@@ -723,7 +731,7 @@ h1.search-results{
 /* ==========================================================================
    other styles
    ========================================================================== */
-   
+
 .confluenceTable {
     border-collapse: collapse;
 }
@@ -823,11 +831,11 @@ p.breadcrumb{
 
 h2.otherPages{
 	margin:-5px 0 0 17px;}
-	
+
 
 .fix ul{
 	list-style-type:none;
-	
+
 }
 
 .fix ul li{
@@ -910,22 +918,22 @@ footer p{margin:0;}
   position: absolute;
 }
 @media screen and (min-width: 686px) {
-	
+
 /* ==========================================================================
    Index styles
    ========================================================================== */
 #checklist button{width:146px;
 					height:40px;}
-					
+
 #checklist p{font-size:1.5em;
 			margin:17px 0 0 0;}
-			
+
 #checklist p#bar{margin:17px 10px 0 0;}
-   
+
 /* ==========================================================================
    publication.html styles
    ========================================================================== */
-	
+
   header {
     display: block !important;
     height: 72px;
@@ -948,10 +956,10 @@ footer p{margin:0;}
     list-style: none;
 	margin:0;
   }
-  
+
   #header_nav ul li{
   margin-bottom:2px;}
-  
+
   #header_nav ul li a {
     color: #fff;
     text-decoration: none;
@@ -986,7 +994,7 @@ footer p{margin:0;}
     text-align: center;
 
   }
-  
+
   nav ul li a {
     color: #fff;
     text-decoration: none !important;
@@ -1007,13 +1015,13 @@ footer p{margin:0;}
     background: #fff;
     color: #003366;
   }
-  
+
   ul#desktop_ul li:hover{
   background:rgb(200,200,200);}
-  
+
   ul#desktop_ul li ul{
   display:none;}
-  
+
   ul#desktop_ul li:hover ul{
   display:block;
   width:375px;
@@ -1025,36 +1033,36 @@ footer p{margin:0;}
   background:#fff;
   border-right:1px solid #808080;
   border-left:1px solid #808080;}
-  
+
   ul#desktop_ul li:hover ul#longer{
   width:430px;}
-  
+
   ul#desktop_ul li:hover ul li{
   text-align:left;
   width:100%;
   border-bottom:1px solid #808080;
   }
-  
+
   ul#desktop_ul li:hover ul li a{
   width:100%;
   padding:5px 5px 5px 5px;
   color:rgb(0,51,102);}
-  
+
   ul#desktop_ul li:hover ul li a:hover{
   background:rgb(220,220,220);}
-  
+
   #center {
     float: right;
   }
   nav input {
     width: 145px;
   }
-  
+
   article h3{margin:0;}
-  
+
   article h5,
   article h6{margin:5px;}
-  
+
   #thumbnail {
     display: block;
     float: left;
@@ -1066,7 +1074,7 @@ footer p{margin:0;}
   dl#contributors .clear {
     clear: none;
   }
-  
+
   #abstract {
     clear: both;
   }
@@ -1083,7 +1091,7 @@ footer p{margin:0;}
 }
 /*media query*/
 @media screen and (min-width: 768px) {
-	
+
 #details dl {
     font-size: .9em;
   }
@@ -1104,15 +1112,15 @@ footer p{margin:0;}
     right: 65px;
     top: 25px;
   }
-  
+
 /* ==========================================================================
    Contact styles
-   ========================================================================== */  
-   
+   ========================================================================== */
+
 form#contactForm input,
 form#contactForm textarea{
 	width:45%;
-	
+
 }
 
 form#contactForm input#submit{
@@ -1121,10 +1129,10 @@ form#contactForm input#submit{
 
 /* ==========================================================================
    Search styles
-   ========================================================================== */  
+   ========================================================================== */
 
 .pagination-page-info b{
-	
+
 	font-size:1.4em;
 }
 
@@ -1133,15 +1141,15 @@ form#contactForm input#submit{
 	text-decoration:none;
 	font-size:1.4em;
 	margin-right:20px;
-	
+
 }
 
 
-  
+
 }
 /*media query*/
 @media screen and (min-width: 1025px) {
-	
+
 /* ==========================================================================
    Index styles
    ========================================================================== */
@@ -1150,14 +1158,14 @@ form#contactForm input#submit{
 	position:absolute;
 	top:0;
 	right:0;
-	}	
-   
+	}
+
 .index_article{
 	width:100%;
 	min-height:600px;
 	position:relative;
 	padding:0;
-	margin:0;} 
+	margin:0;}
 
 #welcome,
 #search,
@@ -1168,15 +1176,15 @@ form#contactForm input#submit{
 #advanced_options,
 #new_pubs{
 	width:59%;
-		} 
-   
+		}
 
 
-   
+
+
 /* ==========================================================================
    publication.html styles
    ========================================================================== */
-   
+
   ul#desktop {
     display: block;
   }
@@ -1188,17 +1196,17 @@ form#contactForm input#submit{
     margin: 0 auto;
     position: relative;
   }
- 
+
   #abstract {
     margin-top: 40px;
     line-height:1.7em;
   }
-  
+
   #abstract > p:first-child{
   float:left;
   background:red;
   }
- 
+
   .publicationAsideDesktop{
 	float:right;
 	display:block;
@@ -1207,7 +1215,7 @@ form#contactForm input#submit{
 }
 
 .publicationAsideDesktop p:first-child{
-	float:none;	
+	float:none;
 }
 
 
@@ -1220,12 +1228,12 @@ form#contactForm input#submit{
 	margin-bottom:230px;
 }
 
-  
+
 /* ==========================================================================
    other styles
    ========================================================================== */
-   
-ul.toc-indentation{	
+
+ul.toc-indentation{
 	width:70%;
 }
 
@@ -1246,7 +1254,7 @@ h1.otherPages{
 	font-size:2em;
 	margin-left:15px;}
 
-	
+
 /* ==========================================================================
    browse styles
    ========================================================================== */
