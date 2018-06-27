@@ -66,13 +66,18 @@ const transformToDownloadsData = partial(transformToGraphData, downloadsMetric.e
 const monthlyDataPromise = batchFetchMonthlyPastYear(metricsAndDimFilters);
 
 
+/*
+ * Creates the year displays
+ * @param {Array of Object} data returned from the fetch for analytics data
+ * @returns {Array of Dygraphs} - return dygraphs that were created.
+ */
 const createYearDisplays = function(data) {
     let sessionsData = data[0].map(transformToSessionsData);
     let visitorsData = data[1].map(transformToVisitorsData);
     let pageviewsData = data[2].map(transformToPageviewsData);
     let downloadsData = data[3].map(transformToDownloadsData);
 
-    let graphs = []
+    let graphs = [];
 
     graphs.push(createGraph(yearSessionsDiv, sessionsData, {
         ylabel: 'Sessions',
@@ -115,6 +120,11 @@ const createYearDisplays = function(data) {
     return graphs;
 };
 
+/*
+ * Creates the month displays
+ * @param {Array of Object} data returned from the fetch for analytics data
+ * @returns {Array of Dygraphs} - return dygraphs that were created.
+ */
 const createMonthDisplays = function(data) {
     let sessionsData = data[0].map(transformToSessionsData);
     let visitorsData = data[1].map(transformToVisitorsData);
