@@ -1,5 +1,7 @@
 {% extends 'metrics/base.html' %}
 
+{% import 'assets.html' as assets %}
+
 {% block config_initialize_script %}
     <script>
         var CONFIG = {
@@ -34,5 +36,5 @@
 
 {% block page_script %}
     {{ super() }}
-    <script type="text/javascript" src="{{ 'scripts/metrics_publications_acquisition.js' | asset_url }}"></script>
+    {{ assets.LoadBundle('pubsAcquisitionGraphController.js') }}
 {% endblock %}

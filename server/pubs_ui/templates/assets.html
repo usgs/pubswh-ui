@@ -1,0 +1,9 @@
+{% macro LoadBundle(bundle) -%}
+    <script type='module'>
+        import('{{ ("scripts/module/" + bundle) | asset_url }}');
+    </script>
+    <script nomodule src='https://unpkg.com/systemjs@0.21.0/dist/system-production.js'></script>
+    <script nomodule>
+        System.import('{{ ("scripts/nomodule/" + bundle) | asset_url }}');
+    </script>
+{%- endmacro %}

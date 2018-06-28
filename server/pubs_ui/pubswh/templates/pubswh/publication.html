@@ -1,4 +1,7 @@
 {% extends 'pubswh/base.html' %}
+
+{% import 'assets.html' as assets %}
+
 {% block head %}
     <title>{{ pubdata['title'] }}</title>
     <meta NAME="title" content="{{ pubdata['title'] }}" />
@@ -366,7 +369,7 @@
             {%- if pubdata["geographicExtents"] -%}
                 <script type="text/javascript" src="{{ 'vendor/leaflet/leaflet.js' | asset_url }}"></script>
                 <script type="text/javascript" src="{{ 'vendor/esri-leaflet/esri-leaflet.js' | asset_url }}"></script>
-                <script type="text/javascript" src="{{ 'scripts/resultsMap.js' | asset_url }}"></script>
+                {{ assets.LoadBundle('resultsMap.js') }}
 
                 <script type="application/javascript">
                     window.createResultsMap({
