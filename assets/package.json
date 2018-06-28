@@ -28,6 +28,7 @@
     "buildvendor:esri-leaflet": "mkdir -p dist/vendor/esri-leaflet && cp -r node_modules/esri-leaflet/dist/* dist/vendor/esri-leaflet",
     "buildvendor:leaflet-draw": "mkdir -p dist/vendor/leaflet-draw && cp -r node_modules/leaflet-draw/dist/* dist/vendor/leaflet-draw",
     "buildvendor:MathJax": "mkdir -p dist/vendor && ln -sfn ../../node_modules/mathjax dist/vendor/MathJax",
+    "buildvendor:systemjs": "mkdir -p dist/vendor && cp node_modules/systemjs/dist/system.js dist/vendor",
     "hash-assets": "echo TODO",
     "lint": "eslint scripts tests",
     "serve:static": "live-server --port=9000 --cors --no-browser dist",
@@ -104,6 +105,7 @@
     "moment": "^2.15.2",
     "select2": "^4.0.3",
     "select2-bootstrap-theme": "0.1.0-beta.10",
+    "systemjs": "^0.21.4",
     "tinymce": "^4.7.13"
   },
   "eslintIgnore": [
