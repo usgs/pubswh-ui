@@ -29,7 +29,7 @@
     "buildvendor:leaflet-draw": "mkdir -p dist/vendor/leaflet-draw && cp -r node_modules/leaflet-draw/dist/* dist/vendor/leaflet-draw",
     "buildvendor:MathJax": "mkdir -p dist/vendor && ln -sfn ../../node_modules/mathjax dist/vendor/MathJax",
     "buildvendor:systemjs": "mkdir -p dist/vendor && cp node_modules/systemjs/dist/system.js dist/vendor",
-    "hash-assets": "echo TODO",
+    "hash-assets": "gulp --gulpfile ./gulpfile.js revall",
     "lint": "eslint scripts tests",
     "serve:static": "live-server --port=9000 --cors --no-browser dist",
     "test": "karma start tests/js/manager/karma.conf.js && karma start tests/js/metrics/karma.conf.js && karma start tests/js/pubswh/karma.conf.js",

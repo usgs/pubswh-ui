@@ -80,3 +80,6 @@ if nose_testing or lettuce_testing:
 # Use Flask-Cors to enable cross-origin requests. Useful for local development,
 # when static assets are hosted on a different port than the Flask dev server.
 FLASK_CORS = False
+
+# To use hashed assets, set this to the gulp-rev-all rev-manifest.json path
+ASSET_MANIFEST_PATH = None
