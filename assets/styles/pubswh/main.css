@@ -456,7 +456,8 @@ dl#contributors .clear {
 }
 dl#contributors .contributor {
   display: inline-block;
-  white-space:nowrap;
+  white-space: nowrap;
+  padding: 0 .25em;
 }
 dl#contributors .contributor i.ai-orcid {
   color: #A6CE39;
