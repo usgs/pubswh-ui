@@ -321,8 +321,8 @@
                     <h4 id="" class="dark">Additional publication details</h4>
                     <dl id="publication_details">
                       {% for detail in pubdata['details'] %}
-                          <dt class="{{ loop.cycle('', 'dark') }}">{{ detail.keys()[0] }}</dt>
-                          <dd class="{{ loop.cycle('', 'dark') }}">{{ detail.values()[0]|safe }}</dd>
+                          <dt class="{{ loop.cycle('', 'dark') }}">{{ detail.keys() | join(', ') }}</dt>
+                          <dd class="{{ loop.cycle('', 'dark') }}">{{ detail.values() | join(', ') | safe }}</dd>
                       {% endfor %}
                     </dl>
                 </section>
