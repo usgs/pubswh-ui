@@ -1,6 +1,8 @@
+{% import 'assets.html' as assets %}
+
 <script type="text/javascript" src="{{ 'vendor/leaflet/leaflet.js' | asset_url }}"></script>
 <script type="text/javascript" src="{{ 'vendor/esri-leaflet/esri-leaflet.js' | asset_url }}"></script>
 <script type="text/javascript" src="{{ 'vendor/leaflet-draw/leaflet.draw.js' | asset_url }}"></script>
 <script type="text/javascript" src="{{ 'scripts/vendor/Wicket/wicket.js' | asset_url }}"></script>
 <script type="text/javascript" src="{{ 'scripts/vendor/Wicket/wicket-leaflet.js' | asset_url }}"></script>
-<script type="text/javascript" src="{{ 'scripts/advanced_search.js' | asset_url }}"></script>
+{{ assets.LoadBundle('searchFormOnReady.js') }}

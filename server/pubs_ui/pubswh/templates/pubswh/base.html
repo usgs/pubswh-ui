@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% import 'assets.html' as assets %}<!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -167,7 +167,7 @@
            </footer>
            <script type="application/javascript"
                    src="https://www2.usgs.gov/scripts/analytics/usgs-analytics.js"></script>
-           <script type="text/javascript" src="{{ 'scripts/base_pubswh.js' | asset_url }}"></script>
+           {{ assets.LoadBundle('pubswh_plugins.js') }}
 
            {% block page_footer_script %}{% endblock page_footer_script %}
 

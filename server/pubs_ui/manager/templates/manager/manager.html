@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% import 'assets.html' as assets %}
+
 {% block title %}Manage USGS Publications{% endblock %}
 
 {% block page_style %}
@@ -24,5 +26,5 @@
 			previewUrl: '{{ url_for("pubswh.restricted_page", index_id="") }}'
 		};
 	</script>
-	<script type="text/javascript" src="{{ 'scripts/manager.js' | asset_url }}"></script>
+	{{ assets.LoadBundle('manager.js') }}
 {% endblock %}

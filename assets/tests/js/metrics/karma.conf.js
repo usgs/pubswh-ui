@@ -1,9 +1,14 @@
 // Karma configuration
 var istanbul = require('rollup-plugin-istanbul');
 
+const getRollupPlugins = require('../../../rollup.plugins');
+
+
 function isDebug(argument) {
     return argument === '--debug';
 }
+
+const ENV = process.env.NODE_ENV || 'development';
 
 
 module.exports = function(config) {
@@ -48,7 +53,11 @@ module.exports = function(config) {
              * This is just a normal Rollup config object,
              * except that `input` is handled for you.
              */
-            ...require('../../../rollup.config')[0]
+            plugins: getRollupPlugins(ENV),
+            output: {
+                format: 'iife',
+                name: 'tests'
+            }
         },
 
         // test results reporter to use

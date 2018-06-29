@@ -28,7 +28,8 @@
     "buildvendor:esri-leaflet": "mkdir -p dist/vendor/esri-leaflet && cp -r node_modules/esri-leaflet/dist/* dist/vendor/esri-leaflet",
     "buildvendor:leaflet-draw": "mkdir -p dist/vendor/leaflet-draw && cp -r node_modules/leaflet-draw/dist/* dist/vendor/leaflet-draw",
     "buildvendor:MathJax": "mkdir -p dist/vendor && ln -sfn ../../node_modules/mathjax dist/vendor/MathJax",
-    "hash-assets": "echo TODO",
+    "buildvendor:systemjs": "mkdir -p dist/vendor && cp node_modules/systemjs/dist/system.js dist/vendor",
+    "hash-assets": "gulp --gulpfile ./gulpfile.js revall",
     "lint": "eslint scripts tests",
     "serve:static": "live-server --port=9000 --cors --no-browser dist",
     "test": "karma start tests/js/manager/karma.conf.js && karma start tests/js/metrics/karma.conf.js && karma start tests/js/pubswh/karma.conf.js",
@@ -80,6 +81,7 @@
     "rollup-plugin-replace": "^2.0.0",
     "rollup-plugin-uglify": "^4.0.0",
     "sinon": "2.2.0",
+    "uglify-es": "^3.3.9",
     "uglifycss": "0.0.29"
   },
   "dependencies": {
@@ -103,6 +105,7 @@
     "moment": "^2.15.2",
     "select2": "^4.0.3",
     "select2-bootstrap-theme": "0.1.0-beta.10",
+    "systemjs": "^0.21.4",
     "tinymce": "^4.7.13"
   },
   "eslintIgnore": [
