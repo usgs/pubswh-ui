@@ -92,9 +92,12 @@
                 {# macro for generating the contributor lists, including commas & ands where they are supposed to be  #}
                 {% macro contributor_list(contributorListTyped, contributorKind) %}
                     {%- for contributor in pubdata[contributorListTyped]  -%}
-                        <div class="contributor" itemprop="{{ contributorKind }}" itemtype="http://schema.org/{%- if contributor['type'] == "person" -%}Person{% else %}Organization{% endif %}">
-                            {% if loop.length == 2 and loop.first != True %} and {% elif loop.last and loop.length > 2 %} and {% endif %}{{ contributor['text'] }}{% if contributor['orcid'] %}<a href="{{ contributor['orcid'] }}"><i class="ai ai-orcid ai-2x"></i></a>{% endif %}{% if not loop.last and loop.length > 2 %}, {% endif %}
-                        </div>
+                        <span class="contributor" itemprop="{{ contributorKind }}" itemtype="http://schema.org/{%- if contributor['type'] == "person" -%}Person{% else %}Organization{% endif %}">
+                            {% if (loop.length == 2 and loop.first != True) or (loop.last and loop.length > 2) %}
+                                and
+                            {% endif %}
+                            {{ contributor['text'] }}{% if contributor['orcid'] %}<a href="{{ contributor['orcid'] }}"><i class="ai ai-orcid ai-2x"></i></a>{% endif %}{% if not loop.last and loop.length > 2 %},{% endif %}
+                        </span>
                     {%-  endfor -%}
                 {% endmacro %}
 
