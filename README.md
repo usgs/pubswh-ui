@@ -1,12 +1,18 @@
-# PubsWarehouse_UI
+# USGS Publications Warehouse User Interface
 
 [![Build Status](https://travis-ci.org/USGS-CIDA/PubsWarehouse_UI.svg?branch=master)](https://travis-ci.org/USGS-CIDA/PubsWarehouse_UI)
 [![Coverage Status](https://coveralls.io/repos/github/USGS-CIDA/PubsWarehouse_UI/badge.svg)](https://coveralls.io/github/USGS-CIDA/PubsWarehouse_UI)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e68775a288dc4077a4672e02110cac22)](https://www.codacy.com/app/usgs_wma_dev/PubsWarehouse_UI?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=USGS-CIDA/PubsWarehouse_UI&amp;utm_campaign=Badge_Grade)
 
-To create the virtualenv you should have python 2.7, virtualenv, pip installed.
+The Pubs Warehouse provides access to over 150,000 publications written by USGS
+scientists over the century-plus history of the bureau.
 
-This application should be built using python 2.7 and node version > 8.x.x.
+This repo contains the front-end components of the Publications Warehouse:
+
+- [`server`](server): A Flask web application that is used to create server-rendered pages
+- [`assets`](assets): Client-side Javascript, CSS, images, etc.
+
+This application should be built using Python 3.6 and Node.js version > 8.x.x.
 
 ## Install dependencies
 
