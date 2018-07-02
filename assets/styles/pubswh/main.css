@@ -462,6 +462,7 @@ dl#contributors .contributor {
 dl#contributors .contributor i.ai-orcid {
   color: #A6CE39;
   font-size: 1.5em;
+  padding: 0 .25em;
 }
 ul#desktop {
   display: none;
