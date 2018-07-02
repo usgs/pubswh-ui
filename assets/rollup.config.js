@@ -28,12 +28,7 @@ const getBundleConfig = function (output) {
 
 module.exports = [
     getBundleConfig({
-        dir: 'dist/scripts/module',
-        format: 'es',
-        sourcemap: ENV !== 'production'
-    }),
-    getBundleConfig({
-        dir: 'dist/scripts/nomodule',
+        dir: 'dist/scripts',
         format: 'system',
         sourcemap: ENV !== 'production'
     })
