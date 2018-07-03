@@ -36,7 +36,6 @@
     "L": true,
     "leafletPip": true,
     "$": true,
-    "Wkt": true,
     "define": true,
     "moment": true,
     "sinon": true,
