@@ -2,7 +2,7 @@ import AdvancedSearchForm from './advancedSearchForm';
 
 
 $(document).ready(function() {
-        // Constants for link text
+    // Constants for link text
     var SHOW_SEARCH = 'Show Advanced Search';
     var HIDE_SEARCH = 'Clear Advanced Search';
 

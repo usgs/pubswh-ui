@@ -1,3 +1,5 @@
+import * as Wellknown from 'wellknown';
+
 import { ClearFeatureControl } from './clearFeatureControl';
 
 
@@ -40,20 +42,16 @@ export default class SearchMap {
 
         // If $geomInput has a value, then add that feature to the feature group.
         var initialGeomVal = $geomInput.val();
-        var wkt;
         if (initialGeomVal) {
-            wkt = new Wkt.Wkt();
-            wkt.read(initialGeomVal);
-
-            searchFeature.addLayer(wkt.toObject(SHAPE_OPTIONS));
+            let layer = L.geoJson(Wellknown.parse(initialGeomVal), SHAPE_OPTIONS);
+            searchFeature.addLayer(layer);
             map.addLayer(searchFeature);
         }
 
         // Add event handlers on the searchFeature layer to update $geomInput
         searchFeature.on('layeradd', function(e) {
-            var wkt = new Wkt.Wkt();
-            wkt.fromObject(e.layer);
-            $geomInput.val(wkt.write());
+            let wktStr = Wellknown.stringify(e.layer.toGeoJSON());
+            $geomInput.val(wktStr);
         });
 
         searchFeature.on('layerremove', function() {
