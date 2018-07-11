@@ -51,6 +51,14 @@ export default class SearchMap {
         // Add event handlers on the searchFeature layer to update $geomInput
         searchFeature.on('layeradd', function(e) {
             let wktStr = Wellknown.stringify(e.layer.toGeoJSON());
+
+            // Wellknown inserts extraneous spaces in its output, which causes
+            // parsing problems on the search service.
+            // https://github.com/mapbox/wellknown/issues/33
+            // Workaround: manually remove the extra spaces.
+            // eg: "POLYGON (LAT LNG, LAT LNG)" -> "POLYGON(LAT LNG,LAT LNG)"
+            wktStr = wktStr.replace(/ \(/g, '(').replace(/, /g, ',');
+
             $geomInput.val(wktStr);
         });
 
