@@ -1,5 +1,4 @@
 {% macro LoadBundle(bundle) -%}
-    <script src="{{ 'vendor/system.js' | asset_url }}"></script>
     <script>
         SystemJS.import('{{ ("scripts/" + bundle) | asset_url }}');
     </script>
