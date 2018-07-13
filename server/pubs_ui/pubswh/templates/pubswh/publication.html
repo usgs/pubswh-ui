@@ -358,15 +358,14 @@
             {%- if pubdata["geographicExtents"] -%}
                 <script type="text/javascript" src="{{ 'vendor/leaflet/leaflet.js' | asset_url }}"></script>
                 <script type="text/javascript" src="{{ 'vendor/esri-leaflet/esri-leaflet.js' | asset_url }}"></script>
-                {{ assets.LoadBundle('resultsMap.js') }}
-
                 <script type="application/javascript">
-                    window.createResultsMap({
-                        mapDivId: 'mymap',
-                        publications: [{{ pubdata | tojson | safe }}],
-                        enablePopup: false
+                    SystemJS.import('{{ "scripts/resultsMap.js" | asset_url }}').then(function (resultsMap) {
+                        resultsMap.createResultsMap({
+                            mapDivId: 'mymap',
+                            publications: [{{ pubdata | tojson | safe }}],
+                            enablePopup: false
+                        });
                     });
                 </script>
             {% endif %}
         {% endblock page_footer_script %}
-

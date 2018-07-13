@@ -13,6 +13,7 @@
         <meta name="format-detection" content="telephone=no">
         {% block head %} {% endblock %}
         {% block page_style %}{% endblock page_style %}
+        <script src="{{ 'vendor/system.js' | asset_url }}"></script>
         <link rel="stylesheet" href="{{ 'pubs_base.css' | asset_url }}" type="text/css" />
         <link rel="shortcut icon" href="{{ 'images/pubswh/favicon.ico' | asset_url }}"/>
         <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('pubswh.open_search') }}" title="USGS Pubs"/>

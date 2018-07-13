@@ -7,6 +7,7 @@
         {% block meta_data %}{% endblock %}
 
         <title>{% block title %}USGS Publications Warehouse{% endblock %}</title>
+        <script src="{{ 'vendor/system.js' | asset_url }}"></script>
         {% block page_style %}
             <link rel="stylesheet" href="{{ 'usgs_style.css' | asset_url }}" type="text/css" />
         {% endblock %}
