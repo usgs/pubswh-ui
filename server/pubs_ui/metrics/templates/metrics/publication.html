@@ -13,7 +13,8 @@
 
 {%  block main %}
     <h1>Google Analytics Dashboard for Pubs Warehouse</h1>
-    <h2>Analytics for publication page with uri: publication/{{ pubsid }}</h2>
+    <h2>{{ publication.title }}</h2>
+    <h3>uri: <a href="{{ url_for('pubswh.publication', index_id=pubsid) }}">{{ url_for('pubswh.publication', index_id=pubsid) }}</a></h2>
     <div class="form-inline">
         <label class="control-label">Display as:&nbsp;</label>
         <label class="radio-inline"><input type="radio" name="display-style" value="chart" checked />&nbsp;Chart</label>
