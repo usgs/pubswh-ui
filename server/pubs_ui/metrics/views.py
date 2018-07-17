@@ -7,11 +7,11 @@ import random
 import time
 
 from flask import Blueprint, render_template, request, jsonify, Response
-
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from httplib2 import Http
 from oauth2client.service_account import ServiceAccountCredentials
+from requests import get
 
 from .. import app, cache
 
@@ -66,7 +66,9 @@ def publications():
 
 @metrics.route('/publication/<pubsid>/')
 def publication(pubsid):
-    return render_template('metrics/publication.html', pubsid=pubsid)
+    r = get(app.config['PUB_URL'] + 'publication/' + pubsid, params={'mimetype': 'json'}, verify=app.config['VERIFY_CERT'])
+    pub = r.json() if r.status_code == 200 else {}
+    return render_template('metrics/publication.html', pubsid=pubsid, publication=pub)
 
 
 @metrics.route('/gadata/', methods=['POST'])
