@@ -40,6 +40,7 @@
     "watch": "run-p watch:* serve:static",
     "watch:css": "nodemon -w ./styles -e less -x \"npm run build:css\"",
     "watch:js": "mkdir -p dist/scripts && run-p buildvendor:* && rollup -c --watch",
+    "watch:tinymceskins": "npm run build:tinymceskins",
     "watch:fonts": "npm run build:fonts",
     "watch:images": "npm run build:images"
   },

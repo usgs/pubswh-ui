@@ -18,6 +18,7 @@ import 'select2';
 import 'backbone.stickit';
 
 // Load the TinyMCE theme and plugins we need.
+import 'tinymce/themes/modern/theme';
 import 'tinymce/plugins/code';
 import 'tinymce/plugins/link';
 import 'tinymce/plugins/paste';
