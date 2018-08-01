@@ -121,7 +121,7 @@ export default BaseView.extend({
                 tinymce.execCommand('mceAddEditor', true, 'contacts-input');
             }
             tinymce.init({
-                skin_url: `${window.CONFIG.scriptRoot}/tinymce/skins/lightgray`,
+                skin_url: `${window.CONFIG.staticRoot}/tinymce/skins/lightgray`,
                 selector : '#contacts-input',
                 setup : function(ed) {
                     deferred.resolve();

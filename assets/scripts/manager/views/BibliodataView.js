@@ -18,7 +18,6 @@ import 'select2';
 import 'backbone.stickit';
 
 // Load the TinyMCE theme and plugins we need.
-import 'tinymce/themes/modern/theme';
 import 'tinymce/plugins/code';
 import 'tinymce/plugins/link';
 import 'tinymce/plugins/paste';
@@ -197,6 +196,7 @@ export default BaseView.extend({
         var isInit = false;
         var abstractInitDeferred = $.Deferred();
         var tocInitDeferred = $.Deferred();
+
         var interval = window.setInterval(function() {
             if (isInit) {
                 tinymce.execCommand('mceRemoveEditor', true, 'docAbstract-input');
@@ -255,6 +255,7 @@ export default BaseView.extend({
                     tinymce.execCommand('mceAddEditor', true, 'tableOfContents-input');
                 }
                 tinymce.init({
+                    skin_url: `${window.CONFIG.staticRoot}/tinymce/skins/lightgray`,
                     selector: '#tableOfContents-input',
                     setup: function (ed) {
                         tocInitDeferred.resolve();
