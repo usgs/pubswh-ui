@@ -1,6 +1,7 @@
 /etc
 assets/node_modules
 assets/coverage
+assets/bower_components
 *.pyc
 .idea/
 .settings/

@@ -1,6 +1,4 @@
-import 'jquery-ui';
-import 'jquery-ui/ui/widgets/mouse';
-import 'jquery-ui/ui/widgets/sortable';
+import 'jquery-ui-dist/jquery-ui.js';
 import 'bootstrap';
 
 import Backbone from 'backbone';
