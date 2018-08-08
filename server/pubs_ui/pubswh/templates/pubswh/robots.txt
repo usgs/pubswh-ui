@@ -5,6 +5,7 @@ Disallow: /apex/
 Disallow: /mypubs/
 Disallow: /newpubs/
 Disallow: /search
+Disallow: /metrics/
 {% else %}
 User-agent: *
 Disallow: /
