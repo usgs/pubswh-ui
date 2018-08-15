@@ -3,7 +3,7 @@ import $ from 'jquery';
 import * as DynamicSelect2 from '../../../../scripts/manager/utils/DynamicSelect2';
 
 
-fdescribe('DynamicSelect2', function() {
+describe('DynamicSelect2', function() {
     describe('Tests for getSelectOptions', function() {
         let resultOptions;
 
