@@ -11,7 +11,7 @@ import isFunction from 'lodash/isFunction';
  *     @prop {String} parentId(optional) - parameter name to be used when retrieving the lookup
  *     @prop {Function} getParentId - optional but should be specified if parentId is specified.
  *                 Function should return a String that will be used as the parentId value when retrieving the lookup
- *     @prop {Object} subgroups - Specify this if you would like the options sorted by subgroups. The subgroups would require
+ *     @prop {Object} subgroups (optional) - Specify this if you would like the options sorted by subgroups. The subgroups would require
  *          separate lookup calls
  *          @prop {String} queryParameter
  *          @prop {Array of Object} nameAndValues - where each Object has a {String} name property for the display name
