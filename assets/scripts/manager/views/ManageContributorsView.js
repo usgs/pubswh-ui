@@ -48,8 +48,8 @@ export default BaseView.extend({
     },
 
     render : function() {
-        var self = this;
-        var $loadingIndicator;
+        const self = this;
+        let $loadingIndicator;
         BaseView.prototype.render.apply(this, arguments);
 
         // If fetching an existing contributor, create edit view once the contributor has been fetched.
@@ -116,7 +116,7 @@ export default BaseView.extend({
      * Helper function to create an edit contributor view.
      */
      _createContributorView : function() {
-        var EditView = this.model.has('corporation') && this.model.get('corporation') ? EditCorporationView : EditPersonView;
+        const EditView = this.model.has('corporation') && this.model.get('corporation') ? EditCorporationView : EditPersonView;
         this.$('.select-contributor-container').hide();
         this.$('.contributor-button-container').show();
         this.editContributorView = new EditView({
@@ -136,9 +136,9 @@ export default BaseView.extend({
     },
 
     selectContributorType : function(ev) {
-        var type = ev.currentTarget.value;
-        var $personSelectDiv = this.$('.person-select-div');
-        var $corpSelectDiv = this.$('.corporation-select-div');
+        const type = ev.currentTarget.value;
+        const $personSelectDiv = this.$('.person-select-div');
+        const $corpSelectDiv = this.$('.corporation-select-div');
         this.$('.select-create-or-edit-container').show();
         switch(type) {
             case 'person':
@@ -154,17 +154,17 @@ export default BaseView.extend({
     },
 
     createContributor : function() {
-        var contributorType = this.$('.contributor-type-select').val();
+        const contributorType = this.$('.contributor-type-select').val();
 
         this.model.set('corporation', contributorType === 'corporation' ? true : false);
         this._createContributorView();
     },
 
     editContributor : function(ev) {
-        var self = this;
-        var contributorType = this.$('.contributor-type-select').val();
-        var contributorId = ev.currentTarget.value;
-        var $loadingIndicator = this.$('.loadingIndicator');
+        const self = this;
+        const contributorType = this.$('.contributor-type-select').val();
+        const contributorId = ev.currentTarget.value;
+        const $loadingIndicator = this.$('.loadingIndicator');
 
         $loadingIndicator.show();
         this.model.set({
@@ -187,9 +187,9 @@ export default BaseView.extend({
     },
 
     saveContributor : function() {
-        var self = this;
-        var $loadingIndicator = this.$('.loadingIndicator');
-        var $errorDiv = this.$('.validation-errors');
+        const self = this;
+        const $loadingIndicator = this.$('.loadingIndicator');
+        const $errorDiv = this.$('.validation-errors');
 
         $loadingIndicator.show();
         $errorDiv.html('');
@@ -210,8 +210,8 @@ export default BaseView.extend({
     },
 
     restoreSavedValues : function() {
-        var self = this;
-        var modelId = this.model.get('contributorId');
+        const self = this;
+        const modelId = this.model.get('contributorId');
 
         this.model.clear();
         if (modelId) {
