@@ -105,8 +105,8 @@ export default BaseView.extend({
     },
 
     render : function() {
-        var self = this;
-        var DEFAULT_SELECT2_OPTIONS = {
+        const self = this;
+        const DEFAULT_SELECT2_OPTIONS = {
             allowClear : true,
             theme : 'bootstrap'
         };
@@ -169,7 +169,16 @@ export default BaseView.extend({
             getParentId : function() {
                 return self.model.get('publicationSubtype').id;
             },
-            activeSubgroup : true
+            subgroups : {
+                queryParameter: 'active',
+                nameAndValues: [{
+                    name: 'Active',
+                    value: 'y'
+                }, {
+                    name: 'Not Active',
+                    value: 'n'
+                }]
+            }
         }, DEFAULT_SELECT2_OPTIONS));
         this.updateSeriesTitle();
 
@@ -189,16 +198,16 @@ export default BaseView.extend({
      * @returns Jquery.Promise which is resolved once all tinymce editors have been successfully initialized.
      */
      initializeTinyMce : function() {
-        var self = this;
+        const self = this;
         //Set up tinymce element. If the setup
         // callback is not called, the app should try again after removing and adding back in the editor.
         // This is the only way I got the tinymce editor to reliably render. Also tinyMCE editors have to be initialized
         // sequentially so we must wait until the previous initialization is complete.
-        var isInit = false;
-        var abstractInitDeferred = $.Deferred();
-        var tocInitDeferred = $.Deferred();
+        let isInit = false;
+        const abstractInitDeferred = $.Deferred();
+        const tocInitDeferred = $.Deferred();
 
-        var interval = window.setInterval(function() {
+        let interval = window.setInterval(function() {
             if (isInit) {
                 tinymce.execCommand('mceRemoveEditor', true, 'docAbstract-input');
                 tinymce.execCommand('mceAddEditor', true, 'docAbstract-input');
@@ -248,8 +257,8 @@ export default BaseView.extend({
         }, 1);
 
         abstractInitDeferred.done(function() {
-            var tocInit = false;
-            var tocInterval;
+            let tocInit = false;
+            let tocInterval;
             tocInterval = window.setInterval(function() {
                 if (tocInit) {
                     tinymce.execCommand('mceRemoveEditor', true, 'tableOfContents-input');
@@ -283,8 +292,8 @@ export default BaseView.extend({
      * Event handlers for select and reset events for the select2s
      */
      selectPubType : function(ev) {
-        var selected = ev.currentTarget.value;
-        var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
+        const selected = ev.currentTarget.value;
+        const selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
         this.model.set('publicationType', {id: selected, text : selectedText});
         this.model.unset('publicationSubtype');
         this.model.unset('seriesTitle');
@@ -297,8 +306,8 @@ export default BaseView.extend({
     },
 
     selectPubSubtype : function(ev) {
-        var selected = ev.currentTarget.value;
-        var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
+        const selected = ev.currentTarget.value;
+        const selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
         this.model.set('publicationSubtype', {id: selected, text : selectedText});
         this.model.unset('seriesTitle');
     },
@@ -309,8 +318,8 @@ export default BaseView.extend({
     },
 
     selectSeriesTitle : function(ev) {
-        var selected = ev.currentTarget.value;
-        var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
+        const selected = ev.currentTarget.value;
+        const selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
         this.model.set('seriesTitle', {id : selected, text : selectedText});
     },
 
@@ -319,7 +328,7 @@ export default BaseView.extend({
     },
 
     selectCostCenter : function(ev) {
-        var costCenters;
+        let costCenters;
         if (this.model.has('costCenters')) {
             costCenters = clone(this.model.get('costCenters'));
         } else {
@@ -333,8 +342,8 @@ export default BaseView.extend({
     },
 
     unselectCostCenter : function(ev) {
-        var costCenters = clone(this.model.get('costCenters'));
-        var ccToRemove = parseInt(ev.params.data.id);
+        const costCenters = clone(this.model.get('costCenters'));
+        const ccToRemove = parseInt(ev.params.data.id);
 
         this.model.set('costCenters', reject(costCenters, function(cc) {
             return cc.id === ccToRemove;
@@ -342,8 +351,8 @@ export default BaseView.extend({
     },
 
     selectLargerWorkType : function(ev) {
-        var selected = ev.currentTarget.value;
-        var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
+        const selected = ev.currentTarget.value;
+        const selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
         this.model.set('largerWorkType', {id: selected, text : selectedText});
         this.model.unset('largerWorkSubtype');
     },
@@ -354,8 +363,8 @@ export default BaseView.extend({
     },
 
     selectLargerWorkSubtype : function(ev) {
-        var selected = ev.currentTarget.value;
-        var selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
+        const selected = ev.currentTarget.value;
+        const selectedText = ev.currentTarget.selectedOptions[0].innerHTML;
         this.model.set('largerWorkSubtype', {id: selected, text : selectedText});
     },
 
@@ -369,11 +378,11 @@ export default BaseView.extend({
      * the value we must also create the corresponding option tags
      */
      updatePubType : function() {
-        var $select = this.$('#pub-type-input');
-        var $subtypeSelect = this.$('#pub-subtype-input');
+        const $select = this.$('#pub-type-input');
+        const $subtypeSelect = this.$('#pub-subtype-input');
 
-        var pubType = this.model.get('publicationType');
-        var hasId = has(pubType, 'id');
+        const pubType = this.model.get('publicationType');
+        const hasId = has(pubType, 'id');
 
         if (hasId) {
             $select.val(pubType.id).trigger('change');
@@ -384,11 +393,11 @@ export default BaseView.extend({
     },
 
     updatePubSubtype : function() {
-        var $select = this.$('#pub-subtype-input');
-        var $seriesTitleSelect = this.$('#series-title-input');
+        const $select = this.$('#pub-subtype-input');
+        const $seriesTitleSelect = this.$('#series-title-input');
 
-        var pubSubtype = this.model.get('publicationSubtype');
-        var hasId = has(pubSubtype, 'id');
+        const pubSubtype = this.model.get('publicationSubtype');
+        const hasId = has(pubSubtype, 'id');
 
         if (hasId) {
             if ($select.find('option[value="' + pubSubtype.id + '"]').length === 0) {
@@ -402,8 +411,8 @@ export default BaseView.extend({
     },
 
     updateSeriesTitle : function() {
-        var $select = this.$('#series-title-input');
-        var seriesTitle = this.model.get('seriesTitle');
+        const $select = this.$('#series-title-input');
+        const seriesTitle = this.model.get('seriesTitle');
 
         if (has(seriesTitle, 'id')) {
             if ($select.find('option[value="' + seriesTitle.id + '"]').length === 0) {
@@ -416,8 +425,8 @@ export default BaseView.extend({
     },
 
     updateCostCenters : function() {
-        var $select = this.$('#cost-centers-input');
-        var costCenters = this.model.get('costCenters');
+        const $select = this.$('#cost-centers-input');
+        const costCenters = this.model.get('costCenters');
         if (isEmpty(costCenters)) {
             $select.val('').trigger('change');
         } else {
@@ -426,11 +435,11 @@ export default BaseView.extend({
     },
 
     updateLargerWorkType : function() {
-        var $select = this.$('#larger-work-type-input');
-        var $subtypeSelect = this.$('#larger-work-subtype-input');
+        const $select = this.$('#larger-work-type-input');
+        const $subtypeSelect = this.$('#larger-work-subtype-input');
 
-        var largerWorkType = this.model.get('largerWorkType');
-        var hasId = has(largerWorkType, 'id');
+        const largerWorkType = this.model.get('largerWorkType');
+        const hasId = has(largerWorkType, 'id');
 
         if (hasId) {
             $select.val(largerWorkType.id).trigger('change');
@@ -441,10 +450,10 @@ export default BaseView.extend({
     },
 
     updateLargerWorkSubtype : function() {
-        var $select = this.$('#larger-work-subtype-input');
+        const $select = this.$('#larger-work-subtype-input');
 
-        var largerWorkSubtype = this.model.get('largerWorkSubtype');
-        var hasId = has(largerWorkSubtype, 'id');
+        const largerWorkSubtype = this.model.get('largerWorkSubtype');
+        const hasId = has(largerWorkSubtype, 'id');
 
         if (hasId) {
             if ($select.find('option[value="' + largerWorkSubtype.id + '"]').length === 0) {
