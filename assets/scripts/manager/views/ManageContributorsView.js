@@ -75,10 +75,30 @@ export default BaseView.extend({
         // Initialize the select2's
         this.$('.contributor-type-select').select2(DEFAULT_SELECT2_OPTIONS);
         this.$('.person-select-div select').select2(DynamicSelect2.getSelectOptions({
-            lookupType : 'people'
+            lookupType : 'people',
+            subgroups: {
+                queryParameter: 'preferred',
+                nameAndValues: [{
+                    name: 'Preferred',
+                    value: 'true'
+                }, {
+                    name: 'Not preferred',
+                    value: 'false'
+                }]
+            }
         }, extend({minimumInputLength : 2}, DEFAULT_SELECT2_OPTIONS)));
         this.$('.corporation-select-div select').select2(DynamicSelect2.getSelectOptions({
-            lookupType : 'corporations'
+            lookupType : 'corporations',
+            subgroups: {
+                queryParameter: 'preferred',
+                nameAndValues: [{
+                    name: 'Preferred',
+                    value: 'true'
+                }, {
+                    name: 'Not preferred',
+                    value: 'false'
+                }]
+            }
         }, DEFAULT_SELECT2_OPTIONS));
 
         return this;
