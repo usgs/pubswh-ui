@@ -96,6 +96,7 @@
     "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "esri-leaflet": "^2.0.8",
     "font-awesome": "^4.6.3",
+    "jquery": "^2.2.4",
     "jquery-ui-dist": "^1.12.1",
     "leaflet": "^1.0.3",
     "leaflet-draw": "^0.4.9",
