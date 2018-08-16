@@ -61,8 +61,7 @@ import isFunction from 'lodash/isFunction';
             });
 
             $.when(...subgroupRequests).always(function() {
-                const results = Array.from(arguments).map((arg) => arg[0]);
-                deferred.resolve(results);
+                deferred.resolve(Array.from(arguments));
             });
             deferred.done(success);
             deferred.fail(failure);
@@ -74,7 +73,7 @@ import isFunction from 'lodash/isFunction';
             responses.forEach((resp, index) => {
                 resultsData.push({
                     text: options.subgroups.nameAndValues[index].name,
-                    children: resp.slice(0, SUBGROUP_CHILDREN_LIMIT)
+                    children: resp[0].slice(0, SUBGROUP_CHILDREN_LIMIT)
                 });
             });
             return {
