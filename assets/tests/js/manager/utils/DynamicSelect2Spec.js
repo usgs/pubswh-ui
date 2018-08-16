@@ -5,7 +5,7 @@ import * as DynamicSelect2 from '../../../../scripts/manager/utils/DynamicSelect
 
 describe('DynamicSelect2', function() {
     describe('Tests for getSelectOptions', function() {
-        var resultOptions;
+        let resultOptions;
 
         beforeEach(function() {
             spyOn($, 'ajax');
@@ -18,8 +18,8 @@ describe('DynamicSelect2', function() {
         });
 
         it('Expects that if the lookType is a function, it will be used at run time to form the lookup url', function() {
-            var choice;
-            var getType = function() {
+            let choice;
+            const getType = function() {
                 return choice;
             };
             resultOptions = DynamicSelect2.getSelectOptions({lookupType : getType});
@@ -32,7 +32,7 @@ describe('DynamicSelect2', function() {
         });
 
         it('Expects that the ajax.data function should add mimetype and any search term to the lookup query', function() {
-            var data;
+            let data;
             resultOptions = DynamicSelect2.getSelectOptions({lookupType : 'nameType'});
             data = resultOptions.ajax.data({});
             expect(data).toEqual({mimetype : 'json'});
@@ -45,11 +45,11 @@ describe('DynamicSelect2', function() {
         });
 
         it('Expects that the parentId and getParentId parameters are used to set a parameter when retrieving data', function() {
-            var id;
-            var getId = function() {
+            let id;
+            const getId = function() {
                 return id;
             };
-            var dataResult;
+            let dataResult;
             resultOptions = DynamicSelect2.getSelectOptions({
                 lookupType : 'nameType',
                 parentId : 'parent',
@@ -78,8 +78,13 @@ describe('DynamicSelect2', function() {
             });
         });
 
-        it('Expects that if activeSubgroup is specified that a transport function property is used to make make two ajax calls to retrieve active and inactive', function() {
-            resultOptions = DynamicSelect2.getSelectOptions({lookupType : 'nameType', activeSubgroup : true});
+        it('Expects that if subgroups is specified that a transport function property is used to make make two ajax calls to retrieve active and inactive', function() {
+            resultOptions = DynamicSelect2.getSelectOptions({
+                lookupType : 'nameType',
+                subgroups: {
+                    queryParameter: 'active',
+                    nameAndValues: [{name: 'Active', value: 'y'}, {name: 'Not Active', value: 'n'}]
+                }});
             expect(resultOptions.ajax.transport).toBeDefined();
             resultOptions.ajax.transport({data : {}}, jasmine.createSpy('successSpy'), jasmine.createSpy('failureSpy'));
             expect($.ajax.calls.count()).toBe(2);

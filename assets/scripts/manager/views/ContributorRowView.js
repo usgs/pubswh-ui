@@ -16,9 +16,9 @@ export default BaseView.extend({
         '.affiliation-input' : {
             observe : 'affiliations',
             onGet : function(value) {
-                var displayText;
+                let displayText;
                 if (value && value.length > 0) {
-                    var stagingText = map(value, 'text');
+                    const stagingText = map(value, 'text');
                     displayText = stagingText.join(', ');
                 } else {
                     displayText = '';
@@ -59,8 +59,8 @@ export default BaseView.extend({
     },
 
     render : function() {
-        var self = this;
-        var DEFAULT_SELECT2_OPTIONS = {
+        const self = this;
+        const DEFAULT_SELECT2_OPTIONS = {
             theme : 'bootstrap'
         };
         BaseView.prototype.render.apply(this, arguments);
@@ -74,6 +74,16 @@ export default BaseView.extend({
         this.$('.contributor-name-input').select2(DynamicSelect2.getSelectOptions({
             lookupType: function () {
                 return self.model.get('corporation') ? 'corporations' : 'people';
+            },
+            subgroups: {
+                queryParameter: 'preferred',
+                nameAndValues: [{
+                    name: 'Preferred',
+                    value: 'true'
+                }, {
+                    name: 'Not preferred',
+                    value: 'false'
+                }]
             }
         }, extend({minimumInputLength: 2}, DEFAULT_SELECT2_OPTIONS)));
         this.updateName();
@@ -103,9 +113,10 @@ export default BaseView.extend({
     },
 
     clickEditLink : function() {
-        var h = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + window.location.pathname + '#contributor' +
-        (this.model.has('contributorId') ? '/' + this.model.get('contributorId') : '');
-        window.open(h, '_blank');
+        const url = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port +
+            window.location.pathname + '#contributor' +
+            (this.model.has('contributorId') ? '/' + this.model.get('contributorId') : '');
+        window.open(url, '_blank');
     },
 
     /*
@@ -113,8 +124,8 @@ export default BaseView.extend({
      */
 
      updateType : function() {
-        var $select = this.$('.contributor-type-input');
-        var corporation = this.model.get('corporation');
+        const $select = this.$('.contributor-type-input');
+        const corporation = this.model.get('corporation');
         if (corporation) {
             $select.val('corporations').trigger('change');
         } else {
@@ -123,8 +134,8 @@ export default BaseView.extend({
     },
 
     updateName : function() {
-        var $select = this.$('.contributor-name-input');
-        var id = this.model.get('contributorId');
+        const $select = this.$('.contributor-name-input');
+        const id = this.model.get('contributorId');
 
         if (id) {
             if ($select.find('option[value="' + id + '"]').length === 0) {

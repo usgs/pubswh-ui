@@ -45,13 +45,13 @@ export default BaseView.extend({
         text : 'Publication Type',
         inputType : 'select',
         select2Init : function(context) {
-            var $select = context.$('.value-select-input');
+            const $select = context.$('.value-select-input');
             context.pubTypeFetch.done(function() {
                 $select.select2(_.extend({
                     data : context.publicationTypeCollection.toJSON()
                 }, DEFAULT_SELECT2_OPTIONS));
                 if (context.model.has('typeName') && context.model.attributes.typeName) {
-                    var selections = context.model.get('typeName').selections;
+                    const selections = context.model.get('typeName').selections;
                     $select.val(_.pluck(selections, 'id')).trigger('change');
                 }
             });
@@ -62,12 +62,12 @@ export default BaseView.extend({
         text : 'Publication Subtype',
         inputType : 'select',
         select2Init : function(context) {
-            var $select = context.$('.value-select-input');
+            const $select = context.$('.value-select-input');
             $select.select2(DynamicSelect2.getSelectOptions({
                 lookupType : 'publicationsubtypes'
             }, DEFAULT_SELECT2_OPTIONS));
             if (context.model.has('subtypeName') && context.model.attributes.subtypeName) {
-                var selections = context.model.get('subtypeName').selections;
+                const selections = context.model.get('subtypeName').selections;
                     // Add options for selections
                     _.each(selections, function(selection) {
                         if ($select.find('option[value="' + selection.id + '"]').length === 0) {
@@ -83,13 +83,22 @@ export default BaseView.extend({
             text : 'Series Title',
             inputType : 'select',
             select2Init : function(context) {
-                var $select = context.$('.value-select-input');
+                const $select = context.$('.value-select-input');
                 $select.select2(DynamicSelect2.getSelectOptions({
                     lookupType : 'publicationseries',
-                    activeSubgroup : true
+                    subgroups : {
+                        queryParameter: 'active',
+                        nameAndValues: [{
+                            name: 'Active',
+                            value: 'y'
+                        }, {
+                            name: 'Not Active',
+                            value: 'n'
+                        }]
+                    }
                 }, DEFAULT_SELECT2_OPTIONS));
                 if (context.model.has('seriesName') && context.model.attributes.seriesName) {
-                    var selections = context.model.get('seriesName').selections;
+                    const selections = context.model.get('seriesName').selections;
                     // Add options for selections
                     _.each(selections, function(selection) {
                         if ($select.find('option[value="' + selection.id + '"]').length === 0) {
@@ -105,7 +114,7 @@ export default BaseView.extend({
             text : 'Cost Center',
             inputType : 'select',
             select2Init : function(context) {
-                var $select = context.$('.value-select-input');
+                const $select = context.$('.value-select-input');
                 context.costCenterPromise.done(function() {
                     $select.select2(_.extend({
                         data : [{
@@ -117,7 +126,7 @@ export default BaseView.extend({
                         }]
                     }, DEFAULT_SELECT2_OPTIONS));
                     if (context.model.has('contributingOffice') && context.model.attributes.contributingOffice) {
-                        var selections = context.model.get('contributingOffice').selections;
+                        const selections = context.model.get('contributingOffice').selections;
                         $select.val(_.pluck(selections, 'id')).trigger('change');
                     }
                 });
@@ -134,7 +143,7 @@ export default BaseView.extend({
      *     @prop {String} initialCategory
      */
      initialize : function(options) {
-        var isCategoryId = function(category) {
+        const isCategoryId = function(category) {
             return options.initialCategory === category.id;
         };
         BaseView.prototype.initialize.apply(this, arguments);
@@ -156,7 +165,7 @@ export default BaseView.extend({
     render : function() {
         this.context.initialCategoryId = this.initialCategory ? this.initialCategory.id : undefined;
         this.context.categories = _.map(this.categories, function (category) {
-            var result = _.clone(category);
+            let result = _.clone(category);
             result.disabled = this.model.has(result.id);
             result.selected = this.initialCategory ? result.id === this.initialCategory.id : false;
             return result;
@@ -180,7 +189,7 @@ export default BaseView.extend({
     },
 
     remove : function() {
-        var category = this.$('.search-category-input').data('current-value');
+        const category = this.$('.search-category-input').data('current-value');
         this.model.unset(category);
 
         BaseView.prototype.remove.apply(this, arguments);
@@ -190,8 +199,8 @@ export default BaseView.extend({
      * Model event handlers
      */
      disableFilterOption : function(model, options) {
-        var $option = this.$('.search-category-input option[value="' + options.changedAttribute + '"]');
-        var enabled = _.has(options, 'unset') && options.unset;
+        const $option = this.$('.search-category-input option[value="' + options.changedAttribute + '"]');
+        const enabled = _.has(options, 'unset') && options.unset;
         $option.prop('disabled', !enabled);
     },
 
@@ -199,14 +208,14 @@ export default BaseView.extend({
      * DOM event handlers
      */
      changeCategory : function(ev) {
-        var $thisEl = $(ev.currentTarget);
-        var $textInputDiv = this.$('.text-input-div');
-        var $selectInputDiv = this.$('.select-input-div');
-        var $select = $selectInputDiv.find('select');
+        const $thisEl = $(ev.currentTarget);
+        const $textInputDiv = this.$('.text-input-div');
+        const $selectInputDiv = this.$('.select-input-div');
+        const $select = $selectInputDiv.find('select');
 
-        var oldValue = $thisEl.data('current-value');
-        var newValue = ev.currentTarget.value;
-        var selectedCategory = _.find(this.categories, function(category) {
+        const oldValue = $thisEl.data('current-value');
+        const newValue = ev.currentTarget.value;
+        const selectedCategory = _.find(this.categories, function(category) {
             return category.id === newValue;
         });
 
@@ -243,15 +252,15 @@ export default BaseView.extend({
     },
 
     changeValue : function(ev) {
-        var category = this.$('.search-category-input').data('current-value');
+        const category = this.$('.search-category-input').data('current-value');
         this.model.set(category, ev.currentTarget.value);
     },
 
     changeSelectedValue : function(ev) {
-        var $categorySelect = this.$('.search-category-input');
-        var category = $categorySelect.data('current-value');
-        var useId = $categorySelect.find('option[value="' + category + '"]').data('sendid');
-        var categorySelections = this.model.has(category) && this.model.attributes[category] ? this.model.get(category).selections : [];
+        const $categorySelect = this.$('.search-category-input');
+        const category = $categorySelect.data('current-value');
+        const useId = $categorySelect.find('option[value="' + category + '"]').data('sendid');
+        const categorySelections = this.model.has(category) && this.model.attributes[category] ? this.model.get(category).selections : [];
         categorySelections.push({
             id : parseInt(ev.params.data.id),
             text : ev.params.data.text
@@ -263,11 +272,11 @@ export default BaseView.extend({
     },
 
     unsetSelectedValue : function(ev) {
-        var $categorySelect = this.$('.search-category-input');
-        var category = $categorySelect.data('current-value');
-        var useId = $categorySelect.find('option[value="' + category + '"]').data('sendid');
-        var categorySelections = this.model.has(category) && this.model.attributes[category] ? this.model.get(category).selections : [];
-        var selectionToRemove = parseInt(ev.params.data.id);
+        const $categorySelect = this.$('.search-category-input');
+        const category = $categorySelect.data('current-value');
+        const useId = $categorySelect.find('option[value="' + category + '"]').data('sendid');
+        const categorySelections = this.model.has(category) && this.model.attributes[category] ? this.model.get(category).selections : [];
+        const selectionToRemove = parseInt(ev.params.data.id);
         this.model.set(category, {
             useId : useId,
             selections : _.reject(categorySelections, function(selection) {

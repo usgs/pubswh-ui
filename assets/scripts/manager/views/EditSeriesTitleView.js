@@ -75,7 +75,7 @@ export default BaseView.extend({
     },
 
     render : function() {
-        var self = this;
+        const self = this;
         this.context = this.model.attributes;
         BaseView.prototype.render.apply(this, arguments);
         this.stickit();
@@ -88,10 +88,19 @@ export default BaseView.extend({
             getParentId : function() {
                 return self.$(EDIT_PUB_SUBTYPE_INPUT_SEL).val();
             },
-            activeSubgroup : true
+            subgroups : {
+                queryParameter: 'active',
+                nameAndValues: [{
+                    name: 'Active',
+                    value: 'y'
+                }, {
+                    name: 'Not Active',
+                    value: 'n'
+                }]
+            }
         }, DEFAULT_SELECT2_OPTIONS));
         this.pubSubtypePromise.done(function() {
-            var select2Options = extend({
+            const select2Options = extend({
                 data : [{id : ''}].concat(self.publicationSubtypeCollection.toJSON())
             }, DEFAULT_SELECT2_OPTIONS);
             self.$(EDIT_PUB_SUBTYPE_INPUT_SEL).select2(select2Options);
@@ -113,8 +122,8 @@ export default BaseView.extend({
      */
 
     updatePublicationSubtype : function() {
-        var $select = this.$(PUB_SUBTYPE_INPUT_SEL);
-        var subtype;
+        const $select = this.$(PUB_SUBTYPE_INPUT_SEL);
+        let subtype;
         if (this.model.has('publicationSubtype')) {
             subtype = this.model.get('publicationSubtype');
             $select.val(subtype.id).trigger('change');
@@ -154,10 +163,10 @@ export default BaseView.extend({
     },
 
     showEditSelectedSeriesTitle : function(ev) {
-        var self = this;
-        var seriesId = ev.currentTarget.value;
-        var seriesTitle = ev.currentTarget.selectedOptions[0].innerHTML;
-        var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
+        const self = this;
+        const seriesId = ev.currentTarget.value;
+        const seriesTitle = ev.currentTarget.selectedOptions[0].innerHTML;
+        const $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
 
         $loadingIndicator.show();
         this.alertView.closeAlert();
@@ -187,9 +196,9 @@ export default BaseView.extend({
     },
 
     saveSeriesTitle : function() {
-        var self = this;
-        var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
-        var $errorDiv = this.$(ERRORS_SEL);
+        const self = this;
+        const $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
+        const $errorDiv = this.$(ERRORS_SEL);
 
         $loadingIndicator.show();
         $errorDiv.html('');
@@ -210,8 +219,8 @@ export default BaseView.extend({
             });
     },
     resetFields : function() {
-        var self = this;
-        var modelId = this.model.get('id');
+        const self = this;
+        const modelId = this.model.get('id');
         this.model.clear();
         this.model.set('id', modelId);
         this.model.fetch()
@@ -227,9 +236,9 @@ export default BaseView.extend({
     },
 
     deleteSeriesTitle : function() {
-        var self = this;
-        var seriesTitle = this.model.get('text');
-        var $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
+        const self = this;
+        const seriesTitle = this.model.get('text');
+        const $loadingIndicator = this.$(LOADING_INDICATOR_SEL);
         $loadingIndicator.show();
         this.model.destroy({wait : true})
             .done(function() {
