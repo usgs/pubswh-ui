@@ -1,4 +1,5 @@
-{% import 'assets.html' as assets %}<!DOCTYPE html>
+<!DOCTYPE html>
+{% import 'assets.html' as assets %}
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -13,6 +14,14 @@
         <meta name="format-detection" content="telephone=no">
         {% block head %} {% endblock %}
         {% block page_style %}{% endblock page_style %}
+        <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
+        <script>
+            if (!String.prototype.startsWith) {
+                String.prototype.startsWith = function(search, pos) {
+                    return this.substr(!pos || pos < 0 ? 0 : +pos, search.length) === search;
+                };
+            }
+        </script>
         <script src="{{ 'vendor/system.js' | asset_url }}"></script>
         <link rel="stylesheet" href="{{ 'pubs_base.css' | asset_url }}" type="text/css" />
         <link rel="shortcut icon" href="{{ 'images/pubswh/favicon.ico' | asset_url }}"/>
