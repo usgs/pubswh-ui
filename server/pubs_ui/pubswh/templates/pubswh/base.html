@@ -14,14 +14,16 @@
         <meta name="format-detection" content="telephone=no">
         {% block head %} {% endblock %}
         {% block page_style %}{% endblock page_style %}
-        <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
-        <script>
-            if (!String.prototype.startsWith) {
-                String.prototype.startsWith = function(search, pos) {
-                    return this.substr(!pos || pos < 0 ? 0 : +pos, search.length) === search;
-                };
-            }
-        </script>
+        <!--[if gt IE 8]><!-->
+            <script src="{{ 'vendor/polyfill.js' | asset_url }}"></script>
+            <script>
+                if (!String.prototype.startsWith) {
+                    String.prototype.startsWith = function(search, pos) {
+                        return this.substr(!pos || pos < 0 ? 0 : +pos, search.length) === search;
+                    };
+                }
+            </script>
+        <!--<![endif]-->
         <script src="{{ 'vendor/system.js' | asset_url }}"></script>
         <link rel="stylesheet" href="{{ 'pubs_base.css' | asset_url }}" type="text/css" />
         <link rel="shortcut icon" href="{{ 'images/pubswh/favicon.ico' | asset_url }}"/>
