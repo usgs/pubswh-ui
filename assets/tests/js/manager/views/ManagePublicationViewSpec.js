@@ -209,8 +209,8 @@ describe('ManagePublicationsView', function() {
             fetchListDeferred.resolve();
             testView.render();
         });
-        //This test is causing a page reload and I don't know why so disabling it for now.
-        xit('Expects that a clicking the search button updates the collection\'s filters and then gets the first page of publications', function() {
+
+        it('Expects that a clicking the search button updates the collection\'s filters and then gets the first page of publications', function() {
             spyOn(testCollection, 'updateFilters');
             spyOn(testCollection, 'getFirstPage').and.callThrough();
 

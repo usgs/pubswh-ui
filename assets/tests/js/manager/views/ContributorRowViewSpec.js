@@ -120,9 +120,7 @@ describe('ContributorRowView', function() {
             expect(testCollection.remove.calls.argsFor(0)).toEqual([testModel]);
         });
 
-        // Temporarily disable this test as we will be linking to the old MyPubs app until the edit
-        // contributors page has been implemented in the new app.
-        xit('Expects that if the edit link is clicked a new window is opened to edit the contributor', function() {
+        it('Expects that if the edit link is clicked a new window is opened to edit the contributor', function() {
             spyOn(window, 'open');
             testView.clickEditLink();
             expect(window.open.calls.argsFor(0)[0]).toContain('#contributor/10');
