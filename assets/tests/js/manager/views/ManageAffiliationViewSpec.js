@@ -10,16 +10,16 @@ import OutsideAffiliationLookupCollection from '../../../../scripts/manager/mode
 
 
 describe('views/ManageAffiliationView', function() {
-    var testView;
-    var $testDiv;
-    var testModel;
-    var fetchModelDeferred;
-    var saveModelDeferred;
-    var deleteModelDeferred;
-    var testRouter;
+    let testView;
+    let $testDiv;
+    let testModel;
+    let fetchModelDeferred;
+    let saveModelDeferred;
+    let deleteModelDeferred;
+    let testRouter;
 
-    var costCenterFetchActiveDeferred, costCenterFetchInactiveDeferred;
-    var outsideAffiliationActiveDeferred, outsideAffiliationInactiveDeferred;
+    let costCenterFetchActiveDeferred, costCenterFetchInactiveDeferred;
+    let outsideAffiliationActiveDeferred, outsideAffiliationInactiveDeferred;
 
     beforeEach(function() {
         $('body').append('<div id="test-div"></div>');
@@ -84,11 +84,11 @@ describe('views/ManageAffiliationView', function() {
 
     it('Expects active and inactive cost centers to fetched', function() {
         expect(CostCenterCollection.prototype.fetch.calls.count()).toBe(2);
-        var activeCostCenters = _.find(CostCenterCollection.prototype.fetch.calls.allArgs(), function(arg) {
+        const activeCostCenters = _.find(CostCenterCollection.prototype.fetch.calls.allArgs(), function(arg) {
             return arg[0].data.active === 'y';
         });
         expect(activeCostCenters).toBeDefined();
-        var inactiveCostCenters = _.find(CostCenterCollection.prototype.fetch.calls.allArgs(), function(arg) {
+        const inactiveCostCenters = _.find(CostCenterCollection.prototype.fetch.calls.allArgs(), function(arg) {
             return arg[0].data.active === 'n';
         });
         expect(inactiveCostCenters).toBeDefined();
@@ -96,11 +96,11 @@ describe('views/ManageAffiliationView', function() {
 
     it('Expects active and inactive outside affiliates to be fetched', function() {
         expect(OutsideAffiliationLookupCollection.prototype.fetch.calls.count()).toBe(2);
-        var activeAffiliates = _.find(OutsideAffiliationLookupCollection.prototype.fetch.calls.allArgs(), function(arg) {
+        const activeAffiliates = _.find(OutsideAffiliationLookupCollection.prototype.fetch.calls.allArgs(), function(arg) {
             return arg[0].data.active === 'y';
         });
         expect(activeAffiliates).toBeDefined();
-        var inactiveAffiliates = _.find(OutsideAffiliationLookupCollection.prototype.fetch.calls.allArgs(), function(arg) {
+        const inactiveAffiliates = _.find(OutsideAffiliationLookupCollection.prototype.fetch.calls.allArgs(), function(arg) {
             return arg[0].data.active === 'n';
         });
         expect(inactiveAffiliates).toBeDefined();
@@ -116,16 +116,16 @@ describe('views/ManageAffiliationView', function() {
 
         it('Expects a drop with affiliation types is populated', function() {
             testView.render();
-            var select2Calls = $.fn.select2.calls.count();
+            const select2Calls = $.fn.select2.calls.count();
             expect(select2Calls).toBe(1);
         });
 
         it('Expects a select2 dropdown called with expected data', function() {
-            var affiliationTypeSelect;
+            let affiliationTypeSelect;
             testView.render();
             affiliationTypeSelect = $('.edit-affiliation-type-input');
             expect(affiliationTypeSelect.select2).toHaveBeenCalledWith({}, {theme : 'bootstrap', allowClear: true});
-            var selectOptions = $('#edit-affiliation-type-input option');
+            const selectOptions = $('#edit-affiliation-type-input option');
             expect(selectOptions.length).toEqual(3);
             expect(selectOptions[1].outerHTML).toEqual('<option value="1">Cost Center</option>');
             expect(selectOptions[2].outerHTML).toEqual('<option value="2">Outside Affiliation</option>');
@@ -159,13 +159,13 @@ describe('views/ManageAffiliationView', function() {
 
             it('Expects the affiliation selector and create button are shown if a cost center is selected', function() {
                 $testDiv.find('#edit-affiliation-type-input').val('1').trigger('select2:select');
-                var $containerCreateEdit = $testDiv.find('.select-create-or-edit-container');
+                const $containerCreateEdit = $testDiv.find('.select-create-or-edit-container');
                 expect($containerCreateEdit.is(':visible')).toBe(true);
             });
 
             it('Expects the affiliation selector and create buttn are shown if an outside affiliate is selected', function() {
                 $testDiv.find('#edit-affiliation-type-input').val('2').trigger('select2:select');
-                var $containerCreateEdit = $testDiv.find('.select-create-or-edit-container');
+                const $containerCreateEdit = $testDiv.find('.select-create-or-edit-container');
                 expect($containerCreateEdit.is(':visible')).toBe(true);
             });
 
@@ -176,8 +176,8 @@ describe('views/ManageAffiliationView', function() {
         });
 
         describe('Tests for creating a new affiliation', function() {
-            var $saveBtn;
-            var $deleteBtn;
+            let $saveBtn;
+            let $deleteBtn;
 
             beforeEach(function() {
                 testView.render();
@@ -206,12 +206,11 @@ describe('views/ManageAffiliationView', function() {
         });
 
         describe('Tests for editing an affiliation', function() {
-
-            var $saveBtn;
-            var $cancelBtn;
-            var $newAffiliationBtn;
-            var $deleteBtn;
-            var $deleteOkBtn;
+            let $saveBtn;
+            let $cancelBtn;
+            let $newAffiliationBtn;
+            let $deleteBtn;
+            let $deleteOkBtn;
 
             beforeEach(function() {
                 testModel.set({
@@ -239,7 +238,7 @@ describe('views/ManageAffiliationView', function() {
 
             it('Expects the model to be updated if a value changes', function() {
                 $testDiv.find('#affiliation-input').val('Super Secret Police 10th Div').trigger('change');
-                $testDiv.find('#affiliation-active-input').attr('checked', false).trigger('change');
+                $testDiv.find('#affiliation-active-input').prop('checked', false).trigger('change');
                 expect(testModel.get('text')).toEqual('Super Secret Police 10th Div');
                 expect(testModel.get('active')).toBe(false);
             });
