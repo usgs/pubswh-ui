@@ -92,7 +92,7 @@
     "backgrid": "^0.3.8",
     "backgrid-paginator": "^0.3.9",
     "bootstrap": "^3.3.7",
-    "dygraphs": "^1.1.1",
+    "dygraphs": "^2.1.0",
     "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "esri-leaflet": "^2.2.3",
     "font-awesome": "^4.7.0",
