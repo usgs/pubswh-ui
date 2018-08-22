@@ -167,7 +167,7 @@ def login_page():
         else:
             error = 'Username or Password is invalid '+str(mp_response.status_code)
 
-    return render_template("auth/login.html", form=form, error=error)
+    return render_template('auth/login.html', form=form, error=error)
 
 
 @auth.route('/loginservice/', methods=["POST"])

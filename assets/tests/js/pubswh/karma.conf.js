@@ -26,7 +26,6 @@ module.exports = function(config) {
         files: [
             'node_modules/leaflet/dist/leaflet.js',
             'node_modules/esri-leaflet/dist/esri-leaflet.js',
-            'scripts/pubswh/vendor/mapbox/leaflet-pip/leaflet-pip.js',
             'tests/js/pubswh/resources/config.js',
             'scripts/pubswh/*.js',
             'tests/js/pubswh/*.js'

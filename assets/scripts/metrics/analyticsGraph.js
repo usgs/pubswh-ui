@@ -1,4 +1,4 @@
-import Dygraph from 'dygraphs/dygraph-combined';
+import Dygraph from 'dygraphs';
 import has from 'lodash/has';
 
 

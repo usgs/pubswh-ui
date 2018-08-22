@@ -13,12 +13,12 @@ import WarningDialogView from '../../../../scripts/manager/views/WarningDialogVi
 // We will have to be satisified with putting spies on the backrid view objects within testView
 
 describe('ManagePublicationsView', function() {
-    var testView, testCollection, testModel;
-    var $testDiv;
+    let testView, testCollection, testModel;
+    let $testDiv;
 
-    var renderWarningDialogSpy;
-    var renderSearchFilterRowViewSpy;
-    var fetchDeferred, fetchListDeferred;
+    let renderWarningDialogSpy;
+    let renderSearchFilterRowViewSpy;
+    let fetchDeferred, fetchListDeferred;
 
     beforeEach(function () {
 
@@ -42,7 +42,7 @@ describe('ManagePublicationsView', function() {
             return [{id : 1, text : 'Pub Cat 1'}, {id : 2, text : 'Pub Cat 2'}];
         });
         spyOn(PublicationListCollection.prototype, 'findWhere').and.callFake(function() {
-            var mockModel = new Backbone.Model();
+            let mockModel = new Backbone.Model();
             return mockModel.set({id : 2, text : 'Pub Cat 2'});
         });
         spyOn(AlertView.prototype, 'setElement');
@@ -121,38 +121,48 @@ describe('ManagePublicationsView', function() {
             expect(testView.paginator.render).toHaveBeenCalled();
         });
 
-        it('Expects that the loading indicator is shown until the fetch has been resolved', function() {
-            var $loadingIndicator;
+        it('Expects that the loading indicator is shown until the fetch has been resolved', function(done) {
+            let $loadingIndicator;
             testView.render();
             $loadingIndicator = testView.$('.pubs-loading-indicator');
+            fetchDeferred.then(() => {
+                expect($loadingIndicator.is(':visible')).toBe(false);
+                done();
+            });
+
             expect($loadingIndicator.is(':visible')).toBe(true);
             fetchDeferred.resolve();
-            expect($loadingIndicator.is(':visible')).toBe(false);
         });
 
         it('Expects the clear search button to have the button type', function() {
-            var $clearSearchBtn;
+            let $clearSearchBtn;
             testView.render();
             $clearSearchBtn = testView.$('.clear-search-btn');
             expect($clearSearchBtn.attr('type')).toEqual('button');
         });
 
-        it('Expects that the publications list category selector is initialized once the list has been fetched', function() {
+        it('Expects that the publications list category selector is initialized once the list has been fetched', function(done) {
             testView.render();
 
+            fetchListDeferred.then(() => {
+                expect($.fn.select2).toHaveBeenCalled();
+                done();
+            });
             expect($.fn.select2).not.toHaveBeenCalled();
             fetchListDeferred.resolve();
-            expect($.fn.select2).toHaveBeenCalled();
         });
 
-        it('Expects that the publications list filter is rendered after the list has been fetched', function() {
+        it('Expects that the publications list filter is rendered after the list has been fetched', function(done) {
             testView.render();
 
+            fetchListDeferred.then(() => {
+                expect($('.list-unstyled').length).toBe(1);
+                done();
+            });
             expect($('.list-unstyled').length).toBe(0);
 
             fetchListDeferred.resolve();
 
-            expect($('.list-unstyled').length).toBe(1);
         });
 
         it('Expects the search term to equal the value in model', function() {
@@ -162,15 +172,17 @@ describe('ManagePublicationsView', function() {
             expect($testDiv.find('#search-term-input').val()).toEqual('Mary');
         });
 
-        it('Expects the publications list filter to be set if publication lists are set in the model', function() {
+        it('Expects the publications list filter to be set if publication lists are set in the model', function(done) {
             testModel.set('listId', {
                 useId : true,
                 selections : [{id : '2', text : 'Pub Cat 2'}]
             });
             testView.render();
+            fetchListDeferred.then(() => {
+                expect($testDiv.find('.pub-filter-list-div input:checked').val()).toEqual('2');
+                done();
+            });
             fetchListDeferred.resolve();
-
-            expect($testDiv.find('.pub-filter-list-div input:checked').val()).toEqual('2');
         });
 
         it('Expects that searchFilterRowViews will be created for any filter other than q or listId when set in the model', function() {
@@ -187,7 +199,7 @@ describe('ManagePublicationsView', function() {
     describe('Tests for remove', function() {
         beforeEach(function() {
             testView.render();
-            var $addBtn = testView.$('.add-category-btn');
+            let $addBtn = testView.$('.add-category-btn');
             $addBtn.trigger('click');
             $addBtn.trigger('click');
             spyOn(testView.grid, 'remove').and.callThrough();
@@ -205,12 +217,16 @@ describe('ManagePublicationsView', function() {
     });
 
     describe('Tests for DOM event handlers', function() {
-        beforeEach(function() {
+        beforeEach(function(done) {
             fetchListDeferred.resolve();
             testView.render();
+
+            fetchListDeferred.then(() => {
+                done();
+            });
         });
-        //This test is causing a page reload and I don't know why so disabling it for now.
-        xit('Expects that a clicking the search button updates the collection\'s filters and then gets the first page of publications', function() {
+
+        it('Expects that a clicking the search button updates the collection\'s filters and then gets the first page of publications', function() {
             spyOn(testCollection, 'updateFilters');
             spyOn(testCollection, 'getFirstPage').and.callThrough();
 
@@ -240,8 +256,8 @@ describe('ManagePublicationsView', function() {
         });
 
         it('Expects that clicking on a publist checkbox updates the collection\'s filters and then gets the first page', function() {
-            var $checkbox1 = testView.$('.pub-filter-list-div input[value="1"]');
-            var $checkbox2 = testView.$('.pub-filter-list-div input[value="2"]');
+            const $checkbox1 = testView.$('.pub-filter-list-div input[value="1"]');
+            const $checkbox2 = testView.$('.pub-filter-list-div input[value="2"]');
             spyOn(testCollection, 'updateFilters');
             spyOn(testCollection, 'getFirstPage').and.callThrough();
 
@@ -268,7 +284,7 @@ describe('ManagePublicationsView', function() {
         });
 
         it('Expects that changing the search term will update the filterModel\'s q property', function() {
-            var $searchInput = testView.$('#search-term-input');
+            const $searchInput = testView.$('#search-term-input');
             $searchInput.val('Junk test').trigger('change');
             expect(testModel.get('q')).toEqual('Junk test');
 
@@ -277,7 +293,7 @@ describe('ManagePublicationsView', function() {
         });
 
         it('Expects that clicking the add category btn creates and renders a SearchFilterRowView', function() {
-            var $addBtn = testView.$('.add-category-btn');
+            const $addBtn = testView.$('.add-category-btn');
             $addBtn.trigger('click');
             expect(SearchFilterRowView.prototype.setElement.calls.count()).toBe(2);
             expect(renderSearchFilterRowViewSpy).toHaveBeenCalled();
@@ -294,7 +310,7 @@ describe('ManagePublicationsView', function() {
         });
 
         it('Expects that clicking on Add to List with a list selected but no publications selected shows the warning dialog', function() {
-            var $listSelect = testView.$('#pubs-categories-select');
+            const $listSelect = testView.$('#pubs-categories-select');
             $listSelect.html('<option value="1" selected>List 1</option>');
             testCollection.add([{id : 1}, {id : 2}]);
 
@@ -303,7 +319,7 @@ describe('ManagePublicationsView', function() {
         });
 
         it('Expects an ajax call for each publication list selected with the ids passed as query parameters', function() {
-            var args0, args1;
+            let args0, args1;
             testView.$('#pubs-categories-select').html('<option value="1" selected>List 1</option><option value="2" selected>List 2</option>');
             testCollection.add([{id : 1, selected: true}, {id : 2}, {id : 3, selected: true}]);
 
@@ -334,9 +350,12 @@ describe('ManagePublicationsView', function() {
     });
 
     describe('Tests for model event listeners', function() {
-        beforeEach(function() {
+        beforeEach(function(done) {
             testView.render();
             fetchListDeferred.resolve();
+            fetchListDeferred.then(() => {
+                done();
+            });
         });
 
         it('Expects that if the q term is set, the DOM is updated', function() {
@@ -389,7 +408,7 @@ describe('ManagePublicationsView', function() {
         });
 
         it('Expects that the loading indicator becomes visible after the fetch start and changes to invisible when the fetch is complete', function() {
-            var $loadingIndicator = testView.$('.pubs-loading-indicator');
+            const $loadingIndicator = testView.$('.pubs-loading-indicator');
             expect($loadingIndicator.is(':visible')).toBe(false);
             testCollection.fetch();
             testCollection.trigger('request');

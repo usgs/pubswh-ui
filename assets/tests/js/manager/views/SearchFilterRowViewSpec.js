@@ -9,10 +9,10 @@ import SearchFilterRowView from '../../../../scripts/manager/views/SearchFilterR
 
 
 describe('SearchFilterRowView', function() {
-    var testView, testModel;
-    var fetchPubTypeDeferred;
-    var costCenterFetchActiveDeferred, costCenterFetchNotActiveDeferred;
-    var $testDiv;
+    let testView, testModel;
+    let fetchPubTypeDeferred;
+    let costCenterFetchActiveDeferred, costCenterFetchNotActiveDeferred;
+    let $testDiv;
 
     beforeEach(function () {
         $('body').append('<div id="test-div"></div>');
@@ -160,14 +160,14 @@ describe('SearchFilterRowView', function() {
         });
 
         it('Expects that if a filter model attribute is set, then that option is disabled', function () {
-            var $prodIdOption = testView.$('.search-category-input option[value="prodId"]');
+            const $prodIdOption = testView.$('.search-category-input option[value="prodId"]');
             expect($prodIdOption.is(':disabled')).toBe(false);
             testModel.set('prodId', '', {changedAttribute : 'prodId'});
             expect($prodIdOption.is(':disabled')).toBe(true);
         });
 
         it('Expects that if a filter model attribute is unset, then that option becomes enabled', function() {
-            var $prodIdOption = testView.$('.search-category-input option[value="prodId"]');
+            const $prodIdOption = testView.$('.search-category-input option[value="prodId"]');
             testModel.set('prodId', '', {changedAttribute : 'prodId'});
             expect($prodIdOption.is(':disabled')).toBe(true);
             testModel.unset('prodId', {changedAttribute : 'prodId'});
@@ -185,7 +185,7 @@ describe('SearchFilterRowView', function() {
         });
 
         it('Expects that if the category select option is set, the model property is set and the previous value is unset', function() {
-            var $categorySelect = testView.$('.search-category-input');
+            const $categorySelect = testView.$('.search-category-input');
             $categorySelect.val('prodId').trigger('change');
             expect(testModel.has('prodId')).toBe(true);
 
@@ -198,10 +198,10 @@ describe('SearchFilterRowView', function() {
         });
 
         it('Expects that if the category select option is set, the appropriate input element is shown and initialized and that both inputs are cleared', function() {
-            var $categorySelect = testView.$('.search-category-input');
-            var $textInput = testView.$('.value-text-input');
-            var $selectInput = testView.$('.value-select-input');
-            var select2Count = $.fn.select2.calls.count();
+            const $categorySelect = testView.$('.search-category-input');
+            const $textInput = testView.$('.value-text-input');
+            const $selectInput = testView.$('.value-select-input');
+            const select2Count = $.fn.select2.calls.count();
 
             $categorySelect.val('prodId').trigger('change');
             expect($textInput.is(':visible')).toBe(true);
@@ -219,13 +219,13 @@ describe('SearchFilterRowView', function() {
             $categorySelect.val('year').trigger('change');
             expect($textInput.is(':visible')).toBe(true);
             expect($selectInput.is(':visible')).toBe(false);
-            expect($selectInput.val()).toBe(null);
+            expect($selectInput.val()).toEqual([]);
             expect($.fn.select2.calls.count()).toEqual(select2Count + 2);
         });
 
         it('Expects that if the category is changed to typeName the select2 will not be initialized until after the publication type collection is fetched', function() {
-            var $categorySelect = testView.$('.search-category-input');
-            var select2Count;
+            const $categorySelect = testView.$('.search-category-input');
+            let select2Count;
 
             $categorySelect.val('typeName').trigger('change');
             select2Count = $.fn.select2.calls.count();
@@ -235,8 +235,8 @@ describe('SearchFilterRowView', function() {
         });
 
         it('Expect that if the text or selected value changes the selected category value is updated in the model', function() {
-            var $categorySelect = testView.$('.search-category-input');
-            var $textInput = testView.$('.value-text-input');
+            const $categorySelect = testView.$('.search-category-input');
+            const $textInput = testView.$('.value-text-input');
 
             $categorySelect.val('prodId').trigger('change');
             $textInput.val('1234').trigger('change');

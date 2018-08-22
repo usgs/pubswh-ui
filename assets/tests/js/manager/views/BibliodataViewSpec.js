@@ -7,9 +7,9 @@ import PublicationTypeCollection from '../../../../scripts/manager/models/Public
 
 
 describe('BibliodataView', function() {
-    var pubTypeFetchDeferred, costCenterFetchActiveDeferred, costCenterFetchNotActiveDeferred;
-    var pubModel;
-    var testView;
+    let pubTypeFetchDeferred, costCenterFetchActiveDeferred, costCenterFetchNotActiveDeferred;
+    let pubModel;
+    let testView;
 
     beforeEach(function() {
         $('body').append('<div id="test-div"></div>');
@@ -81,7 +81,7 @@ describe('BibliodataView', function() {
         // TODO: figure out how to test select2's better. In particular I'd like to test setting up the new transport option
         // for the pub-subtype-input
         it('Expects that the publication type and larger work type input\'s are initialized when the publication type fetch is done', function() {
-            var select2Count;
+            let select2Count;
             testView.render();
             select2Count = $.fn.select2.calls.count();
             pubTypeFetchDeferred.resolve();
@@ -89,7 +89,7 @@ describe('BibliodataView', function() {
         });
 
         it('Expects that the costCenter select is initialized after both cost center fetches are complete', function() {
-            var select2Count;
+            let select2Count;
             testView.render();
             select2Count = $.fn.select2.calls.count();
             costCenterFetchActiveDeferred.resolve();
@@ -100,7 +100,7 @@ describe('BibliodataView', function() {
     });
 
     describe('Test DOM event handling for the select2\'s', function() {
-        var ev;
+        let ev;
 
         beforeEach(function() {
             spyOn(testView, 'stickit');
@@ -176,7 +176,7 @@ describe('BibliodataView', function() {
         });
 
         it('Expects that when a cost center is selected, it is added to the current costCenters', function() {
-            var costCenters;
+            let costCenters;
             ev = {
                 params : {
                     data : {id : 15, text : 'CC 15'}
@@ -198,7 +198,7 @@ describe('BibliodataView', function() {
         });
 
         it('Expects that when a cost center is removed, costCenters is updated appropriately', function() {
-            var costCenters;
+            let costCenters;
             ev = {
                 params : {
                     data : {id : 4, text : 'CC 4'}
@@ -277,8 +277,8 @@ describe('BibliodataView', function() {
         });
 
         it('Expects that if publicationType is updated, the pubType DOM element is updated and the subtype DOM element is disabled when publicationType is unset', function() {
-            var $type = testView.$('#pub-type-input');
-            var $subtype = testView.$('#pub-subtype-input');
+            const $type = testView.$('#pub-type-input');
+            const $subtype = testView.$('#pub-subtype-input');
             pubModel.set('publicationType', {id : 11, text : 'Type 11'});
             expect($type.val()).toEqual('11');
             expect($subtype.is(':disabled')).toBe(false);
@@ -289,8 +289,8 @@ describe('BibliodataView', function() {
         });
 
         it('Expects that if publicationSubtype is updated, the pubSubtype DOM element is updated and the seriesTitle DOM element is disabled when there is no publicationSubtype', function() {
-            var $subtype = testView.$('#pub-subtype-input');
-            var $seriesTitle = testView.$('#series-title-input');
+            const $subtype = testView.$('#pub-subtype-input');
+            const $seriesTitle = testView.$('#series-title-input');
             pubModel.set('publicationSubtype', {id : 12, text : 'Subtype 12'});
             expect($subtype.val()).toEqual('12');
             expect($seriesTitle.is(':disabled')).toBe(false);
@@ -301,7 +301,7 @@ describe('BibliodataView', function() {
         });
 
         it('Expects that if seriesTitle is updated, the seriesTitle DOM element is updated', function() {
-            var $seriesTitle = testView.$('#series-title-input');
+            const $seriesTitle = testView.$('#series-title-input');
             pubModel.set('seriesTitle', {id : 13, text : 'Series Title 13'});
             expect($seriesTitle.val()).toEqual('13');
 
@@ -310,7 +310,7 @@ describe('BibliodataView', function() {
         });
 
         it('Expects that if costCenters is updated, the DOM reflects the change', function() {
-            var $costCenters = testView.$('#cost-centers-input');
+            const $costCenters = testView.$('#cost-centers-input');
             pubModel.set('costCenters', [{id : 4, text : 'CC 4'}, {id : 6, text : 'CC 6'}]);
             expect($costCenters.val()).toEqual(['4', '6']);
 
@@ -318,12 +318,12 @@ describe('BibliodataView', function() {
             expect($costCenters.val()).toEqual(['6']);
 
             pubModel.set('costCenters', []);
-            expect($costCenters.val()).toBeNull();
+            expect($costCenters.val()).toEqual([]);
         });
 
         it('Expects that if largerWork is updated, the DOM is updated and the largerSubType DOM is disabled as appropriate', function() {
-            var $type = testView.$('#larger-work-type-input');
-            var $subtype = testView.$('#larger-work-subtype-input');
+            const $type = testView.$('#larger-work-type-input');
+            const $subtype = testView.$('#larger-work-subtype-input');
             pubModel.set('largerWorkType', {id : 11, text : 'Type 11'});
             expect($type.val()).toEqual('11');
             expect($subtype.is(':disabled')).toBe(false);
@@ -334,7 +334,7 @@ describe('BibliodataView', function() {
         });
 
         it('Expects that if largerWorkSubtype is updated, the DOM is updated', function() {
-            var $subtype = testView.$('#larger-work-subtype-input');
+            const $subtype = testView.$('#larger-work-subtype-input');
             pubModel.set('largerWorkSubtype', {id : 12, text : 'Subtype 12'});
             expect($subtype.val()).toEqual('12');
 
@@ -343,7 +343,7 @@ describe('BibliodataView', function() {
         });
 
         it('Expects that if docAbstract is updated, the DOM is updated', function() {
-            var $abstract = testView.$('#docAbstract-input');
+            const $abstract = testView.$('#docAbstract-input');
             pubModel.set('docAbstract', 'This is an abstract');
             expect($abstract.val()).toEqual('This is an abstract');
 
@@ -352,7 +352,7 @@ describe('BibliodataView', function() {
         });
 
         it('Expects that if the tableOfContents is updated, the DOM is updated', function() {
-            var $tableOfContents = testView.$('#tableOfContents-input');
+            const $tableOfContents = testView.$('#tableOfContents-input');
             pubModel.set('tableOfContents', 'This is a table of contents');
             expect($tableOfContents.val()).toEqual('This is a table of contents');
 
