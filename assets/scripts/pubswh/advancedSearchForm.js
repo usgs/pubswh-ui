@@ -6,7 +6,6 @@ import rowTemplate from './hb_templates/rowTemplate.hbs';
 import mapTemplate from './hb_templates/mapTemplate.hbs';
 import optionTemplate from './hb_templates/optionTemplate.hbs';
 
-
 /*
  * Initially creates inputs to be be used for the advanced search form.
  * @param {Object} options
@@ -35,7 +34,6 @@ export default class AdvancedSearchForm {
         }
     }
 
-
     /*
      * Adds an input to options.$container. Takes the information in row to create the specified input
      * @param {Object} row
@@ -50,6 +48,7 @@ export default class AdvancedSearchForm {
         var lookupDeferred = $.Deferred();
         var lookupOptions = [];
 
+        // get the data for the drop-down select list
         if (row.inputType === 'select' && row.lookup) {
             $.ajax({
                 url: CONFIG.lookupUrl + row.lookup,
@@ -58,8 +57,22 @@ export default class AdvancedSearchForm {
                     lookupOptions = resp.map(function(option) {
                         var result = option;
                         result.selected = row.value ? option.text === row.value : false;
+
                         return result;
                     });
+
+                // remove the duplicate entries from the data for the drop-down select list
+                let lookupOptionsDuplicatesRemoved = [];
+                for (let i = 0; i < lookupOptions.length; i++) {
+                    let valueIsDuplicate = 0;
+                    valueIsDuplicate = lookupOptionsDuplicatesRemoved.findIndex(lookupOption => lookupOption.text === lookupOptions[i].text);
+                    console.log('value is dup ' + JSON.stringify(valueIsDuplicate));
+                    if (valueIsDuplicate === -1) {
+                        lookupOptionsDuplicatesRemoved.push(lookupOptions[i]);
+                    }
+                }
+                lookupOptions = lookupOptionsDuplicatesRemoved;
+
 
                     lookupDeferred.resolve();
                 },
@@ -118,3 +131,4 @@ export default class AdvancedSearchForm {
         this.options.$mapContainer.children().remove();
     }
 }
+
