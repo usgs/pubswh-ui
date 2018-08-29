@@ -6,6 +6,8 @@ import rowTemplate from './hb_templates/rowTemplate.hbs';
 import mapTemplate from './hb_templates/mapTemplate.hbs';
 import optionTemplate from './hb_templates/optionTemplate.hbs';
 
+import {removeObjectsWithDuplicateValues} from './utils';
+
 /*
  * Initially creates inputs to be be used for the advanced search form.
  * @param {Object} options
@@ -45,8 +47,8 @@ export default class AdvancedSearchForm {
      *      @prop {String} lookup (optional) - Used for select inputType to fill in the options via the lookup web service
      */
     addRow(row) {
-        var lookupDeferred = $.Deferred();
-        var lookupOptions = [];
+        let lookupDeferred = $.Deferred();
+        let lookupOptions = [];
 
         // get the data for the drop-down select list
         if (row.inputType === 'select' && row.lookup) {
@@ -55,24 +57,14 @@ export default class AdvancedSearchForm {
                 method: 'GET',
                 success : function(resp) {
                     lookupOptions = resp.map(function(option) {
-                        var result = option;
+                        let result = option;
                         result.selected = row.value ? option.text === row.value : false;
 
                         return result;
                     });
 
-                // remove the duplicate entries from the data for the drop-down select list
-                let lookupOptionsDuplicatesRemoved = [];
-                for (let i = 0; i < lookupOptions.length; i++) {
-                    let valueIsDuplicate = 0;
-                    valueIsDuplicate = lookupOptionsDuplicatesRemoved.findIndex(lookupOption => lookupOption.text === lookupOptions[i].text);
-                    console.log('value is dup ' + JSON.stringify(valueIsDuplicate));
-                    if (valueIsDuplicate === -1) {
-                        lookupOptionsDuplicatesRemoved.push(lookupOptions[i]);
-                    }
-                }
-                lookupOptions = lookupOptionsDuplicatesRemoved;
-
+                    // take the duplicates out of the lookupOptions list
+                    lookupOptions = removeObjectsWithDuplicateValues(lookupOptions, 'text');
 
                     lookupDeferred.resolve();
                 },
@@ -83,14 +75,14 @@ export default class AdvancedSearchForm {
             });
         }
 
-        var context = {
+        let context = {
             isSelect : row.inputType === 'select' || row.inputType === 'boolean',
             isBoolean : row.inputType === 'boolean',
             isDate : row.inputType === 'date',
             mapId: row.inputType === 'map' ? 'map-name-' + row.name : '',
             row : row
         };
-        var $row;
+        let $row;
 
         // Additional context properties
         context.isTrue = context.isBoolean ? row.value === 'true' : false;
@@ -111,7 +103,7 @@ export default class AdvancedSearchForm {
         }
 
         $row.find('.delete-row').click(() => {
-            var name = $row.find(':input').attr('name');
+            let name = $row.find(':input').attr('name');
             $row.remove();
             if (this.options.deleteRowCallback) {
                 this.options.deleteRowCallback(name);
