@@ -36,3 +36,4 @@ dist/
 /static
 *.sublime-project
 *.sublime-workspace
+server/.pytest_cache/
