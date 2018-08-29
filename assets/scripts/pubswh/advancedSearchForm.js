@@ -35,6 +35,7 @@ export default class AdvancedSearchForm {
             this.options.initialRows.forEach(this.addRow.bind(this));
         }
     }
+    
 
     /*
      * Adds an input to options.$container. Takes the information in row to create the specified input
@@ -123,4 +124,3 @@ export default class AdvancedSearchForm {
         this.options.$mapContainer.children().remove();
     }
 }
-
