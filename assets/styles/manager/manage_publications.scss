@@ -1,6 +1,6 @@
 .publications-container {
   .alert-container {
-    .make-sm-column(12);
+    @include make-sm-column(12);
   }
   .navbar {
     .pub-search-form {
@@ -40,14 +40,14 @@
   }
 
   .pub-management-container {
-    .make-row();
+    @include make-row();
     .pub-filter-container {
-      .make-md-column(4);
-      .make-lg-column(2);
+      @include make-md-column(4);
+      @include make-lg-column(2);
     }
     .pub-list-section {
-      .make-md-column(8);
-      .make-lg-column(10);
+      @include make-md-column(8);
+      @include make-lg-column(10);
       .pub-grid-container {
         position: relative;
 
@@ -64,22 +64,22 @@
     }
 
     .pub-grid-footer {
-      .make-md-column(12);
+      @include make-md-column(12);
       margin-bottom : 10px;
-      background-color : @table-bg-accent;
-      border : 1px solid @table-border-color;
+      background-color : $table-bg-accent;
+      border : 1px solid $table-border-color;
       padding-top: 10px;
       .pub-grid-info  {
         font-weight: bold;
         margin-top : 5px;
-        .make-sm-column(2);
+        @include make-sm-column(2);
       }
       .page-size-container {
         margin-bottom: 0px;
-         .make-sm-column(3);
+         @include make-sm-column(3);
       }
       .backgrid-paginator {
-        .make-sm-column(7);
+        @include make-sm-column(7);
         display: inline-block;
       }
     }
