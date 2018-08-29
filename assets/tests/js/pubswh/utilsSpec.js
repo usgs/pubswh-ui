@@ -10,10 +10,11 @@ describe('The removeObjectsWithDuplicateValues function test', function() {
        expect(removeObjectsWithDuplicateValues(sampleArrayWithDuplicates, 'text').length).toEqual(1);
     });
 
-    it('expects if given an array with NO duplicates, it will return the same array', function() {
-        expect(removeObjectsWithDuplicateValues(sampleArrayWithoutDuplicates, 'text').length).toEqual(2);
-        expect(removeObjectsWithDuplicateValues(sampleArrayWithoutDuplicates, 'text')[0].id).toEqual(1);
-        expect(removeObjectsWithDuplicateValues(sampleArrayWithoutDuplicates, 'text')[1].id).toEqual(2);
+    it('expects if given an array with NO duplicates, it will return an array the same as the original', function() {
+        let returnedValue = removeObjectsWithDuplicateValues(sampleArrayWithoutDuplicates, 'text');
+        expect(returnedValue.length).toEqual(2);
+        expect(returnedValue[0].id).toEqual(1);
+        expect(returnedValue[1].id).toEqual(2);
     });
 
     it('expects if given an empty array, it will return an empty array', function() {
