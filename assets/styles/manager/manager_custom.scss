@@ -1,20 +1,19 @@
-@import '../../node_modules/select2/src/scss/core.scss';
-@import '../../node_modules/backgrid/src/backgrid.css';
-@import '../../node_modules/backgrid-paginator/backgrid-paginator.css';
-@import '../../node_modules/jquery-ui-dist/jquery-ui.min.css';
-@import '../../node_modules/tinymce/skins/lightgray/skin.min.css';
-@import '../../node_modules/tinymce/skins/lightgray/content.min.css';
+@import 'backgrid';
+@import 'backgrid-paginator';
+@import 'jquery-ui';
+
+$fa-font-path: './fonts' !default;
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
+
 
 @import 'bootstrap';
 @import '../../node_modules/select2/src/scss/core.scss';
 @import 'bootstrap-datetimepicker';
 $icon-font-path: './fonts/';
 
-@import '../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss';
-@import '../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
-@import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
-
-$fa-font-path: './fonts';
+@import '../../node_modules/select2-bootstrap-theme/src/select2-bootstrap.scss';
 
 @import '../usgs_header_footer.scss';
 @import 'manage_publications.scss';
