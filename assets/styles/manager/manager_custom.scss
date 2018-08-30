@@ -1,0 +1,51 @@
+@import 'backgrid';
+@import 'backgrid-paginator';
+@import 'jquery-ui';
+
+$fa-font-path: './fonts' !default;
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
+
+
+@import 'bootstrap';
+@import '../../node_modules/select2/src/scss/core.scss';
+@import 'bootstrap-datetimepicker';
+$icon-font-path: './fonts/';
+
+@import '../../node_modules/select2-bootstrap-theme/src/select2-bootstrap.scss';
+
+@import '../usgs_header_footer.scss';
+@import 'manage_publications.scss';
+@import 'publication.scss';
+@import 'bibliodata.scss';
+@import 'links.scss';
+@import 'contributors.scss';
+@import 'spn.scss';
+@import 'cataloging.scss';
+@import 'geospatial.scss';
+@import 'editSeriesTitle.scss';
+@import 'manageContributors.scss';
+@import 'manageAffiliations.scss';
+
+#manage-content-header {
+
+  h1 {
+    display : inline-block;
+  }
+  a {
+    float: right !important;
+    margin-top : 10px;
+    margin-right : 10px;
+  }
+}
+ /* application wide styling */
+.fa-minus-circle {
+  color: red;
+  cursor : pointer;
+}
+.fa-bars {
+  cursor : pointer;
+}
+
+

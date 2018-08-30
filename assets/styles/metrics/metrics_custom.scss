@@ -1,0 +1,32 @@
+@import "dygraph";
+
+$fa-font-path : "./fonts" !default;
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
+
+@import "bootstrap";
+$icon-font-path: "./fonts/";
+
+#main-content {
+    margin-left : 15px;
+    margin-right : 15px;
+}
+
+.recent-div, .year-div {
+    height: 400px;
+    @include make-md-column(6);
+}
+.table-display {
+    display: none;
+    .metric-table-div {
+        overflow-y: scroll;
+        height: 400px;
+        margin-bottom: 10px;
+        .metric-table {
+            @include make-md-column(6);
+        }
+    }
+
+
+}

@@ -9,15 +9,15 @@
       display:none;
 
       .create-btn {
-        .make-sm-column(1);
+        @include make-sm-column(1);
       }
       >span {
-        .make-sm-column(1);
+        @include make-sm-column(1);
         text-align: center;
         font-size: large;
       }
       .select-contributor-to-update-container {
-        .make-sm-column(10);
+        @include make-sm-column(10);
       }
     }
   }

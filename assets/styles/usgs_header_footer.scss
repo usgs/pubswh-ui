@@ -1,8 +1,8 @@
-@import "../node_modules/bootstrap/less/bootstrap.less";
+@import "bootstrap.scss";
 
 /* USGS header styles */
 header {
-    .make-row();
+    @include make-row();
     display: block !important;
     height: 72px;
     background: #000;
@@ -39,7 +39,7 @@ header {
    footer styles
    ========================================================================== */
 footer {
-  .make-row();
+  @include make-row();
   clear: both;
   position: relative;
 }

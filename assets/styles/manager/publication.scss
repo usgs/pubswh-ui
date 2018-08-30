@@ -1,26 +1,26 @@
 
 #pubHeader {
-  .make-row();
+  @include make-row();
   #sharedPubData {
-    .make-sm-column(5);
+    @include make-sm-column(5);
     .form-group > label {
-      .make-sm-column(4);
+      @include make-sm-column(4);
     }
 
     .form-group > input {
-      .make-sm-column(8);
+      @include make-sm-column(8);
     }
     .form-group > a {
-      .make-sm-column(8);
+      @include make-sm-column(8);
       margin-top: 7px;
     }
     .form-group > .input-group {
-      .make-row();
-      .make-sm-column(8);
+      @include make-row();
+      @include make-sm-column(8);
     }
   }
   .alert-error-container {
-    .make-sm-column(7);
+    @include make-sm-column(7);
     margin-bottom: 10px;
     .loading-indicator {
       display: none;
@@ -29,22 +29,22 @@
   }
 }
 .actions {
-  .make-row();
+  @include make-row();
     margin-bottom : 10px;
     padding: 10px;
     background-color : #eee;
     border-radius: 4px;
     button {
-      .make-sm-column(2);
+      @include make-sm-column(2);
     }
     button:first-child {
-      .make-sm-column-offset(1);
+      @include make-sm-column-offset(1);
     }
   }
 .edit-tabs {
-  .make-row();
+  @include make-row();
   .nav-tabs {
-    .make-sm-column(12);
+    @include make-sm-column(12);
   }
 }
 

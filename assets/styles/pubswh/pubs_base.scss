@@ -1,0 +1,19 @@
+$fa-font-path: "./fonts" !default;
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
+
+@import 'bootstrap';
+@import '../../node_modules/select2/src/scss/core.scss';
+@import 'bootstrap-datetimepicker';
+
+@import '../../node_modules/select2-bootstrap-theme/src/select2-bootstrap.scss';
+
+@import 'main';
+@import 'pagination';
+
+
+
+
+
+

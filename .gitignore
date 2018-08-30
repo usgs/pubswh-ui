@@ -13,6 +13,7 @@ lettucetests.xml
 *~
 *.swp
 server/env
+server/.pytest_cache
 pubs_ui.log
 server/pubs_ui/pubswh/static/.webassets-cache/
 server/pubs_ui/pubswh/static/css/min_base.css
@@ -36,4 +37,3 @@ dist/
 /static
 *.sublime-project
 *.sublime-workspace
-server/.pytest_cache/

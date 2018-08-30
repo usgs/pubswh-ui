@@ -11,12 +11,12 @@
   .tab-pane {
     padding-top: 15px;
     .grid {
-      .make-sm-column(12);
+      @include make-sm-column(12);
       padding: 10px;
     }
 
     .add-contributor-btn-div {
-      .make-sm-column(12);
+      @include make-sm-column(12);
       padding-bottom: 15px;
     }
   }

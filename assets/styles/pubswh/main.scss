@@ -205,7 +205,6 @@ header {
 }
 nav {
   width: 100%;
-  height: 30px;
   background: #003366;
   font-family: Verdana;
   color: #fff;
@@ -331,7 +330,7 @@ header {
 }
 nav {
   width: 100%;
-  height: 30px;
+  height: 34px;
   background: #003366;
   font-family: Verdana;
   color: #fff;
@@ -352,6 +351,7 @@ img#bars {
   list-style: none;
   float: left;
   padding:0;
+  margin: 0;
   width:35px;
   height:30px;
 }
@@ -919,7 +919,7 @@ footer p{margin:0;}
 #usa_gov {
   position: absolute;
 }
-@media screen and (min-width: 686px) {
+@media screen and (min-width: 700px) {
 
 /* ==========================================================================
    Index styles
@@ -1009,7 +1009,7 @@ footer p{margin:0;}
     width: 115px;
   }
   nav ul li a#nav_title {
-    width: 220px;
+    width: 250px;
     padding-left: 5px;
   }
 
@@ -1054,7 +1054,9 @@ footer p{margin:0;}
   background:rgb(220,220,220);}
 
   #center {
+    clear: both;
     float: right;
+    margin-left: 5px;
   }
   nav input {
     width: 145px;
