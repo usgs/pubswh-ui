@@ -47,4 +47,34 @@ $icon-font-path: './fonts/';
   cursor : pointer;
 }
 
+// Overrides to prevent big issues between USWDS and bootstrap
+.select2-search input[type="search"] {
+  float: none;
+}
+
+.form-group {
+  label {
+    margin-top: 0;
+  }
+  input, textarea{
+    max-width: inherit
+  }
+  button {
+    margin-top: 0;
+  }
+}
+
+.checkbox {
+  label {
+    margin-top: 0;
+  }
+}
+
+input[type="checkbox"] {
+  -webkit-appearance: checkbox;
+  -moz-appearance: checkbox;
+  left: 0px;
+  height: 12px;
+}
+
 

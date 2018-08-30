@@ -12,6 +12,30 @@ $fa-font-path: "./fonts" !default;
 @import 'main';
 @import 'pagination';
 
+// Overrides to prevent conflicts between bootstrap and USWDS
+.select2-search input[type="search"] {
+  float: none;
+}
+
+.form-group {
+  label {
+    margin-top: 0;
+  }
+  input {
+    max-width: inherit
+  }
+
+  button {
+    margin-top: 0;
+  }
+}
+
+.checkbox {
+  label {
+    margin-top: 0;
+  }
+}
+
 
 
 
