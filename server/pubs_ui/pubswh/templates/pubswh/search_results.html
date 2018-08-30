@@ -12,11 +12,12 @@
 {% endblock head %}
 
 {% block page_style %}
+    {{ super() }}
     <link rel="stylesheet" href="{{ 'vendor/leaflet/leaflet.css' | asset_url }}">
     <link rel="stylesheet" href="{{ 'vendor/leaflet-draw/leaflet.draw.css' | asset_url }}">
 {% endblock page_style %}
 
-{% block main %}
+{% block main_pubswh %}
 
     {% if pagination %}
         <h1 class="search-results">Search Results</h1>
@@ -91,7 +92,7 @@
     {% else %}
         {{ search_service_down }}
     {% endif %}
-{% endblock main %}
+{% endblock main_pubswh %}
 
 {% block page_footer_script %}
     {% include "pubswh/search_form_script.html" %}

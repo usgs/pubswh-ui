@@ -5,9 +5,9 @@
     {% include 'pubswh/meta.html' %}
 {% endblock head %}
 
-{% block main %}
+{% block main_pubswh %}
     <p>{{ confirm_message }}</p>
-{% endblock main %}
+{% endblock %}
 
 {% block url %}
     <a href="{{ url_for('pubswh.contact_confirmation') }}">http://pubs.er.usgs.gov{{ url_for('pubswh.contact_confirmation') }}</a>

@@ -7,11 +7,12 @@
 {% endblock head %}
 
 {% block page_style %}
+    {{ super() }}
     <link rel="stylesheet" href="{{ 'vendor/leaflet/leaflet.css' | asset_url }}">
     <link rel="stylesheet" href="{{ 'vendor/leaflet-draw/leaflet.draw.css' | asset_url }}">
 {% endblock page_style %}
 
-{% block main %}
+{% block main_pubswh %}
 
     <main class="container-fluid">
 
