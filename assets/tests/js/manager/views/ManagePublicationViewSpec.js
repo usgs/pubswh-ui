@@ -156,10 +156,10 @@ describe('ManagePublicationsView', function() {
             testView.render();
 
             fetchListDeferred.then(() => {
-                expect($('.list-unstyled').length).toBe(1);
+                expect($('.usa-unstyled-list').length).toBe(1);
                 done();
             });
-            expect($('.list-unstyled').length).toBe(0);
+            expect($('.usa-unstyled-list').length).toBe(0);
 
             fetchListDeferred.resolve();
 
