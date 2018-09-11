@@ -238,6 +238,9 @@ article{padding:0 10px;}
 
 #search-pubs-form {
 	display: inline-block;
+    button {
+      margin-top: 0;
+    }
 }
 #search-pubs-form .delete-row {
 	color: red;
