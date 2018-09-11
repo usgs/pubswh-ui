@@ -38,6 +38,7 @@
     {% endif %}
 
     {% block page_style %}
+        {{ super() }}
        {%- if pubdata["geographicExtents"] -%}
         <link rel="stylesheet" href="{{ 'vendor/leaflet/leaflet.css' | asset_url }} ">
        {% endif %}
@@ -46,7 +47,7 @@
     {% include 'pubswh/mathjax.html' %}
 
 {% endblock head %}
-        {% block main %}
+        {% block main_pubswh %}
         <main role ="main">
             <article itemscope itemtype="http://schema.org/ScholarlyArticle">
             {% if pubdata['publicationType']['text'] == 'Article' or pubdata['publicationType']['text'] == 'Report' %}<abbr class="unapi-id" title="http://pubs.er.usgs.gov/publication/{{ pubdata['indexId'] }}"><!-- avoid empty --></abbr>{% endif %}

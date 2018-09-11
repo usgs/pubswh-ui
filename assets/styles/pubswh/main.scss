@@ -21,7 +21,6 @@ textarea {
 
 html,
 body {
-    font-size: 1em;
     height:100%;
 }
 
@@ -200,9 +199,6 @@ textarea {
 
 }
 
-header {
-  display: none !important;
-}
 nav {
   width: 100%;
   background: #003366;
@@ -242,6 +238,9 @@ article{padding:0 10px;}
 
 #search-pubs-form {
 	display: inline-block;
+    button {
+      margin-top: 0;
+    }
 }
 #search-pubs-form .delete-row {
 	color: red;
@@ -325,9 +324,6 @@ article{padding:0 10px;}
   padding: 0;
 }
 
-header {
-  display: none;
-}
 nav {
   width: 100%;
   height: 34px;
@@ -875,50 +871,6 @@ h2.otherPages{
 	padding:15px;
 }
 
-
-/* ==========================================================================
-   footer styles
-   ========================================================================== */
-footer {
-  clear: both;
-  position: relative;
-}
-
-footer p{margin:0;}
-
-#usgsfooterbar {
-  width: 100%;
-  height: 20px;
-  background: #666666;
-}
-#usgsfooterbar a {
-  color: #fff;
-  font-family: Verdana;
-  text-decoration: none;
-  font-size: .7em;
-  padding-left: 10px;
-}
-#usgsfooterbar a:hover,
-#usgsfootertext a:hover {
-  text-decoration: underline;
-}
-#usgsfootertext {
-  font-size: .65em;
-  font-family: Verdana;
-  padding: 5px;
-  margin:0;
-}
-#usgsfootertext a {
-  color: #003366;
-  text-decoration: none;
-}
-#usgsfootertext img {
-  display: none;
-}
-#take_pride,
-#usa_gov {
-  position: absolute;
-}
 @media screen and (min-width: 700px) {
 
 /* ==========================================================================
@@ -936,40 +888,6 @@ footer p{margin:0;}
    publication.html styles
    ========================================================================== */
 
-  header {
-    display: block !important;
-    height: 72px;
-    width: 100%;
-    background: #000;
-  }
-  #usgs_logo {
-    float: left;
-  }
-  #banner {
-    float: left;
-    height: 72px;
-  }
-  #header_nav {
-    margin: 5px 8px 0 0;
-    float: right;
-  }
-  #header_nav ul {
-    font-family: Verdana;
-    list-style: none;
-	margin:0;
-  }
-
-  #header_nav ul li{
-  margin-bottom:2px;}
-
-  #header_nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: .9em;
-  }
-  #header_nav ul li a:hover {
-    text-decoration: underline;
-  }
   nav img,
   img#bars,
   #mobile_ul {

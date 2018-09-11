@@ -14,11 +14,17 @@
 {%  block main %}
     <h1>Google Analytics Dashboard for Pubs Warehouse</h1>
     <h2>{{ publication.title }}</h2>
-    <h3>uri: <a href="{{ url_for('pubswh.publication', index_id=pubsid) }}">{{ url_for('pubswh.publication', index_id=pubsid) }}</a></h2>
-    <div class="form-inline">
-        <label class="control-label">Display as:&nbsp;</label>
-        <label class="radio-inline"><input type="radio" name="display-style" value="chart" checked />&nbsp;Chart</label>
-        <label class="radio-inline"><input type="radio" name="display-style" value="table" />&nbsp;Table</label>
+    <h3>uri: <a href="{{ url_for('pubswh.publication', index_id=pubsid) }}">{{ url_for('pubswh.publication', index_id=pubsid) }}</a></h3>
+    <div class="chart-display-select-div">
+        <label >Display as:&nbsp;</label>
+        <div>
+            <input id="display-chart" type="radio" name="display-style" value="chart" checked />&nbsp;
+            <label for="display-chart">Chart</label>
+        </div>
+        <div>
+            <input id="display-table" type="radio" name="display-style" value="table" />&nbsp;
+            <label for="display-table">Table</label>
+        </div>
     </div>
     <div class="chart-display">
         <div id="sessions-div" class="metric-div">

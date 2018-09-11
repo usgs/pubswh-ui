@@ -15,7 +15,6 @@ $icon-font-path: './fonts/';
 
 @import '../../node_modules/select2-bootstrap-theme/src/select2-bootstrap.scss';
 
-@import '../usgs_header_footer.scss';
 @import 'manage_publications.scss';
 @import 'publication.scss';
 @import 'bibliodata.scss';
@@ -47,5 +46,32 @@ $icon-font-path: './fonts/';
 .fa-bars {
   cursor : pointer;
 }
+
+// Overrides to prevent big issues between USWDS and bootstrap
+.select2-search input[type="search"] {
+  float: none;
+}
+
+.form-group {
+  label {
+    margin-top: 0;
+  }
+  input, textarea{
+    max-width: inherit
+  }
+  button {
+    margin-top: 0;
+  }
+
+}
+
+input[type="checkbox"] {
+  -webkit-appearance: checkbox;
+  -moz-appearance: checkbox;
+  position: static;
+  margin-top: 0;
+  margin-top: -4px;
+}
+
 
 

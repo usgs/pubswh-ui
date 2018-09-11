@@ -5,7 +5,7 @@
     {% include 'pubswh/mathjax.html' %}
 {% endblock head %}
 
-{% block main %}
+{% block main_pubswh %}
 <h1 id="new-pubs-h1">Publications recently added to the Pubs Warehouse </h1>
     <section id="new_pubs_form">
         <form style="display:inline;" id = num_series method="GET" action="{{ url_for('pubswh.new_pubs') }}">
@@ -34,4 +34,4 @@
 
     </section>
 
-{% endblock main %}
+{% endblock %}

@@ -9,6 +9,37 @@ $fa-font-path: "./fonts" !default;
 
 @import '../../node_modules/select2-bootstrap-theme/src/select2-bootstrap.scss';
 
+// Overrides to prevent conflicts between bootstrap and USWDS
+.select2-search input[type="search"] {
+  float: none;
+}
+
+.form-group {
+  label {
+    margin-top: 0;
+  }
+  input {
+    max-width: inherit
+  }
+
+  button {
+    margin-top: 0;
+  }
+}
+
+.checkbox {
+  label {
+    margin-top: 0;
+  }
+}
+
+.clear-search-btn {
+    margin-top: 0;
+}
+#q-text {
+  height: auto;
+}
+
 @import 'main';
 @import 'pagination';
 
