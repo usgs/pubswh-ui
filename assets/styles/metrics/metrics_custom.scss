@@ -27,6 +27,10 @@ $icon-font-path: "./fonts/";
             @include make-md-column(6);
         }
     }
-
-
+}
+.chart-display-select-div {
+    display: inline-block;
+    div {
+        display: inline-block;
+    }
 }

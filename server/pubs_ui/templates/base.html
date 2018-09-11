@@ -7,10 +7,23 @@
         {% block meta_data %}{% endblock %}
 
         <title>{% block title %}USGS Publications Warehouse{% endblock %}</title>
-        <script src="{{ 'vendor/system.js' | asset_url }}"></script>
+
         {% block page_style %}
             <link rel="stylesheet" href="{{ 'usgs_style.css' | asset_url }}" type="text/css" />
         {% endblock %}
+
+        <!--[if gt IE 8]><!-->
+        <script src="{{ 'vendor/polyfill.js' | asset_url }}"></script>
+        <script>
+            if (!String.prototype.startsWith) {
+                String.prototype.startsWith = function(search, pos) {
+                    return this.substr(!pos || pos < 0 ? 0 : +pos, search.length) === search;
+                };
+            }
+        </script>
+        <!--<![endif]-->
+        <script src="{{ 'vendor/system.js' | asset_url }}"></script>
+
 
         {% block head_script %}{% endblock %}
     </head>

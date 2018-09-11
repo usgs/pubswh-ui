@@ -1,155 +1,143 @@
 {% extends 'base.html' %}
 
 {% import 'assets.html' as assets %}
-<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/html"> <!--<![endif]-->
-    <head lang="en">
-        <meta charset="UTF-8">
-        {% block meta_data %}
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <meta name="title" content="USGS Publications Warehouse">
-            <meta name="keywords" content>
-            <meta name="format-detection" content="telephone=no">
-            {% block head %} {% endblock %}
-        {% endblock %}
-        {% block page_style %}
-            {{ super() }}
-        {% endblock page_style %}
-        <!--[if gt IE 8]><!-->
-            <script src="{{ 'vendor/polyfill.js' | asset_url }}"></script>
-            <script>
-                if (!String.prototype.startsWith) {
-                    String.prototype.startsWith = function(search, pos) {
-                        return this.substr(!pos || pos < 0 ? 0 : +pos, search.length) === search;
-                    };
-                }
-            </script>
-        <!--<![endif]-->
-        {% block head_script %}
-            <script src="{{ 'vendor/system.js' | asset_url }}"></script>
-            <link rel="stylesheet" href="{{ 'pubs_base.css' | asset_url }}" type="text/css" />
-            <link rel="shortcut icon" href="{{ 'images/pubswh/favicon.ico' | asset_url }}"/>
-            <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('pubswh.open_search') }}" title="USGS Pubs"/>
-            <link rel="unapi-server" type="application/xml" title="unAPI" href="{{ url_for('pubswh.unapi') }}" />
-            <link rel="alternate" type="application/rss+xml" title="USGS Publications Warehouse RSS Feed" href="https://pubs.er.usgs.gov/pubs-services/publication/rss"/>
-            <script>
-                function toggle_visibility(id) {
-                    var e = document.getElementById(id);
-                    if (e.style.display == 'block') {
-                        e.style.display = 'none';
-                    }
-                    else {
-                        e.style.display = 'block';
-                    }
-                }
 
-                var CONFIG = {
-                    lookupUrl: '{{ config.LOOKUP_URL }}',
-                    requestArgs: JSON.parse('{{ request.args.to_dict(False)|tojson }}') <!-- set to True if only one value per key is desired -->
-                }
-            </script>
-        {% endblock %}
-    </head>
-    <body>
-        {% block main %}
-           <nav>
-               <ul id="mobile_ul">
-                   <li onclick="toggle_visibility('mobile_list');">
-                       <img id="bars"
-                            src="{{ 'images/pubswh/bars.png' | asset_url }}"
-                            alt="mobile menu bars"/>
-                       <ul id="mobile_list">
-                           <li><a href="{{ url_for('pubswh.index') }}">USGS Publications Warehouse</a></li>
-                           <li><a href="{{ url_for('pubswh.contact') }}">Contact</a></li>
-                           <li><a href="{{ url_for('pubswh.new_pubs') }}">
-                               Explore recent publications by USGS Authors
-                           </a></li>
-                           <li><a href="{{ url_for('pubswh.browse_types') }}">
-                               Browse all of Pubs Warehouse by Publication type and year
-                           </a></li>
-                           <li><a href="{{ url_for('pubswh.faq') }}">FAQS</a></li>
-                           <li><a href="{{ url_for('pubswh.web_service_docs') }}">Web Service Documentation</a></li>
-                           <li><a href="{{ url_for('pubswh.other_resources') }}">Other Resources</a></li>
-                           <li><a href="{{ url_for('pubswh.usgs_series') }}">
-                               Descriptions of US Geological Survey Report Series
-                           </a></li>
-                       </ul>
-                   </li>
-               </ul>
-               <img src="{{ 'images/pubswh/usgs_logo_mobile.png' | asset_url }}" alt="usgs mobile logo"/>
+{% block meta_data %}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="title" content="USGS Publications Warehouse">
+    <meta name="keywords" content>
+    <meta name="format-detection" content="telephone=no">
+    {% block head %} {% endblock %}
+{% endblock %}
 
-               <ul id="desktop_ul">
-                   <li><a id='nav_title' href="{{ url_for('pubswh.index') }}">USGS Publications Warehouse</a></li>
-                   <li><a href="#">Explore</a>
-                       <ul id="longer">
-                           <li><a href="{{ url_for('pubswh.new_pubs') }}">
-                               Explore recent publications by USGS Authors
-                           </a></li>
-                           <li><a href="{{ url_for('pubswh.browse_types') }}">
-                               Browse all of Pubs Warehouse by Publication type and year
-                           </a></li>
-                       </ul>
-                   </li>
-                   <li><a id="long" href="#">Documentation</a>
-                       <ul>
-                           <li><a href="{{ url_for('pubswh.faq') }}">FAQS</a></li>
-                           <li><a href="{{ url_for('pubswh.web_service_docs') }}">Web Service Documentation</a></li>
-                           <li><a href="{{ url_for('pubswh.other_resources') }}">Other Resources</a></li>
-                           <li><a href="{{ url_for('pubswh.usgs_series') }}">
-                               Descriptions of US Geological Survey Report Series
-                           </a></li>
-                       </ul>
-                   </li>
+{% block page_style %}
+    {{ super() }}
+{% endblock page_style %}
+
+{% block head_script %}
+    <link rel="stylesheet" href="{{ 'pubs_base.css' | asset_url }}" type="text/css" />
+    <link rel="shortcut icon" href="{{ 'images/pubswh/favicon.ico' | asset_url }}"/>
+    <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('pubswh.open_search') }}" title="USGS Pubs"/>
+    <link rel="unapi-server" type="application/xml" title="unAPI" href="{{ url_for('pubswh.unapi') }}" />
+    <link rel="alternate" type="application/rss+xml" title="USGS Publications Warehouse RSS Feed" href="https://pubs.er.usgs.gov/pubs-services/publication/rss"/>
+    <script>
+        function toggle_visibility(id) {
+            var e = document.getElementById(id);
+            if (e.style.display == 'block') {
+                e.style.display = 'none';
+            }
+            else {
+                e.style.display = 'block';
+            }
+        }
+
+        var CONFIG = {
+            lookupUrl: '{{ config.LOOKUP_URL }}',
+            requestArgs: JSON.parse('{{ request.args.to_dict(False)|tojson }}') <!-- set to True if only one value per key is desired -->
+        }
+    </script>
+{% endblock %}
+
+{% block main %}
+   <nav>
+       <ul id="mobile_ul">
+           <li onclick="toggle_visibility('mobile_list');">
+               <img id="bars"
+                    src="{{ 'images/pubswh/bars.png' | asset_url }}"
+                    alt="mobile menu bars"/>
+               <ul id="mobile_list">
+                   <li><a href="{{ url_for('pubswh.index') }}">USGS Publications Warehouse</a></li>
                    <li><a href="{{ url_for('pubswh.contact') }}">Contact</a></li>
-                   {% if current_user.is_authenticated %}
-                       <li><a href="{{ url_for('auth.logout_page', forward='pubswh.index') }}">Logout</a></li>
-                   {% endif %}
+                   <li><a href="{{ url_for('pubswh.new_pubs') }}">
+                       Explore recent publications by USGS Authors
+                   </a></li>
+                   <li><a href="{{ url_for('pubswh.browse_types') }}">
+                       Browse all of Pubs Warehouse by Publication type and year
+                   </a></li>
+                   <li><a href="{{ url_for('pubswh.faq') }}">FAQS</a></li>
+                   <li><a href="{{ url_for('pubswh.web_service_docs') }}">Web Service Documentation</a></li>
+                   <li><a href="{{ url_for('pubswh.other_resources') }}">Other Resources</a></li>
+                   <li><a href="{{ url_for('pubswh.usgs_series') }}">
+                       Descriptions of US Geological Survey Report Series
+                   </a></li>
                </ul>
-               <section id="center">
-                   <form style="display: inline;" action="{{ url_for('pubswh.search_results') }}" method="get" name="q">
-                       <input id="q" class="headersearch" name="q" placeholder="search terms" type="search" value="">
-                   </form>
-               </section>
+           </li>
+       </ul>
+       <img src="{{ 'images/pubswh/usgs_logo_mobile.png' | asset_url }}" alt="usgs mobile logo"/>
 
-           </nav>
-           {% if ANNOUNCEMENT_BLOCK|length > 0 %}
-               <span id="announcement"></span>
-               <script>
-                   document.getElementById("announcement").innerHTML = '{{ ANNOUNCEMENT_BLOCK|safe }}';
-               </script>
+       <ul id="desktop_ul">
+           <li><a id='nav_title' href="{{ url_for('pubswh.index') }}">USGS Publications Warehouse</a></li>
+           <li><a href="#">Explore</a>
+               <ul id="longer">
+                   <li><a href="{{ url_for('pubswh.new_pubs') }}">
+                       Explore recent publications by USGS Authors
+                   </a></li>
+                   <li><a href="{{ url_for('pubswh.browse_types') }}">
+                       Browse all of Pubs Warehouse by Publication type and year
+                   </a></li>
+               </ul>
+           </li>
+           <li><a id="long" href="#">Documentation</a>
+               <ul>
+                   <li><a href="{{ url_for('pubswh.faq') }}">FAQS</a></li>
+                   <li><a href="{{ url_for('pubswh.web_service_docs') }}">Web Service Documentation</a></li>
+                   <li><a href="{{ url_for('pubswh.other_resources') }}">Other Resources</a></li>
+                   <li><a href="{{ url_for('pubswh.usgs_series') }}">
+                       Descriptions of US Geological Survey Report Series
+                   </a></li>
+               </ul>
+           </li>
+           <li><a href="{{ url_for('pubswh.contact') }}">Contact</a></li>
+           {% if current_user.is_authenticated %}
+               <li><a href="{{ url_for('auth.logout_page', forward='pubswh.index') }}">Logout</a></li>
            {% endif %}
+       </ul>
+       <section id="center">
+           <form style="display: inline;" action="{{ url_for('pubswh.search_results') }}" method="get" name="q">
+               <input id="q" class="headersearch" name="q" placeholder="search terms" type="search" value="">
+           </form>
+       </section>
 
-           {% block main_pubswh %}{% endblock %}
+   </nav>
+   {% if ANNOUNCEMENT_BLOCK|length > 0 %}
+       <span id="announcement"></span>
+       <script>
+           document.getElementById("announcement").innerHTML = '{{ ANNOUNCEMENT_BLOCK|safe }}';
+       </script>
+   {% endif %}
 
-        {% endblock main %}
-        {% block page_script %}
-           <script type="application/javascript"
-                   src="https://www2.usgs.gov/scripts/analytics/usgs-analytics.js"></script>
-           {{ assets.LoadBundle('pubswh_plugins.js') }}
+   {% block main_pubswh %}{% endblock %}
 
-           {% block page_footer_script %}{% endblock page_footer_script %}
+{% endblock main %}
 
-           <script>
-               var GA = {};
-               (function (i, s, o, g, r, a, m) {
-                   i['GoogleAnalyticsObject'] = r;
-                   i[r] = i[r] || function () {
-                           (i[r].q = i[r].q || []).push(arguments)
-                       }, i[r].l = 1 * new Date();
-                   a = s.createElement(o),
-                       m = s.getElementsByTagName(o)[0];
-                   a.async = 1;
-                   a.src = g;
-                   m.parentNode.insertBefore(a, m)
-               })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+{% block page_script %}
+   <script type="application/javascript"
+           src="https://www2.usgs.gov/scripts/analytics/usgs-analytics.js"></script>
+   {{ assets.LoadBundle('pubswh_plugins.js') }}
 
-               ga('create', '{{ GOOGLE_ANALYTICS_CODE }}', 'auto');
-               ga('send', 'pageview');
+   {% block page_footer_script %}{% endblock page_footer_script %}
 
-               GA.trackGAEvent = function (category, actions, labels, values) {
-                   ga('send', 'event', category, actions, labels, values);
-               };
+   <script>
+       var GA = {};
+       (function (i, s, o, g, r, a, m) {
+           i['GoogleAnalyticsObject'] = r;
+           i[r] = i[r] || function () {
+                   (i[r].q = i[r].q || []).push(arguments)
+               }, i[r].l = 1 * new Date();
+           a = s.createElement(o),
+               m = s.getElementsByTagName(o)[0];
+           a.async = 1;
+           a.src = g;
+           m.parentNode.insertBefore(a, m)
+       })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-           </script>
-        {% endblock %}
-    </body>
-</html>
+       ga('create', '{{ GOOGLE_ANALYTICS_CODE }}', 'auto');
+       ga('send', 'pageview');
+
+       GA.trackGAEvent = function (category, actions, labels, values) {
+           ga('send', 'event', category, actions, labels, values);
+       };
+
+   </script>
+{% endblock %}
+
