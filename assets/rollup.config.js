@@ -11,6 +11,7 @@ const ENV = process.env.NODE_ENV || 'development';
 const getBundleConfig = function (output) {
     return {
         input: [
+            'scripts/common.js',
             'scripts/manager/manager.js',
             'scripts/pubswh/extentsMapOnReady.js',
             'scripts/pubswh/pubswh_plugins.js',

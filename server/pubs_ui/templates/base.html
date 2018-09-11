@@ -1,3 +1,5 @@
+{% import 'assets.html' as assets %}
+
 <!DOCTYPE html>
 <html lang="en">
     <head lang="en">
@@ -38,6 +40,7 @@
             </div>
         </div>
         {% include 'partials/footer.html' %}
+        {{ assets.LoadBundle('common.js') }}
         {% block page_script %}{% endblock %}
     </body>
 </html>
