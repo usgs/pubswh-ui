@@ -14,12 +14,22 @@
     height: auto;
   }
 }
-header {
+.usgs-header {
   background-color: $usgs-blue;
   .usgs-banner-container {
+    width: 100%;
+    height: auto;
+    margin-left: 0;
+    margin-right: 0;
     a {
       color: white;
       text-decoration: none;
+    }
+    .usa-menu-btn {
+        height: 58px;
+        @include media($small-screen) {
+          height: 86px;
+      }
     }
 
     .usgs-logo {
