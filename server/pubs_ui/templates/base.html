@@ -29,10 +29,12 @@
 
         {% block head_script %}{% endblock %}
     </head>
-    <body><div id="skip"><a href="#main-content">Skip to main content</a></div>
+    <body>
+        <div id="skip"><a href="#main-content">Skip to main content</a></div>
         <header role="banner">
             {% include 'partials/usa_banner.html' %}
             {% include 'partials/header.html' %}
+            {% block navigation %}{% endblock %}
         </header>
         <div class="container-fluid">
             <div id="main-content">

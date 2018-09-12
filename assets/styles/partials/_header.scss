@@ -40,22 +40,5 @@ header {
         }
       }
     }
-    .usgs-header-links-container {
-      font-size: $small-font-size;
-      @media screen and (max-width: $small-screen) {
-        #usgs-home-link {
-          font-size: 0px
-        }
-      }
-      @include media($small-screen) {
-        font-size: $base-font-size
-      }
-      display: inline-block;
-      float: right;
-
-      ul {
-        @include unstyled-list();
-      }
-    }
   }
 }
