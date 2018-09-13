@@ -69,9 +69,7 @@ $(document).ready(function() {
     });
 
     // Set up advanced search category select
-    $categorySelect.select2({
-        theme: 'bootstrap'
-    });
+    $categorySelect.select2();
     $categorySelect.on('change', function() {
         var $selectedOption = $(this).find('option:selected');
         advancedSearchForm.addRow({
@@ -83,9 +81,7 @@ $(document).ready(function() {
         });
         $selectedOption.prop('selected', false);
         $selectedOption.prop('disabled', !$selectedOption.data('allow-multi'));
-        $(this).select2({
-            theme: 'bootstrap'
-        });
+        $(this).select2();
     });
 
     // Add click handler for clear search terms
