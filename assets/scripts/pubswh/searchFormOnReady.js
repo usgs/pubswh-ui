@@ -50,21 +50,21 @@ $(document).ready(function() {
     // Show/hide advanced search and add click handler for toggle link
     if (initialSearchRows.length > 0) {
         $showHideSearchBtn.html(HIDE_SEARCH);
-        $advancedSearchDiv.show();
+        $advancedSearchDiv.attr('hidden', false);
     } else {
         $showHideSearchBtn.html(SHOW_SEARCH);
-        $advancedSearchDiv.hide();
+        $advancedSearchDiv.prop('hidden', true);
     }
     $showHideSearchBtn.click(function() {
-        if ($advancedSearchDiv.is(':visible')) {
+        if ($advancedSearchDiv.attr('hidden')) {
+            $showHideSearchBtn.html(HIDE_SEARCH);
+            $advancedSearchDiv.attr('hidden', false);
+        } else {
             $showHideSearchBtn.html(SHOW_SEARCH);
             advancedSearchForm.deleteAllRows();
             $categorySelect.find('option').prop('disabled', false);
             $categorySelect.select2();
-            $advancedSearchDiv.hide();
-        } else {
-            $showHideSearchBtn.html(HIDE_SEARCH);
-            $advancedSearchDiv.show();
+            $advancedSearchDiv.attr('hidden', true);
         }
     });
 

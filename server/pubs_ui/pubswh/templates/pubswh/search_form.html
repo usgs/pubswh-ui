@@ -3,7 +3,7 @@
     <div class="col-sm-12">
         <label for="q-text">Search for Publications</label>
         <div class="usgs-input-group">
-            <button title="Clear search" class="usgs-input-group-btn" type="button"><i class="fas fa-times"></i></button>
+            <button title="Clear search" class="usgs-input-group-btn clear-search-btn" type="button"><i class="fas fa-times"></i></button>
             <input type="text" id="q-text" name="q" value="{{ request.args.q }}" />
             <span class="usgs-input-group-addon" aria-hidden="true"><i class="fas fa-search"></i></span>
         </div>
@@ -77,8 +77,8 @@
     </div>
     <div class="form-horizontal advanced-search-container col-sm-12"></div>
     <div class="form-horizontal map-search-container col-sm-12"></div>
-    <div class="col-sm-12">
-        <button type="submit" class="btn btn-primary">Search</button>
+    <div>
+        <input type="submit" value="Search" />
         <a id="show-hide-advanced-search-btn" role="button"></a>
     </div>
 </form>

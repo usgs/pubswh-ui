@@ -23,9 +23,6 @@ $site-max-width: 100%;
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
     height: $input-height;
-    &:hover {
-      background-color: $color-gray-lightest;
-    }
   }
 
   input {
