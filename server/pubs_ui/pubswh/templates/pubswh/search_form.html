@@ -3,9 +3,7 @@
     <div class="col-sm-12">
         <label for="q-text">Search for Publications</label>
         <div class="usgs-input-group">
-            <span>
-                <button title="Clear search" class="usa-button-secondary usa-button-active clear-search-btn" type="button"><i class="fas fa-times"></i></button>
-            </span>
+            <button title="Clear search" class="usgs-input-group-btn" type="button"><i class="fas fa-times"></i></button>
             <input type="text" id="q-text" name="q" placeholder="Search terms" value="{{ request.args.q }}" />
             <span><i class="fas fa-search"></i></span>
         </div>
