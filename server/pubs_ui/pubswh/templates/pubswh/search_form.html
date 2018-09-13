@@ -1,13 +1,13 @@
 
 <form id="search-pubs-form" action="{{ url_for('pubswh.search_results') }}" method="get">
-    <div class="form-group has_feedback col-sm-12">
+    <div class="col-sm-12">
         <label for="q-text">Search for Publications</label>
-        <div class="input-group">
-            <span class="input-group-btn">
-                <button title="Clear search" class="btn btn-default clear-search-btn" type="button"><i class="fas fa-times"></i></button>
+        <div class="usgs-input-group">
+            <span>
+                <button title="Clear search" class="usa-button-secondary usa-button-active clear-search-btn" type="button"><i class="fas fa-times"></i></button>
             </span>
-            <input type="text" id="q-text" name="q" placeholder="Search terms" value="{{ request.args.q }}" class="form-control" />
-            <span class="form-control-feedback"><i class="fas fa-search"></i></span>
+            <input type="text" id="q-text" name="q" placeholder="Search terms" value="{{ request.args.q }}" />
+            <span><i class="fas fa-search"></i></span>
         </div>
     </div>
     <div class="advanced-search-div">

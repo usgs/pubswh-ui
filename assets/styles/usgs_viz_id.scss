@@ -4,3 +4,8 @@
 @import './partials/header';
 @import './partials/footer';
 
+.usgs-input-group {
+  span, input {
+    display: inline;
+  }
+}
