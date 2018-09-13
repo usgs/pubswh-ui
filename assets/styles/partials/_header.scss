@@ -52,3 +52,11 @@
     }
   }
 }
+.usgs-navigation {
+  .usa-navbar, .usa-nav-inner {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0
+  }
+  border-bottom: 1px solid $color-gray-lighter;
+}
