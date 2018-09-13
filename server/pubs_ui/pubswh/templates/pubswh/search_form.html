@@ -4,8 +4,8 @@
         <label for="q-text">Search for Publications</label>
         <div class="usgs-input-group">
             <button title="Clear search" class="usgs-input-group-btn" type="button"><i class="fas fa-times"></i></button>
-            <input type="text" id="q-text" name="q" placeholder="Search terms" value="{{ request.args.q }}" />
-            <span><i class="fas fa-search"></i></span>
+            <input type="text" id="q-text" name="q" value="{{ request.args.q }}" />
+            <span class="usgs-input-group-addon" aria-hidden="true"><i class="fas fa-search"></i></span>
         </div>
     </div>
     <div class="advanced-search-div">
