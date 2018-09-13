@@ -214,7 +214,7 @@ export default BaseView.extend({
 
             }
             tinymce.init({
-                skin_url: `${window.CONFIG.staticRoot}/tinymce/skins/lightgray`,
+                skin_url: `${window.CONFIG.staticRoot}/vendor/tinymce/skins/lightgray`,
                 selector: '#docAbstract-input',
                 setup: function (ed) {
                     abstractInitDeferred.resolve();
@@ -265,7 +265,7 @@ export default BaseView.extend({
                     tinymce.execCommand('mceAddEditor', true, 'tableOfContents-input');
                 }
                 tinymce.init({
-                    skin_url: `${window.CONFIG.staticRoot}/tinymce/skins/lightgray`,
+                    skin_url: `${window.CONFIG.staticRoot}/vendor/tinymce/skins/lightgray`,
                     selector: '#tableOfContents-input',
                     setup: function (ed) {
                         tocInitDeferred.resolve();

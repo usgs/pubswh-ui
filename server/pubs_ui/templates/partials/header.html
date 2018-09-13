@@ -1,5 +1,75 @@
-<div class="usgs-banner-container content-container">
-    <div class="usgs-logo">
-        <a href="https://www.usgs.gov"><img alt="USGS Home" src="{{ 'images/USGS_logo.svg' | asset_url }}" /></a>
-    </div>
-</div>
+{% macro usgs_header(enable_nav, current_user='') -%}
+    <header role="banner" class="usa-header usa-header-extended usgs-header">
+        <div class="usa-navbar usgs-banner-container">
+            <div class="usgs-logo">
+                <a href="https://www.usgs.gov"><img alt="USGS Home" src="{{ 'images/USGS_logo.svg' | asset_url }}" /></a>
+            </div>
+            {% if enable_nav %}
+                <button class="usa-menu-btn">Menu</button>
+            {% endif %}
+        </div>
+        {% if enable_nav %}
+            <nav role="navigation" class="usa-nav usgs-navigation">
+                <div class="usa-nav-inner">
+                    <button class="usa-nav-close"><img src="{{ 'img/close.svg' | asset_url }}" alt="close"/></button>
+                    <ul class="usa-nav-primary usa-accordion">
+                        <li>
+                            <a class="usa-nav-link" href="{{ url_for('pubswh.index') }}">USGS Publications Warehouse</a>
+                        </li>
+                        <li>
+                            <button class="usa-accordion-button usa-nav-link" aria-expanded="false" aria-controls="explore-section">
+                                <span>Explore</span>
+                            </button>
+                            <ul id="explore-section" class="usa-nav-submenu">
+                                <li>
+                                    <a href="{{ url_for('pubswh.new_pubs') }}">Explore recent publications by USGS authors</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('pubswh.browse_types') }}">Browse all of Pubs Warehouse by publication type and year</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <button class="usa-accordion-button usa-nav-link" aria-expanded="false" aria-controls="documentation-section">
+                                <span>Documentation</span>
+                            </button>
+                            <ul id="documentation-section" class="usa-nav-submenu">
+                                <li>
+                                    <a href="{{ url_for('pubswh.faq') }}">FAQs</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('pubswh.web_service_docs') }}">Web service documentation</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('pubswh.other_resources') }}">Other resources</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('pubswh.usgs_series') }}">Descriptions of US Geological Survey Report Series</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="usa-nav-link" href="{{ url_for('pubswh.contact') }}">Contact</a>
+                        </li>
+                        {% if current_user.is_authenticated %}
+                            <li>
+                                <a class="usa-nav-link" href="{{ url_for('auth.logout_page', forward='pubswh.index') }}">Logout</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                    <div class="usa-nav-secondary">
+                        <form class="usa-search usa-search-small ">
+                            <div role="search">
+                                <label class="usa-sr-only" for="basic-search-field-small">Search small</label>
+                                <input id="basic-search-field-small" type="search" name="search">
+                                <button type="submit">
+                                    <span class="usa-sr-only">Search</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        {% endif %}
+    </header>
+{% endmacro %}

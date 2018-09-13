@@ -7,6 +7,7 @@ $fa-font-path: './fonts' !default;
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
 
+@import '../usgs_viz_id';
 
 @import 'bootstrap';
 @import '../../node_modules/select2/src/scss/core.scss';
@@ -15,17 +16,18 @@ $icon-font-path: './fonts/';
 
 @import '../../node_modules/select2-bootstrap-theme/src/select2-bootstrap.scss';
 
-@import 'manage_publications.scss';
-@import 'publication.scss';
-@import 'bibliodata.scss';
-@import 'links.scss';
-@import 'contributors.scss';
-@import 'spn.scss';
-@import 'cataloging.scss';
-@import 'geospatial.scss';
-@import 'editSeriesTitle.scss';
-@import 'manageContributors.scss';
-@import 'manageAffiliations.scss';
+
+@import 'manage_publications';
+@import 'publication';
+@import 'bibliodata';
+@import 'links';
+@import 'contributors';
+@import 'spn';
+@import 'cataloging';
+@import 'geospatial';
+@import 'editSeriesTitle';
+@import 'manageContributors';
+@import 'manageAffiliations';
 
 #manage-content-header {
 

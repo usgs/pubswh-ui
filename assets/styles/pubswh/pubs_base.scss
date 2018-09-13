@@ -1,4 +1,7 @@
 $fa-font-path: "./fonts" !default;
+
+@import '../usgs_viz_id';
+
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss';
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
@@ -8,6 +11,7 @@ $fa-font-path: "./fonts" !default;
 @import 'bootstrap-datetimepicker';
 
 @import '../../node_modules/select2-bootstrap-theme/src/select2-bootstrap.scss';
+
 
 // Overrides to prevent conflicts between bootstrap and USWDS
 .select2-search input[type="search"] {
@@ -40,8 +44,18 @@ $fa-font-path: "./fonts" !default;
   height: auto;
 }
 
+#pubswh-navigation {
+  .usa-navbar, .usa-nav-inner {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0
+  }
+  border-bottom: 1px solid $color-gray-lighter;
+}
+
 @import 'main';
 @import 'pagination';
+
 
 
 

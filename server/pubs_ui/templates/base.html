@@ -11,7 +11,6 @@
         <title>{% block title %}USGS Publications Warehouse{% endblock %}</title>
 
         {% block page_style %}
-            <link rel="stylesheet" href="{{ 'usgs_style.css' | asset_url }}" type="text/css" />
         {% endblock %}
 
         <!--[if gt IE 8]><!-->
@@ -25,22 +24,23 @@
         </script>
         <!--<![endif]-->
         <script src="{{ 'vendor/system.js' | asset_url }}"></script>
-
+        {{ assets.LoadBundle('common.js') }}
 
         {% block head_script %}{% endblock %}
     </head>
-    <body><div id="skip"><a href="#main-content">Skip to main content</a></div>
-        <header role="banner">
-            {% include 'partials/usa_banner.html' %}
-            {% include 'partials/header.html' %}
-        </header>
+    <body>
+        <div id="skip"><a href="#main-content">Skip to main content</a></div>
+        {% include 'partials/usa_banner.html' %}
+        {% import 'partials/header.html' as header %}
+        {% block usgs_header %}
+            {{ header.usgs_header() }}
+        {% endblock %}
         <div class="container-fluid">
             <div id="main-content">
                 {% block main %}{% endblock %}
             </div>
         </div>
         {% include 'partials/footer.html' %}
-        {{ assets.LoadBundle('common.js') }}
         {% block page_script %}{% endblock %}
     </body>
 </html>
