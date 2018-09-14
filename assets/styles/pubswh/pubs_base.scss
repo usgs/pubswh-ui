@@ -6,14 +6,54 @@ $fa-font-path: "./fonts" !default;
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
 
-@import 'bootstrap';
-@import '../../node_modules/select2/src/scss/core.scss';
-@import 'bootstrap-datetimepicker';
+// Select2 overrides
 
-// Overrides to prevent conflicts between bootstrap and USWDS
+.select2-container .selection .select2-selection {
+  height: $input-height;
+  border-color: $color-gray;
+  border-radius: 0;
+}
+.select2-container .selection .select2-selection .select2-selection__rendered,
+.select2-container .selection .select2-selection .select2-selection__arrow {
+  height: $input-height;
+  line-height: $heading-line-height;
+  padding: $input-padding-vertical 0.7em;
+}
+.select2-container .selection .select2-selection .select2-selection__arrow {
+  right: 1.5rem;
+}
+
 .select2-search input[type="search"] {
   float: none;
 }
+.select2-results {
+  li {
+    margin-bottom: 0;
+  }
+}
+
+
+//@import 'bootstrap';
+@import '../../node_modules/select2/src/scss/core.scss';
+//@import 'bootstrap-datetimepicker';
+
+.advanced-search-container {
+  div {
+    div {
+      display:inline-block;
+      button, label {
+        display: inline-block;
+      }
+      button {
+        background-color: transparent;
+      }
+  }
+    }
+
+}
+
+// Overrides to prevent conflicts between bootstrap and USWDS
+
 
 .form-group {
   label {

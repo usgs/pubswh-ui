@@ -1,12 +1,12 @@
 <div>
     <div class="col-sm-4">
-        <span class="fa fa-minus-circle delete-row"></span>
+        <button class="delete-row" title="Delete row"><span class="fa fa-minus-circle"></span></button>
         <label class="">{{row.displayName}}:</label>
     </div>
     <div class="col-sm-8">
         {{#if isSelect}}
             <select name="{{row.name}}">
-                <option value="">'- Select -'</option>
+                <option value="">- Select -</option>
                 {{#if isBoolean}}
                     <option value="true" {{#if isTrue}}selected{{/if}}>True</option>
                     <option value="false" {{#if isFalse}}selected{{/if}}>False</option>

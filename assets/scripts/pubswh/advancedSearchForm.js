@@ -111,10 +111,9 @@ export default class AdvancedSearchForm {
             }
         });
         lookupDeferred.done(function() {
-            $row.find('select').append(optionTemplate({options: lookupOptions}));
-            $row.find('select').select2({
-                theme: 'bootstrap'
-            });
+            let $select = $row.find('select');
+            $select.append(optionTemplate({options: lookupOptions}));
+            $select.select2();
         });
     }
 
