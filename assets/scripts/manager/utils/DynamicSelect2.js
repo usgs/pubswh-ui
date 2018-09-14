@@ -57,7 +57,6 @@ import isFunction from 'lodash/isFunction';
         let lastResults = {};
 
         result.ajax.transport = function(params, success, failure) {
-            console.log('Params: ' + params.data.text);
             lastParams = params;
             let deferred = $.Deferred();
 
@@ -69,7 +68,6 @@ import isFunction from 'lodash/isFunction';
             });
 
             $.when(...subgroupRequests).always(function() {
-                console.log('in always Params: ' + params.data.text);
                 deferred.resolve([params].concat(Array.from(arguments)));
             });
             deferred.done(success).fail(failure);
