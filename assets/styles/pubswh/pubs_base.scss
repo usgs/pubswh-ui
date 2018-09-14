@@ -12,7 +12,9 @@ $fa-font-path: "./fonts" !default;
 
 @import '../../node_modules/select2-bootstrap-theme/src/select2-bootstrap.scss';
 
-
+h6 {
+  text-transform: none;
+}
 // Overrides to prevent conflicts between bootstrap and USWDS
 .select2-search input[type="search"] {
   float: none;
