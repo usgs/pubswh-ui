@@ -51,8 +51,15 @@ import isFunction from 'lodash/isFunction';
     // deferred which is resolved after both calls are done.
     if (has(options, 'subgroups') && has(options.subgroups, 'queryParameter') && has(options.subgroups, 'nameAndValues') &&
         options.subgroups.nameAndValues.length) {
+
+        // These are used to guarentee that the last ajax command started is shown in the select.
+        let lastParams = {};
+        let lastResults = {};
+
         result.ajax.transport = function(params, success, failure) {
+            lastParams = params;
             let deferred = $.Deferred();
+
             let subgroupRequests = [];
             options.subgroups.nameAndValues.forEach((subgroup) => {
                 let data = clone(params.data);
@@ -61,24 +68,26 @@ import isFunction from 'lodash/isFunction';
             });
 
             $.when(...subgroupRequests).always(function() {
-                deferred.resolve(Array.from(arguments));
+                deferred.resolve([params].concat(Array.from(arguments)));
             });
-            deferred.done(success);
-            deferred.fail(failure);
+            deferred.done(success).fail(failure);
 
-            return deferred;
+            return deferred.promise();
         };
         result.ajax.processResults = function(responses) {
-            let resultsData = [];
-            responses.forEach((resp, index) => {
-                resultsData.push({
-                    text: options.subgroups.nameAndValues[index].name,
-                    children: resp[0].slice(0, SUBGROUP_CHILDREN_LIMIT)
+            if (lastParams == responses[0]) {
+                let resultsData = [];
+                responses.slice(1).forEach((resp, index) => {
+                    resultsData.push({
+                        text: options.subgroups.nameAndValues[index].name,
+                        children: resp[0].slice(0, SUBGROUP_CHILDREN_LIMIT)
+                    });
                 });
-            });
-            return {
-                results: resultsData
-            };
+                lastResults = {
+                    results: resultsData
+                };
+            }
+            return lastResults;
         };
     } else {
         result.ajax.processResults = function(resp) {
