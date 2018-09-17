@@ -137,7 +137,7 @@ describe('AdvancedSearchForm', function() {
             expect($select.find('option[value="false"]').length).toEqual(1);
         });
 
-        it('Expects that calling addRow with a "date" inputType creates a text input which is set up with the datetimepicker', function() {
+        it('Expects that calling addRow with a "date" inputType creates a text input ', function() {
             var row = {
                 name: 'date1',
                 displayName: 'Date 1',
@@ -149,7 +149,6 @@ describe('AdvancedSearchForm', function() {
             $input = $testDiv.find('input[type="text"]');
 
             expect($input.length).toEqual(1);
-            expect($.fn.datetimepicker).toHaveBeenCalled();
             expect($input.attr('name')).toEqual('date1');
         });
 

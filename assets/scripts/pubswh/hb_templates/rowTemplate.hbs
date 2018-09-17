@@ -1,9 +1,9 @@
-<div>
-    <div class="col-sm-4">
+<div class="advanced-search-row">
+    <div class="advanced-search-row-label">
         <button class="delete-row" title="Delete row"><span class="fa fa-minus-circle"></span></button>
         <label class="">{{row.displayName}}:</label>
     </div>
-    <div class="col-sm-8">
+    <div class="advanced-search-row-input">
         {{#if isSelect}}
             <select name="{{row.name}}">
                 <option value="">- Select -</option>
@@ -13,12 +13,7 @@
                 {{/if}}
             </select>
         {{else if isDate}}
-            <div class="date">
-                <input type="text" name="{{row.name}}" value="{{row.value}}" />
-                <span class="input-group-addon">
-                    <i class="fa fa-calendar"></i>
-                </span>
-            </div>
+            <input class="search-date" type="text" name="{{row.name}}" value="{{row.value}}" />
         {{else}}
             <input type="{{row.inputType}}" name="{{row.name}}" value="{{row.value}}"/>
         {{/if}}

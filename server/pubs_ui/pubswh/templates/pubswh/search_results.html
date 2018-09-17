@@ -22,7 +22,7 @@
     {% if pagination %}
         <h1 class="search-results">Search Results</h1>
 
-        <section id="search">
+        <section id="search" class="usa-grid">
             {% include 'pubswh/search_form.html' %}
         </section>
         {% macro pub_service_url(mimetype, disp_mimetype) %}

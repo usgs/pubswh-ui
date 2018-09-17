@@ -1,4 +1,4 @@
-import 'eonasdan-bootstrap-datetimepicker';
+import Pikaday from 'pikaday';
 import 'select2';
 
 import SearchMap from './searchMap';
@@ -96,9 +96,20 @@ export default class AdvancedSearchForm {
         } else {
             this.options.$container.append(rowTemplate(context));
             $row = this.options.$container.children('div:last-child');
+            let $dateInput = $row.find('input');
+
             if (context.isDate) {
-                $row.find('.date').datetimepicker({
-                    format: 'YYYY-MM-DD'
+                $dateInput.change(() => {
+                    let dateText = $dateInput.val();
+                    if (dateText) {
+                        let date = moment(dateText);
+
+                        if (date.isValid()) {
+                            $dateInput.val(date.format('YYYY-MM-DD'));
+                        } else {
+                            $dateInput.val('');
+                        }
+                    }
                 });
             }
         }

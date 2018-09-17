@@ -6,9 +6,7 @@ $fa-font-path: "./fonts" !default;
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
 
-@import 'bootstrap';
-@import '../../node_modules/select2/src/scss/core.scss';
-@import 'bootstrap-datetimepicker';
+@import '../../node_modules/pikaday/scss/pikaday.scss';
 
 .select2-container .selection .select2-selection {
   height: $input-height;
@@ -44,17 +42,25 @@ h6 {
 //@import 'bootstrap-datetimepicker';
 
 .advanced-search-container {
-  div {
-    div {
+  .advanced-search-row {
+    width: 100%;
+    .advanced-search-row-label {
       display:inline-block;
       button, label {
         display: inline-block;
       }
-      button {
+
+      .delete-row {
         background-color: transparent;
       }
-  }
     }
+    .advanced-search-row-input {
+      display:inline-block;
+      button, label, input{
+        display: inline-block;
+      }
+    }
+  }
 
 }
 
