@@ -6,7 +6,9 @@ $fa-font-path: "./fonts" !default;
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
 
-// Select2 overrides
+@import 'bootstrap';
+@import '../../node_modules/select2/src/scss/core.scss';
+@import 'bootstrap-datetimepicker';
 
 .select2-container .selection .select2-selection {
   height: $input-height;
@@ -23,6 +25,10 @@ $fa-font-path: "./fonts" !default;
   right: 1.5rem;
 }
 
+h6 {
+  text-transform: none;
+}
+// Overrides to prevent conflicts between bootstrap and USWDS
 .select2-search input[type="search"] {
   float: none;
 }
