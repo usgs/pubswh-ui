@@ -6,35 +6,4 @@ $site-max-width: 100%;
 @import './partials/header';
 @import './partials/footer';
 
-.usgs-input-group {
-  position: relative;
-  display: block;
-  span, input {
-    display: inline-block;
-  }
-
-  .usgs-input-group-btn {
-    position: relative;
-    margin-right: 0;
-    border-left: 1px solid $color-gray;
-    border-top: 1px solid $color-gray;
-    border-bottom: 1px solid $color-gray;
-    border-right-width: 0;
-    border-bottom-right-radius: 0;
-    border-top-right-radius: 0;
-    height: $input-height;
-  }
-
-  input {
-    position: relative;
-    left: -5px;
-  }
-
-  .usgs-input-group-addon {
-    position:relative;
-    left: -4rem;
-  }
-
-}
-
 

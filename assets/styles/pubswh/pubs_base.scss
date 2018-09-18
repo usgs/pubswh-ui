@@ -7,6 +7,11 @@ $fa-font-path: "./fonts" !default;
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
 
 //USWDS theme for select2's
+.select2-container {
+  @include media($medium-screen) {
+    width: 100%;
+  }
+}
 .select2-container .selection .select2-selection {
   height: $input-height;
   border-color: $color-gray;
@@ -38,10 +43,72 @@ h6 {
 
 @import '../../node_modules/select2/src/scss/core.scss';
 
-#main-content {
-  margin-left: $site-margins;
-  margin-right: $site-margins;
+.usgs-input-group {
+  position: relative;
+  display: block;
+  span, input {
+    display: inline-block;
+  }
+
+  .usgs-input-group-btn {
+    position: relative;
+    margin-right: 0;
+    border-left: 1px solid $color-gray;
+    border-top: 1px solid $color-gray;
+    border-bottom: 1px solid $color-gray;
+    border-right-width: 0;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    height: $input-height;
+    width: auto;
+  }
+
+  input {
+    position: relative;
+    left: -5px;
+    @media screen and (max-width: $medium-large-screen) {
+      width: 230px;
+    }
+  }
+
+  .usgs-input-group-addon {
+    position:relative;
+    left: -4rem;
+    @media screen and (max-width: $medium-screen) {
+      top: -4rem;
+      left: 245px;
+    }
+  }
+
 }
+
+#main-content {
+  padding-left: $site-margins;
+  padding-right: $site-margins;
+}
+#welcome {
+  p {
+    font-size: $h3-font-size;
+  }
+}
+
+.advanced-search-div {
+  .select2-container {
+    max-width: 25rem;
+  }
+}
+
+.delete-row {
+  background-color: transparent;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0;
+  color: red;
+  &:hover {
+    background-color: red;
+  }
+}
+
 
 .advanced-search-container {
   .advanced-search-row {
@@ -49,21 +116,23 @@ h6 {
     .advanced-search-row-label {
       display: inline-block;
       width: 100%;
-      @media screen and (min-width: $small-screen) {
-        width: 25rem;
+      @media screen and (min-width: $medium-large-screen) {
+        width: 42%;
       }
       button, label {
         display: inline-block;
       }
-
-      .delete-row {
-        background-color: transparent;
-      }
     }
     .advanced-search-row-input {
+      width: 100%;
+      @media screen and (min-width: $medium-large-screen) {
+        width: 55%;
+      }
       display: inline-block;
       button, label, input {
         display: inline-block;
+      }
+      .select2-container {
       }
     }
   }

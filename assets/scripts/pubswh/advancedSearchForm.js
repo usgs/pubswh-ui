@@ -114,7 +114,7 @@ export default class AdvancedSearchForm {
         }
 
         $row.find('.delete-row').click(() => {
-            let name = $row.find(':input').attr('name');
+            let name = $row.find('.advanced-search-row-input :input').attr('name');
             $row.remove();
             if (this.options.deleteRowCallback) {
                 this.options.deleteRowCallback(name);

@@ -1,11 +1,11 @@
 <div class="advanced-search-row">
     <div class="advanced-search-row-label">
-        <button class="delete-row" title="Delete row"><span class="fa fa-minus-circle"></span></button>
+        <button class="delete-row" title="Delete row"><span class="fas fa-minus-circle"></span></button>
         <label class="">{{row.displayName}}:</label>
     </div>
     <div class="advanced-search-row-input">
         {{#if isSelect}}
-            <select name="{{row.name}}">
+            <select name="{{row.name}}" style="width: 100%">
                 <option value="">- Select -</option>
                 {{#if isBoolean}}
                     <option value="true" {{#if isTrue}}selected{{/if}}>True</option>
