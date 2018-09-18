@@ -69,6 +69,9 @@ h6 {
     @media screen and (max-width: $medium-large-screen) {
       width: 230px;
     }
+    @media screen and (max-width: $small-screen) {
+      width: 200px;
+    }
   }
 
   .usgs-input-group-addon {
@@ -121,6 +124,11 @@ h6 {
       }
       button, label {
         display: inline-block;
+      }
+      button {
+        @media screen and (max-width: $small-screen) {
+          width: auto;
+        }
       }
     }
     .advanced-search-row-input {
