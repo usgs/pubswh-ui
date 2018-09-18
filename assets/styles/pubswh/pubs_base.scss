@@ -77,10 +77,6 @@ h6 {
   .usgs-input-group-addon {
     position:relative;
     left: -4rem;
-    @media screen and (max-width: $medium-screen) {
-      top: -4rem;
-      left: 245px;
-    }
   }
 
 }
@@ -177,6 +173,19 @@ h6 {
       .select2-container {
       }
     }
+  }
+}
+
+#search-results {
+  .search-result-contributors, .search-result-pubinfo {
+    color: $color-green;
+    font-size: $small-font-size;
+  }
+  .search-result-abstract {
+    font-size: $small-font-size;
+  }
+  article {
+    margin-bottom: 1.5rem;
   }
 }
 
