@@ -1,4 +1,3 @@
-import Pikaday from 'pikaday';
 import 'select2';
 
 import SearchMap from './searchMap';

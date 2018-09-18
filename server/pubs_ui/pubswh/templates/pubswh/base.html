@@ -39,8 +39,9 @@
            document.getElementById("announcement").innerHTML = '{{ ANNOUNCEMENT_BLOCK|safe }}';
        </script>
    {% endif %}
-
-   {% block main_pubswh %}{% endblock %}
+    <div id="main-content">
+        {% block main_pubswh %}{% endblock %}
+    </div>
 
 {% endblock main %}
 

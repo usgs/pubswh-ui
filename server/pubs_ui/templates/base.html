@@ -35,10 +35,8 @@
         {% block usgs_header %}
             {{ header.usgs_header() }}
         {% endblock %}
-        <div class="container-fluid">
-            <div id="main-content">
-                {% block main %}{% endblock %}
-            </div>
+        <div id="main-content">
+            {% block main %}{% endblock %}
         </div>
         {% include 'partials/footer.html' %}
         {% block page_script %}{% endblock %}

@@ -6,8 +6,7 @@ $fa-font-path: "./fonts" !default;
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
 
-@import '../../node_modules/pikaday/scss/pikaday.scss';
-
+//USWDS theme for select2's
 .select2-container .selection .select2-selection {
   height: $input-height;
   border-color: $color-gray;
@@ -37,15 +36,22 @@ h6 {
 }
 
 
-//@import 'bootstrap';
 @import '../../node_modules/select2/src/scss/core.scss';
-//@import 'bootstrap-datetimepicker';
+
+#main-content {
+  margin-left: $site-margins;
+  margin-right: $site-margins;
+}
 
 .advanced-search-container {
   .advanced-search-row {
-    width: 100%;
+
     .advanced-search-row-label {
-      display:inline-block;
+      display: inline-block;
+      width: 100%;
+      @media screen and (min-width: $small-screen) {
+        width: 25rem;
+      }
       button, label {
         display: inline-block;
       }
@@ -55,13 +61,12 @@ h6 {
       }
     }
     .advanced-search-row-input {
-      display:inline-block;
-      button, label, input{
+      display: inline-block;
+      button, label, input {
         display: inline-block;
       }
     }
   }
-
 }
 
 // Overrides to prevent conflicts between bootstrap and USWDS

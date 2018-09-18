@@ -23,7 +23,9 @@
         <h1 class="search-results">Search Results</h1>
 
         <section id="search" class="usa-grid">
-            {% include 'pubswh/search_form.html' %}
+            <div class="usa-width-two-thirds">
+                {% include 'pubswh/search_form.html' %}
+            </div>
         </section>
         {% macro pub_service_url(mimetype, disp_mimetype) %}
             <a href="{{ config.BASE_SEARCH_URL }}?mimeType={{ mimetype }}&{{ query_request_string }}">{{ disp_mimetype }}</a>

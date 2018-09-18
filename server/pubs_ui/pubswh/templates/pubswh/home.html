@@ -13,23 +13,16 @@
 {% endblock page_style %}
 
 {% block main_pubswh %}
+    <section class="usa-section" id="welcome">
+        <h1>USGS Publications Warehouse</h1>
+        <h4>The Pubs Warehouse provides access to over 150,000 publications written by USGS scientists over the
+            century-plus history of the bureau</h4>
+    </section>
 
-    <main class="container-fluid">
-
-        <article class="index_article">
-
-            <section id="welcome">
-                <h1>USGS Publications Warehouse</h1>
-                <h4>The Pubs Warehouse provides access to over 150,000 publications written by USGS scientists over the
-                    century-plus history of the bureau</h4>
-            </section>
-
-            <section id="search" class="no-margin">
-                {% include 'pubswh/search_form.html' %}
-            </section>
-
+    <div class="usa-grid">
+        <div class="usa-width-two-thirds">
+            {% include 'pubswh/search_form.html' %}
             <aside id="new_pubs">
-
                 <h3 id="new_pubs_title"><a id="new_pubs_title_link" href="{{ url_for('pubswh.new_pubs') }}">New
                     Publications by USGS Authors</a></h3>
 
@@ -44,31 +37,23 @@
                         {{ recent_publication|display_pub_info }}
                     </div>
                 {% endfor %}
-
             </aside>
-
-
-            <section id="twitter">
-                <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/USGS_Pubs"
-                   data-widget-id="541086703717347328">Tweets by @USGS_Pubs</a>
-                <script>!function (d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
-                    if (!d.getElementById(id)) {
-                        js = d.createElement(s);
-                        js.id = id;
-                        js.src = p + "://platform.twitter.com/widgets.js";
-                        fjs.parentNode.insertBefore(js, fjs);
-                    }
-                }(document, "script", "twitter-wjs");</script>
-            </section>
-
-        </article>
-    </main>
-
+        </div>
+        <section id="twitter" class="usa-width-one-third">
+            <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/USGS_Pubs"
+               data-widget-id="541086703717347328">Tweets by @USGS_Pubs</a>
+            <script>!function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                if (!d.getElementById(id)) {
+                    js = d.createElement(s);
+                    js.id = id;
+                    js.src = p + "://platform.twitter.com/widgets.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }
+            }(document, "script", "twitter-wjs");</script>
+        </section>
+    </div>
 {% endblock %}
-
-{% block url %}
-    <a href="{{ url_for('pubswh.index') }}">http://pubs.er.usgs.gov{{ url_for('pubswh.index') }}</a>{% endblock %}
 
 {% block page_footer_script %}
 
