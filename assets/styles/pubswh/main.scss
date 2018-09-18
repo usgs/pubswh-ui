@@ -15,12 +15,6 @@
    Newpubs page styles
    ========================================================================== */
 
-#new_pubs_form{
-    padding-left: 15px;
-}
-
-#new-pubs-h1{margin-left:15px;}
-
 .filter-button{
 	background:#eee;
 	width:100px;
@@ -37,61 +31,6 @@
 #announcement{
     font-size: 150%;
     padding: 15px;
-
-}
-
-#new_pubs{
-	width:100%;
-	min-height:200px;
-	border:1px solid #808080;
-	border-radius:5px;
-	margin:0 0 10px 0;
-	padding-bottom:25px;
-	clear:both;
-}
-
-#new_pubs h3{padding:5px;
-			 color: #000;
-			margin-top:10px;
-            }
-
-
-#new_pubs a#new_pubs_title_link:link{
-	color: #000;
-}
-
-#new_pubs a#new_pubs_title_link:visited{
-	color: #000;
-}
-
-#new_pubs a#new_pubs_title_link:active{
-	color: #000;
-}
-
-
-
-.pubs-thumbnail{
-	background:red;
-	clear:both;
-	padding:0 15px 0 15px;
-}
-
-
-#new_pubs_title{
-    text-align: center;
-    color:#000;
-}
-
-
-.recent-pub-title{
-	padding:0 10px 10px 10px;
-	margin-bottom:-5px;
-    text-align: left;
-}
-
-.recent-pub-info{
-	margin:0 0 15px 15px;
-    text-align: left;
 
 }
 
@@ -178,25 +117,6 @@ img#bars {
   width:240px;
 }
 
-article {
-  padding: 10px;
-  font-family: Verdana;
-  position:relative;
-}
-
-article h3,
-article h4,
-article h5,
-article h6 {
-  margin:0 0 5px 0;
-}
-article p {
-  margin:0 0 10px 0;
-  line-height: 1.7em;
-}
-#thumbnail {
-  display: none;
-}
 dl#contributors {margin:5px 0;
   font-size: .8em;
 
@@ -638,16 +558,7 @@ h2.otherPages{
     margin-left: 5px;
   }
 
-  article h3{margin:0;}
 
-  article h5,
-  article h6{margin:5px;}
-
-  #thumbnail {
-    display: block;
-    float: left;
-    margin: 0 10px 15px 0;
-  }
   dl#contributors {min-height:50px;
     font-size: .9em;
   }
@@ -674,23 +585,6 @@ h2.otherPages{
 
 #details dl {
     font-size: .9em;
-  }
-
-  #usgsfootertext {
-    font-size: .9em;
-  }
-  #usgsfootertext img {
-    display: block;
-  }
-  #take_pride {
-    position: absolute;
-    right: 0;
-    top: 25px;
-  }
-  #usa_gov {
-    position: absolute;
-    right: 65px;
-    top: 25px;
   }
 
 /* ==========================================================================

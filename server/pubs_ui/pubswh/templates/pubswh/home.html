@@ -21,19 +21,23 @@
     <div class="usa-grid">
         <div class="usa-width-two-thirds">
             {% include 'pubswh/search_form.html' %}
-            <aside id="new_pubs">
-                <h3 id="new_pubs_title"><a id="new_pubs_title_link" href="{{ url_for('pubswh.new_pubs') }}">New
+            <aside id="new-pubs">
+                <h3><a href="{{ url_for('pubswh.new_pubs') }}">New
                     Publications by USGS Authors</a></h3>
 
                 {% for recent_publication in recent_publications %}
-                    <div class="pubs-thumbnail"><img id="thumbnail" src="
-                            {{ wsgi_str }}{% if recent_publication['displayLinks']['Thumbnail'][0]['url'] %}{{ url_for('images', filename=recent_publication['displayLinks']['Thumbnail'][0]['url'], width=50) }}{% else %}{{ url_for('pubswh.images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=50) }}{% endif %}"
-                                                     alt="thumbnail"/></div>
-                    <div class="recent-pub-title">
-                        <a href="{{ url_for('pubswh.publication', index_id = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
-                    </div>
-                    <div class="recent-pub-info">
-                        {{ recent_publication|display_pub_info }}
+                    <div>
+                        <img class="thumbnail" src="
+                                {{ wsgi_str }}{% if recent_publication['displayLinks']['Thumbnail'][0]['url'] %}{{ url_for('images', filename=recent_publication['displayLinks']['Thumbnail'][0]['url'], width=50) }}{% else %}{{ url_for('pubswh.images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=50) }}{% endif %}"
+                                                         alt="thumbnail"/>
+                        <div class="recent-pub">
+                            <div class="recent-pub-title">
+                                <a href="{{ url_for('pubswh.publication', index_id = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
+                            </div>
+                            <div class="recent-pub-info">
+                                {{ recent_publication|display_pub_info }}
+                            </div>
+                        </div>
                     </div>
                 {% endfor %}
             </aside>

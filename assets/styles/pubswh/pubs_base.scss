@@ -94,6 +94,40 @@ h6 {
     font-size: $h3-font-size;
   }
 }
+#new-pubs {
+  border: 1px solid $color-gray-dark;
+  border-radius: 5px;
+  padding-bottom: $site-margins-mobile;
+  padding-left: $site-margins-mobile;
+  padding-right: $site-margins-mobile;
+  padding-top: 0;
+  @media screen and (min-width: $large-screen) {
+    padding-bottom: $site-margins;
+    padding-left: $site-margins;
+    padding-right: $site-margins;
+  }
+  .recent-pub {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 2rem;
+    @media screen and (min-width: $medium-large-screen) {
+      width: 85%;
+      margin-left: 1rem;
+    }
+    @media screen and (min-width: $large-screen) {
+      width: 90%;
+      margin-left: 1rem;
+    }
+  }
+  .thumbnail {
+    display: none;
+    @media screen and (min-width: $medium-large-screen) {
+      display: inline-block;
+      width: auto;
+    }
+  }
+
+}
 
 .advanced-search-div {
   .select2-container {
