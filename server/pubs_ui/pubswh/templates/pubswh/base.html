@@ -34,7 +34,7 @@
 
 {% block main %}
     {% if ANNOUNCEMENT_BLOCK|length > 0 %}
-        <span id="announcement"></span>
+        <span id="announcement" style="font-size: 150%; padding: 15px;"></span>
         <script>
             document.getElementById('announcement').innerHTML = '{{ ANNOUNCEMENT_BLOCK|safe }}';
         </script>

@@ -143,37 +143,45 @@ h6 {
 }
 
 
-.advanced-search-container {
-  .advanced-search-row {
+.advanced-search-row {
 
-    .advanced-search-row-label {
-      display: inline-block;
-      width: 100%;
-      @media screen and (min-width: $medium-large-screen) {
-        width: 42%;
-      }
-      button, label {
-        display: inline-block;
-      }
-      button {
-        @media screen and (max-width: $small-screen) {
-          width: auto;
-        }
-      }
+  .advanced-search-row-label {
+    display: inline-block;
+    width: 100%;
+    @media screen and (min-width: $medium-large-screen) {
+      width: 42%;
     }
-    .advanced-search-row-input {
-      width: 100%;
-      @media screen and (min-width: $medium-large-screen) {
-        width: 55%;
-      }
+    button, label {
       display: inline-block;
-      button, label, input {
-        display: inline-block;
-      }
-      .select2-container {
+    }
+    button {
+      @media screen and (max-width: $small-screen) {
+        width: auto;
       }
     }
   }
+  .advanced-search-row-input {
+    width: 100%;
+    @media screen and (min-width: $medium-large-screen) {
+      width: 55%;
+    }
+    display: inline-block;
+    button, label, input {
+      display: inline-block;
+    }
+    .select2-container {
+    }
+  }
+}
+
+
+.search-form-map-div {
+	height: 400px;
+	margin: 0 0 15px 0;
+}
+
+.search-form-map-div .leaflet-control label {
+	font-weight: normal;
 }
 
 #search-results {
