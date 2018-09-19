@@ -82,11 +82,9 @@
                 {% endfor %}
         </section>
 
-        <div>
-            <section class="pagination-nav">
-                {{ pagination.links|safe }}
-            </section>
-        </div>
+        <section class="pagination-nav">
+            {{ pagination.links|safe }}
+        </section>
     {% else %}
         {{ search_service_down }}
     {% endif %}

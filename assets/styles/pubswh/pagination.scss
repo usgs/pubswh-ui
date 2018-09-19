@@ -1,21 +1,28 @@
-.pagination-page-info {
-    padding: .6em;
-    padding-left: 0;
-    width: 40em;
-    margin: .5em;
-    margin-left: 0;
-    font-size: 12px;
-}
-.pagination-page-info b {
-    color: black;
-    background: #6aa6ed;
-    padding-left: 2px;
-    padding: .1em .25em;
-    font-size: 150%;
+
+.pagination-nav {
+    text-align: center;
+    li {
+        display: inline;
+        padding-left: 2px;
+        padding-right: 2px;
+        a {
+            color: $color-primary;
+            text-decoration: none;
+            font-size: 1.4em;
+            margin-right: 10px;
+            border: 1px solid $color-gray-light;
+            border-radius: 4px;
+            padding: 6px 12px;
+        }
+
+        a:hover{
+            color:#000;
+            text-decoration:underline;
+        }
+    }
+    .disabled a {
+        color: $color-gray;
+        cursor: not-allowed;
+    }
 }
 
-div.pagination li {
-	display: inline;
-	padding-left: 2px;
-	padding-right: 2px;
-}

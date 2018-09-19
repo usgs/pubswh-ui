@@ -93,14 +93,13 @@ h6 {
 #new-pubs {
   border: 1px solid $color-gray-dark;
   border-radius: 5px;
-  padding-bottom: $site-margins-mobile;
   padding-left: $site-margins-mobile;
   padding-right: $site-margins-mobile;
   padding-top: 0;
   @media screen and (min-width: $large-screen) {
-    padding-bottom: $site-margins;
     padding-left: $site-margins;
     padding-right: $site-margins;
+    margin-bottom: $site-margins;
   }
   .recent-pub {
     display: inline-block;
