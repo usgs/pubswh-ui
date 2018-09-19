@@ -25,82 +25,11 @@
 }
 
 /* ==========================================================================
-   Index styles
-   ========================================================================== */
-
-#checklist{clear:both;}
-
-#checklist input{margin: 0 5px 0 0;}
-
-#checklist label{line-height:1.5em;}
-
-
-
-#checklist button{background:rgb(0,51,102);
-		color:#fff;
-		width:120px;
-		height:30px;
-		border:none;
-		border-radius:5px;
-		padding:4px 0 0 0;
-		margin:20px 5px 25px 0;
-		float:left;}
-
-#checklist button:hover{background:rgb(0,102,153);}
-
-#checklist p{font-weight:bold;
-			font-size:1em;
-			float:left;
-			margin:20px 0 0 0;
-			text-indent:0;
-			cursor:pointer;}
-
-#checklist p#bar{
-				margin:20px 10px 0 0;
-				padding:0;
-				}
-
-#options{margin:0 0 15px 0;}
-
-#options a,
-#links a{color:#808080;
-			text-decoration:none;}
-
-#options a:hover,
-#links a:hover{
-	text-decoration:underline;
-	color:#000;}
-
-#options h3,
-#links h3{font-weight:normal;}
-
-#options h4,
-#links h4{padding:0 0 0 15px;}
-
-#options h3,
-#options h4,
-#links h3,
-#links h4{margin:5px 0 0 0;
-			clear:both;}
-
-#links{margin:0 0 15px 0;}
-
-
-
-/* ==========================================================================
    Publication.html styles
    ========================================================================== */
-
-
-img#bars {
-  padding: 6px 0 0 0;
+#thumbnail {
+  display: none;
 }
-
-#center {
-  margin: 0 auto;
-  width:240px;
-}
-
 dl#contributors {margin:5px 0;
   font-size: .8em;
 
@@ -152,15 +81,6 @@ hgroup h4{
   border-bottom: 1px solid #000000;
   min-height: 30px;
   margin-bottom: 10px;
-}
-
-.basic-advanced a{
-      color: #428bca;
-      margin-left:10px;
-}
-.basic-advanced a:visited {
-color: #428bca;
-text-decoration: none;
 }
 
 address a,
@@ -279,27 +199,6 @@ form#contactForm input#submit:hover{
 	border:1px solid rgb(200,200,200);
 	color:rgb(0,51,102);
 }
-
-/* ==========================================================================
-   Search styles
-   ========================================================================== */
-
-.no-margin{margin-left:0 !important;}
-
-
-#extents-map-section {
-    margin-left: 15px;
-}
-
-#extents-map {
-    height: 800px;
-    width:90%;
-    overflow:hidden;
-    padding: 0 0 15px 0;
-    position:relative;
-
-}
-
 
 
 
@@ -448,17 +347,6 @@ h2.otherPages{
 @media screen and (min-width: 700px) {
 
 /* ==========================================================================
-   Index styles
-   ========================================================================== */
-#checklist button{width:146px;
-					height:40px;}
-
-#checklist p{font-size:1.5em;
-			margin:17px 0 0 0;}
-
-#checklist p#bar{margin:17px 10px 0 0;}
-
-/* ==========================================================================
    publication.html styles
    ========================================================================== */
 
@@ -468,7 +356,11 @@ h2.otherPages{
     margin-left: 5px;
   }
 
-
+  #thumbnail {
+    display: block;
+    float: left;
+    margin: 0 10px 15px 0;
+  }
   dl#contributors {min-height:50px;
     font-size: .9em;
   }
@@ -493,206 +385,100 @@ h2.otherPages{
 /*media query*/
 @media screen and (min-width: 768px) {
 
-#details dl {
+  #details dl {
     font-size: .9em;
   }
 
-/* ==========================================================================
-   Contact styles
-   ========================================================================== */
+  /* ==========================================================================
+     Contact styles
+     ========================================================================== */
 
-form#contactForm input,
-form#contactForm textarea{
-	width:45%;
+  form#contactForm input,
+  form#contactForm textarea {
+    width: 45%;
 
-}
-
-form#contactForm input#submit{
-	width:200px;
-}
-
-/* ==========================================================================
-   Search styles
-   ========================================================================== */
-
-}
-/*media query*/
-@media screen and (min-width: 1025px) {
-
-/* ==========================================================================
-   Index styles
-   ========================================================================== */
-
-	.index_article{
-		width:100%;
-		min-height:600px;
-		position:relative;
-		padding:0;
-		margin:0;}
-
-	#checklist,
-	#options,
-	#links
-		{
-			width:59%;
-		}
-
-
-
-
-/* ==========================================================================
-   publication.html styles
-   ========================================================================== */
-  #abstract {
-    margin-top: 40px;
-    line-height:1.7em;
   }
 
-  .publicationAsideDesktop{
-	float:right;
-	display:block;
-	width:30%;
-	clear:both
+  form#contactForm input#submit {
+    width: 200px;
+  }
 }
+  /*media query*/
+  @media screen and (min-width: 1025px) {
 
-.publicationAsideDesktop p:first-child{
-	float:none;
-}
+    /* ==========================================================================
+       Index styles
+       ========================================================================== */
 
-
-.publicationAside{
-	display:none;
-}
-
-
-#details{
-	margin-bottom:230px;
-}
-
-
-/* ==========================================================================
-   other styles
-   ========================================================================== */
-
-ul.toc-indentation{
-	width:70%;
-}
-
-
-.feed h5{
-	width:70%;
-}
-
-.feed p{
-	width:70%;
-}
-
-li.p1{
-	width:70%;
-}
-
-
-
-/* ==========================================================================
-   browse styles
-   ========================================================================== */
-
-ul#pubs-browse-ul{width:70%;}
-
-}/*media query*/
-
-
-/* ==========================================================================
-   Helper classes
-   ========================================================================== */
-
-/*
- * Image replacement
- */
-
-.ir {
-    background-color: transparent;
-    border: 0;
-    overflow: hidden;
-    /* IE 6/7 fallback */
-    *text-indent: -9999px;
-}
-
-.ir:before {
-    content: "";
-    display: block;
-    width: 0;
-    height: 150%;
-}
-
-/* ==========================================================================
-   Print styles.
-   Inlined to avoid required HTTP connection: h5bp.com/r
-   ========================================================================== */
-
-@media print {
-    * {
-        background: transparent !important;
-        color: #000 !important; /* Black prints faster: h5bp.com/s */
-        box-shadow: none !important;
-        text-shadow: none !important;
+    .index_article {
+      width: 100%;
+      min-height: 600px;
+      position: relative;
+      padding: 0;
+      margin: 0;
     }
 
-    a,
-    a:visited {
-        text-decoration: underline;
+    #checklist,
+    #options,
+    #links {
+      width: 59%;
     }
 
-    a[href]:after {
-        content: " (" attr(href) ")";
+    /* ==========================================================================
+       publication.html styles
+       ========================================================================== */
+    #abstract {
+      margin-top: 40px;
+      line-height: 1.7em;
     }
 
-    abbr[title]:after {
-        content: " (" attr(title) ")";
+    .publicationAsideDesktop {
+      float: right;
+      display: block;
+      width: 30%;
+      clear: both
     }
 
-    /*
-     * Don't show links for images, or javascript/internal links
-     */
-
-    .ir a:after,
-    a[href^="javascript:"]:after,
-    a[href^="#"]:after {
-        content: "";
+    .publicationAsideDesktop p:first-child {
+      float: none;
     }
 
-    pre,
-    blockquote {
-        border: 1px solid #999;
-        page-break-inside: avoid;
+    .publicationAside {
+      display: none;
     }
 
-    thead {
-        display: table-header-group; /* h5bp.com/t */
+    #details {
+      margin-bottom: 230px;
     }
 
-    tr,
-    img {
-        page-break-inside: avoid;
+    /* ==========================================================================
+       other styles
+       ========================================================================== */
+
+    ul.toc-indentation {
+      width: 70%;
     }
 
-    img {
-        max-width: 100% !important;
+    .feed h5 {
+      width: 70%;
     }
 
-    @page {
-        margin: 0.5cm;
+    .feed p {
+      width: 70%;
     }
 
-    p,
-    h2,
-    h3 {
-        orphans: 3;
-        widows: 3;
+    li.p1 {
+      width: 70%;
     }
 
-    h2,
-    h3 {
-        page-break-after: avoid;
+    /* ==========================================================================
+       browse styles
+       ========================================================================== */
+
+    ul#pubs-browse-ul {
+      width: 70%;
     }
-}
+  }
+
+
+

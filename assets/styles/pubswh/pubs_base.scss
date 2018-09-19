@@ -184,6 +184,10 @@ h6 {
 	font-weight: normal;
 }
 
+#show-hide-advanced-search-btn {
+  cursor: pointer;
+}
+
 #search-results {
   .search-result-contributors, .search-result-pubinfo {
     color: $color-green;
