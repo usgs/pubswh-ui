@@ -39,8 +39,7 @@ describe('AdvancedSearchForm', function() {
             var row = {
                 name: 'param1',
                 displayName: 'Param 1',
-                inputType: 'text',
-                placeholder: 'Enter param'
+                inputType: 'text'
             };
             var $text;
             advancedSearchForm.addRow(row);
@@ -49,7 +48,6 @@ describe('AdvancedSearchForm', function() {
             $text = $testDiv.find('input[type="text"]');
             expect($text.length).toEqual(1);
             expect($text.attr('name')).toEqual('param1');
-            expect($text.attr('placeholder')).toEqual('Enter param');
             expect($testDiv.find('label').html()).toContain('Param 1');
         });
 
@@ -69,8 +67,7 @@ describe('AdvancedSearchForm', function() {
                 name: 'param1',
                 displayName: 'Param 1',
                 inputType: 'select',
-                lookup: 'kind1',
-                placeholder: 'Param 1'
+                lookup: 'kind1'
             };
             var $select;
             fakeServer.respondWith([200, {'Content-Type': 'application/json'}, '[{"id": "1", "text": "T1"}, {"id": "2", "text": "T2"}]']);
@@ -84,7 +81,6 @@ describe('AdvancedSearchForm', function() {
 
             fakeServer.respond();
             expect($select.find('option').length).toBe(3);
-            expect($select.find('option:first-child').html()).toEqual('Param 1');
             expect($select.find('option[value="T1"]').length).toEqual(1);
             expect($select.find('option[value="T2"]').length).toEqual(1);
         });
@@ -144,7 +140,6 @@ describe('AdvancedSearchForm', function() {
                 inputType: 'date'
             };
             var $input;
-            spyOn($.fn, 'datetimepicker');
             advancedSearchForm.addRow(row);
             $input = $testDiv.find('input[type="text"]');
 
@@ -272,11 +267,6 @@ describe('AdvancedSearchForm', function() {
             $rowToRemove.find('.delete-row').click();
 
             expect(deleteCallbackSpy).toHaveBeenCalledWith('boolean1');
-
-            $rowToRemove = $('body').children().has(':input[name="map1"]');
-            $rowToRemove.find('.delete-row').click();
-
-            expect(deleteCallbackSpy).toHaveBeenCalledWith('map1');
         });
     });
 
