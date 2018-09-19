@@ -7,6 +7,15 @@ $fa-font-path: "./fonts" !default;
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
 
 //USWDS theme for select2's
+.select2-search input[type="search"] {
+  float: none;
+}
+.select2-results {
+  li {
+    margin-bottom: 0;
+  }
+}
+
 .select2-container {
   @include media($medium-screen) {
     width: 100%;
@@ -30,15 +39,7 @@ $fa-font-path: "./fonts" !default;
 h6 {
   text-transform: none;
 }
-// Overrides to prevent conflicts between bootstrap and USWDS
-.select2-search input[type="search"] {
-  float: none;
-}
-.select2-results {
-  li {
-    margin-bottom: 0;
-  }
-}
+
 
 
 @import '../../node_modules/select2/src/scss/core.scss';
