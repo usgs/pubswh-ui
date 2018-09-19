@@ -6,86 +6,16 @@ $fa-font-path: "./fonts" !default;
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
 
-//USWDS theme for select2's
-.select2-search input[type="search"] {
-  float: none;
-}
-.select2-results {
-  li {
-    margin-bottom: 0;
-  }
-}
+@import './partials/pagination';
+@import './partials/_search_form';
 
-.select2-container {
-  @include media($medium-screen) {
-    width: 100%;
-  }
-}
-.select2-container .selection .select2-selection {
-  height: $input-height;
-  border-color: $color-gray;
-  border-radius: 0;
-}
-.select2-container .selection .select2-selection .select2-selection__rendered,
-.select2-container .selection .select2-selection .select2-selection__arrow {
-  height: $input-height;
-  line-height: $heading-line-height;
-  padding: $input-padding-vertical 0.7em;
-}
-.select2-container .selection .select2-selection .select2-selection__arrow {
-  right: 1.5rem;
-}
-
-h6 {
-  text-transform: none;
-}
-
-
-
-@import '../../node_modules/select2/src/scss/core.scss';
-
-.usgs-input-group {
-  position: relative;
-  display: block;
-  span, input {
-    display: inline-block;
-  }
-
-  .usgs-input-group-btn {
-    position: relative;
-    margin-right: 0;
-    border-left: 1px solid $color-gray;
-    border-top: 1px solid $color-gray;
-    border-bottom: 1px solid $color-gray;
-    border-right-width: 0;
-    border-bottom-right-radius: 0;
-    border-top-right-radius: 0;
-    height: $input-height;
-    width: auto;
-  }
-
-  input {
-    position: relative;
-    left: -5px;
-    @media screen and (max-width: $medium-large-screen) {
-      width: 230px;
-    }
-    @media screen and (max-width: $small-screen) {
-      width: 200px;
-    }
-  }
-
-  .usgs-input-group-addon {
-    position:relative;
-    left: -4rem;
-  }
-
-}
-
+// General styles for all pages
 #main-content {
   padding-left: $site-margins;
   padding-right: $site-margins;
 }
+
+// Styles for the home page
 #welcome {
   p {
     font-size: $h3-font-size;
@@ -125,69 +55,7 @@ h6 {
 
 }
 
-.advanced-search-div {
-  .select2-container {
-    max-width: 25rem;
-  }
-}
-
-.delete-row {
-  background-color: transparent;
-  margin-top: 0;
-  margin-bottom: 0;
-  padding: 0;
-  color: red;
-  &:hover {
-    background-color: red;
-  }
-}
-
-
-.advanced-search-row {
-
-  .advanced-search-row-label {
-    display: inline-block;
-    width: 100%;
-    @media screen and (min-width: $medium-large-screen) {
-      width: 42%;
-    }
-    button, label {
-      display: inline-block;
-    }
-    button {
-      @media screen and (max-width: $small-screen) {
-        width: auto;
-      }
-    }
-  }
-  .advanced-search-row-input {
-    width: 100%;
-    @media screen and (min-width: $medium-large-screen) {
-      width: 55%;
-    }
-    display: inline-block;
-    button, label, input {
-      display: inline-block;
-    }
-    .select2-container {
-    }
-  }
-}
-
-
-.search-form-map-div {
-	height: 400px;
-	margin: 0 0 15px 0;
-}
-
-.search-form-map-div .leaflet-control label {
-	font-weight: normal;
-}
-
-#show-hide-advanced-search-btn {
-  cursor: pointer;
-}
-
+// Styles for search results
 #search-results {
   .search-result-contributors, .search-result-pubinfo {
     color: $color-green;
@@ -201,30 +69,8 @@ h6 {
   }
 }
 
-// Overrides to prevent conflicts between bootstrap and USWDS
-
-
-.form-group {
-  label {
-    margin-top: 0;
-  }
-  input {
-    max-width: inherit
-  }
-
-  button {
-    margin-top: 0;
-  }
-}
-
-.checkbox {
-  label {
-    margin-top: 0;
-  }
-}
-
 @import 'main';
-@import 'pagination';
+
 
 
 
