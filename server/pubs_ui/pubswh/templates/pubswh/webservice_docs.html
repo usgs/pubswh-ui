@@ -1,4 +1,5 @@
 {% extends 'pubswh/base.html' %}
+
 {% block head %}
     <title>USGS Series definitions- USGS Publications Warehouse</title>
     <meta name="description" content="Definitions and descriptions of publications of the US Geological Survey">
@@ -6,7 +7,8 @@
 {% endblock %}
 
 {% block main_pubswh %}
-    <h1 class="otherPages">Web Service Help</h1>
-{{ web_service_docs|safe }}
+    <h1>Web Service Help</h1>
+    {{ web_service_docs|safe }}
 {% endblock %}
+
 {% block url %}<a href="{{ url_for('pubswh.web_service_docs') }}">http://pubs.er.usgs.gov{{ url_for('pubswh.web_service_docs') }}</a>{% endblock %}
