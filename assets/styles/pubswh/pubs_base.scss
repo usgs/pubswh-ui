@@ -108,7 +108,9 @@ $fa-font-path: "./fonts" !default;
     }
     .ai-orcid {
       color: #a6ce39;
-      font-size: $base-font-size;
+      font-size: 1.6rem;
+      margin-left: .8rem;
+      margin-right: .8rem;
     }
   }
 
@@ -132,6 +134,26 @@ $fa-font-path: "./fonts" !default;
   .files-list {
     padding-top: 1rem;
     padding-bottom: 1rem;
+  }
+
+  #abstract {
+    .abstract-contents {
+    }
+    aside {
+      border: 1px solid $color-gray-dark;
+      background-color: $color-gray-lightest;
+      float:right;
+      padding-right: 1rem;
+      padding-left: 1rem;
+      margin-left: 1rem;
+      @media screen and (max-width: $small-screen) {
+        display: none;
+      }
+    }
+  }
+
+  #suggested-citation {
+    font-size: $small-font-size;
   }
 
   #details {

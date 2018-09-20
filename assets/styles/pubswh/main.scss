@@ -12,61 +12,6 @@
    ========================================================================== */
 
 /* ==========================================================================
-   Publication.html styles
-   ========================================================================== */
-
-h2#abstract_head {
-  clear: both;
-  font-weight: 400;
-  margin:10px 0 10px 0;
-}
-
-address a,
-#table_contents a {
-  color: #003366;
-}
-
-address a:hover,
-#table_contents a:hover {
-  text-decoration: none;
-}
-address p {
-  font-style: normal;
-}
-
-#suggested_citation{
-    text-indent: -2em;
-    margin:10px 0 10px 2.9em;
-    font-size: .9em;
-}
-
-#table_contents {
-  font-size: .85em;
-  padding: 0 0 0 15px;
-  line-height: 1.5em;
-}
-
-.publicationAside{
-	background: #f0f0f0;
-  	border: 1px solid #000000;
-  	padding: 8px;
-  	margin-top:10px;
-}
-
-.publicationAside p,
-.publicationAsideDesktop p {
-  text-indent: 0;
-  font-size: .85em;
-}
-
-.publicationAsideDesktop{
-	display:none;
-	background: #f0f0f0;
-  	border: 1px solid #000000;
-  	padding: 8px;
-  	margin:10px 0 0 25px;
-}
-/* ==========================================================================
    contact styles
    ========================================================================== */
 
@@ -247,16 +192,6 @@ h2.otherPages{
 	padding:15px;
 }
 
-@media screen and (min-width: 700px) {
-
-/* ==========================================================================
-   publication.html styles
-   ========================================================================== */
-
-  #abstract {
-    clear: both;
-  }
-}
 /*media query*/
 @media screen and (min-width: 768px) {
 
@@ -293,29 +228,6 @@ h2.otherPages{
     #options,
     #links {
       width: 59%;
-    }
-
-    /* ==========================================================================
-       publication.html styles
-       ========================================================================== */
-    #abstract {
-      margin-top: 40px;
-      line-height: 1.7em;
-    }
-
-    .publicationAsideDesktop {
-      float: right;
-      display: block;
-      width: 30%;
-      clear: both
-    }
-
-    .publicationAsideDesktop p:first-child {
-      float: none;
-    }
-
-    .publicationAside {
-      display: none;
     }
 
     /* ==========================================================================
