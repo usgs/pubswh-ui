@@ -84,11 +84,6 @@ $fa-font-path: "./fonts" !default;
       width: 100%;
     }
 
-    .publication-title {
-      font-size: $h3-font-size;
-      margin-bottom: 1rem;
-    }
-
     .series-title {
       font-size: $h4-font-size;
     }
@@ -128,6 +123,13 @@ $fa-font-path: "./fonts" !default;
       overflow: hidden;
       float: right;
     }
+  }
+
+  .files-list {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-top: 1px solid $color-gray-dark;
+    border-bottom: 1px solid $color-gray;
   }
 }
 

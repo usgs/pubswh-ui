@@ -34,31 +34,9 @@ h2#abstract_head {
   margin:10px 0 10px 0;
 }
 
-hgroup h4{
-	margin-top:5px;
-}
-#suggested {
-  margin-top:10px;
-  clear:both;
-}
-#suggested p {
-  text-indent: 0;
-  font-size: .85em;
-}
-.fileslist {
-  padding: 5px 0 0 15px;
-  border-top: 1px solid #000000;
-  border-bottom: 1px solid #000000;
-  min-height: 30px;
-  margin-bottom: 10px;
-}
-
 address a,
 #table_contents a {
   color: #003366;
-}
-.fileslist a {
-  font-size: .85em;
 }
 
 address a:hover,
@@ -130,8 +108,6 @@ address p {
 				float:left;
 				width:50%;
 				margin:0;}
-
-.dark{background:#eee;}
 
 /* ==========================================================================
    contact styles
