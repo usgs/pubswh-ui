@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block main_pubswh %}
-    <main">
+    <div id="contact-page">
         <h1>Contact us!</h1>
         <h2>Contact the USGS Public Access Team to request public access version of USGS authored publications</h2>
         <form id="contactForm" action="{{ url_for('pubswh.pub_access_contact') }}" method=post>
@@ -17,17 +17,17 @@
                 {{ name_error }}
             {% endfor %}
 
-            {{ contact_form.name(placeholder="Name") }}
+            {{ contact_form.name(placeholder="Name", **{'aria-label': 'enter your name'}) }}
 
             {% for email_error in contact_form.email.errors %}
                 {{ email_error }}
             {% endfor %}
 
-            {{ contact_form.email(placeholder="Email") }}
+            {{ contact_form.email(placeholder="Email", **{'aria-label': 'enter your email address'}) }}
 
-            {{ contact_form.originating_page(placeholder="Originating Page") }}
+            {{ contact_form.originating_page(placeholder="Originating Page", **{'aria-label': 'originating page'}) }}
 
-            {{ contact_form.message(value="I would like to request the full text version of this publication") }}
+            {{ contact_form.message(value="I would like to request the full text version of this publication", **{'aria-label': 'message content'}) }}
 
             {% for captcha_error in contact_form.recaptcha.errors %}
                 {{ captcha_error }}
@@ -37,7 +37,7 @@
 
             {{ contact_form.submit }}
         </form>
-    </main>
+    </div>
 {% endblock %}
 
 {% block url %}
