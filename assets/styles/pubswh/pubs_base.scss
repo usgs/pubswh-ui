@@ -32,6 +32,10 @@ $fa-font-path: "./fonts" !default;
     padding-right: $site-margins;
     margin-bottom: $site-margins;
   }
+  .filter-button {
+    padding-left: 2em;
+    padding-right: 2em;
+  }
   .recent-pub {
     display: inline-block;
     width: 100%;
@@ -56,7 +60,7 @@ $fa-font-path: "./fonts" !default;
 }
 
 // Styles for search results
-#search-results {
+#search-results, #new-publications {
   .search-result-contributors, .search-result-pubinfo {
     color: $color-green;
     font-size: $small-font-size;
@@ -134,11 +138,3 @@ $fa-font-path: "./fonts" !default;
 }
 
 @import 'main';
-
-
-
-
-
-
-
-
