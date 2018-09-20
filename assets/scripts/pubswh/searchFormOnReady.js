@@ -50,28 +50,26 @@ $(document).ready(function() {
     // Show/hide advanced search and add click handler for toggle link
     if (initialSearchRows.length > 0) {
         $showHideSearchBtn.html(HIDE_SEARCH);
-        $advancedSearchDiv.show();
+        $advancedSearchDiv.attr('hidden', false);
     } else {
         $showHideSearchBtn.html(SHOW_SEARCH);
-        $advancedSearchDiv.hide();
+        $advancedSearchDiv.prop('hidden', true);
     }
     $showHideSearchBtn.click(function() {
-        if ($advancedSearchDiv.is(':visible')) {
+        if ($advancedSearchDiv.attr('hidden')) {
+            $showHideSearchBtn.html(HIDE_SEARCH);
+            $advancedSearchDiv.attr('hidden', false);
+        } else {
             $showHideSearchBtn.html(SHOW_SEARCH);
             advancedSearchForm.deleteAllRows();
             $categorySelect.find('option').prop('disabled', false);
             $categorySelect.select2();
-            $advancedSearchDiv.hide();
-        } else {
-            $showHideSearchBtn.html(HIDE_SEARCH);
-            $advancedSearchDiv.show();
+            $advancedSearchDiv.attr('hidden', true);
         }
     });
 
     // Set up advanced search category select
-    $categorySelect.select2({
-        theme: 'bootstrap'
-    });
+    $categorySelect.select2();
     $categorySelect.on('change', function() {
         var $selectedOption = $(this).find('option:selected');
         advancedSearchForm.addRow({
@@ -83,9 +81,7 @@ $(document).ready(function() {
         });
         $selectedOption.prop('selected', false);
         $selectedOption.prop('disabled', !$selectedOption.data('allow-multi'));
-        $(this).select2({
-            theme: 'bootstrap'
-        });
+        $(this).select2();
     });
 
     // Add click handler for clear search terms

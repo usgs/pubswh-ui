@@ -1,0 +1,35 @@
+
+.pagination-nav {
+    text-align: center;
+    li {
+        display: inline;
+        padding-left: 2px;
+        padding-right: 2px;
+        a {
+            color: $color-primary;
+            text-decoration: none;
+            margin-right: 2px;
+            border: 1px solid $color-gray-light;
+            border-radius: 4px;
+            font-size: 1.2rem;
+            padding: 1px 2px;
+            @media screen and (min-width: $medium-screen) {
+                font-size: 1.4rem;
+                margin-right: 10px;
+                padding: 6px 12px;
+            }
+
+        }
+
+
+        a:hover{
+            color:#000;
+            text-decoration:underline;
+        }
+    }
+    .disabled a {
+        color: $color-gray;
+        cursor: not-allowed;
+    }
+}
+

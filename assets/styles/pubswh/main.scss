@@ -15,12 +15,6 @@
    Newpubs page styles
    ========================================================================== */
 
-#new_pubs_form{
-    padding-left: 15px;
-}
-
-#new-pubs-h1{margin-left:15px;}
-
 .filter-button{
 	background:#eee;
 	width:100px;
@@ -31,204 +25,8 @@
 }
 
 /* ==========================================================================
-   Index styles
-   ========================================================================== */
-
-#announcement{
-    font-size: 150%;
-    padding: 15px;
-
-}
-
-#new_pubs{
-	width:100%;
-	min-height:200px;
-	border:1px solid #808080;
-	border-radius:5px;
-	margin:0 0 10px 0;
-	padding-bottom:25px;
-	clear:both;
-}
-
-#new_pubs h3{padding:5px;
-			 color: #000;
-			margin-top:10px;
-            }
-
-
-#new_pubs a#new_pubs_title_link:link{
-	color: #000;
-}
-
-#new_pubs a#new_pubs_title_link:visited{
-	color: #000;
-}
-
-#new_pubs a#new_pubs_title_link:active{
-	color: #000;
-}
-
-
-
-.pubs-thumbnail{
-	background:red;
-	clear:both;
-	padding:0 15px 0 15px;
-}
-
-#twitter{
-	width:100%;
-	min-height:200px;
-	margin-bottom:15px;
-	clear:both;
-}
-
-
-#new_pubs_title{
-    text-align: center;
-    color:#000;
-}
-
-
-.recent-pub-title{
-	padding:0 10px 10px 10px;
-	margin-bottom:-5px;
-    text-align: left;
-}
-
-.recent-pub-info{
-	margin:0 0 15px 15px;
-    text-align: left;
-
-}
-
-
-main#index{font-family:Arial;
-	color:#808080;
-	position:relative}
-
-article{padding:0 10px;}
-
-#welcome{
-	margin-bottom:15px;
-}
-
-#welcome h1{margin:10px 0 5px 0;}
-
-#welcome h3{margin:5px 0 0 0;}
-
-#search-pubs-form {
-	display: inline-block;
-    button {
-      margin-top: 0;
-    }
-}
-#search-pubs-form .delete-row {
-	color: red;
-	padding: 4px;
-}
-.search-form-map-div {
-	height: 400px;
-	margin: 0 0 15px 0;
-}
-
-.search-form-map-div .leaflet-control label {
-	font-weight: normal;
-}
-
-#checklist{clear:both;}
-
-#checklist input{margin: 0 5px 0 0;}
-
-#checklist label{line-height:1.5em;}
-
-
-
-#checklist button{background:rgb(0,51,102);
-		color:#fff;
-		width:120px;
-		height:30px;
-		border:none;
-		border-radius:5px;
-		padding:4px 0 0 0;
-		margin:20px 5px 25px 0;
-		float:left;}
-
-#checklist button:hover{background:rgb(0,102,153);}
-
-#checklist p{font-weight:bold;
-			font-size:1em;
-			float:left;
-			margin:20px 0 0 0;
-			text-indent:0;
-			cursor:pointer;}
-
-#checklist p#bar{
-				margin:20px 10px 0 0;
-				padding:0;
-				}
-
-#options{margin:0 0 15px 0;}
-
-#options a,
-#links a{color:#808080;
-			text-decoration:none;}
-
-#options a:hover,
-#links a:hover{
-	text-decoration:underline;
-	color:#000;}
-
-#options h3,
-#links h3{font-weight:normal;}
-
-#options h4,
-#links h4{padding:0 0 0 15px;}
-
-#options h3,
-#options h4,
-#links h3,
-#links h4{margin:5px 0 0 0;
-			clear:both;}
-
-#links{margin:0 0 15px 0;}
-
-
-
-/* ==========================================================================
    Publication.html styles
    ========================================================================== */
-
-
-img#bars {
-  padding: 6px 0 0 0;
-}
-
-#center {
-  margin: 0 auto;
-  width:240px;
-}
-
-main {
-  width: 100%;
-  min-height: 400px;
-}
-article {
-  padding: 10px;
-  font-family: Verdana;
-  position:relative;
-}
-
-article h3,
-article h4,
-article h5,
-article h6 {
-  margin:0 0 5px 0;
-}
-article p {
-  margin:0 0 10px 0;
-  line-height: 1.7em;
-}
 #thumbnail {
   display: none;
 }
@@ -283,15 +81,6 @@ hgroup h4{
   border-bottom: 1px solid #000000;
   min-height: 30px;
   margin-bottom: 10px;
-}
-
-.basic-advanced a{
-      color: #428bca;
-      margin-left:10px;
-}
-.basic-advanced a:visited {
-color: #428bca;
-text-decoration: none;
 }
 
 address a,
@@ -411,109 +200,6 @@ form#contactForm input#submit:hover{
 	color:rgb(0,51,102);
 }
 
-/* ==========================================================================
-   Search styles
-   ========================================================================== */
-
-.no-margin{margin-left:0 !important;}
-
-
-#search-results{
-	text-align:left;
-	margin-top:15px;
-}
-
- #search-results article{
- margin:0;
- padding-left:15px;}
-
- .searchAbstract {
-     text-indent: 0;
-     padding-left: 5px;
-     line-height: 130%;
-
- }
-
-.searchContributors,
-.pubinfo{
-	color:#006621;
-	font-size:.85em;
-}
-
-.search-results{
-	padding-left:15px;
-}
-
-h1.search-results{
-	margin-bottom:5px;
-}
-
-.pagination-page-info{
-	margin-top:15px;
-	width:95%;
-}
-
-.pagination-page-info b{
-	background:#fff;
-	border:1px solid #808080;
-	font-size:1.2em;
-}
-
-.advanced-search-div {
-	display:none;
-}
-
-.search-title{
-	color:rgb(0,51,102);
-	text-decoration:none;
-
-}
-
-.search-title a:link {
-    color: #1a0dab;
-    text-decoration: none;
-}
-
-.search-title a:visited{
-    color: #609;
-    text-decoration: none;
-}
-.pagination-nav{
-	margin-bottom:15px;
-	text-align:center;
-}
-
-.pagination-nav ul{
-	margin:0;
-	padding:0;
-}
-
-.pagination-nav a{
-	color:#808080;
-	text-decoration:none;
-	margin-right:10px;
-
-}
-
-.pagination-nav a:hover{
-	color:#000;
-	text-decoration:underline;
-}
-
-#extents-map-section {
-    margin-left: 15px;
-}
-
-#extents-map {
-    height: 800px;
-    width:90%;
-    overflow:hidden;
-    padding: 0 0 15px 0;
-    position:relative;
-
-}
-
-
 
 
 
@@ -555,11 +241,6 @@ ul.toc-indentation a:hover{
 
 ul.toc-indentation li ul li:first-child{
 	margin-top:5px;
-}
-
-h1.otherPages{
-	font-size:1.5em;
-	margin-left:10px;
 }
 
 .feed{
@@ -666,17 +347,6 @@ h2.otherPages{
 @media screen and (min-width: 700px) {
 
 /* ==========================================================================
-   Index styles
-   ========================================================================== */
-#checklist button{width:146px;
-					height:40px;}
-
-#checklist p{font-size:1.5em;
-			margin:17px 0 0 0;}
-
-#checklist p#bar{margin:17px 10px 0 0;}
-
-/* ==========================================================================
    publication.html styles
    ========================================================================== */
 
@@ -685,11 +355,6 @@ h2.otherPages{
     float: right;
     margin-left: 5px;
   }
-
-  article h3{margin:0;}
-
-  article h5,
-  article h6{margin:5px;}
 
   #thumbnail {
     display: block;
@@ -720,310 +385,100 @@ h2.otherPages{
 /*media query*/
 @media screen and (min-width: 768px) {
 
-#details dl {
+  #details dl {
     font-size: .9em;
   }
 
-  #usgsfootertext {
-    font-size: .9em;
-  }
-  #usgsfootertext img {
-    display: block;
-  }
-  #take_pride {
-    position: absolute;
-    right: 0;
-    top: 25px;
-  }
-  #usa_gov {
-    position: absolute;
-    right: 65px;
-    top: 25px;
+  /* ==========================================================================
+     Contact styles
+     ========================================================================== */
+
+  form#contactForm input,
+  form#contactForm textarea {
+    width: 45%;
+
   }
 
-/* ==========================================================================
-   Contact styles
-   ========================================================================== */
-
-form#contactForm input,
-form#contactForm textarea{
-	width:45%;
-
+  form#contactForm input#submit {
+    width: 200px;
+  }
 }
+  /*media query*/
+  @media screen and (min-width: 1025px) {
 
-form#contactForm input#submit{
-	width:200px;
-}
+    /* ==========================================================================
+       Index styles
+       ========================================================================== */
 
-/* ==========================================================================
-   Search styles
-   ========================================================================== */
+    .index_article {
+      width: 100%;
+      min-height: 600px;
+      position: relative;
+      padding: 0;
+      margin: 0;
+    }
 
-.pagination-page-info b{
+    #checklist,
+    #options,
+    #links {
+      width: 59%;
+    }
 
-	font-size:1.4em;
-}
+    /* ==========================================================================
+       publication.html styles
+       ========================================================================== */
+    #abstract {
+      margin-top: 40px;
+      line-height: 1.7em;
+    }
 
-.pagination-nav a{
-	color:#808080;
-	text-decoration:none;
-	font-size:1.4em;
-	margin-right:20px;
+    .publicationAsideDesktop {
+      float: right;
+      display: block;
+      width: 30%;
+      clear: both
+    }
 
-}
+    .publicationAsideDesktop p:first-child {
+      float: none;
+    }
 
+    .publicationAside {
+      display: none;
+    }
 
+    #details {
+      margin-bottom: 230px;
+    }
 
-}
-/*media query*/
-@media screen and (min-width: 1025px) {
+    /* ==========================================================================
+       other styles
+       ========================================================================== */
 
-/* ==========================================================================
-   Index styles
-   ========================================================================== */
-   #twitter{
-	width:29%;
-	position:absolute;
-	top:0;
-	right:0;
-	}
+    ul.toc-indentation {
+      width: 70%;
+    }
 
-.index_article{
-	width:100%;
-	min-height:600px;
-	position:relative;
-	padding:0;
-	margin:0;}
+    .feed h5 {
+      width: 70%;
+    }
 
-#welcome,
-#search,
-#checklist,
-#options,
-#links,
-#advanced,
-#advanced_options,
-#new_pubs{
-	width:59%;
-		}
+    .feed p {
+      width: 70%;
+    }
 
+    li.p1 {
+      width: 70%;
+    }
 
+    /* ==========================================================================
+       browse styles
+       ========================================================================== */
 
-
-/* ==========================================================================
-   publication.html styles
-   ========================================================================== */
-  article{
-    width: 1024px;
-    margin: 0 auto;
-    position: relative;
+    ul#pubs-browse-ul {
+      width: 70%;
+    }
   }
 
-  #abstract {
-    margin-top: 40px;
-    line-height:1.7em;
-  }
-
-  #abstract > p:first-child{
-  float:left;
-  background:red;
-  }
-
-  .publicationAsideDesktop{
-	float:right;
-	display:block;
-	width:30%;
-	clear:both
-}
-
-.publicationAsideDesktop p:first-child{
-	float:none;
-}
 
 
-.publicationAside{
-	display:none;
-}
-
-
-#details{
-	margin-bottom:230px;
-}
-
-
-/* ==========================================================================
-   other styles
-   ========================================================================== */
-
-ul.toc-indentation{
-	width:70%;
-}
-
-
-.feed h5{
-	width:70%;
-}
-
-.feed p{
-	width:70%;
-}
-
-li.p1{
-	width:70%;
-}
-
-h1.otherPages{
-	font-size:2em;
-	margin-left:15px;}
-
-
-/* ==========================================================================
-   browse styles
-   ========================================================================== */
-
-ul#pubs-browse-ul{width:70%;}
-
-}/*media query*/
-
-
-/* ==========================================================================
-   Helper classes
-   ========================================================================== */
-
-/*
- * Image replacement
- */
-
-.ir {
-    background-color: transparent;
-    border: 0;
-    overflow: hidden;
-    /* IE 6/7 fallback */
-    *text-indent: -9999px;
-}
-
-.ir:before {
-    content: "";
-    display: block;
-    width: 0;
-    height: 150%;
-}
-
-/*
- * Hide from both screenreaders and browsers: h5bp.com/u
- */
-
-.hidden {
-    display: none !important;
-    visibility: hidden;
-}
-
-/*
- * Hide only visually, but have it available for screenreaders: h5bp.com/v
- */
-
-.visuallyhidden {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
-}
-
-/*
- * Extends the .visuallyhidden class to allow the element to be focusable
- * when navigated to via the keyboard: h5bp.com/p
- */
-
-.visuallyhidden.focusable:active,
-.visuallyhidden.focusable:focus {
-    clip: auto;
-    height: auto;
-    margin: 0;
-    overflow: visible;
-    position: static;
-    width: auto;
-}
-
-/*
- * Hide visually and from screenreaders, but maintain layout
- */
-
-.invisible {
-    visibility: hidden;
-}
-
-
-/* ==========================================================================
-   Print styles.
-   Inlined to avoid required HTTP connection: h5bp.com/r
-   ========================================================================== */
-
-@media print {
-    * {
-        background: transparent !important;
-        color: #000 !important; /* Black prints faster: h5bp.com/s */
-        box-shadow: none !important;
-        text-shadow: none !important;
-    }
-
-    a,
-    a:visited {
-        text-decoration: underline;
-    }
-
-    a[href]:after {
-        content: " (" attr(href) ")";
-    }
-
-    abbr[title]:after {
-        content: " (" attr(title) ")";
-    }
-
-    /*
-     * Don't show links for images, or javascript/internal links
-     */
-
-    .ir a:after,
-    a[href^="javascript:"]:after,
-    a[href^="#"]:after {
-        content: "";
-    }
-
-    pre,
-    blockquote {
-        border: 1px solid #999;
-        page-break-inside: avoid;
-    }
-
-    thead {
-        display: table-header-group; /* h5bp.com/t */
-    }
-
-    tr,
-    img {
-        page-break-inside: avoid;
-    }
-
-    img {
-        max-width: 100% !important;
-    }
-
-    @page {
-        margin: 0.5cm;
-    }
-
-    p,
-    h2,
-    h3 {
-        orphans: 3;
-        widows: 3;
-    }
-
-    h2,
-    h3 {
-        page-break-after: avoid;
-    }
-}

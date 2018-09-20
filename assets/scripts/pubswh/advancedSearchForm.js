@@ -1,4 +1,3 @@
-import 'eonasdan-bootstrap-datetimepicker';
 import 'select2';
 
 import SearchMap from './searchMap';
@@ -96,25 +95,35 @@ export default class AdvancedSearchForm {
         } else {
             this.options.$container.append(rowTemplate(context));
             $row = this.options.$container.children('div:last-child');
+            let $dateInput = $row.find('input');
+
             if (context.isDate) {
-                $row.find('.date').datetimepicker({
-                    format: 'YYYY-MM-DD'
+                $dateInput.change(() => {
+                    let dateText = $dateInput.val();
+                    if (dateText) {
+                        let date = moment(dateText);
+
+                        if (date.isValid()) {
+                            $dateInput.val(date.format('YYYY-MM-DD'));
+                        } else {
+                            $dateInput.val('');
+                        }
+                    }
                 });
             }
         }
 
         $row.find('.delete-row').click(() => {
-            let name = $row.find(':input').attr('name');
+            let name = $row.find('.advanced-search-row-input :input').attr('name');
             $row.remove();
             if (this.options.deleteRowCallback) {
                 this.options.deleteRowCallback(name);
             }
         });
         lookupDeferred.done(function() {
-            $row.find('select').append(optionTemplate({options: lookupOptions}));
-            $row.find('select').select2({
-                theme: 'bootstrap'
-            });
+            let $select = $row.find('select');
+            $select.append(optionTemplate({options: lookupOptions}));
+            $select.select2();
         });
     }
 

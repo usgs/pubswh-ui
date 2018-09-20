@@ -1,3 +1,5 @@
+import findIndex from 'lodash/findIndex';
+
 /**
  * Takes an array of objects, checks for duplicate values of a given property, then
  * creates a new array that excludes the objects containing the duplicated values
@@ -11,7 +13,7 @@ export function removeObjectsWithDuplicateValues(arrayWithDuplicates, propertyNa
 
     arrayWithDuplicates.forEach(function(objectFromArrayWithDuplicates) {
         // if the value for the current index is not in the new list that has no duplicates, function will return -1
-        indexOfObject = deduplicatedArray.findIndex(object => object[propertyName] === objectFromArrayWithDuplicates[propertyName]);
+        indexOfObject = findIndex(deduplicatedArray, object => object[propertyName] === objectFromArrayWithDuplicates[propertyName]);
 
         // if the value is not in the new list that has no duplicates add the object containing that value to the list,
         // otherwise do nothing

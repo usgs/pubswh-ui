@@ -33,14 +33,14 @@
 {% endblock  %}
 
 {% block main %}
-   {% if ANNOUNCEMENT_BLOCK|length > 0 %}
-       <span id="announcement"></span>
-       <script>
-           document.getElementById("announcement").innerHTML = '{{ ANNOUNCEMENT_BLOCK|safe }}';
-       </script>
-   {% endif %}
+    {% if ANNOUNCEMENT_BLOCK|length > 0 %}
+        <span id="announcement" style="font-size: 150%; padding: 15px;"></span>
+        <script>
+            document.getElementById('announcement').innerHTML = '{{ ANNOUNCEMENT_BLOCK|safe }}';
+        </script>
+    {% endif %}
 
-   {% block main_pubswh %}{% endblock %}
+    {% block main_pubswh %}{% endblock %}
 
 {% endblock main %}
 

@@ -39,8 +39,7 @@ describe('AdvancedSearchForm', function() {
             var row = {
                 name: 'param1',
                 displayName: 'Param 1',
-                inputType: 'text',
-                placeholder: 'Enter param'
+                inputType: 'text'
             };
             var $text;
             advancedSearchForm.addRow(row);
@@ -49,7 +48,6 @@ describe('AdvancedSearchForm', function() {
             $text = $testDiv.find('input[type="text"]');
             expect($text.length).toEqual(1);
             expect($text.attr('name')).toEqual('param1');
-            expect($text.attr('placeholder')).toEqual('Enter param');
             expect($testDiv.find('label').html()).toContain('Param 1');
         });
 
@@ -69,8 +67,7 @@ describe('AdvancedSearchForm', function() {
                 name: 'param1',
                 displayName: 'Param 1',
                 inputType: 'select',
-                lookup: 'kind1',
-                placeholder: 'Param 1'
+                lookup: 'kind1'
             };
             var $select;
             fakeServer.respondWith([200, {'Content-Type': 'application/json'}, '[{"id": "1", "text": "T1"}, {"id": "2", "text": "T2"}]']);
@@ -84,7 +81,6 @@ describe('AdvancedSearchForm', function() {
 
             fakeServer.respond();
             expect($select.find('option').length).toBe(3);
-            expect($select.find('option:first-child').html()).toEqual('Param 1');
             expect($select.find('option[value="T1"]').length).toEqual(1);
             expect($select.find('option[value="T2"]').length).toEqual(1);
         });
@@ -137,19 +133,17 @@ describe('AdvancedSearchForm', function() {
             expect($select.find('option[value="false"]').length).toEqual(1);
         });
 
-        it('Expects that calling addRow with a "date" inputType creates a text input which is set up with the datetimepicker', function() {
+        it('Expects that calling addRow with a "date" inputType creates a date input ', function() {
             var row = {
                 name: 'date1',
                 displayName: 'Date 1',
                 inputType: 'date'
             };
             var $input;
-            spyOn($.fn, 'datetimepicker');
             advancedSearchForm.addRow(row);
-            $input = $testDiv.find('input[type="text"]');
+            $input = $testDiv.find('input[type="date"]');
 
             expect($input.length).toEqual(1);
-            expect($.fn.datetimepicker).toHaveBeenCalled();
             expect($input.attr('name')).toEqual('date1');
         });
 
@@ -273,11 +267,6 @@ describe('AdvancedSearchForm', function() {
             $rowToRemove.find('.delete-row').click();
 
             expect(deleteCallbackSpy).toHaveBeenCalledWith('boolean1');
-
-            $rowToRemove = $('body').children().has(':input[name="map1"]');
-            $rowToRemove.find('.delete-row').click();
-
-            expect(deleteCallbackSpy).toHaveBeenCalledWith('map1');
         });
     });
 

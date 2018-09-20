@@ -22,14 +22,12 @@
     {% if pagination %}
         <h1 class="search-results">Search Results</h1>
 
-        <section id="search">
-            {% include 'pubswh/search_form.html' %}
-        </section>
+        {% include 'pubswh/search_form.html' %}
         {% macro pub_service_url(mimetype, disp_mimetype) %}
             <a href="{{ config.BASE_SEARCH_URL }}?mimeType={{ mimetype }}&{{ query_request_string }}">{{ disp_mimetype }}</a>
         {% endmacro %}
 
-        <section class="search-results">
+        <section id="search-result-summary">
             <p>{{ result_summary['record_count'] }} results.</p>
             <p>Alternate formats:
                 <a href="{{ json_ld_base_url }}/search?page_size=3000&mimetype=ris&{{ query_request_string }}">
@@ -62,33 +60,31 @@
         <section id="search-results">
                 {% for result in search_result_records %}
                     <article>
-                        <h5  class="search-title">
+                        <cite class="search-result-title">
                             <a href="{{ url_for('pubswh.publication', index_id = result['indexId']) }}">
                                 {{ result['title']|safe }}
                             </a>
-                        </h5>
+                        </cite>
                         {% if current_user.is_authenticated %}
-                            <small><a href="{{ url_for('manager.show_app')}}#publication/{{ result['id'] }}" target="_blank">(edit in Manager)</a></small>
+                            <a class="edit-pub-link" href="{{ url_for('manager.show_app')}}#publication/{{ result['id'] }}" target="_blank">(edit in Manager)</a></small>
                         {% endif %}
                         {% if result['authorsList']|length > 0 %}
-                            <h6 class="searchContributors">{{ result['authorsList']|join(', ') }}</h6>
+                            <div class="search-result-contributors">{{ result['authorsList']|join(', ') }}</div>
                         {% endif %}
                         {% if result['editorsList']|length > 0 %}
-                            <h6 class="searchContributors">{{ result['editorsList']|join(', ') }}, editor(s)</h6>
+                            <div class="search-result-contributors">{{ result['editorsList']|join(', ') }}, editor(s)</div>
                         {% endif %}
-                        <h6 class="pubinfo">{{ result|display_pub_info }}</h6>
+                        <div class="search-result-pubinfo">{{ result|display_pub_info }}</div>
                         {% if result['docAbstract']  %}
-                            <p class="searchAbstract">{{ result['docAbstract'].split(' ')[0:50]|join(' ')|striptags }}...</p>
+                            <div class="search-result-abstract">{{ result['docAbstract'].split(' ')[0:50]|join(' ')|striptags }}...</div>
                         {% endif %}
                     </article>
                 {% endfor %}
         </section>
 
-        <div>
-            <section class="pagination-nav">
-                {{ pagination.links|safe }}
-            </section>
-        </div>
+        <section class="pagination-nav">
+            {{ pagination.links|safe }}
+        </section>
     {% else %}
         {{ search_service_down }}
     {% endif %}
