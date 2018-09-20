@@ -66,36 +66,6 @@ address p {
   	padding: 8px;
   	margin:10px 0 0 25px;
 }
-
-#details{width:100%;
-		min-height:100px;
-		margin:10px 0 -20px 0;}
-
-#details h4 {
-  color: #8c8c8c;
-  padding-left:10px;
-  background: #dddddd;
-  margin-bottom: 0px;
-  width:100%
-}
-
-#details dl{width:100%;
-			min-height:245px;
-			font-size:.7em;
-			}
-
-#details dl dt{
-				float:left;
-				width:50%;
-				text-align:right;
-				border-right:2px solid #fff;
-				padding:3px;}
-
-#details dl dd{padding:3px;
-				float:left;
-				width:50%;
-				margin:0;}
-
 /* ==========================================================================
    contact styles
    ========================================================================== */
@@ -290,10 +260,6 @@ h2.otherPages{
 /*media query*/
 @media screen and (min-width: 768px) {
 
-  #details dl {
-    font-size: .9em;
-  }
-
   /* ==========================================================================
      Contact styles
      ========================================================================== */
@@ -350,10 +316,6 @@ h2.otherPages{
 
     .publicationAside {
       display: none;
-    }
-
-    #details {
-      margin-bottom: 230px;
     }
 
     /* ==========================================================================

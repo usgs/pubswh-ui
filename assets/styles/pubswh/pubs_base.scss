@@ -132,8 +132,16 @@ $fa-font-path: "./fonts" !default;
   .files-list {
     padding-top: 1rem;
     padding-bottom: 1rem;
-    border-top: 1px solid $color-gray-dark;
-    border-bottom: 1px solid $color-gray;
+  }
+
+  #details {
+    table {
+      tbody {
+        th {
+          font-weight: bold;
+        }
+      }
+    }
   }
 }
 
