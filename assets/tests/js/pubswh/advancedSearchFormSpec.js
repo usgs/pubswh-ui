@@ -133,7 +133,7 @@ describe('AdvancedSearchForm', function() {
             expect($select.find('option[value="false"]').length).toEqual(1);
         });
 
-        it('Expects that calling addRow with a "date" inputType creates a text input ', function() {
+        it('Expects that calling addRow with a "date" inputType creates a date input ', function() {
             var row = {
                 name: 'date1',
                 displayName: 'Date 1',
@@ -141,7 +141,7 @@ describe('AdvancedSearchForm', function() {
             };
             var $input;
             advancedSearchForm.addRow(row);
-            $input = $testDiv.find('input[type="text"]');
+            $input = $testDiv.find('input[type="date"]');
 
             expect($input.length).toEqual(1);
             expect($input.attr('name')).toEqual('date1');
