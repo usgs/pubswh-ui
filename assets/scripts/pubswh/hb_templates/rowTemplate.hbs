@@ -13,7 +13,7 @@
                 {{/if}}
             </select>
         {{else if isDate}}
-            <input class="search-date" type="text" name="{{row.name}}" value="{{row.value}}" />
+            <input class="search-date" type="date" name="{{row.name}}" value="{{row.value}}" />
         {{else}}
             <input type="{{row.inputType}}" name="{{row.name}}" value="{{row.value}}"/>
         {{/if}}
