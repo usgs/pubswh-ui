@@ -7,7 +7,6 @@ $fa-font-path : "./fonts" !default;
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
 
-@import "bootstrap";
 $icon-font-path: "./fonts/";
 
 #main-content {
@@ -17,7 +16,6 @@ $icon-font-path: "./fonts/";
 
 .recent-div, .year-div {
     height: 400px;
-    @include make-md-column(6);
 }
 .table-display {
     display: none;
@@ -25,14 +23,21 @@ $icon-font-path: "./fonts/";
         overflow-y: scroll;
         height: 400px;
         margin-bottom: 10px;
-        .metric-table {
-            @include make-md-column(6);
-        }
     }
+}
+.metric-table {
+    width: 100%;
 }
 .chart-display-select-div {
     display: inline-block;
+    margin: 1em 0;
     div {
         display: inline-block;
+    }
+    legend {
+        @include h3;
+    }
+    label {
+        margin-top: 0;
     }
 }

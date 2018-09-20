@@ -6,17 +6,17 @@
     <script>
         var CONFIG = {
             PUBSID : '{{ pubsid }}',
-            JSON_LD_ID_BASE_URL : '{{ config.JSON_LD_ID_BASE_URL }}',
+            JSON_LD_ID_BASE_URL : '{{ config.JSON_LD_ID_BASE_URL }}'
         };
     </script>
 {% endblock %}
 
-{%  block main %}
+{% block content %}
     <h1>Google Analytics Dashboard for Pubs Warehouse</h1>
     <h2>{{ publication.title }}</h2>
     <h3>uri: <a href="{{ url_for('pubswh.publication', index_id=pubsid) }}">{{ url_for('pubswh.publication', index_id=pubsid) }}</a></h3>
-    <div class="chart-display-select-div">
-        <label >Display as:&nbsp;</label>
+    <fieldset class="chart-display-select-div">
+        <legend>Display as:&nbsp;</legend>
         <div>
             <input id="display-chart" type="radio" name="display-style" value="chart" checked />&nbsp;
             <label for="display-chart">Chart</label>
@@ -25,36 +25,48 @@
             <input id="display-table" type="radio" name="display-style" value="table" />&nbsp;
             <label for="display-table">Table</label>
         </div>
-    </div>
+    </fieldset>
     <div class="chart-display">
-        <div id="sessions-div" class="metric-div">
-            <div id="recent-sessions-container" class="recent-div"><i class="fas fa-spinner fa-spin fa-5x"></i></div>
-            <div id="year-sessions-container" class="year-div"><i class="fas fa-spinner fa-spin fa-5x"></i></div>
+        <div id="sessions-div" class="metric-div usa-grid">
+            <div id="recent-sessions-container" class="usa-width-one-half recent-div"><i class="fas fa-spinner fa-spin fa-5x"></i></div>
+            <div id="year-sessions-container" class="usa-width-one-half year-div"><i class="fas fa-spinner fa-spin fa-5x"></i></div>
         </div>
-        <div id="visitors-div" class="metric-div">
-            <div id="recent-visitors-container" class="recent-div"></div>
-            <div id="year-visitors-container" class="year-div"></div>
+        <div id="visitors-div" class="metric-div usa-grid">
+            <div id="recent-visitors-container" class="usa-width-one-half recent-div"></div>
+            <div id="year-visitors-container" class="usa-width-one-half year-div"></div>
         </div>
-        <div id="downloads-div" class="metric-div">
-            <div id="recent-downloads-container" class="recent-div"></div>
-            <div id="year-downloads-container" class="year-div"></div>
+        <div id="downloads-div" class="metric-div usa-grid">
+            <div id="recent-downloads-container" class="usa-width-one-half recent-div"></div>
+            <div id="year-downloads-container" class="usa-width-one-half year-div"></div>
         </div>
     </div>
     <div class="table-display">
-        <div id="sessions-table-div" class="metric-table-div">
-            <table class="table metric-table" id="recent-sessions-table"></table>
-            <table class="table metric-table" id="year-sessions-table"></table>
+        <div id="sessions-table-div" class="usa-grid metric-table-div">
+            <div class="usa-width-one-half">
+                <table class="table metric-table" id="recent-sessions-table"></table>
+            </div>
+            <div class="usa-width-one-half">
+                <table class="table metric-table" id="year-sessions-table"></table>
+            </div>
         </div>
-        <div id="users-table-div" class="metric-table-div">
-            <table class="table metric-table" id="recent-users-table"></table>
-            <table class="table metric-table" id="year-users-table"></table>
+        <div id="users-table-div" class="usa-grid metric-table-div">
+            <div class="usa-width-one-half">
+                <table class="table metric-table" id="recent-users-table"></table>
+            </div>
+            <div class="usa-width-one-half">
+                <table class="table metric-table" id="year-users-table"></table>
+            </div>
         </div>
-        <div id="downloadevents-table-div" class="metric-table-div">
-            <table class="table metric-table" id="recent-downloadevents-table"></table>
-            <table class="table metric-table" id="year-downloadevents-table"></table>
+        <div id="downloadevents-table-div" class="usa-grid metric-table-div">
+            <div class="usa-width-one-half">
+                <table class="table metric-table" id="recent-downloadevents-table"></table>
+            </div>
+            <div class="usa-width-one-half">
+                <table class="table metric-table" id="year-downloadevents-table"></table>
+            </div>
         </div>
     </div>
-{%  endblock %}
+{% endblock %}
 
 {% block page_script %}
     {{ super() }}
