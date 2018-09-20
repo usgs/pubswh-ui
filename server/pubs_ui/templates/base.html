@@ -35,9 +35,9 @@
         {% block usgs_header %}
             {{ header.usgs_header() }}
         {% endblock %}
-        <div id="main-content">
+        <main id="main-content">
             {% block main %}{% endblock %}
-        </div>
+        </main>
         {% include 'partials/footer.html' %}
         {% block page_script %}{% endblock %}
     </body>

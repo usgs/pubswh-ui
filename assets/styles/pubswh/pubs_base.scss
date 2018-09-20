@@ -56,7 +56,7 @@ $fa-font-path: "./fonts" !default;
 }
 
 // Styles for search results
-#search-results {
+#search-results, #new-publications {
   .search-result-contributors, .search-result-pubinfo {
     color: $color-green;
     font-size: $small-font-size;
