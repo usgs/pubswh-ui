@@ -8,7 +8,7 @@
 {% block main_pubswh %}
 <div class="browse-page">
     <p class="breadcrumb">
-        <p class="breadcrumb"> <a href="{{ url_for('pubswh.index') }}" title="Pubs Warehouse Home">Pubs Warehouse Home</a>
+        <a href="{{ url_for('pubswh.index') }}" title="Pubs Warehouse Home">Pubs Warehouse Home</a>
         <span> &gt; </span><a href="{{ url_for('pubswh.browse_types') }}" title="Browse USGS Publications">Browse</a>
         {% if pub_type %}<span> &gt; </span><a href="{{ url_for("pubswh.browse_subtypes", pub_type=pub_type) }}">{{ pub_type }}</a>{% endif %}
         {% if pub_subtype %}<span> &gt; </span><a href="{{ url_for("pubswh.browse_subtype", pub_type=pub_type, pub_subtype=pub_subtype) }}">{{ pub_subtype }}</a>{% endif %}
