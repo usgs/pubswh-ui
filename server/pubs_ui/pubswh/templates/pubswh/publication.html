@@ -47,326 +47,329 @@
     {% include 'pubswh/mathjax.html' %}
 
 {% endblock head %}
-        {% block main_pubswh %}
-        <main role ="main">
-            <article itemscope itemtype="http://schema.org/ScholarlyArticle">
-            {% if pubdata['publicationType']['text'] == 'Article' or pubdata['publicationType']['text'] == 'Report' %}<abbr class="unapi-id" title="http://pubs.er.usgs.gov/publication/{{ pubdata['indexId'] }}"><!-- avoid empty --></abbr>{% endif %}
 
+{% block main_pubswh %}
+    <main role ="main" id="publication-container">
+        <article itemscope itemtype="http://schema.org/ScholarlyArticle">
+        {% if pubdata['publicationType']['text'] == 'Article' or pubdata['publicationType']['text'] == 'Report' %}
+            <abbr class="unapi-id" title="http://pubs.er.usgs.gov/publication/{{ pubdata['indexId'] }}"><!-- avoid empty --></abbr>
+        {% endif %}
 
-            {% macro thumbnail_image() %}
-                {# this image is being dynamically resized to 200 pixels from whatever it might have been #}
-                {% if pubdata['displayLinks']['Thumbnail']|length > 0 %}
-                <img id="thumbnail" src="{{ wsgi_str }}{{ url_for('images', filename=pubdata['displayLinks']['Thumbnail'][0]['url'], width=200) }}" alt="thumbnail"/>
-                {% else %}
-                <img id="thumbnail" src="{{ wsgi_str }}{{ url_for('images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=200) }}" alt="thumbnail"/>
-                {% endif %}
-            {% endmacro %}
-
-            {% if pubdata['seriesTitle'] and pubdata['seriesTitle']['text'] == "Scientific Investigations Map" and pubdata['displayLinks']['Sheet']|length >= 1 %}
-                <a title ="First sheet link, right click to download or save as" href="{{ (pubdata['displayLinks']['Sheet']|sort(attribute='rank')|first)["url"] }}">{{ thumbnail_image() }}</a>
-            {% elif pubdata['displayLinks']['Document']|length >= 1 %}
-                <a title ="Main document link, right click to download or save as" href="{{ (pubdata['displayLinks']['Document']|sort(attribute='rank')|first)['url'] }}">{{ thumbnail_image() }}</a>
-            {% elif pubdata['displayLinks']['Index Page']|length >= 1 %}
-                <a title ="Go to {% if pubdata['displayLinks']['Index Page'][0]['text'] -%}
-                                    {{- pubdata['displayLinks']['Index Page'][0]['text'] -}}
-                                {%- else -%} Publisher Index Page
-                                {%- endif  %} for more information" href="{{ pubdata['displayLinks']['Index Page'][0]['url'] }}">{{ thumbnail_image() }}</a>
+        {% macro thumbnail_image() %}
+            {# this image is being dynamically resized to 200 pixels from whatever it might have been #}
+            {% if pubdata['displayLinks']['Thumbnail']|length > 0 %}
+            <img id="thumbnail" src="{{ wsgi_str }}{{ url_for('images', filename=pubdata['displayLinks']['Thumbnail'][0]['url'], width=200) }}" alt="thumbnail"/>
             {% else %}
-                {{ thumbnail_image() }}
+            <img id="thumbnail" src="{{ wsgi_str }}{{ url_for('images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=200) }}" alt="thumbnail"/>
             {% endif %}
+        {% endmacro %}
 
+        <div class="usa-grid publication-header-container">
+            <div class="pubs-thumbnail usa-width-one-sixth">
+                {% if pubdata['seriesTitle'] and pubdata['seriesTitle']['text'] == "Scientific Investigations Map" and pubdata['displayLinks']['Sheet']|length >= 1 %}
+                    <a title ="First sheet link, right click to download or save as" href="{{ (pubdata['displayLinks']['Sheet']|sort(attribute='rank')|first)["url"] }}">{{ thumbnail_image() }}</a>
+                {% elif pubdata['displayLinks']['Document']|length >= 1 %}
+                    <a title ="Main document link, right click to download or save as" href="{{ (pubdata['displayLinks']['Document']|sort(attribute='rank')|first)['url'] }}">{{ thumbnail_image() }}</a>
+                {% elif pubdata['displayLinks']['Index Page']|length >= 1 %}
+                    <a title ="Go to {% if pubdata['displayLinks']['Index Page'][0]['text'] -%}
+                                        {{- pubdata['displayLinks']['Index Page'][0]['text'] -}}
+                                     {%- else -%} Publisher Index Page
+                                     {%- endif  %} for more information" href="{{ pubdata['displayLinks']['Index Page'][0]['url'] }}">{{ thumbnail_image() }}</a>
+                {% else %}
+                    {{ thumbnail_image() }}
+                {% endif %}
+            </div>
+            <div class="usa-width-five-sixths publication-header-info-container">
                 {# Choose publication title information to be displayed #}
-                <hgroup class="publicationTitle">
-                    {% if pubdata['displayTitle'] %}
-                    <h3 itemprop="name">{{ pubdata['displayTitle']|safe }}</h3>
-                    {% else %}
-                    <h3 itemprop="name">{{ pubdata['title']|safe }}</h3>
-                    {% endif %}
+                <div class="publication-header-titles">
+                    <div class="publication-title" itemprop="name">
+                        {%- if pubdata['displayTitle'] -%}
+                            {{ pubdata['displayTitle']|safe }}
+                        {%- else -%}
+                            {{ pubdata['title']|safe }}
+                        {%- endif -%}
+                    </div>
+
                     {% if pubdata['seriesTitle'] %}
-                    <h4>{{ pubdata['seriesTitle']['text'] }} {{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %}</h4>
+                        <div class="series-title">{{ pubdata['seriesTitle']['text'] }} {{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %}</div>
                     {% endif %}
+
                     {% if pubdata['subSeriesTitle'] %}
-                    <h5>{{ pubdata['subSeriesTitle'] }}</h5>
+                        <div class="subseries-title">{{ pubdata['subSeriesTitle'] }}</div>
                     {% endif %}
+
                     {% if pubdata['collaboration'] %}
-                    <h6>{{ pubdata['collaboration']|safe }}</h6>
+                        <div class="collaboration">{{ pubdata['collaboration']|safe }}</div>
                     {% endif %}
-                </hgroup>
+                </div>
 
                 {# macro for generating the contributor lists, including commas & ands where they are supposed to be  #}
                 {% macro contributor_list(contributorListTyped, contributorKind) %}
                     {%- for contributor in pubdata[contributorListTyped]  -%}
                         <span class="contributor" itemprop="{{ contributorKind }}" itemtype="http://schema.org/{%- if contributor['type'] == "person" -%}Person{% else %}Organization{% endif %}">
-                            {% if (loop.length == 2 and loop.first != True) or (loop.last and loop.length > 2) %}
-                                and
-                            {% endif %}
-                            {{ contributor['text'] }}{% if contributor['orcid'] %}<a href="{{ contributor['orcid'] }}"><i class="ai ai-orcid ai-2x"></i></a>{% endif %}{% if not loop.last and loop.length > 2 %},{% endif %}
+                            {%- if (loop.length == 2 and loop.first != True) or (loop.last and loop.length > 2) -%}
+                                and&nbsp;
+                            {%- endif -%}
+                            {{ contributor['text'] }}
+                            {%- if contributor['orcid'] -%}
+                                <a href="{{ contributor['orcid'] }}"><i class="ai ai-orcid"></i></a>
+                            {%- endif -%}
+                            {%- if not loop.last and loop.length > 2 -%}
+                                ,&nbsp;
+                            {%- endif -%}
                         </span>
                     {%-  endfor -%}
                 {% endmacro %}
 
-                <section>
-                    <dl id="contributors">
-                      {% if pubdata['authorsList'] %}
-                      <dt>By:</dt>
-                        <dd>
-                            {{ contributor_list('authorsListTyped','author') }}
-                        </dd>
-                      {% endif %}
-                      {% if pubdata['editorsList'] %}
-                      <dt>Edited by:</dt>
-                      <dd>
-                         {{ contributor_list('editorsListTyped','editor') }}
-                      </dd>
-                      {%- endif -%}
-                    {% if pubdata['compilersList'] %}
-                      <dt>Compiled by:</dt>
-                      <dd>
-                         {{ contributor_list('compilersListTyped','compiler') }}
-                      </dd>
-                      {%- endif -%}
-                    </dl>
-                </section>
-                <section>
-                    <div id="metadata-parent">
-                        <div id="doi-twitter">
-                            {% if pubdata['doi'] %}
-                                <h6><a itemprop="sameAs" href="https://doi.org/{{ pubdata['doi'] }}" onclick="GA.trackGAEvent('Downloads', 'DOI', 'http://dx.doi.org/{{ pubdata['doi'] }}')">https://doi.org/{{ pubdata['doi'] }}</a></h6>
-                            {% endif %}
-                            <a href="https://twitter.com/share" class="twitter-share-button" data-text="USGS Pub" data-via="USGS_Pubs" data-dnt="true">Tweet</a>
-                            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <section id="contributors">
+                    {%- if pubdata['authorsList'] -%}
+                        <div>
+                            <span class="list-title">By: </span>{{ contributor_list('authorsListTyped','author') }}
                         </div>
-                        {% if pubdata['altmetric']  %}
-                            <div id="altmetric">
-                                {% if pubdata['altmetric']['image'] is not none and pubdata['altmetric']['details'] is not none %}
-                                    <a href="{{ pubdata['altmetric']['details'] }}">
-                                        <img src="{{ pubdata['altmetric']['image'] }}" alt="Altmetric Badge">
-                                    </a>
-                                {%  endif %}
-                            </div>
+                    {% endif -%}
+                    {%- if pubdata['editorsList'] %}
+                        <div>
+                            <span class="list-title">Edited by: </span>{{ contributor_list('editorsListTyped','editor') }}
+                        </div>
+                    {%- endif -%}
+                    {%- if pubdata['compilersList'] -%}
+                        <div>
+                            <span class="list-title">Compiled by: </span>{{ contributor_list('compilersListTyped','compiler') }}
+                        </div>
+                    {%- endif -%}
+                </section>
+                <section>
+                    <div id="doi-twitter-container">
+                        {% if pubdata['doi'] %}
+                            <div class="doi-container"><a itemprop="sameAs"
+                                   href="https://doi.org/{{ pubdata['doi'] }}" onclick="GA.trackGAEvent('Downloads', 'DOI', 'http://dx.doi.org/{{ pubdata['doi'] }}')">
+                                https://doi.org/{{ pubdata['doi'] }}</a></div>
                         {% endif %}
+                        <a href="https://twitter.com/share" class="twitter-share-button" data-text="USGS Pub" data-via="USGS_Pubs" data-dnt="true">Tweet</a>
+                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                     </div>
-                </section>
-                <section>
-                    {% if pubdata['noUsgsAuthors'] %}
-                        <p>This publication was funded by extramural grants, and has no U.S. Geological Survey(USGS) affiliated authors or editors.
-                        Hence, it was not required to conform to the USGS Fundamental Science Practices as described in the
-                            <a title="Link to USGS Manual" href="https://www.usgs.gov/usgs-manual/">USGS Manual</a>.</p>
+                    {% if pubdata['altmetric']  %}
+                        <div id="altmetric">
+                            {% if pubdata['altmetric']['image'] is not none and pubdata['altmetric']['details'] is not none %}
+                                <a href="{{ pubdata['altmetric']['details'] }}">
+                                    <img src="{{ pubdata['altmetric']['image'] }}" alt="Altmetric Badge">
+                                </a>
+                            {%  endif %}
+                        </div>
                     {% endif %}
                 </section>
+            </div>
+        </div>
+            <section>
+                {% if pubdata['noUsgsAuthors'] %}
+                    <p>This publication was funded by extramural grants, and has no U.S. Geological Survey(USGS) affiliated authors or editors.
+                    Hence, it was not required to conform to the USGS Fundamental Science Practices as described in the
+                        <a title="Link to USGS Manual" href="https://www.usgs.gov/usgs-manual/">USGS Manual</a>.</p>
+                {% endif %}
+            </section>
 
-                <section id="suggested">
-                    {% macro linkdisplay(link) -%}
-                        <a href="{{ link['url'] }}" target="_blank"
-                           onclick="GA.trackGAEvent('Downloads', '{{ link["type"]["text"] }}', '{{ link["url"] }}')"
-                           title="{% if link['description'] %}{{ link['description'] }}{% else %}{{ link['type']['text'] }}{% endif -%}">
-                            <strong>
-                            {%- if link['text'] -%}
-                                {{- link['text']|safe -}}
-                            {%- else -%}
-                                {{- link['type']['text']|safe -}}
-                            {%- endif -%}
-                            </strong>
-                            {%- if link["linkFileType"] and link["size"]   %}
-                                 ({{ link["size"] }} {{ link["linkFileType"]["text"] }})
-                            {% elif link["linkFileType"] %}
-                                ({{ link["linkFileType"]["text"] }})
-                            {%- elif link["size"]   %}
-                                 ({{ link["size"] }})
-                            {% endif -%}
-                            </a>
-                            {%- if link['linkHelpText'] %} <small>{{ link['linkHelpText']|safe }}</small>{% endif %}
-                    {%- endmacro %}
+            <section id="suggested">
+                {% macro linkdisplay(link) -%}
+                    <a href="{{ link['url'] }}" target="_blank"
+                       onclick="GA.trackGAEvent('Downloads', '{{ link["type"]["text"] }}', '{{ link["url"] }}')"
+                       title="{% if link['description'] %}{{ link['description'] }}{% else %}{{ link['type']['text'] }}{% endif -%}">
+                        <strong>
+                        {%- if link['text'] -%}
+                            {{- link['text']|safe -}}
+                        {%- else -%}
+                            {{- link['type']['text']|safe -}}
+                        {%- endif -%}
+                        </strong>
+                        {%- if link["linkFileType"] and link["size"]   %}
+                             ({{ link["size"] }} {{ link["linkFileType"]["text"] }})
+                        {% elif link["linkFileType"] %}
+                            ({{ link["linkFileType"]["text"] }})
+                        {%- elif link["size"]   %}
+                             ({{ link["size"] }})
+                        {% endif -%}
+                        </a>
+                        {%- if link['linkHelpText'] %} <small>{{ link['linkHelpText']|safe }}</small>{% endif %}
+                {%- endmacro %}
 
-                    {%- macro linkdisplaylists(link_type, link_type_text_single, link_type_text_multiple) -%}
-                        {% if pubdata['displayLinks'][link_type]|length == 1  %}
-                            <li>{{ link_type_text_single }}: {{ linkdisplay(pubdata['displayLinks'][link_type][0]) }}</li>
-                        {%- elif pubdata['displayLinks'][link_type]|length > 1 -%}
-                            <li>{{ link_type_text_multiple }}:</li>
-                            <ul class="filessublist">
-                            {%- for link in pubdata['displayLinks'][link_type]|sort(attribute='rank') -%}
-                                <li>{{ linkdisplay(link) }}</li>
-                            {%- endfor -%}
+                {%- macro linkdisplaylists(link_type, link_type_text_single, link_type_text_multiple) -%}
+                    {% if pubdata['displayLinks'][link_type]|length == 1  %}
+                        <li>{{ link_type_text_single }}: {{ linkdisplay(pubdata['displayLinks'][link_type][0]) }}</li>
+                    {%- elif pubdata['displayLinks'][link_type]|length > 1 -%}
+                        <li>{{ link_type_text_multiple }}:</li>
+                        <ul class="filessublist">
+                        {%- for link in pubdata['displayLinks'][link_type]|sort(attribute='rank') -%}
+                            <li>{{ linkdisplay(link) }}</li>
+                        {%- endfor -%}
+                        </ul>
+                    {% endif %}
+                {%- endmacro -%}
+
+                {% macro related_links() %}
+                    {% if related_pubs['precede_len']  > 0 %}
+                        <li>Preceding Publications:</li>
+                        {% for precede_pub in related_pubs['precede_info'] %}
+                            <ul>
+                                <li class="filessublist">
+                                    <a href="{{ url_for('pubswh.publication', index_id = precede_pub['id']) }}">{{ precede_pub['title'] }} ({{precede_pub['year']}})</a>
+                                </li>
                             </ul>
-                        {% endif %}
-                    {%- endmacro -%}
-
-                    {% macro related_links() %}
-                        {% if related_pubs['precede_len']  > 0 %}
-                            <li>Preceding Publications:</li>
-                            {% for precede_pub in related_pubs['precede_info'] %}
-                                <ul>
-                                    <li class="filessublist">
-                                        <a href="{{ url_for('pubswh.publication', index_id = precede_pub['id']) }}">{{ precede_pub['title'] }} ({{precede_pub['year']}})</a>
-                                    </li>
-                                </ul>
-                            {% endfor %}
-                        {% endif %}
-                        {% if related_pubs['supersede_len'] > 0 %}
-                            <li>Superseding Publications:</li>
-                            {% for supersede_pub in related_pubs['supersede_info'] %}
-                                <ul>
-                                    <li class="filessublist">
-                                        <a href="{{ url_for('pubswh.publication', index_id = supersede_pub['id']) }}">{{ supersede_pub['title'] }} ({{ supersede_pub['year']}})</a>
-                                    </li>
-                                </ul>
-                            {% endfor %}
-                        {% endif %}
-                    {% endmacro %}
-                    {% block public_access %}
-                    {% endblock %}
-                    <h4>Links</h4>
-                    <ul class="fileslist">
-                        {{- linkdisplaylists('Index Page','More information','More Information') -}}
-                        {{- linkdisplaylists('Document','Document','Documents') -}}
-                        {{- linkdisplaylists('Plate', 'Plate','Plates')  -}}
-                        {{- linkdisplaylists('Sheet', 'Sheet','Sheets')  -}}
-                        {{- linkdisplaylists('Chapter','Chapter','Chapters') -}}
-                        {% if pubdata['interactions'] %}
-                            {% if pubdata['hasSubParts'] %}
-                            <li>Chapters:</li>
-                            {% endif %}
-                            {% for interaction in pubdata['interactions'] %}
-                                {% if interaction['predicate'] == "IS_PART_OF" and interaction['subject']['indexId'] != pubdata['indexId'] %}
-
-                                    <ul>
-                                        <li itemprop="hasPart" itemscope itemtype="http://schema.org/ScholarlyArticle" itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ interaction['subject']['indexId'] }}">{% if interaction['subject']['chapter'] %}Chapter {{ interaction['subject']['chapter'] }}{% if interaction['subject']['subChapter'] %} {{ interaction['subject']['subChapter'] }}{% endif %}: {% endif %}<a href="{{ JSON_LD_ID_BASE_URL }}/publication/{{ interaction['subject']['indexId'] }}"><span itemprop="name">{{ interaction['subject']['title']|safe }}</span></a> </li>
-                                    </ul>
-                                {% endif %}
-                                {% endfor %}
-                            {% if pubdata['isPartOf'] %}
-                                <li itemprop="isPartOf" itemscope itemtype="http://schema.org/ScholarlyArticle" itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}">Larger Work: {% if pubdata['chapter'] %}This publication is Chapter {{ pubdata['chapter'] }}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %} of {% endif %}<a href="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}"><span itemprop="name">{{ pubdata['isPartOf']['title']|safe }}</span></a></li>
-                            {% endif %}
-                        {% endif %}
-                        {{- linkdisplaylists('Table', 'Table','Tables')  -}}
-                        {{- linkdisplaylists('Figure', 'Figure','Figures')  -}}
-                        {{- linkdisplaylists('Abstract','Abstract','Abstracts') -}}
-                        {{- linkdisplaylists('Additional Report Piece','Additional Report Piece','Additional Report Pieces') -}}
-                        {{- linkdisplaylists('Appendix', 'Appendix', 'Appendixes') -}}
-                        {{- linkdisplaylists('Related Work','Related Work','Related Works') -}}
-                        {{- linkdisplaylists('Application Site','Application Site','Application Sites') -}}
-                        {{- linkdisplaylists('Authors Website','Authors Website','Authors Website') -}}
-                        {{- linkdisplaylists('Companion Files','Companion File','Companion Files') -}}
-                        {{- linkdisplaylists('Cover','Cover','Covers') -}}
-                        {{- linkdisplaylists('Dataset', 'Dataset','Datasets')  -}}
-                        {{- linkdisplaylists('Data Release', 'Data Release','Data Releases')  -}}
-                        {{- linkdisplaylists('Database','Database','Databases') -}}
-                        {{- linkdisplaylists('Errata','Errata','Errata') -}}
-                        {{- linkdisplaylists('Illustration','Illustration','Illustrations') -}}
-                        {{- linkdisplaylists('Image','Image','Images') -}}
-                        {{- linkdisplaylists('Metadata','Metadata','Metadata') -}}
-                        {{- linkdisplaylists('Project Site','Project Site','Project Sites') -}}
-                        {{- linkdisplaylists('Raw Data', 'Raw Data', 'Raw Data') -}}
-                        {{- linkdisplaylists('Read Me','Read Me','Read Me') -}}
-                        {{- linkdisplaylists('Referenced Work','Referenced Work','Referenced Work') -}}
-                        {{- linkdisplaylists('Spatial Data','Spatial Data','Spatial Data') -}}
-                        {{- linkdisplaylists('Version History','Version History','Version History') -}}
-                        {% if related_pubs %}
-                            {{- related_links() -}}
-                        {% endif %}
-                        {% if pubdata['pubHasNoLinks'] == True %}
-                            <li>The Publications Warehouse does not have links to digital versions of this publication at this time</li>
-                        {% endif %}
-                        {% if pubdata['offers'] %}
-                            <li itemprop = "offers" itemscope itemtype="http://schema.org/Offer">Paper version: <link itemprop="availability" href="http://schema.org/InStock">In stock and available from the <a itemprop="url" href="{{ pubdata['offers']['schema:offers']['schema:url'] }}"><strong>USGS Store</strong></a></li>
-                        {% endif %}
-                        {# commenting this out until USGS can make a decision about it
-                        {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Journal Article' and pubdata['publicAccess']) %}
-                            <li>The full text of this publication can be requested by filling out the form <a href="{{ url_for('pubswh.pub_access_contact') }}?title={{ pubdata['title'] }}&index_id={{ pubdata['indexId'] }}">here.</a></li>
-                        {% endif %}
-                        #}
-                        <li>Download citation as:  <a href="{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}?mimetype=ris">RIS</a> | <a href="{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}?mimetype=dublincore">Dublin Core</a></li>
-                    </ul>
-                </section>
-                <section itemprop="description" id="abstract" >
-                    {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and (pubdata['publishedDate'] or pubdata['contact'])) or  (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Federal Government Series' and (pubdata['publishedDate'] or pubdata['contact'])) or (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Unnumbered Series' and (pubdata['publishedDate'] or pubdata['contact']))    %}
-                        <aside class="publicationAsideDesktop">
-                            {% include 'pubswh/USGS_series_aside.html' %}
-                        </aside>
+                        {% endfor %}
                     {% endif %}
-                    <h4 id="abstract_head">{{ pubdata['abstractHeader'] }}</h4>
+                    {% if related_pubs['supersede_len'] > 0 %}
+                        <li>Superseding Publications:</li>
+                        {% for supersede_pub in related_pubs['supersede_info'] %}
+                            <ul>
+                                <li class="filessublist">
+                                    <a href="{{ url_for('pubswh.publication', index_id = supersede_pub['id']) }}">{{ supersede_pub['title'] }} ({{ supersede_pub['year']}})</a>
+                                </li>
+                            </ul>
+                        {% endfor %}
+                    {% endif %}
+                {% endmacro %}
+                {% block public_access %}
+                {% endblock %}
+                <h4>Links</h4>
+                <ul class="fileslist">
+                    {{- linkdisplaylists('Index Page','More information','More Information') -}}
+                    {{- linkdisplaylists('Document','Document','Documents') -}}
+                    {{- linkdisplaylists('Plate', 'Plate','Plates')  -}}
+                    {{- linkdisplaylists('Sheet', 'Sheet','Sheets')  -}}
+                    {{- linkdisplaylists('Chapter','Chapter','Chapters') -}}
+                    {% if pubdata['interactions'] %}
+                        {% if pubdata['hasSubParts'] %}
+                        <li>Chapters:</li>
+                        {% endif %}
+                        {% for interaction in pubdata['interactions'] %}
+                            {% if interaction['predicate'] == "IS_PART_OF" and interaction['subject']['indexId'] != pubdata['indexId'] %}
 
-                    {{ pubdata['docAbstract']|safe }}
-
-
-                </section>
-                {# include the publishedDate test so that we only display the Suggested Citation on Pubs the have been
-                    dealt with by an SPN person #}
-                {% if pubdata['usgsCitation'] and (pubdata['publishedDate'] or pubdata['contact']) %}
-                <section>
-                    <h4>Suggested Citation</h4>
-                    <p id="suggested_citation">{{ pubdata['usgsCitation']|safe }}</p>
-                    {% if pubdata.get('seriesTitle') and pubdata.get('seriesTitle', {}).get("onlineIssn") %}<p>ISSN: {{  pubdata['seriesTitle']["onlineIssn"] }} (online)</p>{% endif %}
-                    {% if pubdata['onlineOnly'] == 'N' and pubdata.get('seriesTitle', {}).get("printIssn")  %}<p>ISSN: {{  pubdata['seriesTitle']["printIssn"] }} (print)</p>{% endif %}
-
-                </section>
+                                <ul>
+                                    <li itemprop="hasPart" itemscope itemtype="http://schema.org/ScholarlyArticle" itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ interaction['subject']['indexId'] }}">{% if interaction['subject']['chapter'] %}Chapter {{ interaction['subject']['chapter'] }}{% if interaction['subject']['subChapter'] %} {{ interaction['subject']['subChapter'] }}{% endif %}: {% endif %}<a href="{{ JSON_LD_ID_BASE_URL }}/publication/{{ interaction['subject']['indexId'] }}"><span itemprop="name">{{ interaction['subject']['title']|safe }}</span></a> </li>
+                                </ul>
+                            {% endif %}
+                            {% endfor %}
+                        {% if pubdata['isPartOf'] %}
+                            <li itemprop="isPartOf" itemscope itemtype="http://schema.org/ScholarlyArticle" itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}">Larger Work: {% if pubdata['chapter'] %}This publication is Chapter {{ pubdata['chapter'] }}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %} of {% endif %}<a href="{{ JSON_LD_ID_BASE_URL }}/publication/{{ pubdata['isPartOf']['indexId'] }}"><span itemprop="name">{{ pubdata['isPartOf']['title']|safe }}</span></a></li>
+                        {% endif %}
+                    {% endif %}
+                    {{- linkdisplaylists('Table', 'Table','Tables')  -}}
+                    {{- linkdisplaylists('Figure', 'Figure','Figures')  -}}
+                    {{- linkdisplaylists('Abstract','Abstract','Abstracts') -}}
+                    {{- linkdisplaylists('Additional Report Piece','Additional Report Piece','Additional Report Pieces') -}}
+                    {{- linkdisplaylists('Appendix', 'Appendix', 'Appendixes') -}}
+                    {{- linkdisplaylists('Related Work','Related Work','Related Works') -}}
+                    {{- linkdisplaylists('Application Site','Application Site','Application Sites') -}}
+                    {{- linkdisplaylists('Authors Website','Authors Website','Authors Website') -}}
+                    {{- linkdisplaylists('Companion Files','Companion File','Companion Files') -}}
+                    {{- linkdisplaylists('Cover','Cover','Covers') -}}
+                    {{- linkdisplaylists('Dataset', 'Dataset','Datasets')  -}}
+                    {{- linkdisplaylists('Data Release', 'Data Release','Data Releases')  -}}
+                    {{- linkdisplaylists('Database','Database','Databases') -}}
+                    {{- linkdisplaylists('Errata','Errata','Errata') -}}
+                    {{- linkdisplaylists('Illustration','Illustration','Illustrations') -}}
+                    {{- linkdisplaylists('Image','Image','Images') -}}
+                    {{- linkdisplaylists('Metadata','Metadata','Metadata') -}}
+                    {{- linkdisplaylists('Project Site','Project Site','Project Sites') -}}
+                    {{- linkdisplaylists('Raw Data', 'Raw Data', 'Raw Data') -}}
+                    {{- linkdisplaylists('Read Me','Read Me','Read Me') -}}
+                    {{- linkdisplaylists('Referenced Work','Referenced Work','Referenced Work') -}}
+                    {{- linkdisplaylists('Spatial Data','Spatial Data','Spatial Data') -}}
+                    {{- linkdisplaylists('Version History','Version History','Version History') -}}
+                    {% if related_pubs %}
+                        {{- related_links() -}}
+                    {% endif %}
+                    {% if pubdata['pubHasNoLinks'] == True %}
+                        <li>The Publications Warehouse does not have links to digital versions of this publication at this time</li>
+                    {% endif %}
+                    {% if pubdata['offers'] %}
+                        <li itemprop = "offers" itemscope itemtype="http://schema.org/Offer">Paper version: <link itemprop="availability" href="http://schema.org/InStock">In stock and available from the <a itemprop="url" href="{{ pubdata['offers']['schema:offers']['schema:url'] }}"><strong>USGS Store</strong></a></li>
+                    {% endif %}
+                    {# commenting this out until USGS can make a decision about it
+                    {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Journal Article' and pubdata['publicAccess']) %}
+                        <li>The full text of this publication can be requested by filling out the form <a href="{{ url_for('pubswh.pub_access_contact') }}?title={{ pubdata['title'] }}&index_id={{ pubdata['indexId'] }}">here.</a></li>
+                    {% endif %}
+                    #}
+                    <li>Download citation as:  <a href="{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}?mimetype=ris">RIS</a> | <a href="{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}?mimetype=dublincore">Dublin Core</a></li>
+                </ul>
+            </section>
+            <section itemprop="description" id="abstract" >
+                {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and (pubdata['publishedDate'] or pubdata['contact'])) or  (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Federal Government Series' and (pubdata['publishedDate'] or pubdata['contact'])) or (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Unnumbered Series' and (pubdata['publishedDate'] or pubdata['contact']))    %}
+                    <aside class="publicationAsideDesktop">
+                        {% include 'pubswh/USGS_series_aside.html' %}
+                    </aside>
                 {% endif %}
+                <h4 id="abstract_head">{{ pubdata['abstractHeader'] }}</h4>
 
-                {%- if pubdata["geographicExtents"] -%}
-                <section>
-                    <h4>Study Area</h4>
-                    <div id="mymap" style="width:90%;height:450px;"></div>
+                {{ pubdata['docAbstract']|safe }}
 
-                </section>
-                {%- endif -%}
-                {% if pubdata['tableOfContents'] %}
-                <section>
-                    <h4>Table of Contents</h4>
-                    {{ pubdata['tableOfContents']|safe }}
-                </section>
-                {% endif %}
-                {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and (pubdata['publishedDate'] or pubdata['contact'])) or
-                (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Federal Government Series' and (pubdata['publishedDate'] or pubdata['contact']))  %}
-                <aside class="publicationAside">
-                    {% include 'pubswh/USGS_series_aside.html' %}
-                </aside>
-                {% endif %}
-                <section id="details">
-                    <h4 id="" class="dark">Additional publication details</h4>
-                    <dl id="publication_details">
-                      {% for detail in pubdata['details'] %}
-                          <dt class="{{ loop.cycle('', 'dark') }}">{{ detail.keys() | join(', ') }}</dt>
-                          <dd class="{{ loop.cycle('', 'dark') }}">{{ detail.values() | join(', ') | safe }}</dd>
-                      {% endfor %}
-                    </dl>
-                </section>
-                 {% if pubdata['displayLinks']['Document'] or pubdata['displayLinks']['Plate'] or pubdata['displayLinks']['Sheet'] %}
-                <aside>
-                <small><p class="adobeReader">Part or all of this report is presented in Portable Document Format (PDF). For best results viewing and printing PDF documents, it is recommended that you download the documents to your computer and open them with Adobe Reader. PDF documents opened from your browser may not display or print as intended. Download the latest version of <a href="http://get.adobe.com/reader/">Adobe Reader</a>, free of charge. More information about viewing, downloading, and printing report files can be found <a href="http://pubs.usgs.gov/potential_problems.html">here</a>.</p></small>
-                </aside>
+
+            </section>
+            {# include the publishedDate test so that we only display the Suggested Citation on Pubs the have been
+                dealt with by an SPN person #}
+            {% if pubdata['usgsCitation'] and (pubdata['publishedDate'] or pubdata['contact']) %}
+            <section>
+                <h4>Suggested Citation</h4>
+                <p id="suggested_citation">{{ pubdata['usgsCitation']|safe }}</p>
+                {% if pubdata.get('seriesTitle') and pubdata.get('seriesTitle', {}).get("onlineIssn") %}<p>ISSN: {{  pubdata['seriesTitle']["onlineIssn"] }} (online)</p>{% endif %}
+                {% if pubdata['onlineOnly'] == 'N' and pubdata.get('seriesTitle', {}).get("printIssn")  %}<p>ISSN: {{  pubdata['seriesTitle']["printIssn"] }} (print)</p>{% endif %}
+
+            </section>
             {% endif %}
-            {% if pubdata['hasExcel'] == True  %}
-                <aside>
-                    <small><p class="adobeReader">Part of this report is presented in Microsoft Excel format (XLSX); the latest version of Excel Viewer is required to view it. Download the latest version of <a href="http://www.microsoft.com/en-us/download/details.aspx?id=10">Excel Viewer</a>, free of charge.</p> </small>
-                </aside>
-            {% endif %}
-            </article>
-        </main>
-        {% endblock %}
 
-        {% block url %}<a href="{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}">http://pubs.er.usgs.gov{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}</a>
-            {% if current_user.is_authenticated %}
-                <small>
-                    <a href="{{ url_for('manager.show_app')}}#publication/{{ pubdata['id'] }}" target="_blank">(edit in Manager)</a>
-                    <a href="{{ url_for('pubswh.clear_cache', path = request.path[1:], **request.args) }}">clear cache</a>
-                </small>
-            {% endif %}
-        {% endblock %}
-
-        {% block modtime %}{{ pubdata['formattedModifiedDateTime'] }}{% endblock %}
-
-        {% block page_footer_script %}
             {%- if pubdata["geographicExtents"] -%}
-                <script type="text/javascript" src="{{ 'vendor/leaflet/leaflet.js' | asset_url }}"></script>
-                <script type="text/javascript" src="{{ 'vendor/esri-leaflet/esri-leaflet.js' | asset_url }}"></script>
-                <script type="application/javascript">
-                    SystemJS.import('{{ "scripts/resultsMap.js" | asset_url }}').then(function (resultsMap) {
-                        resultsMap.createResultsMap({
-                            mapDivId: 'mymap',
-                            publications: [{{ pubdata | tojson | safe }}],
-                            enablePopup: false
-                        });
-                    });
-                </script>
+            <section>
+                <h4>Study Area</h4>
+                <div id="mymap" style="width:90%;height:450px;"></div>
+
+            </section>
+            {%- endif -%}
+            {% if pubdata['tableOfContents'] %}
+            <section>
+                <h4>Table of Contents</h4>
+                {{ pubdata['tableOfContents']|safe }}
+            </section>
             {% endif %}
-        {% endblock page_footer_script %}
+            {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'USGS Numbered Series' and (pubdata['publishedDate'] or pubdata['contact'])) or
+            (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Federal Government Series' and (pubdata['publishedDate'] or pubdata['contact']))  %}
+            <aside class="publicationAside">
+                {% include 'pubswh/USGS_series_aside.html' %}
+            </aside>
+            {% endif %}
+            <section id="details">
+                <h4 id="" class="dark">Additional publication details</h4>
+                <dl id="publication_details">
+                  {% for detail in pubdata['details'] %}
+                      <dt class="{{ loop.cycle('', 'dark') }}">{{ detail.keys() | join(', ') }}</dt>
+                      <dd class="{{ loop.cycle('', 'dark') }}">{{ detail.values() | join(', ') | safe }}</dd>
+                  {% endfor %}
+                </dl>
+            </section>
+             {% if pubdata['displayLinks']['Document'] or pubdata['displayLinks']['Plate'] or pubdata['displayLinks']['Sheet'] %}
+            <aside>
+            <small><p class="adobeReader">Part or all of this report is presented in Portable Document Format (PDF). For best results viewing and printing PDF documents, it is recommended that you download the documents to your computer and open them with Adobe Reader. PDF documents opened from your browser may not display or print as intended. Download the latest version of <a href="http://get.adobe.com/reader/">Adobe Reader</a>, free of charge. More information about viewing, downloading, and printing report files can be found <a href="http://pubs.usgs.gov/potential_problems.html">here</a>.</p></small>
+            </aside>
+        {% endif %}
+        {% if pubdata['hasExcel'] == True  %}
+            <aside>
+                <small><p class="adobeReader">Part of this report is presented in Microsoft Excel format (XLSX); the latest version of Excel Viewer is required to view it. Download the latest version of <a href="http://www.microsoft.com/en-us/download/details.aspx?id=10">Excel Viewer</a>, free of charge.</p> </small>
+            </aside>
+        {% endif %}
+        </article>
+    </main>
+{% endblock %}
+
+
+{% block page_footer_script %}
+    {%- if pubdata["geographicExtents"] -%}
+        <script type="text/javascript" src="{{ 'vendor/leaflet/leaflet.js' | asset_url }}"></script>
+        <script type="text/javascript" src="{{ 'vendor/esri-leaflet/esri-leaflet.js' | asset_url }}"></script>
+        <script type="application/javascript">
+            SystemJS.import('{{ "scripts/resultsMap.js" | asset_url }}').then(function (resultsMap) {
+                resultsMap.createResultsMap({
+                    mapDivId: 'mymap',
+                    publications: [{{ pubdata | tojson | safe }}],
+                    enablePopup: false
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock page_footer_script %}

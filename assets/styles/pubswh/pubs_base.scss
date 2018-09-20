@@ -69,6 +69,68 @@ $fa-font-path: "./fonts" !default;
   }
 }
 
+// Styles for publications page
+#publication-container {
+  .publication-header-container {
+    margin-top: 1rem;
+  }
+  .pubs-thumbnail {
+    @media screen and (max-width: $medium-screen) {
+      display: none;
+    }
+  }
+  .publication-header-info-container {
+    @media screen and (max-width: $medium-screen) {
+      width: 100%;
+    }
+
+    .publication-title {
+      font-size: $h3-font-size;
+      margin-bottom: 1rem;
+    }
+
+    .series-title {
+      font-size: $h4-font-size;
+    }
+
+    .subseries-title {
+      font-size: $h5-font-size;
+    }
+
+    .collaboration {
+      font-size: $h6-font-size;
+    }
+  }
+
+  #contributors {
+    font-size: $small-font-size;
+    .list-title {
+      font-weight: bold;
+    }
+    .ai-orcid {
+      color: #a6ce39;
+      font-size: $base-font-size;
+    }
+  }
+
+  #doi-twitter-container {
+    float: left;
+    margin-top: 1rem;
+    .doi-container {
+      font-size: $small-font-size;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  #altmetric {
+    margin-top: 1rem;
+    @media screen and (min-width: $medium-screen) {
+      overflow: hidden;
+      float: right;
+    }
+  }
+}
+
 @import 'main';
 
 

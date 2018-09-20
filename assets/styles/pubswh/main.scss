@@ -27,36 +27,6 @@
 /* ==========================================================================
    Publication.html styles
    ========================================================================== */
-#thumbnail {
-  display: none;
-}
-dl#contributors {margin:5px 0;
-  font-size: .8em;
-
-}
-dl#contributors dt {
-	float:left;
-  margin:0 5px 0 0;
-  font-weight: 600;
-}
-dl#contributors dd {
-	margin:0 10px 0 0;
-	display:block;
-}
-dl#contributors .clear {
-  clear: both;
-  margin-bottom:10px;
-}
-dl#contributors .contributor {
-  display: inline-block;
-  white-space: nowrap;
-  padding: 0 .15em;
-}
-dl#contributors .contributor i.ai-orcid {
-  color: #A6CE39;
-  font-size: 1.5em;
-  padding: 0 .25em;
-}
 
 h2#abstract_head {
   clear: both;
@@ -350,36 +320,8 @@ h2.otherPages{
    publication.html styles
    ========================================================================== */
 
-  #center {
-    clear: both;
-    float: right;
-    margin-left: 5px;
-  }
-
-  #thumbnail {
-    display: block;
-    float: left;
-    margin: 0 10px 15px 0;
-  }
-  dl#contributors {min-height:50px;
-    font-size: .9em;
-  }
-  dl#contributors .clear {
-    clear: none;
-  }
-
   #abstract {
     clear: both;
-  }
-#center {
-  width:162px;
-}
-  #doi-twitter {
-    float: left;
-  }
-  #altmetric {
-    overflow: hidden;
-    float: right;
   }
 }
 /*media query*/
