@@ -12,5 +12,6 @@
     {% endblock %}
 {% endblock %}
 
-{% block main %}{% endblock %}
-
+{% block main %}
+    <main>{% block content %}{% endblock %}</main>
+{% endblock %}
