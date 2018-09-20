@@ -128,76 +128,12 @@ li.p1{
 	line-height:1.5em;
 }
 
-/* ==========================================================================
-   browse styles
-   ========================================================================== */
-
-p.breadcrumb{
-	background:none;
-	margin-top:15px;
-	padding-left:0;
-}
-
-.breadcrumb a{
-	text-decoration:none;
-	color:rgb(0,51,102);
-	font-weight:bold;
-}
-
-.breadcrumb a:hover{
-	text-decoration:underline;
-}
-
-h2.otherPages{
-	margin:-5px 0 0 17px;}
-
-
-.fix ul{
-	list-style-type:none;
-
-}
-
-.fix ul li{
-	margin-bottom:15px;
-}
-
-.fix ul li a{
-	color:rgb(100,100,100);
-	font-weight:bold;
-	text-decoration:none;
-	font-size:1.1em;
-}
-
-.fix ul li a:hover{
-	text-decoration:underline;
-	color:#000;
-}
-
-.fix li.pubs-browse-list-theme{
-	margin-bottom:15px;
-}
-
-.fix li.pubs-browse-list-theme a{
-	color:rgb(100,100,100);
-	text-decoration:none;
-}
-
-.fix li.pubs-browse-list-theme a:hover{
-	text-decoration:underline;
-	color:#000;
-}
-
-.space{
-	margin-top:-15px;
-	padding:15px;
-}
-
-/*media query*/
-@media screen and (min-width: 768px) {
-
   /* ==========================================================================
      Contact styles
      ========================================================================== */
+
+/*media query*/
+@media screen and (min-width: 768px) {
 
   form#contactForm input,
   form#contactForm textarea {
