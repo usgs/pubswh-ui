@@ -32,6 +32,10 @@ $fa-font-path: "./fonts" !default;
     padding-right: $site-margins;
     margin-bottom: $site-margins;
   }
+  .filter-button {
+    padding-left: 2em;
+    padding-right: 2em;
+  }
   .recent-pub {
     display: inline-block;
     width: 100%;
@@ -70,11 +74,3 @@ $fa-font-path: "./fonts" !default;
 }
 
 @import 'main';
-
-
-
-
-
-
-
-
