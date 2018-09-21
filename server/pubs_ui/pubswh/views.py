@@ -6,10 +6,7 @@ pubswh blueprint views
 from datetime import date, timedelta
 import json
 from operator import itemgetter
-import sys
-import urllib.error
-import urllib.parse
-import urllib.request
+from urllib.parse import urlencode, urljoin
 import random
 
 import arrow
@@ -32,6 +29,7 @@ from .utils import (pull_feed, create_display_links,
                     update_geographic_extents, generate_sb_data, create_store_info,
                     get_altmetric_badge_img_links, generate_dublin_core, get_crossref_data, get_published_online_date,
                     check_public_access)
+
 
 pubswh = Blueprint('pubswh', __name__,
                    template_folder='templates',
@@ -365,14 +363,14 @@ def other_resources():
 @pubswh.route('/browse/')
 @cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def browse_types():
-    types = get(pub_url+"/lookup/publicationtypes", verify=verify_cert).json()
+    types = get(urljoin(pub_url, "lookup/publicationtypes"), verify=verify_cert).json()
     return render_template('pubswh/browse_types.html', types=types)
 
 
 @pubswh.route('/browse/<pub_type>/')
 @cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
 def browse_subtypes(pub_type):
-    pub_types = get(pub_url+"/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
+    pub_types = get(urljoin(pub_url, "lookup/publicationtypes"), params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
     just_list_pubs = ['book', 'book chapter', 'pamphlet', 'patent', 'speech', 'thesis', 'videorecording', 'conference paper']
     if pub_type.lower() in list(pub_types_dict.keys()):
@@ -403,7 +401,7 @@ def browse_subtypes(pub_type):
 def browse_subtype(pub_type, pub_subtype):
     subtype_has_no_series = ['usgs data release', 'website', 'database-nonspatial', 'database-spatial', 'letter',
                              'newspaper article', 'review', 'other report', 'organization series', 'usgs unnumbered series']
-    pub_types = get(pub_url+"/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
+    pub_types = get(urljoin(pub_url, "lookup/publicationtypes"), params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
     if pub_type.lower() in list(pub_types_dict.keys()):
         pub_subtypes = get(pub_url + "/lookup/publicationtype/" +
@@ -427,9 +425,10 @@ def browse_subtype(pub_type, pub_subtype):
                                        pub_type=pub_type, pub_subtype=pub_subtype, series_title=None,
                                        pubs_data=None)
 
-            series_data = get(pub_url+"/lookup/publicationtype/"+
-                              str(pub_types_dict[pub_type.lower()])+"/publicationsubtype/"+
-                              str(pub_subtypes_dict[pub_subtype.lower()])+"/publicationseries", verify=verify_cert).json()
+            series_data = get(urljoin(pub_url, 'lookup/publicationtype/{0}/publicationsubtype/{1}/publicationseries'.format(
+                str(pub_types_dict[pub_type.lower()]),
+                str(pub_subtypes_dict[pub_subtype.lower()])
+            )), verify=verify_cert).json()
             return render_template('pubswh/browse_subtype.html',
                                    pub_type=pub_type, pub_subtype=pub_subtype, series_titles=series_data)
 
@@ -474,8 +473,15 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
                     return render_template('pubswh/browse_series_years.html',
                                            pub_type=pub_type, pub_subtype=pub_subtype, series_title=pub_series_name,
                                            year_range=generate_years[pub_series_name.lower()])
-                pubs = get(pub_url+"publication/", params={"mimeType": "csv", "subtypeName": pub_subtype,
-                                                           "seriesName": pub_series_name, "typeName": pub_type}, verify=verify_cert)
+                pubs = get(
+                    urljoin(pub_url, "publication"), params={
+                        "mimeType": "csv",
+                        "subtypeName": pub_subtype,
+                        "seriesName": pub_series_name,
+                        "typeName": pub_type
+                    },
+                    verify=verify_cert
+                )
                 if pubs.text:
                     pubs_data = tablib.Dataset().load(pubs.content.decode('utf-8'))
                     pubs_data_dict = pubs_data.dict
@@ -621,7 +627,7 @@ def search_results():
                                    search_result_records=search_result_records,
                                    pagination=pagination,
                                    search_service_down=search_service_down,
-                                   query_request_string=urllib.parse.urlencode(query_request_args, True))
+                                   query_request_string=urlencode(query_request_args, True))
 
     return response
 
@@ -734,7 +740,7 @@ def rss():
     the apache level so that we have a little more flexibility in the future.
     :return:
     """
-    url = pub_url+'/publication/rss'
+    url = urljoin(pub_url, 'publication/rss')
     req = get(url)
     return Response(req.content, content_type=req.headers['content-type'])
 
