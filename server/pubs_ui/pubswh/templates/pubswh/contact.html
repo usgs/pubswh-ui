@@ -9,7 +9,7 @@
 <div id="contact-page">
     <h1>Contact us!</h1>
     <h2>Contact the Publications Warehouse Team</h2>
-    <form id="contactForm" action="{{ url_for('pubswh.contact') }}" method=post>
+    <form id="contact-form" action="{{ url_for('pubswh.contact') }}" method=post>
         {{ contact_form.hidden_tag() }}
 
         {% for name_error in contact_form.name.errors %}
