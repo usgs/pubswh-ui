@@ -1,4 +1,5 @@
 {% extends 'pubswh/base.html' %}
+
 {% block head %}
     <title>Frequently Asked Questions- USGS Publications Warehouse</title>
     <meta name="description" content="FAQs about the Publications Warehouse">
@@ -6,7 +7,8 @@
 {% endblock %}
 
 {% block main_pubswh %}
-    <h1 class="otherPages">Frequently Asked Questions</h1>
+    <h1>Frequently Asked Questions</h1>
 {{ faq_content|safe }}
 {% endblock %}
+
 {% block url %}<a href="{{ url_for('pubswh.faq') }}">http://pubs.er.usgs.gov{{ url_for('pubswh.faq') }}</a>{% endblock %}

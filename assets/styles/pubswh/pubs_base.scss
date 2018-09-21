@@ -167,4 +167,42 @@ $fa-font-path: "./fonts" !default;
   }
 }
 
+// Styles each browse page
+.browse-page {
+  margin-top: -15px;
+  padding: 15px;
+
+  .breadcrumb {
+    background: none;
+    margin-top: 15px;
+    padding-left: 0;
+    a {
+      text-decoration: none;
+      color: rgb(0, 51, 102);
+      font-weight: bold;
+    }
+    a {
+      text-decoration: none;
+      color: rgb(0, 51, 102);
+      font-weight: bold;
+      &:hover {
+        text-decoration:underline;
+      }
+    }
+  }
+  ul {
+    @include unstyled-list;
+    li {
+      a {
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 1.1em;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
 @import 'main';
