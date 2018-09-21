@@ -14,6 +14,7 @@ lettucetests.xml
 *.swp
 server/env
 server/.pytest_cache
+server/static
 pubs_ui.log
 server/pubs_ui/pubswh/static/.webassets-cache/
 server/pubs_ui/pubswh/static/css/min_base.css
