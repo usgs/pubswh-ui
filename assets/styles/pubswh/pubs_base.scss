@@ -194,15 +194,22 @@ $fa-font-path: "./fonts" !default;
     @include unstyled-list;
     li {
       a {
-        font-weight: bold;
-        text-decoration: none;
-        font-size: 1.1em;
-        &:hover {
-          text-decoration: underline;
-        }
       }
     }
   }
 }
 
-@import 'main';
+// Styles for documentation pages which are maintained in confluence
+.table-wrap {
+  overflow: auto;
+  .confluenceTable {
+    tbody {
+      tr:first-child {
+        th {
+          background-color: $color-gray-lightest;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
