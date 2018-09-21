@@ -12,23 +12,23 @@ __author__ = 'jameskreft'
 
 
 class ContactForm(FlaskForm):
-    name = StringField("Name")
+    name = StringField('Name', description='your name')
     # email validator also makes this a required field... a blank email is considered invalid
-    email = StringField("Email", [validators.Email()])
-    originating_page = StringField("Originating Page")
-    message = TextAreaField("Message")
+    email = StringField('Email', [validators.Email()])
+    originating_page = StringField('Originating Page')
+    message = TextAreaField('Message')
     recaptcha = RecaptchaField()
-    submit = SubmitField("Send")
+    submit = SubmitField('Send')
 
 
 class PublicAccessContactForm(FlaskForm):
-    name = StringField("Name")
+    name = StringField('Name')
     # email validator also makes this a required field... a blank email is considered invalid
-    email = StringField("Email", [validators.Email()])
-    originating_page = StringField("Originating Page")
-    message = TextAreaField("Message", default="I would like to request the full-text public access version of the following publication")
+    email = StringField('Email', [validators.Email()])
+    originating_page = StringField('Originating Page')
+    message = TextAreaField('Message', default='I would like to request the full-text public access version of the following publication')
     recaptcha = RecaptchaField()
-    submit = SubmitField("Send")
+    submit = SubmitField('Send')
 
 
 class NumSeries(FlaskForm):
