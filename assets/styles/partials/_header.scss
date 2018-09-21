@@ -59,7 +59,9 @@
     padding-right: 0
   }
   border-bottom: 1px solid $color-gray-lighter;
-  .usa-nav-primary > li:first-child {
+  @media screen and (min-width: $nav-width) {
+    .usa-nav-primary > li:first-child {
       margin-left: $site-margins;
+    }
   }
 }
