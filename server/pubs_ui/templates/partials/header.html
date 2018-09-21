@@ -58,10 +58,10 @@
                         {% endif %}
                     </ul>
                     <div class="usa-nav-secondary">
-                        <form class="usa-search usa-search-small ">
+                        <form class="usa-search usa-search-small" action="{{ url_for('pubswh.search_results') }}" method="get">
                             <div role="search">
                                 <label class="usa-sr-only" for="basic-search-field-small">Search small</label>
-                                <input id="basic-search-field-small" type="search" name="search">
+                                <input id="basic-search-field-small" type="search" name="q">
                                 <button type="submit">
                                     <span class="usa-sr-only">Search</span>
                                 </button>
