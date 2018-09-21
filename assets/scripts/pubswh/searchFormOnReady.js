@@ -70,7 +70,7 @@ $(document).ready(function() {
 
     // Set up advanced search category select
     $categorySelect.select2();
-    $categorySelect.on('change', function() {
+    $categorySelect.on('select2:select', function() {
         var $selectedOption = $(this).find('option:selected');
         advancedSearchForm.addRow({
             name: $selectedOption.val(),
@@ -81,7 +81,7 @@ $(document).ready(function() {
         });
         $selectedOption.prop('selected', false);
         $selectedOption.prop('disabled', !$selectedOption.data('allow-multi'));
-        $(this).select2();
+        $categorySelect.select2();
     });
 
     // Add click handler for clear search terms
