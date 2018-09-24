@@ -54,6 +54,32 @@ If you want to generate a real secret key, you can do so trivially from the Pyth
 ```
 You can paste the generated string right into your SECRET_KEY global constant
 
+## Installing Redis for local development
+Note that Redis does not support Windows, but there is a Windows port (see the link below)). These instructions
+are for Linux or MacOS. There is a brew recipe for MacOS which I have not tested
+
+Get the latest stable release from https://redis.io/download. You will install it as follows.
+
+`% tar xzf redis-3.2.8.tar.gz`
+`% make` will make in the current directory, or `sudo make install` to but the executable in /usr/local/bin
+
+You can run the redis server by using the redis_server executable in the src directory.
+`% src/redis-server`
+
+Test by running `src/redis-cli ping`. The response should be `PONG`.
+
+To use redis in the application set the following in your instance/config.py:
+```python
+REDIS_CONFIG = {
+    'host': 'localhost',
+    'port': 6379,
+    'db': 0
+}
+r = StrictRedis(host=REDIS_CONFIG['host'], port=REDIS_CONFIG['port'], db=REDIS_CONFIG['db'])
+CACHE_CONFIG = {'CACHE_TYPE': 'redis', 'CACHE_REDIS_HOST': r, 'CACHE_KEY_PREFIX': 'pubs_http'}
+```
+
+
 ## NOTE: Platform specific issues
 On Mac OS, you may have trouble with the proxy to the pubs-services raising the following error:
 ```
