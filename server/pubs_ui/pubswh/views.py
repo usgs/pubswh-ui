@@ -16,10 +16,9 @@ import tablib
 
 from flask import render_template, abort, request, Response, jsonify, url_for, redirect, Blueprint
 from flask_paginate import Pagination
-from flask_login import login_required, current_user
 from flask_mail import Message
 
-from ..auth.views import generate_auth_header
+from ..auth.views import authentication_required, is_authenticated, get_auth_header
 from .. import app, mail, cache
 from .canned_text import EMAIL_RESPONSE
 from .forms import ContactForm, NumSeries, PublicAccessContactForm
@@ -63,23 +62,25 @@ def make_cache_key(*args, **kwargs):
 
 
 @pubswh.errorhandler(404)
-def page_not_found(e):
+def page_not_found():
     # pylint: disable=W0613
     return render_template('pubswh/404.html'), 404
 
 
 @pubswh.route("/preview/<index_id>")
-@login_required
+@authentication_required
 def restricted_page(index_id):
     """
     web page which is restricted and requires the user to be logged in.
     """
 
     # generate the auth header from the request
-    auth_header = generate_auth_header(request)
+    auth_header = get_auth_header()
+
     # build the url to call the endpoint
     published_status = get(pub_url + 'publication/' + index_id,
                            params={'mimetype': 'json'}, verify=verify_cert).status_code
+
     # go out to manage and get the record
     response = get(preview_endpoint_url+index_id+'/preview', headers=auth_header, verify=verify_cert,
                    params={'mimetype': 'json'})
@@ -96,9 +97,11 @@ def restricted_page(index_id):
         if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
             return jsonify(pubdata)
         return render_template("pubswh/preview.html", indexID=index_id, pubdata=pubdata, related_pubs=related_pubs)
+
     # if the publication has been published (so it is out of manage) redirect to the right URL
     elif response.status_code == 404 and published_status == 200:
         return redirect(url_for('pubswh.publication', index_id=index_id))
+
     elif response.status_code == 404 and published_status == 404:
         return render_template('pubswh/404.html'), 404
 
@@ -119,7 +122,7 @@ def webmaster_tools_verification():
 
 
 @pubswh.route('/')
-@cache.cached(timeout=300, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=300, key_prefix=make_cache_key, unless=is_authenticated)
 def index():
     sp = SearchPublications(search_url)
     recent_publications_resp = sp.get_pubs_search_results(params={'pub_x_days': 7,
@@ -191,14 +194,13 @@ def pub_access_contact_confirmation():
 
 
 @pubswh.route('/public_access_details/<index_id>')
-@login_required
+@authentication_required
 def public_access_details(index_id):
-    # generate the auth header from the request
-    auth_header = generate_auth_header(request)
     # build the url to call the endpoint
     r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
     if r.status_code in [404, 406]:  # a 406 pretty much always means that it is some sort of other weird malformed URL.
         return render_template('pubswh/404.html'), 404
+
     pubreturn = r.json()
     pubdata = munge_pubdata_for_display(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
 
@@ -252,7 +254,7 @@ def contact_confirmation():
 
 # leads to rendered html for publication page
 @pubswh.route('/publication/<index_id>')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: is_authenticated)
 def publication(index_id):
     # pylint: disable=R0914
     r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
@@ -329,7 +331,7 @@ def lookup(endpoint):
 
 
 @pubswh.route('/documentation/faq')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: is_authenticated)
 def faq():
     app.logger.info('The FAQ function is being called')
     feed_url = 'https://my.usgs.gov/confluence//createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=pw_faq&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -337,7 +339,7 @@ def faq():
 
 
 @pubswh.route('/documentation/usgs_series')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: is_authenticated)
 def usgs_series():
     app.logger.info('The USGS Series function is being called')
     feed_url = 'https://my.usgs.gov/confluence//createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=USGS+Series+Definitions&labelString=usgs_series&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -345,7 +347,7 @@ def usgs_series():
 
 
 @pubswh.route('/documentation/web_service_documentation')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: is_authenticated)
 def web_service_docs():
     app.logger.info('The web_service_docs function is being called')
     feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=pubs_webservice_docs&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -353,7 +355,7 @@ def web_service_docs():
 
 
 @pubswh.route('/documentation/other_resources')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: is_authenticated)
 def other_resources():
     app.logger.info('The other_resources function is being called')
     feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=other_resources&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -361,14 +363,14 @@ def other_resources():
 
 
 @pubswh.route('/browse/')
-@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: is_authenticated)
 def browse_types():
     types = get(urljoin(pub_url, "lookup/publicationtypes"), verify=verify_cert).json()
     return render_template('pubswh/browse_types.html', types=types)
 
 
 @pubswh.route('/browse/<pub_type>/')
-@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: is_authenticated)
 def browse_subtypes(pub_type):
     pub_types = get(urljoin(pub_url, "lookup/publicationtypes"), params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
@@ -397,7 +399,7 @@ def browse_subtypes(pub_type):
 
 
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/')
-@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: is_authenticated)
 def browse_subtype(pub_type, pub_subtype):
     subtype_has_no_series = ['usgs data release', 'website', 'database-nonspatial', 'database-spatial', 'letter',
                              'newspaper article', 'review', 'other report', 'organization series', 'usgs unnumbered series']
@@ -436,7 +438,7 @@ def browse_subtype(pub_type, pub_subtype):
 
 
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>/')
-@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: is_authenticated)
 def browse_series(pub_type, pub_subtype, pub_series_name):
     pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {
@@ -499,7 +501,7 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
 
 
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>/<year>/')
-@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: is_authenticated)
 def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
     pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
@@ -535,7 +537,7 @@ def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
 
 
 @pubswh.route('/search', methods=['GET'])
-@cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: is_authenticated)
 def search_results():
     # pylint: disable=R0914,R0915,R0914,R0912
     search_kwargs = request.args.to_dict(flat=False)
@@ -646,7 +648,7 @@ def site_map():
 
 
 @pubswh.route('/newpubs', methods=['GET'])
-@cache.cached(timeout=60, key_prefix=make_cache_key, unless=lambda: current_user.is_authenticated)
+@cache.cached(timeout=60, key_prefix=make_cache_key, unless=lambda: is_authenticated)
 def new_pubs():
     num_form = NumSeries()
     sp = SearchPublications(search_url)

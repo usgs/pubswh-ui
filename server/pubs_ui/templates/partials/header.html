@@ -1,4 +1,4 @@
-{% macro usgs_header(enable_nav, current_user='') -%}
+{% macro usgs_header(enable_nav, is_authenticated) -%}
     <header role="banner" class="usa-header usa-header-extended usgs-header">
         <div class="usa-navbar usgs-banner-container">
             <div class="usgs-logo">
@@ -51,9 +51,9 @@
                         <li>
                             <a class="usa-nav-link" href="{{ url_for('pubswh.contact') }}">Contact</a>
                         </li>
-                        {% if current_user.is_authenticated %}
+                        {% if is_authenticated %}
                             <li>
-                                <a class="usa-nav-link" href="{{ url_for('auth.logout_page', forward='pubswh.index') }}">Logout</a>
+                                <a class="usa-nav-link" href="{{ url_for('auth.logout', next=request.url) }}">Logout</a>
                             </li>
                         {% endif %}
                     </ul>

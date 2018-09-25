@@ -1,186 +1,96 @@
-"""
-Authorization views
-"""
-from itsdangerous import BadSignature, BadPayload
-from requests import post
 
-from flask import render_template, request, redirect, url_for, Blueprint
-from flask_login import LoginManager, logout_user, UserMixin, login_user
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
-from wtforms.validators import DataRequired
+from functools import wraps
+import time
+from urllib.parse import urlencode
 
-from . import login_serializer
-from .utils import get_cida_auth_token, generate_auth_header, get_url_endpoint, is_safe_url
-from .. import app
+from flask import redirect, url_for, Blueprint, session, request
+
+from .. import app, oauth
+
+auth_blueprint = Blueprint('auth', __name__)  # pylint: disable=C0103
+
+TOKEN_EXPIRES_AT_KEY = 'access_token_expires_at'
 
 
-auth = Blueprint('auth', __name__,
-                 template_folder='templates',
-                 static_folder='static',
-                 static_url_path='/auth/static')
-
-AUTH_ENDPOINT_URL = app.config.get('AUTH_ENDPOINT_URL')
-# should requests verify the certificates for ssl connections
-VERIFY_CERT = app.config['VERIFY_CERT']
-
-
-class LoginForm(FlaskForm):
-    """
-    Authorization login form
-    """
-    username = StringField('AD Username:', validators=[DataRequired()])
-    password = PasswordField('AD Password:', validators=[DataRequired()])
-
-# Flask-Login Login Manager
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'auth.login_page'
-
-
-class User(UserMixin):
-    """
-    User Class for flask-Login
-    """
-    def __init__(self, username=None, cida_auth_token=None):
-        self.id = username
-        self.cida_auth_token = cida_auth_token
-
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_auth_token(self):
-        """
-        Encode a secure token for cookie.
-
-        The Token is encrypted using itsdangerous.URLSafeTimedSerializer which
-        allows us to have a max_age on the token itself.  When the cookie is stored
-        on the users computer it also has a exipry date, but could be changed by
-        the user, so this feature allows us to enforce the exipry date of the token
-        server side and not rely on the users cookie to exipre.
-        """
-        data = [str(self.id), self.cida_auth_token]
-        return login_serializer.dumps(data)
-
-    @staticmethod
-    def get(username, cida_auth_token):
+def authentication_required(f):
+    '''
+    View decorator used to decorate any view that requires authorization when the usgs theme is used
+    :param function f: view function
+    :return: Decorated function
+    :rtype: function
+    '''
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
         '''
-        :param username: AD username
-        :param cida_auth_token: token returned by CIDA auth service
-        :return User object if userid is valid, otherwise return None:
+        Function which redirects to the authorization endpoint if the access token has expired otherwise
+        executes the function.
         '''
-        if username:
-            user = User(username, cida_auth_token)
-        else:
-            user = None
-        return user
+        if not is_authenticated():
+            return redirect('{0}?next={1}'.format(url_for('auth.login'), request.url))
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+def is_authenticated():
+    '''
+    Return true if the user is authenticated
+    :rtype: bool
+    '''
+
+    return session.get(TOKEN_EXPIRES_AT_KEY, 0) > int(time.time())
+
+def get_auth_header():
+    '''
+    Return the authentication header to be used for proxy calls. If not authenticated an empty dict will be return
+    :return: dictionary containing the authentication header
+    :rtype: dict
+    '''
+
+    access_token = request.cookies.get('access_token')
+    header = {}
+    if access_token:
+        header['Authorization'] = 'Bearer {0}'.format(access_token)
+
+    return header
+
+@app.context_processor
+def inject_is_authenticated():
+    return dict(is_authenticated=is_authenticated())
 
 
-@login_manager.user_loader
-def load_user(username):
-    """
-    Flask-Login user_loader callback.
-    The user_loader function reloads the user object from the user ID stored in the session.
-    """
-    cida_auth_token = get_cida_auth_token(request.cookies)
-    if cida_auth_token:
-        user = User.get(username, cida_auth_token)
-    else:
-        user = None
+@auth_blueprint.route('/login')
+def login():
+    '''
+    Redirects to the authentication's login.
+    '''
+    redirect_uri = '{0}?next={1}'.format(url_for('auth.authorize', _external=True), request.args.get('next'))
 
-    return user
+    return oauth.pubsauth.authorize_redirect(redirect_uri)
 
 
-@login_manager.token_loader
-def load_token(token):
-    """
-    Flask-Login token_loader callback.
-    The token_loader function asks this function to take the token that was
-    stored on the users computer process it to check if its valid and then
-    return a User Object if its valid or None if its not valid.
-    """
+@auth_blueprint.route('/authorize')
+def authorize():
+    '''
+    Retrieves the access token from the authorization service and sets its value in a cookie.
+    :return:
+    '''
+    token = oauth.pubsauth.authorize_access_token(verify=False)
 
-    # The Token itself was generated by User.get_auth_token.  So it is up to
-    # us to known the format of the token data itself.
-    # Decrypt the Security Token, data = [ad_user_username, user_ad_token]
-    try:
-        data = login_serializer.loads(token, max_age=app.config['REMEMBER_COOKIE_DURATION'].total_seconds())
-    except (BadSignature, BadPayload):
-        user = None
-    else:
-        # generate the user object based on the contents of the cookie, if the cookie isn't expired
-        if data:
-            user = User(data[0], data[1])
-        else:
-            user = None
+    response = redirect(request.args.get('next'))
+    response.set_cookie('access_token', token.get('access_token'), secure=True)
+    session['access_token_expires_at'] = token.get('expires_at')
 
-    return user
+    return response
 
+@auth_blueprint.route('/logout')
+def logout():
+    '''
+    Logouts the user and clears the session data
+    :return:
+    '''
+    # Clear session stored data
+    session.clear()
 
-@auth.route("/logout/<forward>")
-def logout_page(forward):
-    """
-    Web Page to Logout User, then Redirect them to Index Page.
-    """
-    auth_header = generate_auth_header(request)
-    logout_url = AUTH_ENDPOINT_URL + 'logout'
-    response = post(logout_url, headers=auth_header, verify=VERIFY_CERT)
-
-    logout_user()
-
-    return redirect(url_for(forward))
-
-
-@auth.route("/login/", methods=["GET", "POST"])
-def login_page():
-    """
-    Web Page to Display Login Form and process form.
-    """
-    form = LoginForm()
-    error = None
-    if request.method == "POST":
-        # take the form data and put it into the payload to send to the pubs auth endpoint
-        payload = {'username': request.form['username'], 'password': request.form['password']}
-        # POST the payload to the pubs auth endpoint
-        pubs_login_url = AUTH_ENDPOINT_URL + 'token'
-        mp_response = post(pubs_login_url, data=payload, verify=VERIFY_CERT)
-        # if the pubs endpoint login is successful, then proceed with logging in
-        if mp_response.status_code == 200:
-            user = User(request.form['username'], mp_response.json().get('token'))
-            login_user(user, remember=True)
-
-            next_page = request.args.get("next")
-            app.logger.info('Next page: %s', next_page)
-
-            if next_page is not None and is_safe_url(next_page, request.host_url):
-                endpoint = get_url_endpoint(next_page, request.environ['SERVER_NAME'], ('pubswh.index', {}))
-                url = url_for(endpoint[0], **endpoint[1])
-                return redirect(url)
-
-            return redirect(url_for('pubswh.index'))
-        else:
-            error = 'Username or Password is invalid '+str(mp_response.status_code)
-
-    return render_template('auth/login.html', form=form, error=error)
-
-
-@auth.route('/loginservice/', methods=["POST"])
-def login_service():
-    """
-    Login service view
-    """
-    resp = post(AUTH_ENDPOINT_URL + 'token', data=request.form, verify=VERIFY_CERT)
-    if resp.status_code == 200:
-        user = User(request.form['username'], resp.json().get('token'))
-        login_user(user, remember=True)
-
-    # This fixed an an ERR_INVALID_CHUNKED_ENCODING when the app was run on the deployment server.
-    if 'transfer-encoding' in resp.headers:
-        del resp.headers['transfer-encoding']
-    return (resp.text, resp.status_code, list(resp.headers.items()))
+    # Redirect user to logout endpoint
+    params = {'redirect_uri': request.args.get('next')}
+    return redirect(app.config['PUBSAUTH_API_BASE_URL'] + '/logout?' + urlencode(params))
