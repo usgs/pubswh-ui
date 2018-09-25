@@ -38,7 +38,7 @@ REDIS_CONFIG = ''
 IMAGE_CACHE = ''  # path to image cache for thumbnails
 SCIENCEBASE_PARENT_UUID = ''  # set to the sciecebase folder id for the core publications warehouse SB folder
 
-#These should be set in order to authenticate for the manager application
+#These should be set to authenticate the manager application
 PUBSAUTH_CLIENT_ID = ''
 PUBSAUTH_CLIENT_SECRET = ''
 PUBSAUTH_ACCESS_TOKEN_URL = ''
