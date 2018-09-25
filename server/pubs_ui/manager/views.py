@@ -7,7 +7,7 @@ from requests import Request, Session
 
 from flask import Blueprint, render_template, request
 
-from ..auth.views import authentication_required
+from ..auth.views import authentication_required, get_auth_header
 from .. import app
 
 
@@ -30,6 +30,7 @@ def show_app(path=None):
 @manager.route('/services/<op1>/<op2>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @manager.route('/services/<op1>/<op2>/<op3>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @manager.route('/services/<op1>/<op2>/<op3>/<op4>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@authentication_required
 def services_proxy(op1, op2=None, op3=None, op4=None):
     """
     View for proxying service calls
@@ -42,10 +43,7 @@ def services_proxy(op1, op2=None, op3=None, op4=None):
     if op4 is not None:
         url = url + '/' + op4
 
-    headers = {}
-    access_token = request.cookies.get('access_token')
-    if access_token:
-        headers['Authorization'] = 'Bearer {0}'.format(access_token)
+    headers = get_auth_header()
     if request.method == 'POST' or request.method == 'PUT':
         headers.update(request.headers)
 
