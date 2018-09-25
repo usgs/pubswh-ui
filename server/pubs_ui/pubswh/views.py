@@ -254,7 +254,7 @@ def contact_confirmation():
 
 # leads to rendered html for publication page
 @pubswh.route('/publication/<index_id>')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: is_authenticated)
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=is_authenticated)
 def publication(index_id):
     # pylint: disable=R0914
     r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
@@ -331,7 +331,7 @@ def lookup(endpoint):
 
 
 @pubswh.route('/documentation/faq')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: is_authenticated)
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=is_authenticated)
 def faq():
     app.logger.info('The FAQ function is being called')
     feed_url = 'https://my.usgs.gov/confluence//createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=pw_faq&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -339,7 +339,7 @@ def faq():
 
 
 @pubswh.route('/documentation/usgs_series')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: is_authenticated)
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=is_authenticated)
 def usgs_series():
     app.logger.info('The USGS Series function is being called')
     feed_url = 'https://my.usgs.gov/confluence//createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=USGS+Series+Definitions&labelString=usgs_series&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -347,7 +347,7 @@ def usgs_series():
 
 
 @pubswh.route('/documentation/web_service_documentation')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: is_authenticated)
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=is_authenticated)
 def web_service_docs():
     app.logger.info('The web_service_docs function is being called')
     feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=pubs_webservice_docs&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -355,7 +355,7 @@ def web_service_docs():
 
 
 @pubswh.route('/documentation/other_resources')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=lambda: is_authenticated)
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=is_authenticated)
 def other_resources():
     app.logger.info('The other_resources function is being called')
     feed_url = 'https://my.usgs.gov/confluence/createrssfeed.action?types=page&spaces=pubswarehouseinfo&title=Pubs+Other+Resources&labelString=other_resources&excludedSpaceKeys%3D&sort=modified&maxResults=10&timeSpan=3600&showContent=true&confirm=Create+RSS+Feed'
@@ -363,14 +363,14 @@ def other_resources():
 
 
 @pubswh.route('/browse/')
-@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: is_authenticated)
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=is_authenticated)
 def browse_types():
     types = get(urljoin(pub_url, "lookup/publicationtypes"), verify=verify_cert).json()
     return render_template('pubswh/browse_types.html', types=types)
 
 
 @pubswh.route('/browse/<pub_type>/')
-@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: is_authenticated)
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=is_authenticated)
 def browse_subtypes(pub_type):
     pub_types = get(urljoin(pub_url, "lookup/publicationtypes"), params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
@@ -399,7 +399,7 @@ def browse_subtypes(pub_type):
 
 
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/')
-@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: is_authenticated)
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=is_authenticated)
 def browse_subtype(pub_type, pub_subtype):
     subtype_has_no_series = ['usgs data release', 'website', 'database-nonspatial', 'database-spatial', 'letter',
                              'newspaper article', 'review', 'other report', 'organization series', 'usgs unnumbered series']
@@ -438,7 +438,7 @@ def browse_subtype(pub_type, pub_subtype):
 
 
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>/')
-@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: is_authenticated)
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=is_authenticated)
 def browse_series(pub_type, pub_subtype, pub_series_name):
     pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {
@@ -501,7 +501,7 @@ def browse_series(pub_type, pub_subtype, pub_series_name):
 
 
 @pubswh.route('/browse/<pub_type>/<pub_subtype>/<pub_series_name>/<year>/')
-@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=lambda: is_authenticated)
+@cache.cached(timeout=86400, key_prefix=make_cache_key, unless=is_authenticated)
 def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
     pub_types = get(pub_url + "/lookup/publicationtypes", params={'text': pub_type}, verify=verify_cert).json()
     pub_types_dict = {publication_type['text'].lower(): publication_type['id'] for publication_type in pub_types}
@@ -537,7 +537,7 @@ def browse_series_year(pub_type, pub_subtype, pub_series_name, year):
 
 
 @pubswh.route('/search', methods=['GET'])
-@cache.cached(timeout=20, key_prefix=make_cache_key, unless=lambda: is_authenticated)
+@cache.cached(timeout=20, key_prefix=make_cache_key, unless=is_authenticated)
 def search_results():
     # pylint: disable=R0914,R0915,R0914,R0912
     search_kwargs = request.args.to_dict(flat=False)
@@ -648,7 +648,7 @@ def site_map():
 
 
 @pubswh.route('/newpubs', methods=['GET'])
-@cache.cached(timeout=60, key_prefix=make_cache_key, unless=lambda: is_authenticated)
+@cache.cached(timeout=60, key_prefix=make_cache_key, unless=is_authenticated)
 def new_pubs():
     num_form = NumSeries()
     sp = SearchPublications(search_url)
