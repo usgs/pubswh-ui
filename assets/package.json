@@ -1,6 +1,6 @@
 {
   "name": "pubs_ui",
-  "version": "2.21.0",
+  "version": "2.22.0dev",
   "description": "Publications Warehouse User Interface",
   "main": "scripts/manager/index.js",
   "directories": {
