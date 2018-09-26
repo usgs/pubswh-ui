@@ -38,6 +38,13 @@ REDIS_CONFIG = ''
 IMAGE_CACHE = ''  # path to image cache for thumbnails
 SCIENCEBASE_PARENT_UUID = ''  # set to the sciecebase folder id for the core publications warehouse SB folder
 
+#These should be set to authenticate the manager application
+PUBSAUTH_CLIENT_ID = ''
+PUBSAUTH_CLIENT_SECRET = ''
+PUBSAUTH_ACCESS_TOKEN_URL = ''
+PUBSAUTH_AUTHORIZE_URL = ''
+PUBSAUTH_API_BASE_URL = ''
+
 CONTACT_RECIPIENTS = ['servicedesk@usgs.gov']  # recipient address
 
 IPDS_CONTACT_RECIPIENTS = ['GS_Help_IPDS@usgs.gov']

@@ -48,3 +48,12 @@ FLASK_CORS = True
 
 # To use hashed assets, set this to the gulp-rev-all rev-manifest.json path
 #ASSET_MANIFEST_PATH = None
+
+# These should be set to authenticate the manager application. This should be set up to
+# use the same keycloak source as the serices configured above
+PUBSAUTH_CLIENT_ID = ''
+PUBSAUTH_CLIENT_SECRET = ''
+PUBSAUTH_ACCESS_TOKEN_URL = ''
+PUBSAUTH_AUTHORIZE_URL = ''
+PUBSAUTH_API_BASE_URL = ''
+
