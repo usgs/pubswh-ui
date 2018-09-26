@@ -48,7 +48,7 @@ app.jinja_env.globals.update(ANNOUNCEMENT_BLOCK=app.config['ANNOUNCEMENT_BLOCK']
 #Enable authentication
 oauth = OAuth(app)
 oauth.register('pubsauth',
-               client_kwargs = {'veryify': app.config.get('VERIFY_CERT', True)}
+               client_kwargs = {'verify': app.config.get('VERIFY_CERT', True)}
                )
 
 # Set up the cache

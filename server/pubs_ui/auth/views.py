@@ -26,7 +26,7 @@ def authentication_required(f):
         executes the function.
         '''
         if not is_authenticated():
-            return redirect('{0}?next={1}'.format(url_for('auth.login'), request.url))
+            return redirect('{0}?{1}'.format(url_for('auth.login'), urlencode({'next': request.url})))
         return f(*args, **kwargs)
 
     return decorated_function
