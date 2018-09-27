@@ -40,7 +40,7 @@ env/bin/lettuce --with-xunit pubs_ui/lettuce_testing
 To run the unit tests do the following with your virtualenv activated or using the full path name to nosetests:
 
 ```bash
-nosetests -w pubs_ui
+env/bin/pytests pubs_ui
 ```
 
 ## Generating secret keys
@@ -85,8 +85,4 @@ On Mac OS, you may have trouble with the proxy to the pubs-services raising the 
 ```
 SSLError: [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:590)
 ```
-You can solve this by pip install requests[security] but then the lettuce tests fail with:
-```
-raise SSLError(e, request=request)
-    SSLError: ('bad handshake: WantWriteError()',)
-```
+You can solve this by pip install requests[security] 

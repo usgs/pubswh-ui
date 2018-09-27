@@ -65,7 +65,7 @@
                                 {{ result['title']|safe }}
                             </a>
                         </cite>
-                        {% if current_user.is_authenticated %}
+                        {% if is_authenticated %}
                             <a class="edit-pub-link" href="{{ url_for('manager.show_app')}}#publication/{{ result['id'] }}" target="_blank">(edit in Manager)</a></small>
                         {% endif %}
                         {% if result['authorsList']|length > 0 %}

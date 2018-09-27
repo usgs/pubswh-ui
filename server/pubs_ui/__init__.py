@@ -1,6 +1,8 @@
 import json
 import logging
 
+from authlib.flask.client import OAuth
+
 from flask import Flask, request
 from flask_caching import Cache
 from flask_images import Images
@@ -43,6 +45,12 @@ app.jinja_env.globals.update(GOOGLE_WEBMASTER_TOOLS_CODE=app.config['GOOGLE_WEBM
 app.jinja_env.globals.update(LAST_MODIFIED=app.config.get('DEPLOYED'))
 app.jinja_env.globals.update(ANNOUNCEMENT_BLOCK=app.config['ANNOUNCEMENT_BLOCK'])
 
+#Enable authentication
+oauth = OAuth(app)
+oauth.register('pubsauth',
+               client_kwargs = {'verify': app.config.get('VERIFY_CERT', True)}
+               )
+
 # Set up the cache
 cache = Cache(app, config=app.config.get('CACHE_CONFIG'))
 
@@ -58,13 +66,13 @@ if app.config.get('FLASK_CORS'):
     from flask_cors import CORS
     CORS(app)
 
-from .auth.views import auth
+from .auth.views import auth_blueprint
 from .manager.views import manager
 from .pubswh.views import pubswh
 from .metrics.views import metrics
 from . import filters  # pylint: disable=C0413
 
-app.register_blueprint(auth)
+app.register_blueprint(auth_blueprint)
 app.register_blueprint(manager, url_prefix='/manager')
 app.register_blueprint(metrics, url_prefix='/metrics')
 app.register_blueprint(pubswh)
