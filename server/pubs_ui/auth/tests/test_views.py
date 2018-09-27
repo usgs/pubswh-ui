@@ -33,8 +33,8 @@ class TestAuthenticationRequired(TestCase):
 
         view_mock.assert_not_called()
         url = parse.urlparse(resp.location)
-        self.assertEquals(url.path, '/login')
-        self.assertEquals(url.query, 'next=%2Fthis%2Fservice%3Fparm1%3Dval2%26parm2%3Dval1')
+        self.assertEqual(url.path, '/login')
+        self.assertEqual(url.query, 'next=%2Fthis%2Fservice%3Fparm1%3Dval2%26parm2%3Dval1')
 
     @mock.patch('time.time', mock_time)
     def test_authentication_expiration_time_later_than_current_time(self):
@@ -42,7 +42,7 @@ class TestAuthenticationRequired(TestCase):
         app.config['WATERAUTH_AUTHORIZE_URL'] = 'https://fake.auth.com'
         with app.test_request_context('/mock'):
             session['access_token_expires_at'] = 1234568
-            resp = authentication_required(view_mock)()
+            authentication_required(view_mock)()
 
         view_mock.assert_called()
 
