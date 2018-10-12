@@ -33,6 +33,7 @@ $icon-font-path: "./fonts/";
     margin: 1em 0;
     div {
         display: inline-block;
+        margin-right: 2rem;
     }
     legend {
         @include h3;
