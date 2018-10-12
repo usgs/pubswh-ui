@@ -194,11 +194,6 @@ $fa-font-path: "./fonts" !default;
     }
   }
   ul {
-    @include unstyled-list;
-    li {
-      a {
-      }
-    }
   }
 }
 
