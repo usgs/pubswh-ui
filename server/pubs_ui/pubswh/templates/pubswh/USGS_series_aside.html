@@ -11,8 +11,10 @@
 
 
 {% if pubdata['contact'] %}
-    <strong>For additional information, contact:</strong><br/>
-{{ pubdata['contact']|safe }}
+    <div class="pub-contact-info-container">
+        <strong>For additional information, contact:</strong><br/>
+        {{ pubdata['contact']|safe }}
+    </div>
 {% endif %}
 
 
