@@ -149,6 +149,9 @@ $fa-font-path: "./fonts" !default;
       @media screen and (max-width: $small-screen) {
         display: none;
       }
+      .pub-contact-info-container {
+        padding-bottom: 1rem;
+      }
     }
   }
 
@@ -191,11 +194,6 @@ $fa-font-path: "./fonts" !default;
     }
   }
   ul {
-    @include unstyled-list;
-    li {
-      a {
-      }
-    }
   }
 }
 

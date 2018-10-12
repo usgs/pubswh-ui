@@ -158,7 +158,7 @@ const createMonthDisplays = function(data) {
         columnLabel: 'Visitors per day',
         dateFormat: DAY_FORMAT
     });
-    createTable($recentUsersTable, downloadsData, {
+    createTable($recentUsersTable, visitorsData, {
         columnLabel: 'Unique visitors per day',
         dateFormat: DAY_FORMAT
     });
