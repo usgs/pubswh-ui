@@ -159,7 +159,7 @@
                                     https://doi.org/{{ pubdata['doi'] }}</a>
                                 {% if pubdata['isOA'] %}
                                     {% if pubdata['openAccessHostType']=="publisher" or pubdata['openAccessHostType']=="repository" %}
-                                       <a href="{{ pubdata['openAccessLink'] }}"><img src="{{ 'images/20px-Open_Access_logo_PLoS_white.svg.png' | asset_url }}"/></a>
+                                       <a href="{{ pubdata['openAccessLink'] }}"><i class="ai ai-open-access"></i></a>
                                     {% endif %}
                                 {% endif %}
                                 </div>
