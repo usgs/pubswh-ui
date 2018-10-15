@@ -28,7 +28,7 @@ from .utils import (pull_feed, create_display_links,
                     munge_pubdata_for_display, extract_related_pub_info,
                     update_geographic_extents, generate_sb_data, create_store_info,
                     get_altmetric_badge_img_links, generate_dublin_core, get_crossref_data, get_published_online_date,
-                    check_public_access)
+                    check_public_access, get_unpaywall_data)
 
 
 pubswh = Blueprint('pubswh', __name__,
@@ -272,6 +272,7 @@ def publication(index_id):
     altmetric_links = {'image': small_badge, 'details': pub_altmetric_details}
     pubdata['altmetric'] = altmetric_links
     crossref_data = get_crossref_data(pubdata.get('doi'))
+    unpaywall_data = get_unpaywall_data(pubdata.get('doi'))
     online_date_arrow = get_published_online_date(crossref_data)
     pubdata['crossref'] = crossref_data
     pubdata['publicAccess'] = check_public_access(pubdata, online_date_arrow)
