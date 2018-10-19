@@ -157,11 +157,6 @@
                                                               href="https://doi.org/{{ pubdata['doi'] }}"
                                                               onclick="GA.trackGAEvent('Downloads', 'DOI', 'http://dx.doi.org/{{ pubdata['doi'] }}')">
                                     https://doi.org/{{ pubdata['doi'] }}</a>
-                                {% if pubdata['isOA'] %}
-                                    {% if pubdata['openAccessHostType']=="publisher" or pubdata['openAccessHostType']=="repository" %}
-                                       <a href="{{ pubdata['openAccessLink'] }}"><i class="ai ai-open-access"></i></a>
-                                    {% endif %}
-                                {% endif %}
                                 </div>
                             {% endif %}
                             <a href="https://twitter.com/share" class="twitter-share-button" data-text="USGS Pub"
@@ -339,6 +334,15 @@
                             In stock and available from the <a itemprop="url"
                                                                href="{{ pubdata['offers']['schema:offers']['schema:url'] }}"><strong>USGS
                                 Store</strong></a></li>
+                    {% endif %}
+                    {% if pubdata['isOA'] %}
+                        <li>More information (open access): 
+                            {% if pubdata['openAccessHostType']=="publisher" %}
+                                <a href="{{ pubdata['openAccessLink'] }}">Publisher Index Page <i class="ai ai-open-access"></i></a>
+                            {% elif pubdata['openAccessHostType']=="repository" %}
+                                <a href="{{ pubdata['openAccessLink'] }}">External Repository <i class="ai ai-open-access"></i></a>
+                            {% endif %}
+                        </li>
                     {% endif %}
                     {# commenting this out until USGS can make a decision about it
                     {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Journal Article' and pubdata['publicAccess']) %}
