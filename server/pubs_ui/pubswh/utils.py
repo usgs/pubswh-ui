@@ -697,12 +697,10 @@ def has_oa_link(pubdata):
     :param pubdata:
     :return: pubdata
     """
-    pubdata['isOA'] = False
     if 'doi' in pubdata.keys():
         pubdata['isOA'] = get_unpaywall_data(pubdata['doi'])
         unpaywall_data = get_unpaywall_data(pubdata['doi'])
         if (unpaywall_data is not None) and (unpaywall_data['best_oa_location'] is not None):
-            pubdata['isOA'] = True
             pubdata['openAccessLink'] = unpaywall_data['best_oa_location']['url_for_landing_page']
             pubdata['openAccessHostType'] = unpaywall_data['best_oa_location']['host_type']
     return pubdata
@@ -1073,7 +1071,7 @@ def get_crossref_data(doi, endpoint=CROSSREF_ENDPOINT, verify=VERIFY_CERT):
 
 
 @cache.memoize(timeout=2592000)  # Cache data for a month so the nice people at unpaywall yell at us
-def get_unpaywall_data(doi, endpoint=UNPAYWALL_ENDPOINT, verify=VERIFY_CERT):
+def get_unpaywall_data(doi, endpoint=UNPAYWALL_ENDPOINT):
     """
     This pulls data from the unpaywall API for a doi and put it in the cache
     :param doi: the DOI of the pub you are interested in
@@ -1081,7 +1079,6 @@ def get_unpaywall_data(doi, endpoint=UNPAYWALL_ENDPOINT, verify=VERIFY_CERT):
     :return: data from unpaywall API about that DOI
     """
     unpaywall_data = None
-    parameters = {'email': 'pubs_tech_group@usgs.gov'}
     if doi:
         try:
             resp = requests.get(endpoint + doi + '?email=pubs_tech_group@usgs.gov')

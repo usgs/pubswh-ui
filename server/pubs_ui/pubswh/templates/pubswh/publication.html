@@ -335,7 +335,7 @@
                                                                href="{{ pubdata['offers']['schema:offers']['schema:url'] }}"><strong>USGS
                                 Store</strong></a></li>
                     {% endif %}
-                    {% if pubdata['isOA'] == True %}
+                    {% if pubdata['openAccessHostType'] %}
                         <li>Open Access Version:  
                             {% if pubdata['openAccessHostType']=="publisher" %}
                                 <a href="{{ pubdata['openAccessLink'] }}">Publisher Index Page <i class="ai ai-open-access"></i></a>

@@ -272,7 +272,6 @@ def publication(index_id):
     altmetric_links = {'image': small_badge, 'details': pub_altmetric_details}
     pubdata['altmetric'] = altmetric_links
     crossref_data = get_crossref_data(pubdata.get('doi'))
-    unpaywall_data = get_unpaywall_data(pubdata.get('doi'))
     online_date_arrow = get_published_online_date(crossref_data)
     pubdata['crossref'] = crossref_data
     pubdata['publicAccess'] = check_public_access(pubdata, online_date_arrow)
