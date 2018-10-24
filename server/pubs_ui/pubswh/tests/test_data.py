@@ -1590,3 +1590,80 @@ crossref_200_ok_message_empty = {
     'message-version': '1.0.0',
     'status': 'ok'
 }
+
+unpaywall_200_ok = {
+    "best_oa_location": {
+        "evidence": "open (via page says license)",
+        "host_type": "publisher",
+        "is_best": True,
+        "license": "cc-by-nc-nd",
+        "pmh_id": None,
+        "updated": "2017-09-10T13: 49: 11.765139",
+        "url": "http: //onlinelibrary.wiley.com/doi/10.1002/2015JB012376/pdf",
+        "url_for_landing_page": "http: //doi.org/10.1002/2015jb012376",
+        "url_for_pdf": "http: //onlinelibrary.wiley.com/doi/10.1002/2015JB012376/pdf",
+        "version": "publishedVersion",
+    },
+    "data_standard": 2,
+    "doi": "10.1002/2015jb012376",
+    "doi_url": "https: //doi.org/10.1002/2015jb012376",
+    "genre": "journal-article",
+    "is_oa": True,
+    "journal_is_in_doaj": False,
+    "journal_is_oa": False,
+    "journal_issns": "2169-9313",
+    "journal_name": "Journal of Geophysical Research: Solid Earth",
+    "oa_locations": [
+        {
+            "evidence": "open (via page says license)",
+            "host_type": "publisher",
+            "is_best": True,
+            "license": "cc-by-nc-nd",
+            "pmh_id": None,
+            "updated": "2017-09-10T13: 49: 11.765139",
+            "url": "http: //onlinelibrary.wiley.com/doi/10.1002/2015JB012376/pdf",
+            "url_for_landing_page": "http: //doi.org/10.1002/2015jb012376",
+            "url_for_pdf": "http: //onlinelibrary.wiley.com/doi/10.1002/2015JB012376/pdf",
+            "version": "publishedVersion",
+        }
+    ],
+    "published_date": "2016-04-01",
+    "publisher": "Wiley-Blackwell",
+    "title": "Tomographic Rayleigh wave group velocities in the Central Valley, California, centered on the Sacramento/San Joaquin Delta",
+    "updated": "2018-06-17T06: 00: 55.215000",
+    "year": 2016,
+    "z_authors": [
+        {
+            "affiliation": [
+                {"name": "U.S. Geological Survey; Menlo Park California USA"}
+            ],
+            "family": "Fletcher",
+            "given": "Jon B.",
+        },
+        {
+            "affiliation": [
+                {"name": "U.S. Geological Survey; Menlo Park California USA"}
+            ],
+            "family": "Erdem",
+            "given": "Jemile",
+        },
+        {
+            "affiliation": [
+                {
+                    "name": "Department of Geophysics; Stanford University; Stanford California USA"
+                }
+            ],
+            "family": "Seats",
+            "given": "Kevin",
+        },
+        {
+            "affiliation": [
+                {
+                    "name": "Department of Geophysics; Stanford University; Stanford California USA"
+                }
+            ],
+            "family": "Lawrence",
+            "given": "Jesse",
+        },
+    ],
+}
