@@ -1071,7 +1071,7 @@ def get_crossref_data(doi, endpoint=CROSSREF_ENDPOINT, verify=VERIFY_CERT):
 
 
 @cache.memoize(timeout=2592000)  # Cache data for a month so the nice people at unpaywall yell at us
-def get_unpaywall_data(doi, endpoint=UNPAYWALL_ENDPOINT):
+def get_unpaywall_data(doi, endpoint=UNPAYWALL_ENDPOINT, verify=VERIFY_CERT):
     """
     This pulls data from the unpaywall API for a doi and put it in the cache
     :param doi: the DOI of the pub you are interested in
@@ -1080,8 +1080,9 @@ def get_unpaywall_data(doi, endpoint=UNPAYWALL_ENDPOINT):
     """
     unpaywall_data = None
     if doi:
+        unpaywall_endpoint = urljoin(endpoint, '{}'.format(doi))
         try:
-            resp = requests.get(endpoint + doi + '?email=pubs_tech_group@usgs.gov')
+            resp = requests.get(unpaywall_endpoint, params={'email': 'pubs_tech_group@usgs.gov'}, verify=verify)
         except requests.ConnectionError:
             pass
         if resp.status_code == 200:
