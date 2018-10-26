@@ -77,7 +77,7 @@ PARSED_REQUIREMENTS = read_requirements()
 
 setup(
     name='usgs_flask_pubs_ui',
-    version='2.22.0dev',
+    version='2.22.0',
     description='USGS Publications Warehouse User Interface',
     long_description=read('../README.md'),
     author='Mary Bucknell, James Kreft, Andrew Yan',
