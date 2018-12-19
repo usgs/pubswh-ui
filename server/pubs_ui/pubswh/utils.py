@@ -701,8 +701,10 @@ def has_oa_link(pubdata):
         pubdata['isOA'] = get_unpaywall_data(pubdata['doi'])
         unpaywall_data = get_unpaywall_data(pubdata['doi'])
         if (unpaywall_data is not None) and (unpaywall_data['best_oa_location'] is not None):
-            pubdata['openAccessLink'] = unpaywall_data['best_oa_location']['url_for_landing_page']
-            pubdata['openAccessHostType'] = unpaywall_data['best_oa_location']['host_type']
+            # Unpaywall issue with links that may have been removed.
+            if unpaywall_data['best_oa_location']['url_for_landing_page'] is not None:
+                pubdata['openAccessLink'] = unpaywall_data['best_oa_location']['url_for_landing_page']
+                pubdata['openAccessHostType'] = unpaywall_data['best_oa_location']['host_type']
     return pubdata
 
 
