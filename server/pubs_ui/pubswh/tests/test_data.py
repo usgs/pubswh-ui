@@ -1667,3 +1667,20 @@ unpaywall_200_ok = {
         },
     ],
 }
+
+landing_present = {
+    "doi": "1289018729847",
+    "best_oa_location": {
+        "url_for_landing_page": "https://wwww.good-example.gov/landingpage1",
+        "url_for_pdf": None,
+        "host_type": "publisher",
+    },
+}
+
+null_landing = {
+    "doi": "1289018729847",
+    "best_oa_location": {
+        "url_for_landing_page": None,
+        "url_for_pdf": "https://www.good-example.gov/my-file.pdf",
+    },
+}
