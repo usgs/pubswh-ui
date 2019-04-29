@@ -15,7 +15,7 @@
 {% block main_pubswh %}
     <section id="welcome">
         <h1>USGS Publications Warehouse</h1>
-        <p>The Pubs Warehouse provides access to over 150,000 publications written by USGS scientists over the
+        <p>The Pubs Warehouse provides access to over 160,000 publications written by USGS scientists over the
             century-plus history of the bureau.</p>
     </section>
     <div class="usa-grid">
@@ -28,7 +28,7 @@
                 {% for recent_publication in recent_publications %}
                     <div>
                         <img class="thumbnail" src="
-                                {{ wsgi_str }}{% if recent_publication['displayLinks']['Thumbnail'][0]['url'] %}{{ url_for('images', filename=recent_publication['displayLinks']['Thumbnail'][0]['url'], width=50) }}{% else %}{{ url_for('pubswh.images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=50) }}{% endif %}"
+                                {{ wsgi_str }}{% if recent_publication['displayLinks']['Thumbnail'][0]['url'] %}{{ url_for('images', filename=recent_publication['displayLinks']['Thumbnail'][0]['url'], width=50, format='PNG') }}{% else %}{{ url_for('pubswh.images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=50) }}{% endif %}"
                                                          alt="thumbnail"/>
                         <div class="recent-pub">
                             <div class="recent-pub-title">

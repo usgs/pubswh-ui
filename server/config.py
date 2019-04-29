@@ -62,6 +62,9 @@ ALTMETRIC_ENDPOINT = 'https://api.altmetric.com/v1/'
 # Crossref API information
 CROSSREF_ENDPOINT = 'https://api.crossref.org'
 
+# Unpaywall API information
+UNPAYWALL_ENDPOINT = 'https://api.unpaywall.org/v2/'
+
 try:
     from deploy_date import *  # pylint: disable=W0401
 except ImportError:

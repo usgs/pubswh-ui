@@ -60,7 +60,7 @@
                 {# this image is being dynamically resized to 200 pixels from whatever it might have been #}
                 {% if pubdata['displayLinks']['Thumbnail']|length > 0 %}
                     <img id="thumbnail" src="
-                            {{ wsgi_str }}{{ url_for('images', filename=pubdata['displayLinks']['Thumbnail'][0]['url'], width=200) }}"
+                            {{ wsgi_str }}{{ url_for('images', filename=pubdata['displayLinks']['Thumbnail'][0]['url'], width=200, format='PNG') }}"
                          alt="thumbnail"/>
                 {% else %}
                     <img id="thumbnail" src="
@@ -118,18 +118,21 @@
                     {% macro contributor_list(contributorListTyped, contributorKind) %}
                         {%- for contributor in pubdata[contributorListTyped] -%}
                             <span class="contributor" itemprop="{{ contributorKind }}"
-                                  itemtype="http://schema.org/{%- if contributor['type'] == "person" -%}Person{% else %}Organization{% endif %}">
-                                {%- if (loop.length == 2 and loop.first != True) or (loop.last and loop.length > 2) -%}
-                                    and&nbsp;
-                                {%- endif -%}
-                                {{ contributor['text'] }}
-                                {%- if contributor['orcid'] -%}
-                                    <a href="{{ contributor['orcid'] }}" aria-label="ORC Id"><i class="ai ai-orcid"></i></a>
-                                {%- endif -%}
-                                {%- if not loop.last and loop.length > 2 -%}
-                                    ,&nbsp;
-                                {%- endif -%}
+                              itemtype="http://schema.org/{%- if contributor['type'] == "person" -%}Person{% else %}Organization{% endif %}">
+                                {{- contributor['text'] -}}
                             </span>
+                            {%- if contributor['orcid'] -%}
+                                <a href="{{ contributor['orcid'] }}" aria-label="ORC Id"><i class="ai ai-orcid"></i></a>
+                            {%- endif -%}
+                            {%- if loop.first and loop.length == 2 -%}
+                                &nbsp;and&nbsp;
+                            {%- elif not loop.last and loop.length > 2 -%}
+                                {%- if loop.index < loop.length - 1 -%}
+                                    ,&nbsp;
+                                {%- else -%}
+                                    ,&nbsp;and&nbsp;
+                                {%- endif -%}
+                            {%- endif -%}
                         {%- endfor -%}
                     {% endmacro %}
 
@@ -156,7 +159,8 @@
                                 <div class="doi-container"><a itemprop="sameAs"
                                                               href="https://doi.org/{{ pubdata['doi'] }}"
                                                               onclick="GA.trackGAEvent('Downloads', 'DOI', 'http://dx.doi.org/{{ pubdata['doi'] }}')">
-                                    https://doi.org/{{ pubdata['doi'] }}</a></div>
+                                    https://doi.org/{{ pubdata['doi'] }}</a>
+                                </div>
                             {% endif %}
                             <a href="https://twitter.com/share" class="twitter-share-button" data-text="USGS Pub"
                                data-via="USGS_Pubs" data-dnt="true">Tweet</a>
@@ -333,6 +337,15 @@
                             In stock and available from the <a itemprop="url"
                                                                href="{{ pubdata['offers']['schema:offers']['schema:url'] }}"><strong>USGS
                                 Store</strong></a></li>
+                    {% endif %}
+                    {% if pubdata['openAccessHostType'] %}
+                        <li>Open Access Version:  
+                            {% if pubdata['openAccessHostType']=="publisher" %}
+                                <a href="{{ pubdata['openAccessLink'] }}">Publisher Index Page <i class="ai ai-open-access"></i></a>
+                            {% elif pubdata['openAccessHostType']=="repository" %}
+                                <a href="{{ pubdata['openAccessLink'] }}">External Repository <i class="ai ai-open-access"></i></a>
+                            {% endif %}
+                        </li>
                     {% endif %}
                     {# commenting this out until USGS can make a decision about it
                     {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Journal Article' and pubdata['publicAccess']) %}

@@ -27,6 +27,7 @@ BASE_SEARCH_URL = app.config['BASE_SEARCH_URL']
 ALTMETRIC_KEY = app.config['ALTMETRIC_KEY']
 ALTMETRIC_ENDPOINT = app.config['ALTMETRIC_ENDPOINT']
 CROSSREF_ENDPOINT = app.config['CROSSREF_ENDPOINT']
+UNPAYWALL_ENDPOINT = app.config['UNPAYWALL_ENDPOINT']
 
 
 def pubdetails(pubdata):
@@ -661,6 +662,7 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     pubdata['formattedModifiedDateTime'] = arrow.get(pubdata['lastModifiedDate']).format('MMMM DD, YYYY HH:mm:ss')
     pubdata = munge_abstract(pubdata)
     pubdata = has_excel(pubdata)
+    pubdata = has_oa_link(pubdata)
     # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov.
     # Flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI
     # The Apache rewrite changes this to pubs-test.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI, where there is
@@ -684,6 +686,25 @@ def has_excel(pubdata):
         for link in pubdata['links']:
             if link.get('linkFileType', {}).get('text') == 'xlsx':
                 pubdata['hasExcel'] = True
+    return pubdata
+
+
+def has_oa_link(pubdata):
+    """
+    Function to identify if a pub contains an open access link from unpaywall.
+
+    If there is an open access link, the link and the host type of the link is appended to the pubdata.
+    :param pubdata:
+    :return: pubdata
+    """
+    if 'doi' in pubdata.keys():
+        pubdata['isOA'] = get_unpaywall_data(pubdata['doi'])
+        unpaywall_data = get_unpaywall_data(pubdata['doi'])
+        if (unpaywall_data is not None) and (unpaywall_data['best_oa_location'] is not None):
+            # Unpaywall issue with links that may have been removed.
+            if unpaywall_data['best_oa_location']['url_for_landing_page'] is not None:
+                pubdata['openAccessLink'] = unpaywall_data['best_oa_location']['url_for_landing_page']
+                pubdata['openAccessHostType'] = unpaywall_data['best_oa_location']['host_type']
     return pubdata
 
 
@@ -1049,6 +1070,26 @@ def get_crossref_data(doi, endpoint=CROSSREF_ENDPOINT, verify=VERIFY_CERT):
             if resp.status_code == 200:
                 crossref_data = resp.json()
     return crossref_data
+
+
+@cache.memoize(timeout=2592000)  # Cache data for a month so the nice people at unpaywall yell at us
+def get_unpaywall_data(doi, endpoint=UNPAYWALL_ENDPOINT, verify=VERIFY_CERT):
+    """
+    This pulls data from the unpaywall API for a doi and put it in the cache
+    :param doi: the DOI of the pub you are interested in
+    :param verify: sets the verification for the calls
+    :return: data from unpaywall API about that DOI
+    """
+    unpaywall_data = None
+    if doi:
+        unpaywall_endpoint = urljoin(endpoint, '{}'.format(doi))
+        try:
+            resp = requests.get(unpaywall_endpoint, params={'email': 'pubs_tech_group@usgs.gov'}, verify=verify)
+        except requests.ConnectionError:
+            pass
+        if resp.status_code == 200:
+            unpaywall_data = resp.json()
+    return unpaywall_data
 
 
 @cache.memoize(timeout=86400)  # Cache data for a day so the nice people at altmetrics don't yell at us
