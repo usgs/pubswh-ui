@@ -46,6 +46,9 @@ STATIC_ROOT = 'http://localhost:9000'
 # when static assets are hosted on a different port than the Flask dev server.
 FLASK_CORS = True
 
+# Set to False when running the development server on https
+SECURE_COOKIES = False
+
 # To use hashed assets, set this to the gulp-rev-all rev-manifest.json path
 #ASSET_MANIFEST_PATH = None
 
