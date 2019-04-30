@@ -2,9 +2,9 @@
 Tests for pubswh blueprint's utility functions
 """
 import unittest
+from unittest.mock import MagicMock, patch
 
 import arrow
-from mock import MagicMock, patch
 import requests as r
 import requests_mock
 
