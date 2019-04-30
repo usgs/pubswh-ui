@@ -1,5 +1,4 @@
 arrow==0.12.1
-Authlib==0.9
 beautifulsoup4==4.6.3
 click==6.7
 dcxml==0.1.1
