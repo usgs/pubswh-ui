@@ -93,3 +93,6 @@ FLASK_CORS = False
 
 # To use hashed assets, set this to the gulp-rev-all rev-manifest.json path
 ASSET_MANIFEST_PATH = None
+
+# Set to False when running the development server on https
+SECURE_COOKIES = True

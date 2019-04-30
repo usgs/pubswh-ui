@@ -77,7 +77,7 @@ def authorize():
     token = oauth.pubsauth.authorize_access_token(verify=False)
 
     response = redirect(request.args.get('next'))
-    response.set_cookie('access_token', token.get('access_token'), secure=True)
+    response.set_cookie('access_token', token.get('access_token'), secure=app.config['SECURE_COOKIES'])
     session['access_token_expires_at'] = token.get('expires_at')
 
     return response
