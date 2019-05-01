@@ -21,7 +21,6 @@ const getBundleConfig = function (output) {
             'scripts/metrics/pubsGraphController.js',
             'scripts/metrics/pubsAcquisitionGraphController.js'
         ],
-        experimentalCodeSplitting: true,
         plugins: getRollupPlugins(ENV),
         output
     };

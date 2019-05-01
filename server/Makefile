@@ -51,5 +51,5 @@ server/instance/config.py:
 	cp server/config.py.sample server/instance/config.py
 
 cleanenv-server: clean-server
-	@echo 'Cleaning graph-server environment...'
+	@echo 'Cleaning server environment...'
 	rm -rf server/env
