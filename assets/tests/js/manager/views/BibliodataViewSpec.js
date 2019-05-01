@@ -103,9 +103,6 @@ describe('BibliodataView', function() {
         let ev;
 
         beforeEach(function() {
-            spyOn(testView, 'stickit');
-            spyOn($.fn, 'select2');
-
             pubModel.set({
                 publicationType : {id : 1, text : 'Type 1'},
                 publicationSubtype : {id : 2, text : 'Subtype 2'},
@@ -118,6 +115,9 @@ describe('BibliodataView', function() {
                 model : pubModel,
                 el : '#test-div'
             });
+            spyOn(testView, 'stickit');
+            spyOn($.fn, 'select2');
+
             testView.render();
         });
 
@@ -248,9 +248,6 @@ describe('BibliodataView', function() {
     describe('Tests for model event listeners', function() {
 
         beforeEach(function() {
-            spyOn(testView, 'stickit');
-            spyOn($.fn, 'select2').and.callThrough();
-
             pubModel.set({
                 publicationType : {id : 1, text : 'Type 1'},
                 publicationSubtype : {id : 2, text : 'Subtype 2'},
@@ -263,6 +260,9 @@ describe('BibliodataView', function() {
                 model : pubModel,
                 el : '#test-div'
             });
+
+            spyOn(testView, 'stickit');
+            spyOn($.fn, 'select2').and.callThrough();
 
             // For static select2's need to add options.
             testView.publicationTypeCollection.set([{id : 1, text : 'Type1'}, {id : 11, text : 'Type 11'}]);
