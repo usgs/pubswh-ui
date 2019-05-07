@@ -43,8 +43,7 @@ def services_proxy(op1, op2=None, op3=None, op4=None):
         url = url + '/' + op4
 
     headers = get_auth_header()
-    if request.method == 'POST' or request.method == 'PUT':
-        headers.update(request.headers)
+    headers.update(request.headers)
 
     query_string = request.query_string.decode('utf-8')
     app.logger.info('Service URL is %s?%s', url, query_string)
