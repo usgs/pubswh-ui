@@ -92,7 +92,9 @@ def logout():
     '''
     # Send logout to pubs services
     url = '%sauth/logout/' % (app.config['PUB_URL'])
+    headers = get_auth_header()
     proxy_request = Request(method='POST',
+                            headers=headers,
                             url=url)
     app.logger.info('Logout sent to server %s', url)
     resp = Session().send(proxy_request.prepare(), verify=app.config['VERIFY_CERT'])
