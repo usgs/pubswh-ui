@@ -3,6 +3,8 @@ from functools import wraps
 import time
 from urllib.parse import urlencode
 
+from requests import Request, Session
+
 from flask import redirect, url_for, Blueprint, session, request
 
 from .. import app, oauth
@@ -88,6 +90,15 @@ def logout():
     Logouts the user and clears the session data
     :return:
     '''
+    # Send logout to pubs services
+    url = '%sauth/logout/' % (app.config['PUB_URL'])
+    headers = get_auth_header()
+    proxy_request = Request(method='POST',
+                            headers=headers,
+                            url=url)
+    app.logger.info('Logout sent to server %s', url)
+    resp = Session().send(proxy_request.prepare(), verify=app.config['VERIFY_CERT'])
+
     # Clear session stored data
     session.clear()
 
