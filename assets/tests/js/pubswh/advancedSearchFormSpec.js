@@ -270,7 +270,7 @@ describe('AdvancedSearchForm', function() {
         });
     });
 
-    describe('Tests with initialRows', function() {
+    xdescribe('Tests with initialRows', function() {
         beforeEach(function(done) {
             var initialRows = [
                 {
