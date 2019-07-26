@@ -7,7 +7,7 @@ This project produces server-rendered HTML pages for the USGS Pubs Warehouse.
 1. Create a virtualenv and install the project's Python requirements.
 
 ```bash
-virtualenv --python=python3.6 env
+virtualenv --python=python3 env
 env/bin/pip install -r requirements.txt
 ```
 
@@ -31,16 +31,9 @@ env/bin/python run.py
 
 ## Tests
 
-This app has Lettuce tests and Python unit tests. To run the Lettuce tests do the following with your virtualenv activated or using the full path name to Lettuce:
-
+This app has tests that can be run as follows:
 ```bash
-env/bin/lettuce --with-xunit pubs_ui/lettuce_testing
-```
-
-To run the unit tests do the following with your virtualenv activated or using the full path name to nosetests:
-
-```bash
-nosetests -w pubs_ui
+env/bin/coverage run --omit=pubs_ui/*/tests/*.py,env/* -m pytest pubs_ui/
 ```
 
 ## Generating secret keys
