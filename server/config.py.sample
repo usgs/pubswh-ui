@@ -22,12 +22,10 @@ ROBOTS_WELCOME = False
 LOGGING_ON = False
 # A string to put into the announcements block on the homepage- can contain html
 ANNOUNCEMENT_BLOCK = ''
-# The endpoint to get an authorization token based on AD credentials
-AUTH_ENDPOINT_URL = 'https://pubs.er.usgs.gov/pubs-services/auth/'
+
 # The endpoint to get a preview of a pub that is only in mypubs
 PREVIEW_ENDPOINT_URL = 'https://pubs.er.usgs.gov/pubs-services/mppublications/'
-# set the default path for the login page- for local development, it is '/login/'
-LOGIN_PAGE_PATH = '/login/'
+
 # verify ssl certificate for outside service calls
 VERIFY_CERT = True or False
 #cache settings- see the documentation for flask-cache. For development, a cache type of simple works well with the development server.  redis is used on production
@@ -53,7 +51,7 @@ SECURE_COOKIES = False
 #ASSET_MANIFEST_PATH = None
 
 # These should be set to authenticate the manager application. This should be set up to
-# use the same keycloak source as the serices configured above
+# use the same keycloak source as the services configured above
 PUBSAUTH_CLIENT_ID = ''
 PUBSAUTH_CLIENT_SECRET = ''
 PUBSAUTH_ACCESS_TOKEN_URL = ''
