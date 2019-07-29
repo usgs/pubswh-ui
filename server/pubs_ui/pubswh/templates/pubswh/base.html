@@ -29,7 +29,7 @@
 {% endblock %}
 
 {% block usgs_header %}
-    {{ header.usgs_header("enable_nav", current_user=current_user) }}
+    {{ header.usgs_header("enable_nav", is_authenticated) }}
 {% endblock  %}
 
 {% block main %}

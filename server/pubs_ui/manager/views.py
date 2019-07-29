@@ -6,9 +6,8 @@ Manager blueprint views
 from requests import Request, Session
 
 from flask import Blueprint, render_template, request
-from flask_login import login_required
 
-from ..auth.utils import generate_auth_header
+from ..auth.views import authentication_required, get_auth_header
 from .. import app
 
 
@@ -22,7 +21,7 @@ manager = Blueprint('manager', __name__,
 
 
 @manager.route('/')
-@login_required
+@authentication_required
 def show_app(path=None):
     return render_template('manager/manager.html')
 
@@ -42,9 +41,9 @@ def services_proxy(op1, op2=None, op3=None, op4=None):
         url = url + '/' + op3
     if op4 is not None:
         url = url + '/' + op4
-    headers = generate_auth_header(request)
-    if request.method == 'POST' or request.method == 'PUT':
-        headers.update(request.headers)
+
+    headers = get_auth_header()
+    headers.update(request.headers)
 
     query_string = request.query_string.decode('utf-8')
     app.logger.info('Service URL is %s?%s', url, query_string)

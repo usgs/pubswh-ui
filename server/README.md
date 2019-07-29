@@ -33,7 +33,7 @@ env/bin/python run.py
 
 This app has tests that can be run as follows:
 ```bash
-env/bin/coverage run --omit=pubs_ui/*/tests/*.py,env/* -m pytest pubs_ui/
+env/bin/pytests pubs_ui
 ```
 
 ## Generating secret keys
@@ -78,8 +78,4 @@ On Mac OS, you may have trouble with the proxy to the pubs-services raising the 
 ```
 SSLError: [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:590)
 ```
-You can solve this by pip install requests[security] but then the lettuce tests fail with:
-```
-raise SSLError(e, request=request)
-    SSLError: ('bad handshake: WantWriteError()',)
-```
+You can solve this by pip install requests[security] 
