@@ -20,4 +20,4 @@ before_script:
   - mkdir coverage
 
 script:
-  - make test coveralls
+  - make test
