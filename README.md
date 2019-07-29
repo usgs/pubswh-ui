@@ -12,7 +12,7 @@ This repo contains the front-end components of the Publications Warehouse:
 - [`server`](server): A Flask web application that is used to create server-rendered pages
 - [`assets`](assets): Client-side Javascript, CSS, images, etc.
 
-This application should be built using Python 3.6 and Node.js version > 8.x.x.
+This application should be built using Python 3.X and Node.js version > 10.x.x.
 
 ## Install dependencies
 
