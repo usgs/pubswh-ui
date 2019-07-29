@@ -1,5 +1,5 @@
 bumpversion
 coverage
 coveralls
-pylint==1.9.2
+pylint==2.3.1
 SaltPyLint==2019.6.7
