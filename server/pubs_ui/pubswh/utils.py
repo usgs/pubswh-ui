@@ -474,7 +474,7 @@ def create_store_info(publication_resp):
 
     :param requests.Response publication_resp: response object for a publication returned from a GET request on
                                                the /publication service.
-    :return: dict containing two items:
+    :returns: dict containing two items:
         'context_id': the index (prod) ID of the context pub. Included as
             confirmation only; identical to the 'context_id' param.
         'offers': the object that contains a representations of the USGS store offer for the publication
@@ -529,21 +529,16 @@ def create_store_info(publication_resp):
     return {'context_item': index_id, 'offers': offers}
 
 
-def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):
+def add_relationships_graphs(context_pubdata, url_root):
     """
     Accepts publication data JSON for the desired context publication,
-    extracts the context publication's index_id, calls precedes_supersedes_url
-    for that index_id. If the current publication supersedes, and/or
-    is superseded by, any other publications, inserts summary info about
-    those pubs into the passed context_pubdata.
+    extracts the context publication's index_id.
 
-
-    context_pubdata: the Python decode of the JSON representation of the
+    :param dict context_pubdata: the Python decode of the JSON representation of the
         context publication.  the most important elements here is called "interactions"
-    supersedes_service_url: the endpoint of the service from which info about
-        related items should be obtained
-    param pubs_base_url: the url needed to compose a publication URL given
+    :param str url_root the url needed to compose a publication URL given
         a known prod_id
+    :return dict
     """
 
     base_id_url = urljoin(url_root, 'publication/')
@@ -555,9 +550,6 @@ def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):
     # needs to be exported to a configuration.
     pub_type = 'rdac:Work'
 
-    # obtain data from legacy api (down to just store data now)
-    # pre_super = legacy_api_info(index_id, supersedes_service_url)
-    pre_super = {"offers": None}
     # get interactions from the new endpoint to build json-LD object
     interactions = return_pubdata.get('interactions')
 
@@ -613,9 +605,6 @@ def add_relationships_graphs(context_pubdata, supersedes_service_url, url_root):
                     related_pub['dc:date'] = interaction['object']['publicationYear']
                 return_pubdata['relationships']['@graph'].append(related_pub)
 
-    # add offer data from the USGS store if it exists
-    if pre_super['offers']:
-        return_pubdata['offers'] = pre_super['offers']
     return return_pubdata
 
 
@@ -646,14 +635,15 @@ def make_chapter_data_for_display(pubdata):
     return pubdata
 
 
-def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url):
+def munge_pubdata_for_display(pubdata, json_ld_id_base_url):
     """
     Takes publication data from the pubs-services API and smashes it around so that it is friendly for jinja2 templates
-    :param pubdata: data for a single publication from the pubs-services endpoint
+    :param dict pubdata: data for a single publication from the pubs-services endpoint
+    :param str json_ld_id_base_url
     :return: pubdata
     """
     pubdata = pubdetails(pubdata)
-    pubdata = add_relationships_graphs(pubdata, supersedes_url, json_ld_id_base_url)
+    pubdata = add_relationships_graphs(pubdata, json_ld_id_base_url)
     pubdata = manipulate_doi_information(pubdata)
     pubdata = create_display_links(pubdata)
     pubdata = contributor_lists(pubdata)
@@ -663,15 +653,7 @@ def munge_pubdata_for_display(pubdata, replace_pubs_with_pubs_test, supersedes_u
     pubdata = munge_abstract(pubdata)
     pubdata = has_excel(pubdata)
     pubdata = has_oa_link(pubdata)
-    # Following if statement added to deal with Apache rewrite of pubs.er.usgs.gov to pubs-test.er.usgs.gov.
-    # Flask_images creates a unique signature for an image e.g. pubs.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI
-    # The Apache rewrite changes this to pubs-test.er.usgs.gov/blah/more_blah/?s=skjcvjkdejiwI, where there is
-    # no image with the signature 'skjcvjkdejiwI' which leads to a failure to find the image. Instead of allowing
-    # Apache to do the rewrite, this code snippet executes the rewrite so the correct signature is preserved for
-    # a given image URL.
-    if replace_pubs_with_pubs_test:
-        pubdata['displayLinks']['Thumbnail'][0]['url'] = change_to_pubs_test(
-            pubdata['displayLinks']['Thumbnail'][0]['url'])
+
     return pubdata
 
 
@@ -845,18 +827,16 @@ def generate_dublin_core(pubrecord):
     return '\n'.join(simpledc.tostring(data).splitlines()[1:])
 
 
-def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url):
+def generate_sb_data(pubrecord, json_ld_id_base_url):
     """
     This function transforms data from the Publications Warehouse data model to the the ScienceBase data model so that
     Publications Warehouse data can be pushed to ScienceBase
-    :param pubrecord: the publication record that is coming out of the publication warehouse web service
-    :param replace_pubs_with_pubs_test: Needed for munging pubs data we have to do to support pubs-test horribleness
-    :param supersedes_url: needed for munging pubs data function- supports supersedes
-    :param json_ld_id_base_url: needed for generating json-ld in munge pubdata
-    :return: sciencebase data that follows the sciencebase data model:
+    :param dict pubrecord: the publication record that is coming out of the publication warehouse web service
+    :param str json_ld_id_base_url: needed for generating json-ld in munge pubdata
+    :returns: dict sciencebase data that follows the sciencebase data model:
     https://my.usgs.gov/confluence/display/sciencebase/ScienceBase+Item+Core+Model
     """
-    pubdata = munge_pubdata_for_display(pubrecord, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+    pubdata = munge_pubdata_for_display(pubrecord, json_ld_id_base_url)
     sbdata = {
         "title": pubdata.get('title'),
         "id": pubdata.get('scienceBaseUri'),
@@ -1006,11 +986,11 @@ def generate_sb_data(pubrecord, replace_pubs_with_pubs_test, supersedes_url, jso
 def check_public_access(pubdata, online_date_arrow, current_date_time=arrow.utcnow()):
     """
     runs through a few different checks to see if the publication is publically accessable
-    :param pubdata: a publications warehouse object
+    :param dict pubdata: a publications warehouse object
     :param online_date_arrow: an arrow date object that represents the online date for the publication, from crossref
     :param current_date_time: an arrow date object that represents the current date time, but can be overidden for tests
     This is needed for tests around the embargo policy
-    :return: a boolean if there should be public access or not
+    :returns: boolean if there should be public access or not
     """
     public_access = False
     # 2016-10-01 is the key date for the USGS public access policy, and we will use it in several ways
@@ -1034,7 +1014,7 @@ def get_published_online_date(crossref_data):
     """
     This function pulls the published online date out of the crossref data and returns it as an arrow date object
     :param doi: the DOI of interest that you want the published online date for
-    :return: arrow date object for published online date if it exists
+    :returns: arrow date object for published online date if it exists
     """
     published_online_date = None
     if crossref_data and crossref_data.get('status') == 'ok':
@@ -1057,7 +1037,7 @@ def get_crossref_data(doi, endpoint=CROSSREF_ENDPOINT, verify=VERIFY_CERT):
     All this function does is pull data from the crossref API for a specific URL and put it in the cache
     :param doi: the DOI of the pub you are interested in
     :param verify: sets the verification for the calls
-    :return: data from crossref API about that DOI
+    :returns: data from crossref API about that DOI
     """
     parameters = {'mailto': 'pubs_tech_group@usgs.gov'}
     crossref_data = None
@@ -1078,7 +1058,7 @@ def get_unpaywall_data(doi, endpoint=UNPAYWALL_ENDPOINT, verify=VERIFY_CERT):
     This pulls data from the unpaywall API for a doi and put it in the cache
     :param doi: the DOI of the pub you are interested in
     :param verify: sets the verification for the calls
-    :return: data from unpaywall API about that DOI
+    :returns: data from unpaywall API about that DOI
     """
     unpaywall_data = None
     if doi:
@@ -1105,7 +1085,7 @@ def get_altmetric_badge_img_links(publication_doi, altmetric_service_endpoint=AL
     :param str altmetric_service_endpoint: altmetric service endpoint
     :param str altmetric_key: a key so this function can access the badges USGS is paying for
     :param bool verify: boolean specifying whether requests should verify SSL certs
-    :return: badge links if they are available and the link to a page that provides further details about the badge
+    :returns: badge links if they are available and the link to a page that provides further details about the badge
     :rtype: tuple
 
     """

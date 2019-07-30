@@ -36,18 +36,13 @@ pubswh = Blueprint('pubswh', __name__,
                    static_url_path='/pubswh/static')
 pub_url = app.config['PUB_URL']
 lookup_url = app.config['LOOKUP_URL']
-supersedes_url = app.config['SUPERSEDES_URL']
 search_url = app.config['BASE_SEARCH_URL']
 contact_recipients = app.config['CONTACT_RECIPIENTS']
 ipds_contact_recipients = app.config.get('IPDS_CONTACT_RECIPIENTS')
-replace_pubs_with_pubs_test = app.config.get('REPLACE_PUBS_WITH_PUBS_TEST')
 robots_welcome = app.config.get('ROBOTS_WELCOME')
 json_ld_id_base_url = app.config.get('JSON_LD_ID_BASE_URL')
 google_webmaster_tools_code = app.config.get('GOOGLE_WEBMASTER_TOOLS_CODE')
-auth_endpoint_url = app.config.get('AUTH_ENDPOINT_URL')
 preview_endpoint_url = app.config.get('PREVIEW_ENDPOINT_URL')
-max_age = app.config["REMEMBER_COOKIE_DURATION"].total_seconds()
-cache_config = app.config['CACHE_CONFIG']
 crossref_endpoint = app.config['CROSSREF_ENDPOINT']
 
 
@@ -87,7 +82,7 @@ def restricted_page(index_id):
 
     if response.status_code == 200:
         record = response.json()
-        pubdata = munge_pubdata_for_display(record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+        pubdata = munge_pubdata_for_display(record, json_ld_id_base_url)
         pub_doi = pubdata.get('doi')
         pub_altmetric_badges, pub_altmetric_details = get_altmetric_badge_img_links(pub_doi, verify=verify_cert)
         small_badge = pub_altmetric_badges['small'] if pub_altmetric_badges is not None else None
@@ -202,7 +197,7 @@ def public_access_details(index_id):
         return render_template('pubswh/404.html'), 404
 
     pubreturn = r.json()
-    pubdata = munge_pubdata_for_display(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+    pubdata = munge_pubdata_for_display(pubreturn, json_ld_id_base_url)
 
     return render_template('pubswh/pub_access_data.html', indexID=index_id, pubdata=pubdata, related_pubs=None)
 
@@ -266,9 +261,9 @@ def publication(index_id):
     pub_altmetric_badges, pub_altmetric_details = get_altmetric_badge_img_links(pub_doi, verify=verify_cert)
     small_badge = pub_altmetric_badges['small'] if pub_altmetric_badges is not None else None
     if 'mimetype' in request.args and request.args.get("mimetype") == 'sbjson':
-        sbdata = generate_sb_data(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+        sbdata = generate_sb_data(pubreturn, json_ld_id_base_url)
         return jsonify(sbdata)
-    pubdata = munge_pubdata_for_display(pubreturn, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+    pubdata = munge_pubdata_for_display(pubreturn, json_ld_id_base_url)
     store_data = create_store_info(r)
     pubdata.update(store_data)
     altmetric_links = {'image': small_badge, 'details': pub_altmetric_details}
@@ -596,8 +591,7 @@ def search_results():
     elif mimetype == 'sbjson':
         sciencebase_records = []
         for record in search_result_records:
-            sb_record = generate_sb_data(
-                record, replace_pubs_with_pubs_test, supersedes_url, json_ld_id_base_url)
+            sb_record = generate_sb_data(record, json_ld_id_base_url)
             sciencebase_records.append(sb_record)
         sb_response = {
             "pageSize": search_results_response['pageSize'],

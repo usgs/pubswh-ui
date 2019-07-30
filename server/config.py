@@ -8,55 +8,77 @@ import sys
 
 PROJECT_HOME = os.path.dirname(__file__)
 
-DEBUG = False
-JS_DEBUG = False
+DEBUG = 'DEBUG' in os.environ
+# Set to true if the log level in the javascript should be at debug level
+JS_DEBUG = 'JS_DEBUG' in os.environ
 
-SECRET_KEY = ''
-VERIFY_CERT = True  # verify SSL certs during web service calls by requests, can be a path to a cert bundle
-COLLECT_STATIC_ROOT = 'static/'  # directory where static files should be placed during a build
-MAIL_USERNAME = 'PUBSV2_NO_REPLY'
-PUB_URL = ''  # root pubs services URL
-LOOKUP_URL = ''
-SUPERSEDES_URL = ''
-BASE_SEARCH_URL = ''  # pubs services search endpoint
+LOGGING_ON = 'LOGGING_ON' in os.environ
+
+# Do not use the same key as any of the deployment servers
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
+# verify SSL certs during web service calls by requests, can be a path to a cert bundle
+VERIFY_CERT = 'NO_VERIFY_CERT' not in os.environ
+
+# directory where static files should be placed during a build
+COLLECT_STATIC_ROOT = 'static/'
+
+# SERVICE ENDPOINTS
+PUB_URL = os.environ.get('PUB_URL')  # root pubs services URL
+LOOKUP_URL = os.environ.get('LOOKUP_URL')
+BASE_SEARCH_URL = os.environ.get('BASE_SEARCH_URL')  # pubs services search endpoint
+JSON_LD_ID_BASE_URL = os.environ.get('JSON_LD_ID_BASE_URL')  # URL to use when constructing JSON reponses that have a `url` attribute
+PREVIEW_ENDPOINT_URL = os.environ.get('PREVIEW_ENDPOINT_URL')  # pubs services endpoint for publications currently in the manager app
+
 RECAPTCHA_PUBLIC_KEY = '6LfisP0SAAAAAKcg5-a5bEeV4slFfQZr5_7XfqXf'  # using google's recaptcha API
-RECAPTCHA_PRIVATE_KEY = ''  # see RECAPTCHA_PRIVATE_KEY in instance/config.py
-WSGI_STR = ''  # string that should be appended to routes on OWI virtual machines
-GOOGLE_ANALYTICS_CODE = ''  # Google analytics code (e.g. UA-9302130-2)
-JSON_LD_ID_BASE_URL = ''  # URL to use when constructing JSON reponses that have a `url` attribute
-GOOGLE_WEBMASTER_TOOLS_CODE = 'ertoifsdbnerngdjnasdw9rsdn'  # random string, set real code in instance/config.py on prod
-ANNOUNCEMENT_BLOCK = ''  # some text for general announcments on the website
-LOGGING_ON = False
-REPLACE_PUBS_WITH_PUBS_TEST = False  # hack to deal with pubs-test URL mapping on QA virtual machines
-ROBOTS_WELCOME = False
-REMEMBER_COOKIE_NAME = 'remember_token'  # name of the authentication token
-REMEMBER_COOKIE_DURATION = timedelta(days=1)  # time to remember the authentication token
-AUTH_ENDPOINT_URL = ''  # pubs services authentication endpoint
-PREVIEW_ENDPOINT_URL = ''  # pubs services endpoint for publications currently in the manager app
-CACHE_CONFIG = {'CACHE_TYPE': 'null'}
-REDIS_CONFIG = ''
-IMAGE_CACHE = ''  # path to image cache for thumbnails
-SCIENCEBASE_PARENT_UUID = ''  # set to the sciecebase folder id for the core publications warehouse SB folder
+RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY')
+
+WSGI_STR = os.environ.get('WSGI_STR', '')  # string that should be appended to routes on OWI virtual machines
+
+GOOGLE_ANALYTICS_CODE = os.environ.get('GOOGLE_ANALYTICS_CODE', '')  # Google analytics code (e.g. UA-9302130-2)
+GOOGLE_WEBMASTER_TOOLS_CODE = os.environ.get('GOOGLE_WEBMASTER_TOOLS_CODE', '')  # random string
+
+ANNOUNCEMENT_BLOCK = os.environ.get('ANNOUNCEMENT_BLOCK', '')  # some text for general announcments on the website
+ROBOTS_WELCOME = 'ROBOTS_WELCOME' in os.environ
+
+# Settings for Flask-Cache
+CACHE_TYPE = os.environ.get('CACHE_TYPE', 'null')
+CACHE_REDIS_HOST = os.environ.get('CACHE_REDIS_HOST', '') # Only needed if CACHE_TYPE is 'redis'
+CACHE_KEY_PREFIX = os.environ.get('CACHE_CONFIG', '')
+
+# Set REDIS_CONFIG if it exists
+# Should be of form: db:password@host:port
+REDIS_CONFIG = os.environ.get('REDIS_CONFIG')
+if REDIS_CONFIG:
+    groups = re.search(r'(\d+):([^\/.]+?)@(.+):(\d+)', REDIS_CONFIG).groups()
+    REDIS_CONFIG = {
+        'db': groups[0],
+        'password': groups[1],
+        'host': groups[2],
+        'port': groups[3]
+    }
+IMAGES_CACHE = os.environ.get('IMAGES_CACHE', '')  # path to image cache for thumbnails
+SCIENCEBASE_PARENT_UUID = os.environ.get('SCIENCEBASE_PARENT_UUID','') # set to the sciecebase folder id for the core publications warehouse SB folder
 
 #These should be set to authenticate the manager application
-PUBSAUTH_CLIENT_ID = ''
-PUBSAUTH_CLIENT_SECRET = ''
-PUBSAUTH_ACCESS_TOKEN_URL = ''
-PUBSAUTH_AUTHORIZE_URL = ''
-PUBSAUTH_API_BASE_URL = ''
+PUBSAUTH_CLIENT_ID = os.environ.get('PUBS_CLIENT_ID')
+PUBSAUTH_CLIENT_SECRET = os.environ.get('PUBSAUTH_CLIENT_SECRET')
+PUBSAUTH_ACCESS_TOKEN_URL = os.environ.get('PUBSAUTH_ACCESS_TOKEN_URL')
+PUBSAUTH_AUTHORIZE_URL = os.environ.get('PUBSAUTH_AUTHORIZE_URL')
+PUBSAUTH_API_BASE_URL = os.environ.get('PUBSAUTH_API_BASE_URL')
 
 CONTACT_RECIPIENTS = ['servicedesk@usgs.gov']  # recipient address
 
 IPDS_CONTACT_RECIPIENTS = ['GS_Help_IPDS@usgs.gov']
 
 # Location of file containing the google analytics service account's JSON key.
-GA_KEY_FILE_PATH = ''
+GA_KEY_FILE_PATH = os.environ.get('GA_KEY_FILE_PATH', '')
 GA_OAUTH2_SCOPE = 'https://www.googleapis.com/auth/analytics.readonly'
 GA_PUBS_VIEW_ID = 'ga:20354817'
 GA_DISCOVERY_URI = ('https://analyticsreporting.googleapis.com/$discovery/rest')
 
 # Altmetric API information
-ALTMETRIC_KEY = ''
+ALTMETRIC_KEY = os.environ.get('ALTMETRIC_KEY')
 ALTMETRIC_ENDPOINT = 'https://api.altmetric.com/v1/'
 
 # Crossref API information
@@ -70,29 +92,13 @@ try:
 except ImportError:
     pass
 
-#
-# Variables used for testing purposes
-#
-#
-# True if 'nosetests' is a command line argument
-nose_testing = sys.argv[0].endswith('nosetests')  # pylint: disable=C0103
-
-# Determine if a lettuce is being run
-lettuce_testing = 'lettuce' in sys.argv[0]  # pylint: disable=C0103
-
-if nose_testing or lettuce_testing:
-    WTF_CSRF_ENABLED = False
-    TESTING = True
-    BASE_SEARCH_URL = 'https://pubs-fake.er.usgs.gov/pubs-services/publication/'
-    PUB_URL = 'https://pubs-fake.er.usgs.gov/pubs-services/'
-    SUPERSEDES_URL = 'http://cida-eros-pubsfake.er.usgs.gov:8080/pubs2_ui/service/citation/json/extras?'
-
 # Use Flask-Cors to enable cross-origin requests. Useful for local development,
 # when static assets are hosted on a different port than the Flask dev server.
+# TODO Is Flask-Cors really needed. WQP doesn't need this
 FLASK_CORS = False
 
 # To use hashed assets, set this to the gulp-rev-all rev-manifest.json path
-ASSET_MANIFEST_PATH = None
+ASSET_MANIFEST_PATH = os.environ.get('ASSET_MANIFEST_PATH')
 
 # Set to False when running the development server on https
 SECURE_COOKIES = True

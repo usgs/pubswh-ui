@@ -172,8 +172,6 @@ class GenerateScienceBaseData(unittest.TestCase):
     """
     # pylint: disable=C0103,R0201,C0301
 
-    replace_pubs_with_pubs_test = False
-    supersedes_url = "https://pubs.er.usgs.gov/service/citation/json/extras?"
     json_ld_id_base_url = "https://pubs.er.usgs.gov"
 
     def test_will_a_basic_sb_record_be_generated_from_a_basic_pubs_record(self):
@@ -237,8 +235,7 @@ class GenerateScienceBaseData(unittest.TestCase):
             "parentId": app.config['SCIENCEBASE_PARENT_UUID']
         }
         self.assertEqual(
-            generate_sb_data(simple_pubsdata, self.replace_pubs_with_pubs_test,
-                             self.supersedes_url, self.json_ld_id_base_url),
+            generate_sb_data(simple_pubsdata, self.json_ld_id_base_url),
             expected_sbdata
         )
 
