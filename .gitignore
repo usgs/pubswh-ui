@@ -1,5 +1,4 @@
 /etc
-assets/.npmrc
 assets/node_modules
 assets/coverage
 assets/bower_components
