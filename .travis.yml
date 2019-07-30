@@ -1,23 +1,18 @@
-language: python
+language: minimal
 
-python:
-  - "3.6"
-
-addons:
-  firefox: "latest"
-
-before_install:
-  - sudo apt-get install lcov
-  - nvm install $(python -c "import json; print(json.loads(open('./assets/package.json').read())['engines']['node'])")
+services:
+  - docker
 
 install:
-  - make env
-  - gem install coveralls-lcov
-
-before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - mkdir coverage
+  - docker-compose -f docker-compose.yml build
 
 script:
-  - make test
+  # Run Javascript tests
+  - docker-compose -f docker-compose.yml -f docker-compose.ci.yml run assets
+  # Run Python tests
+  - cp server/instance/config.py.sample server/instance/config.py
+  - docker-compose -f docker-compose.yml -f docker-compose.ci.yml run -u root server
+
+after_success:
+  # Upload coverage reports in ./coverage to codecov.io
+  - bash <(curl -s https://codecov.io/bash)
