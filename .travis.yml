@@ -10,7 +10,7 @@ script:
   # Run Javascript tests
   - docker-compose -f docker-compose.yml -f docker-compose.ci.yml run assets
   # Run Python tests
-  - cp server/instance/config.py.sample server/instance/config.py
+  - cp server/config.py.sample server/instance/config.py
   - docker-compose -f docker-compose.yml -f docker-compose.ci.yml run -u root server
 
 after_success:
