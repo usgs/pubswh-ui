@@ -10,8 +10,8 @@ WORKDIR /assets
 COPY package.json .
 COPY package-lock.json .
 COPY bower.json .
-ARG bower_args=
-ARG npm_args=
+ARG bower_args
+ARG npm_args
 RUN echo $bower_args
 RUN echo $npm_args
 RUN npm $npm_args install

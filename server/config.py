@@ -2,9 +2,8 @@
 Base configuration settings for Pubs Warehouse
 """
 
-from datetime import timedelta
 import os
-import sys
+import re
 
 PROJECT_HOME = os.path.dirname(__file__)
 
@@ -27,8 +26,10 @@ COLLECT_STATIC_ROOT = 'static/'
 PUB_URL = os.environ.get('PUB_URL')  # root pubs services URL
 LOOKUP_URL = os.environ.get('LOOKUP_URL')
 BASE_SEARCH_URL = os.environ.get('BASE_SEARCH_URL')  # pubs services search endpoint
-JSON_LD_ID_BASE_URL = os.environ.get('JSON_LD_ID_BASE_URL')  # URL to use when constructing JSON reponses that have a `url` attribute
-PREVIEW_ENDPOINT_URL = os.environ.get('PREVIEW_ENDPOINT_URL')  # pubs services endpoint for publications currently in the manager app
+# URL to use when constructing JSON reponses that have a `url` attribute
+JSON_LD_ID_BASE_URL = os.environ.get('JSON_LD_ID_BASE_URL')
+# pubs services endpoint for publications currently in the manager app
+PREVIEW_ENDPOINT_URL = os.environ.get('PREVIEW_ENDPOINT_URL')
 
 RECAPTCHA_PUBLIC_KEY = '6LfisP0SAAAAAKcg5-a5bEeV4slFfQZr5_7XfqXf'  # using google's recaptcha API
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY')
@@ -43,8 +44,8 @@ ROBOTS_WELCOME = 'ROBOTS_WELCOME' in os.environ
 
 # Settings for Flask-Cache
 CACHE_TYPE = os.environ.get('CACHE_TYPE', 'null')
-CACHE_REDIS_HOST = os.environ.get('CACHE_REDIS_HOST', '') # Only needed if CACHE_TYPE is 'redis'
-CACHE_KEY_PREFIX = os.environ.get('CACHE_CONFIG', '')
+CACHE_REDIS_HOST = os.environ.get('CACHE_REDIS_HOST', '')  # Only needed if CACHE_TYPE is 'redis'
+CACHE_KEY_PREFIX = os.environ.get('CACHE_KEY_PREFIX', '')
 
 # Set REDIS_CONFIG if it exists
 # Should be of form: db:password@host:port
@@ -58,7 +59,8 @@ if REDIS_CONFIG:
         'port': groups[3]
     }
 IMAGES_CACHE = os.environ.get('IMAGES_CACHE', '')  # path to image cache for thumbnails
-SCIENCEBASE_PARENT_UUID = os.environ.get('SCIENCEBASE_PARENT_UUID','') # set to the sciecebase folder id for the core publications warehouse SB folder
+# set to the sciecebase folder id for the core publications warehouse SB folder
+SCIENCEBASE_PARENT_UUID = os.environ.get('SCIENCEBASE_PARENT_UUID', '')
 
 #These should be set to authenticate the manager application
 PUBSAUTH_CLIENT_ID = os.environ.get('PUBS_CLIENT_ID')

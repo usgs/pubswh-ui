@@ -52,7 +52,11 @@ oauth.register('pubsauth',
                )
 
 # Set up the cache
-cache = Cache(app, config=app.config.get('CACHE_CONFIG'))
+cache = Cache(app, config={
+    'CACHE_TYPE': app.config['CACHE_TYPE'],
+    'CACHE_REDIS_HOST': app.config['CACHE_REDIS_HOST'],
+    'CACHE_KEY_PREFIX': app.config['CACHE_KEY_PREFIX']
+})
 
 # Load static assets manifest file, which maps source file names to the
 # corresponding versioned/hashed file name.

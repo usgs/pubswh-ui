@@ -15,7 +15,7 @@ WORKDIR $HOME/application
 
 COPY requirements.txt .
 COPY requirements-dev.txt .
-ARG pip_install_args=
+ARG pip_install_args
 RUN echo $pip_install_args
 RUN pip install $pip_install_args --no-cache-dir -r requirements.txt -r requirements-dev.txt
 

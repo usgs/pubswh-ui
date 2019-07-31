@@ -128,9 +128,6 @@ def index():
         pubs_records = recent_pubs_content['records']
         for record in pubs_records:
             record = create_display_links(record)
-            if replace_pubs_with_pubs_test:
-                record['displayLinks']['Thumbnail'][0]['url'] = change_to_pubs_test(
-                    record['displayLinks']['Thumbnail'][0]['url'])
 
     except TypeError:
         pubs_records = []  # return an empty list recent_pubs_content is None (e.g. the service is down)
@@ -294,12 +291,12 @@ def publication(index_id):
 @pubswh.route('/clear_cache/', defaults={'path': ''})
 @pubswh.route('/clear_cache/<path:path>')
 def clear_cache(path):
-    if cache_config['CACHE_TYPE'] == 'redis':
+    if app.config['CACHE_TYPE'] == 'redis':
         args = str(hash(frozenset(list(request.args.items()))))
-        key = cache_config['CACHE_KEY_PREFIX'] + '/' + (path + args).encode('utf-8')
+        key = app.config['CACHE_KEY_PREFIX'] + '/' + (path + args).encode('utf-8')
         # Get the StrictRedis instance from the cache_config and delete the key using that.
         # The cache.delete(key) doesn't work for some reason but this does
-        cache_config['CACHE_REDIS_HOST'].delete(key)
+        app.config['CACHE_REDIS_HOST'].delete(key)
         return 'cache cleared ' + path + " args: " + str(request.args)
 
     cache.clear()
