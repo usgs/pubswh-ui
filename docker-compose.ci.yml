@@ -10,11 +10,11 @@ services:
       - ./coverage/assets:/assets/coverage
   server:
     volumes:
-      - ./coverage/server:/server/coverage
+      - ./coverage/server:/home/python/application/coverage
       - ./server/instance:/home/python/application/instance
     command: >
-        bash -c "mkdir -p coverage && ls instance
+        bash -c "mkdir -p coverage
         && coverage run --omit=pubs_ui/*/tests/*.py,env/* -m pytest pubs_ui/
-        && coverage xml"
+        && coverage xml -o coverage/coverage.xml"
     environment:
       - SECRET_KEY=keep-me-secret

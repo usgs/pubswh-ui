@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.com/usgs/pubswh-ui.svg?branch=master)](https://travis-ci.com/usgs/pubswh-ui)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1f1df7eea3b04596bdb66fcaccb095e1)](https://www.codacy.com/app/usgs_wma_dev/pubswh-ui?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=usgs/pubswh-ui&amp;utm_campaign=Badge_Grade)
+[![codecov](https://codecov.io/gh/usgs/pubswh-ui/branch/master/graph/badge.svg)](https://codecov.io/gh/usgs/pubswh-ui)
 
 The Pubs Warehouse provides access to over 150,000 publications written by USGS
 scientists over the century-plus history of the bureau.
