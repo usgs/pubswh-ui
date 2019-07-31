@@ -11,9 +11,9 @@ services:
   server:
     volumes:
       - ./coverage/server:/server/coverage
-      - ./server/instance:/server/instance
+      - ./server/instance:/home/python/application/instance
     command: >
-        bash -c "mkdir -p coverage
+        bash -c "mkdir -p coverage && ls instance
         && coverage run --omit=pubs_ui/*/tests/*.py,env/* -m pytest pubs_ui/
         && coverage xml"
     environment:
