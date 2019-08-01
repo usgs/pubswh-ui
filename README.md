@@ -14,13 +14,13 @@ This repo contains the front-end components of the Publications Warehouse:
 
 This application should be built using Python 3.X and Node.js version > 10.x.x.
 
-# Local Developmnt - Makefile configuration
+## Local Development - Makefile configuration
 Application configuration may be specified by creating an instance config in server/instance/config.py. This 
 configuration overrides variables in the default one (server/config.py). The make env target will copy a 
 sample, server/config.py.sample, as a convenience if one doesn't exist. By default these will point to 
 production services.
 
-## Install dependencies
+### Install dependencies
 
 The repository contains a make target to configure a local development environment:
 
@@ -30,7 +30,7 @@ make env
 
 To manually configure your environment, please see the READMEs of each separate project.
 
-## Development server
+### Development server
 
 To run all development servers in a watch mode at the same time, use the make target:
 
@@ -50,7 +50,7 @@ See the specific project READMEs for additional information.
 - [Flask Server README](./server/README.md)
 - [Assets README](./assets/README.md)
 
-## Run tests
+### Run tests
 
 To run all project tests:
 
@@ -58,13 +58,13 @@ To run all project tests:
 make test
 ```
 
-## Production build
+### Production build
 
 ```bash
 make build
 ```
 
-## Clean targets
+### Clean targets
 
 ```bash
 make clean      ; clean build artifacts
@@ -73,14 +73,14 @@ make cleanenv   ; clean environment configuration and build artifacts
 
 `make` supports chaining targets, so you could also `make clean watch`, etc.
 
-# Local Development - Docker configuration
+## Local Development - Docker configuration
 
 Two containers are provided - one for node-based build tooling, the second for
 a Python server container. You will need to have a clean directory before starting.
 ```bash
 make cleanenv
 ```
-### Build
+### Docker Build
 
 ```bash
 docker-compose build
@@ -90,14 +90,14 @@ There are three build_args that can be used to add additional arguments to the n
 --build-arg npm_args=--options --build-arg=pip_install_args=--options --build-arg bower_args=--config.options
 ```
 
-### Development server
+### Docker Development server
 
 You will need to provide the environment variables needed to run the application. The environment variables that
 can be read can be found in ```server/config.py```. Set the appropriate environment
 variables in the `local.env` file in the root directory of the project.  Note that if ```server/instance/config.py```
 is not empty, it's contents will override the environment variables set below. If you may use that rather than create
 ```local.env```. Example `local.env` file:
-```
+```text
 SECRET_KEY=<should not be public>
 PUB_URL=<url to pubs service>
 LOOKUP_URL=<ulr to pubs lookup service>
@@ -114,7 +114,7 @@ STATIC_ROOT=http://localhost:9000
 
 In addition, the following optional environment variables should be set appropriately. If not set they will be
 the empty string unless otherwise noted
-```
+```text
 DEBUG=<any string to turn on debug mode>
 JS_DEBUG=<any string to turn on javascript debugging>
 LOGGING_ON=<any string to turn on logging>
@@ -149,7 +149,7 @@ docker-compose up server
 docker-compose up assets
 ```
 
-### Run tests
+### Docker run tests
 
 ```bash
 # Run Python server tests
@@ -158,4 +158,3 @@ docker-compose -f docker-compose.yml -f docker-compose.ci.yml run -u root server
 # Run Javascript tests
 docker-compose -f docker-compose.yml -f docker-compose.ci.yml run assets
 ```
-

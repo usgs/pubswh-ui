@@ -11,11 +11,11 @@ from flask_mail import Mail
 
 from .custom_filters import display_publication_info, date_format, w3c_date
 
+# pylint: disable=C0103
 
-fmt = logging.Formatter('%(asctime)s - %(levelname)s - {%(pathname)s:L%(lineno)d} - %(message)s')
 handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(logging.INFO)
-handler.setFormatter(fmt)
+handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - {%(pathname)s:L%(lineno)d} - %(message)s'))
 
 
 app = Flask(__name__.split()[0], instance_relative_config=True)
