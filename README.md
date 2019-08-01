@@ -86,7 +86,7 @@ make cleanenv
 docker-compose build
 ```
 There are three build_args that can be used to add additional arguments to the npm, bower, and pip install steps
-```
+```text
 --build-arg npm_args=--options --build-arg=pip_install_args=--options --build-arg bower_args=--config.options
 ```
 
