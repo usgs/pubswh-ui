@@ -24,5 +24,5 @@ gitRepoUrl: "https://github.com/usgs/pubswh-ui.git"
 # string parameter that tells the ALB how to route requests to the containers (e.g. /my-app/*); this forms a listener rule for the load balancer
 #contextPath: "/*"
 # the Jenkins credential ID to be use when pushing commits
-#TODO take out after build works gitRepoCredentialsId: "Jenkins-GitHub-Read-Write-Token"
+gitRepoCredentialsId: "Jenkins-GitHub-Read-Write-Token"
 buildContext: "./server"
