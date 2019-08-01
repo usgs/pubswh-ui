@@ -3,7 +3,7 @@ artifactoryPath: "pubswh"
 # docker image path in gitlab
 gitlabPath: "wma/docker/pubswh/pubswh-ui"
 # name of the docker image
-dockerImageName: "pubswhi-ui"
+dockerImageName: "pubswh-ui"
 # type of build
 gitRepoUrl: "https://github.com/usgs/pubswh-ui.git"
 # name of the deploy job to trigger
