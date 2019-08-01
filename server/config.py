@@ -5,6 +5,8 @@ Base configuration settings for Pubs Warehouse
 import os
 import re
 
+# pylint: disable=C0103
+
 PROJECT_HOME = os.path.dirname(__file__)
 
 DEBUG = 'DEBUG' in os.environ
