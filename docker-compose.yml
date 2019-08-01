@@ -5,7 +5,7 @@ services:
   # Node-based static asset build tooling
   assets:
     build: ./assets
-    image: pubwh_assets
+    image: pubswh_assets
     ports:
       - "9000:9000"
   # Python WSGI server
