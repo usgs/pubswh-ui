@@ -12,7 +12,7 @@ if __name__ == '__main__':
     if host_val is not None:
         host = host_val
     else:
-        host = '127.0.0.1'
+        host = 'localhost'
 
     if args.port is None:
         port = 5050

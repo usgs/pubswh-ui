@@ -58,7 +58,8 @@ if REDIS_CONFIG:
         'host': groups[2],
         'port': groups[3]
     }
-IMAGES_CACHE = os.environ.get('IMAGES_CACHE', '')  # path to image cache for thumbnails
+if 'IMAGES_CACHE' in os.environ:
+    IMAGES_CACHE = os.environ.get('IMAGES_CACHE')  # path to image cache for thumbnails
 # set to the sciecebase folder id for the core publications warehouse SB folder
 SCIENCEBASE_PARENT_UUID = os.environ.get('SCIENCEBASE_PARENT_UUID', '')
 
@@ -100,7 +101,10 @@ except ImportError:
 FLASK_CORS = False
 
 # To use hashed assets, set this to the gulp-rev-all rev-manifest.json path
-ASSET_MANIFEST_PATH = os.environ.get('ASSET_MANIFEST_PATH')
+ASSET_MANIFEST_PATH = os.environ.get('ASSET_MANIFEST_PATH', '')
 
 # Set to False when running the development server on https
 SECURE_COOKIES = True
+
+if 'STATIC_ROOT' in os.environ:
+    STATIC_ROOT = os.environ.get('STATIC_ROOT')

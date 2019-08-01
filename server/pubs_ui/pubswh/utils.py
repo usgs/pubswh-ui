@@ -1067,8 +1067,9 @@ def get_unpaywall_data(doi, endpoint=UNPAYWALL_ENDPOINT, verify=VERIFY_CERT):
             resp = requests.get(unpaywall_endpoint, params={'email': 'pubs_tech_group@usgs.gov'}, verify=verify)
         except requests.ConnectionError:
             pass
-        if resp.status_code == 200:
-            unpaywall_data = resp.json()
+        else:
+            if resp.status_code == 200:
+                unpaywall_data = resp.json()
     return unpaywall_data
 
 

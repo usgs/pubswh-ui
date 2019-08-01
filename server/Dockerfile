@@ -34,4 +34,4 @@ USER $USER
 
 EXPOSE 5050
 
-CMD ["gunicorn", "--config", "gunicorn.conf", "wqp:app"]
+CMD ["gunicorn", "--config", "gunicorn.conf", "pubs_ui:app"]

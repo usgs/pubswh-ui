@@ -6,17 +6,12 @@ version: "3"
 
 services:
   assets:
-    command: npm run watch
-    volumes:
-      - ./assets:/assets
+    command: >
+      bash -c "ls && npm run watch"
   server:
     volumes:
       - ./server:/server
-    command: python run.py --host 0.0.0.0
-    environment:
-      - LOCAL_BASE_URL=http://127.0.0.1:5050
-      - STATIC_ROOT=http://localhost:9000
-      - SECRET_KEY=keep-me-secret
-      - ASSET_MANIFEST_PATH=
     env_file:
       - local.env
+    ports:
+      - "5050:5050"

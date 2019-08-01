@@ -1,5 +1,6 @@
 import json
 import logging
+import sys
 
 from authlib.flask.client import OAuth
 
@@ -11,16 +12,15 @@ from flask_mail import Mail
 from .custom_filters import display_publication_info, date_format, w3c_date
 
 
-FORMAT = '%(asctime)s %(message)s'
-fmt = logging.Formatter(FORMAT)
-handler = logging.FileHandler('pubs_ui.log')
+fmt = logging.Formatter('%(asctime)s - %(levelname)s - {%(pathname)s:L%(lineno)d} - %(message)s')
+handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(logging.INFO)
 handler.setFormatter(fmt)
 
 
 app = Flask(__name__.split()[0], instance_relative_config=True)
 app.config.from_object('config')  # load configuration before passing the app object to other things
-app.config.from_pyfile('config.py')
+app.config.from_pyfile('config.py', silent=True)
 
 @app.before_request
 def log_request():
