@@ -1,0 +1,69 @@
+@Library(value='PipelineLibs@2.0.1', changelog=false) _
+
+def p
+
+pipeline {
+    agent {
+        node {
+            label 'project:any'
+        }
+    }
+    parameters {
+        choice(choices: ['snapshots', 'releases'], description: 'type of build', name: 'BUILD_TYPE')
+    }
+    triggers {
+        pollSCM('H/5 * * * *')
+    }
+    stages {
+        stage('clean workspace') {
+            steps {
+                script {
+                    pipelineUtils.cleanWorkspace()
+                }
+            }
+        }
+        stage('checkout source') {
+            steps {
+                script {
+                    // clone the repo
+                    pipelineUtils.cloneGitRepo()
+                }
+                script {
+                    p = pipelineCfg('pipeline.yml')
+                }
+            }
+        }
+        stage('create virtualenv') {
+            steps {
+                script {
+                    pipelineUtils.setUpPythonVirtualEnv()
+                    pipelineUtils.pipInstall('--only-binary=bumpversion bumpversion==0.5.3 requests')
+                }
+            }
+        }
+        stage('build assets docker image') {
+            steps {
+                script {
+                    pipelineUtils.buildDockerImage('pubswh_assets', './assets')
+                }
+            }
+        }
+        stage('build server docker image') {
+            steps {
+                script {
+                    version = pipelineUtils.bumpVersion(params.BUILD_TYPE)
+                    dockerPipeline.buildPublishAndCleanUpOneDockerImage(p, version)
+                }
+            }
+        }
+        stage('push to git') {
+            steps {
+                script {
+                    if ("${params.BUILD_TYPE}" == "releases") {
+                        pipelineUtils.pushToGitRepo(p.gitRepoUrl, p.gitRepoCredentialsId)
+                    }
+                }
+            }
+        }
+    }
+}

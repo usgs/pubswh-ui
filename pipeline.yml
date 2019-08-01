@@ -1,0 +1,28 @@
+# docker image path in artifactory
+artifactoryPath: "pubswh"
+# docker image path in gitlab
+gitlabPath: "wma/docker/pubswh/pubswh-ui"
+# name of the docker image
+dockerImageName: "pubswhi-ui"
+# type of build
+gitRepoUrl: "https://github.com/usgs/pubswh-ui.git"
+# name of the deploy job to trigger
+#deployJobName: "wqp-ui-deploy"
+# name of the project
+#projectName: "pubswh"
+# maximum amount of RAM for running Docker containers in the service
+#memory: 512
+# name of the application or service
+#applicationName: "pubs_ui"
+# integer representing the order of precedence of the ALB rule.
+# set to a low priority; services are given higher priority.
+#rulePriority: 503
+# port that is exposed by your container
+#containerPort: 5050
+# string parameter specifying a path that ALB should use to verify that your application is alive
+#healthCheck: "/robots.txt"
+# string parameter that tells the ALB how to route requests to the containers (e.g. /my-app/*); this forms a listener rule for the load balancer
+#contextPath: "/*"
+# the Jenkins credential ID to be use when pushing commits
+#TODO take out after build works gitRepoCredentialsId: "Jenkins-GitHub-Read-Write-Token"
+buildContext: "./server"

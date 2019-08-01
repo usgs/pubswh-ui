@@ -1,5 +1,5 @@
 # Build the static assets in the node.js container.
-FROM wqp_assets as assets
+FROM pubswh_assets as assets
 
 RUN npm run build
 
