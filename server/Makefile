@@ -24,10 +24,7 @@ clean-server:
 # Development targets
 #
 test-server:
-	cd server
-	mkdir -p coverage
-	env/bin/coverage run --omit=pubs_ui/*/tests/*.py,env/* -m pytest pubs_ui/
-	env/bin/coverage xml
+	cd server && mkdir -p coverage && env/bin/coverage run --omit=pubs_ui/*/tests/*.py,env/* -m pytest pubs_ui/ && env/bin/coverage xml
 
 watch-server:
 	$(PYTHON) server/run.py
