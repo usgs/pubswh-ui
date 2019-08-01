@@ -1,5 +1,6 @@
 import json
 import logging
+import sys
 
 from authlib.flask.client import OAuth
 
@@ -10,17 +11,16 @@ from flask_mail import Mail
 
 from .custom_filters import display_publication_info, date_format, w3c_date
 
+# pylint: disable=C0103
 
-FORMAT = '%(asctime)s %(message)s'
-fmt = logging.Formatter(FORMAT)
-handler = logging.FileHandler('pubs_ui.log')
+handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(logging.INFO)
-handler.setFormatter(fmt)
+handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - {%(pathname)s:L%(lineno)d} - %(message)s'))
 
 
 app = Flask(__name__.split()[0], instance_relative_config=True)
 app.config.from_object('config')  # load configuration before passing the app object to other things
-app.config.from_pyfile('config.py')
+app.config.from_pyfile('config.py', silent=True)
 
 @app.before_request
 def log_request():
@@ -52,7 +52,11 @@ oauth.register('pubsauth',
                )
 
 # Set up the cache
-cache = Cache(app, config=app.config.get('CACHE_CONFIG'))
+cache = Cache(app, config={
+    'CACHE_TYPE': app.config['CACHE_TYPE'],
+    'CACHE_REDIS_HOST': app.config['CACHE_REDIS_HOST'],
+    'CACHE_KEY_PREFIX': app.config['CACHE_KEY_PREFIX']
+})
 
 # Load static assets manifest file, which maps source file names to the
 # corresponding versioned/hashed file name.

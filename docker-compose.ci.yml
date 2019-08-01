@@ -1,0 +1,20 @@
+# These overrides are for continuous integration systems. Usage example:
+# docker-compose -f docker-compose.yml -f docker-compose.ci.yml run assets
+
+version: "3"
+
+services:
+  assets:
+    command: npm test
+    volumes:
+      - ./coverage/assets:/assets/coverage
+  server:
+    volumes:
+      - ./coverage/server:/home/python/application/coverage
+      - ./server/instance:/home/python/application/instance
+    command: >
+        bash -c "mkdir -p coverage
+        && coverage run --omit=pubs_ui/*/tests/*.py,env/* -m pytest pubs_ui/
+        && coverage xml -o coverage/coverage.xml"
+    environment:
+      - SECRET_KEY=keep-me-secret

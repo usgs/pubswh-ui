@@ -75,7 +75,7 @@ CACHE_CONFIG = {'CACHE_TYPE': 'redis', 'CACHE_REDIS_HOST': r, 'CACHE_KEY_PREFIX'
 
 ## NOTE: Platform specific issues
 On Mac OS, you may have trouble with the proxy to the pubs-services raising the following error:
-```
+```text
 SSLError: [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:590)
 ```
 You can solve this by pip install requests[security] 

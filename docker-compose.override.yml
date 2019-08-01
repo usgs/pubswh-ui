@@ -1,0 +1,17 @@
+# These overrides are useful for local development purposes and will be loaded
+# by default when executing `docker-compose up`.
+# Put custom config in local.env.
+
+version: "3"
+
+services:
+  assets:
+    command: >
+      bash -c "ls && npm run watch"
+  server:
+    volumes:
+      - ./server:/server
+    env_file:
+      - local.env
+    ports:
+      - "5050:5050"
