@@ -13,5 +13,6 @@ if __name__ == '__main__':
     port = args.port if args.port is not None else '5050'
 
     application.run(host=host, port=port, threaded=True)
+
     # run from the command line as follows
-    # python runserver.py -ht <ip address of your choice>
+    # python run.py --host <ip address of your choice> --port <port of your choice>
