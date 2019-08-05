@@ -11,7 +11,8 @@ $fa-font-path: "./fonts" !default;
 
 // General styles for all pages
 #main-content {
-  @include u-padding-x($theme-site-margins-width)
+  @include u-maxw('full');
+  @include u-padding-x($theme-site-margins-width);
 }
 
 // Styles for the home page
