@@ -11,26 +11,24 @@ $fa-font-path: "./fonts" !default;
 
 // General styles for all pages
 #main-content {
-  padding-left: $site-margins;
-  padding-right: $site-margins;
+  @include u-padding-x($theme-site-margins-width)
 }
 
 // Styles for the home page
 #welcome {
   p {
-    font-size: $h3-font-size;
+    font-size: $theme-h3-font-size;
   }
 }
 #new-pubs {
-  border: 1px solid $color-gray-dark;
+  border: 1px solid color('gray-cool-70');
   border-radius: 5px;
-  padding-left: $site-margins-mobile;
-  padding-right: $site-margins-mobile;
+  @include u-padding-x($theme-site-margins-width);
+
   padding-top: 0;
-  @media screen and (min-width: $large-screen) {
-    padding-left: $site-margins;
-    padding-right: $site-margins;
-    margin-bottom: $site-margins;
+  @include at-media('desktop-lg') {
+    @include u-padding-x($theme-site-margins-width);
+    margin-bottom: $theme-site-margins-width;
   }
   .filter-button {
     padding-left: 2em;
@@ -44,7 +42,7 @@ $fa-font-path: "./fonts" !default;
       width: 85%;
       margin-left: 1rem;
     }
-    @media screen and (min-width: $large-screen) {
+    @include at-media('desktop-lg') {
       width: 90%;
       margin-left: 1rem;
     }
@@ -62,11 +60,11 @@ $fa-font-path: "./fonts" !default;
 // Styles for search results
 #search-results, #new-publications {
   .search-result-contributors, .search-result-pubinfo {
-    color: $color-green;
-    font-size: $small-font-size;
+    color: color('green-cool-50v');
+    font-size: $theme-small-font-size;
   }
   .search-result-abstract {
-    font-size: $small-font-size;
+    font-size: $theme-small-font-size;
   }
   article {
     margin-bottom: 1.5rem;
@@ -79,32 +77,33 @@ $fa-font-path: "./fonts" !default;
     margin-top: 1rem;
   }
   .pubs-thumbnail {
-    @media screen and (max-width: $medium-screen) {
+    @include at-media('tablet') {}
+
       display: none;
     }
   }
   .publication-header-info-container {
-    @media screen and (max-width: $medium-screen) {
+    @include at-media('tablet') {
       width: 100%;
     }
 
     .series-title {
-      font-size: $h4-font-size;
+      font-size: $theme-h4-font-size;
     }
 
     .subseries-title {
-      font-size: $h5-font-size;
+      font-size: $theme-h5-font-size;
     }
 
     .collaboration {
-      font-size: $h6-font-size;
+      font-size: $theme-h6-font-size;
     }
   }
 
   #contributors {
-    font-size: $small-font-size;
+    font-size: $theme-small-font-size;
     .list-title {
-      font-weight: bold;
+      font-weight: weight('bold');
     }
     .ai-orcid {
       color: #a6ce39;
@@ -118,14 +117,14 @@ $fa-font-path: "./fonts" !default;
     float: left;
     margin-top: 1rem;
     .doi-container {
-      font-size: $small-font-size;
+      font-size: $theme-small-font-size;
       margin-bottom: 0.5rem;
     }
   }
 
   #altmetric {
     margin-top: 1rem;
-    @media screen and (min-width: $medium-screen) {
+    @include at-media('tablet') {
       overflow: hidden;
       float: right;
     }
@@ -140,13 +139,13 @@ $fa-font-path: "./fonts" !default;
     .abstract-contents {
     }
     aside {
-      border: 1px solid $color-gray-dark;
-      background-color: $color-gray-lightest;
+      border: 1px solid color('gray-cool-70');
+      background-color: color('gray-cool-5');
       float:right;
       padding-right: 1rem;
       padding-left: 1rem;
       margin-left: 1rem;
-      @media screen and (max-width: $small-screen) {
+      @include at-media('tablet') {
         display: none;
       }
       .pub-contact-info-container {
@@ -156,19 +155,18 @@ $fa-font-path: "./fonts" !default;
   }
 
   #suggested-citation {
-    font-size: $small-font-size;
+    font-size: $theme-small-font-size;
   }
 
   #details {
     table {
       tbody {
         th {
-          font-weight: bold;
+          font-weight: weight('bold');
         }
       }
     }
   }
-}
 
 // Styles each browse page
 .browse-page {
@@ -182,12 +180,12 @@ $fa-font-path: "./fonts" !default;
     a {
       text-decoration: none;
       color: rgb(0, 51, 102);
-      font-weight: bold;
+      font-weight: weight('bold');
     }
     a {
       text-decoration: none;
       color: rgb(0, 51, 102);
-      font-weight: bold;
+      font-weight: weight('bold');
       &:hover {
         text-decoration:underline;
       }
@@ -204,8 +202,8 @@ $fa-font-path: "./fonts" !default;
     tbody {
       tr:first-child {
         th {
-          background-color: $color-gray-lightest;
-          font-weight: bold;
+          background-color: color('gray-cool-5');
+          font-weight: weight('bold');
         }
       }
     }

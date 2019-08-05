@@ -9,20 +9,20 @@
 }
 
 .select2-container {
-  @include media($medium-screen) {
+  @include at-media('tablet') {
     width: 100%;
   }
 }
 .select2-container .selection .select2-selection {
-  height: $input-height;
-  border-color: $color-gray;
+  //height: $input-height;
+  border-color: color('gray-cool-60');
   border-radius: 0;
 }
 .select2-container .selection .select2-selection .select2-selection__rendered,
 .select2-container .selection .select2-selection .select2-selection__arrow {
-  height: $input-height;
-  line-height: $heading-line-height;
-  padding: $input-padding-vertical 0.7em;
+  //height: $input-height;
+  @include u-line-height('heading', 2)
+  //padding: @include u-padding(1) 0.7em;
 }
 .select2-container .selection .select2-selection .select2-selection__arrow {
   right: 1.5rem;
@@ -43,13 +43,13 @@
   .usgs-input-group-btn {
     position: relative;
     margin-right: 0;
-    border-left: 1px solid $color-gray;
-    border-top: 1px solid $color-gray;
-    border-bottom: 1px solid $color-gray;
+    border-left: 1px solid color('gray-cool-60');
+    border-top: 1px solid color('gray-cool-60');
+    border-bottom: 1px solid color('gray-cool-60');
     border-right-width: 0;
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
-    height: $input-height;
+    //height: $input-height;
     width: auto;
   }
 
@@ -59,7 +59,7 @@
     @media screen and (max-width: $medium-large-screen) {
       width: 230px;
     }
-    @media screen and (max-width: $small-screen) {
+    @include at-media('mobile-lg') {
       width: 200px;
     }
   }
@@ -101,7 +101,7 @@
       display: inline-block;
     }
     button {
-      @media screen and (max-width: $small-screen) {
+      @include at-media('mobile-lg') {
         width: auto;
       }
     }
