@@ -1,16 +1,16 @@
 
 <form id="search-pubs-form" action="{{ url_for('pubswh.search_results') }}" method="get">
     <div>
-        <label for="q-text">Search for Publications</label>
+        <label class="usa-label" for="q-text">Search for Publications</label>
         <div class="usgs-input-group">
-            <button aria-label="Clear search" title="Clear search" class="usgs-input-group-btn clear-search-btn" type="button"><i class="fas fa-times"></i></button>
-            <input type="text" id="q-text" name="q" value="{{ request.args.q }}" />
+            <button aria-label="Clear search" title="Clear search" class="usa-button usgs-input-group-btn clear-search-btn" type="button"><i class="fas fa-times"></i></button>
+            <input class="usa-input" type="text" id="q-text" name="q" value="{{ request.args.q }}" />
             <span class="usgs-input-group-addon" aria-hidden="true"><i class="fas fa-search"></i></span>
         </div>
     </div>
     <div class="advanced-search-div">
-        <label for="advanced-search-category">Advanced search category</label>
-        <select id="advanced-search-category" class="search-category-select" style="width: 100%;">
+        <label class="usa-label" for="advanced-search-category">Advanced search category</label>
+        <select id="advanced-search-category" class="search-category-select usa-input" style="width: 100%;">
             <option>- Select -</option>
             <option value="title" data-allow-multi="true" data-input-type="text" >Title</option>
             <option value="contributingOffice" data-allow-multi="true" data-input-type="select" data-lookup="costcenters">Contributing Office</option>
@@ -40,8 +40,8 @@
     </div>
     <div class="advanced-search-container"></div>
     <div class="map-search-container"></div>
-    <div>
-        <input type="submit" value="Search" />
-        <a id="show-hide-advanced-search-btn" role="button"></a>
+    <div class="search-button-container">
+        <input class="usa-button" type="submit" value="Search" />
+        <a id="show-hide-advanced-search-btn" class="usa-link" role="button"></a>
     </div>
 </form>

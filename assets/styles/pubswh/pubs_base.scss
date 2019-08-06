@@ -18,45 +18,65 @@ $fa-font-path: "./fonts" !default;
 // Styles for the home page
 #welcome {
   p {
-    font-size: $theme-h3-font-size;
+    @include u-font('heading', 'lg');
   }
 }
-#new-pubs {
-  border: 1px solid color('gray-cool-70');
-  border-radius: 5px;
-  @include u-padding-x($theme-site-margins-width);
+#home-page-content {
+  > div {
+    @include grid-row;
 
-  padding-top: 0;
-  @include at-media('desktop-lg') {
-    @include u-padding-x($theme-site-margins-width);
-    margin-bottom: $theme-site-margins-width;
-  }
-  .filter-button {
-    padding-left: 2em;
-    padding-right: 2em;
-  }
-  .recent-pub {
-    display: inline-block;
-    width: 100%;
-    margin-bottom: 2rem;
-    @media screen and (min-width: $medium-large-screen) {
-      width: 85%;
-      margin-left: 1rem;
-    }
-    @include at-media('desktop-lg') {
-      width: 90%;
-      margin-left: 1rem;
-    }
-  }
-  .thumbnail {
-    display: none;
-    @media screen and (min-width: $medium-large-screen) {
-      display: inline-block;
-      width: auto;
-    }
-  }
+    #search-and-new-pubs-content {
+      @include at-media(tablet) {
+        @include grid-col(8);
+      }
 
+      padding-right: units(2);
+
+      #new-pubs {
+        border: 1px solid color('gray-cool-70');
+        border-radius: 5px;
+        @include u-padding-x($theme-site-margins-width);
+        @include u-margin-y(3);
+
+        padding-top: 0;
+        @include at-media('desktop-lg') {
+          @include u-padding-x($theme-site-margins-width);
+          margin-bottom: $theme-site-margins-width;
+        }
+        .filter-button {
+          padding-left: 2em;
+          padding-right: 2em;
+        }
+        .recent-pub {
+          display: inline-block;
+          width: 100%;
+          margin-bottom: 2rem;
+          @media screen and (min-width: $medium-large-screen) {
+            width: 85%;
+            margin-left: 1rem;
+          }
+          @include at-media('desktop-lg') {
+            width: 90%;
+            margin-left: 1rem;
+          }
+        }
+        .thumbnail {
+          display: none;
+          @media screen and (min-width: $medium-large-screen) {
+            display: inline-block;
+            width: auto;
+          }
+        }
+      }
+    }
+  }
+  #twitter {
+     @include at-media(tablet) {
+        @include grid-col(4);
+      }
+  }
 }
+
 
 // Styles for search results
 #search-results, #new-publications {

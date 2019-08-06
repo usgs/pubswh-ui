@@ -18,35 +18,37 @@
         <p>The Pubs Warehouse provides access to over 160,000 publications written by USGS scientists over the
             century-plus history of the bureau.</p>
     </section>
-    <div class="usa-grid">
-        <div class="usa-width-two-thirds">
-            {% include 'pubswh/search_form.html' %}
-            <aside id="new-pubs">
-                <h3><a href="{{ url_for('pubswh.new_pubs') }}">New
-                    Publications by USGS Authors</a></h3>
+    <div id="home-page-content">
+        <div class="grid-row">
+            <div id="search-and-new-pubs-content">
+                {% include 'pubswh/search_form.html' %}
+                <aside id="new-pubs">
+                    <h3><a href="{{ url_for('pubswh.new_pubs') }}">New
+                        Publications by USGS Authors</a></h3>
 
-                {% for recent_publication in recent_publications %}
-                    <div>
-                        <img class="thumbnail" src="
-                                {{ wsgi_str }}{% if recent_publication['displayLinks']['Thumbnail'][0]['url'] %}{{ url_for('images', filename=recent_publication['displayLinks']['Thumbnail'][0]['url'], width=50, format='PNG') }}{% else %}{{ url_for('pubswh.images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=50) }}{% endif %}"
-                                                         alt="thumbnail"/>
-                        <div class="recent-pub">
-                            <div class="recent-pub-title">
-                                <a href="{{ url_for('pubswh.publication', index_id = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
-                            </div>
-                            <div class="recent-pub-info">
-                                {{ recent_publication|display_pub_info }}
+                    {% for recent_publication in recent_publications %}
+                        <div>
+                            <img class="thumbnail" src="
+                                    {{ wsgi_str }}{% if recent_publication['displayLinks']['Thumbnail'][0]['url'] %}{{ url_for('images', filename=recent_publication['displayLinks']['Thumbnail'][0]['url'], width=50, format='PNG') }}{% else %}{{ url_for('pubswh.images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=50) }}{% endif %}"
+                                                             alt="thumbnail"/>
+                            <div class="recent-pub">
+                                <div class="recent-pub-title">
+                                    <a href="{{ url_for('pubswh.publication', index_id = recent_publication['indexId']) }}">{{ recent_publication['title']|safe }}</a>
+                                </div>
+                                <div class="recent-pub-info">
+                                    {{ recent_publication|display_pub_info }}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
-            </aside>
+                    {% endfor %}
+                </aside>
+            </div>
+            <div id="twitter">
+                <a class="twitter-timeline" data-theme="dark" data-height="600px"
+                   href="https://twitter.com/USGS_Pubs?ref_src=twsrc%5Etfw">Tweets by USGS_Pubs</a>
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
         </div>
-        <section id="twitter" class="usa-width-one-third">
-            <a class="twitter-timeline" data-theme="dark" data-height="600px"
-               href="https://twitter.com/USGS_Pubs?ref_src=twsrc%5Etfw">Tweets by USGS_Pubs</a>
-            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-        </section>
     </div>
 {% endblock %}
 

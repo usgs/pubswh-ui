@@ -8,6 +8,7 @@ $theme-image-path: './img';
 .usa-banner__content,
 .usgs-header .usa-navbar,
 .usa-nav__inner {
+//#main-content .grid-container{
   @include u-maxw('full');
   @include u-padding-x($theme-site-margins-width);
 }

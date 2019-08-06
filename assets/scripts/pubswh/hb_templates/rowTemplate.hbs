@@ -1,11 +1,11 @@
 <div class="advanced-search-row">
     <div class="advanced-search-row-label">
-        <button type="button" class="delete-row" title="Delete row"><span class="fas fa-minus-circle"></span></button>
-        <label class="">{{row.displayName}}:</label>
+        <button class="usa-button--unstyled delete-row" type="button" title="Delete row"><span class="fas fa-minus-circle"></span></button>
+        <label class="usa-label">{{row.displayName}}:</label>
     </div>
     <div class="advanced-search-row-input">
         {{#if isSelect}}
-            <select name="{{row.name}}" style="width: 100%">
+            <select class="usa-select" name="{{row.name}}" style="width: 100%">
                 <option value="">- Select -</option>
                 {{#if isBoolean}}
                     <option value="true" {{#if isTrue}}selected{{/if}}>True</option>
@@ -13,9 +13,9 @@
                 {{/if}}
             </select>
         {{else if isDate}}
-            <input class="search-date" type="date" name="{{row.name}}" value="{{row.value}}" />
+            <input class="search-date usa-input" type="date" name="{{row.name}}" value="{{row.value}}" />
         {{else}}
-            <input type="{{row.inputType}}" name="{{row.name}}" value="{{row.value}}"/>
+            <input class="usa-input" type="{{row.inputType}}" name="{{row.name}}" value="{{row.value}}"/>
         {{/if}}
     </div>
 </div>
