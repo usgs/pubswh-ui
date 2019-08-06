@@ -59,26 +59,29 @@
             {% macro thumbnail_image() %}
                 {# this image is being dynamically resized to 200 pixels from whatever it might have been #}
                 {% if pubdata['displayLinks']['Thumbnail']|length > 0 %}
-                    <img id="thumbnail" src="
-                            {{ wsgi_str }}{{ url_for('images', filename=pubdata['displayLinks']['Thumbnail'][0]['url'], width=200, format='PNG') }}"
+                    <img id="thumbnail"
+                         src="{{ wsgi_str }}{{ url_for('images', filename=pubdata['displayLinks']['Thumbnail'][0]['url'], width=200, format='PNG') }}"
                          alt="thumbnail"/>
                 {% else %}
-                    <img id="thumbnail" src="
-                            {{ wsgi_str }}{{ url_for('images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=200) }}"
+                    <img id="thumbnail"
+                         src="{{ wsgi_str }}{{ url_for('images', filename='http://pubs.er.usgs.gov/thumbnails/usgs_thumb.jpg', width=200) }}"
                          alt="thumbnail"/>
                 {% endif %}
             {% endmacro %}
 
-            <div class="usa-grid-full publication-header-container">
-                <div class="pubs-thumbnail usa-width-one-sixth">
+            <div class="publication-header-container">
+                <div class="pubs-thumbnail">
                     {% if pubdata['seriesTitle'] and pubdata['seriesTitle']['text'] == "Scientific Investigations Map" and pubdata['displayLinks']['Sheet']|length >= 1 %}
-                        <a title="First sheet link, right click to download or save as"
+                        <a class="usa-link"
+                           title="First sheet link, right click to download or save as"
                            href="{{ (pubdata['displayLinks']['Sheet']|sort(attribute='rank')|first)["url"] }}">{{ thumbnail_image() }}</a>
                     {% elif pubdata['displayLinks']['Document']|length >= 1 %}
-                        <a title="Main document link, right click to download or save as"
+                        <a class="usa-link"
+                           title="Main document link, right click to download or save as"
                            href="{{ (pubdata['displayLinks']['Document']|sort(attribute='rank')|first)['url'] }}">{{ thumbnail_image() }}</a>
                     {% elif pubdata['displayLinks']['Index Page']|length >= 1 %}
-                        <a title="Go to {% if pubdata['displayLinks']['Index Page'][0]['text'] -%}
+                        <a class="usa-link"
+                           title="Go to {% if pubdata['displayLinks']['Index Page'][0]['text'] -%}
                                             {{- pubdata['displayLinks']['Index Page'][0]['text'] -}}
                                          {%- else -%} Publisher Index Page
                                          {%- endif %} for more information"
@@ -87,7 +90,7 @@
                         {{ thumbnail_image() }}
                     {% endif %}
                 </div>
-                <div class="usa-width-five-sixths publication-header-info-container">
+                <div class="publication-header-info-container">
                     {# Choose publication title information to be displayed #}
                     <div class="publication-header-titles">
                         <h3 class="publication-title" itemprop="name">
@@ -157,13 +160,17 @@
                         <div id="doi-twitter-container">
                             {% if pubdata['doi'] %}
                                 <div class="doi-container"><a itemprop="sameAs"
+                                                              class="usa-link"
                                                               href="https://doi.org/{{ pubdata['doi'] }}"
                                                               onclick="GA.trackGAEvent('Downloads', 'DOI', 'http://dx.doi.org/{{ pubdata['doi'] }}')">
                                     https://doi.org/{{ pubdata['doi'] }}</a>
                                 </div>
                             {% endif %}
-                            <a href="https://twitter.com/share" class="twitter-share-button" data-text="USGS Pub"
-                               data-via="USGS_Pubs" data-dnt="true">Tweet</a>
+                            <a href="https://twitter.com/share"
+                               class="twitter-share-button"
+                               data-text="USGS Pub"
+                               data-via="USGS_Pubs"
+                               data-dnt="true">Tweet</a>
                             <script>!function(d, s, id) {
                                 var js, fjs = d.getElementsByTagName(s)[0],
                                     p = /^http:/.test(d.location) ? 'http' : 'https';
@@ -193,16 +200,20 @@
                         affiliated authors or editors.
                         Hence, it was not required to conform to the USGS Fundamental Science Practices as described in
                         the
-                        <a title="Link to USGS Manual" href="https://www.usgs.gov/usgs-manual/">USGS Manual</a>.</p>
+                        <a class="usa-link"
+                           title="Link to USGS Manual"
+                           href="https://www.usgs.gov/usgs-manual/">
+                            USGS Manual
+                        </a>.
+                    </p>
                 {% endif %}
             </section>
 
             <section id="suggested">
                 {% macro linkdisplay(link) -%}
-                    <a href="{{ link['url'] }}" target="_blank"
+                    <a class="usa-link" href="{{ link['url'] }}" target="_blank"
                        onclick="GA.trackGAEvent('Downloads', '{{ link["type"]["text"] }}', '{{ link["url"] }}')"
-                       title="
-                               {% if link['description'] %}{{ link['description'] }}{% else %}{{ link['type']['text'] }}{% endif -%}">
+                       title=" {% if link['description'] %}{{ link['description'] }}{% else %}{{ link['type']['text'] }}{% endif -%}">
                         <strong>
                             {%- if link['text'] -%}
                                 {{- link['text']|safe -}}
@@ -242,8 +253,10 @@
                         {% for precede_pub in related_pubs['precede_info'] %}
                             <ul>
                                 <li class="filessublist">
-                                    <a href="{{ url_for('pubswh.publication', index_id = precede_pub['id']) }}">{{ precede_pub['title'] }}
-                                        ({{ precede_pub['year'] }})</a>
+                                    <a  class="usa-link"
+                                        href="{{ url_for('pubswh.publication', index_id = precede_pub['id']) }}">
+                                        {{ precede_pub['title'] }}({{ precede_pub['year'] }})
+                                    </a>
                                 </li>
                             </ul>
                         {% endfor %}
@@ -253,8 +266,10 @@
                         {% for supersede_pub in related_pubs['supersede_info'] %}
                             <ul>
                                 <li class="filessublist">
-                                    <a href="{{ url_for('pubswh.publication', index_id = supersede_pub['id']) }}">{{ supersede_pub['title'] }}
-                                        ({{ supersede_pub['year'] }})</a>
+                                    <a class="usa-link"
+                                       href="{{ url_for('pubswh.publication', index_id = supersede_pub['id']) }}">
+                                        {{ supersede_pub['title'] }}({{ supersede_pub['year'] }})
+                                    </a>
                                 </li>
                             </ul>
                         {% endfor %}
@@ -334,9 +349,11 @@
                     {% if pubdata['offers'] %}
                         <li itemprop="offers" itemscope itemtype="http://schema.org/Offer">Paper version:
                             <link itemprop="availability" href="http://schema.org/InStock">
-                            In stock and available from the <a itemprop="url"
-                                                               href="{{ pubdata['offers']['schema:offers']['schema:url'] }}"><strong>USGS
-                                Store</strong></a></li>
+                            In stock and available from the <a class="usa-link"
+                                                               itemprop="url"
+                                                               href="{{ pubdata['offers']['schema:offers']['schema:url'] }}">
+                                <strong>USGS Store</strong></a>
+                        </li>
                     {% endif %}
                     {% if pubdata['openAccessHostType'] %}
                         <li>Open Access Version:  
@@ -349,13 +366,14 @@
                     {% endif %}
                     {# commenting this out until USGS can make a decision about it
                     {% if (pubdata['publicationSubtype'] and pubdata['publicationSubtype']['text'] == 'Journal Article' and pubdata['publicAccess']) %}
-                        <li>The full text of this publication can be requested by filling out the form <a href="{{ url_for('pubswh.pub_access_contact') }}?title={{ pubdata['title'] }}&index_id={{ pubdata['indexId'] }}">here.</a></li>
+                        <li>The full text of this publication can be requested by filling out the
+                            form <a class="usa-link" href="{{ url_for('pubswh.pub_access_contact') }}?title={{ pubdata['title'] }}&index_id={{ pubdata['indexId'] }}">here.</a></li>
                     {% endif %}
                     #}
                     <li>Download citation as: <a
                             href="{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}?mimetype=ris">RIS</a>
                         |
-                        <a href="{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}?mimetype=dublincore">Dublin
+                        <a class="usa-link" href="{{ url_for('pubswh.publication', index_id = pubdata['indexId']) }}?mimetype=dublincore">Dublin
                             Core</a></li>
                 </ul>
             </section>

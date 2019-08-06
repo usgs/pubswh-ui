@@ -94,43 +94,43 @@ $fa-font-path: "./fonts" !default;
 
 // Styles for publications page
 #publication-container {
+  @include u-maxw('full');
   .publication-header-container {
-    margin-top: 1rem;
+    @include grid-row;
   }
   .pubs-thumbnail {
-    @include at-media('tablet') {}
-
-      display: none;
+    display: none;
+    @include at-media('tablet') {
+      display: block;
+      @include grid-col(2);
     }
   }
   .publication-header-info-container {
-    @include at-media('tablet') {
-      width: 100%;
-    }
+    @include grid-col(fill);
 
     .series-title {
-      font-size: $theme-h4-font-size;
+      font-size: size('body', sm);
     }
 
     .subseries-title {
-      font-size: $theme-h5-font-size;
+      font-size: size('body', xs);
     }
 
     .collaboration {
-      font-size: $theme-h6-font-size;
+      font-size: size('body', 3xs);
     }
   }
 
   #contributors {
-    font-size: $theme-small-font-size;
+    font-size: size('body', 3xs);
     .list-title {
       font-weight: weight('bold');
     }
     .ai-orcid {
       color: #a6ce39;
-      font-size: 1.6rem;
-      margin-left: .8rem;
-      margin-right: .8rem;
+      font-size: size('body', 3xs);
+      margin-left: .5rem;
+      margin-right: .5rem;
     }
   }
 
@@ -138,7 +138,7 @@ $fa-font-path: "./fonts" !default;
     float: left;
     margin-top: 1rem;
     .doi-container {
-      font-size: $theme-small-font-size;
+      font-size: size('body', 2xs);
       margin-bottom: 0.5rem;
     }
   }
@@ -157,12 +157,10 @@ $fa-font-path: "./fonts" !default;
   }
 
   #abstract {
-    .abstract-contents {
-    }
     aside {
       border: 1px solid color('gray-cool-70');
       background-color: color('gray-cool-5');
-      float:right;
+      float: right;
       padding-right: 1rem;
       padding-left: 1rem;
       margin-left: 1rem;
@@ -176,7 +174,7 @@ $fa-font-path: "./fonts" !default;
   }
 
   #suggested-citation {
-    font-size: $theme-small-font-size;
+    font-size: size('body', 2xs);
   }
 
   #details {
@@ -188,7 +186,7 @@ $fa-font-path: "./fonts" !default;
       }
     }
   }
-
+}
 // Styles each browse page
 .browse-page {
   margin-top: -15px;
