@@ -18,11 +18,9 @@
     <ul>
         {% for type in types %}
             <li>
-                <a title="See a list of publications subtypes for the publication type of {{ type['text'] }}" href="{{ url_for("pubswh.browse_subtypes", pub_type=type['text']) }}">{{ type['text'] }}</a>
+                <a class="usa-link" title="See a list of publications subtypes for the publication type of {{ type['text'] }}" href="{{ url_for("pubswh.browse_subtypes", pub_type=type['text']) }}">{{ type['text'] }}</a>
             </li>
         {% endfor %}
     </ul>
 </div>
 {% endblock %}
-
-{% block url %}<a href="{{ request.full_path }}">http://pubs.er.usgs.gov{{ request.path }}</a>{% endblock %}

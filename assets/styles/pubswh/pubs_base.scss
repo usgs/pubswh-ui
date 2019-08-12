@@ -201,18 +201,11 @@ $fa-font-path: "./fonts" !default;
     a {
       text-decoration: none;
       color: rgb(0, 51, 102);
-      font-weight: weight('bold');
-    }
-    a {
-      text-decoration: none;
-      color: rgb(0, 51, 102);
-      font-weight: weight('bold');
+      @include u-text('bold');
       &:hover {
         text-decoration:underline;
       }
     }
-  }
-  ul {
   }
 }
 

@@ -8,7 +8,5 @@
 
 {% block main_pubswh %}
     <h1>USGS Series descriptions</h1>
-{{ usgs_series_content|safe }}
+    {{ usgs_series_content|safe }}
 {% endblock %}
-
-{% block url %}<a href="{{ url_for('pubswh.usgs_series') }}">http://pubs.er.usgs.gov{{ url_for('pubswh.usgs_series') }}</a>{% endblock %}
