@@ -97,65 +97,65 @@ $fa-font-path: "./fonts" !default;
   @include u-maxw('full');
   .publication-header-container {
     @include grid-row;
-  }
-  .pubs-thumbnail {
-    display: none;
-    @include at-media('tablet') {
-      display: block;
-      @include grid-col(2);
+    @include grid-gap;
+
+    .pubs-thumbnail {
+      display: none;
+      @include at-media('tablet') {
+        display: block;
+        @include grid-col(2);
+      }
+    }
+
+    .publication-header-info-container {
+      @include grid-col(fill);
+
+      .series-title {
+        font-size: size('body', sm);
+      }
+
+      .subseries-title {
+        font-size: size('body', xs);
+      }
+
+      .collaboration {
+        font-size: size('body', '3xs');
+      }
+
+      #contributors {
+        font-size: size('body', '3xs');
+
+        .list-title {
+          font-weight: weight('bold');
+        }
+
+        .ai-orcid {
+          color: #a6ce39;
+          font-size: size('body', '3xs');
+          margin-left: .5rem;
+          margin-right: .5rem;
+        }
+      }
+
+      #doi-twitter-container {
+        float: left;
+        margin-top: 1rem;
+
+        .doi-container {
+          font-size: size('body', '2xs');
+          margin-bottom: 0.5rem;
+        }
+      }
+
+      #altmetric {
+        margin-top: 1rem;
+        @include at-media('tablet') {
+          overflow: hidden;
+          float: right;
+        }
+      }
     }
   }
-  .publication-header-info-container {
-    @include grid-col(fill);
-
-    .series-title {
-      font-size: size('body', sm);
-    }
-
-    .subseries-title {
-      font-size: size('body', xs);
-    }
-
-    .collaboration {
-      font-size: size('body', 3xs);
-    }
-  }
-
-  #contributors {
-    font-size: size('body', 3xs);
-    .list-title {
-      font-weight: weight('bold');
-    }
-    .ai-orcid {
-      color: #a6ce39;
-      font-size: size('body', 3xs);
-      margin-left: .5rem;
-      margin-right: .5rem;
-    }
-  }
-
-  #doi-twitter-container {
-    float: left;
-    margin-top: 1rem;
-    .doi-container {
-      font-size: size('body', 2xs);
-      margin-bottom: 0.5rem;
-    }
-  }
-
-  #altmetric {
-    margin-top: 1rem;
-    @include at-media('tablet') {
-      overflow: hidden;
-      float: right;
-    }
-  }
-
-  .files-list {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
-
   #abstract {
     aside {
       border: 1px solid color('gray-cool-70');
@@ -164,8 +164,9 @@ $fa-font-path: "./fonts" !default;
       padding-right: 1rem;
       padding-left: 1rem;
       margin-left: 1rem;
+      display: none;
       @include at-media('tablet') {
-        display: none;
+        display: block;
       }
       .pub-contact-info-container {
         padding-bottom: 1rem;
@@ -174,14 +175,14 @@ $fa-font-path: "./fonts" !default;
   }
 
   #suggested-citation {
-    font-size: size('body', 2xs);
+    font-size: size('body', '2xs');
   }
 
   #details {
     table {
       tbody {
         th {
-          font-weight: weight('bold');
+          @include u-text('bold');
         }
       }
     }

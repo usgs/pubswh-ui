@@ -279,7 +279,7 @@
                 {% block public_access %}{% endblock %}
 
                 <h4>Links</h4>
-                <ul class="files-list">
+                <ul class="usa-list">
                     {{- linkdisplaylists('Index Page','More information','More Information') -}}
                     {{- linkdisplaylists('Document','Document','Documents') -}}
                     {{- linkdisplaylists('Plate', 'Plate','Plates') -}}
@@ -420,7 +420,7 @@
 
             <section id="details">
                 <h4>Additional publication details</h4>
-                <table class="usa-table-borderless">
+                <table class="usa-table usa-table--borderless">
                     <tbody>
                     {% for detail in pubdata['details'] %}
                         <tr>
