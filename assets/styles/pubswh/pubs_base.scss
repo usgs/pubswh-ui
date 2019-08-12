@@ -82,10 +82,10 @@ $fa-font-path: "./fonts" !default;
 #search-results, #new-publications {
   .search-result-contributors, .search-result-pubinfo {
     color: color('green-cool-50v');
-    font-size: $theme-small-font-size;
+    font-size: size('body', xs);
   }
   .search-result-abstract {
-    font-size: $theme-small-font-size;
+    font-size: size('body', xs);
   }
   article {
     margin-bottom: 1.5rem;

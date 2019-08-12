@@ -11,10 +11,10 @@
             margin-right: 2px;
             border: 1px solid color('gray-cool-60');
             border-radius: 4px;
-            font-size: 1.2rem;
+            font-size: size('body', xs);
             padding: 1px 2px;
             @include at-media('tablet') {
-                font-size: 1.4rem;
+                font-size: size('body', sm);
                 margin-right: 10px;
                 padding: 6px 12px;
             }
