@@ -66,7 +66,7 @@ if 'IMAGES_CACHE' in os.environ:
 SCIENCEBASE_PARENT_UUID = os.environ.get('SCIENCEBASE_PARENT_UUID', '')
 
 #These should be set to authenticate the manager application
-PUBSAUTH_CLIENT_ID = os.environ.get('PUBS_CLIENT_ID')
+PUBSAUTH_CLIENT_ID = os.environ.get('PUBSAUTH_CLIENT_ID')
 PUBSAUTH_CLIENT_SECRET = os.environ.get('PUBSAUTH_CLIENT_SECRET')
 PUBSAUTH_ACCESS_TOKEN_URL = os.environ.get('PUBSAUTH_ACCESS_TOKEN_URL')
 PUBSAUTH_AUTHORIZE_URL = os.environ.get('PUBSAUTH_AUTHORIZE_URL')
