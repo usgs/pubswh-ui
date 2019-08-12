@@ -80,12 +80,13 @@ $fa-font-path: "./fonts" !default;
 
 // Styles for search results
 #search-results, #new-publications {
+  @include u-margin-top('3');
   .search-result-contributors, .search-result-pubinfo {
     color: color('green-cool-50v');
-    font-size: size('body', xs);
+    font-size: size('body', '2xs');
   }
   .search-result-abstract {
-    font-size: size('body', xs);
+    font-size: size('body', '2xs');
   }
   article {
     margin-bottom: 1.5rem;

@@ -8,9 +8,9 @@
 {% block main_pubswh %}
     <h1 id="new-pubs-h1">Publications recently added to the Pubs Warehouse</h1>
     <section id="new_pubs_form" title="Search Form">
-        <form id="num_series_form" method="GET" action="{{ url_for('pubswh.new_pubs') }}">
-            <p>{{ num_form.num_series }} {{ num_form.num_series.label }}</p>
-            <p>{{ num_form.date_range.label }} (500 records max) {{ num_form.date_range }}</p>
+        <form id="num_series_form" class="usa-form" method="GET" action="{{ url_for('pubswh.new_pubs') }}">
+            <div class="usa-checkbox">{{ num_form.num_series(class="usa-checkbox__input")}} {{ num_form.num_series.label(class="usa-checkbox__label") }}</div>
+            <div class="usa-text">{{ num_form.date_range.label(class="usa-label") }} (500 records max) {{ num_form.date_range(class="usa-input") }}</div>
             <button type="submit" class="usa-button filter-button">Filter</button>
         </form>
     </section>
