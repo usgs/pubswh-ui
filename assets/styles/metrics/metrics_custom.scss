@@ -10,35 +10,49 @@ $fa-font-path : "./fonts" !default;
 $icon-font-path: "./fonts/";
 
 #main-content {
-    margin-left : 15px;
-    margin-right : 15px;
+    @include u-maxw('full');
+    @include u-padding-x($theme-site-margins-width);
 }
 
-.recent-div, .year-div {
-    height: 400px;
+.chart-display-select-div {
+    @include u-border(0);
+    legend {
+        @include u-font-size('body', 'md');
+        @include u-text('bold');
+    }
+    div {
+        @include u-margin-x(1);
+        @include u-display('inline-block');
+    }
+    //display: inline-block;
+    //@include u-margin-y(2);
+    //div {
+    //    display: inline-block;
+    //    @include u-margin-right(4);
+    //}
+}
+.metric-div {
+    @include grid-row;
+    @include grid-gap(5);
+    .recent-div, .year-div {
+        @include grid-col(6);
+        height: 400px;
+    }
 }
 .table-display {
     display: none;
     .metric-table-div {
+        @include grid-row;
+        @include grid-gap(5);
+        @include u-margin-bottom(2);
         overflow-y: scroll;
         height: 400px;
-        margin-bottom: 10px;
+        .recent-div, .year-div {
+            @include grid-col(6);
+            .metric-table {
+                @include u-width('full');
+            }
+        }
     }
 }
-.metric-table {
-    width: 100%;
-}
-.chart-display-select-div {
-    display: inline-block;
-    margin: 1em 0;
-    div {
-        display: inline-block;
-        margin-right: 2rem;
-    }
-    legend {
-        @include h3;
-    }
-    label {
-        margin-top: 0;
-    }
-}
+
