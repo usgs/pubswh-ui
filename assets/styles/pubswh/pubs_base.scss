@@ -213,13 +213,10 @@ $fa-font-path: "./fonts" !default;
 .table-wrap {
   overflow: auto;
   .confluenceTable {
-    tbody {
-      tr:first-child {
-        th {
-          background-color: color('gray-cool-5');
-          font-weight: weight('bold');
-        }
-      }
+    @extend %usa-table;
+    th {
+      background-color: color('base-lightest');
+      @include u-text('bold');
     }
   }
 }
