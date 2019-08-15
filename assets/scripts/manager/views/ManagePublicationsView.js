@@ -519,7 +519,7 @@ export default BaseView.extend({
         var $removePubBtn = this.$('.remove-from-list-btn');
         var selectedFilter;
         var selectedText;
-        if (selectedFilters.length === 1) {
+        if (selectedFilters.length === 1 && this.publicationListCollection.length > 0) {
             selectedFilter = first(selectedFilters);
             selectedText = this.publicationListCollection.findWhere({id : parseInt(selectedFilter)}).get('text');
             $removePubBtn.html('Remove Selected Publications From "' + selectedText + '" List');
