@@ -42,7 +42,7 @@ def services_proxy(op1, op2=None, op3=None, op4=None):
     if op4 is not None:
         url = url + '/' + op4
 
-    headers = get_auth_header()
+    headers = {}# TODO restore this: get_auth_header()
     headers.update(request.headers)
 
     query_string = request.query_string.decode('utf-8')
