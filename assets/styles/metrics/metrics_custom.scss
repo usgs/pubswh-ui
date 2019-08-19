@@ -24,12 +24,6 @@ $icon-font-path: "./fonts/";
         @include u-margin-x(1);
         @include u-display('inline-block');
     }
-    //display: inline-block;
-    //@include u-margin-y(2);
-    //div {
-    //    display: inline-block;
-    //    @include u-margin-right(4);
-    //}
 }
 .metric-div {
     @include grid-row;
