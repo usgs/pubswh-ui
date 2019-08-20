@@ -23,23 +23,12 @@ module.exports = function(config) {
         files: [
             'node_modules/leaflet/dist/leaflet.js',
             'node_modules/esri-leaflet/dist/esri-leaflet.js',
-            'tests/js/pubswh/resources/config.js',
-            'scripts/pubswh/*.js',
-            'tests/js/pubswh/*.js'
-        ],
-
-        // list of files to exclude
-        exclude: [
-            'scripts/pubswh/searchFormOnReady.js',
-            'scripts/pubswh/extentsMapOnReady.js'
+            'tests/js/pubswh/test-manifest.js'
         ],
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            // source files, that you wanna generate coverage for
-            // do not include tests or libraries
-            // (these files will be instrumented by Istanbul)
             'scripts/**/*.js': ['rollup'],
             'tests/js/**/*.js': ['rollup']
         },
