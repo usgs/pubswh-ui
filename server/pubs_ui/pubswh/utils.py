@@ -16,7 +16,7 @@ import feedparser
 import natsort
 import requests
 
-from pubs_ui import app, cache
+from .. import app, cache
 from ..custom_filters import display_publication_info
 
 

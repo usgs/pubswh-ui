@@ -1,10 +1,26 @@
-$font-path: './fonts';
-$image-path: './img';
+$theme-font-path: './fonts';
+$theme-image-path: './img';
 
-$site-max-width: 100%;
+@import 'wdfnviz';
 
-@import 'uswds';
+// Styles needed to have full width displays for all screen sizes
+.usa-banner__inner,
+.usa-banner__content,
+.usgs-header .usa-navbar,
+.usa-nav__inner {
+//#main-content .grid-container{
+  @include u-maxw('full');
+  @include u-padding-x($theme-site-margins-width);
+}
+.usgs-header .usgs-header-container {
+  @include u-maxw('full');
+  @include u-padding-x(0);
+}
+.usgs-header .usa-nav {
+  @include u-padding-x(1.5);
+}
+
+
 
 @import './partials/variables';
-@import './partials/header';
-@import './partials/footer';
+

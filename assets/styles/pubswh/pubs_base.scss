@@ -11,62 +11,82 @@ $fa-font-path: "./fonts" !default;
 
 // General styles for all pages
 #main-content {
-  padding-left: $site-margins;
-  padding-right: $site-margins;
+  @include u-maxw('full');
+  @include u-padding-x($theme-site-margins-width);
 }
 
 // Styles for the home page
 #welcome {
   p {
-    font-size: $h3-font-size;
+    @include u-font('heading', 'lg');
   }
 }
-#new-pubs {
-  border: 1px solid $color-gray-dark;
-  border-radius: 5px;
-  padding-left: $site-margins-mobile;
-  padding-right: $site-margins-mobile;
-  padding-top: 0;
-  @media screen and (min-width: $large-screen) {
-    padding-left: $site-margins;
-    padding-right: $site-margins;
-    margin-bottom: $site-margins;
-  }
-  .filter-button {
-    padding-left: 2em;
-    padding-right: 2em;
-  }
-  .recent-pub {
-    display: inline-block;
-    width: 100%;
-    margin-bottom: 2rem;
-    @media screen and (min-width: $medium-large-screen) {
-      width: 85%;
-      margin-left: 1rem;
-    }
-    @media screen and (min-width: $large-screen) {
-      width: 90%;
-      margin-left: 1rem;
-    }
-  }
-  .thumbnail {
-    display: none;
-    @media screen and (min-width: $medium-large-screen) {
-      display: inline-block;
-      width: auto;
-    }
-  }
+#home-page-content {
+  > div {
+    @include grid-row;
 
+    #search-and-new-pubs-content {
+      @include at-media(tablet) {
+        @include grid-col(8);
+      }
+
+      padding-right: units(2);
+
+      #new-pubs {
+        border: 1px solid color('gray-cool-70');
+        border-radius: 5px;
+        @include u-padding-x($theme-site-margins-width);
+        @include u-margin-y(3);
+
+        padding-top: 0;
+        @include at-media('desktop-lg') {
+          @include u-padding-x($theme-site-margins-width);
+          margin-bottom: $theme-site-margins-width;
+        }
+        .filter-button {
+          padding-left: 2em;
+          padding-right: 2em;
+        }
+        .recent-pub {
+          display: inline-block;
+          width: 100%;
+          margin-bottom: 2rem;
+          @media screen and (min-width: $medium-large-screen) {
+            width: 85%;
+            margin-left: 1rem;
+          }
+          @include at-media('desktop-lg') {
+            width: 90%;
+            margin-left: 1rem;
+          }
+        }
+        .thumbnail {
+          display: none;
+          @media screen and (min-width: $medium-large-screen) {
+            display: inline-block;
+            width: auto;
+          }
+        }
+      }
+    }
+  }
+  #twitter {
+     @include at-media(tablet) {
+        @include grid-col(4);
+      }
+  }
 }
+
 
 // Styles for search results
 #search-results, #new-publications {
+  @include u-margin-top('3');
   .search-result-contributors, .search-result-pubinfo {
-    color: $color-green;
-    font-size: $small-font-size;
+    color: color('green-cool-50v');
+    font-size: size('body', '2xs');
   }
   .search-result-abstract {
-    font-size: $small-font-size;
+    font-size: size('body', '2xs');
   }
   article {
     margin-bottom: 1.5rem;
@@ -75,79 +95,79 @@ $fa-font-path: "./fonts" !default;
 
 // Styles for publications page
 #publication-container {
+  @include u-maxw('full');
   .publication-header-container {
-    margin-top: 1rem;
-  }
-  .pubs-thumbnail {
-    @media screen and (max-width: $medium-screen) {
+    @include grid-row;
+    @include grid-gap;
+
+    .pubs-thumbnail {
       display: none;
+      @include at-media('tablet') {
+        display: block;
+        @include grid-col(2);
+      }
+    }
+
+    .publication-header-info-container {
+      @include grid-col(fill);
+
+      .series-title {
+        font-size: size('body', sm);
+      }
+
+      .subseries-title {
+        font-size: size('body', xs);
+      }
+
+      .collaboration {
+        font-size: size('body', '3xs');
+      }
+
+      #contributors {
+        font-size: size('body', '3xs');
+
+        .list-title {
+          font-weight: weight('bold');
+        }
+
+        .ai-orcid {
+          color: #a6ce39;
+          font-size: size('body', '3xs');
+          margin-left: .5rem;
+          margin-right: .5rem;
+        }
+      }
+
+      #doi-twitter-container {
+        float: left;
+        margin-top: 1rem;
+
+        .doi-container {
+          font-size: size('body', '2xs');
+          margin-bottom: 0.5rem;
+        }
+      }
+
+      #altmetric {
+        margin-top: 1rem;
+        @include at-media('tablet') {
+          overflow: hidden;
+          float: right;
+        }
+      }
     }
   }
-  .publication-header-info-container {
-    @media screen and (max-width: $medium-screen) {
-      width: 100%;
-    }
-
-    .series-title {
-      font-size: $h4-font-size;
-    }
-
-    .subseries-title {
-      font-size: $h5-font-size;
-    }
-
-    .collaboration {
-      font-size: $h6-font-size;
-    }
-  }
-
-  #contributors {
-    font-size: $small-font-size;
-    .list-title {
-      font-weight: bold;
-    }
-    .ai-orcid {
-      color: #a6ce39;
-      font-size: 1.6rem;
-      margin-left: .8rem;
-      margin-right: .8rem;
-    }
-  }
-
-  #doi-twitter-container {
-    float: left;
-    margin-top: 1rem;
-    .doi-container {
-      font-size: $small-font-size;
-      margin-bottom: 0.5rem;
-    }
-  }
-
-  #altmetric {
-    margin-top: 1rem;
-    @media screen and (min-width: $medium-screen) {
-      overflow: hidden;
-      float: right;
-    }
-  }
-
-  .files-list {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
-
   #abstract {
-    .abstract-contents {
-    }
     aside {
-      border: 1px solid $color-gray-dark;
-      background-color: $color-gray-lightest;
-      float:right;
+      border: 1px solid color('gray-cool-70');
+      background-color: color('gray-cool-5');
+      float: right;
       padding-right: 1rem;
       padding-left: 1rem;
       margin-left: 1rem;
-      @media screen and (max-width: $small-screen) {
-        display: none;
+      display: none;
+      @include at-media('tablet') {
+        display: block;
       }
       .pub-contact-info-container {
         padding-bottom: 1rem;
@@ -156,20 +176,19 @@ $fa-font-path: "./fonts" !default;
   }
 
   #suggested-citation {
-    font-size: $small-font-size;
+    font-size: size('body', '2xs');
   }
 
   #details {
     table {
       tbody {
         th {
-          font-weight: bold;
+          @include u-text('bold');
         }
       }
     }
   }
 }
-
 // Styles each browse page
 .browse-page {
   margin-top: -15px;
@@ -182,18 +201,11 @@ $fa-font-path: "./fonts" !default;
     a {
       text-decoration: none;
       color: rgb(0, 51, 102);
-      font-weight: bold;
-    }
-    a {
-      text-decoration: none;
-      color: rgb(0, 51, 102);
-      font-weight: bold;
+      @include u-text('bold');
       &:hover {
         text-decoration:underline;
       }
     }
-  }
-  ul {
   }
 }
 
@@ -201,13 +213,10 @@ $fa-font-path: "./fonts" !default;
 .table-wrap {
   overflow: auto;
   .confluenceTable {
-    tbody {
-      tr:first-child {
-        th {
-          background-color: $color-gray-lightest;
-          font-weight: bold;
-        }
-      }
+    @extend %usa-table;
+    th {
+      background-color: color('base-lightest');
+      @include u-text('bold');
     }
   }
 }

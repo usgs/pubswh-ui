@@ -1,7 +1,7 @@
+import wdfnviz from 'wdfn-viz';
 import AdvancedSearchForm from './advancedSearchForm';
 
-
-$(document).ready(function() {
+const load = function() {
     // Constants for link text
     var SHOW_SEARCH = 'Show Advanced Search';
     var HIDE_SEARCH = 'Clear Advanced Search';
@@ -88,4 +88,6 @@ $(document).ready(function() {
     $clearSearchBtn.click(function() {
         $qSearch.val('');
     });
-});
+};
+
+wdfnviz.main(load);

@@ -45,6 +45,9 @@ describe('ManagePublicationsView', function() {
             let mockModel = new Backbone.Model();
             return mockModel.set({id : 2, text : 'Pub Cat 2'});
         });
+        spyOn(PublicationListCollection.prototype, 'size').and.callFake(function()  {
+            return 1;
+        });
         spyOn(AlertView.prototype, 'setElement');
         spyOn(AlertView.prototype, 'render');
         spyOn(AlertView.prototype, 'remove');
@@ -156,10 +159,10 @@ describe('ManagePublicationsView', function() {
             testView.render();
 
             fetchListDeferred.then(() => {
-                expect($('.usa-unstyled-list').length).toBe(1);
+                expect($('.usa-list--unstyled').length).toBe(1);
                 done();
             });
-            expect($('.usa-unstyled-list').length).toBe(0);
+            expect($('.usa-list--unstyled').length).toBe(0);
 
             fetchListDeferred.resolve();
 

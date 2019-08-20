@@ -22,7 +22,7 @@
         {% if pubs_data %}
             {% for publication in pubs_data %}
                 <li>
-                   <a href="{{ url_for("pubswh.publication", index_id=publication['indexId'] ) }}">{{ publication['Title'] |safe}}, {{ publication['Year Published'] }},
+                   <a class="usa-link" href="{{ url_for("pubswh.publication", index_id=publication['indexId'] ) }}">{{ publication['Title'] |safe}}, {{ publication['Year Published'] }},
                        {{ publication['Series title'] }}
                        {% if publication['Series number'] %}
                            {{ publication['Series number'] }} {{ publication['Chapter'] }}
@@ -40,5 +40,3 @@
     </ul>
 </div>
 {% endblock %}
-
-{% block url %}<a href="{{ request.full_path }}">http://pubs.er.usgs.gov{{ request.path }}</a>{% endblock %}

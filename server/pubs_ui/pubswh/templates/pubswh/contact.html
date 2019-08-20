@@ -11,29 +11,33 @@
     <h2>Contact the Publications Warehouse Team</h2>
     <form id="contact-form" action="{{ url_for('pubswh.contact') }}" method=post>
         {{ contact_form.hidden_tag() }}
-
-        {% for name_error in contact_form.name.errors %}
-            {{ name_error }}
-        {% endfor %}
-        {{ contact_form.name(placeholder="Name", **{'aria-label': 'enter your name'}) }}
-
-        {% for email_error in contact_form.email.errors %}
-            {{ email_error }}
-        {% endfor %}
-        {{ contact_form.email(placeholder="Email", **{'aria-label': 'enter your email address'}) }}
-
-        {{ contact_form.originating_page(placeholder="Originating Page", **{'aria-label': 'originating page'}) }}
-
-        {{ contact_form.message(placeholder="Write a Message", **{'aria-label': 'message content'}) }}
-
-        {% for captcha_error in contact_form.recaptcha.errors %}
-            {{ captcha_error }}
-        {% endfor %}
-        {{ contact_form.recaptcha }}
-
-        {{ contact_form.submit }}
+        <div>
+            {% for name_error in contact_form.name.errors %}
+                {{ name_error }}
+            {% endfor %}
+        </div>
+        <div>
+            {{ contact_form.name(placeholder="Name", class="usa-input", **{'aria-label': 'enter your name'}) }}
+        </div>
+        <div>
+            {% for email_error in contact_form.email.errors %}
+                {{ email_error }}
+            {% endfor %}
+        </div>
+        <div>
+            {{ contact_form.email(placeholder="Email", class="usa-input", **{'aria-label': 'enter your email address'}) }}
+        </div>
+        <div>
+        {{ contact_form.originating_page(placeholder="Originating Page", class="usa-input", **{'aria-label': 'originating page'}) }}
+        </div>
+        {{ contact_form.message(placeholder="Write a Message", class="usa-input",**{'aria-label': 'message content'}) }}
+        <div>
+            {% for captcha_error in contact_form.recaptcha.errors %}
+                {{ captcha_error }}
+            {% endfor %}
+            {{ contact_form.recaptcha }}
+        </div>
+        {{ contact_form.submit(class="usa-button") }}
   </form>
 </div>
 {% endblock %}
-
-{% block url %}<a href="{{ url_for('pubswh.contact') }}">http://pubs.er.usgs.gov{{ url_for('pubswh.contact') }}</a>{% endblock %}

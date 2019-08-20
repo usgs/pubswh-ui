@@ -17,11 +17,9 @@
     <ul>
         {% for series in series_titles %}
             <li>
-               <a title="see the publications associated with this series" href="{{ url_for("pubswh.browse_series", pub_type=pub_type, pub_subtype=pub_subtype, pub_series_name=series['text']) }}" #}>{{ series['text'] }}</a>
+               <a class="usa-link" title="see the publications associated with this series" href="{{ url_for("pubswh.browse_series", pub_type=pub_type, pub_subtype=pub_subtype, pub_series_name=series['text']) }}" #}>{{ series['text'] }}</a>
             </li>
         {% endfor %}
     </ul>
 </div>
 {% endblock %}
-
-{% block url %}<a href="{{ request.full_path }}">http://pubs.er.usgs.gov{{ request.path }}</a>{% endblock %}

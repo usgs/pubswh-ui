@@ -12,4 +12,8 @@
     {% endblock %}
 {% endblock %}
 
-{% block main %}{% endblock %}
+{% block main %}
+    <div class="usa-prose">
+        {% block metrics_main %}{% endblock %}
+    </div>
+{% endblock %}

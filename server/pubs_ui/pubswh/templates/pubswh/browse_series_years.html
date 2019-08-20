@@ -20,11 +20,9 @@
     <ul>
         {% for year in year_range %}
             <li>
-               <a href="{{ url_for("pubswh.browse_series_year", pub_type=pub_type, pub_subtype=pub_subtype, pub_series_name=series_title, year=year ) }}">{{ year }}</a>
+               <a class="usa-link" href="{{ url_for("pubswh.browse_series_year", pub_type=pub_type, pub_subtype=pub_subtype, pub_series_name=series_title, year=year ) }}">{{ year }}</a>
             </li>
         {% endfor %}
     </ul>
 </div>
 {% endblock %}
-
-{% block url %}<a href="{{ request.full_path }}">http://pubs.er.usgs.gov{{ request.path }}</a>{% endblock %}

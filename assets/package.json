@@ -14,12 +14,11 @@
     "build": "mkdir -p dist/scripts && run-p build:* buildvendor:* && npm run hash-assets",
     "build:js": "rollup -c --environment NODE_ENV:production",
     "build:css": "run-p buildcss:*",
-    "buildcss:pubs_base": "node-sass --include-path node_modules/uswds/src/stylesheets styles/pubswh/pubs_base.scss dist/pubs_base.css && uglifycss --output dist/pubs_base.css dist/pubs_base.css && postcss dist/pubs_base.css --no-map --use autoprefixer -o dist/pubs_base.css",
-    "buildcss:auth": "node-sass --include-path node_modules/uswds/src/stylesheets --include-path node_modules/bootstrap-sass/assets/stylesheets styles/auth.scss  dist/auth.css && uglifycss --output dist/auth.css dist/auth.css && postcss dist/auth.css --no-map --use autoprefixer -o dist/auth.css",
-    "buildcss:manager": "node-sass --include-path node_modules/uswds/src/stylesheets --include-path node_modules/backgrid/src --include-path node_modules/backgrid-paginator --include-path node_modules/jquery-ui-dist --include-path node_modules/tinymce/skins/lightgray --include-path node_modules/eonasdan-bootstrap-datetimepicker/src/sass --include-path node_modules/bootstrap-sass/assets/stylesheets styles/manager/manager_custom.scss dist/manager.css && uglifycss --output dist/manager.css dist/manager.css && postcss dist/manager.css --no-map --use autoprefixer -o dist/manager.css",
-    "buildcss:metrics": "node-sass --include-path node_modules/uswds/src/stylesheets --include-path node_modules/dygraphs/dist --include-path node_modules/bootstrap-sass/assets/stylesheets styles/metrics/metrics_custom.scss dist/metrics.css && uglifycss --output dist/metrics.css dist/metrics.css && postcss dist/metrics.css --no-map --use autoprefixer -o dist/metrics.css",
-    "build:fonts": "mkdir -p dist/fonts && cp node_modules/uswds/src/fonts/* dist/fonts && cp node_modules/@fortawesome/fontawesome-free/webfonts/* dist/fonts && cp node_modules/bootstrap-sass/assets/fonts/bootstrap/* dist/fonts && cp node_modules/tinymce/skins/lightgray/fonts/* dist/fonts",
-    "build:images": "mkdir -p dist/images && mkdir -p dist/img && cp -r node_modules/uswds/src/img/* dist/img && cp -r images/* dist/images",
+    "buildcss:pubs_base": "node-sass --include-path node_modules/wdfn-viz/src/stylesheets --include-path node_modules/uswds/src/stylesheets styles/pubswh/pubs_base.scss dist/pubs_base.css && uglifycss --output dist/pubs_base.css dist/pubs_base.css && postcss dist/pubs_base.css --no-map --use autoprefixer -o dist/pubs_base.css",
+    "buildcss:manager": "node-sass --include-path node_modules/wdfn-viz/src/stylesheets --include-path node_modules/uswds/src/stylesheets --include-path node_modules/backgrid/src --include-path node_modules/backgrid-paginator --include-path node_modules/jquery-ui-dist --include-path node_modules/tinymce/skins/lightgray --include-path node_modules/eonasdan-bootstrap-datetimepicker/src/sass --include-path node_modules/bootstrap-sass/assets/stylesheets styles/manager/manager_custom.scss dist/manager.css && uglifycss --output dist/manager.css dist/manager.css && postcss dist/manager.css --no-map --use autoprefixer -o dist/manager.css",
+    "buildcss:metrics": "node-sass --include-path node_modules/wdfn-viz/src/stylesheets --include-path node_modules/uswds/src/stylesheets --include-path node_modules/dygraphs/dist --include-path node_modules/bootstrap-sass/assets/stylesheets styles/metrics/metrics_custom.scss dist/metrics.css && uglifycss --output dist/metrics.css dist/metrics.css && postcss dist/metrics.css --no-map --use autoprefixer -o dist/metrics.css",
+    "build:fonts": "mkdir -p dist/fonts && cp -r node_modules/uswds/src/fonts/* dist/fonts && cp node_modules/@fortawesome/fontawesome-free/webfonts/* dist/fonts && cp -r node_modules/bootstrap-sass/assets/fonts/* dist/fonts && cp node_modules/tinymce/skins/lightgray/fonts/* dist/fonts",
+    "build:images": "mkdir -p dist/images && mkdir -p dist/img && cp -r node_modules/uswds/src/img/* dist/img && cp -r node_modules/wdfn-viz/src/img/* dist/img && cp -r images/* dist/images",
     "buildvendor:academicons": "mkdir -p dist/vendor/academicons && cp -r bower_components/academicons/* dist/vendor/academicons",
     "buildvendor:git": "cp -r scripts/vendor dist/scripts",
     "buildvendor:leaflet": "mkdir -p dist/vendor/leaflet && cp -r node_modules/leaflet/dist/* dist/vendor/leaflet",
@@ -81,7 +80,8 @@
     "rollup-plugin-uglify": "^6.0.2",
     "sinon": "7.4.1",
     "uglify-es": "^3.3.9",
-    "uglifycss": "0.0.29"
+    "uglifycss": "0.0.29",
+    "wdfn-viz": "^1.0.1"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.10.1",
@@ -105,8 +105,7 @@
     "select2": "^4.0.8",
     "select2-bootstrap-theme": "0.1.0-beta.10",
     "systemjs": "^0.21.6",
-    "tinymce": "^4.7.13",
-    "uswds": "^1.6.10",
+    "tinymce": "4.7.13",
     "wellknown": "^0.5.0"
   },
   "eslintIgnore": [

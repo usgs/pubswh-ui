@@ -10,68 +10,68 @@
     </script>
 {% endblock %}
 
-{% block main %}
+{% block metrics_main %}
     <h1>Google Analytics Dashboard for Pubs Warehouse</h1>
     <fieldset class="chart-display-select-div">
         <legend>Display as:&nbsp;</legend>
-        <div>
-            <input id="display-chart" type="radio" name="display-style" value="chart" checked />&nbsp;
-            <label for="display-chart">Chart</label>
+        <div class="usa-radio">
+            <input class="usa-radio__input" id="display-chart" type="radio" name="display-style" value="chart" checked />&nbsp;
+            <label class="usa-radio__label" for="display-chart">Chart</label>
         </div>
-        <div>
-            <input id="display-table" type="radio" name="display-style" value="table" />&nbsp;
-            <label for="display-table">Table</label>
+        <div class="usa-radio">
+            <input class="usa-radio__input" id="display-table" type="radio" name="display-style" value="table" />&nbsp;
+            <label class="usa-radio__label"for="display-table">Table</label>
         </div>
     </fieldset>
     <div class="chart-display">
-        <div id="sessions-div" class="metric-div usa-grid">
-            <div id="recent-sessions-container" class="recent-div usa-width-one-half"><i class="fas fa-spinner fa-spin fa-5x"></i></div>
-            <div id="year-sessions-container" class="year-div usa-width-one-half"><i class="fas fa-spinner fa-spin fa-5x"></i></div>
+        <div id="sessions-div" class="metric-div">
+            <div id="recent-sessions-container" class="recent-div"><i class="fas fa-spinner fa-spin fa-5x"></i></div>
+            <div id="year-sessions-container" class="year-div"><i class="fas fa-spinner fa-spin fa-5x"></i></div>
         </div>
-        <div id="users-div" class="metric-div usa-grid">
-            <div id="recent-users-container" class="recent-div usa-width-one-half"></div>
-            <div id="year-users-container" class="year-div usa-width-one-half"></div>
+        <div id="users-div" class="metric-div">
+            <div id="recent-users-container" class="recent-div"></div>
+            <div id="year-users-container" class="year-div"></div>
         </div>
-        <div id="pageviews-div" class="metric-div usa-grid">
-            <div id="recent-pageviews-container" class="recent-div usa-width-one-half"></div>
-            <div id="year-pageviews-container" class="year-div usa-width-one-half"></div>
+        <div id="pageviews-div" class="metric-div">
+            <div id="recent-pageviews-container" class="recent-div "></div>
+            <div id="year-pageviews-container" class="year-div"></div>
         </div>
-        <div id="downloadevents-div" class="metric-div usa-grid">
-            <div id="recent-downloadevents-container" class="recent-div usa-width-one-half"></div>
-            <div id="year-downloadevents-container" class="year-div usa-width-one-half"></div>
+        <div id="downloadevents-div" class="metric-div">
+            <div id="recent-downloadevents-container" class="recent-div"></div>
+            <div id="year-downloadevents-container" class="year-div"></div>
         </div>
     </div>
     <div class="table-display">
-        <div id="sessions-table-div" class="metric-table-div usa-grid">
-            <div class="usa-width-one-half">
-                <table class="usa-table-borderless metric-table" id="recent-sessions-table"></table>
+        <div id="sessions-table-div" class="metric-table-div">
+            <div class="recent-div">
+                <table class="usa-table usa-table--borderless metric-table" id="recent-sessions-table"></table>
             </div>
-            <div class="usa-width-one-half">
-                <table class="usa-table-borderless metric-table" id="year-sessions-table"></table>
-            </div>
-        </div>
-        <div id="users-table-div" class="metric-table-div usa-grid">
-            <div class="usa-width-one-half">
-                <table class="usa-table-borderless metric-table" id="recent-users-table"></table>
-            </div>
-            <div class="usa-width-one-half">
-                <table class="usa-table-borderless metric-table" id="year-users-table"></table>
+            <div class="year-div">
+                <table class="usa-table usa-table--borderless metric-table" id="year-sessions-table"></table>
             </div>
         </div>
-        <div id="pageviews-table-div" class="metric-table-div usa-grid">
-            <div class="usa-width-one-half">
-                <table class="usa-table-borderless metric-table" id="recent-pageviews-table"></table>
+        <div id="users-table-div" class="metric-table-div">
+            <div class="recent-div">
+                <table class="usa-table usa-table--borderless metric-table" id="recent-users-table"></table>
             </div>
-            <div class="usa-width-one-half">
-                <table class="usa-table-borderless metric-table" id="year-pageviews-table"></table>
+            <div class="year-div">
+                <table class="usa-table usa-table--borderless metric-table" id="year-users-table"></table>
             </div>
         </div>
-        <div id="downloadevents-table-div" class="metric-table-div usa-grid">
-            <div class="usa-width-one-half">
-                <table class="usa-table-borderless metric-table" id="recent-downloadevents-table"></table>
+        <div id="pageviews-table-div" class="metric-table-div">
+            <div class="recent-div">
+                <table class="usa-table usa-table--borderless metric-table" id="recent-pageviews-table"></table>
             </div>
-            <div class="usa-width-one-half">
-                <table class="usa-table-borderless metric-table" id="year-downloadevents-table"></table>
+            <div class="year-div">
+                <table class="usa-table usa-table--borderless metric-table" id="year-pageviews-table"></table>
+            </div>
+        </div>
+        <div id="downloadevents-table-div" class="metric-table-div">
+            <div class="recent-div">
+                <table class="usa-table usa-table--borderless metric-table" id="recent-downloadevents-table"></table>
+            </div>
+            <div class="year-div">
+                <table class="usa-table usa-table--borderless metric-table" id="year-downloadevents-table"></table>
             </div>
         </div>
     </div>

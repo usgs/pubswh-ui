@@ -6,21 +6,20 @@
         padding-left: 2px;
         padding-right: 2px;
         a {
-            color: $color-primary;
+            color: $theme-color-primary ;
             text-decoration: none;
             margin-right: 2px;
-            border: 1px solid $color-gray-light;
+            border: 1px solid color('gray-cool-60');
             border-radius: 4px;
-            font-size: 1.2rem;
+            font-size: size('body', xs);
             padding: 1px 2px;
-            @media screen and (min-width: $medium-screen) {
-                font-size: 1.4rem;
+            @include at-media('tablet') {
+                font-size: size('body', sm);
                 margin-right: 10px;
                 padding: 6px 12px;
             }
 
         }
-
 
         a:hover{
             color:#000;
@@ -28,7 +27,7 @@
         }
     }
     .disabled a {
-        color: $color-gray;
+        color: color('gray-cool-30');
         cursor: not-allowed;
     }
 }

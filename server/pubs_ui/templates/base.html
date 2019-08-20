@@ -29,8 +29,6 @@
         {% block head_script %}{% endblock %}
     </head>
     <body>
-        <div id="skip"><a href="#main-content">Skip to main content</a></div>
-        {% include 'partials/usa_banner.html' %}
         {% import 'partials/header.html' as header %}
         {% block usgs_header %}
             {{ header.usgs_header() }}
