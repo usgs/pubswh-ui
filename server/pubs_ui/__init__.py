@@ -9,6 +9,8 @@ from flask_caching import Cache
 from flask_images import Images
 from flask_mail import Mail
 
+from whitenoise import WhiteNoise
+
 from .custom_filters import display_publication_info, date_format, w3c_date
 
 # pylint: disable=C0103
@@ -64,6 +66,10 @@ _manifest_path = app.config.get('ASSET_MANIFEST_PATH')
 if _manifest_path:
     with open(_manifest_path, 'r') as f:
         app.config['ASSET_MANIFEST'] = json.loads(f.read())
+
+# Enable Whitenoise which will allow the application when using nginx to serve out the static assets.
+if app.config['STATIC_ASSET_PATH']:
+    app.wsgi_app = WhiteNoise(app.wsgi_app, root=app.config['STATIC_ASSET_PATH'], prefix='static/')
 
 # Enable CORS, if specified in the configuration.
 if app.config.get('FLASK_CORS'):
