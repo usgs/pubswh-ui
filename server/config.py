@@ -101,7 +101,9 @@ FLASK_CORS = False
 
 # To use hashed assets, set this to the gulp-rev-all rev-manifest.json path
 ASSET_MANIFEST_PATH = os.environ.get('ASSET_MANIFEST_PATH', '')
-# Used when initializing WhiteNoise (http://whitenoise.evans.io/en/stable/index.html), set this to the path where the static assets will live.
+
+# Used when initializing WhiteNoise (http://whitenoise.evans.io/en/stable/index.html),
+# set this to the path where the static assets will live.
 STATIC_ASSET_PATH = os.environ.get('STATIC_ASSET_PATH')
 
 # Set to False when running the development server on https
