@@ -18,3 +18,4 @@ services:
         && coverage xml -o coverage/coverage.xml"
     environment:
       - SECRET_KEY=keep-me-secret
+      - STATIC_ASSET_PATH=

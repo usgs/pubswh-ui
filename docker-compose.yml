@@ -6,8 +6,7 @@ services:
   assets:
     build: ./assets
     image: pubswh_assets
-    ports:
-      - "9000:9000"
+
   # Python WSGI server
   server:
     build: ./server
