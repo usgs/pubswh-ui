@@ -14,6 +14,6 @@ ARG bower_args
 ARG npm_args
 
 RUN npm $npm_args install
-RUN npx bower $bower_args install --allow-root
+RUN npx bower install $bower_args --allow-root
 
 COPY . /assets

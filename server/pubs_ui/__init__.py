@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import sys
 
 from authlib.flask.client import OAuth
@@ -8,6 +9,8 @@ from flask import Flask, request
 from flask_caching import Cache
 from flask_images import Images
 from flask_mail import Mail
+
+from whitenoise import WhiteNoise
 
 from .custom_filters import display_publication_info, date_format, w3c_date
 
@@ -19,8 +22,11 @@ handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - {%(pathnam
 
 
 app = Flask(__name__.split()[0], instance_relative_config=True)
+
+# Loads configuration information from config.py and instance/config.py
 app.config.from_object('config')  # load configuration before passing the app object to other things
-app.config.from_pyfile('config.py', silent=True)
+if ('NO_INSTANCE_CONFIG') not in os.environ:
+    app.config.from_pyfile('config.py', silent=True)
 
 @app.before_request
 def log_request():
@@ -64,6 +70,11 @@ _manifest_path = app.config.get('ASSET_MANIFEST_PATH')
 if _manifest_path:
     with open(_manifest_path, 'r') as f:
         app.config['ASSET_MANIFEST'] = json.loads(f.read())
+        app.logger.info(app.config['ASSET_MANIFEST'])
+
+# Enable Whitenoise which will allow the application when using nginx to serve out the static assets.
+if app.config['STATIC_ASSET_PATH']:
+    app.wsgi_app = WhiteNoise(app.wsgi_app, root=app.config['STATIC_ASSET_PATH'], prefix='static/')
 
 # Enable CORS, if specified in the configuration.
 if app.config.get('FLASK_CORS'):

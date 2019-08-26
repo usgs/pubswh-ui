@@ -45,6 +45,13 @@ make watch-server
 make watch-assets
 ```
 
+The make env command will create a config.py in the ```server/instance``` directory if one
+does not exist by copy the file ```server/config.py.sample``` to the directory. Any config
+variable defined in ```server/config.py``` can be overridden by assigning a value
+to that variable in the ```server/instance/config.py``` file. Please note that
+variables that are required (as described in the Docker section below) must have
+values in ```server/instance/config.py```
+
 See the specific project READMEs for additional information.
 
 - [Flask Server README](./server/README.md)
