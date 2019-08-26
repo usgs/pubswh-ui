@@ -29,6 +29,7 @@ from .utils import (pull_feed, create_display_links,
                     get_altmetric_badge_img_links, generate_dublin_core, get_crossref_data, get_published_online_date,
                     check_public_access, get_unpaywall_data)
 import subprocess
+import os
 
 pubswh = Blueprint('pubswh', __name__,
                    template_folder='templates',
@@ -290,15 +291,37 @@ def publication(index_id):
 # leads to rendered html for an xml publication
 @pubswh.route('/publication/xml')
 def xml_publication():
-    saxon9he_jar = "/home/ssoper/Documents/PUBSTWO-1664/SaxonHE9-9-1-4J/saxon9he.jar"
-    output_html = "-o:/home/ssoper/Documents/PUBSTWO-1664/html_output.html"
-    source_xml = "-s:/home/ssoper/Documents/PUBSTWO-1664/CIRC1428.XML"
-    source_xslt = "xsl:/home/ssoper/sourceCode/JATSKit/lib/xslt/jatskit-html.xsl"
 
-    # Calls java to run the saxon xslt transform
-    subprocess.call(["java", "-jar", saxon9he_jar, output_html, source_xml, source_xslt])
+    # inputs
+    working_dir = "/home/ssoper/Documents/PUBSTWO-1664/"
+    saxon9he_jar = working_dir + "SaxonHE9-9-1-4J/saxon9he.jar"
+    output_html = "html_output.html"
+    output_html_path = working_dir + output_html
+    source_xslt = "/home/ssoper/sourceCode/JATSKit/lib/xslt/jatskit-html.xsl"
 
-    return send_from_directory("/home/ssoper/Documents/PUBSTWO-1664/", "html_output.html")
+    # source_xml = working_dir + "CIRC1428.XML"
+    # source_xml = working_dir + "SIR20175024.XML"
+    # source_xml = working_dir + "SIM3280.XML"
+    # source_xml = working_dir + "SIR2932A.XML"
+    # source_xml = working_dir + "SIM3094.XML"
+    # source_xml = working_dir + "SIR20165100.XML"
+    # source_xml = working_dir + "SIR20175024.XML"
+    # source_xml = working_dir + "SIR20175126.XML"
+    source_xml = working_dir + "TM6f1.XML"
+
+    # delete output file
+    if os.path.exists(output_html_path):
+        os.remove(output_html_path)
+
+    # create the output file
+    f = open(output_html_path, "w+")
+    f.close()
+
+    # call java to run the saxon xslt transform
+    subprocess.call(["java", "-jar", saxon9he_jar, "-o:" + output_html_path, "-s:" + source_xml, source_xslt])
+
+    # send the resultant html to the page
+    return send_from_directory(working_dir, output_html)
 
 
 # clears the cache for a specific page
