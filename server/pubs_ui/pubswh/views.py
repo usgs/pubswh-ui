@@ -287,7 +287,7 @@ def publication(index_id):
                            related_pubs=related_pubs)
 
 
-# leads to rendered html for xml_publication page
+# leads to rendered html for an xml publication
 @pubswh.route('/publication/xml')
 def xml_publication():
     saxon9he_jar = "/home/ssoper/Documents/PUBSTWO-1664/SaxonHE9-9-1-4J/saxon9he.jar"
