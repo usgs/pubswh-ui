@@ -14,7 +14,7 @@ from dateutil import parser as dateparser
 from requests import get
 import tablib
 
-from flask import render_template, abort, request, Response, jsonify, url_for, redirect, Blueprint
+from flask import render_template, abort, request, Response, jsonify, url_for, redirect, Blueprint, send_from_directory
 from flask_paginate import Pagination
 from flask_mail import Message
 
@@ -28,7 +28,7 @@ from .utils import (pull_feed, create_display_links,
                     update_geographic_extents, generate_sb_data, create_store_info,
                     get_altmetric_badge_img_links, generate_dublin_core, get_crossref_data, get_published_online_date,
                     check_public_access, get_unpaywall_data)
-
+import subprocess
 
 pubswh = Blueprint('pubswh', __name__,
                    template_folder='templates',
@@ -285,6 +285,20 @@ def publication(index_id):
                            indexID=index_id,
                            pubdata=pubdata,
                            related_pubs=related_pubs)
+
+
+# leads to rendered html for xml_publication page
+@pubswh.route('/publication/xml')
+def xml_publication():
+    saxon9he_jar = "/home/ssoper/Documents/PUBSTWO-1664/SaxonHE9-9-1-4J/saxon9he.jar"
+    output_html = "-o:/home/ssoper/Documents/PUBSTWO-1664/html_output.html"
+    source_xml = "-s:/home/ssoper/Documents/PUBSTWO-1664/CIRC1428.XML"
+    source_xslt = "xsl:/home/ssoper/sourceCode/JATSKit/lib/xslt/jatskit-html.xsl"
+
+    # Calls java to run the saxon xslt transform
+    subprocess.call(["java", "-jar", saxon9he_jar, output_html, source_xml, source_xslt])
+
+    return send_from_directory("/home/ssoper/Documents/PUBSTWO-1664/", "html_output.html")
 
 
 # clears the cache for a specific page
