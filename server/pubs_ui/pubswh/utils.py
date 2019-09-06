@@ -317,28 +317,47 @@ def pull_html_feed():
     pull page data from publication/<indexId>/pubs-services endpoint
     :return: the html of the page itself, stripped of header and footer
     """
-    directory = "/home/ssoper/Documents/PUBSTWO-1676/"
-    html = "sampleOutput.html"
 
-    # open the html file for processing
-    f = open(directory + html, "r").read()
+    # this will eventually be XML response content from a new pubs-services endpoint instead of a file
+    file = open("/home/ssoper/Documents/PUBSTWO-1676/sampleOutput.html", "r").read()
 
-    # create the soup object
-    # specifiying the file as your source
-    # lxml as your parser
-    soup = BeautifulSoup(f, 'lxml')
+    # make a soup
+    soup = BeautifulSoup(file, 'lxml')
 
-    # extract the book-part book-part1, back-section, section ref-list contents
-    content_of_interest = soup.findAll('div', {'class': ['book-part book-part1', 'back-section', 'section ref-list']})
+    # everything we want is in the body element
+    content = soup.find('body')
 
-    # strip the css attributes from the document
-    # for tag in soup():
-    #     for attribute in ["class", "id", "name", "style"]:
-    #         del tag[attribute]
+    # remove body child element we don't want
+    # took the "remove stuff" approach so that we don't need to handle a list of content by selecting the things we want
+    # so that we do not end up with square brackets and commas separating each major content block in the output
+    strip_contents = content.findAll('div', {'class': ['page-header', 'metadata collection-meta', 'metadata book-meta', 'front-matter', 'footer']})
+    for strip_content in strip_contents:
+        strip_content.extract()
 
-    # return str(content_of_interest)
-    return str(content_of_interest)
+    tables = content.findAll('table')
+    for table in tables:
+        table['class'] = "usa-table"
 
+    lists = content.findAll('div', {'class': 'list'})
+    for list in lists:
+        list['class'] = 'usa-list'
+
+    publication_title = content.find('h2', {'class': 'main-title'})
+    publication_title['class'] = 'publication-title'
+
+    series_titles = content.findAll('h3', {'class': 'section-title'})
+    for series_title in series_titles:
+        series_title['class'] = 'series-title'
+
+    subseries_titles = content.findAll('h3', {'class': 'title'})
+    for subseries_title in subseries_titles:
+        subseries_title['class'] = 'subseries-title'
+
+    alinks = content.findAll('a')
+    for alink in alinks:
+        alink['class'] = 'usa-link'
+
+    return content
 
 
 class SearchPublications(object):
