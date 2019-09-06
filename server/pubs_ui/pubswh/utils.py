@@ -15,6 +15,7 @@ from dcxml import simpledc
 import feedparser
 import natsort
 import requests
+from flask import send_from_directory
 
 from .. import app, cache
 from ..custom_filters import display_publication_info
@@ -309,6 +310,35 @@ def pull_feed(feed_url):
         post = str(soup)
 
     return post
+
+
+def pull_html_feed():
+    """
+    pull page data from publication/<indexId>/pubs-services endpoint
+    :return: the html of the page itself, stripped of header and footer
+    """
+    directory = "/home/ssoper/Documents/PUBSTWO-1676/"
+    html = "sampleOutput.html"
+
+    # open the html file for processing
+    f = open(directory + html, "r").read()
+
+    # create the soup object
+    # specifiying the file as your source
+    # lxml as your parser
+    soup = BeautifulSoup(f, 'lxml')
+
+    # extract the book-part book-part1, back-section, section ref-list contents
+    content_of_interest = soup.findAll('div', {'class': ['book-part book-part1', 'back-section', 'section ref-list']})
+
+    # strip the css attributes from the document
+    # for tag in soup():
+    #     for attribute in ["class", "id", "name", "style"]:
+    #         del tag[attribute]
+
+    # return str(content_of_interest)
+    return str(content_of_interest)
+
 
 
 class SearchPublications(object):
