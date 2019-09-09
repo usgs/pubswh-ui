@@ -15,7 +15,6 @@ from dcxml import simpledc
 import feedparser
 import natsort
 import requests
-from flask import send_from_directory
 
 from .. import app, cache
 from ..custom_filters import display_publication_info
@@ -327,7 +326,7 @@ def pull_html_feed():
     # everything we want is in the body element
     content = soup.find('body')
 
-    # remove body child element we don't want
+    # remove body child elements we don't want
     # took the "remove stuff" approach so that we don't need to handle a list of content by selecting the things we want
     # so that we do not end up with square brackets and commas separating each major content block in the output
     strip_contents = content.findAll('div', {'class': ['page-header', 'metadata collection-meta', 'metadata book-meta', 'front-matter', 'footer']})

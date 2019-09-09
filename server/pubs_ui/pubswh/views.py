@@ -14,7 +14,7 @@ from dateutil import parser as dateparser
 from requests import get
 import tablib
 
-from flask import render_template, abort, request, Response, jsonify, url_for, redirect, Blueprint, send_from_directory
+from flask import render_template, abort, request, Response, jsonify, url_for, redirect, Blueprint
 from flask_paginate import Pagination
 from flask_mail import Message
 
