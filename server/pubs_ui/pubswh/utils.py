@@ -334,29 +334,54 @@ def pull_html_feed():
     for strip_content in strip_contents:
         strip_content.extract()
 
+    # add usa-table styling to all tables
     tables = content.findAll('table')
     for table in tables:
         table['class'] = "usa-table"
 
+    # make all div.lists into div.usa-lists
     lists = content.findAll('div', {'class': 'list'})
     for list in lists:
         list['class'] = 'usa-list'
 
+    # make all h2.main-titles into h2.publication-titles
     publication_title = content.find('h2', {'class': 'main-title'})
     publication_title['class'] = 'publication-title'
 
+    # make all h3.section-titles into h3.series-titles
     series_titles = content.findAll('h3', {'class': 'section-title'})
     for series_title in series_titles:
         series_title['class'] = 'series-title'
 
+    # make all h3.titles into h3.subseries-titles
     subseries_titles = content.findAll('h3', {'class': 'title'})
     for subseries_title in subseries_titles:
         subseries_title['class'] = 'subseries-title'
 
+    # make all a links into a.usa-links
     alinks = content.findAll('a')
     for alink in alinks:
         alink['class'] = 'usa-link'
 
+    # swap out div.ref-list table with a table.usa-table
+    citations_table = content.find('div', {'class': 'ref-list table'})
+    citations_table.name = 'table'
+    citations_table['class'] = 'usa-table'
+
+    # swap out references cited divs with table elements to make use of uswds usa-table styling
+    # it is necessary to swap the whole nested div tree with html table tags because nesting divs under certain table
+    # elements is invalid html
+    citation_rows = citations_table.findAll('div', 'row')
+    for citation_row in citation_rows:
+        citation_label = citation_row.find('div', 'ref-label cell')
+        citation_content = citation_row.find('div','ref-content cell')
+        citation_row.name = 'tr'
+        citation_label.name = 'td'
+        del citation_label['class']
+        citation_content.name = 'td'
+        del citation_content['class']
+
+    # return the souped up content
     return content
 
 
