@@ -380,6 +380,47 @@ def pull_html_feed():
         citation_content.name = 'td'
         del citation_content['class']
 
+    # Turn the div.fig panels into figure elements.
+    figures = content.findAll('div', 'fig panel')
+    for figure in figures:
+
+        # turn the div.fig panel into a figure tag, remove its class attribute
+        figure.name = 'figure'
+        del figure['class']
+
+        # make a new figcaption tag and append it within the figure
+        fig_caption_tag = soup.new_tag('figcaption')
+        figure.append(fig_caption_tag)
+
+        # grab the div.caption
+        div_caption = figure.find('div', 'caption')
+
+        # grab the p.first text
+        p_first = div_caption.find('p',{'class': 'first'})
+
+        # grab the b tag
+        figure_number_text = figure.find('b')
+
+        # append the b tag and figcaption text to the figcaption tag
+        figure.figcaption.append(" " + p_first.text)
+        figure.figcaption.string.insert_before(figure_number_text)
+        p_first.extract()
+
+        # add 'https://pubs.usgs.gov/xml_test/Images/' to the front of img src value and `.png` to the end
+        # this should produce urls like `https://pubs.usgs.gov/xml_test/Images/sac19-4232_fig01.png`
+        image = figure.find('img')
+        image_name = image['src']
+        image['src'] = 'https://pubs.usgs.gov/xml_test/Images/' + image_name + '.png'
+
+        # grab the only remaining div.caption paragraph text
+        p = div_caption.find('p')
+
+        # Assign p text to the img alt attribute value
+        image['alt'] = p.text
+
+        # remove the div caption
+        div_caption.extract()
+
     # return the souped up content
     return content
 
