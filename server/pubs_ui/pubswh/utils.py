@@ -404,6 +404,9 @@ def pull_html_feed():
         # append the b tag and figcaption text to the figcaption tag
         figure.figcaption.append(" " + p_first.text)
         figure.figcaption.string.insert_before(figure_number_text)
+
+        # preserve the id from the p.first paragraph for linking
+        figure.figcaption['id'] = p_first['id']
         p_first.extract()
 
         # add 'https://pubs.usgs.gov/xml_test/Images/' to the front of img src value and `.png` to the end
@@ -418,10 +421,12 @@ def pull_html_feed():
         # Assign p text to the img alt attribute value
         image['alt'] = p.text
 
+        # preserve the p id for linking
+        image['id'] = p['id']
+
         # remove the div caption
         div_caption.extract()
 
-    # return the souped up content
     return content
 
 
