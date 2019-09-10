@@ -311,17 +311,14 @@ def pull_feed(feed_url):
     return post
 
 
-def pull_html_feed():
+def transform_html(html, image_url):
     """
     pull page data from publication/<indexId>/pubs-services endpoint
     :return: the html of the page itself, stripped of header and footer
     """
 
-    # this will eventually be XML response content from a new pubs-services endpoint instead of a file
-    file = open("/home/ssoper/Documents/PUBSTWO-1676/sampleOutput.html", "r").read()
-
     # make a soup
-    soup = BeautifulSoup(file, 'lxml')
+    soup = BeautifulSoup(html, 'lxml')
 
     # everything we want is in the body element
     content = soup.find('body')
@@ -410,10 +407,9 @@ def pull_html_feed():
         p_first.extract()
 
         # add 'https://pubs.usgs.gov/xml_test/Images/' to the front of img src value and `.png` to the end
-        # this should produce urls like `https://pubs.usgs.gov/xml_test/Images/sac19-4232_fig01.png`
         image = figure.find('img')
         image_name = image['src']
-        image['src'] = 'https://pubs.usgs.gov/xml_test/Images/' + image_name + '.png'
+        image['src'] = image_url + image_name + '.png'
 
         # grab the only remaining div.caption paragraph text
         p = div_caption.find('p')

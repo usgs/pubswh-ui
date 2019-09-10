@@ -110,3 +110,9 @@ SECURE_COOKIES = True
 
 if 'STATIC_ROOT' in os.environ:
     STATIC_ROOT = os.environ.get('STATIC_ROOT')
+
+# This will eventually be a url for pulling html from pubs-services
+HTML_ENDPOINT = open("/home/ssoper/Documents/PUBSTWO-1676/sampleOutput.html", "r").read()
+
+# This is a url for pulling images from SPN
+SPN_IMAGE_URL = 'https://pubs.usgs.gov/xml_test/Images/'

@@ -27,7 +27,7 @@ from .utils import (pull_feed, create_display_links,
                     munge_pubdata_for_display, extract_related_pub_info,
                     update_geographic_extents, generate_sb_data, create_store_info,
                     get_altmetric_badge_img_links, generate_dublin_core, get_crossref_data, get_published_online_date,
-                    check_public_access, get_unpaywall_data, pull_html_feed)
+                    check_public_access, get_unpaywall_data, transform_html)
 
 pubswh = Blueprint('pubswh', __name__,
                    template_folder='templates',
@@ -293,7 +293,7 @@ def xml_publication():
     # will eventually feed an indexID into these params
     # will eventually want the pubdata when you begin feeding pubs metadata from manager app
     return render_template('pubswh/publication_full.html',
-                           html_content=pull_html_feed())
+                           html_content=transform_html(app.config['HTML_ENDPOINT'], app.config['SPN_IMAGE_URL']))
 
 
 # clears the cache for a specific page
