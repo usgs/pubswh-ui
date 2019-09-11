@@ -109,9 +109,6 @@ STATIC_ASSET_PATH = os.environ.get('STATIC_ASSET_PATH')
 # Set to False when running the development server on https
 SECURE_COOKIES = True
 
-if 'STATIC_ROOT' in os.environ:
-    STATIC_ROOT = os.environ.get('STATIC_ROOT')
-
 # This will eventually be a url for pulling html from pubs-services
 with open("/home/ssoper/sourceCode/pubswh-ui/server/pubs_ui/pubswh/tests/sample_html.html") as f:
     HTML_ENDPOINT = f.read()
