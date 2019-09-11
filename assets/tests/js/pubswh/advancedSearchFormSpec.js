@@ -102,7 +102,7 @@ describe('AdvancedSearchForm', function() {
             expect($select.find('option').length).toEqual(1);
         });
 
-        it('Expects that calling addRow with a "map" inputType makes a call to create the search map and creates a hidden input', function() {
+        xit('Expects that calling addRow with a "map" inputType makes a call to create the search map and creates a hidden input', function() {
             var row = {
                 name: 'map1',
                 displayName: 'Map 1',

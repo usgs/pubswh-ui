@@ -21,15 +21,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # verify SSL certs during web service calls by requests, can be a path to a cert bundle
 VERIFY_CERT = 'NO_VERIFY_CERT' not in os.environ
 
-# directory where static files should be placed during a build
-COLLECT_STATIC_ROOT = 'static/'
-
 # SERVICE ENDPOINTS
 PUB_URL = os.environ.get('PUB_URL')  # root pubs services URL
 LOOKUP_URL = os.environ.get('LOOKUP_URL')
 BASE_SEARCH_URL = os.environ.get('BASE_SEARCH_URL')  # pubs services search endpoint
 # URL to use when constructing JSON reponses that have a `url` attribute
-JSON_LD_ID_BASE_URL = os.environ.get('JSON_LD_ID_BASE_URL')
+JSON_LD_ID_BASE_URL = os.environ.get('JSON_LD_ID_BASE_URL', '')
 # pubs services endpoint for publications currently in the manager app
 PREVIEW_ENDPOINT_URL = os.environ.get('PREVIEW_ENDPOINT_URL')
 
@@ -105,6 +102,10 @@ FLASK_CORS = False
 # To use hashed assets, set this to the gulp-rev-all rev-manifest.json path
 ASSET_MANIFEST_PATH = os.environ.get('ASSET_MANIFEST_PATH', '')
 
+# Used when initializing WhiteNoise (http://whitenoise.evans.io/en/stable/index.html),
+# set this to the path where the static assets will live.
+STATIC_ASSET_PATH = os.environ.get('STATIC_ASSET_PATH')
+
 # Set to False when running the development server on https
 SECURE_COOKIES = True
 
@@ -117,3 +118,6 @@ with open("/home/ssoper/sourceCode/pubswh-ui/server/pubs_ui/pubswh/tests/sample_
 
 # This is a url for pulling images from SPN
 SPN_IMAGE_URL = 'https://pubs.usgs.gov/xml_test/Images/'
+
+STATIC_ROOT = os.environ.get('STATIC_ROOT', '/static/')
+

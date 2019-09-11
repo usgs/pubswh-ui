@@ -12,7 +12,7 @@ gulp.task('revall', function () {
                 /.+\.[a-f0-9]{8}\..+$/,
 
                 // Skip all vendor JS - there are many various loading problems
-                /vendor.+/
+                /vendor\/.+/
             ],
             includeFilesInManifest: ['.css', '.js', '.ico', '.svg', '.png', '.jpg']
         }))
