@@ -317,113 +317,122 @@ def transform_html(html, image_url):
     :return: the html of the page itself, stripped of header and footer
     """
 
-    # make a soup
+    # Make a soup
     soup = BeautifulSoup(html, 'lxml')
 
-    # everything we want is in the body element
-    content = soup.find('body')
+    # Grab all elements we want from the input html, contains a list of content blocks
+    content_divs = soup.findAll('div', {'class': ['book-part', 'back-section', 'section']})
 
-    # remove body child elements we don't want
-    # took the "remove stuff" approach so that we don't need to handle a list of content by selecting the things we want
-    # so that we do not end up with square brackets and commas separating each major content block in the output
-    strip_contents = content.findAll('div', {'class': ['page-header', 'metadata collection-meta', 'metadata book-meta', 'front-matter', 'footer']})
-    for strip_content in strip_contents:
-        strip_content.extract()
+    # Create a new body tag and append all the content blocks
+    body = soup.new_tag('body')
+    for content_div in content_divs:
+        body.append(content_div)
 
-    # add usa-table styling to all tables
-    tables = content.findAll('table')
-    for table in tables:
-        table['class'] = "usa-table"
+    # Make a new citation table, add stuff we want from the ref-list div, append it, then delete the ref-list div
+    citation_table = soup.new_tag('table')
 
-    # make all div.lists into div.usa-lists
-    lists = content.findAll('div', {'class': 'list'})
-    for list in lists:
-        list['class'] = 'usa-list'
+    ref_list = body.find('div', {'class': 'ref-list table'})
+    ref_list.insert_after(citation_table)
 
-    # make all h2.main-titles into h2.publication-titles
-    publication_title = content.find('h2', {'class': 'main-title'})
-    publication_title['class'] = 'publication-title'
+    ref_list_rows = ref_list.findAll('div', 'row')
+    for ref_list_row in ref_list_rows:
 
-    # make all h3.section-titles into h3.series-titles
-    series_titles = content.findAll('h3', {'class': 'section-title'})
-    for series_title in series_titles:
-        series_title['class'] = 'series-title'
+        # add a new row to the citation table
+        row = soup.new_tag('tr')
+        citation_table.append(row)
 
-    # make all h3.titles into h3.subseries-titles
-    subseries_titles = content.findAll('h3', {'class': 'title'})
-    for subseries_title in subseries_titles:
-        subseries_title['class'] = 'subseries-title'
+        # add a data cell for ref-label stuff
+        label_td = soup.new_tag('td')
+        row.append(label_td)
+        citation_label = ref_list_row.find('div', 'ref-label cell')
+        label_td.append(citation_label)
 
-    # make all a links into a.usa-links
-    alinks = content.findAll('a')
-    for alink in alinks:
-        alink['class'] = 'usa-link'
+        # add a data cell for ref-content stuff
+        content_td = soup.new_tag('td')
+        row.append(content_td)
+        citation_content = ref_list_row.find('div', 'ref-content cell')
+        content_td.append(citation_content)
 
-    # swap out div.ref-list table with a table.usa-table
-    citations_table = content.find('div', {'class': 'ref-list table'})
-    citations_table.name = 'table'
-    citations_table['class'] = 'usa-table'
+    ref_list.extract()
 
-    # swap out references cited divs with table elements to make use of uswds usa-table styling
-    # it is necessary to swap the whole nested div tree with html table tags because nesting divs under certain table
-    # elements is invalid html
-    citation_rows = citations_table.findAll('div', 'row')
-    for citation_row in citation_rows:
-        citation_label = citation_row.find('div', 'ref-label cell')
-        citation_content = citation_row.find('div','ref-content cell')
-        citation_row.name = 'tr'
-        citation_label.name = 'td'
-        del citation_label['class']
-        citation_content.name = 'td'
-        del citation_content['class']
+    # Make a new figure, add stuff we want from the fig panel, then delete the fig panel
+    fig_panel_divs = body.findAll('div', 'fig panel')
+    for fig_panel_div in fig_panel_divs:
 
-    # Turn the div.fig panels into figure elements.
-    figures = content.findAll('div', 'fig panel')
-    for figure in figures:
+        # create a new figure
+        figure = soup.new_tag('figure')
 
-        # turn the div.fig panel into a figure tag, remove its class attribute
-        figure.name = 'figure'
-        del figure['class']
+        # add an "a" tag
+        a = soup.new_tag('a')
+        figure.append(a)
+        old_a = fig_panel_div.find('a')
+        a['id'] = old_a['id']
 
-        # make a new figcaption tag and append it within the figure
-        fig_caption_tag = soup.new_tag('figcaption')
-        figure.append(fig_caption_tag)
+        # add an h5
+        h5 = soup.new_tag('h5')
+        figure.append(h5)
+        h5.append(fig_panel_div.find('h5').text)
 
-        # grab the div.caption
-        div_caption = figure.find('div', 'caption')
+        # add an img tag to the figure
+        img = soup.new_tag('img')
+        figure.append(img)
 
-        # grab the p.first text
-        p_first = div_caption.find('p',{'class': 'first'})
+        # construct the img url
+        old_image = fig_panel_div.find('img')
+        img['src'] = image_url + old_image['src'] + '.png'
 
-        # grab the b tag
-        figure_number_text = figure.find('b')
+        # add a figcaption
+        fig_caption = soup.new_tag('figcaption')
+        figure.append(fig_caption)
 
-        # append the b tag and figcaption text to the figcaption tag
+        # add the b tag, and the p.first id and text to the figcaption
+        b = fig_panel_div.find('b')
+        figure.figcaption.string.insert_before(b)
+
+        p_first = fig_panel_div.find('p',{'class': 'first'})
         figure.figcaption.append(" " + p_first.text)
-        figure.figcaption.string.insert_before(figure_number_text)
-
-        # preserve the id from the p.first paragraph for linking
         figure.figcaption['id'] = p_first['id']
         p_first.extract()
 
-        # add 'https://pubs.usgs.gov/xml_test/Images/' to the front of img src value and `.png` to the end
-        image = figure.find('img')
-        image_name = image['src']
-        image['src'] = image_url + image_name + '.png'
+        # add the only remaining div.caption p#id and text and to the img and its alt text
+        p = fig_panel_div.find('p')
+        img['alt'] = p.text
+        img['id'] = p['id']
 
-        # grab the only remaining div.caption paragraph text
-        p = div_caption.find('p')
+        # insert the newly built figure after the existing fig panel, then delete the now obsolete fig panel
+        fig_panel_div.insert_after(figure)
+        fig_panel_div.extract()
 
-        # Assign p text to the img alt attribute value
-        image['alt'] = p.text
+    # add usa-table styling to all tables
+    tables = body.findAll('table')
+    for table in tables:
+        table['class'] = "usa-table"
 
-        # preserve the p id for linking
-        image['id'] = p['id']
+    # add usa-list styling to all div.lists
+    list_divs = body.findAll('div', {'class': 'list'})
+    for list_div in list_divs:
+        list_div['class'] = 'usa-list'
 
-        # remove the div caption
-        div_caption.extract()
+    # add publication-title styling to h2.main-title
+    main_title = body.find('h2', {'class': 'main-title'})
+    main_title['class'] = 'publication-title'
 
-    return content
+    # add series-title styling to all h3.section-titles
+    section_titles = body.findAll('h3', {'class': 'section-title'})
+    for section_title in section_titles:
+        section_title['class'] = 'series-title'
+
+    # add subseries-title styling to all h3.titles
+    titles = body.findAll('h3', {'class': 'title'})
+    for title in titles:
+        title['class'] = 'subseries-title'
+
+    # add usa-link styling to all a tags
+    a_tags = body.findAll('a')
+    for a in a_tags:
+        a['class'] = 'usa-link'
+
+    return body
 
 
 class SearchPublications(object):
