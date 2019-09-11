@@ -112,8 +112,7 @@ if 'STATIC_ROOT' in os.environ:
     STATIC_ROOT = os.environ.get('STATIC_ROOT')
 
 # This will eventually be a url for pulling html from pubs-services
-# HTML_ENDPOINT = open("/home/ssoper/Documents/PUBSTWO-1676/sampleOutput.html", "r").read()
-with open("/home/ssoper/Documents/PUBSTWO-1676/sampleOutput.html") as f:
+with open("/home/ssoper/sourceCode/pubswh-ui/server/pubs_ui/pubswh/tests/sample_html.html") as f:
     HTML_ENDPOINT = f.read()
 
 # This is a url for pulling images from SPN

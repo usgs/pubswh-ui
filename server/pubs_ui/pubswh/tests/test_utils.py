@@ -14,7 +14,7 @@ from .test_data import (
     null_landing)
 from ..utils import manipulate_doi_information, generate_sb_data, update_geographic_extents, create_store_info, \
     get_altmetric_badge_img_links, SearchPublications, get_crossref_data, check_public_access, \
-    get_published_online_date, get_unpaywall_data, has_oa_link
+    get_published_online_date, get_unpaywall_data, has_oa_link, transform_html
 from ... import app
 
 
@@ -164,6 +164,22 @@ class ManipulateDoiInformationTestCase(unittest.TestCase):
             ]
         }
         assert manipulate_doi_information(simple_pubsdata) == expected_pubsdata
+
+
+class TransformHTMLTestCase(unittest.TestCase):
+    """
+    Tests for transform_html
+    """
+
+    def test_does_the_transform_produce_xml_publication_with_usgs_styling(self):
+
+        with open("/home/ssoper/sourceCode/pubswh-ui/server/pubs_ui/pubswh/tests/transformed_output.html") as f:
+            expected_output = f.read()
+
+        self.assertEqual(
+            transform_html(app.config['HTML_ENDPOINT'], app.config['SPN_IMAGE_URL']),
+            expected_output
+        )
 
 
 class GenerateScienceBaseData(unittest.TestCase):
