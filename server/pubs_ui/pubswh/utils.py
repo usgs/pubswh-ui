@@ -344,20 +344,26 @@ def transform_html(html, image_url):
         # add a data cell for ref-label stuff
         label_td = soup.new_tag('td')
         row.append(label_td)
-        citation_label = ref_list_row.find('div', 'ref-label cell')
-        label_td.append(citation_label)
+        ref_label = ref_list_row.find('div', 'ref-label cell')
+        label = ref_label.find('span', 'generated')
+        del label['class']
+        label_td.append(label)
+        label_link = ref_label.find('a')
+        label_td.append(label_link)
 
         # add a data cell for ref-content stuff
         content_td = soup.new_tag('td')
         row.append(content_td)
-        citation_content = ref_list_row.find('div', 'ref-content cell')
-        content_td.append(citation_content)
+        ref_content = ref_list_row.find('div', 'ref-content cell')
+        content = ref_content.find('p')
+        del content['class']
+        content_td.append(content)
 
     ref_list.extract()
 
     # Make a new figure, add stuff we want from the fig panel, then delete the fig panel
-    fig_panel_divs = body.findAll('div', 'fig panel')
-    for fig_panel_div in fig_panel_divs:
+    figs = body.findAll('div', 'fig panel')
+    for fig in figs:
 
         # create a new figure
         figure = soup.new_tag('figure')
@@ -365,20 +371,20 @@ def transform_html(html, image_url):
         # add an "a" tag
         a = soup.new_tag('a')
         figure.append(a)
-        old_a = fig_panel_div.find('a')
+        old_a = fig.find('a')
         a['id'] = old_a['id']
 
         # add an h5
         h5 = soup.new_tag('h5')
         figure.append(h5)
-        h5.append(fig_panel_div.find('h5').text)
+        h5.append(fig.find('h5').text)
 
         # add an img tag to the figure
         img = soup.new_tag('img')
         figure.append(img)
 
         # construct the img url
-        old_image = fig_panel_div.find('img')
+        old_image = fig.find('img')
         img['src'] = image_url + old_image['src'] + '.png'
 
         # add a figcaption
@@ -386,22 +392,24 @@ def transform_html(html, image_url):
         figure.append(fig_caption)
 
         # add the b tag, and the p.first id and text to the figcaption
-        b = fig_panel_div.find('b')
-        figure.figcaption.string.insert_before(b)
+        b = fig.find('b')
+        fig_caption.append(b)
 
-        p_first = fig_panel_div.find('p',{'class': 'first'})
-        figure.figcaption.append(" " + p_first.text)
-        figure.figcaption['id'] = p_first['id']
+        p_first = fig.find('p',{'class': 'first'})
+        fig_caption.append(" " + p_first.text)
+        fig_caption['id'] = p_first['id']
+
         p_first.extract()
 
         # add the only remaining div.caption p#id and text and to the img and its alt text
-        p = fig_panel_div.find('p')
+        p = fig.find('p')
         img['alt'] = p.text
         img['id'] = p['id']
 
         # insert the newly built figure after the existing fig panel, then delete the now obsolete fig panel
-        fig_panel_div.insert_after(figure)
-        fig_panel_div.extract()
+        fig.insert_after(figure)
+        fig.extract()
+
 
     # add usa-table styling to all tables
     tables = body.findAll('table')
