@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 -   Using OAuth2 rather than a home rolled authentication.
 -   Using wdfn-viz rather than using USWDS directly. Note that this also means we are using USWDS version 2.x.x.
+-   Updated jasmine dependency to 3.4.0
 
 ### Added
 -   Dockerfile and docker-compose scripts to build a pubswh-ui. This includes Jenkinsfile.build used to build the image
