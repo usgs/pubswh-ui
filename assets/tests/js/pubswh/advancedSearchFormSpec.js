@@ -102,7 +102,7 @@ describe('AdvancedSearchForm', function() {
             expect($select.find('option').length).toEqual(1);
         });
 
-        xit('Expects that calling addRow with a "map" inputType makes a call to create the search map and creates a hidden input', function() {
+        it('Expects that calling addRow with a "map" inputType makes a call to create the search map and creates a hidden input', function() {
             var row = {
                 name: 'map1',
                 displayName: 'Map 1',
@@ -270,7 +270,7 @@ describe('AdvancedSearchForm', function() {
         });
     });
 
-    xdescribe('Tests with initialRows', function() {
+    describe('Tests with initialRows', function() {
         beforeEach(function(done) {
             var initialRows = [
                 {
@@ -315,7 +315,7 @@ describe('AdvancedSearchForm', function() {
 
         // The following tests have been disabled because they cause the Firefox browser tests to fail intermittently
         // but only when run with --no-single-run.
-        xit('Expects that three rows are added with the correct input type and initial value', function() {
+        it('Expects that three rows are added with the correct input type and initial value', function() {
             var $rows = $testDiv.children();
             var $maprows = $mapDiv.children();
             var $text, $select, $map, $boolean, $date;
@@ -338,7 +338,7 @@ describe('AdvancedSearchForm', function() {
             expect($date.val()).toEqual('2001-01-14');
         });
 
-        xit('Expects that calling deleteAllRows removes all the rows from the form', function() {
+        it('Expects that calling deleteAllRows removes all the rows from the form', function() {
             advancedSearchForm.deleteAllRows();
 
             expect($testDiv.children().length).toEqual(0);

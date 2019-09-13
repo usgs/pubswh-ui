@@ -51,8 +51,7 @@ describe('ResultsMap', function() {
         expect(L.geoJSON).not.toHaveBeenCalled();
     });
 
-    //Randomly failing
-    xit('Expects that extent layers are created for publications with a geographicExtent property', function() {
+    it('Expects that extent layers are created for publications with a geographicExtent property', function() {
         var publications = [
             {
                 title : 'Title1',
