@@ -174,9 +174,8 @@ class TransformHTMLTestCase(unittest.TestCase):
 
     def test_does_the_transform_produce_xml_publication_with_usgs_styling(self):
 
-        with open("pubs_ui/pubswh/tests/transformed_output.html") as f:
-
-            transformed_html = f.read()
+        with open("pubs_ui/pubswh/tests/transformed_output.html") as sample_output:
+            transformed_html = sample_output.read()
 
         # need to extract the body from the html tag, which soup adds by default
         soup = BeautifulSoup(transformed_html, 'lxml')

@@ -328,7 +328,7 @@ def transform_html(html, image_url):
     for content_div in content_divs:
         body.append(content_div)
 
-    # Make a new citation table, add stuff we want from the ref-list div, append it, then delete the ref-list div
+    # Make a new citation table, add content from the ref-list div, append it to the body, then delete the ref-list div
     citation_table = soup.new_tag('table')
 
     ref_list = body.find('div', {'class': 'ref-list table'})
@@ -361,7 +361,7 @@ def transform_html(html, image_url):
 
     ref_list.extract()
 
-    # Make a new figure, add stuff we want from the fig panel, then delete the fig panel
+    # Make a new figure, add content we want from the fig panel, then delete the fig panel
     figs = body.findAll('div', 'fig panel')
     for fig in figs:
 
@@ -395,7 +395,7 @@ def transform_html(html, image_url):
         b = fig.find('b')
         fig_caption.append(b)
 
-        p_first = fig.find('p',{'class': 'first'})
+        p_first = fig.find('p', {'class': 'first'})
         fig_caption.append(" " + p_first.text)
         fig_caption['id'] = p_first['id']
 
@@ -409,7 +409,6 @@ def transform_html(html, image_url):
         # insert the newly built figure after the existing fig panel, then delete the now obsolete fig panel
         fig.insert_after(figure)
         fig.extract()
-
 
     # add usa-table styling to all tables
     tables = body.findAll('table')

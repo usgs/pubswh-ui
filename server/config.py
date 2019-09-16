@@ -117,4 +117,3 @@ with open("pubs_ui/pubswh/tests/sample_html.html") as f:
 SPN_IMAGE_URL = 'https://pubs.usgs.gov/xml_test/Images/'
 
 STATIC_ROOT = os.environ.get('STATIC_ROOT', '/static/')
-
