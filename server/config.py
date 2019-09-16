@@ -110,7 +110,7 @@ STATIC_ASSET_PATH = os.environ.get('STATIC_ASSET_PATH')
 SECURE_COOKIES = True
 
 # This will eventually be a url for pulling html from pubs-services
-with open("/home/ssoper/sourceCode/pubswh-ui/server/pubs_ui/pubswh/tests/sample_html.html") as f:
+with open("pubs_ui/pubswh/tests/sample_html.html") as f:
     HTML_ENDPOINT = f.read()
 
 # This is a url for pulling images from SPN
