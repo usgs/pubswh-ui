@@ -320,38 +320,31 @@ def transform_html(html, image_url):
     # Make a soup
     soup = BeautifulSoup(html, 'lxml')
 
-    # Grab all elements we want from the input html, contains a list of content blocks
-    content_divs = soup.findAll('div', {'class': ['book-part', 'back-section', 'section']})
-
-    # Create a new body tag and append all the content blocks
     body = soup.new_tag('body')
-    for content_div in content_divs:
+
+    # Grab all content blocks we want from the input html
+    for content_div in soup.findAll('div', {'class': ['book-part', 'back-section', 'section']}):
         body.append(content_div)
 
-    # Make a new citation table, add content from the ref-list div, append it to the body, then delete the ref-list div
+    # Make a new citation table and add content we want from the ref-list div
     citation_table = soup.new_tag('table')
-
     ref_list = body.find('div', {'class': 'ref-list table'})
-    ref_list.insert_after(citation_table)
 
-    ref_list_rows = ref_list.findAll('div', 'row')
-    for ref_list_row in ref_list_rows:
-
+    for ref_list_row in ref_list.findAll('div', 'row'):
         # add a new row to the citation table
         row = soup.new_tag('tr')
         citation_table.append(row)
 
-        # add a data cell for ref-label stuff
+        # add a data cell for ref-label content
         label_td = soup.new_tag('td')
         row.append(label_td)
         ref_label = ref_list_row.find('div', 'ref-label cell')
         label = ref_label.find('span', 'generated')
         del label['class']
         label_td.append(label)
-        label_link = ref_label.find('a')
-        label_td.append(label_link)
+        label_td.append(ref_label.find('a'))
 
-        # add a data cell for ref-content stuff
+        # add a data cell for ref-content content
         content_td = soup.new_tag('td')
         row.append(content_td)
         ref_content = ref_list_row.find('div', 'ref-content cell')
@@ -359,20 +352,19 @@ def transform_html(html, image_url):
         del content['class']
         content_td.append(content)
 
+    # append the citation table to the body and delete the now obsolete ref-list div
+    ref_list.insert_after(citation_table)
     ref_list.extract()
 
     # Make a new figure, add content we want from the fig panel, then delete the fig panel
-    figs = body.findAll('div', 'fig panel')
-    for fig in figs:
-
+    for fig in body.findAll('div', 'fig panel'):
         # create a new figure
         figure = soup.new_tag('figure')
 
         # add an "a" tag
         a = soup.new_tag('a')
         figure.append(a)
-        old_a = fig.find('a')
-        a['id'] = old_a['id']
+        a['id'] = fig.find('a')['id']
 
         # add an h5
         h5 = soup.new_tag('h5')
@@ -384,16 +376,14 @@ def transform_html(html, image_url):
         figure.append(img)
 
         # construct the img url
-        old_image = fig.find('img')
-        img['src'] = image_url + old_image['src'] + '.png'
+        img['src'] = image_url + fig.find('img')['src'] + '.png'
 
         # add a figcaption
         fig_caption = soup.new_tag('figcaption')
         figure.append(fig_caption)
 
         # add the b tag, and the p.first id and text to the figcaption
-        b = fig.find('b')
-        fig_caption.append(b)
+        fig_caption.append(fig.find('b'))
 
         p_first = fig.find('p', {'class': 'first'})
         fig_caption.append(" " + p_first.text)
@@ -401,7 +391,7 @@ def transform_html(html, image_url):
 
         p_first.extract()
 
-        # add the only remaining div.caption p#id and text and to the img and its alt text
+        # add the only remaining div.caption paragraph content to the img
         p = fig.find('p')
         img['alt'] = p.text
         img['id'] = p['id']
@@ -411,13 +401,11 @@ def transform_html(html, image_url):
         fig.extract()
 
     # add usa-table styling to all tables
-    tables = body.findAll('table')
-    for table in tables:
+    for table in body.findAll('table'):
         table['class'] = "usa-table"
 
     # add usa-list styling to all div.lists
-    list_divs = body.findAll('div', {'class': 'list'})
-    for list_div in list_divs:
+    for list_div in body.findAll('div', {'class': 'list'}):
         list_div['class'] = 'usa-list'
 
     # add publication-title styling to h2.main-title
@@ -425,18 +413,15 @@ def transform_html(html, image_url):
     main_title['class'] = 'publication-title'
 
     # add series-title styling to all h3.section-titles
-    section_titles = body.findAll('h3', {'class': 'section-title'})
-    for section_title in section_titles:
+    for section_title in body.findAll('h3', {'class': 'section-title'}):
         section_title['class'] = 'series-title'
 
     # add subseries-title styling to all h3.titles
-    titles = body.findAll('h3', {'class': 'title'})
-    for title in titles:
+    for title in body.findAll('h3', {'class': 'title'}):
         title['class'] = 'subseries-title'
 
     # add usa-link styling to all a tags
-    a_tags = body.findAll('a')
-    for a in a_tags:
+    for a in body.findAll('a'):
         a['class'] = 'usa-link'
 
     return body

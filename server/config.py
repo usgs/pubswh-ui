@@ -109,8 +109,10 @@ STATIC_ASSET_PATH = os.environ.get('STATIC_ASSET_PATH')
 # Set to False when running the development server on https
 SECURE_COOKIES = True
 
-# This will eventually be a url for pulling html from pubs-services
-with open("pubs_ui/pubswh/tests/sample_html.html") as f:
+# HTML_ENDPOINT will eventually be a url for pulling html from pubs-services
+sample_html_absolute_path = os.path.abspath(os.path.dirname(__file__))
+sample_html_relative_path = os.path.join(sample_html_absolute_path, "pubs_ui/pubswh/tests/sample_html.html")
+with open(sample_html_relative_path) as f:
     HTML_ENDPOINT = f.read()
 
 # This is a url for pulling images from SPN
