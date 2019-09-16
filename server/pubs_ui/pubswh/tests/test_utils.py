@@ -7,6 +7,7 @@ from unittest.mock import MagicMock, patch
 import arrow
 import requests as r
 import requests_mock
+from bs4 import BeautifulSoup
 
 from .test_data import (
     crossref_200_ok, crossref_200_not_ok, crossref_200_ok_2_date_parts,
@@ -174,12 +175,18 @@ class TransformHTMLTestCase(unittest.TestCase):
     def test_does_the_transform_produce_xml_publication_with_usgs_styling(self):
 
         with open("/home/ssoper/sourceCode/pubswh-ui/server/pubs_ui/pubswh/tests/transformed_output.html") as f:
-            expected_output = f.read()
+            transformed_html = f.read()
 
-        self.assertEqual(
-            transform_html(app.config['HTML_ENDPOINT'], app.config['SPN_IMAGE_URL']),
-            expected_output
-        )
+        # need to extract the body from the html tag, which soup adds by default
+        soup = BeautifulSoup(transformed_html, 'lxml')
+        expected_string = str(soup.find('body'))
+        expected_no_whitespace = "".join(expected_string.split())
+
+        actual_string = str(transform_html(app.config['HTML_ENDPOINT'], app.config['SPN_IMAGE_URL']))
+        actual_no_whitespace = "".join(actual_string.split())
+
+        # string comparison of the soup output with all whitespace removed
+        self.assertEqual(actual_no_whitespace, expected_no_whitespace)
 
 
 class GenerateScienceBaseData(unittest.TestCase):
