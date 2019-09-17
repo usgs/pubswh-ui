@@ -327,30 +327,8 @@ def transform_html(html, image_url):
         body.append(content_div)
 
     # Make a new citation table and add content we want from the ref-list div
-    citation_table = soup.new_tag('table')
     ref_list = body.find('div', {'class': 'ref-list table'})
-
-    for ref_list_row in ref_list.findAll('div', 'row'):
-        # add a new row to the citation table
-        row = soup.new_tag('tr')
-        citation_table.append(row)
-
-        # add a data cell for ref-label content
-        label_td = soup.new_tag('td')
-        row.append(label_td)
-        ref_label = ref_list_row.find('div', 'ref-label cell')
-        label = ref_label.find('span', 'generated')
-        del label['class']
-        label_td.append(label)
-        label_td.append(ref_label.find('a'))
-
-        # add a data cell for ref-content content
-        content_td = soup.new_tag('td')
-        row.append(content_td)
-        ref_content = ref_list_row.find('div', 'ref-content cell')
-        content = ref_content.find('p')
-        del content['class']
-        content_td.append(content)
+    citation_table = make_citation_table(soup, ref_list)
 
     # append the citation table to the body and delete the now obsolete ref-list div
     ref_list.insert_after(citation_table)
@@ -425,6 +403,39 @@ def transform_html(html, image_url):
         a['class'] = 'usa-link'
 
     return body
+
+
+def make_citation_table(soup, references):
+    """
+    Creates a citation table given a list of references cited
+    :return: a citation table
+    """
+    citation_table = soup.new_tag('table')
+    citation_table['id'] = 'references-cited'
+
+    for ref_list_row in references.findAll('div', 'row'):
+        # add a new row to the citation table
+        row = soup.new_tag('tr')
+        citation_table.append(row)
+
+        # add a data cell for ref-label content
+        label_td = soup.new_tag('td')
+        row.append(label_td)
+        ref_label = ref_list_row.find('div', 'ref-label cell')
+        label = ref_label.find('span', 'generated')
+        del label['class']
+        label_td.append(label)
+        label_td.append(ref_label.find('a'))
+
+        # add a data cell for ref-content content
+        content_td = soup.new_tag('td')
+        row.append(content_td)
+        ref_content = ref_list_row.find('div', 'ref-content cell')
+        content = ref_content.find('p')
+        del content['class']
+        content_td.append(content)
+
+    return citation_table
 
 
 class SearchPublications(object):
