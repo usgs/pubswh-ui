@@ -111,7 +111,7 @@ SECURE_COOKIES = True
 
 # HTML_ENDPOINT will eventually be a url for pulling html from pubs-services
 sample_html_absolute_path = os.path.abspath(os.path.dirname(__file__))
-sample_html_relative_path = os.path.join(sample_html_absolute_path, "pubs_ui/pubswh/tests/sample_html.html")
+sample_html_relative_path = os.path.join(sample_html_absolute_path, "pubs_ui/pubswh/tests/data/sample_html.html")
 with open(sample_html_relative_path) as f:
     HTML_ENDPOINT = f.read()
 
