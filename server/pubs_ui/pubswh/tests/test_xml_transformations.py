@@ -3,13 +3,13 @@ Tests for xml_transformations transformation tools
 """
 import unittest
 from bs4 import BeautifulSoup
-from ..xml_transformations import transform_xml_full, make_citation_table
+from ..xml_transformations import transform_xml_full, get_citation_table
 from ... import app
 
 
-class TransformHTMLTestCase(unittest.TestCase):
+class TransformXMLFullTestCase(unittest.TestCase):
     """
-    Tests for transform_html
+    Tests for transform_xml_full
     """
 
     def test_does_the_transform_produce_html_publication_with_usgs_styling(self):
@@ -27,7 +27,7 @@ class TransformHTMLTestCase(unittest.TestCase):
         # string comparison of the soup output with all whitespace removed
         self.assertEqual(actual_no_whitespace, expected_no_whitespace)
 
-    def test_does_the_transform_produce_a_usgs_styled_citation_table(self):
+    def test_does_the_transform_produce_a_citation_table(self):
         sample_ref_list_table = """
             <div class="ref-list table">
                 <div class="row">
@@ -91,10 +91,11 @@ class TransformHTMLTestCase(unittest.TestCase):
                 </tr>
             </table>
         """
+
         soup = BeautifulSoup(sample_ref_list_table, 'lxml')
         references = soup.find('div', {"class": "ref-list table"})
 
         expected_citation_table_string_no_whitespace = "".join(expected_citation_table_string.split())
-        actual_citation_table_string_no_whitespace = "".join(str(make_citation_table(soup, references)).split())
+        actual_citation_table_string_no_whitespace = "".join(str(get_citation_table(soup, references)).split())
 
         self.assertEqual(expected_citation_table_string_no_whitespace, actual_citation_table_string_no_whitespace)

@@ -23,7 +23,7 @@ def transform_xml_full(html, image_url):
 
     # Make a new citation table and add content we want from the ref-list div
     ref_list = body.find('div', {'class': 'ref-list table'})
-    citation_table = make_citation_table(soup, ref_list)
+    citation_table = get_citation_table(soup, ref_list)
 
     # append the citation table to the body and delete the now obsolete ref-list div
     ref_list.insert_after(citation_table)
@@ -100,7 +100,7 @@ def transform_xml_full(html, image_url):
     return body
 
 
-def make_citation_table(soup, references):
+def get_citation_table(soup, references):
     """
     Creates a citation table given a list of references cited
     :return: a citation table
