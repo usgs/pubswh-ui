@@ -99,3 +99,14 @@ class TransformXMLFullTestCase(unittest.TestCase):
         actual_citation_table_string_no_whitespace = "".join(str(get_citation_table(soup, references)).split())
 
         self.assertEqual(expected_citation_table_string_no_whitespace, actual_citation_table_string_no_whitespace)
+
+
+    def does_the_transform_produce_a_figure(self):
+        sample_fig_panel_div="""
+            
+        """
+
+        expected_figure_string="""
+            
+        """
+

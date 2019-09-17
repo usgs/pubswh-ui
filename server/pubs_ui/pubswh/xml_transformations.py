@@ -31,47 +31,7 @@ def transform_xml_full(html, image_url):
 
     # Make a new figure, add content we want from the fig panel, then delete the fig panel
     for fig in body.findAll('div', 'fig panel'):
-        # create a new figure
-        figure = soup.new_tag('figure')
-
-        # add an "a" tag
-        a = soup.new_tag('a')
-        figure.append(a)
-        a['id'] = fig.find('a')['id']
-
-        # add an h5
-        h5 = soup.new_tag('h5')
-        figure.append(h5)
-        h5.append(fig.find('h5').text)
-
-        # add an img tag to the figure
-        img = soup.new_tag('img')
-        figure.append(img)
-
-        # construct the img url
-        img['src'] = image_url + fig.find('img')['src'] + '.png'
-
-        # add a figcaption
-        fig_caption = soup.new_tag('figcaption')
-        figure.append(fig_caption)
-
-        # add the b tag, and the p.first id and text to the figcaption
-        fig_caption.append(fig.find('b'))
-
-        p_first = fig.find('p', {'class': 'first'})
-        fig_caption.append(" " + p_first.text)
-        fig_caption['id'] = p_first['id']
-
-        p_first.extract()
-
-        # add the only remaining div.caption paragraph content to the img
-        p = fig.find('p')
-        img['alt'] = p.text
-        img['id'] = p['id']
-
-        # insert the newly built figure after the existing fig panel, then delete the now obsolete fig panel
-        fig.insert_after(figure)
-        fig.extract()
+        get_figure(soup, fig, image_url)
 
     # add usa-table styling to all tables
     for table in body.findAll('table'):
@@ -131,3 +91,47 @@ def get_citation_table(soup, references):
         content_td.append(content)
 
     return citation_table
+
+
+def get_figure(soup, fig, image_url):
+    # create a new figure
+    figure = soup.new_tag('figure')
+
+    # add an "a" tag
+    a = soup.new_tag('a')
+    figure.append(a)
+    a['id'] = fig.find('a')['id']
+
+    # add an h5
+    h5 = soup.new_tag('h5')
+    figure.append(h5)
+    h5.append(fig.find('h5').text)
+
+    # add an img tag to the figure
+    img = soup.new_tag('img')
+    figure.append(img)
+
+    # construct the img url
+    img['src'] = image_url + fig.find('img')['src'] + '.png'
+
+    # add a figcaption
+    fig_caption = soup.new_tag('figcaption')
+    figure.append(fig_caption)
+
+    # add the b tag, and the p.first id and text to the figcaption
+    fig_caption.append(fig.find('b'))
+
+    p_first = fig.find('p', {'class': 'first'})
+    fig_caption.append(" " + p_first.text)
+    fig_caption['id'] = p_first['id']
+
+    p_first.extract()
+
+    # add the only remaining div.caption paragraph content to the img
+    p = fig.find('p')
+    img['alt'] = p.text
+    img['id'] = p['id']
+
+    # insert the newly built figure after the existing fig panel, then delete the now obsolete fig panel
+    fig.insert_after(figure)
+    fig.extract()
