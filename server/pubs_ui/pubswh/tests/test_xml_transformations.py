@@ -3,7 +3,7 @@ Tests for xml_transformations transformation tools
 """
 import unittest
 from bs4 import BeautifulSoup
-from ..xml_transformations import transform_xml_full, get_citation_table
+from ..xml_transformations import transform_xml_full, get_citation_table, get_figure
 from ... import app
 
 
@@ -103,10 +103,48 @@ class TransformXMLFullTestCase(unittest.TestCase):
 
     def does_the_transform_produce_a_figure(self):
         sample_fig_panel_div="""
-            
+            <div class="fig panel" style="display: float; clear: both">
+                <a id="fig01"><!-- named anchor --></a>
+                <h5 class="label">Figure&nbsp;1</h5>
+                <div class="caption">
+                    <p class="first" id="d5e645">Location of pumping and observation wells, groundwater discharge area, physiographic
+                        features, and groundwater basins surrounding the Ash Meadows groundwater basin, Nevada
+                        and California.
+                    </p>
+                    <p id="d5e647">
+                        <b>Figure 1.</b> 
+                        Map showing location of pumping and observation wells, groundwater discharge area,
+                        physiographic features, and groundwater basins surrounding the Ash Meadows groundwater
+                        basin, Nevada and California.
+                    </p>
+                </div>
+                <img alt="sac19-4232_fig01" src="sac19-4232_fig01">
+            </div>
         """
 
         expected_figure_string="""
-            
+            <figure>
+                <a class="usa-link" id="fig01"></a>
+                <h5>Figure 1</h5>
+                <img alt=" Map showing location of pumping and observation wells, groundwater discharge area,
+                    physiographic features, and groundwater basins surrounding the Ash Meadows groundwater
+                    basin, Nevada and California." 
+                    id="d5e647" 
+                    src="https://pubs.usgs.gov/xml_test/Images/sac19-4232_fig01.png"/>
+                <figcaption id="d5e645">
+                    <b>Figure 1.</b> 
+                    Location of pumping and observation wells, groundwater discharge area, physiographic
+                    features, and groundwater basins surrounding the Ash Meadows groundwater basin, Nevada
+                    and California.
+                </figcaption>
+            </figure>
         """
+
+        soup = BeautifulSoup(sample_fig_panel_div, 'lxml')
+        fig = soup.find('div', {"class": "fig panel"})
+
+        expected_figure_string_no_whitespace = "".join(expected_figure_string.split())
+        actual_figure_string_no_whitespace = "".join(str(get_figure(soup, fig, app.config['SPN_IMAGE_URL'])).split())
+
+        self.assertEqual(expected_figure_string_no_whitespace, actual_figure_string_no_whitespace)
 
