@@ -42,20 +42,20 @@ def transform_xml_full(html, image_url):
         get_list(list_div)
 
     # add publication-title styling to h2.main-title
-    main_title = body.find('h2', {'class': 'main-title'})
-    main_title['class'] = 'publication-title'
+    for main_title in body.findAll('h2', {'class': 'main-title'}):
+        get_main_title(main_title)
 
     # add series-title styling to all h3.section-titles
     for section_title in body.findAll('h3', {'class': 'section-title'}):
-        section_title['class'] = 'series-title'
+        get_section_title(section_title)
 
     # add subseries-title styling to all h3.titles
     for title in body.findAll('h3', {'class': 'title'}):
-        title['class'] = 'subseries-title'
+        get_title(title)
 
     # add usa-link styling to all a tags
     for a in body.findAll('a'):
-        a['class'] = 'usa-link'
+        get_a_tag(a)
 
     return body
 
@@ -147,3 +147,27 @@ def get_list(list_div):
     list_div['class'] = 'usa-list'
 
     return list_div
+
+
+def get_section_title(section_title):
+    section_title['class'] = 'series-title'
+
+    return section_title
+
+
+def get_title(title):
+    title['class'] = 'subseries-title'
+
+    return title
+
+
+def get_a_tag(a):
+    a['class'] = 'usa-link'
+
+    return a
+
+
+def get_main_title(main_title):
+    main_title['class'] = 'publication-title'
+
+    return main_title

@@ -3,7 +3,8 @@ Tests for xml_transformations transformation tools
 """
 import unittest
 from bs4 import BeautifulSoup
-from ..xml_transformations import transform_xml_full, get_citation_table, get_figure, get_table, get_list
+from ..xml_transformations import transform_xml_full, get_citation_table, get_figure, get_table, get_list, \
+    get_section_title, get_title, get_a_tag, get_main_title
 from ... import app
 
 
@@ -99,7 +100,6 @@ class TransformXMLFullTestCase(unittest.TestCase):
         actual_citation_table_string_no_whitespace = "".join(str(get_citation_table(soup, references)).split())
 
         self.assertEqual(expected_citation_table_string_no_whitespace, actual_citation_table_string_no_whitespace)
-
 
     def does_the_transform_produce_a_figure(self):
         sample_fig_panel_div = """
@@ -306,3 +306,79 @@ class TransformXMLFullTestCase(unittest.TestCase):
         actual_list_string_no_whitespace = "".join(str(get_list(div_list)).split())
 
         self.assertEqual(expected_list_string_no_whitespace, actual_list_string_no_whitespace)
+
+    def test_does_transform_produce_pubs_styled_section_titles(self):
+        sample_section_title_string = """
+            <h3 class="section-title">Purpose and Scope</h3>
+        """
+
+        expected_section_title_string = """
+            <h3 class="series-title">Purpose and Scope</h3>
+        """
+
+        soup = BeautifulSoup(sample_section_title_string, 'lxml')
+        section_title = soup.find('h3', {'class': 'section-title'})
+
+        expected_section_title_string_no_whitespace = "".join(expected_section_title_string.split())
+        actual_section_title_string_no_whitespace = "".join(str(get_section_title(section_title)).split())
+
+        self.assertEqual(expected_section_title_string_no_whitespace, actual_section_title_string_no_whitespace)
+
+    def test_does_transform_produce_pubs_styled_titles(self):
+        sample_title_string = """
+            <h3 class="title">
+                Well location and construction information for pumping and observation wells monitored during 
+                <i>ER-6-1-2 main</i> 
+                development and aquifer testing, Ash Meadows groundwater basin, southern Nevada.
+            </h3>
+        """
+
+        expected_title_string = """
+            <h3 class="subseries-title">
+                Well location and construction information for pumping and observation wells monitored during 
+                <i>ER-6-1-2 main</i> 
+                development and aquifer testing, Ash Meadows groundwater basin, southern Nevada.
+            </h3>
+        """
+
+        soup = BeautifulSoup(sample_title_string, 'lxml')
+        title = soup.find('h3', {'class': 'title'})
+
+        expected_title_string_no_whitespace = "".join(expected_title_string.split())
+        actual_title_string_no_whitespace = "".join(str(get_title(title)).split())
+
+        self.assertEqual(expected_title_string_no_whitespace, actual_title_string_no_whitespace)
+
+    def test_does_transform_produce_usgs_styled_links(self):
+        sample_a_string = """
+            <a href="#r1">Bechtel Nevada, 2004</a>
+        """
+
+        expected_a_string = """
+            <a class="usa-link" href="#r1">Bechtel Nevada, 2004</a>
+        """
+
+        soup = BeautifulSoup(sample_a_string, 'lxml')
+        a_tag = soup.find('a')
+
+        expected_a_string_no_whitespace = "".join(expected_a_string.split())
+        actual_a_string_no_whitespace = "".join(str(get_a_tag(a_tag)).split())
+
+        self.assertEqual(expected_a_string_no_whitespace, actual_a_string_no_whitespace)
+
+    def test_does_transform_produce_pubs_styled_main_title(self):
+        sample_main_title_string = """
+            <h2 class="main-title">Summary and Conclusions</h2>
+        """
+
+        expected_main_title_string = """
+            <h2 class="publication-title">Summary and Conclusions</h2>
+        """
+
+        soup = BeautifulSoup(sample_main_title_string, 'lxml')
+        main_title = soup.find('h2', {"class": "main-title"})
+
+        expected_main_title_string_no_whitespace = "".join(expected_main_title_string.split())
+        actual_main_title_string_no_whitespace = "".join(str(get_main_title(main_title)).split())
+
+        self.assertEqual(expected_main_title_string_no_whitespace, actual_main_title_string_no_whitespace)
