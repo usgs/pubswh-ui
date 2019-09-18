@@ -98,7 +98,7 @@
     "leaflet": "^1.5.1",
     "leaflet-draw": "^1.0.4",
     "lodash": "^4.17.15",
-    "loglevel": "^1.6.3",
+    "loglevel": "^1.6.4",
     "mathjax": "^2.7.5",
     "moment": "^2.24.0",
     "promise-polyfill": "^8.1.3",
