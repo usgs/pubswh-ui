@@ -35,11 +35,11 @@ def transform_xml_full(html, image_url):
 
     # add usa-table styling to all tables
     for table in body.findAll('table'):
-        table['class'] = "usa-table"
+        get_table(table)
 
     # add usa-list styling to all div.lists
     for list_div in body.findAll('div', {'class': 'list'}):
-        list_div['class'] = 'usa-list'
+        get_list(list_div)
 
     # add publication-title styling to h2.main-title
     main_title = body.find('h2', {'class': 'main-title'})
@@ -135,3 +135,15 @@ def get_figure(soup, fig, image_url):
     # insert the newly built figure after the existing fig panel, then delete the now obsolete fig panel
     fig.insert_after(figure)
     fig.extract()
+
+
+def get_table(table):
+    table['class'] = "usa-table"
+
+    return table
+
+
+def get_list(list_div):
+    list_div['class'] = 'usa-list'
+
+    return list_div

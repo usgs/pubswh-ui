@@ -3,7 +3,7 @@ Tests for xml_transformations transformation tools
 """
 import unittest
 from bs4 import BeautifulSoup
-from ..xml_transformations import transform_xml_full, get_citation_table, get_figure
+from ..xml_transformations import transform_xml_full, get_citation_table, get_figure, get_table, get_list
 from ... import app
 
 
@@ -102,7 +102,7 @@ class TransformXMLFullTestCase(unittest.TestCase):
 
 
     def does_the_transform_produce_a_figure(self):
-        sample_fig_panel_div="""
+        sample_fig_panel_div = """
             <div class="fig panel" style="display: float; clear: both">
                 <a id="fig01"><!-- named anchor --></a>
                 <h5 class="label">Figure&nbsp;1</h5>
@@ -122,7 +122,7 @@ class TransformXMLFullTestCase(unittest.TestCase):
             </div>
         """
 
-        expected_figure_string="""
+        expected_figure_string = """
             <figure>
                 <a class="usa-link" id="fig01"></a>
                 <h5>Figure 1</h5>
@@ -148,3 +148,161 @@ class TransformXMLFullTestCase(unittest.TestCase):
 
         self.assertEqual(expected_figure_string_no_whitespace, actual_figure_string_no_whitespace)
 
+    def test_does_the_transform_produce_usgs_styled_table(self):
+        sample_table_string = """
+            <table xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:ali="http://www.niso.org/schemas/ali/1.0/" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" rules="groups">
+                <a id="d5e1943"><!-- named anchor --></a>
+                <col width="20.65%" span="1">
+                <a id="d5e1944"><!-- named anchor --></a>
+                <col width="28.16%" span="1">
+                <thead>
+                    <a id="d5e1950"><!-- named anchor --></a>
+                    <tr>
+                        <a id="d5e1951">
+                            <!-- named anchor -->
+                        </a>
+                        <td colspan="6" valign="top" align="center" scope="colgroup" style="border-top: solid 0.25pt; border-bottom: solid 0.25pt" rowspan="1">
+                            <a id="d5e1952">
+                                <!-- named anchor -->
+                            </a>Observation wells—Drawdown estimated from depth-to-water measurements
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <a id="d5e1955">
+                        <!-- named anchor -->
+                    </a>
+                    <tr>
+                        <a id="d5e1956">
+                            <!-- named anchor -->
+                        </a>
+                        <td valign="top" align="left" style="border-top: solid 0.25pt" scope="row" rowspan="1" colspan="1">
+                            <a id="d5e1957">
+                                <!-- named anchor -->
+                            </a><i>Army 1 WW (MV-1)</i><sup>1</sup></td>
+                        <td valign="top" align="left" style="border-top: solid 0.25pt" rowspan="1" colspan="1">
+                            <a id="d5e1962">
+                                <!-- named anchor -->
+                            </a>November 1, 2003–December 1, 2004
+                        </td>
+                    </tr>
+                    <tr>
+                        <a id="d5e1972">
+                            <!-- named anchor -->
+                        </a>
+                        <td valign="top" align="left" scope="row" rowspan="1" colspan="1">
+                            <a id="d5e1973">
+                                <!-- named anchor -->
+                            </a><i>U-3cn 5</i></td>
+                        <td valign="top" align="left" rowspan="1" colspan="1">
+                            <a id="d5e1976">
+                                <!-- named anchor -->
+                            </a>November 1, 2003–December 1, 2004
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        """
+
+        expected_table_string = """
+            <table class="usa-table" rules="groups" xmlns:ali="http://www.niso.org/schemas/ali/1.0/" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <a id="d5e1943"><!-- named anchor --></a>
+                <col span="1" width="20.65%" />
+                <a id="d5e1944"><!-- named anchor --></a>
+                <col span="1" width="28.16%" />
+                <thead>
+                    <a id="d5e1950">
+                        <!-- named anchor -->
+                    </a>
+                    <tr>
+                        <a id="d5e1951">
+                            <!-- named anchor -->
+                        </a>
+                        <td align="center" colspan="6" rowspan="1" scope="colgroup" style="border-top: solid 0.25pt; border-bottom: solid 0.25pt" valign="top">
+                            <a id="d5e1952">
+                                <!-- named anchor -->
+                            </a>Observation wells—Drawdown estimated from depth-to-water measurements
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <a id="d5e1955">
+                        <!-- named anchor -->
+                    </a>
+                    <tr>
+                        <a id="d5e1956">
+                            <!-- named anchor -->
+                        </a>
+                        <td align="left" colspan="1" rowspan="1" scope="row" style="border-top: solid 0.25pt" valign="top">
+                            <a id="d5e1957">
+                                <!-- named anchor -->
+                            </a><i>Army 1 WW (MV-1)</i><sup>1</sup></td>
+                        <td align="left" colspan="1" rowspan="1" style="border-top: solid 0.25pt" valign="top">
+                            <a id="d5e1962">
+                                <!-- named anchor -->
+                            </a>November 1, 2003–December 1, 2004
+                        </td>
+                    </tr>
+                    <tr>
+                        <a id="d5e1972">
+                            <!-- named anchor -->
+                        </a>
+                        <td align="left" colspan="1" rowspan="1" scope="row" valign="top">
+                            <a id="d5e1973">
+                                <!-- named anchor -->
+                            </a><i>U-3cn 5</i></td>
+                        <td align="left" colspan="1" rowspan="1" valign="top">
+                            <a id="d5e1976">
+                                <!-- named anchor -->
+                            </a>November 1, 2003–December 1, 2004
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        """
+
+        soup = BeautifulSoup(sample_table_string, 'lxml')
+        table = soup.find('table')
+
+        expected_table_string_no_whitespace = "".join(expected_table_string.split())
+        actual_table_string_no_whitespace = "".join(str(get_table(table)).split())
+
+        self.assertEqual(expected_table_string_no_whitespace, actual_table_string_no_whitespace)
+
+    def test_does_the_transform_produce_usgs_styled_list(self):
+        sample_list_string = """
+            <div class="list"><a id="L1">
+                   <!-- named anchor --></a><ul style="list-style-type: none">
+                   <li>
+                      <p id="d5e1698"><span class="label">•</span> Water-level altitudes in wells;
+                      </p>
+                   </li>
+                   <li>
+                      <p id="d5e1703"><span class="label">•</span> Water-level differences between paired wells;
+                      </p>
+                   </li>
+                </ul>
+             </div>
+        """
+
+        expected_list_string = """
+            <div class="usa-list">
+                <a id="L1"><!-- named anchor --></a>
+                <ul style="list-style-type: none">
+                    <li>
+                    <p id="d5e1698"><span class="label">•</span> Water-level altitudes in wells;</p>
+                    </li>
+                    <li>
+                    <p id="d5e1703"><span class="label">•</span> Water-level differences between paired wells;</p>
+                    </li>
+                </ul>
+            </div>
+        """
+
+        soup = BeautifulSoup(sample_list_string, 'lxml')
+        div_list = soup.find('div', {'class': 'list'})
+
+        expected_list_string_no_whitespace = "".join(expected_list_string.split())
+        actual_list_string_no_whitespace = "".join(str(get_list(div_list)).split())
+
+        self.assertEqual(expected_list_string_no_whitespace, actual_list_string_no_whitespace)
