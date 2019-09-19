@@ -8,13 +8,10 @@ from bs4 import BeautifulSoup
 
 def transform_xml_full(html, image_url):
     """
-    pull page data from publication/<indexId>/pubs-services endpoint
-    :return: the html of the page itself, stripped of header and footer
+    transform xml full documents to use usgs publications styling
+    :return: newly styled html
     """
-
-    # Make a soup
     soup = BeautifulSoup(html, 'lxml')
-
     body = soup.new_tag('body')
 
     # Grab all content blocks we want from the input html
@@ -74,21 +71,18 @@ def get_citation_table(soup, references):
         citation_table.append(row)
 
         # add a data cell for ref-label content
-        label_td = soup.new_tag('td')
-        row.append(label_td)
         ref_label = ref_list_row.find('div', 'ref-label cell')
         label = ref_label.find('span', 'generated')
         del label['class']
-        label_td.append(label)
-        label_td.append(ref_label.find('a'))
+        row.append(soup.new_tag('td'))
+        row.td.append(label)
+        row.td.append(ref_label.find('a'))
 
         # add a data cell for ref-content content
-        content_td = soup.new_tag('td')
-        row.append(content_td)
-        ref_content = ref_list_row.find('div', 'ref-content cell')
-        content = ref_content.find('p')
-        del content['class']
-        content_td.append(content)
+        p = ref_list_row.find('div', 'ref-content cell').find('p')
+        del p['class']
+        row.append(soup.new_tag('td'))
+        row.td.next_sibling.append(p)
 
     return citation_table
 
@@ -104,39 +98,34 @@ def get_figure(soup, fig, image_url):
     figure = soup.new_tag('figure')
 
     # add an "a" tag
-    a = soup.new_tag('a')
-    figure.append(a)
-    a['id'] = fig.find('a')['id']
+    figure.append(soup.new_tag('a'))
+    figure.a['id'] = fig.find('a')['id']
 
     # add an h5
-    h5 = soup.new_tag('h5')
-    figure.append(h5)
-    h5.append(fig.find('h5').text)
+    figure.append(soup.new_tag('h5'))
+    figure.h5.append(fig.find('h5').text)
 
     # add an img tag to the figure
-    img = soup.new_tag('img')
-    figure.append(img)
+    figure.append(soup.new_tag('img'))
 
     # construct the img url
-    img['src'] = image_url + fig.find('img')['src'] + '.png'
+    figure.img['src'] = image_url + fig.find('img')['src'] + '.png'
 
     # add a figcaption
-    fig_caption = soup.new_tag('figcaption')
-    figure.append(fig_caption)
+    figure.append(soup.new_tag('figcaption'))
 
     # add the b tag, and the p.first id and text to the figcaption
-    fig_caption.append(fig.find('b'))
+    figure.figcaption.append(fig.find('b'))
 
     p_first = fig.find('p', {'class': 'first'})
-    fig_caption.append(" " + p_first.text)
-    fig_caption['id'] = p_first['id']
-
+    figure.figcaption.append(" " + p_first.text)
+    figure.figcaption['id'] = p_first['id']
     p_first.extract()
 
     # add the only remaining div.caption paragraph content to the img
     p = fig.find('p')
-    img['alt'] = p.text
-    img['id'] = p['id']
+    figure.img['alt'] = p.text
+    figure.img['id'] = p['id']
 
     # insert the newly built figure after the existing fig panel, then delete the now obsolete fig panel
     fig.insert_after(figure)

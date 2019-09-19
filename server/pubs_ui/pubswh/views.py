@@ -294,7 +294,7 @@ def xml_publication():
     # will eventually feed an indexID into these params
     # will eventually want the pubdata when you begin feeding pubs metadata from manager app
     return render_template('pubswh/publication_full.html',
-                           html_content=transform_xml_full(app.config['HTML_ENDPOINT'], app.config['SPN_IMAGE_URL']))
+                           html_content=transform_xml_full(app.config['SAMPLE_HTML_CONTENTS'], app.config['SPN_IMAGE_URL']))
 
 
 # clears the cache for a specific page

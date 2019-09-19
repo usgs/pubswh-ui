@@ -12,22 +12,25 @@ class TransformXMLFullTestCase(unittest.TestCase):
     """
     Tests for transform_xml_full
     """
-
     def test_does_the_transform_produce_html_publication_with_usgs_styling(self):
+        """Given some html and an image url, is usgs styled html generated?"""
         with open("pubs_ui/pubswh/tests/data/transformed_output.html") as sample_output:
             transformed_html = sample_output.read()
 
-        # need to extract the body from the html tag, which soup adds by default
         soup = BeautifulSoup(transformed_html, 'lxml')
         expected_string = str(soup.find('body'))
         expected_no_whitespace = "".join(expected_string.split())
 
-        actual_string = str(transform_xml_full(app.config['HTML_ENDPOINT'], app.config['SPN_IMAGE_URL']))
+        actual_string = str(transform_xml_full(app.config['SAMPLE_HTML_CONTENTS'], app.config['SPN_IMAGE_URL']))
         actual_no_whitespace = "".join(actual_string.split())
 
-        # string comparison of the soup output with all whitespace removed
         self.assertEqual(actual_no_whitespace, expected_no_whitespace)
 
+
+class GetCitationTableTestCase(unittest.TestCase):
+    """
+    Tests for get_citation_table
+    """
     def test_does_the_transform_produce_a_citation_table(self):
         """Given a references div, is a citation table generated?"""
         sample_ref_list_table = """
@@ -102,6 +105,11 @@ class TransformXMLFullTestCase(unittest.TestCase):
 
         self.assertEqual(expected_citation_table_string_no_whitespace, actual_citation_table_string_no_whitespace)
 
+
+class GetFigureTestCase(unittest.TestCase):
+    """
+    Tests for get_figure
+    """
     def does_the_transform_produce_a_figure(self):
         """Given a fig panel div, is a figure generated?"""
         sample_fig_panel_div = """
@@ -150,6 +158,11 @@ class TransformXMLFullTestCase(unittest.TestCase):
 
         self.assertEqual(expected_figure_string_no_whitespace, actual_figure_string_no_whitespace)
 
+
+class GetTableTestCase(unittest.TestCase):
+    """
+    Tests for get_table
+    """
     def test_does_the_transform_produce_usgs_styled_table(self):
         """Given a table, is a usgs styled table.usa-table generated?"""
         sample_table_string = """
@@ -272,6 +285,11 @@ class TransformXMLFullTestCase(unittest.TestCase):
 
         self.assertEqual(expected_table_string_no_whitespace, actual_table_string_no_whitespace)
 
+
+class GetListTestCase(unittest.TestCase):
+    """
+    Tests for get_list
+    """
     def test_does_the_transform_produce_usgs_styled_list(self):
         """Given a div.list, is a usgs styled div.usa-list generated?"""
         sample_list_string = """
@@ -311,6 +329,11 @@ class TransformXMLFullTestCase(unittest.TestCase):
 
         self.assertEqual(expected_list_string_no_whitespace, actual_list_string_no_whitespace)
 
+
+class GetSectionTitleTestCase(unittest.TestCase):
+    """
+    Tests for get_section_title
+    """
     def test_does_transform_produce_pubs_styled_section_titles(self):
         """Given a section h3.title, is a pubs styled h3.series-title generated?"""
         sample_section_title_string = """
@@ -329,6 +352,11 @@ class TransformXMLFullTestCase(unittest.TestCase):
 
         self.assertEqual(expected_section_title_string_no_whitespace, actual_section_title_string_no_whitespace)
 
+
+class GetTitleTestCase(unittest.TestCase):
+    """
+    Tests for get_title
+    """
     def test_does_transform_produce_pubs_styled_titles(self):
         """Given an h3.title, is a pubs styled h3.subseries-title generated?"""
         sample_title_string = """
@@ -355,6 +383,11 @@ class TransformXMLFullTestCase(unittest.TestCase):
 
         self.assertEqual(expected_title_string_no_whitespace, actual_title_string_no_whitespace)
 
+
+class GetATagTestCase(unittest.TestCase):
+    """
+    Tests for get_a_tag
+    """
     def test_does_transform_produce_usgs_styled_links(self):
         """Given a link tag, is a usgs styled a.usa-link generated?"""
         sample_a_string = """
@@ -373,6 +406,11 @@ class TransformXMLFullTestCase(unittest.TestCase):
 
         self.assertEqual(expected_a_string_no_whitespace, actual_a_string_no_whitespace)
 
+
+class GetMainTitleTestCase(unittest.TestCase):
+    """
+    Tests for get_main_title
+    """
     def test_does_transform_produce_pubs_styled_main_title(self):
         """Given an h2.main-title, is a usgs styled h2.publication-title generated?"""
         sample_main_title_string = """
