@@ -14,43 +14,32 @@ def transform_xml_full(html, image_url):
     soup = BeautifulSoup(html, 'lxml')
     body = soup.new_tag('body')
 
-    # Grab all content blocks we want from the input html
     for content_div in soup.findAll('div', {'class': ['book-part', 'back-section', 'section']}):
         body.append(content_div)
 
-    # Make a new citation table and add content we want from the ref-list div
     ref_list = body.find('div', {'class': 'ref-list table'})
     citation_table = get_citation_table(soup, ref_list)
-
-    # append the citation table to the body and delete the now obsolete ref-list div
     ref_list.insert_after(citation_table)
     ref_list.extract()
 
-    # Make a new figure, add content we want from the fig panel, then delete the fig panel
     for fig in body.findAll('div', 'fig panel'):
         get_figure(soup, fig, image_url)
 
-    # add usa-table styling to all tables
     for table in body.findAll('table'):
         get_table(table)
 
-    # add usa-list styling to all div.lists
     for list_div in body.findAll('div', {'class': 'list'}):
         get_list(list_div)
 
-    # add publication-title styling to h2.main-title
     for main_title in body.findAll('h2', {'class': 'main-title'}):
         get_main_title(main_title)
 
-    # add series-title styling to all h3.section-titles
     for section_title in body.findAll('h3', {'class': 'section-title'}):
         get_section_title(section_title)
 
-    # add subseries-title styling to all h3.titles
     for title in body.findAll('h3', {'class': 'title'}):
         get_title(title)
 
-    # add usa-link styling to all a tags
     for a in body.findAll('a'):
         get_a_tag(a)
 
@@ -66,11 +55,9 @@ def get_citation_table(soup, references):
     citation_table['id'] = 'references-cited'
 
     for ref_list_row in references.findAll('div', 'row'):
-        # add a new row to the citation table
         row = soup.new_tag('tr')
         citation_table.append(row)
 
-        # add a data cell for ref-label content
         ref_label = ref_list_row.find('div', 'ref-label cell')
         label = ref_label.find('span', 'generated')
         del label['class']
@@ -78,7 +65,6 @@ def get_citation_table(soup, references):
         row.td.append(label)
         row.td.append(ref_label.find('a'))
 
-        # add a data cell for ref-content content
         p = ref_list_row.find('div', 'ref-content cell').find('p')
         del p['class']
         row.append(soup.new_tag('td'))
@@ -94,27 +80,18 @@ def get_figure(soup, fig, image_url):
     :param fig: an html element containing an image and caption
     :param image_url: a url string
     """
-    # create a new figure
     figure = soup.new_tag('figure')
 
-    # add an "a" tag
     figure.append(soup.new_tag('a'))
     figure.a['id'] = fig.find('a')['id']
 
-    # add an h5
     figure.append(soup.new_tag('h5'))
     figure.h5.append(fig.find('h5').text)
 
-    # add an img tag to the figure
     figure.append(soup.new_tag('img'))
-
-    # construct the img url
     figure.img['src'] = image_url + fig.find('img')['src'] + '.png'
 
-    # add a figcaption
     figure.append(soup.new_tag('figcaption'))
-
-    # add the b tag, and the p.first id and text to the figcaption
     figure.figcaption.append(fig.find('b'))
 
     p_first = fig.find('p', {'class': 'first'})
@@ -122,12 +99,10 @@ def get_figure(soup, fig, image_url):
     figure.figcaption['id'] = p_first['id']
     p_first.extract()
 
-    # add the only remaining div.caption paragraph content to the img
     p = fig.find('p')
     figure.img['alt'] = p.text
     figure.img['id'] = p['id']
 
-    # insert the newly built figure after the existing fig panel, then delete the now obsolete fig panel
     fig.insert_after(figure)
     fig.extract()
 
