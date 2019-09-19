@@ -29,6 +29,7 @@ class TransformXMLFullTestCase(unittest.TestCase):
         self.assertEqual(actual_no_whitespace, expected_no_whitespace)
 
     def test_does_the_transform_produce_a_citation_table(self):
+        """Given a references div, is a citation table generated?"""
         sample_ref_list_table = """
             <div class="ref-list table">
                 <div class="row">
@@ -102,6 +103,7 @@ class TransformXMLFullTestCase(unittest.TestCase):
         self.assertEqual(expected_citation_table_string_no_whitespace, actual_citation_table_string_no_whitespace)
 
     def does_the_transform_produce_a_figure(self):
+        """Given a fig panel div, is a figure generated?"""
         sample_fig_panel_div = """
             <div class="fig panel" style="display: float; clear: both">
                 <a id="fig01"><!-- named anchor --></a>
@@ -149,6 +151,7 @@ class TransformXMLFullTestCase(unittest.TestCase):
         self.assertEqual(expected_figure_string_no_whitespace, actual_figure_string_no_whitespace)
 
     def test_does_the_transform_produce_usgs_styled_table(self):
+        """Given a table, is a usgs styled table.usa-table generated?"""
         sample_table_string = """
             <table xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:ali="http://www.niso.org/schemas/ali/1.0/" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" rules="groups">
                 <a id="d5e1943"><!-- named anchor --></a>
@@ -270,6 +273,7 @@ class TransformXMLFullTestCase(unittest.TestCase):
         self.assertEqual(expected_table_string_no_whitespace, actual_table_string_no_whitespace)
 
     def test_does_the_transform_produce_usgs_styled_list(self):
+        """Given a div.list, is a usgs styled div.usa-list generated?"""
         sample_list_string = """
             <div class="list"><a id="L1">
                    <!-- named anchor --></a><ul style="list-style-type: none">
@@ -308,6 +312,7 @@ class TransformXMLFullTestCase(unittest.TestCase):
         self.assertEqual(expected_list_string_no_whitespace, actual_list_string_no_whitespace)
 
     def test_does_transform_produce_pubs_styled_section_titles(self):
+        """Given a section h3.title, is a pubs styled h3.series-title generated?"""
         sample_section_title_string = """
             <h3 class="section-title">Purpose and Scope</h3>
         """
@@ -325,6 +330,7 @@ class TransformXMLFullTestCase(unittest.TestCase):
         self.assertEqual(expected_section_title_string_no_whitespace, actual_section_title_string_no_whitespace)
 
     def test_does_transform_produce_pubs_styled_titles(self):
+        """Given an h3.title, is a pubs styled h3.subseries-title generated?"""
         sample_title_string = """
             <h3 class="title">
                 Well location and construction information for pumping and observation wells monitored during 
@@ -350,6 +356,7 @@ class TransformXMLFullTestCase(unittest.TestCase):
         self.assertEqual(expected_title_string_no_whitespace, actual_title_string_no_whitespace)
 
     def test_does_transform_produce_usgs_styled_links(self):
+        """Given a link tag, is a usgs styled a.usa-link generated?"""
         sample_a_string = """
             <a href="#r1">Bechtel Nevada, 2004</a>
         """
@@ -367,6 +374,7 @@ class TransformXMLFullTestCase(unittest.TestCase):
         self.assertEqual(expected_a_string_no_whitespace, actual_a_string_no_whitespace)
 
     def test_does_transform_produce_pubs_styled_main_title(self):
+        """Given an h2.main-title, is a usgs styled h2.publication-title generated?"""
         sample_main_title_string = """
             <h2 class="main-title">Summary and Conclusions</h2>
         """

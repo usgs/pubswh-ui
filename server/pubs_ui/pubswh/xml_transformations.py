@@ -94,6 +94,12 @@ def get_citation_table(soup, references):
 
 
 def get_figure(soup, fig, image_url):
+    """
+    Creates and inserts a new figure element, and removes the old fig panel div
+    :param soup: a BeautifulSoup transformation object
+    :param fig: an html element containing an image and caption
+    :param image_url: a url string
+    """
     # create a new figure
     figure = soup.new_tag('figure')
 
@@ -138,36 +144,66 @@ def get_figure(soup, fig, image_url):
 
 
 def get_table(table):
+    """
+    Updates table styling
+    :param table: an html table
+    :return: the newly styled table
+    """
     table['class'] = "usa-table"
 
     return table
 
 
 def get_list(list_div):
+    """
+    Updates list styling
+    :param list_div: an html div.list
+    :return: the newly styled list
+    """
     list_div['class'] = 'usa-list'
 
     return list_div
 
 
 def get_section_title(section_title):
+    """
+    Updates section-title styling
+    :param section_title: an html element with section-title styling
+    :return: the newly styled element
+    """
     section_title['class'] = 'series-title'
 
     return section_title
 
 
 def get_title(title):
+    """
+    Updates title styling
+    :param title: an html element with title styling
+    :return: the newly styled element
+    """
     title['class'] = 'subseries-title'
 
     return title
 
 
 def get_a_tag(a):
+    """
+    Updates link styling
+    :param a: an html a element
+    :return: the newly styled a element
+    """
     a['class'] = 'usa-link'
 
     return a
 
 
 def get_main_title(main_title):
+    """
+    Updates main-title styling
+    :param main_title: an html element with main-title styling
+    :return: the newly styled element
+    """
     main_title['class'] = 'publication-title'
 
     return main_title
