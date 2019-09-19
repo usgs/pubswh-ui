@@ -25,22 +25,22 @@
     "laborHours": 0,
 
     "tags": [
-      "TAG_1",
-      "TAG_2"
+      "Publications",
+      "USGS"
     ],
 
     "languages": [
-      "LANG_1",
-      "LANG_2"
+      "python 3 ",
+      "javascript ES6"
     ],
 
     "contact": {
-      "name": "REPOSITORY_ADMINISTRATOR_NAME",
-      "email": "REPOSITORY_ADMINISTRATOR_EMAIL"
+      "name": "Mary Bucknell",
+      "email": "mbucknell@usgs.gov"
     },
 
     "date": {
-      "metadataLastUpdated": "YYYY-MM-DD"
+      "metadataLastUpdated": "2019-09-19"
     }
   }
 ]
