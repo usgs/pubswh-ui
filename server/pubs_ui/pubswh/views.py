@@ -28,7 +28,7 @@ from .utils import (pull_feed, create_display_links,
                     update_geographic_extents, generate_sb_data, create_store_info,
                     get_altmetric_badge_img_links, generate_dublin_core, get_crossref_data, get_published_online_date,
                     check_public_access, get_unpaywall_data)
-
+from .xml_transformations import transform_xml_full
 
 pubswh = Blueprint('pubswh', __name__,
                    template_folder='templates',
@@ -285,6 +285,16 @@ def publication(index_id):
                            indexID=index_id,
                            pubdata=pubdata,
                            related_pubs=related_pubs)
+
+
+# leads to rendered html for an xml publication
+@pubswh.route('/publication/full')
+def xml_publication():
+
+    # will eventually feed an indexID into these params
+    # will eventually want the pubdata when you begin feeding pubs metadata from manager app
+    return render_template('pubswh/publication_full.html',
+                           html_content=transform_xml_full(app.config['SAMPLE_HTML_CONTENTS'], app.config['SPN_IMAGE_URL']))
 
 
 # clears the cache for a specific page
