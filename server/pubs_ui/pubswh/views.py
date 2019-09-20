@@ -244,10 +244,7 @@ def contact_confirmation():
     return render_template('pubswh/contact_confirm.html', confirm_message=confirmation_message)
 
 
-# leads to rendered html for publication page
-@pubswh.route('/publication/<index_id>')
-@cache.cached(timeout=600, key_prefix=make_cache_key, unless=is_authenticated)
-def publication(index_id):
+def get_pubdata(index_id):
     # pylint: disable=R0914
     r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
     # a 406 pretty much always means that it is some sort of other weird malformed URL.
@@ -269,7 +266,18 @@ def publication(index_id):
     online_date_arrow = get_published_online_date(crossref_data)
     pubdata['crossref'] = crossref_data
     pubdata['publicAccess'] = check_public_access(pubdata, online_date_arrow)
+
+    return pubdata
+
+
+# leads to rendered html for publication page
+@pubswh.route('/publication/<index_id>')
+@cache.cached(timeout=600, key_prefix=make_cache_key, unless=is_authenticated)
+def publication(index_id):
+
+    pubdata = get_pubdata(index_id)
     related_pubs = extract_related_pub_info(pubdata)
+
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'dublincore':
@@ -288,13 +296,18 @@ def publication(index_id):
 
 
 # leads to rendered html for an xml publication
-@pubswh.route('/publication/full')
-def xml_publication():
+@pubswh.route('/publication/<index_id>/full')
+def xml_publication(index_id):
 
-    # will eventually feed an indexID into these params
-    # will eventually want the pubdata when you begin feeding pubs metadata from manager app
-    return render_template('pubswh/publication_full.html',
-                           html_content=transform_xml_full(app.config['SAMPLE_HTML_CONTENTS'], app.config['SPN_IMAGE_URL']))
+    pubdata = get_pubdata(index_id)
+    related_pubs = extract_related_pub_info(pubdata)
+
+    return render_template('pubswh/publication.html',
+                           indexID=index_id,
+                           pubdata=pubdata,
+                           related_pubs=related_pubs,
+                           html_content=transform_xml_full(app.config['SAMPLE_HTML_CONTENTS'],
+                                                           app.config['SPN_IMAGE_URL']))
 
 
 # clears the cache for a specific page
