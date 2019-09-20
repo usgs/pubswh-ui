@@ -1,12 +1,16 @@
 import _ from 'underscore';
 import $ from 'jquery';
 
-import * as DynamicSelect2 from '../utils/DynamicSelect2';
-import PublicationTypeCollection from '../models/PublicationTypeCollection';
 import CostCenterCollection from '../models/CostCenterCollection';
-import BaseView from './BaseView';
+import LinkTypeCollection from '../models/LinkTypeCollection';
+import PublicationTypeCollection from '../models/PublicationTypeCollection';
+
 import hbTemplate from '../hb_templates/searchFilterRow.hbs';
 import optionTemplate from '../hb_templates/searchFilterRowOption.hbs';
+
+import * as DynamicSelect2 from '../utils/DynamicSelect2';
+
+import BaseView from './BaseView';
 
 
 const DEFAULT_SELECT2_OPTIONS = {
@@ -14,13 +18,13 @@ const DEFAULT_SELECT2_OPTIONS = {
     theme : 'bootstrap'
 };
 
-
 export default BaseView.extend({
     template : hbTemplate,
 
     events : {
         'change .search-category-input' : 'changeCategory',
         'change .value-text-input' : 'changeValue',
+        'change .value-boolean-input' : 'changeBooleanValue',
         'select2:select .value-select-input' : 'changeSelectedValue',
         'select2:unselect .value-select-input' : 'unsetSelectedValue',
         'click .delete-row' : 'remove'
@@ -34,42 +38,42 @@ export default BaseView.extend({
      *     @prop select2Init {Function which is passed the view's context} - Called to initialized the select2 field.
      *           Only required for inputType's of 'select'
      */
-     categories : [
-     {id : 'prodId', text : 'Prod ID', inputType : 'text'},
-     {id : 'indexId', text : 'Index ID', inputType : 'text'},
-     {id : 'ipdsId', text : 'IPDS', inputType : 'text'},
-     {id : 'contributor', text : 'Contributor', inputType : 'text'},
-     {id : 'title', text : 'Title', inputType : 'text'},
-     {
-        id : 'typeName',
-        text : 'Publication Type',
-        inputType : 'select',
-        select2Init : function(context) {
-            const $select = context.$('.value-select-input');
-            context.pubTypeFetch.done(function() {
-                $select.select2(_.extend({
-                    data : context.publicationTypeCollection.toJSON()
+    categories: [
+        {id: 'prodId', text: 'Prod ID', inputType: 'text'},
+        {id: 'indexId', text: 'Index ID', inputType: 'text'},
+        {id: 'ipdsId', text: 'IPDS', inputType: 'text'},
+        {id: 'contributor', text: 'Contributor', inputType: 'text'},
+        {id: 'title', text: 'Title', inputType: 'text'},
+        {
+            id: 'typeName',
+            text: 'Publication Type',
+            inputType: 'select',
+            select2Init: function (context) {
+                const $select = context.$('.value-select-input');
+                context.pubTypeFetch.done(function () {
+                    $select.select2(_.extend({
+                        data: context.publicationTypeCollection.toJSON()
+                    }, DEFAULT_SELECT2_OPTIONS));
+                    if (context.model.has('typeName') && context.model.attributes.typeName) {
+                        const selections = context.model.get('typeName').selections;
+                        $select.val(_.pluck(selections, 'id')).trigger('change');
+                    }
+                });
+            }
+        },
+        {
+            id: 'subtypeName',
+            text: 'Publication Subtype',
+            inputType: 'select',
+            select2Init: function (context) {
+                const $select = context.$('.value-select-input');
+                $select.select2(DynamicSelect2.getSelectOptions({
+                    lookupType: 'publicationsubtypes'
                 }, DEFAULT_SELECT2_OPTIONS));
-                if (context.model.has('typeName') && context.model.attributes.typeName) {
-                    const selections = context.model.get('typeName').selections;
-                    $select.val(_.pluck(selections, 'id')).trigger('change');
-                }
-            });
-        }
-    },
-    {
-        id : 'subtypeName',
-        text : 'Publication Subtype',
-        inputType : 'select',
-        select2Init : function(context) {
-            const $select = context.$('.value-select-input');
-            $select.select2(DynamicSelect2.getSelectOptions({
-                lookupType : 'publicationsubtypes'
-            }, DEFAULT_SELECT2_OPTIONS));
-            if (context.model.has('subtypeName') && context.model.attributes.subtypeName) {
-                const selections = context.model.get('subtypeName').selections;
+                if (context.model.has('subtypeName') && context.model.attributes.subtypeName) {
+                    const selections = context.model.get('subtypeName').selections;
                     // Add options for selections
-                    _.each(selections, function(selection) {
+                    _.each(selections, function (selection) {
                         if ($select.find('option[value="' + selection.id + '"]').length === 0) {
                             $select.append(optionTemplate(selection));
                         }
@@ -79,14 +83,14 @@ export default BaseView.extend({
             }
         },
         {
-            id : 'seriesName',
-            text : 'Series Title',
-            inputType : 'select',
-            select2Init : function(context) {
+            id: 'seriesName',
+            text: 'Series Title',
+            inputType: 'select',
+            select2Init: function (context) {
                 const $select = context.$('.value-select-input');
                 $select.select2(DynamicSelect2.getSelectOptions({
-                    lookupType : 'publicationseries',
-                    subgroups : {
+                    lookupType: 'publicationseries',
+                    subgroups: {
                         queryParameter: 'active',
                         nameAndValues: [{
                             name: 'Active',
@@ -100,7 +104,7 @@ export default BaseView.extend({
                 if (context.model.has('seriesName') && context.model.attributes.seriesName) {
                     const selections = context.model.get('seriesName').selections;
                     // Add options for selections
-                    _.each(selections, function(selection) {
+                    _.each(selections, function (selection) {
                         if ($select.find('option[value="' + selection.id + '"]').length === 0) {
                             $select.append(optionTemplate(selection));
                         }
@@ -110,19 +114,19 @@ export default BaseView.extend({
             }
         },
         {
-            id : 'contributingOffice',
-            text : 'Cost Center',
-            inputType : 'select',
-            select2Init : function(context) {
+            id: 'contributingOffice',
+            text: 'Cost Center',
+            inputType: 'select',
+            select2Init: function (context) {
                 const $select = context.$('.value-select-input');
-                context.costCenterPromise.done(function() {
+                context.costCenterPromise.done(function () {
                     $select.select2(_.extend({
-                        data : [{
-                            text : 'Active',
-                            children : context.activeCostCenters.toJSON()
+                        data: [{
+                            text: 'Active',
+                            children: context.activeCostCenters.toJSON()
                         }, {
-                            text : 'Not Active',
-                            children : context.notActiveCostCenters.toJSON()
+                            text: 'Not Active',
+                            children: context.notActiveCostCenters.toJSON()
                         }]
                     }, DEFAULT_SELECT2_OPTIONS));
                     if (context.model.has('contributingOffice') && context.model.attributes.contributingOffice) {
@@ -132,8 +136,57 @@ export default BaseView.extend({
                 });
             }
         },
-        {id : 'year', text : 'Year', inputType : 'text'}
-        ],
+        {id: 'year', text: 'Year', inputType: 'text'},
+        {id: 'chorus', text: 'Is Chorus', inputType: 'boolean'},
+        {id: 'contributingOffice', text: 'Contributing Office', inputType: 'text'},
+        {id: 'doi', text: 'DOI', inputType: 'text'},
+        {id: 'endYear', text: 'End Year', inputType: 'text'},
+        {id: 'global', text: 'Global', inputType: 'text'},
+        {id: 'hasDOI', text: 'Has DOI', inputType: 'boolean'},
+        {id: 'indexId', text: 'Index ID', inputType: 'text'},
+        {id: 'ipdsId', text: 'IPDS ID', inputType: 'text'},
+        {
+            id: 'linkType',
+            text: 'Link Type',
+            inputType: 'select',
+            select2Init: function (context) {
+                const $select = context.$('.value-select-input');
+                context.linkTypeFetch.done(function () {
+                    $select.select2(_.extend({
+                        data: context.linkTypeCollection.toJSON()
+                    }, DEFAULT_SELECT2_OPTIONS));
+                    if (context.model.has('typeName') && context.model.attributes.typeName) {
+                        const selections = context.model.get('typeName').selections;
+                        $select.val(_.pluck(selections, 'id')).trigger('change');
+                    }
+                });
+            }
+        },
+        {id: 'listId', text: 'List ID', inputType: 'text'},
+        {id: 'modDateHigh', text: 'Modified After (yyyy-mm-dd)', inputType: 'text'},
+        {id: 'modDateLo', text: 'Modified Before (yyyy-mm-dd)', inputType: 'text'},
+        {id: 'modXDays', text: 'Modified in the last X Days', inputType: 'text'},
+        {
+            id: 'noLinkType',
+            text: 'Missing Link Type',
+            inputType: 'select',
+            select2Init: function (context) {
+                const $select = context.$('.value-select-input');
+                context.linkTypeFetch.done(function () {
+                    $select.select2(_.extend({
+                        data: context.linkTypeCollection.toJSON()
+                    }, DEFAULT_SELECT2_OPTIONS));
+                    if (context.model.has('typeName') && context.model.attributes.typeName) {
+                        const selections = context.model.get('typeName').selections;
+                        $select.val(_.pluck(selections, 'id')).trigger('change');
+                    }
+                });
+            }
+        },
+        {id: 'orcid', text: 'ORCID', inputType: 'text'},
+        {id: 'prodId', text: 'Prod ID', inputType: 'text'},
+        {id: ''}
+    ],
 
     /*
      * @constructs
@@ -151,6 +204,9 @@ export default BaseView.extend({
 
         this.publicationTypeCollection = new PublicationTypeCollection();
         this.pubTypeFetch = this.publicationTypeCollection.fetch();
+
+        this.linkTypeCollection = new LinkTypeCollection();
+        this.linkTypeFetch = this.linkTypeCollection.fetch();
 
         this.activeCostCenters = new CostCenterCollection();
         this.notActiveCostCenters = new CostCenterCollection();
@@ -178,6 +234,9 @@ export default BaseView.extend({
             if (this.initialCategory.inputType === 'select') {
                 this.initialCategory.select2Init(this);
                 this.$('.select-input-div').show();
+                this.$('.text-input-div').hide();
+            } else if (this.initialCategory.inputType === 'boolean') {
+                this.$('.boolean-input-div').show();
                 this.$('.text-input-div').hide();
             } else {
                 this.$('.value-text-input').val(this.model.get(this.initialCategory.id));
@@ -211,6 +270,7 @@ export default BaseView.extend({
         const $thisEl = $(ev.currentTarget);
         const $textInputDiv = this.$('.text-input-div');
         const $selectInputDiv = this.$('.select-input-div');
+        const $booleanInputDiv = this.$('.boolean-input-div');
         const $select = $selectInputDiv.find('select');
 
         const oldValue = $thisEl.data('current-value');
@@ -222,6 +282,7 @@ export default BaseView.extend({
         // Clear input fields
         $textInputDiv.find('input').val('');
         $select.val('');
+        $booleanInputDiv.prop('checked', false);
         // Show/hide the appropriate input div and perform any initialization
         if (!selectedCategory || selectedCategory.inputType === 'text') {
             if (selectedCategory) {
@@ -229,9 +290,15 @@ export default BaseView.extend({
             }
 
             $textInputDiv.show();
+            $booleanInputDiv.hide();
+            $selectInputDiv.hide();
+        } else if (selectedCategory.inputType === 'boolean') {
+            $textInputDiv.hide();
+            $booleanInputDiv.show();
             $selectInputDiv.hide();
         } else {
             $textInputDiv.hide();
+            $booleanInputDiv.hide();
 
             $select.select2('destroy');
             $select.html('');
@@ -239,8 +306,6 @@ export default BaseView.extend({
 
             $selectInputDiv.show();
         }
-
-
 
         // Set model value for the current category and remove the old category if necessary.
         // Then update the data-current-value attribute.
@@ -254,6 +319,11 @@ export default BaseView.extend({
     changeValue : function(ev) {
         const category = this.$('.search-category-input').data('current-value');
         this.model.set(category, ev.currentTarget.value);
+    },
+
+    changeBooleanValue: function (ev) {
+        const category = this.$('.search-category-input').data('current-value');
+        this.model.set(category, ev.currentTarget.checked ? 'true' : 'false');
     },
 
     changeSelectedValue : function(ev) {
