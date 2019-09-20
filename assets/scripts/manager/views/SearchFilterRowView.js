@@ -94,10 +94,10 @@ export default BaseView.extend({
                         queryParameter: 'active',
                         nameAndValues: [{
                             name: 'Active',
-                            value: 'y'
+                            value: 'true'
                         }, {
                             name: 'Not Active',
-                            value: 'n'
+                            value: 'false'
                         }]
                     }
                 }, DEFAULT_SELECT2_OPTIONS));
@@ -138,13 +138,10 @@ export default BaseView.extend({
         },
         {id: 'year', text: 'Year', inputType: 'text'},
         {id: 'chorus', text: 'Is Chorus', inputType: 'boolean'},
-        {id: 'contributingOffice', text: 'Contributing Office', inputType: 'text'},
         {id: 'doi', text: 'DOI', inputType: 'text'},
         {id: 'endYear', text: 'End Year', inputType: 'text'},
         {id: 'global', text: 'Global', inputType: 'text'},
         {id: 'hasDOI', text: 'Has DOI', inputType: 'boolean'},
-        {id: 'indexId', text: 'Index ID', inputType: 'text'},
-        {id: 'ipdsId', text: 'IPDS ID', inputType: 'text'},
         {
             id: 'linkType',
             text: 'Link Type',
@@ -155,14 +152,13 @@ export default BaseView.extend({
                     $select.select2(_.extend({
                         data: context.linkTypeCollection.toJSON()
                     }, DEFAULT_SELECT2_OPTIONS));
-                    if (context.model.has('typeName') && context.model.attributes.typeName) {
-                        const selections = context.model.get('typeName').selections;
+                    if (context.model.has('linkType') && context.model.attributes.linkType) {
+                        const selections = context.model.get('linkType').selections;
                         $select.val(_.pluck(selections, 'id')).trigger('change');
                     }
                 });
             }
         },
-        {id: 'listId', text: 'List ID', inputType: 'text'},
         {id: 'modDateHigh', text: 'Modified After (yyyy-mm-dd)', inputType: 'text'},
         {id: 'modDateLo', text: 'Modified Before (yyyy-mm-dd)', inputType: 'text'},
         {id: 'modXDays', text: 'Modified in the last X Days', inputType: 'text'},
@@ -176,16 +172,20 @@ export default BaseView.extend({
                     $select.select2(_.extend({
                         data: context.linkTypeCollection.toJSON()
                     }, DEFAULT_SELECT2_OPTIONS));
-                    if (context.model.has('typeName') && context.model.attributes.typeName) {
-                        const selections = context.model.get('typeName').selections;
+                    if (context.model.has('noLinkType') && context.model.attributes.noLinkType) {
+                        const selections = context.model.get('noLinkType').selections;
                         $select.val(_.pluck(selections, 'id')).trigger('change');
                     }
                 });
             }
         },
         {id: 'orcid', text: 'ORCID', inputType: 'text'},
-        {id: 'prodId', text: 'Prod ID', inputType: 'text'},
-        {id: ''}
+        {id: 'pubAbstract', text: 'Abstract', inputType: 'text'},
+        {id: 'pubDateHigh', text: 'Published in or before (YYYY-MM-DD)', inputType: 'text'},
+        {id: 'pubDateLow', text: 'Published starting in (YYYY-MM-DD)', inputType: 'text'},
+        {id: 'pubXdays', text: 'Published in the last X days', inputType: 'text'},
+        {id: 'reportNumber', text: 'Report Number', inputType: 'text'},
+        {id: 'startYear', text: 'Start Year', inputType: 'text'}
     ],
 
     /*
@@ -211,8 +211,8 @@ export default BaseView.extend({
         this.activeCostCenters = new CostCenterCollection();
         this.notActiveCostCenters = new CostCenterCollection();
         this.costCenterPromise = $.when(
-            this.activeCostCenters.fetch({data : {active : 'y'}}),
-            this.notActiveCostCenters.fetch({data : {active : 'n'}})
+            this.activeCostCenters.fetch({data : {active : 'true'}}),
+            this.notActiveCostCenters.fetch({data : {active : 'false'}})
             );
 
         this.listenTo(this.model, 'change', this.disableFilterOption);
@@ -236,6 +236,7 @@ export default BaseView.extend({
                 this.$('.select-input-div').show();
                 this.$('.text-input-div').hide();
             } else if (this.initialCategory.inputType === 'boolean') {
+                this.$('.value-boolean-input').prop('checked', this.model.get(this.initialCategory.id) === 'true');
                 this.$('.boolean-input-div').show();
                 this.$('.text-input-div').hide();
             } else {
@@ -275,9 +276,7 @@ export default BaseView.extend({
 
         const oldValue = $thisEl.data('current-value');
         const newValue = ev.currentTarget.value;
-        const selectedCategory = _.find(this.categories, function(category) {
-            return category.id === newValue;
-        });
+        const selectedCategory = _.find(this.categories, (category) => category.id === newValue);
 
         // Clear input fields
         $textInputDiv.find('input').val('');
