@@ -324,5 +324,17 @@ describe('SearchFilterRowView', function() {
             $textInput.val('4567').trigger('change');
             expect(testModel.get('prodId')).toEqual('4567');
         });
+
+        fit('Expect that if the boolean value changes thes selected category value is updated in the model',() => {
+            const $categorySelect = testView.$('.search-category-input');
+            const $booleanInput = testView.$('.value-boolean-input');
+
+            $categorySelect.val('chorus').trigger('change');
+            $booleanInput.prop('checked', true).trigger('change');
+            expect(testModel.get('chorus')).toBe(true);
+
+            $booleanInput.prop('checked', false).trigger('change');
+            expect(testModel.get('chorus')).toBe(false);
+        });
     });
 });
