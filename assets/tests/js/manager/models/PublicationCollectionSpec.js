@@ -34,8 +34,8 @@ describe('PublicationCollection', function() {
             expect(collection.getFilters()).toEqual({});
             collection.updateFilters({f1 : 'Text1'});
             expect(collection.getFilters()).toEqual({f1 : 'Text1'});
-            collection.updateFilters({f2 : 'Text2', f3 : 'Text3'});
-            expect(collection.getFilters()).toEqual({f2 : 'Text2', f3 : 'Text3'});
+            collection.updateFilters({f2 : 'Text2', f3 : false});
+            expect(collection.getFilters()).toEqual({f2 : 'Text2', f3 : false});
         });
 
         it('Expects the filter parameters to be added to the request url when fetch is called', function() {

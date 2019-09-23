@@ -38,10 +38,12 @@ const getFilters = function(model) {
         var result;
         if (isString(val)) {
             result = val;
-        } else {
+        } else if (isArray(val.selections)) {
             result = map(val.selections, function(selection) {
                 return val.useId ? selection.id : selection.text;
             });
+        } else { // must be a boolean
+            result = val;
         }
 
         return result;

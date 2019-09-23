@@ -1,6 +1,7 @@
 import Backbone from 'backbone';
 import extend from 'lodash/extend';
 import has from 'lodash/has';
+import isBoolean from 'lodash/isBoolean';
 import pickBy from 'lodash/pickBy';
 
 import 'backbone.paginator';
@@ -55,7 +56,7 @@ export default Backbone.PageableCollection.extend({
     updateFilters : function(filters) {
         // Remove values that are null or undefined.
         this.filters = pickBy(filters, function(value) {
-            return value;
+            return isBoolean(value) || value;
         });
     },
 
