@@ -325,7 +325,7 @@ describe('SearchFilterRowView', function() {
             expect(testModel.get('prodId')).toEqual('4567');
         });
 
-        fit('Expect that if the boolean value changes thes selected category value is updated in the model',() => {
+        it('Expect that if the boolean value changes thes selected category value is updated in the model',() => {
             const $categorySelect = testView.$('.search-category-input');
             const $booleanInput = testView.$('.value-boolean-input');
 
