@@ -299,7 +299,7 @@ describe('SearchFilterRowView', function() {
             expect($booleanInput.is(':visible')).toBe(true);
             expect($selectInput.val()).toEqual([]);
             expect($.fn.select2.calls.count()).toEqual(select2Count + 2);
-            expect(testModel.get('chorus')).toBe('false');
+            expect(testModel.get('chorus')).toBe(false);
         });
 
         it('Expects that if the category is changed to typeName the select2 will not be initialized until after the publication type collection is fetched', function() {

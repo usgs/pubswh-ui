@@ -211,8 +211,8 @@ export default BaseView.extend({
         this.activeCostCenters = new CostCenterCollection();
         this.notActiveCostCenters = new CostCenterCollection();
         this.costCenterPromise = $.when(
-            this.activeCostCenters.fetch({data : {active : 'true'}}),
-            this.notActiveCostCenters.fetch({data : {active : 'false'}})
+            this.activeCostCenters.fetch({data: {active: true}}),
+            this.notActiveCostCenters.fetch({data: {active: false}})
             );
 
         this.listenTo(this.model, 'change', this.disableFilterOption);
@@ -236,7 +236,7 @@ export default BaseView.extend({
                 this.$('.select-input-div').show();
                 this.$('.text-input-div').hide();
             } else if (this.initialCategory.inputType === 'boolean') {
-                this.$('.value-boolean-input').prop('checked', this.model.get(this.initialCategory.id) === 'true');
+                this.$('.value-boolean-input').prop('checked', this.model.get(this.initialCategory.id) === true);
                 this.$('.boolean-input-div').show();
                 this.$('.text-input-div').hide();
             } else {
@@ -316,7 +316,7 @@ export default BaseView.extend({
 
         // Set model value for the current category and remove the old category if necessary.
         // Then update the data-current-value attribute.
-        this.model.set(newValue, selectedCategory.inputType === 'boolean' ? 'false': '', {changedAttribute : newValue});
+        this.model.set(newValue, selectedCategory.inputType === 'boolean' ? false: '', {changedAttribute : newValue});
         if (oldValue) {
             this.model.unset(oldValue, {changedAttribute: oldValue});
         }
@@ -330,7 +330,7 @@ export default BaseView.extend({
 
     changeBooleanValue: function (ev) {
         const category = this.$('.search-category-input').data('current-value');
-        this.model.set(category, ev.currentTarget.checked ? 'true' : 'false');
+        this.model.set(category, ev.currentTarget.checked ? true : false);
     },
 
     changeSelectedValue : function(ev) {
