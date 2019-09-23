@@ -4,6 +4,7 @@ import $ from 'jquery';
 import Backbone from 'backbone';
 
 import CostCenterCollection from '../../../../scripts/manager/models/CostCenterCollection';
+import LinkTypeCollection from '../../../../scripts/manager/models/LinkTypeCollection';
 import PublicationTypeCollection from '../../../../scripts/manager/models/PublicationTypeCollection';
 import SearchFilterRowView from '../../../../scripts/manager/views/SearchFilterRowView';
 
@@ -11,6 +12,7 @@ import SearchFilterRowView from '../../../../scripts/manager/views/SearchFilterR
 describe('SearchFilterRowView', function() {
     let testView, testModel;
     let fetchPubTypeDeferred;
+    let fetchLinkTypeDeferred;
     let costCenterFetchActiveDeferred, costCenterFetchNotActiveDeferred;
     let $testDiv;
 
@@ -20,11 +22,23 @@ describe('SearchFilterRowView', function() {
         testModel = new Backbone.Model();
 
         fetchPubTypeDeferred = $.Deferred();
+        fetchLinkTypeDeferred = $.Deferred();
 
         spyOn(PublicationTypeCollection.prototype, 'fetch').and.returnValue(fetchPubTypeDeferred);
-        spyOn(PublicationTypeCollection.prototype, 'toJSON').and.callFake(function() {
-            return [{id : 1, text : 'Type1'}, {id : 2, text : 'Type2'}, {id : 3, text : 'Type3'}];
-        });
+        spyOn(PublicationTypeCollection.prototype, 'toJSON').and.callFake(() => [
+            {id : 1, text : 'Type1'},
+            {id : 2, text : 'Type2'},
+            {id : 3, text : 'Type3'}
+            ]
+        );
+        spyOn(LinkTypeCollection.prototype, 'fetch').and.returnValue(fetchLinkTypeDeferred);
+        spyOn(LinkTypeCollection.prototype, 'toJSON').and.callFake(() => [
+            {id: 1, text: 'LinkType1'},
+            {id: 2, text: 'LinkType2'},
+            {id: 3, text: 'LinkType3'}
+            ]
+        );
+
         spyOn(CostCenterCollection.prototype, 'fetch').and.callFake(function(options) {
             if (options.data.active === 'y') {
                 return costCenterFetchActiveDeferred;
@@ -42,7 +56,7 @@ describe('SearchFilterRowView', function() {
         $testDiv.remove();
     });
 
-    it('Expect the publication type collection  to be fetched at initialization', function () {
+    it('Expect the publication type collection to be fetched at initialization', function () {
         testView = new SearchFilterRowView({
                 el: '#test-div',
                 model: testModel
@@ -50,6 +64,13 @@ describe('SearchFilterRowView', function() {
         expect(PublicationTypeCollection.prototype.fetch).toHaveBeenCalled();
     });
 
+    it('Expect the link type collection to be fetchd at initialization', () => {
+        testView = new SearchFilterRowView({
+            el: '#test-div',
+            model: testModel
+        });
+        expect(LinkTypeCollection.prototype.fetch).toHaveBeenCalled();
+    });
 
     describe('Tests for render', function () {
 
@@ -60,7 +81,8 @@ describe('SearchFilterRowView', function() {
             });
             testModel.set({
                 prodId: '1234',
-                subtypeName: 'Subtype 1'
+                subtypeName: 'Subtype 1',
+                hasDOI: 'true'
             });
             testView.render();
             expect(testView.$('.search-category-input option[value="prodId"]').is(':disabled')).toBe(true);
@@ -72,6 +94,23 @@ describe('SearchFilterRowView', function() {
             expect(testView.$('.search-category-input option[value="subtypeName"]').is(':disabled')).toBe(true);
             expect(testView.$('.search-category-input option[value="seriesName"]').is(':disabled')).toBe(false);
             expect(testView.$('.search-category-input option[value="year"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="chorus"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="doi"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="endYear"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="globabl"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="hasDOI"]').is(':disabled')).toBe(true);
+            expect(testView.$('.search-category-input option[value="linkType"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="modDateHigh"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="modDateLo"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="modXDays"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="noLinkType"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="orcid"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="pubAbstract"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="pubDateHigh"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="pubDateLow"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="pubXdays"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="reportNumber"]').is(':disabled')).toBe(false);
+            expect(testView.$('.search-category-input option[value="startYear"]').is(':disabled')).toBe(false);
         });
 
         it('Expects that if the initialCategory is set to an inputType of text, the select text field is initialized', function() {
@@ -100,6 +139,38 @@ describe('SearchFilterRowView', function() {
             fetchPubTypeDeferred.resolve();
 
             expect($testDiv.find('.value-select-input').val()).toEqual(['1', '2']);
+        });
+
+        it('Expects that if the initialCategory is linkType, the select2 is initialized after the linkTypeCollection has been fetched', () => {
+            testView = new SearchFilterRowView({
+                el: '#test-div',
+                model: testModel,
+                initialCategory : 'linkType'
+            });
+            testModel.set('linkType', {
+                useId : false,
+                selections : [{id : 1, text : 'LinkType1'}, {id : 2, text : 'LinkType2'}, {id : 3, text : 'LinkType3'}]
+            });
+            testView.render();
+            fetchLinkTypeDeferred.resolve();
+
+            expect($testDiv.find('.value-select-input').val()).toEqual(['1', '2', '3']);
+        });
+
+        it('Expects that if the initialCategory is noLinkType, the select2 is initialized after the linkTypeCollection has been fetched', () => {
+            testView = new SearchFilterRowView({
+                el: '#test-div',
+                model: testModel,
+                initialCategory : 'noLinkType'
+            });
+            testModel.set('noLinkType', {
+                useId : false,
+                selections : [{id : 1, text : 'LinkType1'}, {id : 2, text : 'LinkType2'}, {id : 3, text : 'LinkType3'}]
+            });
+            testView.render();
+            fetchLinkTypeDeferred.resolve();
+
+            expect($testDiv.find('.value-select-input').val()).toEqual(['1', '2', '3']);
         });
 
         it('Expects that if the initialCategory is subtypeName, the select2 is initialized', function() {
@@ -134,7 +205,7 @@ describe('SearchFilterRowView', function() {
     });
 
     describe('Tests for remove', function () {
-        it('Expects that if the category has been set for the row that the correpsonding model property is cleared', function () {
+        it('Expects that if the category has been set for the row that the corresponding model property is cleared', function () {
             testView = new SearchFilterRowView({
                 el: '#test-div',
                 model: testModel
@@ -193,34 +264,42 @@ describe('SearchFilterRowView', function() {
             expect(testModel.has('prodId')).toBe(false);
             expect(testModel.has('subtypeName')).toBe(true);
 
-            $categorySelect.val('').trigger('change');
+            $categorySelect.val('chorus').trigger('change');
+            expect(testModel.has('chorus')).toBe(true);
             expect(testModel.has('subtypeName')).toBe(false);
         });
 
-        it('Expects that if the category select option is set, the appropriate input element is shown and initialized and that both inputs are cleared', function() {
+        it('Expects that if the category select option is set, the appropriate input element is shown and initialized and that all inputs are cleared', function() {
             const $categorySelect = testView.$('.search-category-input');
             const $textInput = testView.$('.value-text-input');
+            const $booleanInput = testView.$('.value-boolean-input');
             const $selectInput = testView.$('.value-select-input');
             const select2Count = $.fn.select2.calls.count();
 
             $categorySelect.val('prodId').trigger('change');
             expect($textInput.is(':visible')).toBe(true);
+            expect($booleanInput.is(':visible')).toBe(false);
             expect($selectInput.is(':visible')).toBe(false);
             expect($.fn.select2.calls.count()).toEqual(select2Count);
+            expect(testModel.get('prodId')).toBe('');
 
             $textInput.val('1234');
             $categorySelect.val('subtypeName').trigger('change');
             expect($textInput.is(':visible')).toBe(false);
             expect($textInput.val()).toBe('');
             expect($selectInput.is(':visible')).toBe(true);
+            expect($booleanInput.is(':visible')).toBe(false);
             expect($.fn.select2.calls.count()).toEqual(select2Count + 2); // calls destroy and then initialize
+            expect(testModel.get('subtypeName')).toBe('');
 
             $selectInput.val('Subtype 1');
-            $categorySelect.val('year').trigger('change');
-            expect($textInput.is(':visible')).toBe(true);
+            $categorySelect.val('chorus').trigger('change');
+            expect($textInput.is(':visible')).toBe(false);
             expect($selectInput.is(':visible')).toBe(false);
+            expect($booleanInput.is(':visible')).toBe(true);
             expect($selectInput.val()).toEqual([]);
             expect($.fn.select2.calls.count()).toEqual(select2Count + 2);
+            expect(testModel.get('chorus')).toBe(false);
         });
 
         it('Expects that if the category is changed to typeName the select2 will not be initialized until after the publication type collection is fetched', function() {
@@ -244,6 +323,18 @@ describe('SearchFilterRowView', function() {
 
             $textInput.val('4567').trigger('change');
             expect(testModel.get('prodId')).toEqual('4567');
+        });
+
+        it('Expect that if the boolean value changes thes selected category value is updated in the model',() => {
+            const $categorySelect = testView.$('.search-category-input');
+            const $booleanInput = testView.$('.value-boolean-input');
+
+            $categorySelect.val('chorus').trigger('change');
+            $booleanInput.prop('checked', true).trigger('change');
+            expect(testModel.get('chorus')).toBe(true);
+
+            $booleanInput.prop('checked', false).trigger('change');
+            expect(testModel.get('chorus')).toBe(false);
         });
     });
 });
