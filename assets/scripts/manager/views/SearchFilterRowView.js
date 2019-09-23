@@ -270,18 +270,23 @@ export default BaseView.extend({
      changeCategory : function(ev) {
         const $thisEl = $(ev.currentTarget);
         const $textInputDiv = this.$('.text-input-div');
+        const $textInput = $textInputDiv.find('input');
+
         const $selectInputDiv = this.$('.select-input-div');
-        const $booleanInputDiv = this.$('.boolean-input-div');
         const $select = $selectInputDiv.find('select');
+
+        const $booleanInputDiv = this.$('.boolean-input-div');
+        const $booleanInput = $booleanInputDiv.find('input');
 
         const oldValue = $thisEl.data('current-value');
         const newValue = ev.currentTarget.value;
         const selectedCategory = _.find(this.categories, (category) => category.id === newValue);
 
         // Clear input fields
-        $textInputDiv.find('input').val('');
+        $textInput.val('');
         $select.val('');
-        $booleanInputDiv.prop('checked', false);
+        $booleanInput.prop('checked', false);
+
         // Show/hide the appropriate input div and perform any initialization
         if (!selectedCategory || selectedCategory.inputType === 'text') {
             if (selectedCategory) {
@@ -293,8 +298,11 @@ export default BaseView.extend({
             $selectInputDiv.hide();
         } else if (selectedCategory.inputType === 'boolean') {
             $textInputDiv.hide();
-            $booleanInputDiv.show();
             $selectInputDiv.hide();
+
+            const $booleanInput = $booleanInputDiv.find('input');
+            $booleanInput.prop('checked', false);
+            $booleanInputDiv.show();
         } else {
             $textInputDiv.hide();
             $booleanInputDiv.hide();
@@ -308,11 +316,11 @@ export default BaseView.extend({
 
         // Set model value for the current category and remove the old category if necessary.
         // Then update the data-current-value attribute.
-        this.model.set(ev.currentTarget.value, '', {changedAttribute : ev.currentTarget.value});
+        this.model.set(newValue, selectedCategory.inputType === 'boolean' ? 'false': '', {changedAttribute : newValue});
         if (oldValue) {
             this.model.unset(oldValue, {changedAttribute: oldValue});
         }
-        $thisEl.data('current-value', ev.currentTarget.value);
+        $thisEl.data('current-value', newValue);
     },
 
     changeValue : function(ev) {
