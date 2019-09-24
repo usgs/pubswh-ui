@@ -311,8 +311,7 @@ def xml_publication(index_id):
                            indexID=index_id,
                            pubdata=pubdata,
                            related_pubs=related_pubs,
-                           publication_html_content=transform_xml_full(r.content,
-                                                           app.config['SPN_IMAGE_URL']))
+                           publication_html_content=transform_xml_full(r.content, app.config['SPN_IMAGE_URL']))
 
 
 # clears the cache for a specific page
