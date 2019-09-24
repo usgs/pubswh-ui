@@ -26,7 +26,7 @@ def transform_xml_full(html, image_url):
         get_figure(soup, fig, image_url)
 
     for formula in body.findAll('div', 'disp-formula'):
-        formula.img['src'] = get_image_url(image_url, formula.find('img')['src'])
+        formula.img.extract()
 
     for table in body.findAll('table'):
         get_table(table)
