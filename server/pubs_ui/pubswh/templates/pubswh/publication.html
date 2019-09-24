@@ -390,8 +390,8 @@
                     </div>
                 </div>
             </section>
-            {% if html_content %}
-                {% include 'pubswh/publication_full.html' %}
+            {% if publication_html_content %}
+                {{ publication_html_content | safe }}
             {% endif %}
             {# include the publishedDate test so that we only display the Suggested Citation on Pubs the have been
                 dealt with by an SPN person #}

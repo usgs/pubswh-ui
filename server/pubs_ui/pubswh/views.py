@@ -306,7 +306,7 @@ def xml_publication(index_id):
                            indexID=index_id,
                            pubdata=pubdata,
                            related_pubs=related_pubs,
-                           html_content=transform_xml_full(app.config['SAMPLE_HTML_CONTENTS'],
+                           publication_html_content=transform_xml_full(app.config['SAMPLE_HTML_CONTENTS'],
                                                            app.config['SPN_IMAGE_URL']))
 
 
