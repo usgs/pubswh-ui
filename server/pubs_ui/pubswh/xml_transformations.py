@@ -25,6 +25,9 @@ def transform_xml_full(html, image_url):
     for fig in body.findAll('div', 'fig panel'):
         get_figure(soup, fig, image_url)
 
+    for formula in body.findAll('div', 'disp-formula'):
+        formula.img.extract()
+
     for table in body.findAll('table'):
         get_table(table)
 
@@ -89,7 +92,7 @@ def get_figure(soup, fig, image_url):
     figure.h5.append(fig.find('h5').text)
 
     figure.append(soup.new_tag('img'))
-    figure.img['src'] = image_url + fig.find('img')['src'] + '.png'
+    figure.img['src'] = get_image_url(image_url, fig.find('img')['src'])
 
     figure.append(soup.new_tag('figcaption'))
     figure.figcaption.append(fig.find('b'))
@@ -171,3 +174,13 @@ def get_main_title(main_title):
     main_title['class'] = 'publication-title'
 
     return main_title
+
+
+def get_image_url(image_url, img_src):
+    """
+    Updates an image source url
+    :param img_src: the image src
+    :param image_url: a url string
+    :return: the full image url string
+    """
+    return image_url + img_src + '.png'

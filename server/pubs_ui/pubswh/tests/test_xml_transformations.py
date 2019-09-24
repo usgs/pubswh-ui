@@ -4,7 +4,7 @@ Tests for xml_transformations transformation tools
 import unittest
 from bs4 import BeautifulSoup
 from ..xml_transformations import transform_xml_full, get_citation_table, get_figure, get_table, get_list, \
-    get_section_title, get_title, get_a_tag, get_main_title
+    get_section_title, get_title, get_a_tag, get_main_title, get_image_url
 from ... import app
 
 
@@ -428,3 +428,24 @@ class GetMainTitleTestCase(unittest.TestCase):
         actual_main_title_string_no_whitespace = "".join(str(get_main_title(main_title)).split())
 
         self.assertEqual(expected_main_title_string_no_whitespace, actual_main_title_string_no_whitespace)
+
+
+class GetImageUrlTestCase(unittest.TestCase):
+    """
+    Tests of get_image_url
+    """
+    def test_does_transform_format_image_urls_properly(self):
+        """Given an image source value, is a new image source value generated?"""
+        sample_image_string = """
+            <img alt="sac19-4232_m01" src="sac19-4232_m01"/>
+        """
+
+        expected_image_string = app.config['SPN_IMAGE_URL'] + "sac19-4232_m01.png"
+
+        soup = BeautifulSoup(sample_image_string, 'lxml')
+        img_src = soup.find('img')['src']
+
+        expected_image_string_no_whitespace = "".join(expected_image_string.split())
+        actual_image_string_no_whitespace = "".join(str(get_image_url(app.config['SPN_IMAGE_URL'], img_src)).split())
+
+        self.assertEqual(expected_image_string_no_whitespace, actual_image_string_no_whitespace)
