@@ -15,16 +15,17 @@ import keys from 'lodash/keys';
 import map from 'lodash/map';
 import mapValues from 'lodash/mapValues';
 
-import PublicationListCollection from '../models/PublicationListCollection';
-import BackgridUrlCell from './BackgridUrlCell';
-import BackgridClientSortingBody from './BackgridClientSortingBody';
-import BaseView from './BaseView';
-import AlertView from './AlertView';
-import WarningDialogView from './WarningDialogView';
-import SearchFilterRowView from './SearchFilterRowView';
 import hbTemplate from '../hb_templates/managePublications.hbs';
 import pubListTemplate from '../hb_templates/publicationListFilter.hbs';
 
+import PublicationListCollection from '../models/PublicationListCollection';
+
+import AlertView from './AlertView';
+import BackgridUrlCell from './BackgridUrlCell';
+import BackgridClientSortingBody from './BackgridClientSortingBody';
+import BaseView from './BaseView';
+import SearchFilterRowView from './SearchFilterRowView';
+import WarningDialogView from './WarningDialogView';
 
 const DEFAULT_SELECT2_OPTIONS = {
     allowClear : true,
@@ -37,10 +38,12 @@ const getFilters = function(model) {
         var result;
         if (isString(val)) {
             result = val;
-        } else {
+        } else if (isArray(val.selections)) {
             result = map(val.selections, function(selection) {
                 return val.useId ? selection.id : selection.text;
             });
+        } else { // must be a boolean
+            result = val;
         }
 
         return result;
