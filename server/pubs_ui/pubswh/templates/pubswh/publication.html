@@ -391,7 +391,7 @@
                 </div>
             </section>
             {% if html_content %}
-                {% include 'pubswh/publication_full.html' %}
+                {{ html_content | safer }}
             {% endif %}
             {# include the publishedDate test so that we only display the Suggested Citation on Pubs the have been
                 dealt with by an SPN person #}

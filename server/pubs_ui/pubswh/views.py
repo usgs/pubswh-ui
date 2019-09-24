@@ -299,6 +299,11 @@ def publication(index_id):
 @pubswh.route('/publication/<index_id>/full')
 def xml_publication(index_id):
 
+    r = get(app.config['BASE_SEARCH_URL'] + '/full/' + index_id, verify=verify_cert)
+    # a 406 pretty much always means that it is some sort of other weird malformed URL.
+    if r.status_code in [404, 406]:
+        return render_template('pubswh/404.html'), 404
+
     pubdata = get_pubdata(index_id)
     related_pubs = extract_related_pub_info(pubdata)
 
@@ -306,7 +311,7 @@ def xml_publication(index_id):
                            indexID=index_id,
                            pubdata=pubdata,
                            related_pubs=related_pubs,
-                           html_content=transform_xml_full(app.config['SAMPLE_HTML_CONTENTS'],
+                           publication_html_content=transform_xml_full(r.content,
                                                            app.config['SPN_IMAGE_URL']))
 
 
