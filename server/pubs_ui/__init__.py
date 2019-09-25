@@ -9,6 +9,7 @@ from flask import Flask, request
 from flask_caching import Cache
 from flask_images import Images
 from flask_mail import Mail
+from graypy import GELFTCPHandler
 
 from whitenoise import WhiteNoise
 
@@ -16,9 +17,31 @@ from .custom_filters import display_publication_info, date_format, w3c_date
 
 # pylint: disable=C0103
 
-handler = logging.StreamHandler(sys.stdout)
-handler.setLevel(logging.INFO)
-handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - {%(pathname)s:L%(lineno)d} - %(message)s'))
+
+def _create_log_handler(graylog_config=None, log_level=logging.INFO):
+    """
+    Create a handler object.
+
+    If a graylog configuration is specified, a handler will be created to
+    push to the graylog server.
+
+    If no arguments are provided, the logs will be streamed to stdout using StreamHandler.
+
+    :param dict graylog_config: optional dictionary with `host` and `port` keys, which specify
+        the Graylog server's host and the port being listened to. For example, `{'host': '127.0.0.1', 'port': 12201}`.
+    :param log_level: the log level to use
+    :return: a handler
+    :rtype: logging.Handler
+
+    """
+    if graylog_config is not None:
+        log_handler = GELFTCPHandler(graylog_config['host'], graylog_config['port'])
+    else:
+        log_handler = logging.StreamHandler(sys.stdout)
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - {%(pathname)s:L%(lineno)d} - %(message)s')
+    log_handler.setFormatter(formatter)
+    log_handler.setLevel(log_level)
+    return log_handler
 
 
 app = Flask(__name__.split()[0], instance_relative_config=True)
@@ -38,6 +61,7 @@ def log_request():
 
 
 if app.config.get('LOGGING_ON'):
+    handler = _create_log_handler(app.config.get('GRAYLOG_CONFIG'))
     app.logger.addHandler(handler)
 images = Images(app)
 mail = Mail(app)

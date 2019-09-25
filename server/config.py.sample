@@ -26,6 +26,9 @@ ROBOTS_WELCOME = False
 # If logging is turned on or not
 LOGGING_ON = False
 
+# Graylog configuration
+GRAYLOG_CONFIG = {'host': '127.0.0.1', 'port': 12201}
+
 # A string to put into the announcements block on the homepage- can contain html
 ANNOUNCEMENT_BLOCK = ''
 
