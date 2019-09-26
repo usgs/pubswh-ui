@@ -15,6 +15,9 @@ JS_DEBUG = 'JS_DEBUG' in os.environ
 
 LOGGING_ON = 'LOGGING_ON' in os.environ
 
+if os.environ.get('GRAYLOG_HOST') and os.environ.get('GRAYLOG_PORT'):
+    GRAYLOG_CONFIG = {'host': os.environ.get('GRAYLOG_HOST'), 'port': int(os.environ.get('GRAYLOG_PORT'))}
+
 # Do not use the same key as any of the deployment servers
 SECRET_KEY = os.environ.get('SECRET_KEY')
 

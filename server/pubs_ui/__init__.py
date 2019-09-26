@@ -9,6 +9,7 @@ from flask import Flask, request
 from flask_caching import Cache
 from flask_images import Images
 from flask_mail import Mail
+from graypy import GELFTCPHandler
 
 from whitenoise import WhiteNoise
 
@@ -16,9 +17,34 @@ from .custom_filters import display_publication_info, date_format, w3c_date
 
 # pylint: disable=C0103
 
-handler = logging.StreamHandler(sys.stdout)
-handler.setLevel(logging.INFO)
-handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - {%(pathname)s:L%(lineno)d} - %(message)s'))
+
+def _create_log_handlers(graylog_config=None, log_level=logging.INFO):
+    """
+    Create a handler object(s). A stream handler will always be created to
+    send output to STDOUT.
+
+    If a graylog configuration is specified, a handler will be created to
+    push to the graylog server.
+
+    :param dict graylog_config: optional dictionary with `host` and `port` keys, which specify
+        the Graylog server's host and the port being listened to. For example, `{'host': '127.0.0.1', 'port': 12201}`.
+    :param log_level: the log level to use
+    :return: a list of handlers
+    :rtype: list
+
+    """
+
+    handlers = [logging.StreamHandler(sys.stdout)]
+    if graylog_config is not None:
+        handlers.append(GELFTCPHandler(graylog_config['host'], graylog_config['port']))
+
+    def configure_handler(some_handler):
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - {%(pathname)s:L%(lineno)d} - %(message)s')
+        some_handler.setFormatter(formatter)
+        some_handler.setLevel(log_level)
+
+    map(configure_handler, handlers)
+    return handlers
 
 
 app = Flask(__name__.split()[0], instance_relative_config=True)
@@ -38,7 +64,9 @@ def log_request():
 
 
 if app.config.get('LOGGING_ON'):
-    app.logger.addHandler(handler)
+    app_log_handlers = _create_log_handlers(app.config.get('GRAYLOG_CONFIG'))
+    for app_log_handler in app_log_handlers:
+        app.logger.addHandler(app_log_handler)
 images = Images(app)
 mail = Mail(app)
 app.view_functions['images'] = images.handle_request
