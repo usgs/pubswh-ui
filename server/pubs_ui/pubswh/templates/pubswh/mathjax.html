@@ -1,5 +1,13 @@
-{# The two script tags below allow the the mathjax javascript engine to work on math elements of the page.  This allows for pretty, very accesible (508 compliant) math to appear on the page with little effort.
-to learn more, check out https://www.mathjax.org/ #}
+{# The two script tags below allow the the mathjax javascript engine to work on math elements of the page.
+   This allows for pretty, very accesible (508 compliant) math to appear on the page with little effort.
+   to learn more, check out https://www.mathjax.org/ #}
+
+{# download mathjax with both LaTex (TeX) and MathML (MML) support.  #}
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+
+{# LaTex config for abstracts follows #}
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     extensions: ["tex2jax.js"],
@@ -11,5 +19,9 @@ to learn more, check out https://www.mathjax.org/ #}
     },
   });
 </script>
-<script type="text/javascript" src="{{ 'vendor/MathJax/MathJax.js' | asset_url }}"></script>
 
+{# polyfill is a CSS tool that has not been supported since 2016.
+   https://philipwalton.github.io/polyfill/
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+   This is loaded via local copy later.
+#}
