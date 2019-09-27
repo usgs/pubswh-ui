@@ -4,7 +4,7 @@ Tests for xml_transformations transformation tools
 import unittest
 from bs4 import BeautifulSoup
 from ..xml_transformations import transform_xml_full, get_citation_table, get_figure, get_table, get_list, \
-    get_section_title, get_title, get_a_tag, get_main_title, get_image_url
+    get_section_title, get_title, get_a_tag, get_main_title
 from ... import app
 
 
@@ -13,7 +13,7 @@ class TransformXMLFullTestCase(unittest.TestCase):
     Tests for transform_xml_full
     """
     def test_does_the_transform_produce_html_publication_with_usgs_styling(self):
-        """Given some html and an image url, is usgs styled html generated?"""
+        """Given some html, is usgs styled html generated?"""
         with open("pubs_ui/pubswh/tests/data/transformed_output.html") as sample_output:
             transformed_html = sample_output.read()
 
@@ -21,7 +21,7 @@ class TransformXMLFullTestCase(unittest.TestCase):
         expected_string = str(soup.find('body'))
         expected_no_whitespace = "".join(expected_string.split())
 
-        actual_string = str(transform_xml_full(app.config['SAMPLE_HTML_CONTENTS'], app.config['SPN_IMAGE_URL']))
+        actual_string = str(transform_xml_full(app.config['SAMPLE_HTML_CONTENTS']))
         actual_no_whitespace = "".join(actual_string.split())
 
         self.assertEqual(actual_no_whitespace, expected_no_whitespace)
@@ -128,7 +128,7 @@ class GetFigureTestCase(unittest.TestCase):
                         basin, Nevada and California.
                     </p>
                 </div>
-                <img alt="sac19-4232_fig01" src="sac19-4232_fig01">
+                <img alt="sac19-4232_fig01" src="https://pubs.usgs.gov/xml_test/Images/sac19-4232_fig01.png">
             </div>
         """
 
@@ -154,7 +154,7 @@ class GetFigureTestCase(unittest.TestCase):
         fig = soup.find('div', {"class": "fig panel"})
 
         expected_figure_string_no_whitespace = "".join(expected_figure_string.split())
-        actual_figure_string_no_whitespace = "".join(str(get_figure(soup, fig, app.config['SPN_IMAGE_URL'])).split())
+        actual_figure_string_no_whitespace = "".join(str(get_figure(soup, fig)).split())
 
         self.assertEqual(expected_figure_string_no_whitespace, actual_figure_string_no_whitespace)
 
@@ -428,24 +428,3 @@ class GetMainTitleTestCase(unittest.TestCase):
         actual_main_title_string_no_whitespace = "".join(str(get_main_title(main_title)).split())
 
         self.assertEqual(expected_main_title_string_no_whitespace, actual_main_title_string_no_whitespace)
-
-
-class GetImageUrlTestCase(unittest.TestCase):
-    """
-    Tests of get_image_url
-    """
-    def test_does_transform_format_image_urls_properly(self):
-        """Given an image source value, is a new image source value generated?"""
-        sample_image_string = """
-            <img alt="sac19-4232_m01" src="sac19-4232_m01"/>
-        """
-
-        expected_image_string = app.config['SPN_IMAGE_URL'] + "sac19-4232_m01.png"
-
-        soup = BeautifulSoup(sample_image_string, 'lxml')
-        img_src = soup.find('img')['src']
-
-        expected_image_string_no_whitespace = "".join(expected_image_string.split())
-        actual_image_string_no_whitespace = "".join(str(get_image_url(app.config['SPN_IMAGE_URL'], img_src)).split())
-
-        self.assertEqual(expected_image_string_no_whitespace, actual_image_string_no_whitespace)

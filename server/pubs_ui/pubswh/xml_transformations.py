@@ -6,7 +6,7 @@ Tools for transforming xml pubs
 from bs4 import BeautifulSoup
 
 
-def transform_xml_full(html, image_url):
+def transform_xml_full(html):
     """
     transform xml full documents to use usgs publications styling
     :return: newly styled html
@@ -23,7 +23,7 @@ def transform_xml_full(html, image_url):
     ref_list.extract()
 
     for fig in body.findAll('div', 'fig panel'):
-        get_figure(soup, fig, image_url)
+        get_figure(soup, fig)
 
     for formula in body.findAll('div', 'disp-formula'):
         formula.img.extract()
@@ -76,12 +76,11 @@ def get_citation_table(soup, references):
     return citation_table
 
 
-def get_figure(soup, fig, image_url):
+def get_figure(soup, fig):
     """
     Creates and inserts a new figure element, and removes the old fig panel div
     :param soup: a BeautifulSoup transformation object
     :param fig: an html element containing an image and caption
-    :param image_url: a url string
     """
     figure = soup.new_tag('figure')
 
@@ -92,7 +91,7 @@ def get_figure(soup, fig, image_url):
     figure.h5.append(fig.find('h5').text)
 
     figure.append(soup.new_tag('img'))
-    figure.img['src'] = get_image_url(image_url, fig.find('img')['src'])
+    figure.img['src'] = fig.find('img')['src']
 
     figure.append(soup.new_tag('figcaption'))
     figure.figcaption.append(fig.find('b'))
@@ -174,13 +173,3 @@ def get_main_title(main_title):
     main_title['class'] = 'publication-title'
 
     return main_title
-
-
-def get_image_url(image_url, img_src):
-    """
-    Updates an image source url
-    :param img_src: the image src
-    :param image_url: a url string
-    :return: the full image url string
-    """
-    return image_url + img_src + '.png'
