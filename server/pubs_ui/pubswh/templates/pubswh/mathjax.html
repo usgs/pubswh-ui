@@ -1,5 +1,11 @@
-{# The two script tags below allow the the mathjax javascript engine to work on math elements of the page.  This allows for pretty, very accesible (508 compliant) math to appear on the page with little effort.
-to learn more, check out https://www.mathjax.org/ #}
+{# The two script tags below allow the the mathjax javascript engine to work on math elements of the page.
+   This allows for pretty, very accesible (508 compliant) math to appear on the page with little effort.
+   to learn more, check out https://www.mathjax.org/ #}
+
+{# download mathjax with both LaTex (TeX) and MathML (MML) support.  #}
+<script type="text/javascript" src="{{ 'vendor/MathJax/MathJax.js' | asset_url }}?config=TeX-MML-AM_CHTML"></script>
+
+{# LaTex config for abstracts follows #}
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     extensions: ["tex2jax.js"],
@@ -11,5 +17,3 @@ to learn more, check out https://www.mathjax.org/ #}
     },
   });
 </script>
-<script type="text/javascript" src="{{ 'vendor/MathJax/MathJax.js' | asset_url }}"></script>
-
