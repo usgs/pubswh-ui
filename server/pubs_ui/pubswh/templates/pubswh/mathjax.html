@@ -18,6 +18,6 @@ window.MathJax = {
 };
 </script>
 
-{# download mathjax with both LaTex (TeX) and MathML (MML) support.  #}
+{# download MathJax with both LaTex (TeX) and MathML (MML) support. #}
 <script id="MathJax-script" async
-src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+src="{{ 'vendor/MathJax/es5/tex-mml-svg.js' | asset_url }}"></script>
