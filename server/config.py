@@ -118,7 +118,4 @@ sample_html_relative_path = os.path.join(sample_html_absolute_path, "pubs_ui/pub
 with open(sample_html_relative_path) as f:
     SAMPLE_HTML_CONTENTS = f.read()
 
-# This is a url for pulling images from SPN
-SPN_IMAGE_URL = 'https://pubs.usgs.gov/xml_test/Images/'
-
 STATIC_ROOT = os.environ.get('STATIC_ROOT', '/static/')
