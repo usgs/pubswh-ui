@@ -2,18 +2,22 @@
    This allows for pretty, very accesible (508 compliant) math to appear on the page with little effort.
    to learn more, check out https://www.mathjax.org/ #}
 
-{# download mathjax with both LaTex (TeX) and MathML (MML) support.  #}
-<script type="text/javascript" src="{{ 'vendor/MathJax/MathJax.js' | asset_url }}?config=TeX-MML-AM_CHTML"></script>
 
-{# LaTex config for abstracts follows #}
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
-    jax: ["input/TeX", "output/SVG"],
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
-      processEscapes: true
-    },
-  });
+{# LaTex config for abstracts in MathJax 3 #}
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+    processEscapes: true
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
 </script>
+
+{# download mathjax with both LaTex (TeX) and MathML (MML) support.  #}
+<script id="MathJax-script" async
+src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
