@@ -1,0 +1,103 @@
+#
+# .gitlab-ci.yml
+#
+# This builds a Docker image and tags it as the latest for its branch.
+# After building, it will trigger a deployment pipeline in another repo.
+#
+# Reference:
+#   - https://docs.gitlab.com/ee/ci/yaml/
+#   - https://docs.gitlab.com/ee/ci/multi_project_pipelines.html
+#
+# CI Variables:
+#   PUBSWH_UI_IMAGE
+#     Should be the full value of the Docker image to produce. This should include the full registry address.
+#     This variable is sent to the deployment trigger.
+#
+#   PUBSWH_UI_IMAGE_TAG
+#     The Docker image tag. The default is to use the branch:short_sha
+#     This variable is sent to the deployment trigger.
+#
+#   node_image
+#     The Docker image name for node. Used by the Docker image build for the node image source.
+#
+#   python_image
+#     The Docker image name for Python. Used by the Docker image build for the Python image source.
+#
+#   DEPLOY_TRIGGER_REF
+#     Set on the individual deployment jobs below. This is the branch name to trigger on the deployment pipeline.
+#
+#   DEPLOY_TRIGGER_VARS
+#     Space-delimited list of variables to pass along with the deployment trigger.
+#     This is used to pass the PUBSWH_UI_IMAGE and PUBSWH_UI_IMAGE_TAG variables along.
+#
+include:
+  - project: 'sas/ops/ci-pipeline/gitlab-ci-pipeline'
+    file: '/build/docker.yml'
+  - project: 'sas/ops/ci-pipeline/gitlab-ci-pipeline'
+    file: '/deploy/api_trigger.yml'
+
+# These stages are defined on the jobs in the included files above.
+stages:
+  - docker_build
+  - docker_tag_latest
+  - deploy_trigger
+
+variables:
+  PUBSWH_UI_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}
+  PUBSWH_UI_IMAGE_TAG: ${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}
+  DEPLOY_TRIGGER_VARS: PUBSWH_UI_IMAGE PUBSWH_UI_IMAGE_TAG
+
+# The 'docker_build' job is defined in the '/build/docker.yml' file listed above.
+# The keys defined here are overrides/supplemental to the job.
+docker_build:
+  variables:
+    # Use SAS-built base images for building
+    node_image: 'code.chs.usgs.gov:5001/sas/ops/docker/base-images/node'
+    node_image_tag: '10.16-latest'
+    python_image: 'code.chs.usgs.gov:5001/sas/ops/docker/base-images/python'
+    python_image_tag: '3.7-slim-buster-latest'
+    DOCKERFILE: ./Dockerfile-ci
+    DOCKER_BUILD_ARGS: >-
+      --build-arg node_image=${node_image}
+      --build-arg node_image_tag=${node_image_tag}
+      --build-arg python_image=${python_image}
+      --build-arg python_image_tag=${python_image_tag}
+  only:
+    refs:
+      - master
+
+# The 'docker_tag' job is defined in the '/build/docker.yml' file listed above.
+# The keys defined here are overrides/supplemental to the job.
+# This simply labels the built image as '${ref}-latest' and pushes to the registry.
+docker_tag_latest:
+  only:
+    refs:
+      - master
+
+# The 'trigger_deploy_*' jobs are defined in the '/deploy/api_trigger.yml' file listed above.
+# The keys defined here are overrides/supplemental to the job.
+# This uses the GitLab trigger API to trigger the "deployment repo" pipeline, passing along
+# the image information.
+# This triggers a 'development' environment deployment on successful builds of
+# the 'master' branch.
+trigger_deploy_development:
+  extends: .deploy_trigger
+  variables:
+    ENVIRONMENT: development
+    DEPLOY_TRIGGER_REF: develop
+  only:
+    refs:
+      - master
+  when: on_success
+
+# This triggers a 'staging' environment deployment on successful builds of
+# the 'master' branch.
+trigger_deploy_staging:
+  extends: .deploy_trigger
+  variables:
+    ENVIRONMENT: staging
+    DEPLOY_TRIGGER_REF: master
+  only:
+    refs:
+      - master
+  when: on_success
