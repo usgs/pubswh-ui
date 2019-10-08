@@ -17,5 +17,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -   Added a link to the google analytics metrics page on the publication page in the Additional Details table.
 -   Added additional available search parameters to the manager app's search form.
 -   Added support for sending logs to a Graylog server.
+-   Added USGS ci/cd configuration and Dockerfile-ci for building.
 
 [Unreleased]: https://github.com/NWQMC/WQP_UI/master
