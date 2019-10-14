@@ -48,7 +48,7 @@
   "author": "WMA - IOW Team",
   "license": "MIT",
   "devDependencies": {
-    "autoprefixer": "^9.6.1",
+    "autoprefixer": "^9.6.5",
     "bower": "^1.8.8",
     "eslint": "^6.4.0",
     "eslint-plugin-jasmine": "^2.10.1",
