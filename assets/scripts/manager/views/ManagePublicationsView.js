@@ -1,5 +1,3 @@
-import 'backgrid-paginator';
-
 import $ from 'jquery';
 import Backgrid from 'backgrid';
 import bind from 'lodash/bind';
@@ -250,10 +248,24 @@ export default BaseView.extend({
         });
 
         // Initialize the paginator
-        this.paginator = new Backgrid.Extension.Paginator({
-            collection: this.collection,
-            goBackFirstOnSort : false
+        this.pagination = window.jQuery.pagination(this.$('.pub-pagination'),  {
+             dataSource: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15 , 195],
+             callback: function(data, pagination) {
+                 // template method of yourself
+                 //var html = template(data);
+                 this.$('pub-grid-footer').html("<p> test </p>");
+             }
         });
+
+
+        // this.$('.pub-grid').pagination({
+        //     dataSource: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15 , 195],
+        //     callback: function(data, pagination) {
+        //         // template method of yourself
+        //         //var html = template(data);
+        //         this.$('pub-grid').html("<p> test </p>");
+        //     }
+        // });
 
         // Create other child views
         this.alertView = new AlertView({
@@ -282,7 +294,7 @@ export default BaseView.extend({
         $pubList.append(this.grid.render().el);
 
         // Render the paginator
-        this.$('.pub-grid-footer').append(this.paginator.render().el);
+        //this.$('.pub-grid-footer').append(this.paginator.render().el);
 
         //Create any search filter rows
         each(keys(this.model.omit(['listId', 'q'])), bind(this._createFilterRow, this));

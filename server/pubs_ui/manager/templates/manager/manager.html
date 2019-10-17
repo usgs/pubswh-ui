@@ -28,5 +28,7 @@
 			previewUrl: '{{ url_for("pubswh.restricted_page", index_id="") }}'
 		};
 	</script>
+        <script type="text/javascript" src="{{ 'vendor/jquery/jquery.js' | asset_url }}"></script>
+        <script type="text/javascript" src="{{ 'vendor/paginationjs/pagination.js' | asset_url }}"></script>
 	{{ assets.LoadBundle('manager.js') }}
 {% endblock %}
