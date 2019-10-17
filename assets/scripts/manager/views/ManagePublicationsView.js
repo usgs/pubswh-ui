@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Backgrid from 'backgrid';
+
 import bind from 'lodash/bind';
 import clone from 'lodash/clone';
 import each from 'lodash/each';
@@ -19,8 +19,6 @@ import pubListTemplate from '../hb_templates/publicationListFilter.hbs';
 import PublicationListCollection from '../models/PublicationListCollection';
 
 import AlertView from './AlertView';
-import BackgridUrlCell from './BackgridUrlCell';
-import BackgridClientSortingBody from './BackgridClientSortingBody';
 import BaseView from './BaseView';
 import SearchFilterRowView from './SearchFilterRowView';
 import WarningDialogView from './WarningDialogView';
@@ -77,6 +75,7 @@ export default BaseView.extend({
      */
     initialize : function() {
         BaseView.prototype.initialize.apply(this, arguments);
+        console.log('in initializse..');
 
         //Fetch publication lists
         this.publicationListCollection = new PublicationListCollection();
@@ -119,126 +118,6 @@ export default BaseView.extend({
             return fromRawFirstAuthor(model.get(colName));
         };
 
-        // Create backgrid and paginator views
-        var columns = [
-            {
-                name: 'selected',
-                label : '',
-                editable : true,
-                sortable : false,
-                cell : Backgrid.BooleanCell.extend({
-                    events : {
-                        'change input': function (e) {
-                            this.model.set(this.column.get('name'), e.target.checked);
-                        }
-                    }
-                })
-            },
-            {
-                name: 'id',
-                label : '',
-                editable : false,
-                sortable : false,
-                cell: BackgridUrlCell.extend({
-                    router : this.router,
-                    toFragment : function(rawValue) {
-                        return 'publication/' + rawValue;
-                    },
-                    title : 'Click to edit'
-                }),
-                formatter : {
-                    fromRaw : function() {
-                        return 'Edit';
-                    }
-                }
-            }, {
-                name: 'publicationType',
-                label: 'Type',
-                editable: false,
-                sortable : true,
-                cell: 'string',
-                formatter : {
-                    fromRaw : fromRawLookup
-                },
-
-                sortValue : sortValueLookup
-            }, {
-                name: 'seriesTitle',
-                label: 'Series Name',
-                editable: false,
-                sortable : true,
-                cell: 'string',
-                formatter: {
-                    fromRaw: fromRawLookup
-                },
-                sortValue : sortValueLookup
-            }, {
-                name: 'seriesNumber',
-                label: 'Report Number',
-                editable: false,
-                sortable : true,
-                cell: 'string',
-                sortValue : sortValueText
-            }, {
-                name: 'chapter',
-                label : 'Chapter',
-                editable : false,
-                sortable: true,
-                cell: 'string',
-                sortValue : sortValueText
-            }, {
-                name: 'publicationYear',
-                label: 'Year',
-                editable: false,
-                sortable : true,
-                cell: 'string',
-                sortValue : sortValueText
-            },{
-                name: 'indexId',
-                label : 'Index ID',
-                editable : false,
-                sortable : true,
-                cell: 'string',
-                sortValue : sortValueText
-            }, {
-                name: 'title',
-                label: 'Title',
-                editable: false,
-                sortable : true,
-                cell: 'string',
-                sortValue : sortValueText
-            },{
-                name: 'contributors',
-                label: 'First Author',
-                editable : false,
-                sortable : true,
-                cell: 'string',
-                formatter : {
-                    fromRaw : fromRawFirstAuthor
-                },
-                sortValue : sortValueFirstAuthor
-            },{
-                name: 'sourceDatabase',
-                label: 'Origin',
-                editable : false,
-                sortable: true,
-                cell: 'string',
-                sortValue : sortValueText
-            },
-            {
-                name : 'published',
-                label : 'Published',
-                editable : false,
-                sortable : true,
-                cell : 'string',
-                formatter : {
-                    fromRaw : function(rawValue) {
-                        return rawValue ? 'Yes' : 'No';
-                    }
-                }
-            }
-        ];
-
         // Initialize a new Grid instance
         this.grid = new Backgrid.Grid({
             body : BackgridClientSortingBody,
@@ -248,7 +127,7 @@ export default BaseView.extend({
         });
 
         // Initialize the paginator
-        this.pagination = window.jQuery.pagination(this.$('.pub-pagination'),  {
+        window.jQuery.pagination(this.$('.pub-pagination'),  {
              dataSource: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15 , 195],
              callback: function(data, pagination) {
                  // template method of yourself
@@ -257,15 +136,6 @@ export default BaseView.extend({
              }
         });
 
-
-        // this.$('.pub-grid').pagination({
-        //     dataSource: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15 , 195],
-        //     callback: function(data, pagination) {
-        //         // template method of yourself
-        //         //var html = template(data);
-        //         this.$('pub-grid').html("<p> test </p>");
-        //     }
-        // });
 
         // Create other child views
         this.alertView = new AlertView({
@@ -279,19 +149,14 @@ export default BaseView.extend({
 
     render : function() {
         var self = this;
-        var $pubList;
+        console.log('in render..');
 
         this.context.qTerm = this.model.has('q') ? this.model.get('q') : '';
         BaseView.prototype.render.apply(this, arguments);
 
-        $pubList = this.$('.pub-grid');
-
         // Set the elements for child views and render if needed.
         this.alertView.setElement(this.$('.alert-container'));
         this.warningDialogView.setElement(this.$('.warning-dialog-container')).render();
-
-        // Render the grid and attach the root to HTML document
-        $pubList.append(this.grid.render().el);
 
         // Render the paginator
         //this.$('.pub-grid-footer').append(this.paginator.render().el);
@@ -326,6 +191,91 @@ export default BaseView.extend({
         this.updateVisibilityRemoveFromPubListBtn();
 
         return this;
+    },
+
+    renderPublicationsPane : function() {
+   	    let $pubList = this.$('.pub-pane');
+   	    let maxItems = 4;  // TODO testing remove
+
+        if(this.collection.length < maxItems) {
+            maxItems = this.collection.length;
+        }
+        console.log('max items ' + maxItems);
+        console.log('collections size ' + this.collection.length);
+        console.log('collections state ' + this.collection.state);
+
+        let dataHtml = '<H3><b>Publications</b></H3><br>';
+        let publication;
+        let sep = '';
+        for(let i=0; i < maxItems; i++)  {
+             publication = this.collection.at(i);
+             var propValue;
+             	for(var propName in publication) {
+             	    propValue = publication[propName]
+             	    console.log(propName,propValue);
+             	}
+             dataHtml += sep;
+             const title = '<i>' + publication.attributes['title'] + '</i>';
+             const url = '/publication/' + publication.attributes['indexId'];
+
+             dataHtml += '<a href=' + url + '>' + title + '</a>';
+             dataHtml += this.formatPublicationAuthors(i);
+             dataHtml += this.formatPublicationEditors(i);
+             dataHtml += this.formatPublicationAbstract(i);
+             sep = '<hr>';
+        }
+
+   	    $pubList.html(dataHtml);
+   },
+
+    formatPublicationAuthors : function(collectionIndex) {
+        let publication = this.collection.at(collectionIndex);
+        let dataHtml = '';
+        let sep = '';
+
+        const authors = publication.attributes['contributors']['authors'];
+        if (typeof authors !== 'undefined') {
+            dataHtml += '<br>';
+            authors.forEach(function (author) {
+                dataHtml += sep + ' ' + author['text'];
+                sep = ',';
+            });
+        }
+
+        return dataHtml;
+    } ,
+
+    formatPublicationEditors : function(collectionIndex) {
+        let publication = this.collection.at(collectionIndex);
+        let dataHtml = '';
+        let sep = '';
+
+        const editors = publication.attributes['contributors']['editors'];
+        if (typeof editors !== 'undefined') {
+            dataHtml += '<br>';
+            editors.forEach(function (editor) {
+                dataHtml += sep + ' ' + editor['text'];
+                sep = ',';
+            });
+
+            dataHtml += ', editor(s)';
+        }
+
+        return dataHtml;
+    },
+
+    formatPublicationAbstract : function(collectionIndex) {
+        let publication = this.collection.at(collectionIndex);
+        let dataHtml = '';
+        let sep = '';
+
+        const abstract = publication.attributes['contributors']['editors'];
+        if (typeof abstract !== 'undefined') {
+            dataHtml += '<br>';
+            dataHtml += '<p>' + abstract + '</p>';
+        }
+
+        return dataHtml;
     },
 
     remove : function() {
@@ -551,6 +501,7 @@ export default BaseView.extend({
 
     updatePubsListDisplay : function() {
         this.$('.pubs-loading-indicator').hide();
+        this.renderPublicationsPane();
         this.$('.pubs-count').html(this.collection.state.totalRecords);
     }
 });

@@ -54,10 +54,10 @@
     .pub-list-section {
       @include make-md-column(8);
       @include make-lg-column(9);
-      .pub-grid-container {
+      .pub-pane-container {
         position: relative;
 
-        .pub-grid {
+        .pub-pane {
           height : 515px;
         }
       }
@@ -69,13 +69,13 @@
       }
     }
 
-    .pub-grid-footer {
+    .pub-pane-footer {
       @include make-md-column(12);
       margin-bottom : 10px;
       background-color : $table-bg-accent;
       border : 1px solid $table-border-color;
       padding-top: 10px;
-      .pub-grid-info  {
+      .pub-pane-info  {
         font-weight: bold;
         margin-top : 5px;
         @include make-sm-column(2);

@@ -1,5 +1,5 @@
-PYTHON := python3
-PIP := pip3 --trusted-host files.pythonhosted.org --trusted-host pypi.org 
+PYTHON := server/env/bin/python
+PIP := server/env/bin/pip
 
 .PHONY: env-server test-server clean-server cleanenv-server watch-server
 

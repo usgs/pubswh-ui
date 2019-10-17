@@ -79,6 +79,9 @@ export default BaseView.extend({
         this.confirmationDialogView.setElement(this.$('.confirmation-dialog-container')).render();
         this.loginDialogView.setElement(this.$('.login-dialog-container')).render();
 
+        // Render the paginator
+        this.$('.pub-grid-footer').append(this.paginator.render().el);
+
         this.$('[data-toggle="tooltip"]').tooltip({
             trigger : 'hover'
         });
