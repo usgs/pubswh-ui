@@ -89,8 +89,8 @@ export default BaseView.extend({
         this.activeCostCenters = new CostCenterCollection();
         this.notActiveCostCenters = new CostCenterCollection();
         this.costCenterPromise = $.when(
-            this.activeCostCenters.fetch({data : {active : 'y'}}),
-            this.notActiveCostCenters.fetch({data : {active : 'n'}})
+            this.activeCostCenters.fetch({data : {active : true}}),
+            this.notActiveCostCenters.fetch({data : {active : false}})
             );
 
         // Add binding from model to dom for select2's and tinymce elements which are not handled by stickit.
@@ -173,10 +173,10 @@ export default BaseView.extend({
                 queryParameter: 'active',
                 nameAndValues: [{
                     name: 'Active',
-                    value: 'y'
+                    value: true
                 }, {
                     name: 'Not Active',
-                    value: 'n'
+                    value: false
                 }]
             }
         }, DEFAULT_SELECT2_OPTIONS));

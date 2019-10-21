@@ -83,13 +83,13 @@ describe('DynamicSelect2', function() {
                 lookupType : 'nameType',
                 subgroups: {
                     queryParameter: 'active',
-                    nameAndValues: [{name: 'Active', value: 'y'}, {name: 'Not Active', value: 'n'}]
+                    nameAndValues: [{name: 'Active', value: true}, {name: 'Not Active', value: false}]
                 }});
             expect(resultOptions.ajax.transport).toBeDefined();
             resultOptions.ajax.transport({data : {}}, jasmine.createSpy('successSpy'), jasmine.createSpy('failureSpy'));
             expect($.ajax.calls.count()).toBe(2);
-            expect($.ajax.calls.argsFor(0)[0].data.active).toEqual('y');
-            expect($.ajax.calls.argsFor(1)[0].data.active).toEqual('n');
+            expect($.ajax.calls.argsFor(0)[0].data.active).toEqual(true);
+            expect($.ajax.calls.argsFor(1)[0].data.active).toEqual(false);
         });
 
         it('Expects that if defaults are specified they are added to the returned results', function() {

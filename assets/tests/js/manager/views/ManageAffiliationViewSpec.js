@@ -50,14 +50,14 @@ describe('views/ManageAffiliationView', function() {
         spyOn(AlertView.prototype, 'closeAlert');
         spyOn(AlertView.prototype, 'remove');
         spyOn(CostCenterCollection.prototype, 'fetch').and.callFake(function(options) {
-            if (options.data.active === 'y') {
+            if (options.data.active === true) {
                 return costCenterFetchActiveDeferred;
             } else {
                 return costCenterFetchInactiveDeferred;
             }
         });
         spyOn(OutsideAffiliationLookupCollection.prototype, 'fetch').and.callFake(function(options) {
-            if (options.data.active === 'y') {
+            if (options.data.active === true) {
                 return outsideAffiliationActiveDeferred;
             } else {
                 return outsideAffiliationInactiveDeferred;
@@ -85,11 +85,11 @@ describe('views/ManageAffiliationView', function() {
     it('Expects active and inactive cost centers to fetched', function() {
         expect(CostCenterCollection.prototype.fetch.calls.count()).toBe(2);
         const activeCostCenters = _.find(CostCenterCollection.prototype.fetch.calls.allArgs(), function(arg) {
-            return arg[0].data.active === 'y';
+            return arg[0].data.active === true;
         });
         expect(activeCostCenters).toBeDefined();
         const inactiveCostCenters = _.find(CostCenterCollection.prototype.fetch.calls.allArgs(), function(arg) {
-            return arg[0].data.active === 'n';
+            return arg[0].data.active === false;
         });
         expect(inactiveCostCenters).toBeDefined();
     });
@@ -97,11 +97,11 @@ describe('views/ManageAffiliationView', function() {
     it('Expects active and inactive outside affiliates to be fetched', function() {
         expect(OutsideAffiliationLookupCollection.prototype.fetch.calls.count()).toBe(2);
         const activeAffiliates = _.find(OutsideAffiliationLookupCollection.prototype.fetch.calls.allArgs(), function(arg) {
-            return arg[0].data.active === 'y';
+            return arg[0].data.active === true;
         });
         expect(activeAffiliates).toBeDefined();
         const inactiveAffiliates = _.find(OutsideAffiliationLookupCollection.prototype.fetch.calls.allArgs(), function(arg) {
-            return arg[0].data.active === 'n';
+            return arg[0].data.active === false;
         });
         expect(inactiveAffiliates).toBeDefined();
     });

@@ -24,7 +24,7 @@ describe('BibliodataView', function() {
 
         spyOn(PublicationTypeCollection.prototype, 'fetch').and.returnValue(pubTypeFetchDeferred);
         spyOn(CostCenterCollection.prototype, 'fetch').and.callFake(function(options) {
-            if (options.data.active === 'y') {
+            if (options.data.active === true) {
                 return costCenterFetchActiveDeferred;
             } else {
                 return costCenterFetchNotActiveDeferred;
@@ -53,8 +53,8 @@ describe('BibliodataView', function() {
         });
 
         expect(CostCenterCollection.prototype.fetch.calls.count()).toBe(2);
-        expect(CostCenterCollection.prototype.fetch.calls.argsFor(0)[0].data.active).toEqual('y');
-        expect(CostCenterCollection.prototype.fetch.calls.argsFor(1)[0].data.active).toEqual('n');
+        expect(CostCenterCollection.prototype.fetch.calls.argsFor(0)[0].data.active).toEqual(true);
+        expect(CostCenterCollection.prototype.fetch.calls.argsFor(1)[0].data.active).toEqual(false);
     });
 
     describe('Tests for render', function() {
