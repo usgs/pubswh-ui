@@ -29,14 +29,14 @@ describe('views/EditPersonView', function() {
         outsideAffFetchNotActiveDeferred  = $.Deferred();
 
         spyOn(CostCenterCollection.prototype, 'fetch').and.callFake(function(options) {
-            if (options.data.active === 'y') {
+            if (options.data.active === true) {
                 return costCenterFetchActiveDeferred;
             } else {
                 return costCenterFetchNotActiveDeferred;
             }
         });
         spyOn(OutsideAffiliationLookupCollection.prototype, 'fetch').and.callFake(function(options) {
-            if (options.data.active === 'y') {
+            if (options.data.active === true) {
                 return outsideAffFetchActiveDeferred;
             } else {
                 return outsideAffFetchNotActiveDeferred;
@@ -56,20 +56,20 @@ describe('views/EditPersonView', function() {
     it('Expects the active and not active cost centers to be fetched', function() {
         expect(CostCenterCollection.prototype.fetch.calls.count()).toBe(2);
         expect(_.find(CostCenterCollection.prototype.fetch.calls.allArgs(), function(arg) {
-            return arg[0].data.active === 'y';
+            return arg[0].data.active === true;
         })).toBeDefined();
         expect(_.find(CostCenterCollection.prototype.fetch.calls.allArgs(), function(arg) {
-            return arg[0].data.active === 'n';
+            return arg[0].data.active === false;
         })).toBeDefined();
     });
 
     it('Expects the active and not active outside affiliations to be fetched', function() {
         expect(OutsideAffiliationLookupCollection.prototype.fetch.calls.count()).toBe(2);
         expect(_.find(OutsideAffiliationLookupCollection.prototype.fetch.calls.allArgs(), function(arg) {
-            return arg[0].data.active === 'y';
+            return arg[0].data.active === true;
         })).toBeDefined();
         expect(_.find(OutsideAffiliationLookupCollection.prototype.fetch.calls.allArgs(), function(arg) {
-            return arg[0].data.active === 'n';
+            return arg[0].data.active === false;
         })).toBeDefined();
     });
 

@@ -40,7 +40,7 @@ describe('SearchFilterRowView', function() {
         );
 
         spyOn(CostCenterCollection.prototype, 'fetch').and.callFake(function(options) {
-            if (options.data.active === 'y') {
+            if (options.data.active === true) {
                 return costCenterFetchActiveDeferred;
             } else {
                 return costCenterFetchNotActiveDeferred;

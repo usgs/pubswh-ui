@@ -51,15 +51,15 @@ var DEFAULT_SELECT2_OPTIONS = {
         this.activeCostCenters = new CostCenterCollection();
         this.notActiveCostCenters = new CostCenterCollection();
         this.costCenterPromise = $.when(
-            this.activeCostCenters.fetch({data : {active : 'y'}}),
-            this.notActiveCostCenters.fetch({data : {active : 'n'}})
+            this.activeCostCenters.fetch({data : {active : true}}),
+            this.notActiveCostCenters.fetch({data : {active : false}})
             );
 
         this.activeOutsideAffiliates = new OutsideAffiliationLookupCollection();
         this.notActiveOutsideAffiliates = new OutsideAffiliationLookupCollection();
         this.outsideAffiliatesPromise = $.when(
-            this.activeOutsideAffiliates.fetch({data : {active : 'y'}}),
-            this.notActiveOutsideAffiliates.fetch({data : {active : 'n'}})
+            this.activeOutsideAffiliates.fetch({data : {active : true}}),
+            this.notActiveOutsideAffiliates.fetch({data : {active : false}})
             );
 
         // Add binding to dom for select2

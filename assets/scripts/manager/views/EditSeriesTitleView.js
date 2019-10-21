@@ -92,10 +92,10 @@ export default BaseView.extend({
                 queryParameter: 'active',
                 nameAndValues: [{
                     name: 'Active',
-                    value: 'y'
+                    value: true
                 }, {
                     name: 'Not Active',
-                    value: 'n'
+                    value: false
                 }]
             }
         }, DEFAULT_SELECT2_OPTIONS));

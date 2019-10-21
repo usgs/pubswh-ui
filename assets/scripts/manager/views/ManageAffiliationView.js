@@ -61,14 +61,14 @@ export default BaseView.extend({
         this.activeCostCenters = new CostCenterCollection();
         this.inactiveCostCenters = new CostCenterCollection();
         this.costCenterPromise = $.when(
-            this.activeCostCenters.fetch({data : {active : 'y'}}),
-            this.inactiveCostCenters.fetch({data : {active : 'n'}})
+            this.activeCostCenters.fetch({data : {active : true}}),
+            this.inactiveCostCenters.fetch({data : {active : false}})
         );
         this.activeOutsideAffiliates = new OutsideAffiliationCollection();
         this.inactiveOutsideAffiliates = new OutsideAffiliationCollection();
         this.outsideAffiliatesPromise = $.when(
-            this.activeOutsideAffiliates.fetch({data : {active : 'y'}}),
-            this.inactiveOutsideAffiliates.fetch({data : {active : 'n'}})
+            this.activeOutsideAffiliates.fetch({data : {active : true}}),
+            this.inactiveOutsideAffiliates.fetch({data : {active : false}})
         );
     },
 
