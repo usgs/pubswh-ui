@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -   Updated jasmine dependency to 3.4.0
 -   Updated MathJax config to support MathML (in addition to the original LaTeX)
 -   Updated MathJax dependency to 3.0.0
+-   Updated USGS ci/cd configuration to reflect trivial upstream changes.
 
 ### Added
 -   Dockerfile and docker-compose scripts to build a pubswh-ui. This includes Jenkinsfile.build used to build the image

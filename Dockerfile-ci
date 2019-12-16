@@ -1,7 +1,7 @@
 ARG node_image=node
 ARG node_image_tag=10.16-stretch
-ARG python_image=usgswma/python
-ARG python_image_tag=debian-slim-buster-python-3.7-4117b859d9051a96f5d9729198769d2205424c9
+ARG python_image=python
+ARG python_image_tag=3.7-slim-buster
 
 # Build the static assets in the node.js container.
 FROM ${node_image}:${node_image_tag} as assets
