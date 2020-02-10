@@ -16,7 +16,7 @@ Flask-Testing==0.7.1
 Flask-WTF==0.14.3
 google-api-python-client==1.7.11
 graypy==1.2.0
-gunicorn[gevent]==19.9.0
+gunicorn[gevent]==20.0.4
 httplib2==0.13.1
 natsort==6.0.0
 oauth2client==4.1.3
