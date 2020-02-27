@@ -1,118 +1,168 @@
+# .gitlab-ci.yml for pubswh-ui
 #
-# .gitlab-ci.yml
-#
-# This file is used by the USGS SAS team for building on code.usgs.gov
-#
-# This builds a Docker image and tags it as the latest for its branch.
-# After building, it will trigger a deployment pipeline in another repo.
-#
-# Reference:
+# == Reference:
+#   - https://sas.cr.usgs.gov/
 #   - https://docs.gitlab.com/ee/ci/yaml/
+#   - https://docs.gitlab.com/ee/ci/multi_project_pipelines.html
 #
-# CI Variables:
-#   PUBSWH_UI_IMAGE
-#     Should be the full value of the Docker image to produce. This should include the full registry address.
-#     This variable is sent to the deployment trigger.
+# == CI Variables:
+#   The following CI variables are expected to be set outside of this file.
 #
-#   PUBSWH_UI_IMAGE_TAG
-#     The Docker image tag. The default is to use the branch:short_sha
-#     This variable is sent to the deployment trigger.
+#   ARTIFACTORY_BASE_URL
+#     The base URL for the SAS group's Artifactory for uploading the
+#     asset artifact.
 #
-#   node_image
-#     The Docker image name for node. Used by the Docker image build for the node image source.
+#   ARTIFACTORY_TOKEN
+#     A token used to authenticate with SAS Artifactory for uploading the
+#     asset artifact.
 #
-#   python_image
-#     The Docker image name for Python. Used by the Docker image build for the Python image source.
+#   CI_REGISTRY
+#     Address to the Docker image registry.
+#     This is a built-in Docker variable that, by default, points to the internal
+#     Docker Image registry.
 #
-#   DEPLOY_TRIGGER_REF
-#     Set on the individual deployment jobs below. This is the branch name to trigger on the deployment pipeline.
+#   CI_REGISTRY_USER
+#     The username for authenticating with the Docker image registry.
+#     Defaults to "gitlab-ci-token"
 #
-#   DEPLOY_TRIGGER_VARS
-#     Space-delimited list of variables to pass along with the deployment trigger.
-#     This is used to pass the PUBSWH_UI_IMAGE and PUBSWH_UI_IMAGE_TAG variables along.
+#   CI_REGISTRY_PASS
+#     The password. for authenticating with the Docker image registry.
+#     Defaults to "$CI_JOB_TOKEN"
+#     This is restricted to protected branches and tags!
 #
-
-# Include common SAS defined jobs from a repository available to ci/cd.
-include:
-  # Include common variables
-  - project: 'sas/ops/ci-pipeline/gitlab-ci-pipeline'
-    file: '/common-vars.yml'
-  # Docker build jobs
-  - project: 'sas/ops/ci-pipeline/gitlab-ci-pipeline'
-    file: '/build/docker.yml'
-  # Job for triggering deployment via GitLab API
-  - project: 'sas/ops/ci-pipeline/gitlab-ci-pipeline'
-    file: '/deploy/api_trigger.yml'
-
-# These stages are defined on the jobs in the included files above.
+#   DEPLOY_TRIGGER_TOKEN
+#     The API token for the deployment pipeline as configured on the deployment
+#     repository.
+#
+#   DEPLOY_TRIGGER_URL
+#     The API URL for the deployment pipeline as configured on the deployment
+#     repository.
+#
 stages:
-  - docker_build
-  - docker_tag_latest
-  - deploy_trigger
+  - Build
+  - Package Assets
+  - Trigger Deployment
 
 variables:
-  # These variables are referenced by the deployment triggers to specify the
-  # image and image tag to deploy dynamically.
-  PUBSWH_UI_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}
-  PUBSWH_UI_IMAGE_TAG: ${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}
-  # This variable is referenced by the deployment trigger jobs and sets the
-  # variable names to pass along with the deployment trigger.
-  DEPLOY_TRIGGER_VARS: PUBSWH_UI_IMAGE PUBSWH_UI_IMAGE_TAG
+  # The full name of the Docker image to produce, including the registry address.
+  # In most cases, this should be left alone.
+  IMAGE_NAME: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}
+  IMAGE_TAG: ${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}
+  # The asset files are packaged and uploaded to Artifactory for deployment.
+  # This sets the filename to use for the artifact.
+  ASSET_ARTIFACT_FILE: pubswh-assets-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}.zip
 
-# The 'docker_build' job is defined in the '/build/docker.yml' file listed above.
-# The keys defined here are overrides/supplemental to the job.
-# Only build on pushes to the 'master' branch.
-docker_build:
-  variables:
-    # Use local base images for building
-    # These are based on the upstream
-    node_image: code.chs.usgs.gov:5001/sas/ops/docker/base-images/node
-    node_image_tag: '10.16'
-    python_image: code.chs.usgs.gov:5001/sas/ops/docker/base-images/python
-    python_image_tag: '3.7-slim-buster'
-    DOCKERFILE: ./Dockerfile-ci
-    DOCKER_BUILD_ARGS: >-
-      --build-arg node_image=${node_image}
-      --build-arg node_image_tag=${node_image_tag}
-      --build-arg python_image=${python_image}
-      --build-arg python_image_tag=${python_image_tag}
+#
+# == Docker Build
+#
+Build Docker Image:
+  image: code.chs.usgs.gov:5001/sas/ops/docker/base-images/docker:19-latest
+  stage: Build
+  services:
+    - docker:dind
+  tags:
+    - docker
   only:
-    refs:
-      - master
+    variables:
+      # We must run on a protected branch to access the CI_REGISTRY_PASS variable.
+      - $CI_COMMIT_REF_PROTECTED == "true"
+  before_script:
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASS} ${CI_REGISTRY}
+  script:
+    - docker build
+      --pull
+      -t ${IMAGE_NAME}:${IMAGE_TAG}
+      --build-arg python_image=${SAS_IMAGES_URL}/python
+      --build-arg python_image_tag=3.7-slim-buster
+      -f Dockerfile-ci .
+    - docker push ${IMAGE_NAME}:${IMAGE_TAG}
 
-# The 'docker_tag' job is defined in the '/build/docker.yml' file listed above.
-# The keys defined here are overrides/supplemental to the job.
-# This simply labels the built image as '${ref}-latest' and pushes to the registry.
-docker_tag_latest:
+#
+# == Build Static Assets
+#
+Build Assets:
+  image: ${SAS_IMAGES_URL}/node:12.16
+  stage: Build
+  tags:
+    - docker
+  script:
+    - cd assets
+    - npm install
+    - npx bower install --allow-root
+    - npm run build
+  artifacts:
+    paths:
+      - assets/dist
+
+#
+# == Upload Assets to Artifactory
+#
+# This job zips the "assets/" directory and uploads it to Artifactory. The URL
+# to # the artifact is passed in the deployment trigger.
+#
+# NOTE: This uses an ARTIFACTORY_TOKEN, which is specified as a global ci
+Package Assets:
+  image: ${SAS_IMAGE_DEPLOY_TOOL}
+  stage: Package Assets
+  dependencies:
+    - Build Assets
+  tags:
+    - docker
   only:
-    refs:
-      - master
+    variables:
+      - $CI_COMMIT_REF_PROTECTED == "true"
+  script:
+    - 'zip -9 -r ${ASSET_ARTIFACT_FILE} assets/dist'
+    # Compute the sha1sum of the .zip file for uploading to artifactory.
+    - export SHA1SUM_ASSET_FILE=$(sha1sum ${ASSET_ARTIFACT_FILE} | cut -d " " -f1)
+    - curl --fail -k
+      -H "X-JFrog-Art-Api:${ARTIFACTORY_TOKEN}"
+      -H "X-Checksum-Sha1:${SHA1SUM_ASSET_FILE}"
+      -T ${ASSET_ARTIFACT_FILE}
+      ${ARTIFACTORY_BASE_URL}/pubswh/${ASSET_ARTIFACT_FILE}
 
-# The 'trigger_deploy_*' jobs are defined in the '/deploy/api_trigger.yml' file listed above.
-# The keys defined here are overrides/supplemental to the job.
-# This uses the GitLab trigger API to trigger the "deployment repo" pipeline, passing along
-# the image information (DEPLOY_TRIGGER_VARS).
+#
+# == Deployment Triggers
+#
+# These jobs use 'curl' to make a request to the GitLab API to trigger the
+# deployment repository's pipeline. The pipeline trigger is configured on
+# the deployment repository under "Settings -> CI/CD -> Pipeline Triggers",
+# which provides an API URL and token.
+#
+# References:
+#   - https://docs.gitlab.com/ee/ci/triggers/README.html
+#
+.deploy_trigger:
+  image: ${SAS_IMAGES_URL}/curl:master-latest
+  stage: Trigger Deployment
+  tags:
+    - docker
+  only:
+    variables:
+      - $CI_COMMIT_REF_PROTECTED == "true"
+  script:
+    - curl -X POST
+      -F variables[PUBSWH_UI_IMAGE]=${IMAGE_NAME}
+      -F variables[PUBSWH_UI_IMAGE_TAG]=${IMAGE_TAG}
+      -F variables[ASSET_ARTIFACT_URL]=${ARTIFACTORY_BASE_URL}/pubswh/${ASSET_ARTIFACT_FILE}
+      -F token=${DEPLOY_TRIGGER_TOKEN}
+      -F ref=${DEPLOY_TRIGGER_REF}
+      ${DEPLOY_TRIGGER_URL}
 
-# This triggers a 'development' environment deployment on successful builds of
-# the 'master' branch.
-trigger_deploy_development:
+Development deployment:
   extends: .deploy_trigger
+  only:
+    refs:
+      - master
   variables:
-    ENVIRONMENT: development
+    # The branch of the deployment repository to trigger.
     DEPLOY_TRIGGER_REF: develop
-  only:
-    refs:
-      - master
-  when: on_success
 
-# This triggers a 'staging' environment deployment on successful builds of
-# the 'master' branch.
-trigger_deploy_staging:
+Staging deployment:
   extends: .deploy_trigger
-  variables:
-    ENVIRONMENT: staging
-    DEPLOY_TRIGGER_REF: master
   only:
     refs:
       - master
-  when: on_success
+  variables:
+    # The branch of the deployment repository to trigger.
+    DEPLOY_TRIGGER_REF: release
