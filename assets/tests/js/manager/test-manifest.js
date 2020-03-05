@@ -21,7 +21,6 @@ import './views/EditSeriesTitleViewSpec';
 import './views/GeospatialViewSpec';
 import './views/LinkRowViewSpec';
 import './views/LinksViewSpec';
-import './views/LoginDialogViewSpec';
 import './views/ManageAffiliationViewSpec';
 import './views/ManageContributorsViewSpec';
 import './views/ManagePublicationViewSpec';

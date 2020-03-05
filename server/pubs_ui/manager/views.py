@@ -30,6 +30,7 @@ def show_app(path=None):
 @manager.route('/services/<op1>/<op2>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @manager.route('/services/<op1>/<op2>/<op3>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @manager.route('/services/<op1>/<op2>/<op3>/<op4>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@authentication_required
 def services_proxy(op1, op2=None, op3=None, op4=None):
     """
     View for proxying service calls
