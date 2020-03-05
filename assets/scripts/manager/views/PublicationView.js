@@ -304,7 +304,7 @@ export default BaseView.extend({
                     if (jqXHR.status === 401) {
                         self.alertView.showDangerAlert('Publication not deleted because login expired. Please logout and log back in');
                     } else {
-                        self.alertView.showDangerAlert('Publication not deleted with error: ' + jqxhr.statusText);
+                        self.alertView.showDangerAlert('Publication not deleted with error: ' + jqXHR.statusText);
                     }
                 });
 
