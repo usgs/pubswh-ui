@@ -246,8 +246,7 @@ export default BaseView.extend({
             var response = jqXhr;
             if (response === 401) {
                 self.alertView.showDangerAlert('Publication not saved because login expired. Please logout and log back in');
-            }
-            else if (has(response, 'responseJSON') &&
+            } else if (has(response, 'responseJSON') &&
                 has(response.responseJSON, 'validationErrors') &&
                 response.responseJSON.validationErrors.length > 0) {
                 self.model.set('validationErrors', response.responseJSON.validationErrors);
