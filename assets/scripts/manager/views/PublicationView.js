@@ -217,7 +217,11 @@ export default BaseView.extend({
             .done(function() {
                 self.returnToSearch();
             }).fail(function(jqXHR, error) {
-                self.alertView.showDangerAlert('Publication not released: ' + error);
+                if (jqXHR.status === 401) {
+                    self.alertView.showDangerAlert('Publication not released because login expired. Please logout and log back in');
+                } else {
+                    self.alertView.showDangerAlert('Publication not released: ' + error);
+                }
             });
     },
 
@@ -240,7 +244,10 @@ export default BaseView.extend({
             }
         }).fail(function(jqXhr, textStatus, error) {
             var response = jqXhr;
-            if (has(response, 'responseJSON') &&
+            if (response === 401) {
+                self.alertView.showDangerAlert('Publication not saved because login expired. Please logout and log back in');
+            }
+            else if (has(response, 'responseJSON') &&
                 has(response.responseJSON, 'validationErrors') &&
                 response.responseJSON.validationErrors.length > 0) {
                 self.model.set('validationErrors', response.responseJSON.validationErrors);
@@ -264,7 +271,11 @@ export default BaseView.extend({
                     self.returnToSearch();
                 })
                 .fail(function(jqXHR, error) {
-                    self.alertView.showDangerAlert(error);
+                    if (jqXHR.status === 401) {
+                        self.alertView.showDangerAlert('Publication not publised because login expired. Please logout and log back in');
+                    } else {
+                        self.alertView.showDangerAlert(error);
+                    }
                 })
                 .always(function() {
                     loadingDiv.hide();
@@ -289,8 +300,12 @@ export default BaseView.extend({
                 .done(function() {
                     self.returnToSearch();
                 })
-                .fail(function(jqxhr) {
-                    self.alertView.showDangerAlert('Publication not deleted with error: ' + jqxhr.statusText);
+                .fail(function(jqXHR) {
+                    if (jqXHR.status === 401) {
+                        self.alertView.showDangerAlert('Publication not deleted because login expired. Please logout and log back in');
+                    } else {
+                        self.alertView.showDangerAlert('Publication not deleted with error: ' + jqxhr.statusText);
+                    }
                 });
 
         };
