@@ -9,7 +9,6 @@ import isArray from 'lodash/isArray';
 import BaseView from './BaseView';
 import AlertView from './AlertView';
 import ConfirmationDialogView from './ConfirmationDialogView';
-import LoginDialogView from './LoginDialogView';
 import BibliodataView from './BibliodataView';
 import LinksView from './LinksView';
 import ContributorsView from './ContributorsView';
@@ -77,7 +76,6 @@ export default BaseView.extend({
         // Set the elements for child views and render if needed.
         this.alertView.setElement(this.$('.alert-container'));
         this.confirmationDialogView.setElement(this.$('.confirmation-dialog-container')).render();
-        this.loginDialogView.setElement(this.$('.login-dialog-container')).render();
 
         this.$('[data-toggle="tooltip"]').tooltip({
             trigger : 'hover'
@@ -137,9 +135,6 @@ export default BaseView.extend({
         this.confirmationDialogView = new ConfirmationDialogView({
             el : '.confirmation-dialog-container'
         });
-        this.loginDialogView = new LoginDialogView({
-            el : '.login-dialog-container'
-        });
 
         this.tabs = {
             bibliodata : {
@@ -191,7 +186,6 @@ export default BaseView.extend({
     remove : function() {
         this.alertView.remove();
         this.confirmationDialogView.remove();
-        this.loginDialogView.remove();
         each(this.tabs, function(t) {
             t.view.remove();
         });
@@ -224,9 +218,7 @@ export default BaseView.extend({
                 self.returnToSearch();
             }).fail(function(jqXHR, error) {
                 if (jqXHR.status === 401) {
-                    self.loginDialogView.show(function() {
-                        self.alertView.showWarningAlert('Please click Release to release the publication');
-                    });
+                    self.alertView.showDangerAlert('Publication not released because login expired. Please logout and log back in');
                 } else {
                     self.alertView.showDangerAlert('Publication not released: ' + error);
                 }
@@ -252,10 +244,8 @@ export default BaseView.extend({
             }
         }).fail(function(jqXhr, textStatus, error) {
             var response = jqXhr;
-            if (jqXhr.status === 401) {
-                self.loginDialogView.show(function() {
-                    self.alertView.showWarningAlert('Please click Save Changes to save the publication');
-                });
+            if (response === 401) {
+                self.alertView.showDangerAlert('Publication not saved because login expired. Please logout and log back in');
             } else if (has(response, 'responseJSON') &&
                 has(response.responseJSON, 'validationErrors') &&
                 response.responseJSON.validationErrors.length > 0) {
@@ -281,9 +271,7 @@ export default BaseView.extend({
                 })
                 .fail(function(jqXHR, error) {
                     if (jqXHR.status === 401) {
-                        self.loginDialogView.show(function() {
-                            self.alertView.showWarningAlert('Please click Publish to publish the publication');
-                        });
+                        self.alertView.showDangerAlert('Publication not publised because login expired. Please logout and log back in');
                     } else {
                         self.alertView.showDangerAlert(error);
                     }
@@ -311,13 +299,11 @@ export default BaseView.extend({
                 .done(function() {
                     self.returnToSearch();
                 })
-                .fail(function(jqxhr) {
-                    if (jqxhr.status === 401) {
-                        self.loginDialogView.show(function() {
-                            self.alertView.showWarningAlert('Please clicke Delete to delete the publication');
-                        });
+                .fail(function(jqXHR) {
+                    if (jqXHR.status === 401) {
+                        self.alertView.showDangerAlert('Publication not deleted because login expired. Please logout and log back in');
                     } else {
-                        self.alertView.showDangerAlert('Publication not deleted with error: ' + jqxhr.statusText);
+                        self.alertView.showDangerAlert('Publication not deleted with error: ' + jqXHR.statusText);
                     }
                 });
 
