@@ -1,6 +1,6 @@
 arrow==0.15.2
 Authlib==0.12.1
-beautifulsoup4==4.8.0
+beautifulsoup4==4.9.0
 click==7.0
 dcxml==0.1.1
 feedparser==5.2.1
