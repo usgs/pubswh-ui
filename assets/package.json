@@ -81,7 +81,7 @@
     "sinon": "7.4.2",
     "uglify-es": "^3.3.9",
     "uglifycss": "0.0.29",
-    "wdfn-viz": "^1.0.1"
+    "wdfn-viz": "^1.5.0"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.11.1",
