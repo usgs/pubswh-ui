@@ -3,7 +3,7 @@ import logging
 import os
 import sys
 
-from authlib.flask.client import OAuth
+from authlib.integrations.flask_client import OAuth
 
 from flask import Flask, request
 from flask_caching import Cache
