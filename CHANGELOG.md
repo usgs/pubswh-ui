@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -   Updated MathJax dependency to 3.0.0
 -   Updated USGS ci/cd configuration to reflect trivial upstream changes.
 -   Removed client side login dialog. Instead show a descriptive message if the service call fails with status 401
+-   Updated to latest wdfn-viz (1.5) which uses USWDS 2.6
 
 ### Added
 -   Dockerfile and docker-compose scripts to build a pubswh-ui. This includes Jenkinsfile.build used to build the image
