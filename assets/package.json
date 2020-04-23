@@ -43,7 +43,7 @@
     "watch:images": "npm run build:images"
   },
   "engines": {
-    "node": "10.16.3"
+    "node": "12.16.2"
   },
   "author": "WMA - IOW Team",
   "license": "MIT",

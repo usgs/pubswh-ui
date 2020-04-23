@@ -5,7 +5,7 @@ RUN npm run build
 
 
 # Base off the community Python image
-FROM usgswma/python:debian-slim-buster-python-3.7-4117b859d9051a96f5d9729198769d2205424c99
+FROM usgswma/python:debian-slim-buster-python-3.8
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	build-essential && \
