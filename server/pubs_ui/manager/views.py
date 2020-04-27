@@ -3,12 +3,14 @@ Manager blueprint views
 """
 # pylint: disable=C0103,C0111
 
+from urllib.parse import urlencode
+
 from requests import Request, Session
 
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for, session
 
-from ..auth.views import authentication_required, get_auth_header
-from .. import app
+from ..auth.views import authentication_required, get_auth_header, is_authenticated
+from .. import app, oauth
 
 
 SERVICES_ENDPOINT = app.config['PUB_URL']
@@ -41,6 +43,15 @@ def services_proxy(op1, op2=None, op3=None, op4=None):
         url = url + '/' + op3
     if op4 is not None:
         url = url + '/' + op4
+
+    if not is_authenticated():
+        token = oauth.pubsauth.authorize_access_token(verify=False)
+
+        response = redirect(request.args.get('next'))
+        response.set_cookie('access_token', token.get('access_token'), secure=app.config['SECURE_COOKIES'])
+        session['access_token_expires_at'] = token.get('expires_at')
+
+        return response
 
     headers = get_auth_header()
     headers.update(request.headers)
