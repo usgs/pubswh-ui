@@ -3,16 +3,14 @@
  * NOTE: This is a CommonJS module so it can be imported by Karma.
  */
 
-const buble = require('rollup-plugin-buble');
+const buble = require('@rollup/plugin-buble');
 const commonjs = require('rollup-plugin-commonjs');
 const handlebars = require('rollup-plugin-handlebars-plus');
-const inject = require('rollup-plugin-inject');
-const json = require('rollup-plugin-json');
-const resolve = require('rollup-plugin-node-resolve');
-const replace = require('rollup-plugin-replace');
+const inject = require('@rollup/plugin-inject');
+const json = require('@rollup/plugin-json');
+const resolve = require('@rollup/plugin-node-resolve');
+const replace = require('@rollup/plugin-replace');
 const { uglify } = require('rollup-plugin-uglify');
-const { minify } = require('uglify-es');
-
 
 module.exports = function (env) {
     return [
@@ -62,6 +60,6 @@ module.exports = function (env) {
                 dead_code: true,
                 drop_console: true
             }
-        }, minify)
+        })
     ];
 };
