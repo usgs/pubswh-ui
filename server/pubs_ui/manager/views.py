@@ -3,10 +3,11 @@ Manager blueprint views
 """
 # pylint: disable=C0103,C0111
 
-from authlib.integrations.requests_client import OAuth2Session
 from requests import Request, Session
 
 from flask import Blueprint, render_template, request, Response
+
+from authlib.integrations.requests_client import OAuth2Session
 
 from ..auth.views import authentication_required, get_auth_header, is_authenticated
 from .. import app
@@ -48,9 +49,9 @@ def services_proxy(op1, op2=None, op3=None, op4=None):
     if not is_authenticated():
         # Retrieve refresh token and ask for a new access token.
         oauth_session = OAuth2Session(client_id=app.config['PUBSAUTH_CLIENT_ID'],
-                                     client_secret=app.config['PUBSAUTH_CLIENT_SECRET'],
-                                     authorization_endpoint=app.config['PUBSAUTH_AUTHORIZE_URL'],
-                                     token_endpoint=app.config['PUBSAUTH_ACCESS_TOKEN_URL'])
+                                      client_secret=app.config['PUBSAUTH_CLIENT_SECRET'],
+                                      authorization_endpoint=app.config['PUBSAUTH_AUTHORIZE_URL'],
+                                      token_endpoint=app.config['PUBSAUTH_ACCESS_TOKEN_URL'])
         refresh_token = request.cookies.get('refresh_token')
 
         new_token = oauth_session.refresh_token(app.config['PUBSAUTH_ACCESS_TOKEN_URL'], refresh_token=refresh_token)
