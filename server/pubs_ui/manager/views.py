@@ -3,15 +3,13 @@ Manager blueprint views
 """
 # pylint: disable=C0103,C0111
 
-from urllib.parse import urlencode
-
 from authlib.integrations.requests_client import OAuth2Session
 from requests import Request, Session
 
-from flask import Blueprint, render_template, request, redirect, url_for, session, Response
+from flask import Blueprint, render_template, request, Response
 
 from ..auth.views import authentication_required, get_auth_header, is_authenticated
-from .. import app, oauth
+from .. import app
 
 
 SERVICES_ENDPOINT = app.config['PUB_URL']
@@ -21,6 +19,7 @@ VERIFY_CERT = app.config['VERIFY_CERT']
 manager = Blueprint('manager', __name__,
                     template_folder='templates',
                     static_folder='static')
+
 
 @manager.route('/')
 @authentication_required
@@ -48,13 +47,13 @@ def services_proxy(op1, op2=None, op3=None, op4=None):
     new_token = None
     if not is_authenticated():
         # Retrieve refresh token and ask for a new access token.
-        oauthSession = OAuth2Session(client_id=app.config['PUBSAUTH_CLIENT_ID'],
+        oauth_session = OAuth2Session(client_id=app.config['PUBSAUTH_CLIENT_ID'],
                                      client_secret=app.config['PUBSAUTH_CLIENT_SECRET'],
                                      authorization_endpoint=app.config['PUBSAUTH_AUTHORIZE_URL'],
-                                     token_endpoint=app.config['PUBSAUTH_ACCESS_TOKEN_URL']);
+                                     token_endpoint=app.config['PUBSAUTH_ACCESS_TOKEN_URL'])
         refresh_token = request.cookies.get('refresh_token')
 
-        new_token = oauthSession.refresh_token(app.config['PUBSAUTH_ACCESS_TOKEN_URL'], refresh_token=refresh_token)
+        new_token = oauth_session.refresh_token(app.config['PUBSAUTH_ACCESS_TOKEN_URL'], refresh_token=refresh_token)
         headers['Authorization'] = 'Bearer {0}'.format(new_token.get('access_token'))
     else:
         headers = get_auth_header()
