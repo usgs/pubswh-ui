@@ -2,7 +2,7 @@ import AdvancedSearchForm from '../../../scripts/pubswh/advancedSearchForm';
 import SearchMap from '../../../scripts/pubswh/searchMap';
 
 
-describe('AdvancedSearchForm', function() {
+xdescribe('AdvancedSearchForm', function() {
     var $testDiv, $mapDiv;
     var fakeServer;
     var advancedSearchForm;
