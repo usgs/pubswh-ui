@@ -22,4 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -   Added support for sending logs to a Graylog server.
 -   Added USGS ci/cd configuration and Dockerfile-ci for building.
 
+### Fixed
+-   Tokens are refreshed are proxy service calls.
+
 [Unreleased]: https://github.com/NWQMC/WQP_UI/master

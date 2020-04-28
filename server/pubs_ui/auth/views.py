@@ -80,6 +80,7 @@ def authorize():
 
     response = redirect(request.args.get('next'))
     response.set_cookie('access_token', token.get('access_token'), secure=app.config['SECURE_COOKIES'])
+    response.set_cookie('refresh_token', token.get('refresh_token'), secure=app.config['SECURE_COOKIES'])
     session[TOKEN_EXPIRES_AT_KEY] = token.get('expires_at')
 
     return response
