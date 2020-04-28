@@ -31,7 +31,7 @@
     "hash-assets": "gulp --gulpfile ./gulpfile.js revall",
     "lint": "eslint scripts tests",
     "serve:static": "live-server --port=9000 --cors --no-browser dist",
-    "test": "karma start tests/js/pubswh/karma.conf.js && karma start tests/js/metrics/karma.conf.js && karma start tests/js/manager/karma.conf.js",
+    "test": "karma start tests/js/metrics/karma.conf.js && karma start tests/js/manager/karma.conf.js",
     "test:watch": "run-p test:watchitem:*",
     "test:watchitem:manager": "karma start tests/js/manager/karma.conf.js --debug --no-single-run --browsers Chrome",
     "test:watchitem:metrics": "karma start tests/js/metrics/karma.conf.js --debug --no-single-run --browsers Chrome",
