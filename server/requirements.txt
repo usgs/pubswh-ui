@@ -1,7 +1,7 @@
 arrow==0.15.5
 Authlib==0.14.1
 beautifulsoup4==4.9.0
-click==7.1.1
+click==7.1.2
 dcxml==0.1.1
 email-validator==1.0.5
 feedparser==5.2.1
