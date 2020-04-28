@@ -80,7 +80,7 @@
     "rollup-plugin-handlebars-plus": "^0.2.4",
     "rollup-plugin-istanbul": "^2.0.1",
     "rollup-plugin-uglify": "^6.0.3",
-    "sass": "^1.26.3",
+    "sass": "^1.26.5",
     "sinon": "^9.0.2",
     "stylelint": "^13.3.3",
     "stylelint-config-recommended-scss": "^4.2.0",
