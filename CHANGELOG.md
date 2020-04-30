@@ -24,5 +24,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 -   Tokens are refreshed are proxy service calls.
+-   publication view on pubswh now propertly returns a 404 page on non-existent publication
 
 [Unreleased]: https://github.com/NWQMC/WQP_UI/master
