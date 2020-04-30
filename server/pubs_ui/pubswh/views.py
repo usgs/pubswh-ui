@@ -243,22 +243,18 @@ def contact_confirmation():
     confirmation_message = 'Thank you for contacting the USGS Publications Warehouse support team.'
     return render_template('pubswh/contact_confirm.html', confirm_message=confirmation_message)
 
+def fetch_publication(index_id):
+    return get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
 
-def get_pubdata(index_id):
-    # pylint: disable=R0914
-    r = get(pub_url + 'publication/' + index_id, params={'mimetype': 'json'}, verify=verify_cert)
-    # a 406 pretty much always means that it is some sort of other weird malformed URL.
-    if r.status_code in [404, 406]:
-        return render_template('pubswh/404.html'), 404
-    pubreturn = r.json()
-    pub_doi = pubreturn.get('doi')
+def get_pubdata(pub_json):
+    pub_doi = pub_json.get('doi')
     pub_altmetric_badges, pub_altmetric_details = get_altmetric_badge_img_links(pub_doi, verify=verify_cert)
     small_badge = pub_altmetric_badges['small'] if pub_altmetric_badges is not None else None
     if 'mimetype' in request.args and request.args.get("mimetype") == 'sbjson':
-        sbdata = generate_sb_data(pubreturn, json_ld_id_base_url)
+        sbdata = generate_sb_data(pub_json, json_ld_id_base_url)
         return jsonify(sbdata)
-    pubdata = munge_pubdata_for_display(pubreturn, json_ld_id_base_url)
-    store_data = create_store_info(r)
+    pubdata = munge_pubdata_for_display(pub_json, json_ld_id_base_url)
+    store_data = create_store_info(pub_json)
     pubdata.update(store_data)
     altmetric_links = {'image': small_badge, 'details': pub_altmetric_details}
     pubdata['altmetric'] = altmetric_links
@@ -274,8 +270,10 @@ def get_pubdata(index_id):
 @pubswh.route('/publication/<index_id>')
 @cache.cached(timeout=600, key_prefix=make_cache_key, unless=is_authenticated)
 def publication(index_id):
-
-    pubdata = get_pubdata(index_id)
+    resp = fetch_publication(index_id)
+    if resp.status_code in [404, 406]:
+        return render_template('pubswh/404.html'), 404
+    pubdata = get_pubdata(resp.json())
     related_pubs = extract_related_pub_info(pubdata)
 
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
@@ -303,8 +301,11 @@ def xml_publication(index_id):
     # a 406 pretty much always means that it is some sort of other weird malformed URL.
     if r.status_code in [404, 406]:
         return render_template('pubswh/404.html'), 404
+    resp = fetch_publication(index_id)
+    if resp.status_code in [404, 406]:
+        return render_template('pubswh/404.html'), 404
+    pubdata = get_pubdata(resp.json())
 
-    pubdata = get_pubdata(index_id)
     related_pubs = extract_related_pub_info(pubdata)
 
     return render_template('pubswh/publication.html',

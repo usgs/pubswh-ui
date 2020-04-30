@@ -467,12 +467,12 @@ def update_geographic_extents(record):
             del record['geographicExtents']
 
 
-def create_store_info(publication_resp):
+def create_store_info(pub_json):
     """
     Create context that can be displayed in a Jinja
     Template for publications with USGS Store data.
 
-    :param requests.Response publication_resp: response object for a publication returned from a GET request on
+    :param dict pub_json: dict representing the response from the publication returned from a GET request on
                                                the /publication service.
     :returns: dict containing two items:
         'context_id': the index (prod) ID of the context pub. Included as
@@ -483,13 +483,11 @@ def create_store_info(publication_resp):
     product = None
     offers = None
 
-    if publication_resp.status_code == 200:
-        response_json = publication_resp.json()
-        index_id = response_json.get('indexId')
-        if 'stores' in list(response_json.keys()):
-            stores = response_json['stores']
-            if stores:
-                product = stores[0]
+    index_id = pub_json.get('indexId')
+    if 'stores' in list(pub_json.keys()):
+        stores = pub_json['stores']
+        if stores:
+            product = stores[0]
 
     # REMARKS ABOUT SERVICE RETURNED VALUE ASSUMPTIONS
     #
