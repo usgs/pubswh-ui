@@ -12,7 +12,8 @@ from .test_data import (
     crossref_200_ok, crossref_200_not_ok, crossref_200_ok_2_date_parts,
     crossref_200_ok_1_date_part, crossref_200_ok_message_empty, unpaywall_200_ok, landing_present,
     null_landing)
-from ..utils import (manipulate_doi_information, generate_sb_data, update_geographic_extents, create_store_info,
+from ..utils import (
+    manipulate_doi_information, generate_sb_data, update_geographic_extents, create_store_info,
     get_altmetric_badge_img_links, SearchPublications, get_crossref_data, check_public_access,
     get_published_online_date, get_unpaywall_data, has_oa_link)
 from ... import app
