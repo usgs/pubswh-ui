@@ -293,7 +293,7 @@ export default BaseView.extend({
         var callDelete = function() {
             self.model.destroy({
                 headers: {
-                    'Accept': 'application/json text/plain, */*'
+                    'Accept': 'application/json, text/plain, */*'
                 }
             })
                 .done(function() {
