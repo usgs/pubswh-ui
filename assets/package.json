@@ -84,7 +84,7 @@
     "sinon": "^9.0.2",
     "stylelint": "^13.3.3",
     "stylelint-config-recommended-scss": "^4.2.0",
-    "stylelint-scss": "^3.17.1"
+    "stylelint-scss": "^3.17.2"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.13.0",
