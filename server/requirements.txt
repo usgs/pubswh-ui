@@ -2,7 +2,7 @@ arrow==0.15.6
 Authlib==0.14.2
 beautifulsoup4==4.9.0
 click==7.1.2
-dcxml==0.1.1
+dcxml==0.1.2
 email-validator==1.1.0
 feedparser==5.2.1
 Flask==1.1.2
