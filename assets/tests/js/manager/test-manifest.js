@@ -24,6 +24,7 @@ import './views/LinksViewSpec';
 import './views/ManageAffiliationViewSpec';
 import './views/ManageContributorsViewSpec';
 import './views/ManagePublicationViewSpec';
+import './views/PullFromSIPPViewSpec';
 import './views/PublicationViewSpec';
 import './views/SearchFilterRowViewSpec';
 import './views/SPNViewSpec';
