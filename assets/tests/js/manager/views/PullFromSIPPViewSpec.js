@@ -2,7 +2,7 @@
 import PullFromSippView from '../../../../scripts/manager/views/PullFromSIPPView';
 import AlertView from '../../../../scripts/manager/views/AlertView';
 
-fdescribe('views/PullFromSippView', () => {
+describe('views/PullFromSippView', () => {
     let server, testView, testRouter, $testDiv, $btn, $ipNo, $loadingIndicator;
 
     beforeEach(function() {
