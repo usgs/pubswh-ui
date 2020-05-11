@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -   Added additional available search parameters to the manager app's search form.
 -   Added support for sending logs to a Graylog server.
 -   Added USGS ci/cd configuration and Dockerfile-ci for building.
+-   Added Pull From SIPP button on the manager application
 
 ### Fixed
 -   Tokens are refreshed are proxy service calls.
