@@ -119,3 +119,5 @@ with open(sample_html_relative_path) as f:
     SAMPLE_HTML_CONTENTS = f.read()
 
 STATIC_ROOT = os.environ.get('STATIC_ROOT', '/static/')
+
+MAIL_SERVER = os.environ.get('MAIL_SERVER', 'localhost');
