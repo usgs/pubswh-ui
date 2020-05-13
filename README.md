@@ -141,6 +141,7 @@ SCIENCEBASE_PARENT_UUID=<sciencebase foler id for publications warehouse>
 GA_KEY_FILE_PATH=< path to the location of the google analytices service account key>
 ALTIMETRIC_KEY=<altimetric key>
 ASSET_MANIFEST_PATH=<If using hashed assets, PATH_IN_CONTAINER/static/assets/rev-manifest.json
+MAIL_SERVER=<Will default to localhost>
 ```
 ```bash
 # Run in the foreground
