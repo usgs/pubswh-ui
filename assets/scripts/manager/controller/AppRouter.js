@@ -1,11 +1,13 @@
 import $ from 'jquery';
 import Backbone from 'backbone';
 
+import EditSeriesTitleView from '../views/EditSeriesTitleView';
 import ManagePublicationsView from '../views/ManagePublicationsView';
 import PublicationView from '../views/PublicationView';
+import PullFromSIPPView from '../views/PullFromSIPPView';
 import ManageContributorsView from '../views/ManageContributorsView';
-import EditSeriesTitleView from '../views/EditSeriesTitleView';
 import ManageAffiliationView from '../views/ManageAffiliationView';
+
 import PublicationModel from '../models/PublicationModel';
 import PublicationCollection from '../models/PublicationCollection';
 import ContributorModel from '../models/ContributorModel';
@@ -24,7 +26,8 @@ export default Backbone.Router.extend({
         'seriesTitle' : 'editSeriesTitleView',
         'seriesTitle/:seriesTitleId' : 'editSeriesTitleView',
         'affiliation' : 'manageAffiliationView',
-        'affiliation/:affiliationId' : 'manageAffiliationView'
+        'affiliation/:affiliationId' : 'manageAffiliationView',
+        'sipp' : 'pullFromSIPPView'
     },
 
     applicationContextDiv: '#main-content',
@@ -107,5 +110,9 @@ export default Backbone.Router.extend({
         this.createView(ManageAffiliationView, {
             model : model
         }).render();
+    },
+
+    pullFromSIPPView: function() {
+         this.createView(PullFromSIPPView, {}).render();
     }
 });

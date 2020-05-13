@@ -21,9 +21,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -   Added additional available search parameters to the manager app's search form.
 -   Added support for sending logs to a Graylog server.
 -   Added USGS ci/cd configuration and Dockerfile-ci for building.
+-   Added Pull From SIPP button on the manager application
 
 ### Fixed
 -   Tokens are refreshed are proxy service calls.
 -   publication view on pubswh now propertly returns a 404 page on non-existent publication
-
+-   Deletes in the manager now pass the accept headers correctly.
+-   Fixed the browse publications feature
 [Unreleased]: https://github.com/NWQMC/WQP_UI/master
