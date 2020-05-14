@@ -9,7 +9,6 @@ import ConfirmationDialogView from '../../../../scripts/manager/views/Confirmati
 import ContributorsView from '../../../../scripts/manager/views/ContributorsView';
 import GeospatialView from '../../../../scripts/manager/views/GeospatialView';
 import LinksView from '../../../../scripts/manager/views/LinksView';
-import LoginDialogView from '../../../../scripts/manager/views/LoginDialogView';
 import PublicationModel from '../../../../scripts/manager/models/PublicationModel';
 import PublicationView from '../../../../scripts/manager/views/PublicationView';
 import SPNView from '../../../../scripts/manager/views/SPNView';
@@ -21,7 +20,6 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;  // Set to 20 seconds. Seems to need a
 describe('PublicationView', function(){
     var testView;
 
-    var renderLoginDialogSpy;
     var renderDialogSpy;
     var renderBibliodataSpy;
     var renderLinksSpy;
@@ -48,7 +46,6 @@ describe('PublicationView', function(){
         spyOn(pubModel, 'destroy').and.returnValue(opDeferred.promise());
 
         renderDialogSpy = jasmine.createSpy('renderDialogSpy');
-        renderLoginDialogSpy = jasmine.createSpy('renderLoginDialogSpy');
         renderBibliodataSpy = jasmine.createSpy('renderBibliodataSpy');
         renderLinksSpy = jasmine.createSpy('renderLinksSpy');
         renderContributorsSpy = jasmine.createSpy('renderContributorsSpy');
@@ -65,12 +62,7 @@ describe('PublicationView', function(){
         spyOn(AlertView.prototype, 'remove');
         spyOn(AlertView.prototype, 'showDangerAlert');
         spyOn(AlertView.prototype, 'showSuccessAlert');
-        spyOn(LoginDialogView.prototype, 'setElement').and.returnValue({
-            render : renderLoginDialogSpy
-        });
-        spyOn(LoginDialogView.prototype, 'render').and.callFake(renderLoginDialogSpy);
-        spyOn(LoginDialogView.prototype, 'remove');
-        spyOn(LoginDialogView.prototype, 'show');
+
         spyOn(ConfirmationDialogView.prototype, 'setElement').and.returnValue({
             render : renderDialogSpy
         });
@@ -140,7 +132,7 @@ describe('PublicationView', function(){
     });
 
     describe('Tests for render', function() {
-        it('Expects the confirmationDialogView and loginDialogView to be rendered and the alertView to have it\'s element set', function() {
+        it('Expects the confirmationDialogView to be rendered and the alertView to have it\'s element set', function() {
             pubModel.set('id', 1234);
             testView = new PublicationView({
                 model : pubModel,
@@ -149,8 +141,6 @@ describe('PublicationView', function(){
 
             expect(AlertView.prototype.setElement.calls.count()).toBe(2);
             expect(AlertView.prototype.render).not.toHaveBeenCalled();
-            expect(LoginDialogView.prototype.setElement.calls.count()).toBe(2);
-            expect(renderLoginDialogSpy).toHaveBeenCalled();
             expect(ConfirmationDialogView.prototype.setElement.calls.count()).toBe(2);
             expect(renderDialogSpy).toHaveBeenCalled();
         });
@@ -246,7 +236,6 @@ describe('PublicationView', function(){
             });
             testView.remove();
             expect(AlertView.prototype.remove).toHaveBeenCalled();
-            expect(LoginDialogView.prototype.remove).toHaveBeenCalled();
             expect(ConfirmationDialogView.prototype.remove).toHaveBeenCalled();
             expect(BibliodataView.prototype.remove).toHaveBeenCalled();
             expect(LinksView.prototype.remove).toHaveBeenCalled();
@@ -322,13 +311,6 @@ describe('PublicationView', function(){
             opDeferred.reject('Error message');
             expect(AlertView.prototype.showDangerAlert).toHaveBeenCalled();
         });
-
-        it('Expects that if release fails with a status of 401, the loginDialogView is shown', function() {
-            testView.releasePub();
-            expect(LoginDialogView.prototype.show).not.toHaveBeenCalled();
-            opDeferred.reject({status : 401});
-            expect(LoginDialogView.prototype.show).toHaveBeenCalled();
-        });
     });
 
     describe('Tests for saving a pub', function() {
@@ -365,13 +347,6 @@ describe('PublicationView', function(){
             opDeferred.reject({}, 'error', 'Server error');
             expect(pubModel.has('validationErrors')).toBe(false);
             expect(AlertView.prototype.showDangerAlert).toHaveBeenCalled();
-        });
-
-        it('Expects that if the save fails with a 401 status, the loginDialog is shown', function() {
-            testView.savePub();
-            expect(LoginDialogView.prototype.show).not.toHaveBeenCalled();
-            opDeferred.reject({status : 401});
-            expect(LoginDialogView.prototype.show).toHaveBeenCalled();
         });
     });
 
@@ -430,12 +405,6 @@ describe('PublicationView', function(){
             it('Expects that if publish fails, the danger alert is shown', function() {
                 opDeferred.reject('Has error');
                 expect(AlertView.prototype.showDangerAlert).toHaveBeenCalled();
-            });
-
-            it('Expects a failed call with a status of 401 shows the login dialog', function() {
-                expect(LoginDialogView.prototype.show).not.toHaveBeenCalled();
-                opDeferred.reject({status : 401});
-                expect(LoginDialogView.prototype.show).toHaveBeenCalled();
             });
         });
     });
@@ -496,19 +465,6 @@ describe('PublicationView', function(){
             });
 
             expect(AlertView.prototype.showDangerAlert).toHaveBeenCalled();
-        });
-
-        it('Expects a failed delete with a status of 401 shows the login dialog', function() {
-            var actionCallback;
-            pubModel.set('id', 1234);
-            testView.deletePub();
-            actionCallback = ConfirmationDialogView.prototype.show.calls.argsFor(0)[1];
-            // This mocks what would happen if the confirmation dialog is confirmed.
-            actionCallback();
-
-            expect(LoginDialogView.prototype.show).not.toHaveBeenCalled();
-            opDeferred. reject({status : 401});
-            expect(LoginDialogView.prototype.show).toHaveBeenCalled();
         });
     });
 });

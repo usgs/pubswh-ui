@@ -110,7 +110,7 @@ PUB_URL=<url to pubs service>
 LOOKUP_URL=<ulr to pubs lookup service>
 BASE_SEARCH_URL=<url to publications search service>
 JSON_LD_ID_BASE_URL=<url to use when constructing JSON responses that have a 'url' attribute>
-PREVIEW_ENPOINT_URL=<url to publication that are not public>
+PREVIEW_ENDPOINT_URL=<url to publication that are not public>
 PUBSAUTH_CLIENT_ID=<pubs auth client id>
 PUBS_AUTH_CLIENT_SECRET=<pubs auth client secret (may be empty)>
 PUBSAUTH_ACCESS_TOKEN_URL=https://www.sciencebase.gov/auth/realms/PubsWH/protocol/openid-connect/token
@@ -141,6 +141,7 @@ SCIENCEBASE_PARENT_UUID=<sciencebase foler id for publications warehouse>
 GA_KEY_FILE_PATH=< path to the location of the google analytices service account key>
 ALTIMETRIC_KEY=<altimetric key>
 ASSET_MANIFEST_PATH=<If using hashed assets, PATH_IN_CONTAINER/static/assets/rev-manifest.json
+MAIL_SERVER=<Will default to localhost>
 ```
 ```bash
 # Run in the foreground

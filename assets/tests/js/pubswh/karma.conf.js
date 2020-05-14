@@ -23,6 +23,7 @@ module.exports = function(config) {
         files: [
             'node_modules/leaflet/dist/leaflet.js',
             'node_modules/esri-leaflet/dist/esri-leaflet.js',
+            'node_modules/leaflet-draw/dist/leaflet.draw.js',
             'tests/js/pubswh/resources/config.js',
             'scripts/pubswh/*.js',
             'tests/js/pubswh/*.js'
@@ -59,7 +60,7 @@ module.exports = function(config) {
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['dots'],
+        reporters: ['spec'],
 
         // web server port
         port: 9876,

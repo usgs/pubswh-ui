@@ -5,9 +5,11 @@ Manager blueprint views
 
 from requests import Request, Session
 
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, Response
 
-from ..auth.views import authentication_required, get_auth_header
+from authlib.integrations.requests_client import OAuth2Session
+
+from ..auth.views import authentication_required, get_auth_header, is_authenticated
 from .. import app
 
 
@@ -42,7 +44,20 @@ def services_proxy(op1, op2=None, op3=None, op4=None):
     if op4 is not None:
         url = url + '/' + op4
 
-    headers = get_auth_header()
+    headers = {}
+    new_token = None
+    if not is_authenticated():
+        # Retrieve refresh token and ask for a new access token.
+        oauth_session = OAuth2Session(client_id=app.config['PUBSAUTH_CLIENT_ID'],
+                                      client_secret=app.config['PUBSAUTH_CLIENT_SECRET'],
+                                      authorization_endpoint=app.config['PUBSAUTH_AUTHORIZE_URL'],
+                                      token_endpoint=app.config['PUBSAUTH_ACCESS_TOKEN_URL'])
+        refresh_token = request.cookies.get('refresh_token')
+
+        new_token = oauth_session.refresh_token(app.config['PUBSAUTH_ACCESS_TOKEN_URL'], refresh_token=refresh_token)
+        headers['Authorization'] = 'Bearer {0}'.format(new_token.get('access_token'))
+    else:
+        headers = get_auth_header()
     headers.update(request.headers)
 
     query_string = request.query_string.decode('utf-8')
@@ -53,12 +68,17 @@ def services_proxy(op1, op2=None, op3=None, op4=None):
                             url='%s?%s' %(url, query_string),
                             headers=headers,
                             data=request.data)
-    resp = Session().send(proxy_request.prepare(), verify=VERIFY_CERT)
+    proxy_resp = Session().send(proxy_request.prepare(), verify=VERIFY_CERT)
     # This fixed an an ERR_INVALID_CHUNKED_ENCODING when the app was run on the deployment server.
-    if 'transfer-encoding' in resp.headers:
-        del resp.headers['transfer-encoding']
+    if 'transfer-encoding' in proxy_resp.headers:
+        del proxy_resp.headers['transfer-encoding']
 
-    return (resp.text, resp.status_code, list(resp.headers.items()))
+    resp = Response(proxy_resp.text, proxy_resp.status_code, list(proxy_resp.headers.items()))
+    if new_token:
+        # Update the access_token cookie
+        resp.set_cookie('access_token', new_token.get('access_token'), secure=app.config['SECURE_COOKIES'])
+
+    return resp
 
 
 @manager.errorhandler(404)

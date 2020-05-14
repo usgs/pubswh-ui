@@ -1,33 +1,5 @@
-ARG node_image=node
-ARG node_image_tag=10.16-stretch
-ARG python_image=usgswma/python
-ARG python_image_tag=debian-slim-buster-python-3.7-4117b859d9051a96f5d9729198769d2205424c9
-
-# Build the static assets in the node.js container.
-FROM ${node_image}:${node_image_tag} as assets
-LABEL maintainer="gs-w_eto_eb_federal_employees@usgs.gov"
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    firefox-esr && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /assets
-
-COPY ./assets/package.json .
-COPY ./assets/package-lock.json .
-COPY ./assets/bower.json .
-ARG bower_args
-ARG npm_args
-
-RUN npm $npm_args install
-#RUN npm install
-RUN npx bower install $bower_args --allow-root
-#RUN npx bower install --allow-root
-
-COPY ./assets /assets
-
-RUN npm run build
-
+ARG python_image=python
+ARG python_image_tag=3.7-slim-buster
 
 # Base off the community Python image
 FROM ${python_image}:${python_image_tag}
@@ -36,7 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	build-essential && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-WORKDIR $HOME/application
+WORKDIR /application
 
 COPY ./server/requirements.txt .
 COPY ./server/requirements-dev.txt .
@@ -44,18 +16,10 @@ ARG pip_install_args
 RUN pip install $pip_install_args --no-cache-dir -r requirements.txt -r requirements-dev.txt
 
 # Add source files and pre-compile them
-COPY ./server/ $HOME/application
+COPY ./server/ /application
 
 RUN python -m compileall -f
 RUN python -m compileall -f .
-
-# Copy static files from the assets image to this one.
-COPY --from=assets /assets/dist $HOME/assets
-# Use environment variables for application configuration rather than an
-# instance/config.py module.
-ENV NO_INSTANCE_CONFIG=1
-ENV STATIC_ASSET_PATH=$HOME/assets
-ENV ASSET_MANIFEST_PATH=$HOME/assets/rev-manifest.json
 
 USER $USER
 

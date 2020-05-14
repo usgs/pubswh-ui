@@ -66,7 +66,8 @@ export default BaseView.extend({
         'click .add-to-lists-btn' : 'addSelectedPubsToCategory',
         'click .remove-from-list-btn' : 'removeSelectedPubsFromCategory',
         'change .pub-filter-list-div input[type="checkbox"]' : 'changePubsListFilter',
-        'click .manager-affiliation-btn' : 'goToAffiliationManagement'
+        'click .manager-affiliation-btn' : 'goToAffiliationManagement',
+        'click .manager-sipp-btn': 'goToSIPPPage'
     },
 
     template: hbTemplate,
@@ -410,6 +411,11 @@ export default BaseView.extend({
     goToAffiliationManagement : function(ev) {
         ev.preventDefault();
         this.router.navigate('affiliation', {trigger: true});
+    },
+
+    goToSIPPPage : function(ev) {
+        ev.preventDefault();
+        this.router.navigate('sipp', {trigger: true});
     },
 
     addSelectedPubsToCategory : function(ev) {

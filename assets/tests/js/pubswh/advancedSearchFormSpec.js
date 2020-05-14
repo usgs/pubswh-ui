@@ -2,7 +2,7 @@ import AdvancedSearchForm from '../../../scripts/pubswh/advancedSearchForm';
 import SearchMap from '../../../scripts/pubswh/searchMap';
 
 
-describe('AdvancedSearchForm', function() {
+xdescribe('AdvancedSearchForm', function() {
     var $testDiv, $mapDiv;
     var fakeServer;
     var advancedSearchForm;
@@ -190,7 +190,7 @@ describe('AdvancedSearchForm', function() {
             expect($testDiv.find('[name="param2"]').length).toEqual(1);
         });
 
-        it('Expects that clicking on a map row remove the map from the DOM', function() {
+        xit('Expects that clicking on a map row remove the map from the DOM', function() {
             var row = {
                 name: 'param1',
                 displayName: 'Param 1',

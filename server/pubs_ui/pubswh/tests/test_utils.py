@@ -10,11 +10,12 @@ import requests_mock
 
 from .test_data import (
     crossref_200_ok, crossref_200_not_ok, crossref_200_ok_2_date_parts,
-    crossref_200_ok_1_date_part, crossref_200_ok_message_empty, unpaywall_200_ok, landing_present, \
+    crossref_200_ok_1_date_part, crossref_200_ok_message_empty, unpaywall_200_ok, landing_present,
     null_landing)
-from ..utils import manipulate_doi_information, generate_sb_data, update_geographic_extents, create_store_info, \
-    get_altmetric_badge_img_links, SearchPublications, get_crossref_data, check_public_access, \
-    get_published_online_date, get_unpaywall_data, has_oa_link
+from ..utils import (
+    manipulate_doi_information, generate_sb_data, update_geographic_extents, create_store_info,
+    get_altmetric_badge_img_links, SearchPublications, get_crossref_data, check_public_access,
+    get_published_online_date, get_unpaywall_data, has_oa_link)
 from ... import app
 
 
@@ -242,56 +243,35 @@ class GenerateScienceBaseData(unittest.TestCase):
 
 class CreateStoreInfoTestCase(unittest.TestCase):
     # pylint: disable=C0103,R0201,C0301
-
-    def setUp(self):
-        self.resp_with_store = r.Response()
-        self.resp_with_store = MagicMock(status_code=200)
-        self.resp_with_store.json = MagicMock(return_value={'indexId': 'abc091',
-                                                            'stores': [{'publicationId': 7850,
-                                                                        'store': 'https://fake.store.gov',
-                                                                        'available': True,
-                                                                        'price': 18}]})
-        self.resp_pub_not_avail = r.Response()
-        self.resp_pub_not_avail = MagicMock(status_code=200)
-        self.resp_pub_not_avail.json = MagicMock(return_value={'indexId': 'efg845',
-                                                               'stores': [{'publicationId': 6980,
-                                                                           'store': 'https://fake.store.gov',
-                                                                           'available': False,
-                                                                           'price': 17}]})
-        self.resp_without_store = r.Response()
-        self.resp_without_store = MagicMock(status_code=200)
-        self.resp_without_store.json = MagicMock(return_value={'indexId': 'xyz735',
-                                                               'stores': []})
-        self.resp_no_store = r.Response()
-        self.resp_no_store = MagicMock(status_code=200)
-        self.resp_no_store.json = MagicMock(return_value={'indexId': 'mno426'})
-        self.bad_resp = r.Response()
-        self.bad_resp = MagicMock(status_code=404)
-
     def test_store_data_is_created_if_present(self):
-        result = create_store_info(self.resp_with_store)
+        result = create_store_info({'indexId': 'abc091',
+                                    'stores': [{'publicationId': 7850,
+                                                'store': 'https://fake.store.gov',
+                                                'available': True,
+                                                'price': 18}]})
         expected = {'offers': {'@context': {'schema': 'http://schema.org/'}, '@type': 'schema:ScholarlyArticle', 'schema:offers': {'schema:seller': {'schema:name': 'USGS Store', '@type': 'schema:Organization', 'schema:url': 'http://store.usgs.gov'}, 'schema:url': 'https://fake.store.gov', 'schema:price': 18, 'schema:availability': 'schema:InStock', 'schema:priceCurrency': 'USD', '@type': 'schema:Offer'}}, 'context_item': 'abc091'}
         self.assertEqual(result, expected)
 
     def test_store_data_is_listed_as_out_of_stock(self):
-        result = create_store_info(self.resp_pub_not_avail)
+        result = create_store_info({'indexId': 'efg845',
+                                    'stores': [{'publicationId': 6980,
+                                                'store': 'https://fake.store.gov',
+                                                'available': False,
+                                                'price': 17}]})
         expected = {'offers': {'@context': {'schema': 'http://schema.org/'}, '@type': 'schema:ScholarlyArticle', 'schema:offers': {'schema:seller': {'schema:name': 'USGS Store', '@type': 'schema:Organization', 'schema:url': 'http://store.usgs.gov'}, 'schema:url': 'https://fake.store.gov', 'schema:price': 17, 'schema:availability': 'schema:OutOfStock', 'schema:priceCurrency': 'USD', '@type': 'schema:Offer'}}, 'context_item': 'efg845'}
         self.assertEqual(result, expected)
 
     def test_store_data_is_created_if_not_present(self):
-        result = create_store_info(self.resp_without_store)
+        result = create_store_info({'indexId': 'xyz735',
+                                    'stores': []})
         expected = {'context_item': 'xyz735', 'offers': None}
         self.assertEqual(result, expected)
 
     def test_store_data_is_created_if_no_store(self):
-        result = create_store_info(self.resp_no_store)
+        result = create_store_info({'indexId': 'mno426'})
         expected = {'context_item': 'mno426', 'offers': None}
         self.assertEqual(result, expected)
 
-    def test_store_data_with_bad_response(self):
-        result = create_store_info(self.bad_resp)
-        expected = {'context_item': None, 'offers': None}
-        self.assertEqual(result, expected)
 
 
 class GetAltmetricBadgeImgLinksTestCase(unittest.TestCase):

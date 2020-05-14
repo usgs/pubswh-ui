@@ -51,7 +51,7 @@ except IOError:
 
 
 def make_cache_key_from_request_data():
-    return request.data
+    return request.data.decode()
 
 
 @metrics.route('/publications/acquisitions/')

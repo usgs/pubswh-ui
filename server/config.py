@@ -33,7 +33,7 @@ JSON_LD_ID_BASE_URL = os.environ.get('JSON_LD_ID_BASE_URL', '')
 # pubs services endpoint for publications currently in the manager app
 PREVIEW_ENDPOINT_URL = os.environ.get('PREVIEW_ENDPOINT_URL')
 
-RECAPTCHA_PUBLIC_KEY = '6LfisP0SAAAAAKcg5-a5bEeV4slFfQZr5_7XfqXf'  # using google's recaptcha API
+RECAPTCHA_PUBLIC_KEY = '6LfUcPMUAAAAAKoPAT33zUZYN6rrVoaFqJJOVM7b'  # using google's recaptcha API
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY')
 
 WSGI_STR = os.environ.get('WSGI_STR', '')  # string that should be appended to routes on OWI virtual machines
@@ -119,3 +119,5 @@ with open(sample_html_relative_path) as f:
     SAMPLE_HTML_CONTENTS = f.read()
 
 STATIC_ROOT = os.environ.get('STATIC_ROOT', '/static/')
+
+MAIL_SERVER = os.environ.get('MAIL_SERVER', 'localhost')
