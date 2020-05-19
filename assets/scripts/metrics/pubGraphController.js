@@ -99,7 +99,7 @@ const createYearDisplays = function(data) {
         columnLabel: 'Visitors per month',
         dateFormat: MONTH_FORMAT
     });
-    createTable($yearUsersTable, downloadsData, {
+    createTable($yearUsersTable, visitorsData, {
         columnLabel: 'Unique visitors per month',
         dateFormat: MONTH_FORMAT
     });
