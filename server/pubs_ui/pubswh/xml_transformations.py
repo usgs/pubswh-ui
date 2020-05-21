@@ -6,7 +6,7 @@ Tools for transforming xml pubs
 from bs4 import BeautifulSoup
 
 
-def transform_xml_full(html):
+def transform_xml_full(html, images_path):
     """
     transform xml full documents to use usgs publications styling
     :return: newly styled html
@@ -23,7 +23,7 @@ def transform_xml_full(html):
     ref_list.extract()
 
     for fig in body.findAll('div', 'fig panel'):
-        get_figure(soup, fig)
+        get_figure(soup, fig, images_path)
 
     for formula in body.findAll('div', 'disp-formula'):
         formula.img.extract()
@@ -76,7 +76,7 @@ def get_citation_table(soup, references):
     return citation_table
 
 
-def get_figure(soup, fig):
+def get_figure(soup, fig, images_path):
     """
     Creates and inserts a new figure element, and removes the old fig panel div
     :param soup: a BeautifulSoup transformation object
@@ -86,24 +86,28 @@ def get_figure(soup, fig):
 
     figure.append(soup.new_tag('a'))
     figure.a['id'] = fig.find('a')['id']
+    (fig.find('a')['id'])
 
     figure.append(soup.new_tag('h5'))
     figure.h5.append(fig.find('h5').text)
 
     figure.append(soup.new_tag('img'))
-    figure.img['src'] = fig.find('img')['src']
-
+    #figure.img['src'] = fig.find('img')['src']
+    figure.img['src'] = images_path+fig.find('a')['id']+".png"
     figure.append(soup.new_tag('figcaption'))
-    figure.figcaption.append(fig.find('b'))
+    #figure.figcaption.append(fig.find('b'))
 
     p_first = fig.find('p', {'class': 'first'})
     figure.figcaption.append(" " + p_first.text)
     figure.figcaption['id'] = p_first['id']
     p_first.extract()
 
-    p = fig.find('p')
-    figure.img['alt'] = p.text
-    figure.img['id'] = p['id']
+    if fig.find('div', {'class': 'long-desc'}) is not None:
+        p = fig.find('div', {'class': 'long-desc'})
+        figure.img['alt'] = p.text
+
+    fig_id = fig.find('a')['id']
+    figure.img['id'] = fig_id
 
     fig.insert_after(figure)
     fig.extract()
