@@ -4,7 +4,7 @@
  */
 
 const buble = require('@rollup/plugin-buble');
-const commonjs = require('rollup-plugin-commonjs');
+const commonjs = require('@rollup/plugin-commonjs');
 const handlebars = require('rollup-plugin-handlebars-plus');
 const inject = require('@rollup/plugin-inject');
 const json = require('@rollup/plugin-json');
@@ -23,7 +23,7 @@ module.exports = function (env) {
                 moment: 'moment'
             }
         }),
-        resolve({
+        resolve.nodeResolve({
             // use "module" field for ES6 module if possible
             mainFields: [
                 // use "module" field for ES6 module if possible

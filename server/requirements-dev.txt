@@ -2,4 +2,4 @@ bumpversion
 coverage
 coveralls
 pylint==2.5.2
-SaltPyLint==2019.11.14
+SaltPyLint==2020.5.22
