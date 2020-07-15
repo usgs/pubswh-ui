@@ -16,18 +16,14 @@
 #     A token used to authenticate with SAS Artifactory for uploading the
 #     asset artifact.
 #
-#   CI_REGISTRY
+#   DOCKER_REGISTRY
 #     Address to the Docker image registry.
-#     This is a built-in Docker variable that, by default, points to the internal
-#     Docker Image registry.
 #
-#   CI_REGISTRY_USER
+#   DOCKER_REGISTRY_USER
 #     The username for authenticating with the Docker image registry.
-#     Defaults to "gitlab-ci-token"
 #
-#   CI_REGISTRY_PASS
-#     The password. for authenticating with the Docker image registry.
-#     Defaults to "$CI_JOB_TOKEN"
+#   DOCKER_REGISTRY_PASS
+#     The password for authenticating with the Docker image registry.
 #     This is restricted to protected branches and tags!
 #
 #   DEPLOY_TRIGGER_TOKEN
@@ -46,7 +42,7 @@ stages:
 variables:
   # The full name of the Docker image to produce, including the registry address.
   # In most cases, this should be left alone.
-  IMAGE_NAME: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}
+  IMAGE_NAME: ${DOCKER_REGISTRY}/pubs-docker/pubswh-ui
   IMAGE_TAG: ${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}
   # The asset files are packaged and uploaded to Artifactory for deployment.
   # This sets the filename to use for the artifact.
@@ -56,7 +52,7 @@ variables:
 # == Docker Build
 #
 Build Docker Image:
-  image: code.chs.usgs.gov:5001/sas/ops/docker/base-images/docker:19-latest
+  image: docker:19
   stage: Build
   services:
     - docker:dind
@@ -64,15 +60,15 @@ Build Docker Image:
     - docker
   only:
     variables:
-      # We must run on a protected branch to access the CI_REGISTRY_PASS variable.
+      # We must run on a protected branch to access the DOCKER_REGISTRY_PASS variable.
       - $CI_COMMIT_REF_PROTECTED == "true"
   before_script:
-    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASS} ${CI_REGISTRY}
+    - docker login -u ${DOCKER_REGISTRY_USER} -p ${DOCKER_REGISTRY_PASS} ${DOCKER_REGISTRY}
   script:
     - docker build
       --pull
       -t ${IMAGE_NAME}:${IMAGE_TAG}
-      --build-arg python_image=${SAS_IMAGES_URL}/python
+      --build-arg python_image=${SAS_IMAGES_URL}/base-images/python
       --build-arg python_image_tag=3.7-slim-buster
       -f Dockerfile-ci .
     - docker push ${IMAGE_NAME}:${IMAGE_TAG}
@@ -81,7 +77,7 @@ Build Docker Image:
 # == Build Static Assets
 #
 Build Assets:
-  image: ${SAS_IMAGES_URL}/node:12.16
+  image: ${SAS_IMAGES_URL}/base-images/node:12.16
   stage: Build
   tags:
     - docker
@@ -102,7 +98,7 @@ Build Assets:
 #
 # NOTE: This uses an ARTIFACTORY_TOKEN, which is specified as a global ci
 Package Assets:
-  image: ${SAS_IMAGE_DEPLOY_TOOL}
+  image: ${SAS_IMAGES_URL}/base-images/sas-deploy-tool:latest
   stage: Package Assets
   dependencies:
     - Build Assets
@@ -133,7 +129,7 @@ Package Assets:
 #   - https://docs.gitlab.com/ee/ci/triggers/README.html
 #
 .deploy_trigger:
-  image: ${SAS_IMAGES_URL}/curl:master-latest
+  image: ${SAS_IMAGES_URL}/base-images/curl:latest
   stage: Trigger Deployment
   tags:
     - docker
