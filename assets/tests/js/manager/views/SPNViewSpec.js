@@ -153,9 +153,9 @@ describe('SPNView', function() {
                 el : '#test-div',
                 model : testModel
             });
-            testView.render();
             testView.serviceCenterCollection.set([{id : 1, text : 'Text1'}, {id : 2, text : 'Text2'}]);
             serviceCenterFetchDeferred.resolve();
+            testView.render();
         });
 
         it('Expects the published date input to reflect changes in the publishedDate model property', function() {
