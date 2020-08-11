@@ -108,7 +108,7 @@
     "select2": "4.0.13",
     "select2-bootstrap-theme": "0.1.0-beta.10",
     "systemjs": "0.21.6",
-    "tinymce": "4.9.10",
+    "tinymce": "4.9.11",
     "wdfn-viz": "1.7.0",
     "wellknown": "0.5.0"
   },
