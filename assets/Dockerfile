@@ -1,4 +1,4 @@
-FROM node:12.16-stretch
+FROM node:12.18-stretch
 LABEL maintainer="gs-w_eto_eb_federal_employees@usgs.gov"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \

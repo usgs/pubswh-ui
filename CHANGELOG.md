@@ -28,4 +28,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -   publication view on pubswh now propertly returns a 404 page on non-existent publication
 -   Deletes in the manager now pass the accept headers correctly.
 -   Fixed the browse publications feature
+
 [Unreleased]: https://github.com/NWQMC/WQP_UI/master
