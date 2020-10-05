@@ -1,6 +1,6 @@
 arrow==0.15.7
 Authlib==0.14.3
-beautifulsoup4==4.9.1
+beautifulsoup4==4.9.3
 click==7.1.2
 dcxml==0.1.2
 email-validator==1.1.1
