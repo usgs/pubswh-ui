@@ -103,9 +103,7 @@
 
                         {% if pubdata['seriesTitle'] %}
                             <div class="series-title">{{ pubdata['seriesTitle']['text'] }}
-                                {{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-
-                                    {{ pubdata['chapter'] }}{% endif %}{% if pubdata['subChapter'] %}-
-                                    {{ pubdata['subChapter'] }}{% endif %}</div>
+                                {{ pubdata['seriesNumber'] }}{% if pubdata['chapter'] %}-{{ pubdata['chapter'] }}{% endif %}{% if pubdata['subChapter'] %}-{{ pubdata['subChapter'] }}{% endif %}</div>
                         {% endif %}
 
                         {% if pubdata['subSeriesTitle'] %}
@@ -355,7 +353,8 @@
                                 <strong>USGS Store</strong></a>
                         </li>
                     {% endif %}
-                    {% if pubdata['openAccessHostType'] %}
+                    {% if pubdata['openAccessHostType'] and pubdata['publicationSubtype']['text'] != 'USGS Numbered Series' and pubdata['publicationSubtype']['text'] != 'USGS Unnumbered Series' %}
+                        
                         <li>Open Access Version:  
                             {% if pubdata['openAccessHostType']=="publisher" %}
                                 <a href="{{ pubdata['openAccessLink'] }}">Publisher Index Page <i class="ai ai-open-access"></i></a>
