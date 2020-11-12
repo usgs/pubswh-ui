@@ -233,7 +233,7 @@
 
                 {%- macro linkdisplaylists(link_type, link_type_text_single, link_type_text_multiple) -%}
                     {% if pubdata['displayLinks'][link_type]|length == 1 %}
-                        <li>{{ link_type_text_single }}: {{ linkdisplay(pubdata['displayLinks'][link_type][0]) }}</li>
+                        <li style="max-width: 100%;">{{ link_type_text_single }}: {{ linkdisplay(pubdata['displayLinks'][link_type][0]) }}</li>
                     {%- elif pubdata['displayLinks'][link_type]|length > 1 -%}
                         <li>{{ link_type_text_multiple }}:
                             <ul class="filessublist">
