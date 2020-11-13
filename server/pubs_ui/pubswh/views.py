@@ -287,6 +287,10 @@ def publication(index_id):
         return Response(content, mimetype="application/x-research-info-systems",
                         headers={"Content-Disposition": "attachment;filename=USGS_PW_" + pubdata['indexId'] + ".ris"})
 
+    # Sort first by alphabet.Then sort by length of chapter string
+    pubdata['interactions'] = sorted(pubdata['interactions'], key=lambda chapter: (chapter["subject"]["chapter"], chapter))
+    pubdata['interactions'] = sorted(pubdata['interactions'], key=lambda chapterlen: (-len(chapterlen["subject"]["chapter"]), len(chapterlen["subject"]["chapter"])), reverse=True)
+
     return render_template('pubswh/publication.html',
                            indexID=index_id,
                            pubdata=pubdata,
