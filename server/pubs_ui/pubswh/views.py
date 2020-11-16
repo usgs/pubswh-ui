@@ -27,7 +27,7 @@ from .utils import (pull_feed, create_display_links,
                     munge_pubdata_for_display, extract_related_pub_info,
                     update_geographic_extents, generate_sb_data, create_store_info,
                     get_altmetric_badge_img_links, generate_dublin_core, get_crossref_data, get_published_online_date,
-                    check_public_access, get_unpaywall_data)
+                    check_public_access, get_unpaywall_data, make_chapter_data_for_display)
 from .xml_transformations import transform_xml_full
 
 pubswh = Blueprint('pubswh', __name__,
@@ -276,6 +276,8 @@ def publication(index_id):
     pubdata = get_pubdata(resp.json())
     related_pubs = extract_related_pub_info(pubdata)
 
+    pubdata = make_chapter_data_for_display(pubdata)
+
     if 'mimetype' in request.args and request.args.get("mimetype") == 'json':
         return jsonify(pubdata)
     if 'mimetype' in request.args and request.args.get("mimetype") == 'dublincore':
@@ -286,11 +288,7 @@ def publication(index_id):
         content = render_template('pubswh/ris_single.ris', result=pubdata)
         return Response(content, mimetype="application/x-research-info-systems",
                         headers={"Content-Disposition": "attachment;filename=USGS_PW_" + pubdata['indexId'] + ".ris"})
-
-    # Sort first by alphabet.Then sort by length of chapter string
-    pubdata['interactions'] = sorted(pubdata['interactions'], key=lambda chapter: (chapter["subject"]["chapter"], chapter))
-    pubdata['interactions'] = sorted(pubdata['interactions'], key=lambda chapterlen: (-len(chapterlen["subject"]["chapter"]), len(chapterlen["subject"]["chapter"])), reverse=True)
-
+    
     return render_template('pubswh/publication.html',
                            indexID=index_id,
                            pubdata=pubdata,
