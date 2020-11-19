@@ -296,7 +296,6 @@ def publication(index_id):
 # leads to rendered html for an xml publication
 @pubswh.route('/publication/<index_id>/full')
 def xml_publication(index_id):
-    images_path = "https://pubs.usgs.gov/sir/2019/5125/images/"+index_id+"_"
     r = get(app.config['BASE_SEARCH_URL'] + '/full/' + index_id, params={'mimeType': 'html'}, verify=verify_cert)
     # a 406 pretty much always means that it is some sort of other weird malformed URL.
     if r.status_code in [404, 406]:
@@ -305,6 +304,7 @@ def xml_publication(index_id):
     if resp.status_code in [404, 406]:
         return render_template('pubswh/404.html'), 404
     pubdata = get_pubdata(resp.json())
+    images_path = f"{pubdata.get('displayLinks').get('Image Folder')[0].get('url')}{index_id}_"
 
     related_pubs = extract_related_pub_info(pubdata)
 
