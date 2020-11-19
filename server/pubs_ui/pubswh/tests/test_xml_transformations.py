@@ -21,7 +21,7 @@ class TransformXMLFullTestCase(unittest.TestCase):
         expected_string = str(soup.find('body'))
         expected_no_whitespace = "".join(expected_string.split())
 
-        actual_string = str(transform_xml_full(app.config['SAMPLE_HTML_CONTENTS']), 'https://pubs.usgs.gov/xml_test/Images/sac19-4232_')
+        actual_string = str(transform_xml_full(app.config['SAMPLE_HTML_CONTENTS']), images_path='https://pubs.usgs.gov/xml_test/Images/sac19-4232_')
         actual_no_whitespace = "".join(actual_string.split())
 
         self.assertEqual(actual_no_whitespace, expected_no_whitespace)
