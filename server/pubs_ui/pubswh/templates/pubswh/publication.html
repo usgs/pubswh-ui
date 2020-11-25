@@ -233,7 +233,7 @@
 
                 {%- macro linkdisplaylists(link_type, link_type_text_single, link_type_text_multiple) -%}
                     {% if pubdata['displayLinks'][link_type]|length == 1 %}
-                        <li>{{ link_type_text_single }}: {{ linkdisplay(pubdata['displayLinks'][link_type][0]) }}</li>
+                        <li style="max-width: 100%;">{{ link_type_text_single }}: {{ linkdisplay(pubdata['displayLinks'][link_type][0]) }}</li>
                     {%- elif pubdata['displayLinks'][link_type]|length > 1 -%}
                         <li>{{ link_type_text_multiple }}:
                             <ul class="filessublist">
@@ -290,8 +290,8 @@
                         {% for interaction in pubdata['interactions'] %}
                             {% if interaction['predicate'] == "IS_PART_OF" and interaction['subject']['indexId'] != pubdata['indexId'] %}
 
-                                <ul>
-                                    <li itemprop="hasPart" itemscope itemtype="http://schema.org/ScholarlyArticle"
+                                <ul >
+                                    <li itemprop="hasPart" itemscope itemtype="http://schema.org/ScholarlyArticle" style="max-width: 100%;"
                                         itemid="{{ JSON_LD_ID_BASE_URL }}/publication/{{ interaction['subject']['indexId'] }}">
                                         {% if interaction['subject']['chapter'] %}Chapter
                                             {{ interaction['subject']['chapter'] }}
@@ -336,6 +336,10 @@
                     {{- linkdisplaylists('Referenced Work','Referenced Work','Referenced Work') -}}
                     {{- linkdisplaylists('Spatial Data','Spatial Data','Spatial Data') -}}
                     {{- linkdisplaylists('Version History','Version History','Version History') -}}
+                    {{- linkdisplaylists('NGMDB Index Page','National Geological Map Database Index Page','National Geological Map Database Index Pages') -}}
+                    {{- linkdisplaylists('USGS Store','USGS Store Page','USGS Store Pages') -}}
+                    {{- linkdisplaylists('Software Release','Software Release','Software Releases') -}}
+
                     {% if related_pubs %}
                         {{- related_links() -}}
                     {% endif %}
