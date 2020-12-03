@@ -425,7 +425,6 @@
             {% endif %}
 
             <section id="details">
-                <h4>Additional publication details</h4>
                 <table class="usa-table usa-table--borderless">
                     <tbody>
                     {% for detail in pubdata['details'] %}
@@ -439,7 +438,7 @@
                         <td><a href="{{ url_for('metrics.publication', pubsid=indexID) }}">Metrics page</a></td>
                     </tr>
                     </tbody>
-                    <caption>Additional metadata about this publication, not found in other parts of the page is in this table</caption>
+                    <caption>Additional publication details</caption>
                 </table>
             </section>
             {% if pubdata['displayLinks']['Document'] or pubdata['displayLinks']['Plate'] or pubdata['displayLinks']['Sheet'] %}
