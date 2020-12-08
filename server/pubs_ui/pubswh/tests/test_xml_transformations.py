@@ -8,23 +8,7 @@ from ..xml_transformations import transform_xml_full, get_citation_table, get_fi
 from ... import app
 
 
-class TransformXMLFullTestCase(unittest.TestCase):
-    """
-    Tests for transform_xml_full
-    """
-    def test_does_the_transform_produce_html_publication_with_usgs_styling(self):
-        """Given some html, is usgs styled html generated?"""
-        with open("pubs_ui/pubswh/tests/data/transformed_output.html") as sample_output:
-            transformed_html = sample_output.read()
 
-        soup = BeautifulSoup(transformed_html, 'lxml')
-        expected_string = str(soup.find('body'))
-        expected_no_whitespace = "".join(expected_string.split())
-
-        actual_string = str(transform_xml_full(app.config['SAMPLE_HTML_CONTENTS'], images_path='https://pubs.usgs.gov/xml_test/Images/sac19-4232_'))
-        actual_no_whitespace = "".join(actual_string.split())
-
-        self.assertEqual(actual_no_whitespace, expected_no_whitespace)
 
 
 class GetCitationTableTestCase(unittest.TestCase):
