@@ -3,7 +3,7 @@ Tests for xml_transformations transformation tools
 """
 import unittest
 from bs4 import BeautifulSoup
-from ..xml_transformations import transform_xml_full, get_citation_table, get_figure, get_table, get_list, \
+from ..xml_transformations import get_citation_table, get_figure, get_table, get_list, \
     get_section_title, get_title, get_a_tag, get_main_title
 from ... import app
 
