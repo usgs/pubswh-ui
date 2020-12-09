@@ -3,28 +3,12 @@ Tests for xml_transformations transformation tools
 """
 import unittest
 from bs4 import BeautifulSoup
-from ..xml_transformations import transform_xml_full, get_citation_table, get_figure, get_table, get_list, \
+from ..xml_transformations import get_citation_table, get_figure, get_table, get_list, \
     get_section_title, get_title, get_a_tag, get_main_title
 from ... import app
 
 
-class TransformXMLFullTestCase(unittest.TestCase):
-    """
-    Tests for transform_xml_full
-    """
-    def test_does_the_transform_produce_html_publication_with_usgs_styling(self):
-        """Given some html, is usgs styled html generated?"""
-        with open("pubs_ui/pubswh/tests/data/transformed_output.html") as sample_output:
-            transformed_html = sample_output.read()
 
-        soup = BeautifulSoup(transformed_html, 'lxml')
-        expected_string = str(soup.find('body'))
-        expected_no_whitespace = "".join(expected_string.split())
-
-        actual_string = str(transform_xml_full(app.config['SAMPLE_HTML_CONTENTS']))
-        actual_no_whitespace = "".join(actual_string.split())
-
-        self.assertEqual(actual_no_whitespace, expected_no_whitespace)
 
 
 class GetCitationTableTestCase(unittest.TestCase):
