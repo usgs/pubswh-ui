@@ -91,6 +91,7 @@ def get_figure(soup, fig, images_path):
     figure.append(soup.new_tag('h5'))
     figure.h5.append(fig.find('h5').text)
 
+    # TODO clean up figure management to handle the several different ways that figures come through the system
     figure.append(soup.new_tag('img'))
     #figure.img['src'] = fig.find('img')['src']
     figure.img['src'] = images_path+fig.find('a')['id']+".png"
