@@ -176,7 +176,10 @@ def create_display_links(pubdata):
         'Related Work': [],
         'Spatial Data': [],
         'Thumbnail': [],
-        'Version History': []
+        'Version History': [],
+        'NGMDB Index Page':[],
+        'USGS Store Link':[],
+        'Software Release':[]
     }
     links = deepcopy(pubdata.get("links"))
     # sort links into the different link types
@@ -188,6 +191,8 @@ def create_display_links(pubdata):
     # smash index page and plate links around
     display_links = manipulate_plate_links(display_links)
     display_links = manipulate_index_page_links(display_links)
+    display_links = manipulate_NGMDB_links(display_links)
+    display_links = manipulate_USGS_Store_links(display_links)
     # shove a rank onto everything that doesn't have one
     for key, value in display_links.items():
         rank_counter = 1
@@ -205,6 +210,29 @@ def create_display_links(pubdata):
     pubdata['pubHasNoLinks'] = pub_has_no_links
     return pubdata
 
+def manipulate_NGMDB_links(display_links):
+    """
+    This function rejiggers display text for NGMDB page links
+    :param display_links:
+    :return:
+    """
+    if display_links.get('NGMDB Index Page'):
+        for link in display_links["NGMDB Index Page"]:
+            if link.get("text") is None:
+                link["text"] = "National Geological Map Database Index Page"
+    return display_links
+
+def manipulate_USGS_Store_links(display_links):
+    """
+    This function rejiggers display text for USGS_Store page links
+    :param display_links:
+    :return:
+    """
+    if display_links.get('USGS Store Link'):
+        for link in display_links["USGS Store Link"]:
+            if link.get("text") is None:
+                link["text"] = "USGS Store Page"
+    return display_links
 
 def manipulate_index_page_links(display_links):
     """
