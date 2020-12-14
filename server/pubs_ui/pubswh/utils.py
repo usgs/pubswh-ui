@@ -180,6 +180,8 @@ def create_display_links(pubdata):
         'NGMDB Index Page':[],
         'USGS Store Link':[],
         'Software Release':[]
+        'Image Folder': []
+
     }
     links = deepcopy(pubdata.get("links"))
     # sort links into the different link types

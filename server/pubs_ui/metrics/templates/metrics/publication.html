@@ -12,9 +12,9 @@
 {% endblock %}
 
 {% block metrics_main %}
-    <h1>Google Analytics Dashboard for Pubs Warehouse</h1>
+    <h1>Google Analytics Dashboard for {{ publication.title }}</h1>
     <h2>{{ publication.title }}</h2>
-    <h3>uri: <a href="{{ url_for('pubswh.publication', index_id=pubsid) }}">{{ url_for('pubswh.publication', index_id=pubsid) }}</a></h3>
+    <h3>URI: <a href="{{ url_for('pubswh.publication', index_id=pubsid) }}">https://pubs.er.usgs.gov{{ url_for('pubswh.publication', index_id=pubsid) }}</a></h3>
     <fieldset class="chart-display-select-div">
         <legend>Display as:&nbsp;</legend>
         <div class="usa-radio">
