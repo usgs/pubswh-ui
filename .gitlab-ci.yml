@@ -84,7 +84,6 @@ Build Assets:
   script:
     - cd assets
     - npm install
-    - npx bower install --allow-root
     - npm run build
   artifacts:
     paths:
