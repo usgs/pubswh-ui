@@ -235,10 +235,10 @@
                     {% if pubdata['displayLinks'][link_type]|length == 1 %}
                         <li style="max-width: 100%;">{{ link_type_text_single }}: {{ linkdisplay(pubdata['displayLinks'][link_type][0]) }}</li>
                     {%- elif pubdata['displayLinks'][link_type]|length > 1 -%}
-                        <li>{{ link_type_text_multiple }}:
+                        <li style="max-width: 100%;">{{ link_type_text_multiple }}:
                             <ul class="filessublist">
                                 {%- for link in pubdata['displayLinks'][link_type]|sort(attribute='rank') -%}
-                                    <li>{{ linkdisplay(link) }}</li>
+                                    <li style="max-width: 100%;">{{ linkdisplay(link) }}</li>
                                 {%- endfor -%}
                             </ul>
                         </li>
@@ -434,7 +434,7 @@
                         </tr>
                     {% endfor %}
                     <tr>
-                        <th scope="row">Google Analytics Metrics</th>
+                        <th scope="row">Google Analytic Metrics</th>
                         <td><a href="{{ url_for('metrics.publication', pubsid=indexID) }}">Metrics page</a></td>
                     </tr>
                     </tbody>

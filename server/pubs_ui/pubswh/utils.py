@@ -179,7 +179,7 @@ def create_display_links(pubdata):
         'Version History': [],
         'NGMDB Index Page':[],
         'USGS Store Link':[],
-        'Software Release':[]
+        'Software Release':[],
         'Image Folder': []
 
     }
