@@ -80,7 +80,7 @@
     "rollup-plugin-istanbul": "^2.0.1",
     "rollup-plugin-uglify": "^6.0.4",
     "sass": "^1.26.10",
-    "sinon": "^9.0.2",
+    "sinon": "^9.2.3",
     "stylelint": "^13.6.1",
     "stylelint-config-recommended-scss": "^4.2.0",
     "stylelint-scss": "^3.18.0",
