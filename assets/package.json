@@ -100,7 +100,7 @@
     "jquery-ui-dist": "1.12.1",
     "leaflet": "1.6.0",
     "leaflet-draw": "1.0.4",
-    "lodash": "4.17.19",
+    "lodash": "4.17.21",
     "loglevel": "1.6.8",
     "mathjax": "3.0.5",
     "moment": "2.27.0",
