@@ -75,7 +75,7 @@
     "postcss-cli": "^7.1.1",
     "postcss-csso": "^4.0.0",
     "postcss-flexbugs-fixes": "^4.2.1",
-    "rollup": "^2.21.0",
+    "rollup": "^2.52.4",
     "rollup-plugin-handlebars-plus": "^0.2.5",
     "rollup-plugin-istanbul": "^2.0.1",
     "rollup-plugin-uglify": "^6.0.4",
